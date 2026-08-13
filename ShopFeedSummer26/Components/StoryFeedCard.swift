@@ -33,6 +33,9 @@ struct StoryFeedCard: View {
                 VStack(alignment: .leading, spacing: 0) {
                     storyHeader
                         .padding(.horizontal, GravitySpacing.space20)
+                        // Nudged off the card's top edge so the title sits
+                        // more comfortably in the atmosphere.
+                        .padding(.top, GravitySpacing.space32)
                     Spacer(minLength: GravitySpacing.space12)
                     productCarousel
                 }
