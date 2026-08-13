@@ -121,19 +121,28 @@ if the mix drifts.
 
 ### Navigation model
 
-The home tab has three levels that all render **inline** (HomePage state), so
-the top bar — avatar + topic pills — persists across the whole world:
+Pinterest-style: the For You feed is the only view with global chrome (avatar
++ topic pills at top, bottom tab pill). Everything deeper is a real push:
 
-1. **For You** — vertical story-card feed (`selectedTopicID == "for-you"`)
-2. **Topic** — `TopicLandingView`, selected via pill or story card
-3. **Subcategory** — a drilled-in story (`focusedStoryID`), rendered through
-   `StoryTopicPage` inline
+1. **For You** — `HomePage`, the home tab's root; avatar + topic pills live
+   only here
+2. **Topic** — `TopicPage` (route `.topic(topicId:sourceStoryId:)`), pushed
+   with the system zoom transition (`navigationTransition(.zoom)`) sourced
+   from the tapped feed card's `matchedTransitionSource`; pill-opened topics
+   fall back to a plain push
+3. **Subcategory** — `StoryTopicPage` (route `.story(storyId:)`)
 
-`NavigationCoordinator.pushRoute(.story(…))` is intercepted at the home root
-by `inlineStoryHandler` and becomes state instead of a push; pushes from other
-tabs or deeper pages still navigate normally. The bottom nav's back button
-walks the levels via `topicBackAction` (subcategory → topic → For You).
-Product and store pages remain real pushes.
+Topic and subcategory pages are immersive: they hide the bottom nav bar
+entirely (move+fade) and carry a single `FloatingBackButton` chip at the top.
+The bar returns on product-level pushes (PDP, Deep Dive, store), which rely on
+the bottom back button. The bottom tab pill is five tabs per the Hyperfeed
+spec — Home, Search, Cart, Orders, Favorites (`navigation-*` Gravity icons);
+Cart and Favorites are stub pages awaiting real state.
+
+The topic header renders the lead story's ambient dossier film (falling back
+to cover art) — the same surface its feed card plays — so the zoom hands the
+motion off visually. Films restart on push (separate players); a shared-player
+handoff is a known polish item once real films land.
 
 ### Subtopics
 
