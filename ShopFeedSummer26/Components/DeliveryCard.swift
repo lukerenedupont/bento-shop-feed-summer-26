@@ -1,0 +1,366 @@
+import SwiftUI
+
+// MARK: - Data Model
+
+struct DeliveryItem: Identifiable {
+    let id: String
+    let merchantId: String
+    let products: [SampleMerchant.Product]
+    let status: DeliveryStatus
+    let isStale: Bool
+}
+
+enum DeliveryStatus {
+    case labelCreated(headline: String)
+    case inTransit(headline: String)
+    case outForDelivery(headline: String)
+    case delivered(date: String)
+}
+
+extension DeliveryItem {
+    /// Short summary for compact contexts (e.g. account map card).
+    var statusSubtitle: String {
+        switch status {
+        case .labelCreated(let h): return h
+        case .inTransit(let h): return h
+        case .outForDelivery(let h): return h
+        case .delivered(let date): return "Delivered \(date)"
+        }
+    }
+}
+
+// MARK: - DeliveryCard (Active)
+
+/// Card for an active delivery with merchant info, product thumbnails, status, and progress bar.
+/// Supports optional tap-to-navigate to the delivery detail page.
+struct DeliveryCard: View {
+#if DEBUG
+    @ObservedObject private var _purlTuneRuntime = PurlTuneRuntime.shared
+#endif
+    let item: DeliveryItem
+    var onTap: (() -> Void)? = nil
+
+    private var merchant: SampleMerchant? {
+        SampleMerchant.byId[item.merchantId]
+    }
+
+    var body: some View {
+        Button {
+            HapticFeedback.light.fire()
+            onTap?()
+        } label: {
+            cardContent
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var cardContent: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            // Top row: merchant avatar + name | product thumbnails
+            HStack {
+                if let merchant {
+                    HStack(spacing: GravitySpacing.space8) {
+                        MerchantAvatarView(merchant: merchant, size: 24)
+                        Text(merchant.name)
+                            .gravityTextStyle(GravityTypography.bodyTitleSmall)
+                            .foregroundStyle(PurlTune.token("Components/DeliveryCard.swift:foregroundStyle:_:63:46", default: GravityColors.text, options: GravityColors.purlTuneColorOptions))
+                    }
+                }
+
+                Spacer(minLength: 0)
+
+                HStack(spacing: GravitySpacing.space4) {
+                    ForEach(item.products.prefix(3)) { product in
+                        productThumb(product)
+                    }
+                }
+            }
+
+            // Status headline + subtitle
+            VStack(alignment: .leading, spacing: GravitySpacing.space4) {
+                Text(headline)
+                    .gravityTextStyle(GravityTypography.subtitle)
+                    .foregroundStyle(PurlTune.token("Components/DeliveryCard.swift:foregroundStyle:_:80:38", default: GravityColors.text, options: GravityColors.purlTuneColorOptions))
+                Text(subtitle)
+                    .gravityTextStyle(GravityTypography.caption)
+                    .foregroundStyle(PurlTune.token("Components/DeliveryCard.swift:foregroundStyle:_:83:38", default: GravityColors.textTertiary, options: GravityColors.purlTuneColorOptions))
+            }
+
+            // Progress bar
+            progressBar
+
+            // Mark as delivered button (stale orders)
+            if item.isStale {
+                Button {
+                    HapticFeedback.light.fire()
+                } label: {
+                    Text("Mark as delivered")
+                        .gravityTextStyle(GravityTypography.buttonLarge)
+                        .foregroundStyle(PurlTune.token("Components/DeliveryCard.swift:foregroundStyle:_:96:42", default: GravityColors.text, options: GravityColors.purlTuneColorOptions))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: PurlTune.value("Components/DeliveryCard.swift:frame:height:98:40", default: 44))
+                        .background(GravityColors.bgFillSecondary, in: .capsule)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(PurlTune.token("Components/DeliveryCard.swift:padding:_:104:18", default: GravitySpacing.space16, options: GravitySpacing.purlTuneOptions))
+        .background(PurlTune.token("Components/DeliveryCard.swift:background:_:105:21", default: GravityColors.bg, options: GravityColors.purlTuneColorOptions))
+        .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous)
+                .strokeBorder(GravityColors.borderImage, lineWidth: 0.5)
+        )
+        .gravityShadow(GravityShadows.medium)
+    }
+
+    // MARK: - Helpers
+
+    private var headline: String {
+        switch item.status {
+        case .labelCreated(let h), .inTransit(let h), .outForDelivery(let h):
+            return h
+        case .delivered(let date):
+            return "Delivered \(date)"
+        }
+    }
+
+    private var subtitle: String {
+        switch item.status {
+        case .labelCreated: return "Label created"
+        case .inTransit: return "In transit"
+        case .outForDelivery: return "Out for delivery"
+        case .delivered: return "Delivered"
+        }
+    }
+
+    private var progress: CGFloat {
+        switch item.status {
+        case .labelCreated: return 0.05
+        case .inTransit: return 0.40
+        case .outForDelivery: return 0.85
+        case .delivered: return 1.0
+        }
+    }
+
+    private var progressBar: some View {
+        GeometryReader { geo in
+            Capsule()
+                .fill(PurlTune.token("Components/DeliveryCard.swift:fill:_:146:23", default: GravityColors.bgFillSecondary, options: GravityColors.purlTuneColorOptions))
+                .frame(height: PurlTune.value("Components/DeliveryCard.swift:frame:height:147:32", default: 8))
+                .overlay(alignment: .leading) {
+                    Capsule()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color(hex: 0xB350F6), Color(hex: 0x7358EC)],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: max(geo.size.width * progress, 8))
+                }
+        }
+        .frame(height: PurlTune.value("Components/DeliveryCard.swift:frame:height:160:24", default: 8))
+    }
+
+    private func productThumb(_ product: SampleMerchant.Product) -> some View {
+        Group {
+            if let imageURL = product.imageURL, let url = URL(string: imageURL) {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .success(let img):
+                        img.resizable().scaledToFill()
+                    default:
+                        Rectangle().fill(PurlTune.token("Components/DeliveryCard.swift:fill:_:171:42", default: GravityColors.bgFillSecondary, options: GravityColors.purlTuneColorOptions))
+                    }
+                }
+            } else {
+                Rectangle().fill(PurlTune.token("Components/DeliveryCard.swift:fill:_:175:34", default: GravityColors.bgFillSecondary, options: GravityColors.purlTuneColorOptions))
+            }
+        }
+        .frame(width: PurlTune.value("Components/DeliveryCard.swift:frame:width:178:23", default: 32), height: PurlTune.value("Components/DeliveryCard.swift:frame:height:178:112", default: 32))
+        .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r8, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: GravityRadius.r8, style: .continuous)
+                .strokeBorder(GravityColors.borderImage, lineWidth: 0.5)
+        )
+    }
+}
+
+// MARK: - PastDeliveryRow
+
+/// Simpler row for delivered items in the past deliveries section.
+struct PastDeliveryRow: View {
+#if DEBUG
+    @ObservedObject private var _purlTuneRuntime = PurlTuneRuntime.shared
+#endif
+    let item: DeliveryItem
+
+    private var merchant: SampleMerchant? {
+        SampleMerchant.byId[item.merchantId]
+    }
+
+    var body: some View {
+        HStack(spacing: GravitySpacing.space12) {
+            if let merchant {
+                MerchantAvatarView(merchant: merchant, size: 32)
+            }
+
+            VStack(alignment: .leading, spacing: GravitySpacing.space2) {
+                if let merchant {
+                    Text(merchant.name)
+                        .gravityTextStyle(GravityTypography.bodyTitleSmall)
+                        .foregroundStyle(PurlTune.token("Components/DeliveryCard.swift:foregroundStyle:_:207:42", default: GravityColors.text, options: GravityColors.purlTuneColorOptions))
+                }
+                if case .delivered(let date) = item.status {
+                    Text("Delivered \(date)")
+                        .gravityTextStyle(GravityTypography.caption)
+                        .foregroundStyle(PurlTune.token("Components/DeliveryCard.swift:foregroundStyle:_:212:42", default: GravityColors.textTertiary, options: GravityColors.purlTuneColorOptions))
+                }
+            }
+
+            Spacer(minLength: 0)
+
+            HStack(spacing: GravitySpacing.space4) {
+                ForEach(item.products.prefix(3)) { product in
+                    productThumb(product)
+                }
+            }
+        }
+        .padding(.vertical, PurlTune.token("Components/DeliveryCard.swift:padding:_:224:29", default: GravitySpacing.space12, options: GravitySpacing.purlTuneOptions))
+    }
+
+    private func productThumb(_ product: SampleMerchant.Product) -> some View {
+        Group {
+            if let imageURL = product.imageURL, let url = URL(string: imageURL) {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .success(let img):
+                        img.resizable().scaledToFill()
+                    default:
+                        Rectangle().fill(PurlTune.token("Components/DeliveryCard.swift:fill:_:235:42", default: GravityColors.bgFillSecondary, options: GravityColors.purlTuneColorOptions))
+                    }
+                }
+            } else {
+                Rectangle().fill(PurlTune.token("Components/DeliveryCard.swift:fill:_:239:34", default: GravityColors.bgFillSecondary, options: GravityColors.purlTuneColorOptions))
+            }
+        }
+        .frame(width: PurlTune.value("Components/DeliveryCard.swift:frame:width:242:23", default: 32), height: PurlTune.value("Components/DeliveryCard.swift:frame:height:242:112", default: 32))
+        .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r8, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: GravityRadius.r8, style: .continuous)
+                .strokeBorder(GravityColors.borderImage, lineWidth: 0.5)
+        )
+    }
+}
+
+// MARK: - Live Catalog-Derived Delivery Data
+
+extension DeliveryItem {
+    @MainActor
+    static var active: [DeliveryItem] {
+        let merchants = SampleMerchant.all.filter { !$0.products.isEmpty }
+        guard merchants.count >= 4 else { return [] }
+        return [
+            DeliveryItem(
+                id: "active-1",
+                merchantId: merchants[0].id,
+                products: Array(merchants[0].products.prefix(3)),
+                status: .outForDelivery(headline: "Arrives today, 3-4PM"),
+                isStale: false
+            ),
+            DeliveryItem(
+                id: "active-2",
+                merchantId: merchants[1].id,
+                products: Array(merchants[1].products.prefix(2)),
+                status: .inTransit(headline: "Expected by Dec 10"),
+                isStale: false
+            ),
+            DeliveryItem(
+                id: "active-3",
+                merchantId: merchants[2].id,
+                products: Array(merchants[2].products.prefix(1)),
+                status: .labelCreated(headline: "Arrives Dec 14-16"),
+                isStale: true
+            ),
+            DeliveryItem(
+                id: "active-4",
+                merchantId: merchants[3].id,
+                products: Array(merchants[3].products.prefix(2)),
+                status: .inTransit(headline: "In transit"),
+                isStale: false
+            ),
+        ]
+    }
+
+    @MainActor
+    static var past: [DeliveryItem] {
+        let merchants = SampleMerchant.all.filter { !$0.products.isEmpty }
+        guard merchants.count >= 4 else { return [] }
+        return [
+            DeliveryItem(
+                id: "past-1",
+                merchantId: merchants[0].id,
+                products: Array(merchants[0].products.dropFirst(3).prefix(2)),
+                status: .delivered(date: "Dec 12"),
+                isStale: false
+            ),
+            DeliveryItem(
+                id: "past-2",
+                merchantId: merchants[1].id,
+                products: Array(merchants[1].products.dropFirst(2).prefix(2)),
+                status: .delivered(date: "Dec 8"),
+                isStale: false
+            ),
+            DeliveryItem(
+                id: "past-3",
+                merchantId: merchants[2].id,
+                products: Array(merchants[2].products.dropFirst(1).prefix(3)),
+                status: .delivered(date: "Nov 28"),
+                isStale: false
+            ),
+            DeliveryItem(
+                id: "past-4",
+                merchantId: merchants[3].id,
+                products: Array(merchants[3].products.dropFirst(2).prefix(1)),
+                status: .delivered(date: "Nov 20"),
+                isStale: false
+            ),
+        ]
+    }
+}
+
+// MARK: - Previews
+
+#Preview("Active Deliveries") {
+    ScrollView {
+        VStack(spacing: 16) {
+            ForEach(DeliveryItem.active) { item in
+                DeliveryCard(item: item)
+            }
+        }
+        .padding()
+    }
+    .background(PurlTune.token("Components/DeliveryCard.swift:background:_:338:17", default: GravityColors.bg, options: GravityColors.purlTuneColorOptions))
+}
+
+#Preview("Past Deliveries") {
+    List {
+        ForEach(DeliveryItem.past) { item in
+            PastDeliveryRow(item: item)
+        }
+    }
+}
+
+#Preview("Stale Delivery") {
+    let merchants = SampleMerchant.all
+    DeliveryCard(item: DeliveryItem(
+        id: "stale-preview",
+        merchantId: merchants[0].id,
+        products: Array(merchants[0].products.prefix(2)),
+        status: .labelCreated(headline: "Arrives Dec 14-16"),
+        isStale: true
+    ))
+    .padding()
+    .background(PurlTune.token("Components/DeliveryCard.swift:background:_:359:17", default: GravityColors.bg, options: GravityColors.purlTuneColorOptions))
+}

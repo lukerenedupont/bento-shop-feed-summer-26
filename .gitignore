@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Purl local metadata & run artifacts
+.purl/
+.purl-run/
+
+# Build products
+DerivedData/
+.build/
+build/
+xcuserdata/
+*.xcuserdata
+*.xcuserdatad
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# Secrets (Shop Server auth) — never commit
+.env.local
+
+# Cover source art (200MB+ of working files; the app bundles downscaled
+# imagesets in Assets.xcassets, so the repo doesn't need these)
+covers/

@@ -1,0 +1,69 @@
+{
+  "prototype" : {
+    "collaboration" : {
+      "contributors" : [
+        {
+          "avatarColorName" : "sunrise",
+          "avatarImageFileName" : "avatar-6FD92913-29DA-43E8-BDCE-8FDF456506B3.png",
+          "avatarSystemName" : "none",
+          "displayName" : "Luke Dupont",
+          "githubHandle" : "lukerenedupont",
+          "handle" : "lukedupont",
+          "id" : "handle:lukerenedupont"
+        }
+      ],
+      "createdBy" : {
+        "avatarColorName" : "sunrise",
+        "avatarImageFileName" : "avatar-6FD92913-29DA-43E8-BDCE-8FDF456506B3.png",
+        "avatarSystemName" : "none",
+        "displayName" : "Luke Dupont",
+        "githubHandle" : "lukerenedupont",
+        "handle" : "lukedupont",
+        "id" : "handle:lukerenedupont"
+      },
+      "lineage" : {
+        "rootPrototypeID" : "01B6D886-5127-486F-B440-DE8B9698D91F",
+        "versionID" : "6C64DFCA-40E6-4513-9248-0094135D7A84"
+      },
+      "owner" : {
+        "avatarColorName" : "sunrise",
+        "avatarImageFileName" : "avatar-6FD92913-29DA-43E8-BDCE-8FDF456506B3.png",
+        "avatarSystemName" : "none",
+        "displayName" : "Luke Dupont",
+        "githubHandle" : "lukerenedupont",
+        "handle" : "lukedupont",
+        "id" : "handle:lukerenedupont"
+      }
+    },
+    "createdAt" : "2026-08-11T19:19:56Z",
+    "id" : "01B6D886-5127-486F-B440-DE8B9698D91F",
+    "localCheckout" : {
+      "generatedFilesVersion" : 3,
+      "health" : "ready",
+      "lastHealthCheckAt" : "2026-08-11T19:19:57Z",
+      "path" : "\/Users\/lukedupont\/Purl\/Prototypes\/shop-feed-summer-26",
+      "sourceKind" : "swiftLocal"
+    },
+    "localPath" : "\/Users\/lukedupont\/Purl\/Prototypes\/shop-feed-summer-26",
+    "project" : "Prototypes",
+    "runtime" : "swift",
+    "setupNotes" : [
+      "Shop Prototype Kit SwiftUI project generated with XcodeGen.",
+      "Kit cache: \/Users\/lukedupont\/Purl\/Caches\/shop-prototype-kit",
+      "Kit revision: 6ebcceb1d5fc0d7ed2b4352b45b350a530ed7f81",
+      "Shop Server auth is optional and should live in this prototype's ignored `.env.local` file."
+    ],
+    "slug" : "shop-feed-summer-26",
+    "source" : {
+      "kind" : "swiftLocal",
+      "kitCachedAt" : "2026-08-11T19:19:56Z",
+      "kitRef" : "6ebcceb1d5fc0d7ed2b4352b45b350a530ed7f81",
+      "useShopKit" : true
+    },
+    "status" : "running",
+    "title" : "Shop Feed Summer 26",
+    "updatedAt" : "2026-08-11T19:32:25Z",
+    "visibility" : "local"
+  },
+  "schemaVersion" : 3
+}

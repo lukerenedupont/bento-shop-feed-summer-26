@@ -1,0 +1,2340 @@
+{
+  "version": 2,
+  "topics": [
+    {
+      "id": "for-you",
+      "label": "For you",
+      "storyTopicKey": null,
+      "storyIDs": [
+        "city-to-trail-birding",
+        "keep-shopping",
+        "sculptural-mirror-hunt",
+        "type-systems",
+        "coffee-counter",
+        "table-stranger",
+        "nursery-grown-up-room",
+        "trail-to-street",
+        "new-york-graphics",
+        "scalp-reset",
+        "black-silver-signal"
+      ]
+    },
+    {
+      "id": "birding-gear",
+      "label": "Birding gear",
+      "storyTopicKey": "birding",
+      "storyIDs": [
+        "city-to-trail-birding",
+        "birding-optics-sizes",
+        "birding-wet-weather",
+        "birding-pocketable"
+      ],
+      "subtopics": [
+        {
+          "label": "The full field kit",
+          "storyID": "city-to-trail-birding"
+        },
+        {
+          "label": "Optics by size",
+          "storyID": "birding-optics-sizes"
+        },
+        {
+          "label": "Wet-weather days",
+          "storyID": "birding-wet-weather"
+        },
+        {
+          "label": "Pocketable optics",
+          "storyID": "birding-pocketable"
+        }
+      ],
+      "relatedMerchantIDs": [
+        "fellow",
+        "kinto",
+        "house-of-leon"
+      ],
+      "merchandisingBlocks": [
+        {
+          "id": "keep-shopping",
+          "kind": "productRail",
+          "title": "Keep shopping",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "nocs",
+              "productID": 10432692846871
+            },
+            {
+              "kind": "product",
+              "merchantID": "feature-salomon",
+              "productID": 7029064368199
+            },
+            {
+              "kind": "product",
+              "merchantID": "nocs",
+              "productID": 6591770722382
+            },
+            {
+              "kind": "product",
+              "merchantID": "extra-butter-salomon",
+              "productID": 8151144530103
+            }
+          ]
+        },
+        {
+          "id": "collections",
+          "kind": "mediaCarousel",
+          "title": "Collections for you",
+          "items": [
+            {
+              "kind": "story",
+              "storyID": "city-to-trail-birding"
+            },
+            {
+              "kind": "story",
+              "storyID": "birding-optics-sizes"
+            },
+            {
+              "kind": "story",
+              "storyID": "birding-wet-weather"
+            },
+            {
+              "kind": "story",
+              "storyID": "birding-pocketable"
+            }
+          ]
+        },
+        {
+          "id": "trending-shops",
+          "kind": "merchantRail",
+          "title": "Trending shops",
+          "items": [
+            {
+              "kind": "merchant",
+              "merchantID": "nocs"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "feature-salomon"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "extra-butter-salomon"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "kinto"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "fellow"
+            }
+          ]
+        },
+        {
+          "id": "discover",
+          "kind": "masonry",
+          "title": "Discover more",
+          "items": null
+        }
+      ]
+    },
+    {
+      "id": "sculptural-mirrors",
+      "label": "Sculptural mirrors",
+      "storyTopicKey": "mirrors",
+      "storyIDs": [
+        "sculptural-mirror-hunt",
+        "mirrors-floor-presence",
+        "mirrors-fluid-forms",
+        "mirrors-warm-wood"
+      ],
+      "subtopics": [
+        {
+          "label": "The shortlist",
+          "storyID": "sculptural-mirror-hunt"
+        },
+        {
+          "label": "Floor mirrors",
+          "storyID": "mirrors-floor-presence"
+        },
+        {
+          "label": "Fluid forms",
+          "storyID": "mirrors-fluid-forms"
+        },
+        {
+          "label": "Warm wood",
+          "storyID": "mirrors-warm-wood"
+        }
+      ],
+      "relatedMerchantIDs": [
+        "moma",
+        "doiy",
+        "house-of-leon",
+        "lichen"
+      ],
+      "merchandisingBlocks": [
+        {
+          "id": "spotlight",
+          "kind": "mediaCarousel",
+          "title": null,
+          "items": [
+            {
+              "kind": "story",
+              "storyID": "sculptural-mirror-hunt"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "forom"
+            },
+            {
+              "kind": "story",
+              "storyID": "mirrors-floor-presence"
+            },
+            {
+              "kind": "product",
+              "merchantID": "coming-soon",
+              "productID": 9908030275890
+            }
+          ]
+        },
+        {
+          "id": "merchants",
+          "kind": "merchantRail",
+          "title": "Related shops",
+          "items": [
+            {
+              "kind": "merchant",
+              "merchantID": "forom"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "coming-soon"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "house-of-leon"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "moma"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "doiy"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "lichen"
+            }
+          ]
+        },
+        {
+          "id": "for-you",
+          "kind": "productRail",
+          "title": "For you in Sculptural mirrors",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "forom",
+              "productID": 7914833051779
+            },
+            {
+              "kind": "product",
+              "merchantID": "forom",
+              "productID": 9080102322307
+            },
+            {
+              "kind": "product",
+              "merchantID": "coming-soon",
+              "productID": 9908030275890
+            },
+            {
+              "kind": "product",
+              "merchantID": "coming-soon",
+              "productID": 9603148841266
+            },
+            {
+              "kind": "product",
+              "merchantID": "forom",
+              "productID": 9080109072515
+            },
+            {
+              "kind": "product",
+              "merchantID": "forom",
+              "productID": 9080102715523
+            },
+            {
+              "kind": "product",
+              "merchantID": "coming-soon",
+              "productID": 9960379842866
+            },
+            {
+              "kind": "product",
+              "merchantID": "coming-soon",
+              "productID": 9603401253170
+            }
+          ]
+        },
+        {
+          "id": "discover",
+          "kind": "masonry",
+          "title": "Discover more",
+          "items": null
+        }
+      ]
+    },
+    {
+      "id": "type-and-transit",
+      "label": "Type & transit",
+      "storyTopicKey": "type",
+      "storyIDs": [
+        "type-systems",
+        "type-identity-manuals",
+        "type-making-now",
+        "type-public-systems",
+        "new-york-graphics"
+      ],
+      "subtopics": [
+        {
+          "label": "Type specimens",
+          "storyID": "type-systems"
+        },
+        {
+          "label": "Identity manuals",
+          "storyID": "type-identity-manuals"
+        },
+        {
+          "label": "Type in the making",
+          "storyID": "type-making-now"
+        },
+        {
+          "label": "Public systems",
+          "storyID": "type-public-systems"
+        },
+        {
+          "label": "NYC ephemera",
+          "storyID": "new-york-graphics"
+        }
+      ],
+      "relatedMerchantIDs": [
+        "moma",
+        "coming-soon",
+        "lichen"
+      ],
+      "merchandisingBlocks": [
+        {
+          "id": "spotlight",
+          "kind": "mediaCarousel",
+          "title": null,
+          "items": [
+            {
+              "kind": "story",
+              "storyID": "type-systems"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "standards-manual"
+            },
+            {
+              "kind": "story",
+              "storyID": "type-identity-manuals"
+            },
+            {
+              "kind": "product",
+              "merchantID": "draw-down",
+              "productID": 1591926554714
+            }
+          ]
+        },
+        {
+          "id": "merchants",
+          "kind": "merchantRail",
+          "title": "Related shops",
+          "items": [
+            {
+              "kind": "merchant",
+              "merchantID": "standards-manual"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "draw-down"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "moma"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "lichen"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "coming-soon"
+            }
+          ]
+        },
+        {
+          "id": "for-you",
+          "kind": "productRail",
+          "title": "For you in Type & transit",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 1424479363
+            },
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 5842516163
+            },
+            {
+              "kind": "product",
+              "merchantID": "draw-down",
+              "productID": 1591926554714
+            },
+            {
+              "kind": "product",
+              "merchantID": "draw-down",
+              "productID": 8336413458686
+            },
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 92039479320
+            },
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 3933686169669
+            },
+            {
+              "kind": "product",
+              "merchantID": "draw-down",
+              "productID": 7804062892286
+            },
+            {
+              "kind": "product",
+              "merchantID": "draw-down",
+              "productID": 7955948863742
+            }
+          ]
+        },
+        {
+          "id": "discover",
+          "kind": "masonry",
+          "title": "Discover more",
+          "items": null
+        }
+      ]
+    },
+    {
+      "id": "coffee-counter",
+      "label": "Coffee counter",
+      "storyTopicKey": "coffee",
+      "storyIDs": [
+        "coffee-counter",
+        "coffee-fellow-workflow",
+        "coffee-kinto-serve",
+        "coffee-cup-ritual"
+      ],
+      "subtopics": [
+        {
+          "label": "The counter setup",
+          "storyID": "coffee-counter",
+          "anchorMerchantID": "fellow",
+          "anchorProductID": 7507479003236
+        },
+        {
+          "label": "Fellow workflow",
+          "storyID": "coffee-fellow-workflow",
+          "anchorMerchantID": "fellow",
+          "anchorProductID": 2055410221171
+        },
+        {
+          "label": "Kinto glassware",
+          "storyID": "coffee-kinto-serve",
+          "anchorMerchantID": "kinto",
+          "anchorProductID": 2214011961392
+        },
+        {
+          "label": "Cups & ritual",
+          "storyID": "coffee-cup-ritual",
+          "anchorMerchantID": "kinto",
+          "anchorProductID": 2214023331888
+        }
+      ],
+      "relatedMerchantIDs": [
+        "moma",
+        "coming-soon",
+        "doiy"
+      ],
+      "merchandisingBlocks": [
+        {
+          "id": "spotlight",
+          "kind": "mediaCarousel",
+          "title": null,
+          "items": [
+            {
+              "kind": "story",
+              "storyID": "coffee-counter"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "fellow"
+            },
+            {
+              "kind": "story",
+              "storyID": "coffee-fellow-workflow"
+            },
+            {
+              "kind": "product",
+              "merchantID": "kinto",
+              "productID": 2214011961392
+            }
+          ]
+        },
+        {
+          "id": "merchants",
+          "kind": "merchantRail",
+          "title": "Related shops",
+          "items": [
+            {
+              "kind": "merchant",
+              "merchantID": "fellow"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "kinto"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "moma"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "coming-soon"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "doiy"
+            }
+          ]
+        },
+        {
+          "id": "for-you",
+          "kind": "productRail",
+          "title": "For you in Coffee counter",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 7507479003236
+            },
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 2055410221171
+            },
+            {
+              "kind": "product",
+              "merchantID": "kinto",
+              "productID": 2214011961392
+            },
+            {
+              "kind": "product",
+              "merchantID": "kinto",
+              "productID": 2214023331888
+            },
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 2055409762419
+            },
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 4807420739684
+            },
+            {
+              "kind": "product",
+              "merchantID": "kinto",
+              "productID": 2214022053936
+            },
+            {
+              "kind": "product",
+              "merchantID": "kinto",
+              "productID": 2214010978352
+            }
+          ]
+        },
+        {
+          "id": "discover",
+          "kind": "masonry",
+          "title": "Discover more",
+          "items": null
+        }
+      ]
+    },
+    {
+      "id": "design-for-kids",
+      "label": "Design for kids",
+      "storyTopicKey": "kids",
+      "storyIDs": [
+        "nursery-grown-up-room",
+        "kids-swell-room",
+        "kids-feeding-stages",
+        "kids-small-footprint"
+      ],
+      "subtopics": [
+        {
+          "label": "The nursery",
+          "storyID": "nursery-grown-up-room"
+        },
+        {
+          "label": "Around the Swell",
+          "storyID": "kids-swell-room"
+        },
+        {
+          "label": "Feeding stages",
+          "storyID": "kids-feeding-stages"
+        },
+        {
+          "label": "Small footprint",
+          "storyID": "kids-small-footprint"
+        }
+      ],
+      "relatedMerchantIDs": [
+        "moma",
+        "doiy",
+        "house-of-leon"
+      ],
+      "merchandisingBlocks": [
+        {
+          "id": "spotlight",
+          "kind": "mediaCarousel",
+          "title": null,
+          "items": [
+            {
+              "kind": "story",
+              "storyID": "nursery-grown-up-room"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "babyletto"
+            },
+            {
+              "kind": "story",
+              "storyID": "kids-swell-room"
+            },
+            {
+              "kind": "product",
+              "merchantID": "lalo",
+              "productID": 4363480432704
+            }
+          ]
+        },
+        {
+          "id": "merchants",
+          "kind": "merchantRail",
+          "title": "Related shops",
+          "items": [
+            {
+              "kind": "merchant",
+              "merchantID": "babyletto"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "lalo"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "moma"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "doiy"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "house-of-leon"
+            }
+          ]
+        },
+        {
+          "id": "for-you",
+          "kind": "productRail",
+          "title": "For you in Design for kids",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "babyletto",
+              "productID": 7652167942198
+            },
+            {
+              "kind": "product",
+              "merchantID": "babyletto",
+              "productID": 6867000164406
+            },
+            {
+              "kind": "product",
+              "merchantID": "lalo",
+              "productID": 4363480432704
+            },
+            {
+              "kind": "product",
+              "merchantID": "lalo",
+              "productID": 6603936137280
+            },
+            {
+              "kind": "product",
+              "merchantID": "babyletto",
+              "productID": 7652167647286
+            },
+            {
+              "kind": "product",
+              "merchantID": "babyletto",
+              "productID": 7784483389494
+            },
+            {
+              "kind": "product",
+              "merchantID": "lalo",
+              "productID": 7134036885568
+            },
+            {
+              "kind": "product",
+              "merchantID": "lalo",
+              "productID": 4462324875328
+            }
+          ]
+        },
+        {
+          "id": "discover",
+          "kind": "masonry",
+          "title": "Discover more",
+          "items": null
+        }
+      ]
+    },
+    {
+      "id": "tabletop-objects",
+      "label": "Tabletop objects",
+      "storyTopicKey": "tabletop",
+      "storyIDs": [
+        "table-stranger",
+        "tabletop-vase-shapes",
+        "tabletop-red-metal",
+        "tabletop-serve-small"
+      ],
+      "subtopics": [
+        {
+          "label": "The strange table",
+          "storyID": "table-stranger"
+        },
+        {
+          "label": "Sculptural vases",
+          "storyID": "tabletop-vase-shapes"
+        },
+        {
+          "label": "Red metal",
+          "storyID": "tabletop-red-metal"
+        },
+        {
+          "label": "Small serveware",
+          "storyID": "tabletop-serve-small"
+        }
+      ],
+      "relatedMerchantIDs": [
+        "kinto",
+        "house-of-leon",
+        "lichen",
+        "forom"
+      ],
+      "merchandisingBlocks": [
+        {
+          "id": "spotlight",
+          "kind": "mediaCarousel",
+          "title": null,
+          "items": [
+            {
+              "kind": "story",
+              "storyID": "table-stranger"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "doiy"
+            },
+            {
+              "kind": "story",
+              "storyID": "tabletop-vase-shapes"
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 8909829603558
+            }
+          ]
+        },
+        {
+          "id": "merchants",
+          "kind": "merchantRail",
+          "title": "Related shops",
+          "items": [
+            {
+              "kind": "merchant",
+              "merchantID": "doiy"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "moma"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "fellow"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "kinto"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "house-of-leon"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "lichen"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "forom"
+            }
+          ]
+        },
+        {
+          "id": "for-you",
+          "kind": "productRail",
+          "title": "For you in Tabletop objects",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "doiy",
+              "productID": 8491003314332
+            },
+            {
+              "kind": "product",
+              "merchantID": "doiy",
+              "productID": 8300748931228
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 8909829603558
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 9787655160038
+            },
+            {
+              "kind": "product",
+              "merchantID": "doiy",
+              "productID": 9135917301916
+            },
+            {
+              "kind": "product",
+              "merchantID": "doiy",
+              "productID": 8712550678684
+            },
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 2055410221171
+            },
+            {
+              "kind": "product",
+              "merchantID": "kinto",
+              "productID": 2214022053936
+            }
+          ]
+        },
+        {
+          "id": "discover",
+          "kind": "masonry",
+          "title": "Discover more",
+          "items": null
+        }
+      ]
+    },
+    {
+      "id": "trail-to-street",
+      "label": "Trail to street",
+      "storyTopicKey": "trail",
+      "storyIDs": [
+        "trail-to-street",
+        "trail-light-neutrals",
+        "trail-weatherproof",
+        "trail-dark-palette"
+      ],
+      "subtopics": [
+        {
+          "label": "Beyond the trail",
+          "storyID": "trail-to-street"
+        },
+        {
+          "label": "Light neutrals",
+          "storyID": "trail-light-neutrals"
+        },
+        {
+          "label": "Weatherproof pairs",
+          "storyID": "trail-weatherproof"
+        },
+        {
+          "label": "Dark palette",
+          "storyID": "trail-dark-palette"
+        }
+      ],
+      "relatedMerchantIDs": [
+        "nocs",
+        "feature-salomon",
+        "extra-butter-salomon"
+      ],
+      "merchandisingBlocks": [
+        {
+          "id": "spotlight",
+          "kind": "mediaCarousel",
+          "title": null,
+          "items": [
+            {
+              "kind": "story",
+              "storyID": "trail-to-street"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "feature-salomon"
+            },
+            {
+              "kind": "story",
+              "storyID": "trail-light-neutrals"
+            },
+            {
+              "kind": "product",
+              "merchantID": "extra-butter-salomon",
+              "productID": 8151144530103
+            }
+          ]
+        },
+        {
+          "id": "merchants",
+          "kind": "merchantRail",
+          "title": "Related shops",
+          "items": [
+            {
+              "kind": "merchant",
+              "merchantID": "feature-salomon"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "extra-butter-salomon"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "nocs"
+            }
+          ]
+        },
+        {
+          "id": "for-you",
+          "kind": "productRail",
+          "title": "For you in Trail to street",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "feature-salomon",
+              "productID": 7029064368199
+            },
+            {
+              "kind": "product",
+              "merchantID": "feature-salomon",
+              "productID": 6753846919239
+            },
+            {
+              "kind": "product",
+              "merchantID": "extra-butter-salomon",
+              "productID": 8151144530103
+            },
+            {
+              "kind": "product",
+              "merchantID": "extra-butter-salomon",
+              "productID": 8349773922487
+            },
+            {
+              "kind": "product",
+              "merchantID": "feature-salomon",
+              "productID": 6753846853703
+            },
+            {
+              "kind": "product",
+              "merchantID": "extra-butter-salomon",
+              "productID": 7919493251255
+            },
+            {
+              "kind": "product",
+              "merchantID": "extra-butter-salomon",
+              "productID": 4643336060976
+            },
+            {
+              "kind": "product",
+              "merchantID": "feature-salomon",
+              "productID": 7243015094343
+            }
+          ]
+        },
+        {
+          "id": "discover",
+          "kind": "masonry",
+          "title": "Discover more",
+          "items": null
+        }
+      ]
+    },
+    {
+      "id": "keep-shopping-topic",
+      "label": "Keep shopping",
+      "storyTopicKey": null,
+      "storyIDs": [
+        "keep-shopping"
+      ]
+    },
+    {
+      "id": "new-york-graphics-topic",
+      "label": "New York graphics",
+      "storyTopicKey": null,
+      "storyIDs": [
+        "new-york-graphics",
+        "type-public-systems",
+        "type-identity-manuals"
+      ],
+      "subtopics": [
+        {
+          "label": "Off the wall",
+          "storyID": "new-york-graphics"
+        },
+        {
+          "label": "Public systems",
+          "storyID": "type-public-systems"
+        },
+        {
+          "label": "Identity manuals",
+          "storyID": "type-identity-manuals"
+        }
+      ],
+      "relatedMerchantIDs": [
+        "coming-soon",
+        "lichen",
+        "moma"
+      ],
+      "merchandisingBlocks": [
+        {
+          "id": "spotlight",
+          "kind": "mediaCarousel",
+          "title": null,
+          "items": [
+            {
+              "kind": "story",
+              "storyID": "new-york-graphics"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "standards-manual"
+            },
+            {
+              "kind": "story",
+              "storyID": "type-public-systems"
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 9604489248998
+            }
+          ]
+        },
+        {
+          "id": "merchants",
+          "kind": "merchantRail",
+          "title": "Related shops",
+          "items": [
+            {
+              "kind": "merchant",
+              "merchantID": "standards-manual"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "lichen"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "moma"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "draw-down"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "coming-soon"
+            }
+          ]
+        },
+        {
+          "id": "for-you",
+          "kind": "productRail",
+          "title": "For you in New York graphics",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 1424479363
+            },
+            {
+              "kind": "product",
+              "merchantID": "lichen",
+              "productID": 11009838154046
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 9604489248998
+            },
+            {
+              "kind": "product",
+              "merchantID": "draw-down",
+              "productID": 7804062892286
+            },
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 92039479320
+            },
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 3933686169669
+            },
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 5842516163
+            }
+          ]
+        },
+        {
+          "id": "discover",
+          "kind": "masonry",
+          "title": "Discover more",
+          "items": null
+        }
+      ]
+    },
+    {
+      "id": "scalp-care-topic",
+      "label": "Scalp care",
+      "storyTopicKey": null,
+      "storyIDs": [
+        "scalp-reset"
+      ],
+      "relatedMerchantIDs": [
+        "rhode"
+      ],
+      "merchandisingBlocks": [
+        {
+          "id": "spotlight",
+          "kind": "mediaCarousel",
+          "title": null,
+          "items": [
+            {
+              "kind": "story",
+              "storyID": "scalp-reset"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "ceremonia"
+            },
+            {
+              "kind": "product",
+              "merchantID": "ceremonia",
+              "productID": 14886355796337
+            }
+          ]
+        },
+        {
+          "id": "merchants",
+          "kind": "merchantRail",
+          "title": "Related shops",
+          "items": [
+            {
+              "kind": "merchant",
+              "merchantID": "ceremonia"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "rhode"
+            }
+          ]
+        },
+        {
+          "id": "for-you",
+          "kind": "productRail",
+          "title": "For you in Scalp care",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "ceremonia",
+              "productID": 7219216580772
+            },
+            {
+              "kind": "product",
+              "merchantID": "ceremonia",
+              "productID": 6060165300388
+            },
+            {
+              "kind": "product",
+              "merchantID": "ceremonia",
+              "productID": 14886355796337
+            },
+            {
+              "kind": "product",
+              "merchantID": "ceremonia",
+              "productID": 15369056321905
+            }
+          ]
+        },
+        {
+          "id": "discover",
+          "kind": "masonry",
+          "title": "Discover more",
+          "items": null
+        }
+      ]
+    },
+    {
+      "id": "material-study-topic",
+      "label": "Material study",
+      "storyTopicKey": null,
+      "storyIDs": [
+        "black-silver-signal",
+        "tabletop-red-metal",
+        "trail-dark-palette",
+        "mirrors-warm-wood"
+      ],
+      "subtopics": [
+        {
+          "label": "The signal",
+          "storyID": "black-silver-signal"
+        },
+        {
+          "label": "Red metal",
+          "storyID": "tabletop-red-metal"
+        },
+        {
+          "label": "Dark trail geometry",
+          "storyID": "trail-dark-palette"
+        },
+        {
+          "label": "Warm wood",
+          "storyID": "mirrors-warm-wood"
+        }
+      ],
+      "relatedMerchantIDs": [
+        "moma",
+        "forom",
+        "doiy"
+      ],
+      "merchandisingBlocks": [
+        {
+          "id": "spotlight",
+          "kind": "mediaCarousel",
+          "title": null,
+          "items": [
+            {
+              "kind": "story",
+              "storyID": "black-silver-signal"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "house-of-leon"
+            },
+            {
+              "kind": "story",
+              "storyID": "tabletop-red-metal"
+            },
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 2055410221171
+            }
+          ]
+        },
+        {
+          "id": "merchants",
+          "kind": "merchantRail",
+          "title": "Related shops",
+          "items": [
+            {
+              "kind": "merchant",
+              "merchantID": "house-of-leon"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "moma"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "fellow"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "feature-salomon"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "doiy"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "extra-butter-salomon"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "forom"
+            }
+          ]
+        },
+        {
+          "id": "for-you",
+          "kind": "productRail",
+          "title": "For you in Material study",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "house-of-leon",
+              "productID": 7873592721581
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 9604489248998
+            },
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 2055410221171
+            },
+            {
+              "kind": "product",
+              "merchantID": "feature-salomon",
+              "productID": 6753846919239
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 9787655160038
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 8909829603558
+            },
+            {
+              "kind": "product",
+              "merchantID": "doiy",
+              "productID": 8300748931228
+            },
+            {
+              "kind": "product",
+              "merchantID": "feature-salomon",
+              "productID": 7243015094343
+            }
+          ]
+        },
+        {
+          "id": "discover",
+          "kind": "masonry",
+          "title": "Discover more",
+          "items": null
+        }
+      ]
+    }
+  ],
+  "stories": [
+    {
+      "id": "city-to-trail-birding",
+      "eyebrow": "Because you searched bird watching",
+      "title": "A field kit for city-to-trail birding",
+      "subtitle": "Waterproof optics and trail-ready footwear for moving between the city edge and a full day outside.",
+      "format": "shortlist",
+      "topicKeys": [
+        "birding"
+      ],
+      "accentHex": "#383122",
+      "destinationLabel": "Compare the field kit",
+      "products": [
+        {
+          "merchantID": "nocs",
+          "productID": 10432692846871
+        },
+        {
+          "merchantID": "nocs",
+          "productID": 6591770722382
+        },
+        {
+          "merchantID": "feature-salomon",
+          "productID": 7029064368199
+        },
+        {
+          "merchantID": "extra-butter-salomon",
+          "productID": 8151144530103
+        }
+      ],
+      "coverImageName": "cover-birding"
+    },
+    {
+      "id": "keep-shopping",
+      "eyebrow": "Recent activity",
+      "title": "Keep shopping",
+      "subtitle": "A quick return to the products and ongoing hunts you have been considering.",
+      "format": "shortlist",
+      "topicKeys": [],
+      "accentHex": "#463D38",
+      "destinationLabel": "Pick up where you left off",
+      "products": [
+        {
+          "merchantID": "forom",
+          "productID": 7914833051779
+        },
+        {
+          "merchantID": "ceremonia",
+          "productID": 14886355796337
+        },
+        {
+          "merchantID": "moma",
+          "productID": 9604489248998
+        },
+        {
+          "merchantID": "fellow",
+          "productID": 7507479003236
+        }
+      ]
+    },
+    {
+      "id": "sculptural-mirror-hunt",
+      "eyebrow": "Your active mirror hunt",
+      "title": "Four mirrors that change the whole wall",
+      "subtitle": "Organic silhouettes, mahogany framing, and high-gloss color from Forom and Coming Soon.",
+      "format": "shortlist",
+      "topicKeys": [
+        "mirrors",
+        "tabletop"
+      ],
+      "accentHex": "#6B5C51",
+      "destinationLabel": "Enter the mirror hunt",
+      "products": [
+        {
+          "merchantID": "forom",
+          "productID": 7914833051779
+        },
+        {
+          "merchantID": "forom",
+          "productID": 9080102322307
+        },
+        {
+          "merchantID": "coming-soon",
+          "productID": 9908030275890
+        },
+        {
+          "merchantID": "coming-soon",
+          "productID": 9603148841266
+        }
+      ],
+      "coverImageName": "cover-sculptural-mirrors"
+    },
+    {
+      "id": "type-systems",
+      "eyebrow": "From your reference shelf",
+      "title": "Type systems worth keeping nearby",
+      "subtitle": "Transit standards, institutional identity, and contemporary type practice in one working shelf.",
+      "format": "world",
+      "topicKeys": [
+        "type"
+      ],
+      "accentHex": "#6B6B69",
+      "destinationLabel": "Open the reference shelf",
+      "products": [
+        {
+          "merchantID": "standards-manual",
+          "productID": 1424479363
+        },
+        {
+          "merchantID": "standards-manual",
+          "productID": 5842516163
+        },
+        {
+          "merchantID": "draw-down",
+          "productID": 1591926554714
+        },
+        {
+          "merchantID": "draw-down",
+          "productID": 8336413458686
+        }
+      ],
+      "coverImageName": "cover-type-systems"
+    },
+    {
+      "id": "coffee-counter",
+      "eyebrow": "Your coffee counter, reconsidered",
+      "title": "Precision brewing without the visual noise",
+      "subtitle": "An automatic brewer, temperature control, and Japanese glassware assembled as one workflow.",
+      "format": "setup",
+      "topicKeys": [
+        "coffee"
+      ],
+      "accentHex": "#3E2E20",
+      "destinationLabel": "Build the coffee setup",
+      "products": [
+        {
+          "merchantID": "fellow",
+          "productID": 7507479003236
+        },
+        {
+          "merchantID": "fellow",
+          "productID": 2055410221171
+        },
+        {
+          "merchantID": "kinto",
+          "productID": 2214011961392
+        },
+        {
+          "merchantID": "kinto",
+          "productID": 2214023331888
+        }
+      ],
+      "coverImageName": "cover-coffee-counter"
+    },
+    {
+      "id": "table-stranger",
+      "eyebrow": "Playful, but still considered",
+      "title": "Objects that make the table stranger",
+      "subtitle": "A surreal still life of fish, sun, steel, and red aluminum from three different design worlds.",
+      "format": "world",
+      "topicKeys": [
+        "tabletop"
+      ],
+      "accentHex": "#6B5111",
+      "destinationLabel": "Enter the tablescape",
+      "products": [
+        {
+          "merchantID": "doiy",
+          "productID": 8491003314332
+        },
+        {
+          "merchantID": "doiy",
+          "productID": 8300748931228
+        },
+        {
+          "merchantID": "moma",
+          "productID": 8909829603558
+        },
+        {
+          "merchantID": "moma",
+          "productID": 9787655160038
+        }
+      ],
+      "coverImageName": "cover-tabletop-objects"
+    },
+    {
+      "id": "nursery-grown-up-room",
+      "eyebrow": "For the child space you're building",
+      "title": "A nursery that still feels like your home",
+      "subtitle": "Warm wood, compact footprints, and seating that transitions beyond the first stage.",
+      "format": "setup",
+      "topicKeys": [
+        "kids"
+      ],
+      "accentHex": "#6A5137",
+      "destinationLabel": "Build the room",
+      "products": [
+        {
+          "merchantID": "babyletto",
+          "productID": 7652167942198
+        },
+        {
+          "merchantID": "babyletto",
+          "productID": 6867000164406
+        },
+        {
+          "merchantID": "lalo",
+          "productID": 4363480432704
+        },
+        {
+          "merchantID": "lalo",
+          "productID": 6603936137280
+        }
+      ],
+      "coverImageName": "cover-design-for-kids"
+    },
+    {
+      "id": "trail-to-street",
+      "eyebrow": "Performance, without looking overbuilt",
+      "title": "Salomons that work after the trail ends",
+      "subtitle": "Technical GTX pairs, archival trail geometry, and quieter colors selected across two shops.",
+      "format": "shortlist",
+      "topicKeys": [
+        "trail"
+      ],
+      "accentHex": "#6B5B4E",
+      "destinationLabel": "Compare the rotation",
+      "products": [
+        {
+          "merchantID": "feature-salomon",
+          "productID": 7029064368199
+        },
+        {
+          "merchantID": "feature-salomon",
+          "productID": 6753846919239
+        },
+        {
+          "merchantID": "extra-butter-salomon",
+          "productID": 8151144530103
+        },
+        {
+          "merchantID": "extra-butter-salomon",
+          "productID": 8349773922487
+        }
+      ],
+      "coverImageName": "cover-trail-to-street"
+    },
+    {
+      "id": "new-york-graphics",
+      "eyebrow": "A recurring line through your profile",
+      "title": "New York graphics, off the wall",
+      "subtitle": "Transit identity, publishing, and a neon watch connected by the city's visual language.",
+      "format": "world",
+      "topicKeys": [
+        "type"
+      ],
+      "accentHex": "#302618",
+      "destinationLabel": "Follow the city thread",
+      "products": [
+        {
+          "merchantID": "standards-manual",
+          "productID": 1424479363
+        },
+        {
+          "merchantID": "lichen",
+          "productID": 11009838154046
+        },
+        {
+          "merchantID": "moma",
+          "productID": 9604489248998
+        },
+        {
+          "merchantID": "draw-down",
+          "productID": 7804062892286
+        }
+      ],
+      "coverImageName": "cover-new-york-graphics"
+    },
+    {
+      "id": "scalp-reset",
+      "eyebrow": "Your Ceremonia regimen, sequenced",
+      "title": "A scalp-first reset for the full week",
+      "subtitle": "Clarify, condition, extend, and dry with four products that each have a distinct job.",
+      "format": "setup",
+      "topicKeys": [],
+      "accentHex": "#6B5136",
+      "destinationLabel": "See the regimen",
+      "products": [
+        {
+          "merchantID": "ceremonia",
+          "productID": 7219216580772
+        },
+        {
+          "merchantID": "ceremonia",
+          "productID": 6060165300388
+        },
+        {
+          "merchantID": "ceremonia",
+          "productID": 14886355796337
+        },
+        {
+          "merchantID": "ceremonia",
+          "productID": 15369056321905
+        }
+      ],
+      "coverImageName": "cover-scalp-care"
+    },
+    {
+      "id": "black-silver-signal",
+      "eyebrow": "A material thread, not a category",
+      "title": "Black, silver, and one electric signal",
+      "subtitle": "A chair, a watch, coffee equipment, and trail footwear held together by finish and proportion.",
+      "format": "world",
+      "topicKeys": [
+        "mirrors",
+        "coffee",
+        "tabletop",
+        "trail"
+      ],
+      "accentHex": "#242120",
+      "destinationLabel": "Explore the material study",
+      "products": [
+        {
+          "merchantID": "house-of-leon",
+          "productID": 7873592721581
+        },
+        {
+          "merchantID": "moma",
+          "productID": 9604489248998
+        },
+        {
+          "merchantID": "fellow",
+          "productID": 2055410221171
+        },
+        {
+          "merchantID": "feature-salomon",
+          "productID": 6753846919239
+        }
+      ],
+      "coverImageName": "cover-material-study"
+    },
+    {
+      "id": "birding-optics-sizes",
+      "eyebrow": "",
+      "title": "Compact, field, or full-size?",
+      "subtitle": "Four carry formats for different distances and days.",
+      "format": "shortlist",
+      "topicKeys": [
+        "birding"
+      ],
+      "accentHex": "#315C45",
+      "destinationLabel": "Compare the optics",
+      "products": [
+        {
+          "merchantID": "nocs",
+          "productID": 10432692846871
+        },
+        {
+          "merchantID": "nocs",
+          "productID": 10002676810007
+        },
+        {
+          "merchantID": "nocs",
+          "productID": 8226174730519
+        },
+        {
+          "merchantID": "nocs",
+          "productID": 6591770722382
+        }
+      ]
+    },
+    {
+      "id": "birding-wet-weather",
+      "eyebrow": "",
+      "title": "A field day built for wet weather",
+      "subtitle": "",
+      "format": "setup",
+      "topicKeys": [
+        "birding"
+      ],
+      "accentHex": "#3F554B",
+      "destinationLabel": "Build the wet-weather kit",
+      "products": [
+        {
+          "merchantID": "nocs",
+          "productID": 10432692846871
+        },
+        {
+          "merchantID": "nocs",
+          "productID": 10002676810007
+        },
+        {
+          "merchantID": "feature-salomon",
+          "productID": 7029064368199
+        },
+        {
+          "merchantID": "extra-butter-salomon",
+          "productID": 8349773922487
+        }
+      ]
+    },
+    {
+      "id": "birding-pocketable",
+      "eyebrow": "",
+      "title": "The smallest way into birding",
+      "subtitle": "",
+      "format": "world",
+      "topicKeys": [
+        "birding"
+      ],
+      "accentHex": "#496B67",
+      "destinationLabel": "Start with compact optics",
+      "products": [
+        {
+          "merchantID": "nocs",
+          "productID": 6591770722382
+        },
+        {
+          "merchantID": "nocs",
+          "productID": 8226174730519
+        },
+        {
+          "merchantID": "kinto",
+          "productID": 2214022053936
+        },
+        {
+          "merchantID": "fellow",
+          "productID": 4807420739684
+        }
+      ]
+    },
+    {
+      "id": "mirrors-floor-presence",
+      "eyebrow": "",
+      "title": "Floor mirrors with real presence",
+      "subtitle": "",
+      "format": "shortlist",
+      "topicKeys": [
+        "mirrors"
+      ],
+      "accentHex": "#7A6656",
+      "destinationLabel": "Compare full-length forms",
+      "products": [
+        {
+          "merchantID": "forom",
+          "productID": 9080109072515
+        },
+        {
+          "merchantID": "forom",
+          "productID": 9080102715523
+        },
+        {
+          "merchantID": "coming-soon",
+          "productID": 9960379842866
+        },
+        {
+          "merchantID": "coming-soon",
+          "productID": 9603401253170
+        }
+      ]
+    },
+    {
+      "id": "mirrors-fluid-forms",
+      "eyebrow": "",
+      "title": "No straight lines required",
+      "subtitle": "",
+      "format": "world",
+      "topicKeys": [
+        "mirrors"
+      ],
+      "accentHex": "#805C59",
+      "destinationLabel": "Explore fluid silhouettes",
+      "products": [
+        {
+          "merchantID": "forom",
+          "productID": 7914833051779
+        },
+        {
+          "merchantID": "coming-soon",
+          "productID": 9908030275890
+        },
+        {
+          "merchantID": "coming-soon",
+          "productID": 9603148841266
+        },
+        {
+          "merchantID": "coming-soon",
+          "productID": 9603401253170
+        }
+      ]
+    },
+    {
+      "id": "mirrors-warm-wood",
+      "eyebrow": "",
+      "title": "Warm wood around the reflection",
+      "subtitle": "",
+      "format": "world",
+      "topicKeys": [
+        "mirrors"
+      ],
+      "accentHex": "#72533E",
+      "destinationLabel": "Follow the material",
+      "products": [
+        {
+          "merchantID": "forom",
+          "productID": 9080102322307
+        },
+        {
+          "merchantID": "forom",
+          "productID": 9080102715523
+        },
+        {
+          "merchantID": "house-of-leon",
+          "productID": 7873592688813
+        },
+        {
+          "merchantID": "house-of-leon",
+          "productID": 7922656051373
+        }
+      ]
+    },
+    {
+      "id": "type-identity-manuals",
+      "eyebrow": "",
+      "title": "Four identity systems, documented",
+      "subtitle": "",
+      "format": "shortlist",
+      "topicKeys": [
+        "type"
+      ],
+      "accentHex": "#C93D31",
+      "destinationLabel": "Open the standards shelf",
+      "products": [
+        {
+          "merchantID": "standards-manual",
+          "productID": 1424479363
+        },
+        {
+          "merchantID": "standards-manual",
+          "productID": 5842516163
+        },
+        {
+          "merchantID": "standards-manual",
+          "productID": 92039479320
+        },
+        {
+          "merchantID": "standards-manual",
+          "productID": 3933686169669
+        }
+      ]
+    },
+    {
+      "id": "type-making-now",
+      "eyebrow": "",
+      "title": "How type gets made now",
+      "subtitle": "",
+      "format": "setup",
+      "topicKeys": [
+        "type"
+      ],
+      "accentHex": "#304E92",
+      "destinationLabel": "Build the working shelf",
+      "products": [
+        {
+          "merchantID": "draw-down",
+          "productID": 1591926554714
+        },
+        {
+          "merchantID": "draw-down",
+          "productID": 7804062892286
+        },
+        {
+          "merchantID": "draw-down",
+          "productID": 8336413458686
+        },
+        {
+          "merchantID": "draw-down",
+          "productID": 7955948863742
+        }
+      ]
+    },
+    {
+      "id": "type-public-systems",
+      "eyebrow": "",
+      "title": "Graphics made for public life",
+      "subtitle": "",
+      "format": "world",
+      "topicKeys": [
+        "type"
+      ],
+      "accentHex": "#D24B37",
+      "destinationLabel": "Follow the public thread",
+      "products": [
+        {
+          "merchantID": "standards-manual",
+          "productID": 1424479363
+        },
+        {
+          "merchantID": "standards-manual",
+          "productID": 92039479320
+        },
+        {
+          "merchantID": "standards-manual",
+          "productID": 3933686169669
+        },
+        {
+          "merchantID": "moma",
+          "productID": 9604489248998
+        }
+      ]
+    },
+    {
+      "id": "coffee-fellow-workflow",
+      "eyebrow": "",
+      "title": "The complete Fellow workflow",
+      "subtitle": "",
+      "format": "setup",
+      "topicKeys": [
+        "coffee"
+      ],
+      "accentHex": "#252525",
+      "destinationLabel": "Build the Fellow counter",
+      "products": [
+        {
+          "merchantID": "fellow",
+          "productID": 7507479003236
+        },
+        {
+          "merchantID": "fellow",
+          "productID": 2055410221171
+        },
+        {
+          "merchantID": "fellow",
+          "productID": 2055409762419
+        },
+        {
+          "merchantID": "fellow",
+          "productID": 4807420739684
+        }
+      ]
+    },
+    {
+      "id": "coffee-kinto-serve",
+      "eyebrow": "",
+      "title": "Japanese glassware for the second half of the brew",
+      "subtitle": "",
+      "format": "world",
+      "topicKeys": [
+        "coffee"
+      ],
+      "accentHex": "#736B60",
+      "destinationLabel": "Set the serving layer",
+      "products": [
+        {
+          "merchantID": "kinto",
+          "productID": 2214011961392
+        },
+        {
+          "merchantID": "kinto",
+          "productID": 2214022053936
+        },
+        {
+          "merchantID": "kinto",
+          "productID": 2214023331888
+        },
+        {
+          "merchantID": "kinto",
+          "productID": 2214010978352
+        }
+      ]
+    },
+    {
+      "id": "coffee-cup-ritual",
+      "eyebrow": "",
+      "title": "Four objects between brew and first sip",
+      "subtitle": "",
+      "format": "shortlist",
+      "topicKeys": [
+        "coffee"
+      ],
+      "accentHex": "#57504A",
+      "destinationLabel": "Compare the drinkware",
+      "products": [
+        {
+          "merchantID": "fellow",
+          "productID": 2055409762419
+        },
+        {
+          "merchantID": "fellow",
+          "productID": 4807420739684
+        },
+        {
+          "merchantID": "kinto",
+          "productID": 2214022053936
+        },
+        {
+          "merchantID": "kinto",
+          "productID": 2214023331888
+        }
+      ]
+    },
+    {
+      "id": "kids-swell-room",
+      "eyebrow": "",
+      "title": "Build the room around Swell",
+      "subtitle": "",
+      "format": "setup",
+      "topicKeys": [
+        "kids"
+      ],
+      "accentHex": "#897866",
+      "destinationLabel": "See the complete room",
+      "products": [
+        {
+          "merchantID": "babyletto",
+          "productID": 7652167942198
+        },
+        {
+          "merchantID": "babyletto",
+          "productID": 7652167647286
+        },
+        {
+          "merchantID": "babyletto",
+          "productID": 7784483389494
+        },
+        {
+          "merchantID": "babyletto",
+          "productID": 6867000164406
+        }
+      ]
+    },
+    {
+      "id": "kids-feeding-stages",
+      "eyebrow": "",
+      "title": "One seat for every feeding stage",
+      "subtitle": "",
+      "format": "shortlist",
+      "topicKeys": [
+        "kids"
+      ],
+      "accentHex": "#B7654D",
+      "destinationLabel": "Compare the seating",
+      "products": [
+        {
+          "merchantID": "lalo",
+          "productID": 4363480432704
+        },
+        {
+          "merchantID": "lalo",
+          "productID": 6603936137280
+        },
+        {
+          "merchantID": "lalo",
+          "productID": 7134036885568
+        },
+        {
+          "merchantID": "lalo",
+          "productID": 4462324875328
+        }
+      ]
+    },
+    {
+      "id": "kids-small-footprint",
+      "eyebrow": "",
+      "title": "Child gear for a smaller footprint",
+      "subtitle": "",
+      "format": "world",
+      "topicKeys": [
+        "kids"
+      ],
+      "accentHex": "#7B6E61",
+      "destinationLabel": "Explore compact pieces",
+      "products": [
+        {
+          "merchantID": "lalo",
+          "productID": 6603936137280
+        },
+        {
+          "merchantID": "lalo",
+          "productID": 7134036885568
+        },
+        {
+          "merchantID": "lalo",
+          "productID": 4462324875328
+        },
+        {
+          "merchantID": "babyletto",
+          "productID": 7652167942198
+        }
+      ]
+    },
+    {
+      "id": "tabletop-vase-shapes",
+      "eyebrow": "",
+      "title": "Four vases that refuse to disappear",
+      "subtitle": "",
+      "format": "shortlist",
+      "topicKeys": [
+        "tabletop"
+      ],
+      "accentHex": "#C9613D",
+      "destinationLabel": "Compare the silhouettes",
+      "products": [
+        {
+          "merchantID": "doiy",
+          "productID": 8491003314332
+        },
+        {
+          "merchantID": "doiy",
+          "productID": 9135917301916
+        },
+        {
+          "merchantID": "doiy",
+          "productID": 8712550678684
+        },
+        {
+          "merchantID": "doiy",
+          "productID": 8300748931228
+        }
+      ]
+    },
+    {
+      "id": "tabletop-red-metal",
+      "eyebrow": "",
+      "title": "Red metal, from tool to table",
+      "subtitle": "",
+      "format": "world",
+      "topicKeys": [
+        "tabletop"
+      ],
+      "accentHex": "#A93E2D",
+      "destinationLabel": "Follow the red signal",
+      "products": [
+        {
+          "merchantID": "moma",
+          "productID": 9787655160038
+        },
+        {
+          "merchantID": "moma",
+          "productID": 8909829603558
+        },
+        {
+          "merchantID": "fellow",
+          "productID": 2055410221171
+        },
+        {
+          "merchantID": "doiy",
+          "productID": 8300748931228
+        }
+      ]
+    },
+    {
+      "id": "tabletop-serve-small",
+      "eyebrow": "",
+      "title": "Small serving objects with a point of view",
+      "subtitle": "",
+      "format": "setup",
+      "topicKeys": [
+        "tabletop"
+      ],
+      "accentHex": "#7B6B56",
+      "destinationLabel": "Build the small setting",
+      "products": [
+        {
+          "merchantID": "kinto",
+          "productID": 2214022053936
+        },
+        {
+          "merchantID": "kinto",
+          "productID": 2214023331888
+        },
+        {
+          "merchantID": "fellow",
+          "productID": 2055409762419
+        },
+        {
+          "merchantID": "moma",
+          "productID": 8909829603558
+        }
+      ]
+    },
+    {
+      "id": "trail-light-neutrals",
+      "eyebrow": "",
+      "title": "Technical shoes in lighter neutrals",
+      "subtitle": "",
+      "format": "shortlist",
+      "topicKeys": [
+        "trail"
+      ],
+      "accentHex": "#8B877B",
+      "destinationLabel": "Compare the light rotation",
+      "products": [
+        {
+          "merchantID": "feature-salomon",
+          "productID": 6753846853703
+        },
+        {
+          "merchantID": "feature-salomon",
+          "productID": 7029064368199
+        },
+        {
+          "merchantID": "extra-butter-salomon",
+          "productID": 7919493251255
+        },
+        {
+          "merchantID": "extra-butter-salomon",
+          "productID": 4643336060976
+        }
+      ]
+    },
+    {
+      "id": "trail-weatherproof",
+      "eyebrow": "",
+      "title": "Four pairs for bad weather",
+      "subtitle": "",
+      "format": "shortlist",
+      "topicKeys": [
+        "trail"
+      ],
+      "accentHex": "#41443E",
+      "destinationLabel": "Compare weather protection",
+      "products": [
+        {
+          "merchantID": "feature-salomon",
+          "productID": 7029064368199
+        },
+        {
+          "merchantID": "feature-salomon",
+          "productID": 7243015094343
+        },
+        {
+          "merchantID": "extra-butter-salomon",
+          "productID": 8151144530103
+        },
+        {
+          "merchantID": "extra-butter-salomon",
+          "productID": 8349773922487
+        }
+      ]
+    },
+    {
+      "id": "trail-dark-palette",
+      "eyebrow": "",
+      "title": "Black, brown, and trail geometry",
+      "subtitle": "",
+      "format": "world",
+      "topicKeys": [
+        "trail"
+      ],
+      "accentHex": "#3F3A34",
+      "destinationLabel": "Explore the darker palette",
+      "products": [
+        {
+          "merchantID": "feature-salomon",
+          "productID": 6753846919239
+        },
+        {
+          "merchantID": "feature-salomon",
+          "productID": 7243015094343
+        },
+        {
+          "merchantID": "extra-butter-salomon",
+          "productID": 8151144530103
+        },
+        {
+          "merchantID": "extra-butter-salomon",
+          "productID": 8349773922487
+        }
+      ]
+    }
+  ]
+}

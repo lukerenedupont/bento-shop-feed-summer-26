@@ -1,0 +1,65 @@
+name: ShopFeedSummer26
+options:
+  bundleIdPrefix: com.shopify.purl.prototype
+  deploymentTarget:
+    iOS: "26.0"
+  generateEmptyDirectories: true
+settings:
+  base:
+    GENERATE_INFOPLIST_FILE: YES
+    IPHONEOS_DEPLOYMENT_TARGET: "26.0"
+    SWIFT_VERSION: "5.9"
+    SWIFT_STRICT_CONCURRENCY: minimal
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  configs:
+    Debug:
+      ENABLE_DEBUG_DYLIB: YES
+packages:
+  FloatingPanel:
+    url: https://github.com/scenee/FloatingPanel
+    from: "3.0.0"
+targets:
+  ShopFeedSummer26:
+    type: application
+    platform: iOS
+    sources:
+      - path: ShopFeedSummer26
+        excludes:
+          - "**/.DS_Store"
+          - "**/*.env"
+          - "Dossiers"
+      # Dossier drop zone: bundled as a folder reference so newly dropped
+      # dossier JSON + mp4 films ship without regenerating the project.
+      - path: ShopFeedSummer26/Dossiers
+        type: folder
+        buildPhase: resources
+    dependencies:
+      - package: FloatingPanel
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.shopify.purl.prototype.shop.feed.summer.26
+        PRODUCT_NAME: ShopFeedSummer26
+        INFOPLIST_KEY_CFBundleDisplayName: "Shop Feed Summer 26"
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
+      info:
+        UIAppFonts:
+                  []
+    preBuildScripts:
+      - name: Validate Personalized Feed
+        basedOnDependencyAnalysis: false
+        script: |
+          "${SRCROOT}/Scripts/validate_personalized_feed.py"
+    postBuildScripts:
+      - name: Copy Local Shop Server Env
+        basedOnDependencyAnalysis: false
+        script: |
+          ENV_FILE="${SRCROOT}/.env.local"
+          DEST_DIR="${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+          if [ -f "$ENV_FILE" ]; then
+            mkdir -p "$DEST_DIR"
+            cp "$ENV_FILE" "$DEST_DIR/ShopServer.env"
+          else
+            rm -f "$DEST_DIR/ShopServer.env"
+          fi

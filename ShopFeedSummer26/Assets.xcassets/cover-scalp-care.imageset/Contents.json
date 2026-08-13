@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "cover-scalp-care.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

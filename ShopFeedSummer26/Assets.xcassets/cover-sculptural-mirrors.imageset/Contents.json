@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "cover-sculptural-mirrors.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
