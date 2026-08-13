@@ -89,9 +89,11 @@ final class NavigationCoordinator {
     }
 
     /// Whether the currently visible page has a pushed sub-page.
+    /// Inline topic/subcategory views are excluded: they carry their own
+    /// top back button, so the bottom bar stays back-free for them.
     var isNavigatedDeep: Bool {
         switch selectedPage {
-        case 0: return !homePath.isEmpty || topicBackAction != nil
+        case 0: return !homePath.isEmpty
         case 1: return !accountPath.isEmpty
         case 2: return !explorePath.isEmpty
         case 3: return !searchPath.isEmpty

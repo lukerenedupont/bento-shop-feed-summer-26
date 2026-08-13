@@ -10,8 +10,12 @@ struct TopicLandingView: View {
     /// Optional parent-topic theme inherited by drilled-in subtopic pages.
     var headerCoverImageName: String? = nil
     var surfaceAccentHex: String? = nil
+    /// When provided, the header participates in a hero zoom from the feed
+    /// card that opened this topic (matched on the lead story's ID).
+    var heroNamespace: Namespace.ID? = nil
 
     @Environment(NavigationCoordinator.self) private var coordinator
+    @Namespace private var fallbackNamespace
 
     private var backgroundColor: Color {
         Color(hex: surfaceAccentHex ?? stories.first?.accentHex ?? "#171717")
@@ -118,9 +122,23 @@ struct TopicLandingView: View {
         .background(backgroundColor.ignoresSafeArea())
     }
 
+    /// The lead story's hero-product film — the same surface its feed card
+    /// plays, so the zoom transition hands the motion off seamlessly.
+    private var headerFilm: (url: URL, poster: String?)? {
+        guard let hero = stories.first?.resolvedProducts(from: merchants).first,
+              let url = DossierStore.ambientVideoURL(merchantID: hero.merchant.id, productID: hero.product.id) else { return nil }
+        return (url, hero.product.imageURL)
+    }
+
     private var topicHeader: some View {
         ZStack(alignment: .bottomLeading) {
-            if let coverImageName = effectiveCoverImageName {
+            if let headerFilm {
+                Color.clear
+                    .overlay {
+                        AmbientProductVideo(videoURL: headerFilm.url, posterImageURL: headerFilm.poster)
+                    }
+                    .clipped()
+            } else if let coverImageName = effectiveCoverImageName {
                 // Overlay-on-clear keeps the fill image from widening the
                 // header beyond the container and displacing the page layout.
                 Color.clear
@@ -201,7 +219,11 @@ struct TopicLandingView: View {
         }
         // Cover topics get a tall editorial header; coverless landings stay
         // compact instead of reserving empty atmosphere.
-        .frame(height: effectiveCoverImageName != nil ? 500 : 220)
+        .frame(height: effectiveCoverImageName != nil || headerFilm != nil ? 500 : 220)
+        .matchedGeometryEffect(
+            id: "topic-hero-\(stories.first?.id ?? topic.id)",
+            in: heroNamespace ?? fallbackNamespace
+        )
     }
 
     /// Curated subtopic pills; falls back to story titles for topics that

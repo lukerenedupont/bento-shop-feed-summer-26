@@ -47,14 +47,14 @@ struct HomePage: View {
             } else if selectedTopicID == "for-you" {
                 storyFeed
             } else {
-                TopicLandingView(topic: selectedTopic, stories: focusedStories, merchants: merchants)
-                    .id(selectedTopicID)
+                TopicLandingView(
+                    topic: selectedTopic,
+                    stories: focusedStories,
+                    merchants: merchants,
+                    heroNamespace: heroNamespace
+                )
+                .id(selectedTopicID)
             }
-        }
-        .transaction { transaction in
-            // Topic changes replace the content immediately while the
-            // selection pill animates independently in the top bar.
-            transaction.animation = nil
         }
         .background(pageBackgroundColor.ignoresSafeArea())
         .safeAreaBar(edge: .top) {
@@ -108,7 +108,9 @@ struct HomePage: View {
                             height: cardHeight,
                             onTap: { openTopic(for: story) }
                         )
-                        .matchedTransitionSource(id: story.id, in: heroNamespace)
+                        // Hero zoom: the card's frame hands off to the topic
+                        // header when its world opens.
+                        .matchedGeometryEffect(id: "topic-hero-\(story.id)", in: heroNamespace)
                         .id(story.id)
                     }
                 }
