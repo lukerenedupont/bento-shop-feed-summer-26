@@ -151,18 +151,54 @@ struct HomePage: View {
 
     @State private var avatarPressed = false
 
+    /// Pinterest-style navigation: the avatar + topic rail only exist on the
+    /// For You feed. Topic and subcategory views get a single floating back
+    /// button instead of persistent tabs.
+    @ViewBuilder
     private var topBar: some View {
-        HStack(spacing: 0) {
-            avatar
+        if selectedTopicID == "for-you" && focusedStoryID == nil {
+            HStack(spacing: 0) {
+                avatar
 
-            // Topic feeds
-            topicRail
+                // Topic feeds
+                topicRail
+            }
+            .padding(.horizontal, PurlTune.token("Pages/HomePage.swift:padding:_:164:31", default: GravitySpacing.space16, options: GravitySpacing.purlTuneOptions))
+            .padding(.vertical, PurlTune.token("Pages/HomePage.swift:padding:_:165:29", default: GravitySpacing.space4, options: GravitySpacing.purlTuneOptions))
+            .background(pageBackgroundColor)
+        } else {
+            HStack {
+                backButton
+                Spacer()
+            }
+            .padding(.horizontal, GravitySpacing.space16)
+            .padding(.vertical, GravitySpacing.space4)
         }
-        .padding(.horizontal, PurlTune.token("Pages/HomePage.swift:padding:_:164:31", default: GravitySpacing.space16, options: GravitySpacing.purlTuneOptions))
-        .padding(.vertical, PurlTune.token("Pages/HomePage.swift:padding:_:165:29", default: GravitySpacing.space4, options: GravitySpacing.purlTuneOptions))
-        // Topic pages bleed their cover image behind the pills; For You keeps
-        // an opaque header so cards never collide with the controls.
-        .background(selectedTopicID == "for-you" && focusedStoryID == nil ? pageBackgroundColor : Color.clear)
+    }
+
+    /// Steps back one level: subcategory → topic → For You.
+    private var backButton: some View {
+        Button {
+            HapticFeedback.light.fire()
+            coordinator.resetScrollState()
+            withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
+                if focusedStoryID != nil {
+                    focusedStoryID = nil
+                } else {
+                    selectedTopicID = "for-you"
+                }
+            }
+        } label: {
+            Image(systemName: "arrow.left")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 42, height: 42)
+                .background(.black.opacity(0.28), in: Circle())
+                .overlay { Circle().strokeBorder(.white.opacity(0.22), lineWidth: 0.5) }
+                .shadow(color: .black.opacity(0.16), radius: 10, y: 4)
+        }
+        .buttonStyle(PressScaleButtonStyle(scale: 0.9))
+        .accessibilityLabel("Back")
     }
 
     /// Registers the bottom nav's back behavior for the active topic. Topic
