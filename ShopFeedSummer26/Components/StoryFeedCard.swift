@@ -162,33 +162,24 @@ struct StoryFeedCard: View {
 
     // MARK: - Product carousel
 
+    /// The component-system `ProductCard` in image-only mode — square tile,
+    /// price badge top-leading — identical to topic-page product rails.
     private var productCarousel: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: GravitySpacing.space8) {
                 ForEach(items) { item in
-                    productTile(item)
+                    ProductCard(
+                        image: nil,
+                        imageURL: item.product.imageURL,
+                        priceBadge: formatPrice(item.product.price),
+                        showFavoriteButton: false
+                    )
+                    .frame(width: 124)
+                    .accessibilityLabel("\(item.product.title), \(formatPrice(item.product.price))")
                 }
             }
             .padding(.horizontal, GravitySpacing.space20)
         }
-    }
-
-    private func productTile(_ item: ResolvedStoryProduct) -> some View {
-        ZStack(alignment: .bottomLeading) {
-            ProductImageView(product: item.product, merchant: item.merchant)
-                .frame(width: 108, height: 132)
-                .background(.white)
-                .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r16, style: .continuous))
-
-            Text(formatPrice(item.product.price))
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(.black)
-                .padding(.horizontal, GravitySpacing.space8)
-                .padding(.vertical, GravitySpacing.space4)
-                .background(.white.opacity(0.92), in: Capsule())
-                .padding(GravitySpacing.space6)
-        }
-        .accessibilityLabel("\(item.product.title), \(formatPrice(item.product.price))")
     }
 }
 
