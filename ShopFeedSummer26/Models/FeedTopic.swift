@@ -22,6 +22,10 @@ struct FeedTopic: Identifiable, Hashable, Codable {
             case merchantRail
             case productRail
             case masonry
+            /// A packed box of role-based compartments. Items carry a `role`
+            /// ("See", "Wear", "Keep shopping") and an optional `size`;
+            /// unsized compartments are sized by shopper signal strength.
+            case bento
         }
 
         struct Item: Hashable, Codable {
@@ -35,6 +39,12 @@ struct FeedTopic: Identifiable, Hashable, Codable {
             let storyID: String?
             let merchantID: String?
             let productID: Int?
+            /// Bento only: the compartment's stated purpose. Every bento
+            /// compartment must explain why it exists.
+            var role: String? = nil
+            /// Bento only: explicit cell size (`hero`, `wide`, `standard`).
+            /// Omit to let signal strength decide.
+            var size: String? = nil
         }
 
         let id: String

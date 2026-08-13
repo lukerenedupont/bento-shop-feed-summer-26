@@ -240,6 +240,16 @@ struct TopicLandingView: View {
     @ViewBuilder
     private func merchandisingBlock(_ block: FeedTopic.MerchandisingBlock, containerWidth: CGFloat) -> some View {
         switch block.kind {
+        case .bento:
+            VStack(alignment: .leading, spacing: 14) {
+                sectionTitle(block.title)
+                BentoGrid(
+                    compartments: bentoCompartments(block),
+                    containerWidth: containerWidth - 32
+                )
+                .padding(.horizontal, 16)
+            }
+            .padding(.top, 12)
         case .mediaCarousel:
             mediaCarousel(block)
         case .merchantRail:
@@ -362,6 +372,50 @@ struct TopicLandingView: View {
                     }
                 }
                 .padding(.horizontal, 16)
+            }
+        }
+    }
+
+    /// Maps a bento block's items to compartments. Explicit sizes win;
+    /// unsized cells resolve from signal strength and film coverage.
+    private func bentoCompartments(_ block: FeedTopic.MerchandisingBlock) -> [BentoCompartment] {
+        let signals = ShopperSignals.current
+        return (block.items ?? []).enumerated().compactMap { index, item in
+            let id = "\(block.id)-\(index)"
+            let role = item.role ?? ""
+            switch item.kind {
+            case .product:
+                guard let resolved = resolvedProduct(for: item) else { return nil }
+                let hasFilm = DossierStore.ambientVideoURL(merchantID: resolved.merchant.id, productID: resolved.product.id) != nil
+                let size = BentoCompartment.resolveSize(
+                    explicit: item.size,
+                    signal: signals.strength(merchantID: resolved.merchant.id, productID: resolved.product.id),
+                    hasFilm: hasFilm
+                )
+                return BentoCompartment(id: id, role: role, size: size, surface: .product(resolved)) {
+                    // Dossier'd products get the Deep Dive; the rest, the PDP.
+                    if DossierStore.dossier(merchantID: resolved.merchant.id, productID: resolved.product.id) != nil {
+                        coordinator.pushRoute(.deepDive(merchantId: resolved.merchant.id, productId: resolved.product.id))
+                    } else {
+                        coordinator.pushRoute(.product(merchantId: resolved.merchant.id, productId: resolved.product.id))
+                    }
+                }
+            case .merchant:
+                guard let merchantID = item.merchantID,
+                      let merchant = merchants.first(where: { $0.id == merchantID }) else { return nil }
+                let size = BentoCompartment.resolveSize(explicit: item.size, signal: .none, hasFilm: false)
+                return BentoCompartment(id: id, role: role, size: size, surface: .merchant(merchant)) {
+                    coordinator.pushRoute(.store(merchantId: merchant.id))
+                }
+            case .story:
+                guard let storyID = item.storyID,
+                      let story = stories.first(where: { $0.id == storyID }) ?? PersonalizedFeedStories.all.first(where: { $0.id == storyID }) else { return nil }
+                let hero = story.resolvedProducts(from: merchants).first
+                let hasFilm = hero.map { DossierStore.ambientVideoURL(merchantID: $0.merchant.id, productID: $0.product.id) != nil } ?? false
+                let size = BentoCompartment.resolveSize(explicit: item.size, signal: .none, hasFilm: hasFilm)
+                return BentoCompartment(id: id, role: role, size: size, surface: .story(story, hero: hero)) {
+                    coordinator.pushRoute(.story(storyId: story.id))
+                }
             }
         }
     }

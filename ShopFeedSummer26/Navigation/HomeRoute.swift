@@ -3,6 +3,7 @@ import Foundation
 /// Navigation routes used by all pages that push store or product destinations.
 enum HomeRoute: Hashable {
     case product(merchantId: String, productId: Int)
+    case deepDive(merchantId: String, productId: Int)
     case store(merchantId: String)
     case story(storyId: String)
     case deliveries

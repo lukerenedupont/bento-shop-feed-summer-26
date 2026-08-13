@@ -51,10 +51,16 @@ for topic in feed["topics"]:
         if not block_id or block_id in block_ids:
             errors.append(f"{topic['id']}: merchandising block IDs must be present and unique")
         block_ids.add(block_id)
-        if block.get("kind") not in {"mediaCarousel", "merchantRail", "productRail", "masonry"}:
+        if block.get("kind") not in {"mediaCarousel", "merchantRail", "productRail", "masonry", "bento"}:
             errors.append(f"{topic['id']}: unsupported merchandising block kind {block.get('kind')!r}")
         for item in block.get("items", []) or []:
             kind = item.get("kind")
+            if block.get("kind") == "bento":
+                # Every bento compartment must state its purpose.
+                if not item.get("role"):
+                    errors.append(f"{topic['id']}/{block_id}: bento compartment missing role")
+                if item.get("size") not in {None, "hero", "wide", "standard"}:
+                    errors.append(f"{topic['id']}/{block_id}: unknown bento size {item.get('size')!r}")
             if kind == "story" and item.get("storyID") not in story_id_set:
                 errors.append(f"{topic['id']}/{block_id}: unknown story item {item.get('storyID')!r}")
             elif kind == "merchant" and item.get("merchantID") not in merchants:
@@ -126,6 +132,13 @@ for key in known_topic_keys:
 unknown_story_keys = used_topic_keys - known_topic_keys
 if unknown_story_keys:
     errors.append(f"Stories use unknown topic keys: {sorted(unknown_story_keys)}")
+
+# Shopper signal fixtures must reference real catalog products.
+for group in ("cart", "owned", "viewed"):
+    for ref in (feed.get("signals", {}) or {}).get(group, []) or []:
+        key = (ref.get("merchantID"), int(ref.get("productID", -1)))
+        if key not in products:
+            errors.append(f"signals.{group}: unknown product {key}")
 
 # Dossier drop zone: manifest entries must reference real catalog products,
 # and dropped files must belong to a manifest entry.

@@ -61,6 +61,8 @@ struct RootView: View {
         switch route {
         case .product(let merchantId, let productId):
             ProductPage(merchantId: merchantId, productId: productId, namespace: namespace)
+        case .deepDive(let merchantId, let productId):
+            DeepDivePage(merchantId: merchantId, productId: productId)
         case .store(let merchantId):
             StorePage(merchantId: merchantId, namespace: namespace)
         case .story(let storyId):

@@ -5,6 +5,8 @@ struct PersonalizedFeedCatalog: Codable {
     let version: Int
     let topics: [FeedTopic]
     let stories: [FeedStory]
+    /// Authored shopper-intent fixtures (cart, owned, viewed, searches).
+    var signals: ShopperSignals? = nil
 
     static let current: PersonalizedFeedCatalog = {
         guard let asset = NSDataAsset(name: "personalized-feed"),

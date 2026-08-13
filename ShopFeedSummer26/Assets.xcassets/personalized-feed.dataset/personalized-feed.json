@@ -54,29 +54,51 @@
       ],
       "merchandisingBlocks": [
         {
-          "id": "keep-shopping",
-          "kind": "productRail",
-          "title": "Keep shopping",
+          "id": "kit-bento",
+          "kind": "bento",
+          "title": "The birding kit",
           "items": [
+            {
+              "kind": "story",
+              "storyID": "city-to-trail-birding",
+              "role": "The full kit",
+              "size": "hero"
+            },
             {
               "kind": "product",
               "merchantID": "nocs",
-              "productID": 10432692846871
+              "productID": 10432692846871,
+              "role": "Keep shopping"
+            },
+            {
+              "kind": "product",
+              "merchantID": "nocs",
+              "productID": 6591770722382,
+              "role": "See"
             },
             {
               "kind": "product",
               "merchantID": "feature-salomon",
-              "productID": 7029064368199
-            },
-            {
-              "kind": "product",
-              "merchantID": "nocs",
-              "productID": 6591770722382
+              "productID": 7029064368199,
+              "role": "Wear"
             },
             {
               "kind": "product",
               "merchantID": "extra-butter-salomon",
-              "productID": 8151144530103
+              "productID": 8151144530103,
+              "role": "Wear"
+            },
+            {
+              "kind": "product",
+              "merchantID": "kinto",
+              "productID": 2214022053936,
+              "role": "Carry"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "nocs",
+              "role": "Shop the world",
+              "size": "wide"
             }
           ]
         },
@@ -2336,5 +2358,38 @@
         }
       ]
     }
-  ]
+  ],
+  "signals": {
+    "cart": [
+      {
+        "merchantID": "forom",
+        "productID": 7914833051779
+      }
+    ],
+    "owned": [
+      {
+        "merchantID": "feature-salomon",
+        "productID": 7029064368199
+      }
+    ],
+    "viewed": [
+      {
+        "merchantID": "nocs",
+        "productID": 10432692846871
+      },
+      {
+        "merchantID": "nocs",
+        "productID": 6591770722382
+      },
+      {
+        "merchantID": "extra-butter-salomon",
+        "productID": 8151144530103
+      }
+    ],
+    "searches": [
+      "bird watching",
+      "bird watching binoculars",
+      "amorphous wavy wall mirror"
+    ]
+  }
 }

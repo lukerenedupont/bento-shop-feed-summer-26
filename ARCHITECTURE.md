@@ -187,9 +187,23 @@ is a direct content-enrichment layer:
   its own content type
 - Coverage grows without code changes — see “Dossier drop zone” below
 
-Status: scaffolding shipped (store, component, manifest, validation, drop
-zone); awaiting first dossier JSONs + films to type the payload schema and
-build the bento renderer.
+Status: **bento scaffolding shipped and piloted on Birding gear.**
+
+- `bento` block kind: items carry `role` (required — validator-enforced) and
+  optional `size` (`hero`/`wide`/`standard`)
+- `Components/BentoGrid.swift`: deterministic two-column packer + compartment
+  card (role eyebrow, ambient surface, legibility scrim)
+- Unsized compartments resolve from data: cart signal → hero, owned/filmed →
+  wide, else standard (`BentoCompartment.resolveSize`)
+- `signals` object in `personalized-feed.json` (cart/owned/viewed/searches)
+  decoded by `ShopperSignals`; views only ever read `strength(…)`, so a live
+  signal source later touches one file
+- `Pages/DeepDivePage.swift` + `.deepDive` route: dossier'd products route to
+  the deep dive (films + generic payload sections) instead of the plain PDP;
+  bento product taps pick the destination automatically
+
+Awaiting first dossier JSONs + films to type the payload schema and light up
+the ambient surfaces; then roll bento recipes to the remaining topics.
 
 ## Dossier drop zone
 
