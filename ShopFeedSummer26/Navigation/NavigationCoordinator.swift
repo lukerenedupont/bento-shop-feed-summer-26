@@ -3,13 +3,16 @@ import SwiftUI
 /// Shared navigation state: selected page index + independent nav paths per page.
 @Observable
 final class NavigationCoordinator {
-    /// 0 = Home, 1 = Orders/Deliveries, 2 = Explore, 3 = Search
+    /// 0 = Home, 1 = Orders/Deliveries, 2 = Explore, 3 = Search,
+    /// 4 = Cart, 5 = Favorites
     var selectedPage: Int = 0
 
     var homePath = NavigationPath()
     var accountPath = NavigationPath()
     var explorePath = NavigationPath()
     var searchPath = NavigationPath()
+    var cartPath = NavigationPath()
+    var favoritesPath = NavigationPath()
 
     /// Whether the bottom nav bar shows its blur background.
     var showNavBarBlur: Bool = true
@@ -21,16 +24,9 @@ final class NavigationCoordinator {
     /// Whether the bottom nav bar is visible at all.
     var showNavBar: Bool = true
 
-    /// Back action for the home tab's inline topic feed. Topic selection is
-    /// HomePage state rather than a pushed route, so the bottom nav's back
-    /// button uses this hook to leave a topic and return to For You.
-    var topicBackAction: (() -> Void)? = nil
-
-    /// Inline handler for story drill-ins at the home tab's root. HomePage
-    /// registers this so subcategories swap in place — keeping the avatar and
-    /// topic pills — instead of pushing a separate destination. Returns true
-    /// when the story was handled inline.
-    @ObservationIgnored var inlineStoryHandler: ((String) -> Bool)? = nil
+    /// Topic and subcategory pages own their back affordance at the top, so
+    /// they suppress the bottom bar's back button while they're frontmost.
+    var bottomBackSuppressed: Bool = false
 
     /// Current scroll offset tracking.
     @ObservationIgnored var scrollOffset: CGFloat = 0
@@ -88,15 +84,17 @@ final class NavigationCoordinator {
         }
     }
 
-    /// Whether the currently visible page has a pushed sub-page.
-    /// Inline topic/subcategory views are excluded: they carry their own
-    /// top back button, so the bottom bar stays back-free for them.
+    /// Whether the bottom bar should show its back button. Pages that carry
+    /// their own top back chip (topics, subcategories) suppress it.
     var isNavigatedDeep: Bool {
+        if bottomBackSuppressed { return false }
         switch selectedPage {
         case 0: return !homePath.isEmpty
         case 1: return !accountPath.isEmpty
         case 2: return !explorePath.isEmpty
         case 3: return !searchPath.isEmpty
+        case 4: return !cartPath.isEmpty
+        case 5: return !favoritesPath.isEmpty
         default: return false
         }
     }
@@ -108,24 +106,21 @@ final class NavigationCoordinator {
         case 1: return accountPath.count
         case 2: return explorePath.count
         case 3: return searchPath.count
+        case 4: return cartPath.count
+        case 5: return favoritesPath.count
         default: return 0
         }
     }
 
     /// Push a route onto the current page's navigation stack.
     func pushRoute(_ route: HomeRoute) {
-        // Story drill-ins from the home root stay inline so the top bar
-        // (avatar + topic pills) persists across subcategory pages.
-        if case .story(let storyId) = route,
-           selectedPage == 0, homePath.isEmpty,
-           let inlineStoryHandler, inlineStoryHandler(storyId) {
-            return
-        }
         switch selectedPage {
         case 0: homePath.append(route)
         case 1: accountPath.append(route)
         case 2: explorePath.append(route)
         case 3: searchPath.append(route)
+        case 4: cartPath.append(route)
+        case 5: favoritesPath.append(route)
         default: break
         }
     }
@@ -136,6 +131,8 @@ final class NavigationCoordinator {
         case 1: accountPath = NavigationPath()
         case 2: explorePath = NavigationPath()
         case 3: searchPath = NavigationPath()
+        case 4: cartPath = NavigationPath()
+        case 5: favoritesPath = NavigationPath()
         default: break
         }
         selectedPage = page
@@ -145,15 +142,12 @@ final class NavigationCoordinator {
 
     func popCurrentPage() {
         switch selectedPage {
-        case 0:
-            if !homePath.isEmpty {
-                homePath.removeLast()
-            } else {
-                topicBackAction?()
-            }
+        case 0: if !homePath.isEmpty { homePath.removeLast() }
         case 1: if !accountPath.isEmpty { accountPath.removeLast() }
         case 2: if !explorePath.isEmpty { explorePath.removeLast() }
         case 3: if !searchPath.isEmpty { searchPath.removeLast() }
+        case 4: if !cartPath.isEmpty { cartPath.removeLast() }
+        case 5: if !favoritesPath.isEmpty { favoritesPath.removeLast() }
         default: break
         }
     }

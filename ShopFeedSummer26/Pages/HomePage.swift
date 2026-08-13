@@ -1,96 +1,42 @@
 import Combine
 import SwiftUI
 
-/// Home feed — scrollable merchant feed cards with focused topic feeds.
+/// Home feed — the For You story stream. Topics and subcategories are
+/// pushed destinations that zoom in from their cards; this page carries the
+/// avatar and topic pills, which only exist here.
 struct HomePage: View {
 #if DEBUG
     @ObservedObject private var _purlTuneRuntime = PurlTuneRuntime.shared
 #endif
+    /// Shared with RootView so pushed topics can zoom from their feed card.
+    let namespace: Namespace.ID
+
     @Environment(NavigationCoordinator.self) private var coordinator
     @ObservedObject private var merchantService = RemoteMerchantService.shared
-    @Namespace private var heroNamespace
-    @Namespace private var topicSelectionNamespace
 
     /// Buyer-profile-curated products bundled from official merchant catalogs.
     @State private var merchants: [SampleMerchant] = LocalMerchantService.loadMerchants()
-    @State private var selectedTopicID = "for-you"
-    /// A drilled-in subcategory story rendered inline so the top bar stays.
-    @State private var focusedStoryID: String?
 
     private var topics: [FeedTopic] { PersonalizedFeedCatalog.current.topics }
-    private var selectedTopic: FeedTopic {
-        topics.first { $0.id == selectedTopicID } ?? topics[0]
-    }
 
-    private var pageBackgroundColor: Color {
-        guard selectedTopicID != "for-you", let leadStory = focusedStories.first else {
-            return .white
-        }
-        return Color(hex: leadStory.accentHex)
-    }
-
-    private var focusedStories: [FeedStory] {
-        let stories = PersonalizedFeedStories.all
-        if let storyIDs = selectedTopic.storyIDs {
-            let storiesByID = Dictionary(uniqueKeysWithValues: stories.map { ($0.id, $0) })
-            return storyIDs.compactMap { storiesByID[$0] }
-        }
-        guard let topicKey = selectedTopic.storyTopicKey else { return stories }
-        return stories.filter { $0.topicKeys.contains(topicKey) }
-    }
+    private var stories: [FeedStory] { PersonalizedFeedStories.all }
 
     var body: some View {
-        Group {
-            if let focusedStoryID {
-                StoryTopicPage(storyID: focusedStoryID)
-                    .id(focusedStoryID)
-            } else if selectedTopicID == "for-you" {
-                storyFeed
-            } else {
-                TopicLandingView(
-                    topic: selectedTopic,
-                    stories: focusedStories,
-                    merchants: merchants,
-                    heroNamespace: heroNamespace
-                )
-                .id(selectedTopicID)
+        storyFeed
+            .background(Color.white.ignoresSafeArea())
+            .safeAreaBar(edge: .top) {
+                topBar
             }
-        }
-        .background(pageBackgroundColor.ignoresSafeArea())
-        .safeAreaBar(edge: .top) {
-            topBar
-        }
-        .environment(\.colorScheme, selectedTopicID == "for-you" && focusedStoryID == nil ? .light : .dark)
-        .toolbar(.hidden, for: .navigationBar)
-        .toolbarBackground(.hidden, for: .navigationBar)
-        .task {
-            // Keep the curated assortment authoritative for this prototype and
-            // expose it to PDP/store lookups through SampleMerchant.all.
-            merchantService.merchants = merchants
-            merchantService.usingFallbackData = true
-            coordinator.navBarBlurTint = pageBackgroundColor
-        }
-        .onChange(of: selectedTopicID) { _, _ in
-            withAnimation(.easeOut(duration: 0.22)) {
-                coordinator.navBarBlurTint = pageBackgroundColor
+            .toolbar(.hidden, for: .navigationBar)
+            .toolbarBackground(.hidden, for: .navigationBar)
+            .task {
+                // Keep the curated assortment authoritative for this prototype and
+                // expose it to PDP/store lookups through SampleMerchant.all.
+                merchantService.merchants = merchants
+                merchantService.usingFallbackData = true
+                coordinator.navBarBlurTint = .white
             }
-            syncTopicBackAction()
-        }
-        .onChange(of: focusedStoryID) { _, _ in
-            syncTopicBackAction()
-        }
-        .onAppear {
-            syncTopicBackAction()
-            coordinator.inlineStoryHandler = { storyID in
-                coordinator.resetScrollState()
-                HapticFeedback.light.fire()
-                withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
-                    focusedStoryID = storyID
-                }
-                return true
-            }
-        }
-        .purlInjectable()
+            .purlInjectable()
     }
 
     private var storyFeed: some View {
@@ -100,7 +46,7 @@ struct HomePage: View {
 
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVStack(spacing: 16) {
-                    ForEach(focusedStories) { story in
+                    ForEach(stories) { story in
                         StoryFeedCard(
                             story: story,
                             merchants: merchants,
@@ -108,9 +54,8 @@ struct HomePage: View {
                             height: cardHeight,
                             onTap: { openTopic(for: story) }
                         )
-                        // Hero zoom: the card's frame hands off to the topic
-                        // header when its world opens.
-                        .matchedGeometryEffect(id: "topic-hero-\(story.id)", in: heroNamespace)
+                        // Source for the system zoom into the pushed topic.
+                        .matchedTransitionSource(id: "topic-hero-\(story.id)", in: namespace)
                         .id(story.id)
                     }
                 }
@@ -142,88 +87,26 @@ struct HomePage: View {
             return
         }
 
-        coordinator.resetScrollState()
-        withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
-            focusedStoryID = nil
-            selectedTopicID = destination.id
-        }
+        // The tapped card is the zoom source; the pushed topic scales out of it.
+        coordinator.pushRoute(.topic(topicId: destination.id, sourceStoryId: story.id))
     }
 
     // MARK: - Top Bar (Quick Links)
 
     @State private var avatarPressed = false
 
-    /// Pinterest-style navigation: the avatar + topic rail only exist on the
-    /// For You feed. Topic and subcategory views get a single floating back
-    /// button instead of persistent tabs.
-    @ViewBuilder
+    /// Pinterest-style navigation: the avatar + topic rail only exist here on
+    /// the For You feed. Pushed topic/subcategory pages carry their own back chip.
     private var topBar: some View {
-        if selectedTopicID == "for-you" && focusedStoryID == nil {
-            HStack(spacing: 0) {
-                avatar
+        HStack(spacing: 0) {
+            avatar
 
-                // Topic feeds
-                topicRail
-            }
-            .padding(.horizontal, PurlTune.token("Pages/HomePage.swift:padding:_:164:31", default: GravitySpacing.space16, options: GravitySpacing.purlTuneOptions))
-            .padding(.vertical, PurlTune.token("Pages/HomePage.swift:padding:_:165:29", default: GravitySpacing.space4, options: GravitySpacing.purlTuneOptions))
-            .background(pageBackgroundColor)
-        } else {
-            HStack {
-                backButton
-                Spacer()
-            }
-            .padding(.horizontal, GravitySpacing.space16)
-            .padding(.vertical, GravitySpacing.space4)
+            // Topic feeds
+            topicRail
         }
-    }
-
-    /// Steps back one level: subcategory → topic → For You.
-    private var backButton: some View {
-        Button {
-            HapticFeedback.light.fire()
-            coordinator.resetScrollState()
-            withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
-                if focusedStoryID != nil {
-                    focusedStoryID = nil
-                } else {
-                    selectedTopicID = "for-you"
-                }
-            }
-        } label: {
-            Image(systemName: "arrow.left")
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: 42, height: 42)
-                .background(.black.opacity(0.28), in: Circle())
-                .overlay { Circle().strokeBorder(.white.opacity(0.22), lineWidth: 0.5) }
-                .shadow(color: .black.opacity(0.16), radius: 10, y: 4)
-        }
-        .buttonStyle(PressScaleButtonStyle(scale: 0.9))
-        .accessibilityLabel("Back")
-    }
-
-    /// Registers the bottom nav's back behavior for the active topic. Topic
-    /// selection is inline state, so the shared back button needs this hook.
-    private func syncTopicBackAction() {
-        if focusedStoryID != nil {
-            // Back from a subcategory returns to its parent topic in place.
-            coordinator.topicBackAction = {
-                coordinator.resetScrollState()
-                withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
-                    focusedStoryID = nil
-                }
-            }
-        } else if selectedTopicID == "for-you" {
-            coordinator.topicBackAction = nil
-        } else {
-            coordinator.topicBackAction = {
-                coordinator.resetScrollState()
-                withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
-                    selectedTopicID = "for-you"
-                }
-            }
-        }
+        .padding(.horizontal, PurlTune.token("Pages/HomePage.swift:padding:_:164:31", default: GravitySpacing.space16, options: GravitySpacing.purlTuneOptions))
+        .padding(.vertical, PurlTune.token("Pages/HomePage.swift:padding:_:165:29", default: GravitySpacing.space4, options: GravitySpacing.purlTuneOptions))
+        .background(Color.white)
     }
 
     private var avatar: some View {
@@ -232,7 +115,7 @@ struct HomePage: View {
                 .scaledToFill()
                 .frame(width: PurlTune.value("Pages/HomePage.swift:frame:width:131:31", default: 40), height: PurlTune.value("Pages/HomePage.swift:frame:height:131:111", default: 40))
                 .clipShape(Circle())
-                .matchedTransitionSource(id: "account-avatar", in: heroNamespace)
+                .matchedTransitionSource(id: "account-avatar", in: namespace)
                 .scaleEffect(avatarPressed ? 0.85 : 1.0)
                 .animation(.spring(response: PurlTune.value("Pages/HomePage.swift:spring:response:135:46", default: 0.2), dampingFraction: PurlTune.value("Pages/HomePage.swift:spring:dampingFraction:135:140", default: 0.7)), value: avatarPressed)
                 .gesture(
@@ -270,27 +153,20 @@ struct HomePage: View {
                 .padding(.vertical, PurlTune.value("Pages/HomePage.swift:padding:_:160:33", default: -20))
                 .padding(.leading, -20 / 2)
                 .padding(.trailing, -GravitySpacing.space16)
-                .onChange(of: selectedTopicID) { _, topicID in
-                    withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
-                        proxy.scrollTo(topicID, anchor: .leading)
-                    }
-                }
             }
     }
 
+    /// "For you" is this page itself (selected pill); other topics push their
+    /// world, zooming from the lead story's card when it's on screen.
     private func topicButton(_ topic: FeedTopic) -> some View {
         Button {
-            guard selectedTopicID != topic.id || focusedStoryID != nil else { return }
+            guard topic.id != "for-you" else { return }
             HapticFeedback.light.fire()
-            coordinator.resetScrollState()
-            withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
-                focusedStoryID = nil
-                selectedTopicID = topic.id
-            }
+            coordinator.pushRoute(.topic(topicId: topic.id, sourceStoryId: topic.storyIDs?.first))
         } label: {
             topicLabel(topic)
                 .background {
-                    if selectedTopicID == topic.id {
+                    if topic.id == "for-you" {
                         Capsule()
                             .fill(Color.white.opacity(0.92))
                             .overlay {
@@ -298,33 +174,27 @@ struct HomePage: View {
                                     .strokeBorder(Color.black.opacity(0.06), lineWidth: 0.5)
                             }
                             .shadow(color: .black.opacity(0.10), radius: 12, y: 4)
-                            .matchedGeometryEffect(id: "selected-topic", in: topicSelectionNamespace)
                     }
                 }
         }
         .buttonStyle(.plain)
-        .accessibilityAddTraits(selectedTopicID == topic.id ? .isSelected : [])
+        .accessibilityAddTraits(topic.id == "for-you" ? .isSelected : [])
     }
 
     private func topicLabel(_ topic: FeedTopic) -> some View {
         Text(topic.label)
             .gravityTextStyle(GravityTypography.bodyTitleSmall)
-            .foregroundStyle(topicLabelColor(topic))
+            .foregroundStyle(GravityColors.textFixedDark)
             .padding(.horizontal, PurlTune.token("Pages/HomePage.swift:padding:_:181:37", default: GravitySpacing.space16, options: GravitySpacing.purlTuneOptions))
             .padding(.vertical, PurlTune.token("Pages/HomePage.swift:padding:_:182:37", default: GravitySpacing.space12, options: GravitySpacing.purlTuneOptions))
             .contentShape(Capsule())
     }
-
-    private func topicLabelColor(_ topic: FeedTopic) -> Color {
-        guard selectedTopicID != "for-you" else { return GravityColors.textFixedDark }
-        return selectedTopicID == topic.id ? GravityColors.textFixedDark : GravityColors.textFixedLight
-    }
-
 }
 
 #Preview {
+    @Previewable @Namespace var ns
     NavigationStack {
-        HomePage()
+        HomePage(namespace: ns)
     }
     .environment(NavigationCoordinator())
 }

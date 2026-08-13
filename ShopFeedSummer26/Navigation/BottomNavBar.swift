@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Persistent bottom navigation bar matching the Figma nav spec.
 ///
-/// Layout: Back (conditional) | Tabs (Home, Search, Explore, Orders) | Cart (conditional)
+/// Layout: Back (conditional) | Tabs (Home, Search, Cart, Orders, Favorites)
 /// Uses glass-style pills with progressive blur background.
 /// Sits at the bottom of every screen, ignoring safe area.
 struct BottomNavBar: View {
@@ -124,8 +124,9 @@ struct BottomNavBar: View {
         HStack(spacing: 0) {
             tabItem(icon: .homeFilled, page: 0)
             tabItem(icon: .searchFilled, page: 3)
-            tabItem(icon: .categoriesFilled, page: 2)
+            tabItem(icon: .cartFilled, page: 4)
             tabItem(icon: .orderFilled, page: 1)
+            tabItem(icon: .favoritesFilled, page: 5)
         }
         .padding(PurlTune.value("Navigation/BottomNavBar.swift:padding:_:127:18", default: 6))
         .frame(height: tabPillHeight)

@@ -10,12 +10,8 @@ struct TopicLandingView: View {
     /// Optional parent-topic theme inherited by drilled-in subtopic pages.
     var headerCoverImageName: String? = nil
     var surfaceAccentHex: String? = nil
-    /// When provided, the header participates in a hero zoom from the feed
-    /// card that opened this topic (matched on the lead story's ID).
-    var heroNamespace: Namespace.ID? = nil
 
     @Environment(NavigationCoordinator.self) private var coordinator
-    @Namespace private var fallbackNamespace
 
     private var backgroundColor: Color {
         Color(hex: surfaceAccentHex ?? stories.first?.accentHex ?? "#171717")
@@ -220,10 +216,6 @@ struct TopicLandingView: View {
         // Cover topics get a tall editorial header; coverless landings stay
         // compact instead of reserving empty atmosphere.
         .frame(height: effectiveCoverImageName != nil || headerFilm != nil ? 500 : 220)
-        .matchedGeometryEffect(
-            id: "topic-hero-\(stories.first?.id ?? topic.id)",
-            in: heroNamespace ?? fallbackNamespace
-        )
     }
 
     /// Curated subtopic pills; falls back to story titles for topics that

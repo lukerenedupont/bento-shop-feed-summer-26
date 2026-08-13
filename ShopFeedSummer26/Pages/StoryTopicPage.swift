@@ -46,13 +46,23 @@ struct StoryTopicPage: View {
             )
             .environment(\.colorScheme, .dark)
             .toolbar(.hidden, for: .navigationBar)
+            .safeAreaBar(edge: .top) {
+                HStack {
+                    FloatingBackButton { coordinator.popCurrentPage() }
+                    Spacer()
+                }
+                .padding(.horizontal, GravitySpacing.space16)
+                .padding(.vertical, GravitySpacing.space4)
+            }
             .onAppear {
+                coordinator.bottomBackSuppressed = true
                 previousNavBarTint = coordinator.navBarBlurTint
                 withAnimation(.easeOut(duration: 0.22)) {
                     coordinator.navBarBlurTint = Color(hex: parentLeadStory?.accentHex ?? story.accentHex)
                 }
             }
             .onDisappear {
+                coordinator.bottomBackSuppressed = false
                 if let previousNavBarTint {
                     withAnimation(.easeOut(duration: 0.22)) {
                         coordinator.navBarBlurTint = previousNavBarTint

@@ -11,7 +11,7 @@ struct RootView: View {
             switch coordinator.selectedPage {
             case 0:
                 NavigationStack(path: $coordinator.homePath) {
-                    HomePage()
+                    HomePage(namespace: namespace)
                         .navigationDestination(for: HomeRoute.self) { route in
                             destinations(for: route)
                         }
@@ -33,6 +33,20 @@ struct RootView: View {
             case 3:
                 NavigationStack(path: $coordinator.searchPath) {
                     SearchPage()
+                        .navigationDestination(for: HomeRoute.self) { route in
+                            destinations(for: route)
+                        }
+                }
+            case 4:
+                NavigationStack(path: $coordinator.cartPath) {
+                    CartPage()
+                        .navigationDestination(for: HomeRoute.self) { route in
+                            destinations(for: route)
+                        }
+                }
+            case 5:
+                NavigationStack(path: $coordinator.favoritesPath) {
+                    FavoritesPage()
                         .navigationDestination(for: HomeRoute.self) { route in
                             destinations(for: route)
                         }
@@ -67,6 +81,11 @@ struct RootView: View {
             StorePage(merchantId: merchantId, namespace: namespace)
         case .story(let storyId):
             StoryTopicPage(storyID: storyId)
+        case .topic(let topicId, let sourceStoryId):
+            // System zoom from the feed card that opened this world; pill-
+            // opened topics (no source registered) fall back to a plain push.
+            TopicPage(topicId: topicId)
+                .navigationTransition(.zoom(sourceID: "topic-hero-\(sourceStoryId ?? topicId)", in: namespace))
         case .deliveries:
             DeliveriesPage(namespace: namespace)
         case .deliveryDetail(let deliveryId):
