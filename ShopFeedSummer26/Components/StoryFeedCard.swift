@@ -1,7 +1,8 @@
 import SwiftUI
 
-/// Full-screen commerce-content card. A story can mix products and merchants;
-/// the stable formats keep interaction familiar while the content supplies the novelty.
+/// Full-screen commerce-content card. One structure for every story — a
+/// full-bleed ambient film or cover image, the title, and a product carousel
+/// with price overlays along the bottom. A level playing field to build from.
 struct StoryFeedCard: View {
     let story: FeedStory
     let merchants: [SampleMerchant]
@@ -31,12 +32,11 @@ struct StoryFeedCard: View {
 
                 VStack(alignment: .leading, spacing: 0) {
                     storyHeader
+                        .padding(.horizontal, GravitySpacing.space20)
                     Spacer(minLength: GravitySpacing.space12)
-                    storyContent
-                    Spacer(minLength: GravitySpacing.space12)
-                    storyFooter
+                    productCarousel
                 }
-                .padding(GravitySpacing.space20)
+                .padding(.vertical, GravitySpacing.space20)
             }
             .frame(width: width, height: height)
             .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous))
@@ -54,11 +54,22 @@ struct StoryFeedCard: View {
 
     // MARK: - Atmosphere
 
+    /// The story's hero product film, when its dossier has one.
+    private var heroFilmURL: URL? {
+        guard let hero = items.first else { return nil }
+        return DossierStore.ambientVideoURL(merchantID: hero.merchant.id, productID: hero.product.id)
+    }
+
     private var atmosphericBackground: some View {
         ZStack {
             Color(hex: story.accentHex)
 
-            if let coverImageName = story.coverImageName {
+            if let heroFilmURL {
+                AmbientProductVideo(
+                    videoURL: heroFilmURL,
+                    posterImageURL: items.first?.product.imageURL
+                )
+            } else if let coverImageName = story.coverImageName {
                 // Overlay-on-clear keeps the fill image from expanding the
                 // ZStack beyond the card frame and breaking sibling layout.
                 Color.clear
@@ -149,44 +160,41 @@ struct StoryFeedCard: View {
         return isMerchantStory ? first.merchant : nil
     }
 
-    // MARK: - Stable formats
+    // MARK: - Product carousel
 
-    @ViewBuilder
-    private var storyContent: some View {
-        switch story.format {
-        case .world:
-            StoryWorldLayout(items: items)
-        case .shortlist:
-            StoryShortlistLayout(items: items)
-        case .setup:
-            StorySetupLayout(items: items)
+    private var productCarousel: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: GravitySpacing.space8) {
+                ForEach(items) { item in
+                    productTile(item)
+                }
+            }
+            .padding(.horizontal, GravitySpacing.space20)
         }
     }
 
-    // MARK: - Footer
+    private func productTile(_ item: ResolvedStoryProduct) -> some View {
+        ZStack(alignment: .bottomLeading) {
+            ProductImageView(product: item.product, merchant: item.merchant)
+                .frame(width: 108, height: 132)
+                .background(.white)
+                .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r16, style: .continuous))
 
-    private var storyFooter: some View {
-        HStack(spacing: GravitySpacing.space12) {
-            Text(story.destinationLabel)
-                .gravityTextStyle(GravityTypography.headerBold)
-                .foregroundStyle(.white)
-                .lineLimit(1)
-
-            Spacer()
-
-            Image(systemName: "arrow.right")
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: 40, height: 40)
-                .background(.white.opacity(0.12), in: Circle())
+            Text(formatPrice(item.product.price))
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(.black)
+                .padding(.horizontal, GravitySpacing.space8)
+                .padding(.vertical, GravitySpacing.space4)
+                .background(.white.opacity(0.92), in: Capsule())
+                .padding(GravitySpacing.space6)
         }
+        .accessibilityLabel("\(item.product.title), \(formatPrice(item.product.price))")
     }
-
 }
 
-#Preview("World story") {
+#Preview("Story card") {
     StoryFeedCard(
-        story: FeedStory.previews.first(where: { $0.format == .world }) ?? FeedStory.preview,
+        story: FeedStory.preview,
         merchants: SampleMerchant.previews,
         width: 377,
         height: 645
@@ -196,21 +204,9 @@ struct StoryFeedCard: View {
     .environment(NavigationCoordinator())
 }
 
-#Preview("Shortlist story") {
+#Preview("Story card — no cover") {
     StoryFeedCard(
-        story: FeedStory.previews.first(where: { $0.format == .shortlist }) ?? FeedStory.preview,
-        merchants: SampleMerchant.previews,
-        width: 377,
-        height: 645
-    )
-    .padding()
-    .background(GravityColors.bg)
-    .environment(NavigationCoordinator())
-}
-
-#Preview("Setup story") {
-    StoryFeedCard(
-        story: FeedStory.previews.first(where: { $0.format == .setup }) ?? FeedStory.preview,
+        story: FeedStory.previews.first(where: { $0.coverImageName == nil }) ?? FeedStory.preview,
         merchants: SampleMerchant.previews,
         width: 377,
         height: 645
