@@ -62,6 +62,7 @@ struct RootView: View {
                     BottomNavBar()
                 }
                 .ignoresSafeArea(edges: .bottom)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .environment(coordinator)

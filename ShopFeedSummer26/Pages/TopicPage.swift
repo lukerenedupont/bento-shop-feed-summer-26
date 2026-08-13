@@ -41,16 +41,18 @@ struct TopicPage: View {
                     .padding(.vertical, GravitySpacing.space4)
                 }
                 .onAppear {
-                    coordinator.bottomBackSuppressed = true
                     previousNavBarTint = coordinator.navBarBlurTint
                     withAnimation(.easeOut(duration: 0.22)) {
+                        // Topics are immersive: the top back chip is the only
+                        // chrome, so the bottom nav steps out entirely.
+                        coordinator.showNavBar = false
                         coordinator.navBarBlurTint = accent
                     }
                 }
                 .onDisappear {
-                    coordinator.bottomBackSuppressed = false
-                    if let previousNavBarTint {
-                        withAnimation(.easeOut(duration: 0.22)) {
+                    withAnimation(.easeOut(duration: 0.22)) {
+                        coordinator.showNavBar = true
+                        if let previousNavBarTint {
                             coordinator.navBarBlurTint = previousNavBarTint
                         }
                     }

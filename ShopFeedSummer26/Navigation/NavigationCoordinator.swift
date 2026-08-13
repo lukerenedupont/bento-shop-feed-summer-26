@@ -24,9 +24,7 @@ final class NavigationCoordinator {
     /// Whether the bottom nav bar is visible at all.
     var showNavBar: Bool = true
 
-    /// Topic and subcategory pages own their back affordance at the top, so
-    /// they suppress the bottom bar's back button while they're frontmost.
-    var bottomBackSuppressed: Bool = false
+
 
     /// Current scroll offset tracking.
     @ObservationIgnored var scrollOffset: CGFloat = 0
@@ -84,10 +82,8 @@ final class NavigationCoordinator {
         }
     }
 
-    /// Whether the bottom bar should show its back button. Pages that carry
-    /// their own top back chip (topics, subcategories) suppress it.
+    /// Whether the bottom bar should show its back button.
     var isNavigatedDeep: Bool {
-        if bottomBackSuppressed { return false }
         switch selectedPage {
         case 0: return !homePath.isEmpty
         case 1: return !accountPath.isEmpty
