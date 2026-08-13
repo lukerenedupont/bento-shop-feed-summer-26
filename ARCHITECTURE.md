@@ -94,6 +94,47 @@ A topic may declare ordered `merchandisingBlocks` in `personalized-feed.json`. T
 
 Blocks and their items can be reordered or independently curated without editing Swift. The validator checks block IDs, kinds, and every story, merchant, and product reference. Do not label a shelf “Deals” until authentic sale or compare-at-price data is present.
 
+**Intent-grouped recipe (piloted on Birding gear).** Every shelf answers a
+different shopper question, stated in its title, rather than mixing formats in
+one carousel:
+
+1. `Keep shopping` (productRail) — retargeting; highest intent, first slot
+2. `Collections for you` (mediaCarousel, stories only) — the topic's editorial subcategories
+3. `Trending shops` (merchantRail) — trust, trimmed to topically relevant merchants
+4. `Discover more` (masonry) — open-ended browse; post cards stay interleaved here
+
+Roll this recipe to the remaining topics by re-authoring their
+`merchandisingBlocks` in the JSON — no Swift changes required.
+
+### Catalog depth
+
+Topic masonry streams the **full inventory of every shop on the page** —
+story-curated products lead (editorial ordering is authoritative), then the
+rest of each relevant merchant's catalog, deduped (`deepProducts` in
+`TopicLandingView`). The bundled catalog holds ~340 real products pulled from
+the 17 merchants' live storefronts via `Scripts/deepen_catalog.py`, which hits
+each shop's public `/products.json`, skips gift cards and unavailable items,
+and appends deduped entries after the hand-curated ones. Re-run it any time;
+it is idempotent. Note: a topic's `relatedMerchantIDs` now surface those
+shops' full catalogs in its masonry — prune off-topic related IDs in the JSON
+if the mix drifts.
+
+### Navigation model
+
+The home tab has three levels that all render **inline** (HomePage state), so
+the top bar — avatar + topic pills — persists across the whole world:
+
+1. **For You** — vertical story-card feed (`selectedTopicID == "for-you"`)
+2. **Topic** — `TopicLandingView`, selected via pill or story card
+3. **Subcategory** — a drilled-in story (`focusedStoryID`), rendered through
+   `StoryTopicPage` inline
+
+`NavigationCoordinator.pushRoute(.story(…))` is intercepted at the home root
+by `inlineStoryHandler` and becomes state instead of a push; pushes from other
+tabs or deeper pages still navigate normally. The bottom nav's back button
+walks the levels via `topicBackAction` (subcategory → topic → For You).
+Product and store pages remain real pushes.
+
 ### Subtopics
 
 Each topic may declare `subtopics` — curated `{label, storyID}` pills rendered in the topic header. Labels are phrased as shopping categories (“Optics by size”, “Kinto glassware”), not truncated story titles, and each pill opens its story. Topics without subtopics fall back to story-title pills.
@@ -109,6 +150,46 @@ Each topic may declare `subtopics` — curated `{label, storyID}` pills rendered
 3. Add product attributes for material, form, use case, technical specs, and cultural adjacency.
 4. Generate 6–10 distinct stories per topic, then select a diverse subset for For You.
 5. Preserve factual product assets separately from generated atmosphere or motion.
+
+## Roadmap: Shopping as a Bento
+
+The next structural evolution. Worlds answer *why am I seeing this* (the
+personal signal); the bento answers *how does this fit together* (the
+structural grammar). Topic pages evolve from linear shelves into a packed box
+of role-based compartments — for birding: *See* (optics), *Wear* (footwear),
+*Carry* (straps/bags), *Keep shopping*, *Shops* — so the page teaches what a
+kit **is**, not just what's for sale.
+
+Planned sequence:
+
+1. Bento layout engine (new `bento` block kind: compartments carry a role
+   label and a cell span), piloted on Birding gear — its four hero products
+   already have completed dossiers
+2. Compartment sizing driven by real data: cart item → large, recent search →
+   medium, taste adjacency → small; dossier/film coverage adds prominence
+3. Different bento shapes per topic (mirrors by wall/room, coffee by ritual
+   step) to prove the grammar flexes
+4. Home For You bento as a toggle experiment — covers stay the door, bento is
+   the room; masonry remains the overflow drawer below
+
+### Dossier integration (content layer)
+
+An external pipeline (dossier-lab) builds a **Deep Dive dossier** per curated
+product plus **two portrait Sora films** of the product in use. The batch is
+keyed to this prototype's stable graph keys (`merchantID + productID`), so it
+is a direct content-enrichment layer:
+
+- **Ambient films** (muted, autoplaying, looping) become bento compartment
+  texture via `AmbientProductVideo` — film #1 is the ambient cell loop,
+  film #2 is reserved for the Deep Dive page
+- **Dossier payloads** will power a Deep Dive product page replacing the
+  plain PDP for covered products: cover → bento → deep dive, each level with
+  its own content type
+- Coverage grows without code changes — see “Dossier drop zone” below
+
+Status: scaffolding shipped (store, component, manifest, validation, drop
+zone); awaiting first dossier JSONs + films to type the payload schema and
+build the bento renderer.
 
 ## Dossier drop zone
 

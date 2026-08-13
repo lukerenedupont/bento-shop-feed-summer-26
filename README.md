@@ -1,11 +1,34 @@
 # Shop Feed Summer 26
 
+**A personalized, editorial home feed for the Shop app** — opening Shop feels
+like opening a magazine written about your own taste, that you can buy from.
+
+Instead of an algorithmic product grid, the feed turns real shopper signals
+(searches, carts, sustained interests) into a small set of curated **content
+worlds** — "City-to-trail birding" because you searched for binoculars,
+"Sculptural mirror hunt" because a mirror is sitting in your cart. Each world
+is a magazine-cover card in the For You feed, backed by a topic destination
+with intent-grouped merchandising and real products from real merchants.
+
+Next phase (planned, scaffolding in place): **Shopping as a Bento** — topic
+pages become packed boxes of role-based compartments brought alive by ambient
+product films. See [Roadmap](ARCHITECTURE.md#roadmap-shopping-as-a-bento).
+
 Project: Prototypes  
 Runtime: Swift  
 Status: Draft  
 Visibility: Local  
 Owner: Luke Dupont  
 Source: Swift / shop-prototype-kit
+
+## Documentation map
+
+| Doc | What it covers |
+| --- | --- |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | Data schema, component boundaries, navigation model, validation, catalog depth, bento/dossier roadmap |
+| [`TOPIC_HANDOFF.md`](TOPIC_HANDOFF.md) | The 10 editorial topics: why each shows, its merchants, and stable product keys |
+| [`VISUALS_PLAN.md`](VISUALS_PLAN.md) | Cover art direction and visual treatment plan |
+| `Scripts/` | Validation (`validate_personalized_feed.py`), catalog deepening (`deepen_catalog.py`), cover color sampling (`extract_cover_color.swift`) |
 
 ## Getting Started
 
