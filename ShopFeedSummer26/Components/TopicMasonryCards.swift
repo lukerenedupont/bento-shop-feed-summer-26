@@ -9,6 +9,14 @@ enum TopicMasonryItem: Identifiable {
     case merchant(SampleMerchant, [ResolvedStoryProduct])
     case category(FeedStory, [ResolvedStoryProduct])
     case post(FeedStory, ResolvedStoryProduct)
+    /// Tall brand card: cover backdrop, avatar + rating header, and two
+    /// floating product chips at the bottom.
+    case merchantSpotlight(SampleMerchant, [ResolvedStoryProduct])
+    /// Short brand moment: cover (or brand color) with the wordmark centered.
+    case merchantWordmark(SampleMerchant)
+    /// A loose cluster of circular shop avatars — a browsable brand shelf
+    /// without card chrome.
+    case avatarCluster([SampleMerchant])
 
     var id: String {
         switch self {
@@ -16,6 +24,9 @@ enum TopicMasonryItem: Identifiable {
         case let .merchant(merchant, _): "merchant:\(merchant.id)"
         case let .category(story, _): "category:\(story.id)"
         case let .post(story, item): "post:\(story.id):\(item.id)"
+        case let .merchantSpotlight(merchant, _): "spotlight:\(merchant.id)"
+        case let .merchantWordmark(merchant): "wordmark:\(merchant.id)"
+        case let .avatarCluster(merchants): "avatars:\(merchants.map(\.id).joined(separator: "-"))"
         }
     }
 }
@@ -34,6 +45,12 @@ struct TopicMasonryCard: View {
             TopicMasonryCategoryCard(story: story, products: products, cardWidth: cardWidth)
         case let .post(story, product):
             TopicMasonryPostCard(story: story, item: product, cardWidth: cardWidth)
+        case let .merchantSpotlight(merchant, products):
+            TopicMasonrySpotlightCard(merchant: merchant, products: products, cardWidth: cardWidth)
+        case let .merchantWordmark(merchant):
+            TopicMasonryWordmarkCard(merchant: merchant, cardWidth: cardWidth)
+        case let .avatarCluster(merchants):
+            TopicMasonryAvatarCluster(merchants: merchants, cardWidth: cardWidth)
         }
     }
 
@@ -135,6 +152,198 @@ private struct TopicMasonryMerchantCard: View {
         }
         .frame(width: cardWidth, alignment: .topLeading)
         .padding(.bottom, GravitySpacing.space8)
+    }
+}
+
+/// Tall brand spotlight: the merchant's cover is the whole surface, identity
+/// (avatar, name, rating) sits at the top, and two products float at the
+/// bottom as tappable chips wearing the standard price badge.
+private struct TopicMasonrySpotlightCard: View {
+    let merchant: SampleMerchant
+    let products: [ResolvedStoryProduct]
+    let cardWidth: CGFloat
+
+    @Environment(NavigationCoordinator.self) private var coordinator
+
+    var body: some View {
+        Button {
+            coordinator.pushRoute(.store(merchantId: merchant.id))
+        } label: {
+            ZStack {
+                Color.clear
+                    .overlay { MerchantCoverImage(merchant: merchant) }
+                    .clipped()
+
+                // Soft top scrim keeps the identity row legible on any cover.
+                LinearGradient(
+                    colors: [.black.opacity(0.45), .clear],
+                    startPoint: .top,
+                    endPoint: .center
+                )
+            }
+            .overlay(alignment: .topLeading) {
+                HStack(spacing: GravitySpacing.space8) {
+                    MerchantLogoImage(merchant: merchant, size: 36)
+                        .background(Circle().fill(.white))
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(merchant.displayName)
+                            .gravityTextStyle(GravityTypography.captionBold)
+                            .foregroundStyle(.white)
+                            .lineLimit(1)
+                        if merchant.totalRatings > 0 {
+                            HStack(spacing: 3) {
+                                GravityIcon.starFilled.image
+                                    .resizable().scaledToFit()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(.white)
+                                Text(String(format: "%.1f", merchant.rating))
+                                    .gravityTextStyle(GravityTypography.caption)
+                                    .foregroundStyle(.white)
+                                Text("(\(merchant.totalRatings))")
+                                    .gravityTextStyle(GravityTypography.caption)
+                                    .foregroundStyle(.white.opacity(0.72))
+                            }
+                        }
+                    }
+                    Spacer(minLength: 0)
+                }
+                .padding(GravitySpacing.space12)
+            }
+            .overlay(alignment: .bottom) {
+                HStack(spacing: GravitySpacing.space8) {
+                    ForEach(products.prefix(2)) { item in
+                        productChip(item)
+                    }
+                }
+                .padding(GravitySpacing.space12)
+            }
+            .frame(width: cardWidth, height: cardWidth * 1.62)
+            .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r20, style: .continuous))
+            .gravityShadow(GravityShadows.small)
+        }
+        .buttonStyle(PressScaleButtonStyle())
+    }
+
+    private func productChip(_ item: ResolvedStoryProduct) -> some View {
+        // Two chips share the card width inside the 12pt card padding.
+        let side = (cardWidth - GravitySpacing.space12 * 2 - GravitySpacing.space8) / 2
+        return Button {
+            coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
+        } label: {
+            ProductImageView(product: item.product, merchant: item.merchant)
+                .frame(width: side, height: side)
+                .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r12, style: .continuous))
+                .background {
+                    RoundedRectangle(cornerRadius: GravityRadius.r12, style: .continuous)
+                        .fill(.white)
+                }
+                .overlay(alignment: .topLeading) {
+                    Text(formatPrice(item.product.price))
+                        .gravityTextStyle(GravityTypography.badgeBold)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: GravityRadius.max))
+                        .environment(\.colorScheme, .dark)
+                        .padding(6)
+                }
+                .gravityShadow(GravityShadows.small)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+/// Short brand moment: the merchant's cover (or brand color) carries the
+/// card and the wordmark holds the center. A quieter store entry point than
+/// the product pager — pure brand voice.
+private struct TopicMasonryWordmarkCard: View {
+    let merchant: SampleMerchant
+    let cardWidth: CGFloat
+
+    @Environment(NavigationCoordinator.self) private var coordinator
+
+    var body: some View {
+        Button {
+            coordinator.pushRoute(.store(merchantId: merchant.id))
+        } label: {
+            ZStack {
+                Color.clear
+                    .overlay { MerchantCoverImage(merchant: merchant) }
+                    .clipped()
+
+                // Center vignette so the wordmark reads on busy covers.
+                RadialGradient(
+                    colors: [.black.opacity(0.38), .black.opacity(0.12)],
+                    center: .center,
+                    startRadius: 0,
+                    endRadius: cardWidth * 0.7
+                )
+
+                VStack(spacing: GravitySpacing.space4) {
+                    MerchantWordmarkImage(
+                        merchant: merchant,
+                        maxHeight: 30,
+                        maxWidth: cardWidth * 0.72
+                    )
+                    .frame(maxWidth: cardWidth * 0.72, alignment: .center)
+                    if merchant.totalRatings > 0 {
+                        HStack(spacing: 3) {
+                            GravityIcon.starFilled.image
+                                .resizable().scaledToFit()
+                                .frame(width: 10, height: 10)
+                                .foregroundStyle(.white)
+                            Text(String(format: "%.1f", merchant.rating))
+                                .gravityTextStyle(GravityTypography.caption)
+                                .foregroundStyle(.white)
+                            Text("(\(merchant.totalRatings))")
+                                .gravityTextStyle(GravityTypography.caption)
+                                .foregroundStyle(.white.opacity(0.72))
+                        }
+                    }
+                }
+            }
+            .frame(width: cardWidth, height: cardWidth * 0.78)
+            .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r20, style: .continuous))
+            .gravityShadow(GravityShadows.small)
+        }
+        .buttonStyle(PressScaleButtonStyle())
+    }
+}
+
+/// A loose 2-wide cluster of circular shop avatars — no card chrome, the
+/// circles float directly on the topic surface. Each avatar is a store link.
+private struct TopicMasonryAvatarCluster: View {
+    let merchants: [SampleMerchant]
+    let cardWidth: CGFloat
+
+    @Environment(NavigationCoordinator.self) private var coordinator
+
+    private var diameter: CGFloat { (cardWidth - GravitySpacing.space12) / 2 }
+
+    var body: some View {
+        let rows = stride(from: 0, to: merchants.count, by: 2).map {
+            Array(merchants[$0..<min($0 + 2, merchants.count)])
+        }
+        VStack(spacing: GravitySpacing.space12) {
+            ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
+                HStack(spacing: GravitySpacing.space12) {
+                    ForEach(row) { merchant in
+                        Button {
+                            coordinator.pushRoute(.store(merchantId: merchant.id))
+                        } label: {
+                            // A white disc backs every avatar so transparent
+                            // wordmark logos still read as floating circles.
+                            MerchantLogoImage(merchant: merchant, size: diameter)
+                                .background(Circle().fill(.white))
+                                .gravityShadow(GravityShadows.small)
+                        }
+                        .buttonStyle(PressScaleButtonStyle())
+                    }
+                }
+            }
+        }
+        .frame(width: cardWidth)
+        .padding(.vertical, GravitySpacing.space8)
     }
 }
 
@@ -254,6 +463,37 @@ private struct TopicMasonryPostCard: View {
                 }
                 if let product = products.last {
                     TopicMasonryCard(item: .post(story, product), cardWidth: 170)
+                }
+            }
+        }
+        .padding()
+    }
+    .background(GravityColors.bg)
+    .environment(NavigationCoordinator())
+}
+
+#Preview("Brand cards: spotlight, wordmark, avatars") {
+    let merchants = SampleMerchant.previews
+    let story = PersonalizedFeedStories.all.first!
+    let products = story.resolvedProducts(from: merchants)
+
+    ScrollView {
+        HStack(alignment: .top, spacing: GravitySpacing.space16) {
+            VStack(spacing: GravitySpacing.space16) {
+                if let merchant = products.first?.merchant {
+                    TopicMasonryCard(
+                        item: .merchantSpotlight(merchant, products.filter { $0.merchant.id == merchant.id }),
+                        cardWidth: 170
+                    )
+                }
+                if let merchant = merchants.last {
+                    TopicMasonryCard(item: .merchantWordmark(merchant), cardWidth: 170)
+                }
+            }
+            VStack(spacing: GravitySpacing.space16) {
+                TopicMasonryCard(item: .avatarCluster(Array(merchants.prefix(6))), cardWidth: 170)
+                if let merchant = merchants.dropFirst().first {
+                    TopicMasonryCard(item: .merchantWordmark(merchant), cardWidth: 170)
                 }
             }
         }

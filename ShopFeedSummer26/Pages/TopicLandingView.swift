@@ -85,8 +85,14 @@ struct TopicLandingView: View {
         let products = deepProducts.filter { !merchandisedProductIDs.contains($0.id) }
         var items: [TopicMasonryItem] = []
         if products.indices.contains(0) { items.append(.product(products[0])) }
-        if let merchant = relevantMerchants.first {
-            items.append(.merchant(merchant, products.filter { $0.merchant.id == merchant.id }))
+        // Brand spotlight leads the merchant treatments: the first relevant
+        // shop with at least two topical products earns the tall cover card.
+        var spotlightMerchantID: String?
+        if let merchant = relevantMerchants.first(where: { m in
+            products.filter { $0.merchant.id == m.id }.count >= 2
+        }) {
+            spotlightMerchantID = merchant.id
+            items.append(.merchantSpotlight(merchant, products.filter { $0.merchant.id == merchant.id }))
         }
         if products.indices.contains(1) { items.append(.product(products[1])) }
         if products.indices.contains(2) { items.append(.product(products[2])) }
@@ -94,16 +100,28 @@ struct TopicLandingView: View {
             items.append(.category(stories[2], stories[2].resolvedProducts(from: merchants)))
         }
         if products.indices.contains(3) { items.append(.product(products[3])) }
+        // Wordmark moment: pure brand voice for the next merchant.
+        if let merchant = relevantMerchants.first(where: { $0.id != spotlightMerchantID }) {
+            items.append(.merchantWordmark(merchant))
+        }
         if products.indices.contains(4), stories.indices.contains(1) {
             items.append(.post(stories[1], products[4]))
         }
         if products.indices.contains(5) { items.append(.product(products[5])) }
-        if relevantMerchants.indices.contains(1) {
-            let merchant = relevantMerchants[1]
+        if relevantMerchants.indices.contains(2) {
+            let merchant = relevantMerchants[2]
             items.append(.merchant(merchant, products.filter { $0.merchant.id == merchant.id }))
         }
         if products.indices.contains(6) { items.append(.product(products[6])) }
         if products.indices.contains(7) { items.append(.product(products[7])) }
+        // Avatar shelf: six floating shop circles — topic merchants first,
+        // then the wider catalog fills the cluster out.
+        let clusterMerchants = (relevantMerchants + merchants.filter { m in
+            !relevantMerchants.contains(where: { $0.id == m.id })
+        }).prefix(6)
+        if clusterMerchants.count == 6 {
+            items.append(.avatarCluster(Array(clusterMerchants)))
+        }
         if stories.indices.contains(3) {
             items.append(.category(stories[3], stories[3].resolvedProducts(from: merchants)))
         }
