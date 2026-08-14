@@ -1,7 +1,14 @@
 #!/usr/bin/env swift
-// Prints the average color of the bottom band of each image as a hex value.
-// The topic header fades its cover into the page background, so sampling the
-// bottom ~22% of the image yields the color that blends most seamlessly.
+// Prints a surface accent color for each cover image as a hex value.
+//
+// The topic header fades its cover into the page background, so we sample
+// the bottom ~30% of the image. A plain average collapses every photo into
+// the same muddy brown, so instead pixels are bucketed by hue and buckets
+// are scored by coverage x saturation: the cover's most *characterful*
+// color wins (olive for the birding field, coffee-brown for the counter,
+// blue-gray for type-and-transit), not its arithmetic mean. The winner is
+// then normalized to a dark, white-text-safe surface tone with its hue and
+// saturation character preserved.
 //
 // Usage: swift Scripts/extract_cover_color.swift <image> [<image> ...]
 // Output: one "<path> #RRGGBB" line per image.
@@ -11,50 +18,101 @@ import Foundation
 
 let context = CIContext(options: [.workingColorSpace: CGColorSpace(name: CGColorSpace.sRGB)!])
 
-func bottomBandAverageHex(url: URL) -> String? {
+func rgbToHSV(r: Double, g: Double, b: Double) -> (h: Double, s: Double, v: Double) {
+    let maxC = max(r, g, b), minC = min(r, g, b)
+    let delta = maxC - minC
+    var h = 0.0
+    if delta > 0 {
+        if maxC == r { h = ((g - b) / delta).truncatingRemainder(dividingBy: 6) }
+        else if maxC == g { h = (b - r) / delta + 2 }
+        else { h = (r - g) / delta + 4 }
+        h *= 60
+        if h < 0 { h += 360 }
+    }
+    let s = maxC == 0 ? 0 : delta / maxC
+    return (h, s, maxC)
+}
+
+func hsvToRGB(h: Double, s: Double, v: Double) -> (r: Double, g: Double, b: Double) {
+    let c = v * s
+    let x = c * (1 - abs((h / 60).truncatingRemainder(dividingBy: 2) - 1))
+    let m = v - c
+    let (r, g, b): (Double, Double, Double)
+    switch h {
+    case ..<60: (r, g, b) = (c, x, 0)
+    case ..<120: (r, g, b) = (x, c, 0)
+    case ..<180: (r, g, b) = (0, c, x)
+    case ..<240: (r, g, b) = (0, x, c)
+    case ..<300: (r, g, b) = (x, 0, c)
+    default: (r, g, b) = (c, 0, x)
+    }
+    return (r + m, g + m, b + m)
+}
+
+func surfaceAccentHex(url: URL) -> String? {
     guard let image = CIImage(contentsOf: url) else { return nil }
     // CoreImage's origin is bottom-left, so y=0 is the visual bottom.
-    let band = CGRect(
+    let band = image.cropped(to: CGRect(
         x: 0, y: 0,
         width: image.extent.width,
-        height: (image.extent.height * 0.22).rounded()
-    )
-    guard let filter = CIFilter(name: "CIAreaAverage", parameters: [
-        kCIInputImageKey: image.cropped(to: band),
-        kCIInputExtentKey: CIVector(cgRect: band),
-    ]), let output = filter.outputImage else { return nil }
+        height: (image.extent.height * 0.30).rounded()
+    ))
 
-    var pixel = [UInt8](repeating: 0, count: 4)
+    // Downsample the band to a small bitmap for the histogram.
+    let sampleWidth = 96
+    let scale = Double(sampleWidth) / band.extent.width
+    let small = band.transformed(by: .init(scaleX: scale, y: scale))
+    let w = Int(small.extent.width.rounded()), h = Int(small.extent.height.rounded())
+    guard w > 0, h > 0 else { return nil }
+    var pixels = [UInt8](repeating: 0, count: w * h * 4)
     context.render(
-        output,
-        toBitmap: &pixel,
-        rowBytes: 4,
-        bounds: CGRect(x: 0, y: 0, width: 1, height: 1),
-        format: .RGBA8,
-        colorSpace: CGColorSpace(name: CGColorSpace.sRGB)
+        small, toBitmap: &pixels, rowBytes: w * 4,
+        bounds: CGRect(x: small.extent.minX, y: small.extent.minY, width: CGFloat(w), height: CGFloat(h)),
+        format: .RGBA8, colorSpace: CGColorSpace(name: CGColorSpace.sRGB)
     )
 
-    var r = Double(pixel[0]) / 255
-    var g = Double(pixel[1]) / 255
-    var b = Double(pixel[2]) / 255
-
-    // Topic surfaces render white text and use a dark color scheme, so cap
-    // the value (HSV brightness) while preserving hue and saturation.
-    let maxComponent = max(r, g, b)
-    let brightnessCap = 0.42
-    if maxComponent > brightnessCap {
-        let scale = brightnessCap / maxComponent
-        r *= scale
-        g *= scale
-        b *= scale
+    // Bucket by hue (24 buckets); score = coverage x (saturation + floor).
+    // The floor keeps near-neutral covers from losing to a few loud pixels.
+    let buckets = 24
+    var score = [Double](repeating: 0, count: buckets)
+    var sumR = [Double](repeating: 0, count: buckets)
+    var sumG = [Double](repeating: 0, count: buckets)
+    var sumB = [Double](repeating: 0, count: buckets)
+    var weight = [Double](repeating: 0, count: buckets)
+    for i in stride(from: 0, to: pixels.count, by: 4) {
+        let r = Double(pixels[i]) / 255, g = Double(pixels[i + 1]) / 255, b = Double(pixels[i + 2]) / 255
+        let (hue, s, v) = rgbToHSV(r: r, g: g, b: b)
+        // Skip near-black and blown-out pixels; they carry no hue identity.
+        guard v > 0.08, v < 0.97 else { continue }
+        let bucket = min(buckets - 1, Int(hue / 360 * Double(buckets)))
+        let pixelWeight = s + 0.08
+        score[bucket] += pixelWeight
+        sumR[bucket] += r * pixelWeight
+        sumG[bucket] += g * pixelWeight
+        sumB[bucket] += b * pixelWeight
+        weight[bucket] += pixelWeight
     }
+    guard let winner = score.indices.max(by: { score[$0] < score[$1] }), weight[winner] > 0 else { return nil }
 
-    return String(format: "#%02X%02X%02X", Int(r * 255), Int(g * 255), Int(b * 255))
+    let r = sumR[winner] / weight[winner]
+    let g = sumG[winner] / weight[winner]
+    let b = sumB[winner] / weight[winner]
+    var (hue, s, v) = rgbToHSV(r: r, g: g, b: b)
+
+    // Normalize toward a dark, white-text-safe surface while keeping the
+    // cover's own character: saturation is amplified (not pinned) and value
+    // is compressed into a dark band instead of flattened to one number —
+    // a bright airy cover should still yield a lighter surface than a
+    // moody one.
+    s = min(max(s * 1.6, 0.16), 0.78)
+    v = min(max(v * 0.85, 0.18), 0.46)
+    let (outR, outG, outB) = hsvToRGB(h: hue, s: s, v: v)
+    return String(format: "#%02X%02X%02X", Int(outR * 255), Int(outG * 255), Int(outB * 255))
 }
 
 for path in CommandLine.arguments.dropFirst() {
     let url = URL(fileURLWithPath: path)
-    if let hex = bottomBandAverageHex(url: url) {
+    if let hex = surfaceAccentHex(url: url) {
         print("\(path) \(hex)")
     } else {
         FileHandle.standardError.write("Failed to read \(path)\n".data(using: .utf8)!)

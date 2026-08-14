@@ -1401,7 +1401,7 @@
       "topicKeys": [
         "birding"
       ],
-      "accentHex": "#383122",
+      "accentHex": "#352810",
       "destinationLabel": "Compare the field kit",
       "products": [
         {
@@ -1433,7 +1433,7 @@
         "mirrors",
         "tabletop"
       ],
-      "accentHex": "#6B5C51",
+      "accentHex": "#755237",
       "destinationLabel": "Enter the mirror hunt",
       "products": [
         {
@@ -1464,7 +1464,7 @@
       "topicKeys": [
         "type"
       ],
-      "accentHex": "#6B6B69",
+      "accentHex": "#737562",
       "destinationLabel": "Open the reference shelf",
       "products": [
         {
@@ -1495,7 +1495,7 @@
       "topicKeys": [
         "coffee"
       ],
-      "accentHex": "#3E2E20",
+      "accentHex": "#351E0B",
       "destinationLabel": "Build the coffee setup",
       "products": [
         {
@@ -1526,7 +1526,7 @@
       "topicKeys": [
         "tabletop"
       ],
-      "accentHex": "#6B5111",
+      "accentHex": "#755B19",
       "destinationLabel": "Enter the tablescape",
       "products": [
         {
@@ -1557,7 +1557,7 @@
       "topicKeys": [
         "kids"
       ],
-      "accentHex": "#6A5137",
+      "accentHex": "#70491C",
       "destinationLabel": "Build the room",
       "products": [
         {
@@ -1588,7 +1588,7 @@
       "topicKeys": [
         "trail"
       ],
-      "accentHex": "#6B5B4E",
+      "accentHex": "#755537",
       "destinationLabel": "Compare the rotation",
       "products": [
         {
@@ -1619,7 +1619,7 @@
       "topicKeys": [
         "type"
       ],
-      "accentHex": "#302618",
+      "accentHex": "#2D1F0A",
       "destinationLabel": "Follow the city thread",
       "products": [
         {
@@ -1648,7 +1648,7 @@
       "subtitle": "Clarify, condition, extend, and dry with four products that each have a distinct job.",
       "format": "setup",
       "topicKeys": [],
-      "accentHex": "#6B5136",
+      "accentHex": "#744119",
       "destinationLabel": "See the regimen",
       "products": [
         {
@@ -1682,7 +1682,7 @@
         "tabletop",
         "trail"
       ],
-      "accentHex": "#242120",
+      "accentHex": "#2D2824",
       "destinationLabel": "Explore the material study",
       "products": [
         {

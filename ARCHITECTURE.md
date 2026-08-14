@@ -51,7 +51,7 @@ Each editorial topic's lead story may carry a `coverImageName` (e.g. `cover-bird
 
 Source art lives in `covers/<topic>/v*.png` (highest version wins) and is downscaled into `Assets.xcassets/cover-*.imageset` as ~2200px JPEGs (~500KB each) via `sips`.
 
-A cover story's `accentHex` is not hand-picked — it is sampled from the image itself so the header fade dissolves seamlessly. `Scripts/extract_cover_color.swift` averages the bottom ~22% of the cover (the region the fade crosses) via CoreImage `CIAreaAverage`, caps HSV brightness at 0.42 so white text stays legible, and prints a hex per image. Re-run it and update the feed JSON whenever a cover changes:
+A cover story's `accentHex` is not hand-picked — it is sampled from the image itself so the header fade dissolves seamlessly *and* each topic surface carries its own cover's color. `Scripts/extract_cover_color.swift` samples the bottom ~30% of the cover (the region the fade crosses), buckets pixels by hue, and scores buckets by coverage × saturation — the cover's most characterful color wins instead of the muddy arithmetic average. The winner is normalized to a dark, white-text-safe surface tone (saturation amplified, value compressed but not flattened). Re-run it and update the feed JSON whenever a cover changes:
 
 ```bash
 swift Scripts/extract_cover_color.swift ShopFeedSummer26/Assets.xcassets/cover-*.imageset/*.jpg
