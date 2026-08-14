@@ -16,6 +16,7 @@
 		11E254172BFC0FD544475A74 /* TopicPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2011A0FCF1C61D89093DEFFA /* TopicPage.swift */; };
 		11FC0467DDD38B21A4FE32AA /* AgentConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B983AC901056B787D37F13CA /* AgentConversationView.swift */; };
 		13D4F8E2F7F72D421D0DFF83 /* LocalMerchantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2537D9E279EC49B168BFF767 /* LocalMerchantService.swift */; };
+		FBLDR0000000000000000001 /* FeedBundleLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBLDR0000000000000000002 /* FeedBundleLoader.swift */; };
 		16BC6F274BF3266109322406 /* SearchHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D64725EFF88C7418AC33BE /* SearchHeader.swift */; };
 		19702C926FC3B3CB49F84140 /* AgentProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8078D239E65B41D28D2935B /* AgentProduct.swift */; };
 		1A3E9B20593B0BE7E22C48C4 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2C1A0A84FDDE28DC408251 /* HomePage.swift */; };
@@ -148,6 +149,7 @@
 		2031C250C27B23086631BFD2 /* PurlTuneTokenOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurlTuneTokenOptions.swift; sourceTree = "<group>"; };
 		206CA1295E8B6FC39644D1DE /* PurlTuneRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurlTuneRuntime.swift; sourceTree = "<group>"; };
 		2537D9E279EC49B168BFF767 /* LocalMerchantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMerchantService.swift; sourceTree = "<group>"; };
+		FBLDR0000000000000000002 /* FeedBundleLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBundleLoader.swift; sourceTree = "<group>"; };
 		281FDFAC7B3A9E95703E93EE /* FeedTopic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTopic.swift; sourceTree = "<group>"; };
 		2A3821AE03CF82ED67CFAA6F /* KeyboardAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAnimation.swift; sourceTree = "<group>"; };
 		2ACD1E2168C3779609CA48BE /* CachedAsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedAsyncImage.swift; sourceTree = "<group>"; };
@@ -421,6 +423,7 @@
 				E50FED85087F954198F8D79A /* AuthService.swift */,
 				902A5F8C87482DAA5084A6B9 /* DossierStore.swift */,
 				2537D9E279EC49B168BFF767 /* LocalMerchantService.swift */,
+				FBLDR0000000000000000002 /* FeedBundleLoader.swift */,
 				9E7378974583A27B80E0EFB3 /* PersonalizedFeedCatalog.swift */,
 				613E1770898F8B692C9D11FE /* PreviewData.swift */,
 				5A91B29B5DF530EFF5D216F1 /* RemoteMerchantService.swift */,
@@ -687,6 +690,7 @@
 				9C9C4E768F481DBBF61445E2 /* InjectableView.swift in Sources */,
 				824ADF93916375DD59209CE0 /* KeyboardAnimation.swift in Sources */,
 				13D4F8E2F7F72D421D0DFF83 /* LocalMerchantService.swift in Sources */,
+				FBLDR0000000000000000001 /* FeedBundleLoader.swift in Sources */,
 				E11A9247F1749EC35F25E92A /* LoopingVideoPlayer.swift in Sources */,
 				F35A073486623C0A6B012827 /* MerchantAvatarView.swift in Sources */,
 				80240471BC5516F34CFFCA23 /* MerchantImage.swift in Sources */,

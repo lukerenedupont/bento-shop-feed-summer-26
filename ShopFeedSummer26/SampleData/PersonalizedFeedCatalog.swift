@@ -9,6 +9,13 @@ struct PersonalizedFeedCatalog: Codable {
     var signals: ShopperSignals? = nil
 
     static let current: PersonalizedFeedCatalog = {
+        // A dossier-feed-bundle on disk (via -feedBundlePath) wins over the
+        // bundled asset; any failure falls straight through to it.
+        if let data = FeedBundleLoader.feedData(),
+           let catalog = try? JSONDecoder().decode(PersonalizedFeedCatalog.self, from: data),
+           !catalog.topics.isEmpty {
+            return catalog
+        }
         guard let asset = NSDataAsset(name: "personalized-feed"),
               let catalog = try? JSONDecoder().decode(PersonalizedFeedCatalog.self, from: asset.data) else {
             assertionFailure("personalized-feed.json is missing or invalid")

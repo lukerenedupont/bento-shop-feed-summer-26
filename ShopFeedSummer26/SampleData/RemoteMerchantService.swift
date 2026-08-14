@@ -57,6 +57,13 @@ final class RemoteMerchantService: ObservableObject {
         guard !isLoading else { return }
         guard force || merchants.isEmpty else { return }
 
+        // A dossier-feed-bundle on disk is authoritative: skip the live
+        // path entirely so a signed-in session can't shadow the fixture.
+        if FeedBundleLoader.bundleDirectory != nil {
+            loadFallbackData()
+            return
+        }
+
         isLoading = true
         error = nil
         needsConfiguration = false

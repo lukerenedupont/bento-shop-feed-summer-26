@@ -6,8 +6,19 @@ import SwiftUI
 enum LocalMerchantService {
 
     static func loadMerchants() -> [SampleMerchant] {
-        guard let asset = NSDataAsset(name: "prototype-merchants"),
-              let snapshot = try? JSONDecoder().decode(MerchantSnapshot.self, from: asset.data) else {
+        // A dossier-feed-bundle on disk (via -feedBundlePath) wins over the
+        // bundled asset; a failed decode falls straight through to it.
+        if let data = FeedBundleLoader.merchantsData() {
+            let fromBundle = decodeMerchants(from: data)
+            if !fromBundle.isEmpty { return fromBundle }
+        }
+        guard let asset = NSDataAsset(name: "prototype-merchants") else { return [] }
+        return decodeMerchants(from: asset.data)
+    }
+
+    /// Decodes a MerchantSnapshot document. Returns [] on any decode failure.
+    static func decodeMerchants(from data: Data) -> [SampleMerchant] {
+        guard let snapshot = try? JSONDecoder().decode(MerchantSnapshot.self, from: data) else {
             return []
         }
 
