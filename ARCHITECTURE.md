@@ -196,12 +196,18 @@ is a direct content-enrichment layer:
   its own content type
 - Coverage grows without code changes — see “Dossier drop zone” below
 
-Status: **bento scaffolding shipped and piloted on Birding gear.**
+Status: **bento shipped on Birding gear, Sculptural mirrors, and Coffee
+counter.**
 
 - `bento` block kind: items carry `role` (required — validator-enforced) and
   optional `size` (`hero`/`wide`/`standard`)
 - `Components/BentoGrid.swift`: deterministic two-column packer + compartment
-  card (role eyebrow, ambient surface, legibility scrim)
+  card (ambient surface, legibility scrim, ProductCard-style price badge)
+- **Rhythm grammar — a bento is never a plain grid.** Runs of standard cells
+  cluster into tall-anchored trios (one 2-row tall cell beside two stacked
+  squares, sides alternating through the box), a leftover pair sits side by
+  side, and a lone orphan is promoted to a full-width banner. Hero and wide
+  cells flush the run, so authored order still controls the shape
 - Unsized compartments resolve from data: cart signal → hero, owned/filmed →
   wide, else standard (`BentoCompartment.resolveSize`)
 - `signals` object in `personalized-feed.json` (cart/owned/viewed/searches)

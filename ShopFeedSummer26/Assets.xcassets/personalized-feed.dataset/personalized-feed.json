@@ -527,6 +527,12 @@
             },
             {
               "kind": "product",
+              "merchantID": "fellow",
+              "productID": 8643987505252,
+              "role": "Grind"
+            },
+            {
+              "kind": "product",
               "merchantID": "kinto",
               "productID": 2214023331888,
               "role": "Sip"

@@ -38,14 +38,19 @@ struct BentoCompartment: Identifiable {
 }
 
 /// Lays compartments into a two-column packed box. Hero and wide cells span
-/// the full width; standard cells pair up. Layout is deterministic from the
-/// compartment order — curation stays in data, not in layout heuristics.
+/// the full width. Standard cells never fall into a plain grid: runs of
+/// squares are clustered into tall-anchored trios (one tall cell beside two
+/// stacked squares, alternating sides), leftover pairs sit side by side, and
+/// a lone orphan is promoted to a full-width banner. Layout stays
+/// deterministic from the compartment order — curation lives in data.
 struct BentoGrid: View {
     let compartments: [BentoCompartment]
     let containerWidth: CGFloat
 
     private let spacing: CGFloat = GravitySpacing.space8
     private var columnWidth: CGFloat { (containerWidth - spacing) / 2 }
+    /// Tall cells span exactly two square rows, so the cluster stays flush.
+    private var tallHeight: CGFloat { columnWidth * 2 + spacing }
 
     private func height(for size: BentoCellSize) -> CGFloat {
         switch size {
@@ -56,46 +61,95 @@ struct BentoGrid: View {
         }
     }
 
+    /// A resolved layout row — the rhythm grammar of the box.
+    private enum LayoutRow {
+        /// Hero or wide cell spanning the container.
+        case full(BentoCompartment)
+        /// An orphan standard promoted to a full-width banner.
+        case banner(BentoCompartment)
+        /// Two squares side by side.
+        case pair(BentoCompartment, BentoCompartment)
+        /// One tall cell beside two stacked squares.
+        case trio(tall: BentoCompartment, top: BentoCompartment, bottom: BentoCompartment, tallLeading: Bool)
+    }
+
     var body: some View {
         VStack(spacing: spacing) {
-            ForEach(rows.indices, id: \.self) { index in
-                let row = rows[index]
-                HStack(spacing: spacing) {
-                    ForEach(row) { compartment in
-                        BentoCompartmentCard(compartment: compartment)
-                            .frame(
-                                width: row.count == 1 && compartment.size != .standard ? containerWidth : columnWidth,
-                                height: height(for: compartment.size)
-                            )
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+            ForEach(Array(layoutRows.enumerated()), id: \.offset) { _, row in
+                rowView(row)
             }
         }
         .frame(width: containerWidth)
     }
 
-    /// Full-width cells get their own row; standard cells pair greedily.
-    private var rows: [[BentoCompartment]] {
-        var rows: [[BentoCompartment]] = []
-        var pending: BentoCompartment?
-        for compartment in compartments {
-            if compartment.size == .standard {
-                if let waiting = pending {
-                    rows.append([waiting, compartment])
-                    pending = nil
-                } else {
-                    pending = compartment
+    @ViewBuilder
+    private func rowView(_ row: LayoutRow) -> some View {
+        switch row {
+        case .full(let compartment):
+            BentoCompartmentCard(compartment: compartment)
+                .frame(width: containerWidth, height: height(for: compartment.size))
+        case .banner(let compartment):
+            BentoCompartmentCard(compartment: compartment)
+                .frame(width: containerWidth, height: height(for: .wide))
+        case .pair(let leading, let trailing):
+            HStack(spacing: spacing) {
+                BentoCompartmentCard(compartment: leading)
+                    .frame(width: columnWidth, height: columnWidth)
+                BentoCompartmentCard(compartment: trailing)
+                    .frame(width: columnWidth, height: columnWidth)
+            }
+        case .trio(let tall, let top, let bottom, let tallLeading):
+            HStack(spacing: spacing) {
+                if tallLeading { tallCell(tall) }
+                VStack(spacing: spacing) {
+                    BentoCompartmentCard(compartment: top)
+                        .frame(width: columnWidth, height: columnWidth)
+                    BentoCompartmentCard(compartment: bottom)
+                        .frame(width: columnWidth, height: columnWidth)
                 }
-            } else {
-                if let waiting = pending {
-                    rows.append([waiting])
-                    pending = nil
-                }
-                rows.append([compartment])
+                if !tallLeading { tallCell(tall) }
             }
         }
-        if let waiting = pending { rows.append([waiting]) }
+    }
+
+    private func tallCell(_ compartment: BentoCompartment) -> some View {
+        BentoCompartmentCard(compartment: compartment)
+            .frame(width: columnWidth, height: tallHeight)
+    }
+
+    /// Full-width cells flush the pending run of standards; each run is
+    /// clustered so something always breaks the grid: trios first (sides
+    /// alternating box-wide), a final pair if two remain, a banner if one.
+    private var layoutRows: [LayoutRow] {
+        var rows: [LayoutRow] = []
+        var run: [BentoCompartment] = []
+        var trioCount = 0
+
+        func flushRun() {
+            while !run.isEmpty {
+                if run.count == 1 {
+                    rows.append(.banner(run.removeFirst()))
+                } else if run.count == 2 {
+                    rows.append(.pair(run.removeFirst(), run.removeFirst()))
+                } else {
+                    let tall = run.removeFirst()
+                    let top = run.removeFirst()
+                    let bottom = run.removeFirst()
+                    rows.append(.trio(tall: tall, top: top, bottom: bottom, tallLeading: trioCount.isMultiple(of: 2)))
+                    trioCount += 1
+                }
+            }
+        }
+
+        for compartment in compartments {
+            if compartment.size == .standard {
+                run.append(compartment)
+            } else {
+                flushRun()
+                rows.append(.full(compartment))
+            }
+        }
+        flushRun()
         return rows
     }
 }
@@ -203,8 +257,8 @@ private struct BentoCompartmentCard: View {
                 .init(id: "0", role: "See", size: .hero, surface: .product(products[0]), action: {}),
                 .init(id: "1", role: "See", size: .standard, surface: .product(products[1]), action: {}),
                 .init(id: "2", role: "Wear", size: .standard, surface: .product(products[2]), action: {}),
-                .init(id: "3", role: "Shop the world", size: .wide, surface: .merchant(merchant), action: {}),
-                .init(id: "4", role: "Carry", size: .standard, surface: .product(products[3]), action: {}),
+                .init(id: "3", role: "Carry", size: .standard, surface: .product(products[3]), action: {}),
+                .init(id: "4", role: "Shop the world", size: .wide, surface: .merchant(merchant), action: {}),
             ],
             containerWidth: 361
         )
