@@ -81,17 +81,14 @@ struct SampleMerchant: Identifiable {
     static var all: [SampleMerchant] {
         let live = RemoteMerchantService.shared.merchants
         if !live.isEmpty { return live }
-        #if DEBUG
-        // In Xcode previews `RemoteMerchantService` never loads, so fall back
-        // to the bundled `prototype-merchants.json` snapshot so previews "just
-        // work" with realistic data. Production behavior is unchanged — this
-        // only kicks in inside the previews runtime.
-        if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
-            return previews
-        }
-        #endif
-        return live
+        // Previews, deep links, and pushed pages can all render before
+        // HomePage seeds RemoteMerchantService — the bundled snapshot is
+        // always a safe source of truth, so nothing races an empty catalog.
+        return bundledSnapshot.isEmpty ? previews : bundledSnapshot
     }
+
+    /// Bundled `prototype-merchants.json`, decoded once.
+    private static let bundledSnapshot: [SampleMerchant] = LocalMerchantService.loadMerchants()
 
     @MainActor
     static var byId: [String: SampleMerchant] {

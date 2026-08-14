@@ -135,12 +135,17 @@ private struct BentoCompartmentCard: View {
                 .padding(12)
             }
             .overlay(alignment: .topLeading) {
+                // Chip, not bare text — role labels must survive white
+                // product photography.
                 Text(compartment.role)
                     .font(.system(size: 11, weight: .semibold))
                     .textCase(.uppercase)
                     .tracking(0.8)
-                    .foregroundStyle(.white.opacity(0.85))
-                    .padding(12)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(.black.opacity(0.35), in: Capsule())
+                    .padding(10)
             }
             .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
         }

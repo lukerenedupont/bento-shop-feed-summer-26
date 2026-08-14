@@ -93,12 +93,14 @@ struct TopicLandingView: View {
 
     var body: some View {
         GeometryReader { geometry in
+            ScrollViewReader { proxy in
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
                     topicHeader
                     VStack(alignment: .leading, spacing: 20) {
                         ForEach(merchandisingBlocks) { block in
                             merchandisingBlock(block, containerWidth: geometry.size.width)
+                                .id(block.id)
                         }
                     }
                 }
@@ -113,6 +115,19 @@ struct TopicLandingView: View {
             .ignoresSafeArea(edges: .top)
             .onScrollGeometryChange(for: CGFloat.self) { $0.contentOffset.y } action: { _, offset in
                 coordinator.updateScrollOffset(offset)
+            }
+#if DEBUG
+            // Fast-iteration hook: `-scrollTo <blockID>` jumps to a
+            // merchandising block for screenshot loops.
+            .onAppear {
+                if let target = UserDefaults.standard.string(forKey: "scrollTo") {
+                    // Delay past first layout so cold launches land correctly.
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                        proxy.scrollTo(target, anchor: .top)
+                    }
+                }
+            }
+#endif
             }
         }
         .background(backgroundColor.ignoresSafeArea())

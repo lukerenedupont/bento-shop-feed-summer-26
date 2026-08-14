@@ -67,6 +67,18 @@ struct RootView: View {
         }
         .environment(coordinator)
         .purlInjectable()
+#if DEBUG
+        // Fast-iteration hook: `simctl launch ... -openTopic birding-gear`
+        // (or -openStory / -openProduct) jumps straight to a surface so
+        // screenshot loops don't need UI driving.
+        .onAppear {
+            if let topicID = UserDefaults.standard.string(forKey: "openTopic") {
+                coordinator.pushRoute(.topic(topicId: topicID, sourceStoryId: nil))
+            } else if let storyID = UserDefaults.standard.string(forKey: "openStory") {
+                coordinator.pushRoute(.story(storyId: storyID))
+            }
+        }
+#endif
     }
 
     // MARK: - Navigation Destinations

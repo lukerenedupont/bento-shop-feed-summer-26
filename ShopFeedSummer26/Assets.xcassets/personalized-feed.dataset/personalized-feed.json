@@ -59,16 +59,11 @@
           "title": "The birding kit",
           "items": [
             {
-              "kind": "story",
-              "storyID": "city-to-trail-birding",
-              "role": "The full kit",
-              "size": "hero"
-            },
-            {
               "kind": "product",
               "merchantID": "nocs",
               "productID": 10432692846871,
-              "role": "Keep shopping"
+              "role": "Keep shopping",
+              "size": "hero"
             },
             {
               "kind": "product",
@@ -78,20 +73,26 @@
             },
             {
               "kind": "product",
-              "merchantID": "feature-salomon",
-              "productID": 7029064368199,
-              "role": "Wear"
-            },
-            {
-              "kind": "product",
               "merchantID": "extra-butter-salomon",
               "productID": 8151144530103,
               "role": "Wear"
             },
             {
               "kind": "product",
+              "merchantID": "feature-salomon",
+              "productID": 7029064368199,
+              "role": "Wear"
+            },
+            {
+              "kind": "product",
               "merchantID": "kinto",
               "productID": 2214022053936,
+              "role": "Carry"
+            },
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 4807420739684,
               "role": "Carry"
             },
             {
