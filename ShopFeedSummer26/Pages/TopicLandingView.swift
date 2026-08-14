@@ -183,14 +183,15 @@ struct TopicLandingView: View {
             }
 
             // Eased dissolve into the page background so the cover melts
-            // into the feed instead of ending on a hard edge.
+            // into the feed instead of ending on a hard edge. Kept low and
+            // light: the cover art stays clean and the ramp only builds in
+            // the last stretch before the feed.
             LinearGradient(
                 stops: [
                     .init(color: backgroundColor.opacity(0), location: 0),
-                    .init(color: backgroundColor.opacity(0), location: 0.42),
-                    .init(color: backgroundColor.opacity(0.14), location: 0.58),
-                    .init(color: backgroundColor.opacity(0.42), location: 0.72),
-                    .init(color: backgroundColor.opacity(0.76), location: 0.85),
+                    .init(color: backgroundColor.opacity(0), location: 0.66),
+                    .init(color: backgroundColor.opacity(0.1), location: 0.78),
+                    .init(color: backgroundColor.opacity(0.4), location: 0.88),
                     .init(color: backgroundColor, location: 1),
                 ],
                 startPoint: .top,
