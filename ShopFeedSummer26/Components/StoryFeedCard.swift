@@ -133,8 +133,9 @@ struct StoryFeedCard: View {
         VStack(spacing: GravitySpacing.space8) {
             storyContext
 
-            // Same hero treatment as topic-page titles: centered, heavy,
-            // tightly tracked display text.
+            // Same heavy display voice as topic pages — the distinction
+            // lives in the words: card titles are short, scannable hooks,
+            // topic labels name the destination.
             Text(story.title)
                 .font(.system(size: 40, weight: .heavy))
                 .tracking(-1.4)
