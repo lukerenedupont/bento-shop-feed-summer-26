@@ -69,6 +69,31 @@ for topic in feed["topics"]:
                 key = (item.get("merchantID"), int(item.get("productID", -1)))
                 if key not in products:
                     errors.append(f"{topic['id']}/{block_id}: unknown product item {key}")
+            elif kind == "merchantSpotlight":
+                # Bento-only tall brand card: a merchant plus exactly two
+                # shoppable chips from that merchant's catalog.
+                if block.get("kind") != "bento":
+                    errors.append(f"{topic['id']}/{block_id}: merchantSpotlight is bento-only")
+                if item.get("merchantID") not in merchants:
+                    errors.append(f"{topic['id']}/{block_id}: unknown spotlight merchant {item.get('merchantID')!r}")
+                chip_ids = item.get("productIDs") or []
+                if len(chip_ids) != 2:
+                    errors.append(f"{topic['id']}/{block_id}: merchantSpotlight needs exactly 2 productIDs")
+                for product_id in chip_ids:
+                    if (item.get("merchantID"), int(product_id)) not in products:
+                        errors.append(f"{topic['id']}/{block_id}: unknown spotlight chip ({item.get('merchantID')!r}, {product_id})")
+            elif kind == "avatarCluster":
+                # Bento-only shop shelf: 4 discs fill a square cell, 6 a tall one.
+                if block.get("kind") != "bento":
+                    errors.append(f"{topic['id']}/{block_id}: avatarCluster is bento-only")
+                cluster_ids = item.get("merchantIDs") or []
+                if len(cluster_ids) not in {4, 6}:
+                    errors.append(f"{topic['id']}/{block_id}: avatarCluster needs 4 or 6 merchantIDs")
+                if len(cluster_ids) != len(set(cluster_ids)):
+                    errors.append(f"{topic['id']}/{block_id}: avatarCluster merchants must not repeat")
+                for merchant_id in cluster_ids:
+                    if merchant_id not in merchants:
+                        errors.append(f"{topic['id']}/{block_id}: unknown cluster merchant {merchant_id!r}")
             elif kind not in {"story", "merchant", "product"}:
                 errors.append(f"{topic['id']}/{block_id}: unsupported item kind {kind!r}")
 

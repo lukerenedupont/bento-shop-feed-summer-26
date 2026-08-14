@@ -85,14 +85,8 @@ struct TopicLandingView: View {
         let products = deepProducts.filter { !merchandisedProductIDs.contains($0.id) }
         var items: [TopicMasonryItem] = []
         if products.indices.contains(0) { items.append(.product(products[0])) }
-        // Brand spotlight leads the merchant treatments: the first relevant
-        // shop with at least two topical products earns the tall cover card.
-        var spotlightMerchantID: String?
-        if let merchant = relevantMerchants.first(where: { m in
-            products.filter { $0.merchant.id == m.id }.count >= 2
-        }) {
-            spotlightMerchantID = merchant.id
-            items.append(.merchantSpotlight(merchant, products.filter { $0.merchant.id == merchant.id }))
+        if let merchant = relevantMerchants.first {
+            items.append(.merchant(merchant, products.filter { $0.merchant.id == merchant.id }))
         }
         if products.indices.contains(1) { items.append(.product(products[1])) }
         if products.indices.contains(2) { items.append(.product(products[2])) }
@@ -100,28 +94,16 @@ struct TopicLandingView: View {
             items.append(.category(stories[2], stories[2].resolvedProducts(from: merchants)))
         }
         if products.indices.contains(3) { items.append(.product(products[3])) }
-        // Wordmark moment: pure brand voice for the next merchant.
-        if let merchant = relevantMerchants.first(where: { $0.id != spotlightMerchantID }) {
-            items.append(.merchantWordmark(merchant))
-        }
         if products.indices.contains(4), stories.indices.contains(1) {
             items.append(.post(stories[1], products[4]))
         }
         if products.indices.contains(5) { items.append(.product(products[5])) }
-        if relevantMerchants.indices.contains(2) {
-            let merchant = relevantMerchants[2]
+        if relevantMerchants.indices.contains(1) {
+            let merchant = relevantMerchants[1]
             items.append(.merchant(merchant, products.filter { $0.merchant.id == merchant.id }))
         }
         if products.indices.contains(6) { items.append(.product(products[6])) }
         if products.indices.contains(7) { items.append(.product(products[7])) }
-        // Avatar shelf: six floating shop circles — topic merchants first,
-        // then the wider catalog fills the cluster out.
-        let clusterMerchants = (relevantMerchants + merchants.filter { m in
-            !relevantMerchants.contains(where: { $0.id == m.id })
-        }).prefix(6)
-        if clusterMerchants.count == 6 {
-            items.append(.avatarCluster(Array(clusterMerchants)))
-        }
         if stories.indices.contains(3) {
             items.append(.category(stories[3], stories[3].resolvedProducts(from: merchants)))
         }
@@ -361,6 +343,9 @@ struct TopicLandingView: View {
                 }
                 .frame(width: 190)
             }
+        case .merchantSpotlight, .avatarCluster:
+            // Bento-only kinds; a media carousel never authors them.
+            EmptyView()
         }
     }
 
@@ -443,6 +428,26 @@ struct TopicLandingView: View {
                 return BentoCompartment(id: id, role: role, size: size, surface: .merchant(merchant)) {
                     coordinator.pushRoute(.store(merchantId: merchant.id))
                 }
+            case .merchantSpotlight:
+                guard let merchantID = item.merchantID,
+                      let merchant = merchants.first(where: { $0.id == merchantID }) else { return nil }
+                let chips = (item.productIDs ?? []).compactMap { productID in
+                    merchant.products.first(where: { $0.id == productID })
+                        .map { ResolvedStoryProduct(merchant: merchant, product: $0) }
+                }
+                // Always standard: the spotlight earns its height by anchoring
+                // a trio, not by claiming a full-width cell.
+                return BentoCompartment(id: id, role: role, size: .standard, surface: .merchantSpotlight(merchant, chips)) {
+                    coordinator.pushRoute(.store(merchantId: merchant.id))
+                }
+            case .avatarCluster:
+                let clusterMerchants = (item.merchantIDs ?? []).compactMap { mid in
+                    merchants.first(where: { $0.id == mid })
+                }
+                guard clusterMerchants.count >= 4 else { return nil }
+                // The discs are their own buttons; the compartment action is
+                // never reachable but the shape keeps the grammar uniform.
+                return BentoCompartment(id: id, role: role, size: .standard, surface: .avatarCluster(clusterMerchants), action: {})
             case .story:
                 guard let storyID = item.storyID,
                       let story = stories.first(where: { $0.id == storyID }) ?? PersonalizedFeedStories.all.first(where: { $0.id == storyID }) else { return nil }

@@ -65,6 +65,15 @@
               "size": "hero"
             },
             {
+              "kind": "merchantSpotlight",
+              "merchantID": "nocs",
+              "productIDs": [
+                10002676810007,
+                8226174730519
+              ],
+              "role": "Meet the maker"
+            },
+            {
               "kind": "product",
               "merchantID": "nocs",
               "productID": 6591770722382,
@@ -93,6 +102,16 @@
               "merchantID": "fellow",
               "productID": 4807420739684,
               "role": "Carry"
+            },
+            {
+              "kind": "avatarCluster",
+              "merchantIDs": [
+                "extra-butter-salomon",
+                "feature-salomon",
+                "kinto",
+                "fellow"
+              ],
+              "role": "Browse the shops"
             },
             {
               "kind": "merchant",
@@ -208,6 +227,15 @@
               "size": "hero"
             },
             {
+              "kind": "merchantSpotlight",
+              "merchantID": "forom",
+              "productIDs": [
+                9080102715523,
+                8817998889091
+              ],
+              "role": "Meet the maker"
+            },
+            {
               "kind": "product",
               "merchantID": "forom",
               "productID": 9080102322307,
@@ -242,6 +270,16 @@
               "merchantID": "coming-soon",
               "productID": 9960379842866,
               "role": "Floor presence"
+            },
+            {
+              "kind": "avatarCluster",
+              "merchantIDs": [
+                "coming-soon",
+                "house-of-leon",
+                "moma",
+                "lichen"
+              ],
+              "role": "Browse the shops"
             },
             {
               "kind": "merchant",
@@ -366,6 +404,15 @@
               "size": "hero"
             },
             {
+              "kind": "merchantSpotlight",
+              "merchantID": "standards-manual",
+              "productIDs": [
+                3933686169669,
+                9250932523224
+              ],
+              "role": "Meet the maker"
+            },
+            {
               "kind": "product",
               "merchantID": "standards-manual",
               "productID": 1424479363,
@@ -400,6 +447,16 @@
               "merchantID": "lichen",
               "productID": 11009838154046,
               "role": "On the wall"
+            },
+            {
+              "kind": "avatarCluster",
+              "merchantIDs": [
+                "moma",
+                "lichen",
+                "draw-down",
+                "forom"
+              ],
+              "role": "Browse the shops"
             },
             {
               "kind": "merchant",
@@ -523,6 +580,15 @@
               "size": "hero"
             },
             {
+              "kind": "merchantSpotlight",
+              "merchantID": "fellow",
+              "productIDs": [
+                8662361079908,
+                8659871072356
+              ],
+              "role": "Meet the maker"
+            },
+            {
               "kind": "product",
               "merchantID": "fellow",
               "productID": 2055410221171,
@@ -551,6 +617,16 @@
               "merchantID": "fellow",
               "productID": 4807420739684,
               "role": "Sip"
+            },
+            {
+              "kind": "avatarCluster",
+              "merchantIDs": [
+                "kinto",
+                "moma",
+                "doiy",
+                "house-of-leon"
+              ],
+              "role": "Browse the shops"
             },
             {
               "kind": "merchant",
@@ -666,6 +742,15 @@
               "size": "hero"
             },
             {
+              "kind": "merchantSpotlight",
+              "merchantID": "babyletto",
+              "productIDs": [
+                9109598306358,
+                9109592440886
+              ],
+              "role": "Meet the maker"
+            },
+            {
               "kind": "product",
               "merchantID": "babyletto",
               "productID": 7652167647286,
@@ -700,6 +785,16 @@
               "merchantID": "babyletto",
               "productID": 7784483389494,
               "role": "Change"
+            },
+            {
+              "kind": "avatarCluster",
+              "merchantIDs": [
+                "lalo",
+                "doiy",
+                "moma",
+                "kinto"
+              ],
+              "role": "Browse the shops"
             },
             {
               "kind": "merchant",
@@ -816,6 +911,15 @@
               "size": "hero"
             },
             {
+              "kind": "merchantSpotlight",
+              "merchantID": "moma",
+              "productIDs": [
+                9686879502566,
+                9598032576742
+              ],
+              "role": "Meet the maker"
+            },
+            {
               "kind": "product",
               "merchantID": "fellow",
               "productID": 2055410221171,
@@ -850,6 +954,16 @@
               "merchantID": "fellow",
               "productID": 2055409762419,
               "role": "Sip"
+            },
+            {
+              "kind": "avatarCluster",
+              "merchantIDs": [
+                "doiy",
+                "kinto",
+                "fellow",
+                "forom"
+              ],
+              "role": "Browse the shops"
             },
             {
               "kind": "merchant",
@@ -973,10 +1087,13 @@
               "size": "hero"
             },
             {
-              "kind": "product",
+              "kind": "merchantSpotlight",
               "merchantID": "extra-butter-salomon",
-              "productID": 8349773922487,
-              "role": "On trail"
+              "productIDs": [
+                8664566857911,
+                8700421308599
+              ],
+              "role": "Meet the maker"
             },
             {
               "kind": "product",
@@ -1009,10 +1126,14 @@
               "role": "On street"
             },
             {
-              "kind": "product",
-              "merchantID": "feature-salomon",
-              "productID": 6753846853703,
-              "role": "On street"
+              "kind": "avatarCluster",
+              "merchantIDs": [
+                "extra-butter-salomon",
+                "kinto",
+                "fellow",
+                "moma"
+              ],
+              "role": "Browse the shops"
             },
             {
               "kind": "merchant",
@@ -1115,6 +1236,15 @@
               "size": "hero"
             },
             {
+              "kind": "merchantSpotlight",
+              "merchantID": "moma",
+              "productIDs": [
+                8398523367654,
+                9727956189414
+              ],
+              "role": "Meet the maker"
+            },
+            {
               "kind": "product",
               "merchantID": "standards-manual",
               "productID": 92039479320,
@@ -1139,10 +1269,14 @@
               "role": "Wear"
             },
             {
-              "kind": "product",
-              "merchantID": "lichen",
-              "productID": 11009838154046,
-              "role": "On the wall"
+              "kind": "avatarCluster",
+              "merchantIDs": [
+                "lichen",
+                "draw-down",
+                "forom",
+                "doiy"
+              ],
+              "role": "Browse the shops"
             },
             {
               "kind": "merchant",
@@ -1233,6 +1367,15 @@
               "productID": 7219216580772,
               "role": "Scrub",
               "size": "hero"
+            },
+            {
+              "kind": "merchantSpotlight",
+              "merchantID": "ceremonia",
+              "productIDs": [
+                8686256816292,
+                15094318268785
+              ],
+              "role": "Meet the maker"
             },
             {
               "kind": "product",
@@ -1362,6 +1505,15 @@
               "size": "hero"
             },
             {
+              "kind": "merchantSpotlight",
+              "merchantID": "forom",
+              "productIDs": [
+                8774121619587,
+                9228002951299
+              ],
+              "role": "Meet the maker"
+            },
+            {
               "kind": "product",
               "merchantID": "house-of-leon",
               "productID": 7873592688813,
@@ -1396,6 +1548,16 @@
               "merchantID": "house-of-leon",
               "productID": 7922656051373,
               "role": "Wood"
+            },
+            {
+              "kind": "avatarCluster",
+              "merchantIDs": [
+                "moma",
+                "fellow",
+                "lichen",
+                "doiy"
+              ],
+              "role": "Browse the shops"
             },
             {
               "kind": "merchant",
@@ -1483,7 +1645,7 @@
       "topicKeys": [
         "birding"
       ],
-      "accentHex": "#352810",
+      "accentHex": "#5B411C",
       "destinationLabel": "Compare the field kit",
       "products": [
         {
@@ -1515,7 +1677,7 @@
         "mirrors",
         "tabletop"
       ],
-      "accentHex": "#755237",
+      "accentHex": "#2E5D75",
       "destinationLabel": "Enter the mirror hunt",
       "products": [
         {
@@ -1546,7 +1708,7 @@
       "topicKeys": [
         "type"
       ],
-      "accentHex": "#737562",
+      "accentHex": "#752C19",
       "destinationLabel": "Open the reference shelf",
       "products": [
         {
@@ -1577,7 +1739,7 @@
       "topicKeys": [
         "coffee"
       ],
-      "accentHex": "#351E0B",
+      "accentHex": "#3F250F",
       "destinationLabel": "Build the coffee setup",
       "products": [
         {
@@ -1608,7 +1770,7 @@
       "topicKeys": [
         "tabletop"
       ],
-      "accentHex": "#755B19",
+      "accentHex": "#755919",
       "destinationLabel": "Enter the tablescape",
       "products": [
         {
@@ -1639,7 +1801,7 @@
       "topicKeys": [
         "kids"
       ],
-      "accentHex": "#70491C",
+      "accentHex": "#75542A",
       "destinationLabel": "Build the room",
       "products": [
         {
@@ -1670,7 +1832,7 @@
       "topicKeys": [
         "trail"
       ],
-      "accentHex": "#755537",
+      "accentHex": "#75573C",
       "destinationLabel": "Compare the rotation",
       "products": [
         {
@@ -1701,7 +1863,7 @@
       "topicKeys": [
         "type"
       ],
-      "accentHex": "#2D1F0A",
+      "accentHex": "#513D21",
       "destinationLabel": "Follow the city thread",
       "products": [
         {
@@ -1730,7 +1892,7 @@
       "subtitle": "Clarify, condition, extend, and dry with four products that each have a distinct job.",
       "format": "setup",
       "topicKeys": [],
-      "accentHex": "#744119",
+      "accentHex": "#5E3114",
       "destinationLabel": "See the regimen",
       "products": [
         {

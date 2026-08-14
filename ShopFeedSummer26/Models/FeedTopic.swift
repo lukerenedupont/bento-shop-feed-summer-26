@@ -33,12 +33,25 @@ struct FeedTopic: Identifiable, Hashable, Codable {
                 case story
                 case merchant
                 case product
+                /// Bento only: tall brand card — the merchant's cover as the
+                /// surface, identity header up top, two shoppable product
+                /// chips floating at the bottom. Wants a tall cell (author it
+                /// first in a run of standards so it anchors the trio).
+                case merchantSpotlight
+                /// Bento only: a loose grid of circular shop avatars floating
+                /// chrome-free on the topic surface. Each disc opens a store.
+                case avatarCluster
             }
 
             let kind: Kind
             let storyID: String?
             let merchantID: String?
             let productID: Int?
+            /// merchantSpotlight only: the two products for the chips.
+            var productIDs: [Int]? = nil
+            /// avatarCluster only: the shops in the cluster (4 for a square
+            /// cell, 6 for a tall one).
+            var merchantIDs: [String]? = nil
             /// Bento only: the compartment's stated purpose. Every bento
             /// compartment must explain why it exists.
             var role: String? = nil

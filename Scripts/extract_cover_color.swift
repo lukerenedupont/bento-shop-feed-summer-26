@@ -1,14 +1,14 @@
 #!/usr/bin/env swift
 // Prints a surface accent color for each cover image as a hex value.
 //
-// The topic header fades its cover into the page background, so we sample
-// the bottom ~30% of the image. A plain average collapses every photo into
-// the same muddy brown, so instead pixels are bucketed by hue and buckets
-// are scored by coverage x saturation: the cover's most *characterful*
-// color wins (olive for the birding field, coffee-brown for the counter,
-// blue-gray for type-and-transit), not its arithmetic mean. The winner is
-// then normalized to a dark, white-text-safe surface tone with its hue and
-// saturation character preserved.
+// Pixels from the whole frame are bucketed by hue; each qualifying bucket
+// (>= 4% coverage) is ranked by the *chroma* of its average color with a
+// gentle coverage tiebreaker. Chroma finds the cover's characterful color
+// (sky-blue mirror, NYCTA orange, terracotta tile) instead of the biggest
+// neutral wall or the shadow band at the frame's bottom - coverage-scored
+// bottom-band sampling collapsed most covers into the same muddy brown.
+// The winner is then normalized to a dark, white-text-safe surface tone
+// with its hue and saturation character preserved.
 //
 // Usage: swift Scripts/extract_cover_color.swift <image> [<image> ...]
 // Output: one "<path> #RRGGBB" line per image.
@@ -51,14 +51,9 @@ func hsvToRGB(h: Double, s: Double, v: Double) -> (r: Double, g: Double, b: Doub
 
 func surfaceAccentHex(url: URL) -> String? {
     guard let image = CIImage(contentsOf: url) else { return nil }
-    // CoreImage's origin is bottom-left, so y=0 is the visual bottom.
-    let band = image.cropped(to: CGRect(
-        x: 0, y: 0,
-        width: image.extent.width,
-        height: (image.extent.height * 0.30).rounded()
-    ))
+    let band = image
 
-    // Downsample the band to a small bitmap for the histogram.
+    // Downsample to a small bitmap for the histogram.
     let sampleWidth = 96
     let scale = Double(sampleWidth) / band.extent.width
     let small = band.transformed(by: .init(scaleX: scale, y: scale))
@@ -79,6 +74,8 @@ func surfaceAccentHex(url: URL) -> String? {
     var sumG = [Double](repeating: 0, count: buckets)
     var sumB = [Double](repeating: 0, count: buckets)
     var weight = [Double](repeating: 0, count: buckets)
+    var count = [Int](repeating: 0, count: buckets)
+    var totalCount = 0
     for i in stride(from: 0, to: pixels.count, by: 4) {
         let r = Double(pixels[i]) / 255, g = Double(pixels[i + 1]) / 255, b = Double(pixels[i + 2]) / 255
         let (hue, s, v) = rgbToHSV(r: r, g: g, b: b)
@@ -86,13 +83,29 @@ func surfaceAccentHex(url: URL) -> String? {
         guard v > 0.08, v < 0.97 else { continue }
         let bucket = min(buckets - 1, Int(hue / 360 * Double(buckets)))
         let pixelWeight = s + 0.08
+        count[bucket] += 1
+        totalCount += 1
         score[bucket] += pixelWeight
         sumR[bucket] += r * pixelWeight
         sumG[bucket] += g * pixelWeight
         sumB[bucket] += b * pixelWeight
         weight[bucket] += pixelWeight
     }
-    guard let winner = score.indices.max(by: { score[$0] < score[$1] }), weight[winner] > 0 else { return nil }
+    // A bucket qualifies if it covers a real share of the frame; among
+    // qualifiers the most chromatic average wins. Chroma (s x v) keeps
+    // near-black shadow fringes from beating an airy oak room, and the
+    // gentle coverage factor keeps a dominant surface (terracotta tile)
+    // from losing to a sliver of highlight with marginally higher chroma.
+    let minCount = max(1, Int(Double(totalCount) * 0.04))
+    var winner = -1
+    var winnerRank = -1.0
+    for b in 0..<buckets where count[b] >= minCount && weight[b] > 0 {
+        let hsv = rgbToHSV(r: sumR[b] / weight[b], g: sumG[b] / weight[b], b: sumB[b] / weight[b])
+        let coverage = Double(count[b]) / Double(totalCount)
+        let rank = hsv.s * hsv.v * pow(coverage, 0.15)
+        if rank > winnerRank { winnerRank = rank; winner = b }
+    }
+    guard winner >= 0 else { return nil }
 
     let r = sumR[winner] / weight[winner]
     let g = sumG[winner] / weight[winner]
