@@ -172,13 +172,21 @@ struct StoryFeedCard: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: GravitySpacing.space8) {
                 ForEach(items) { item in
-                    ProductCard(
-                        image: nil,
-                        imageURL: item.product.imageURL,
-                        priceBadge: formatPrice(item.product.price),
-                        showFavoriteButton: false
-                    )
-                    .frame(width: 124)
+                    // Tiles are their own tap targets: a product tap goes
+                    // straight to the real PDP, not the story's topic.
+                    Button {
+                        HapticFeedback.light.fire()
+                        coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
+                    } label: {
+                        ProductCard(
+                            image: nil,
+                            imageURL: item.product.imageURL,
+                            priceBadge: formatPrice(item.product.price),
+                            showFavoriteButton: false
+                        )
+                        .frame(width: 124)
+                    }
+                    .buttonStyle(.plain)
                     .accessibilityLabel("\(item.product.title), \(formatPrice(item.product.price))")
                 }
             }
