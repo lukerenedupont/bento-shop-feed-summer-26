@@ -53,6 +53,10 @@ struct TopicPage: View {
                         }
                         .padding(.leading, GravitySpacing.space16)
                     }
+                    // Keep the chip pinned leading even when the pill rail
+                    // is hidden (single-story landings) — otherwise the bar
+                    // shrinks to the chip and centers it.
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, GravitySpacing.space4)
                 }
                 .onAppear {
