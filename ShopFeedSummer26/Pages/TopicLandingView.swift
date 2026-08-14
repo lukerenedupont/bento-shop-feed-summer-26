@@ -128,6 +128,9 @@ struct TopicLandingView: View {
             // The cover header owns the top of the screen; the top-bar pills
             // float above it with a clear background.
             .ignoresSafeArea(edges: .top)
+            // The default scroll-edge effect paints a heavy tinted wash under
+            // the top bar (harsh in dark scheme); .soft is blur-based.
+            .scrollEdgeEffectStyle(.soft, for: .top)
             .onScrollGeometryChange(for: CGFloat.self) { $0.contentOffset.y } action: { _, offset in
                 coordinator.updateScrollOffset(offset)
             }
