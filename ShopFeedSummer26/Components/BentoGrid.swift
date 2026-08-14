@@ -123,22 +123,27 @@ private struct BentoCompartmentCard: View {
                     endPoint: .bottom
                 )
 
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(title)
-                        .font(.system(size: compartment.size == .hero ? 22 : 15, weight: .bold))
-                        .tracking(-0.3)
+                Text(title)
+                    .font(.system(size: compartment.size == .hero ? 22 : 15, weight: .bold))
+                    .tracking(-0.3)
+                    .foregroundStyle(.white)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                    .padding(12)
+            }
+            // Same price treatment as ProductCard tiles: badge pill in the
+            // top-leading corner instead of a subtitle under the title.
+            .overlay(alignment: .topLeading) {
+                if let price {
+                    Text(price)
+                        .gravityTextStyle(GravityTypography.badgeBold)
                         .foregroundStyle(.white)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.leading)
-
-                    if let subtitle {
-                        Text(subtitle)
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(.white.opacity(0.75))
-                            .lineLimit(1)
-                    }
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: GravityRadius.max))
+                        .environment(\.colorScheme, .dark)
+                        .padding(GravitySpacing.space12)
                 }
-                .padding(12)
             }
             .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
         }
@@ -181,7 +186,7 @@ private struct BentoCompartmentCard: View {
         }
     }
 
-    private var subtitle: String? {
+    private var price: String? {
         switch compartment.surface {
         case .product(let item): return formatPrice(item.product.price)
         case .merchant, .story: return nil
