@@ -13,6 +13,9 @@ struct SubtopicPillRail: View {
 
     var body: some View {
         if showsRail {
+            // The rail spans the full bar width and slides beneath the back
+            // chip; the mask fades pills out as they pass behind it instead
+            // of clipping them on a hard edge.
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(pills, id: \.storyID) { subtopic in
@@ -37,7 +40,7 @@ struct SubtopicPillRail: View {
                             }
                             .padding(.leading, anchor != nil ? 6 : 15)
                             .padding(.trailing, 15)
-                            .frame(height: 42)
+                            .frame(height: 44)
                             .background(.black.opacity(0.28), in: Capsule())
                             .overlay { Capsule().strokeBorder(.white.opacity(0.22), lineWidth: 0.5) }
                             .shadow(color: .black.opacity(0.16), radius: 10, y: 4)
@@ -45,7 +48,26 @@ struct SubtopicPillRail: View {
                         .buttonStyle(.plain)
                     }
                 }
+                // Rest position clears the 44pt back chip (16 + 44 + 8).
+                .padding(.leading, 68)
                 .padding(.trailing, 16)
+            }
+            .mask {
+                HStack(spacing: 0) {
+                    // Fully transparent under the chip, easing to opaque
+                    // just past its trailing edge.
+                    LinearGradient(
+                        stops: [
+                            .init(color: .clear, location: 0),
+                            .init(color: .clear, location: 0.62),
+                            .init(color: .black, location: 1),
+                        ],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                    .frame(width: 84)
+                    Color.black
+                }
             }
         }
     }

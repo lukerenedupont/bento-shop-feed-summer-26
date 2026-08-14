@@ -14,7 +14,7 @@ struct FloatingBackButton: View {
             Image(systemName: "arrow.left")
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(.white)
-                .frame(width: 42, height: 42)
+                .frame(width: 44, height: 44)
                 .background(.black.opacity(0.28), in: Circle())
                 .overlay { Circle().strokeBorder(.white.opacity(0.22), lineWidth: 0.5) }
                 .shadow(color: .black.opacity(0.16), radius: 10, y: 4)

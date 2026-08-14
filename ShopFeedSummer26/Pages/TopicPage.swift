@@ -33,7 +33,13 @@ struct TopicPage: View {
                 .environment(\.colorScheme, .dark)
                 .toolbar(.hidden, for: .navigationBar)
                 .safeAreaBar(edge: .top) {
-                    HStack(spacing: 8) {
+                    // Chip floats over the rail: pills slide beneath it and
+                    // fade out via the rail's leading mask.
+                    ZStack(alignment: .leading) {
+                        // Subtopics share the chip's row — chrome, not
+                        // scrolled content, so they stay crisp above the
+                        // scroll-edge blur and reclaim dead atmosphere.
+                        SubtopicPillRail(topic: topic, stories: stories, merchants: merchants)
                         FloatingBackButton {
                             // Bring the bar back the moment the pop starts —
                             // waiting for onDisappear reads as lag.
@@ -45,12 +51,8 @@ struct TopicPage: View {
                             }
                             coordinator.popCurrentPage()
                         }
-                        // Subtopics share the chip's row — chrome, not
-                        // scrolled content, so they stay crisp above the
-                        // scroll-edge blur and reclaim dead atmosphere.
-                        SubtopicPillRail(topic: topic, stories: stories, merchants: merchants)
+                        .padding(.leading, GravitySpacing.space16)
                     }
-                    .padding(.leading, GravitySpacing.space16)
                     .padding(.vertical, GravitySpacing.space4)
                 }
                 .onAppear {
