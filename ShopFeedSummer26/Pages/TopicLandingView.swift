@@ -159,9 +159,13 @@ struct TopicLandingView: View {
             }
 #if DEBUG
             // Fast-iteration hook: `-scrollTo <blockID>` jumps to a
-            // merchandising block for screenshot loops.
+            // merchandising block for screenshot loops. One-shot: the launch
+            // arg lives for the whole process, so without consuming it every
+            // topic opened in the session would auto-scroll.
             .onAppear {
-                if let target = UserDefaults.standard.string(forKey: "scrollTo") {
+                if let target = UserDefaults.standard.string(forKey: "scrollTo"),
+                   !Self.didConsumeScrollTo {
+                    Self.didConsumeScrollTo = true
                     // Delay past first layout + image decode so cold
                     // launches land correctly.
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
@@ -174,6 +178,11 @@ struct TopicLandingView: View {
         }
         .background(backgroundColor.ignoresSafeArea())
     }
+
+#if DEBUG
+    /// Whether the `-scrollTo` launch hook has already fired this process.
+    @MainActor private static var didConsumeScrollTo = false
+#endif
 
     /// The lead story's hero-product film — the same surface its feed card
     /// plays, so the zoom transition hands the motion off seamlessly.
