@@ -48,7 +48,16 @@ struct StoryTopicPage: View {
             .toolbar(.hidden, for: .navigationBar)
             .safeAreaBar(edge: .top) {
                 HStack {
-                    FloatingBackButton { coordinator.popCurrentPage() }
+                    FloatingBackButton {
+                        // Restore the bar as the pop starts, matching TopicPage.
+                        withAnimation(.easeOut(duration: 0.15)) {
+                            coordinator.showNavBar = true
+                            if let previousNavBarTint {
+                                coordinator.navBarBlurTint = previousNavBarTint
+                            }
+                        }
+                        coordinator.popCurrentPage()
+                    }
                     Spacer()
                 }
                 .padding(.horizontal, GravitySpacing.space16)
@@ -63,7 +72,8 @@ struct StoryTopicPage: View {
                 }
             }
             .onDisappear {
-                withAnimation(.easeOut(duration: 0.22)) {
+                // Fallback for swipe-back pops; idempotent after the chip.
+                withAnimation(.easeOut(duration: 0.15)) {
                     coordinator.showNavBar = true
                     if let previousNavBarTint {
                         coordinator.navBarBlurTint = previousNavBarTint

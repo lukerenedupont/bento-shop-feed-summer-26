@@ -58,11 +58,26 @@ struct TopicLandingView: View {
         return result
     }
 
+    /// Products already merchandised by explicit blocks above the masonry
+    /// (bento compartments, product rails). The catch-all must not repeat
+    /// them — seeing the same binoculars twice in one screen reads as broken.
+    private var merchandisedProductIDs: Set<String> {
+        Set(merchandisingBlocks.flatMap { block -> [String] in
+            guard block.kind != .masonry else { return [] }
+            return (block.items ?? []).compactMap { item in
+                guard item.kind == .product,
+                      let merchantID = item.merchantID,
+                      let productID = item.productID else { return nil }
+                return "\(merchantID)-\(productID)"
+            }
+        })
+    }
+
     /// Mirrors the heterogeneous item stream accepted by Shop client's masonry
     /// renderer. Merchant, category/action, and post cards are interleaved with
     /// products rather than being presented as separate shelves.
     private var masonryItems: [TopicMasonryItem] {
-        let products = deepProducts
+        let products = deepProducts.filter { !merchandisedProductIDs.contains($0.id) }
         var items: [TopicMasonryItem] = []
         if products.indices.contains(0) { items.append(.product(products[0])) }
         if let merchant = relevantMerchants.first {
@@ -121,8 +136,9 @@ struct TopicLandingView: View {
             // merchandising block for screenshot loops.
             .onAppear {
                 if let target = UserDefaults.standard.string(forKey: "scrollTo") {
-                    // Delay past first layout so cold launches land correctly.
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                    // Delay past first layout + image decode so cold
+                    // launches land correctly.
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
                         proxy.scrollTo(target, anchor: .top)
                     }
                 }
