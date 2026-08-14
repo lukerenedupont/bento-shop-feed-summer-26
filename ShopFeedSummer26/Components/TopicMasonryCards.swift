@@ -191,18 +191,7 @@ private struct TopicMasonrySpotlightCard: View {
                             .foregroundStyle(.white)
                             .lineLimit(1)
                         if merchant.totalRatings > 0 {
-                            HStack(spacing: 3) {
-                                GravityIcon.starFilled.image
-                                    .resizable().scaledToFit()
-                                    .frame(width: 10, height: 10)
-                                    .foregroundStyle(.white)
-                                Text(String(format: "%.1f", merchant.rating))
-                                    .gravityTextStyle(GravityTypography.caption)
-                                    .foregroundStyle(.white)
-                                Text("(\(merchant.totalRatings))")
-                                    .gravityTextStyle(GravityTypography.caption)
-                                    .foregroundStyle(.white.opacity(0.72))
-                            }
+                            MerchantRatingRow(merchant: merchant)
                         }
                     }
                     Spacer(minLength: 0)
@@ -210,12 +199,17 @@ private struct TopicMasonrySpotlightCard: View {
                 .padding(GravitySpacing.space12)
             }
             .overlay(alignment: .bottom) {
-                HStack(spacing: GravitySpacing.space8) {
-                    ForEach(products.prefix(2)) { item in
-                        productChip(item)
+                VStack(spacing: 0) {
+                    HStack(spacing: GravitySpacing.space8) {
+                        ForEach(products.prefix(2)) { item in
+                            productChip(item)
+                        }
+                    }
+                    .padding(GravitySpacing.space12)
+                    if let promo {
+                        promoFooter(promo)
                     }
                 }
-                .padding(GravitySpacing.space12)
             }
             .frame(width: cardWidth, height: cardWidth * 1.62)
             .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r20, style: .continuous))
@@ -224,18 +218,49 @@ private struct TopicMasonrySpotlightCard: View {
         .buttonStyle(PressScaleButtonStyle())
     }
 
+    /// Deterministic merchant promo ("Save $20 on orders over $70") so a
+    /// third of spotlights carry the footer variant — same synthesized-data
+    /// trick as ProductPage's discounts, stable across launches.
+    private var promo: (save: Int, threshold: Int)? {
+        let seed = merchant.id.unicodeScalars.reduce(0) { $0 + Int($1.value) }
+        guard seed % 3 == 0 else { return nil }
+        return (save: [10, 15, 20][(seed / 3) % 3], threshold: [60, 70, 80][(seed / 9) % 3])
+    }
+
+    private func promoFooter(_ promo: (save: Int, threshold: Int)) -> some View {
+        HStack(spacing: GravitySpacing.space8) {
+            Text("Save $\(promo.save)")
+                .gravityTextStyle(GravityTypography.badgeBold)
+                .foregroundStyle(.white)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 3)
+                .background(GravityColors.bgFillBrand, in: Capsule())
+            Text("on orders over $\(promo.threshold)")
+                .gravityTextStyle(GravityTypography.caption)
+                .foregroundStyle(.white)
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, GravitySpacing.space12)
+        .padding(.vertical, GravitySpacing.space8)
+        .frame(maxWidth: .infinity)
+        .background(.black.opacity(0.82))
+    }
+
     private func productChip(_ item: ResolvedStoryProduct) -> some View {
         // Two chips share the card width inside the 12pt card padding.
         let side = (cardWidth - GravitySpacing.space12 * 2 - GravitySpacing.space8) / 2
         return Button {
             coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
         } label: {
-            ProductImageView(product: item.product, merchant: item.merchant)
+            // Product floats fitted inside the white chip with breathing
+            // room, per the reference — not edge-to-edge.
+            RoundedRectangle(cornerRadius: GravityRadius.r12, style: .continuous)
+                .fill(.white)
                 .frame(width: side, height: side)
-                .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r12, style: .continuous))
-                .background {
-                    RoundedRectangle(cornerRadius: GravityRadius.r12, style: .continuous)
-                        .fill(.white)
+                .overlay {
+                    ProductImageView(product: item.product, merchant: item.merchant)
+                        .frame(width: side - 14, height: side - 14)
+                        .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r8, style: .continuous))
                 }
                 .overlay(alignment: .topLeading) {
                     Text(formatPrice(item.product.price))
@@ -287,18 +312,7 @@ private struct TopicMasonryWordmarkCard: View {
                     )
                     .frame(maxWidth: cardWidth * 0.72, alignment: .center)
                     if merchant.totalRatings > 0 {
-                        HStack(spacing: 3) {
-                            GravityIcon.starFilled.image
-                                .resizable().scaledToFit()
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(.white)
-                            Text(String(format: "%.1f", merchant.rating))
-                                .gravityTextStyle(GravityTypography.caption)
-                                .foregroundStyle(.white)
-                            Text("(\(merchant.totalRatings))")
-                                .gravityTextStyle(GravityTypography.caption)
-                                .foregroundStyle(.white.opacity(0.72))
-                        }
+                        MerchantRatingRow(merchant: merchant)
                     }
                 }
             }
@@ -331,10 +345,12 @@ private struct TopicMasonryAvatarCluster: View {
                         Button {
                             coordinator.pushRoute(.store(merchantId: merchant.id))
                         } label: {
-                            // A white disc backs every avatar so transparent
-                            // wordmark logos still read as floating circles.
+                            // Brand-color disc backs every avatar (white
+                            // fallback keeps dark marks legible) so
+                            // transparent wordmark logos still read as
+                            // floating circles.
                             MerchantLogoImage(merchant: merchant, size: diameter)
-                                .background(Circle().fill(.white))
+                                .background(Circle().fill(discColor(for: merchant)))
                                 .gravityShadow(GravityShadows.small)
                         }
                         .buttonStyle(PressScaleButtonStyle())
@@ -344,6 +360,35 @@ private struct TopicMasonryAvatarCluster: View {
         }
         .frame(width: cardWidth)
         .padding(.vertical, GravitySpacing.space8)
+    }
+
+    /// Brand color when it's light enough to carry a dark wordmark;
+    /// white otherwise.
+    private func discColor(for merchant: SampleMerchant) -> Color {
+        let color = merchant.primaryColor
+        var brightness: CGFloat = 0
+        UIColor(color).getWhite(&brightness, alpha: nil)
+        return brightness > 0.55 ? color : .white
+    }
+}
+
+/// "4.6 ★ (194)" — shared rating row for the brand cards.
+private struct MerchantRatingRow: View {
+    let merchant: SampleMerchant
+
+    var body: some View {
+        HStack(spacing: 3) {
+            Text(String(format: "%.1f", merchant.rating))
+                .gravityTextStyle(GravityTypography.caption)
+                .foregroundStyle(.white)
+            GravityIcon.starFilled.image
+                .resizable().scaledToFit()
+                .frame(width: 10, height: 10)
+                .foregroundStyle(.white)
+            Text("(\(merchant.totalRatings))")
+                .gravityTextStyle(GravityTypography.caption)
+                .foregroundStyle(.white.opacity(0.72))
+        }
     }
 }
 
