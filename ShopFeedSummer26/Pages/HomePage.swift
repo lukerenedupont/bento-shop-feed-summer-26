@@ -1,42 +1,130 @@
 import Combine
 import SwiftUI
 
-/// Home feed — the For You story stream. Topics and subcategories are
-/// pushed destinations that zoom in from their cards; this page carries the
-/// avatar and topic pills, which only exist here.
+/// Home feed — scrollable merchant feed cards with focused topic feeds.
 struct HomePage: View {
+    /// Shared with `RootView` so a tapped feed card can zoom into the
+    /// original full-screen topic content.
+    var namespace: Namespace.ID
+
 #if DEBUG
     @ObservedObject private var _purlTuneRuntime = PurlTuneRuntime.shared
 #endif
-    /// Shared with RootView so pushed topics can zoom from their feed card.
-    let namespace: Namespace.ID
-
     @Environment(NavigationCoordinator.self) private var coordinator
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @ObservedObject private var merchantService = RemoteMerchantService.shared
+    @ObservedObject private var feedService = RemoteFeedService.shared
+    @Namespace private var heroNamespace
+    @Namespace private var topicSelectionNamespace
 
     /// Buyer-profile-curated products bundled from official merchant catalogs.
-    @State private var merchants: [SampleMerchant] = LocalMerchantService.loadMerchants()
+    @State private var bundledMerchants: [SampleMerchant] = LocalMerchantService.loadMerchants()
+
+    /// The generated assortment once the dossier-lab feed answers, else the
+    /// bundled snapshot. Recomputes when the service publishes, so a feed that
+    /// lands after first render swaps in without any manual refresh.
+    private var merchants: [SampleMerchant] {
+        feedService.merchants.isEmpty ? bundledMerchants : feedService.merchants
+    }
+    @State private var selectedTopicID = "for-you"
+    /// A drilled-in subcategory story rendered inline so the top bar stays.
+    @State private var focusedStoryID: String?
+    @State private var visibleStoryID: String?
+    @State private var isFeedScrolling = false
+    @State private var expandingStoryID: String?
 
     private var topics: [FeedTopic] { PersonalizedFeedCatalog.current.topics }
+    private var selectedTopic: FeedTopic {
+        topics.first { $0.id == selectedTopicID } ?? topics[0]
+    }
 
-    private var stories: [FeedStory] { PersonalizedFeedStories.all }
+    private var pageBackgroundColor: Color {
+        guard selectedTopicID != "for-you", let leadStory = focusedStories.first else {
+            return .white
+        }
+        return Color(hex: leadStory.accentHex)
+    }
+
+    private var focusedStories: [FeedStory] {
+        let stories = PersonalizedFeedStories.all
+        if let storyIDs = selectedTopic.storyIDs {
+            let storiesByID = Dictionary(uniqueKeysWithValues: stories.map { ($0.id, $0) })
+            return storyIDs.compactMap { storiesByID[$0] }
+        }
+        guard let topicKey = selectedTopic.storyTopicKey else { return stories }
+        return stories.filter { $0.topicKeys.contains(topicKey) }
+    }
+
+    private var activeFeedStory: FeedStory? {
+        if let visibleStoryID,
+           let visibleStory = focusedStories.first(where: { $0.id == visibleStoryID }) {
+            return visibleStory
+        }
+        return focusedStories.first
+    }
 
     var body: some View {
-        storyFeed
-            .background(Color.white.ignoresSafeArea())
-            .safeAreaBar(edge: .top) {
-                topBar
+        Group {
+            if let focusedStoryID {
+                StoryTopicPage(storyID: focusedStoryID)
+                    .id(focusedStoryID)
+            } else if selectedTopicID == "for-you" {
+                storyFeed
+            } else {
+                TopicLandingView(topic: selectedTopic, stories: focusedStories, merchants: merchants)
+                    .id(selectedTopicID)
             }
-            .toolbar(.hidden, for: .navigationBar)
-            .toolbarBackground(.hidden, for: .navigationBar)
-            .task {
-                // Keep the curated assortment authoritative for this prototype and
-                // expose it to PDP/store lookups through SampleMerchant.all.
-                merchantService.merchants = merchants
-                merchantService.usingFallbackData = true
-                coordinator.navBarBlurTint = .white
+        }
+        .transaction { transaction in
+            // Topic changes replace the content immediately while the
+            // selection pill animates independently in the top bar.
+            transaction.animation = nil
+        }
+        .background(pageBackgroundColor.ignoresSafeArea())
+        .safeAreaBar(edge: .top) {
+            topBar
+        }
+        // Every Home surface now sits on imagery. Keep status-bar chrome light
+        // so the transparent top rail remains legible over the moving backdrop.
+        .environment(\.colorScheme, .dark)
+        .toolbar(.hidden, for: .navigationBar)
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .task {
+            // Keep the curated assortment authoritative for this prototype and
+            // expose it to PDP/store lookups through SampleMerchant.all.
+            merchantService.merchants = merchants
+            merchantService.usingFallbackData = !feedService.isLive
+            coordinator.navBarBlurTint = pageBackgroundColor
+        }
+        .onChange(of: feedService.revision) { _, _ in
+            // The feed usually lands after first render; re-publish so PDP and
+            // store lookups going through SampleMerchant.all see the same
+            // assortment the stories reference.
+            merchantService.merchants = merchants
+            merchantService.usingFallbackData = !feedService.isLive
+        }
+        .onChange(of: selectedTopicID) { _, _ in
+            withAnimation(.easeOut(duration: 0.22)) {
+                coordinator.navBarBlurTint = pageBackgroundColor
             }
-            .purlInjectable()
+            syncTopicBackAction()
+        }
+        .onChange(of: focusedStoryID) { _, _ in
+            syncTopicBackAction()
+        }
+        .onAppear {
+            expandingStoryID = nil
+            syncTopicBackAction()
+            coordinator.inlineStoryHandler = { storyID in
+                coordinator.resetScrollState()
+                HapticFeedback.light.fire()
+                withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
+                    focusedStoryID = storyID
+                }
+                return true
+            }
+        }
+        .purlInjectable()
     }
 
     private var storyFeed: some View {
@@ -44,30 +132,133 @@ struct HomePage: View {
             let cardWidth = min(geo.size.width - 32, 377)
             let cardHeight = cardWidth * 1.71
 
-            ScrollView(.vertical, showsIndicators: false) {
-                LazyVStack(spacing: 16) {
-                    ForEach(stories) { story in
-                        StoryFeedCard(
-                            story: story,
-                            merchants: merchants,
-                            width: cardWidth,
-                            height: cardHeight,
-                            onTap: { openTopic(for: story) }
-                        )
-                        // Source for the system zoom into the pushed topic.
-                        .matchedTransitionSource(id: "topic-hero-\(story.id)", in: namespace)
-                        .id(story.id)
+            ZStack {
+                feedAmbientBackdrop
+
+                ScrollView(.vertical, showsIndicators: false) {
+                    LazyVStack(spacing: 16) {
+                        ForEach(focusedStories) { story in
+                            paginatedFeedCard(
+                                story,
+                                width: cardWidth,
+                                height: cardHeight,
+                                viewportHeight: geo.size.height
+                            )
+                        }
                     }
+                    .scrollTargetLayout()
+                    .padding(.top, max((geo.size.height - cardHeight) / 2 - 40, 8))
+                    .padding(.bottom, max((geo.size.height - cardHeight) / 2, 8))
                 }
-                .scrollTargetLayout()
-                .padding(.top, max((geo.size.height - cardHeight) / 2 - 40, 8))
-                .padding(.bottom, max((geo.size.height - cardHeight) / 2, 8))
+                .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+                .scrollPosition(id: $visibleStoryID, anchor: .center)
+                .onScrollPhaseChange { _, phase in
+                    isFeedScrolling = phase != .idle
+                }
+                .onScrollGeometryChange(for: CGFloat.self) { $0.contentOffset.y } action: { _, offset in
+                    coordinator.updateScrollOffset(offset)
+                }
             }
-            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-            .onScrollGeometryChange(for: CGFloat.self) { $0.contentOffset.y } action: { _, offset in
-                coordinator.updateScrollOffset(offset)
+            .onAppear {
+                if visibleStoryID == nil {
+                    visibleStoryID = focusedStories.first?.id
+                }
+            }
+            .onChange(of: focusedStories.map(\.id)) { _, storyIDs in
+                guard let visibleStoryID, storyIDs.contains(visibleStoryID) else {
+                    self.visibleStoryID = storyIDs.first
+                    return
+                }
             }
         }
+    }
+
+    /// Pulls each card gently back toward the viewport center while it moves.
+    /// Native snapping releases that resistance at the end, creating a short,
+    /// interruptible rubber catch-up rather than delaying gesture response.
+    private func paginatedFeedCard(
+        _ story: FeedStory,
+        width: CGFloat,
+        height: CGFloat,
+        viewportHeight: CGFloat
+    ) -> some View {
+        let motionIsReduced = reduceMotion
+
+        return StoryFeedCard(
+            story: story,
+            merchants: merchants,
+            width: width,
+            height: height,
+            isActive: story.id == activeFeedStory?.id,
+            backgroundPlaybackEnabled: expandingStoryID != story.id,
+            freezesParallax: expandingStoryID == story.id,
+            scrollViewportHeight: viewportHeight,
+            onTap: { openTopic(for: story) }
+        )
+        .scrollTransition(
+            motionIsReduced ? .identity : .interactive(timingCurve: .circularEaseOut),
+            axis: .vertical
+        ) { card, phase in
+            card
+                .offset(y: motionIsReduced ? 0 : -CGFloat(phase.value) * 18)
+                .scaleEffect(
+                    motionIsReduced
+                        ? 1
+                        : 1 - CGFloat(min(abs(phase.value), 1)) * 0.015
+                )
+        }
+        .scaleEffect(motionIsReduced || story.id == activeFeedStory?.id ? 1 : 0.992)
+        .animation(motionIsReduced ? nil : SpringPreset.responsive, value: activeFeedStory?.id)
+        .matchedTransitionSource(id: story.id, in: namespace) { source in
+            source
+                .background(.black)
+                .clipShape(
+                    RoundedRectangle(
+                        cornerRadius: GravityRadius.r28,
+                        style: .continuous
+                    )
+                )
+                .shadow(
+                    color: .black.opacity(0.24),
+                    radius: 18,
+                    y: 10
+                )
+        }
+        .id(story.id)
+    }
+
+    private var feedAmbientBackdrop: some View {
+        ZStack {
+            Color.black
+
+            if let story = activeFeedStory,
+               let lead = story.resolvedProducts(from: merchants).first {
+                AmbientProductVideo(
+                    videoURLs: backdropFilmURLs(for: story),
+                    posterImageURL: lead.product.imageURL,
+                    playbackEnabled: isFeedScrolling
+                )
+                .id(story.id)
+                .scaleEffect(1.18)
+                .blur(radius: 34, opaque: true)
+                .opacity(isFeedScrolling ? 0.64 : 0.48)
+                .transition(.opacity)
+            }
+        }
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+        .animation(.easeOut(duration: isFeedScrolling ? 0.18 : 0.24), value: isFeedScrolling)
+        .animation(.easeInOut(duration: 0.24), value: activeFeedStory?.id)
+    }
+
+    /// Rotates the story playlist by one item so the blurred backdrop never
+    /// mirrors the clip currently beginning inside the foreground card.
+    private func backdropFilmURLs(for story: FeedStory) -> [URL] {
+        let urls = story.resolvedProducts(from: merchants).compactMap {
+            $0.product.ambientFilmURL(merchantID: $0.merchant.id)
+        }
+        guard urls.count > 1 else { return urls }
+        return Array(urls.dropFirst()) + [urls[0]]
     }
 
     /// Resolves a For You story to its canonical topic. An exact lead-story
@@ -87,26 +278,57 @@ struct HomePage: View {
             return
         }
 
-        // The tapped card is the zoom source; the pushed topic scales out of it.
-        coordinator.pushRoute(.topic(topicId: destination.id, sourceStoryId: story.id))
+        coordinator.resetScrollState()
+        expandingStoryID = story.id
+
+        // Commit the frozen media geometry before navigation captures the
+        // matched source. Otherwise parallax reacts to the zoom's changing
+        // coordinate space and the film appears to slide out of the card.
+        Task { @MainActor in
+            await Task.yield()
+            coordinator.pushRoute(
+                .topicExpanded(topicId: destination.id, sourceStoryId: story.id)
+            )
+        }
     }
 
     // MARK: - Top Bar (Quick Links)
 
     @State private var avatarPressed = false
 
-    /// Pinterest-style navigation: the avatar + topic rail only exist here on
-    /// the For You feed. Pushed topic/subcategory pages carry their own back chip.
     private var topBar: some View {
-        HStack(spacing: 0) {
+        HStack {
+            Spacer()
             avatar
-
-            // Topic feeds
-            topicRail
+            Spacer()
         }
         .padding(.horizontal, PurlTune.token("Pages/HomePage.swift:padding:_:164:31", default: GravitySpacing.space16, options: GravitySpacing.purlTuneOptions))
         .padding(.vertical, PurlTune.token("Pages/HomePage.swift:padding:_:165:29", default: GravitySpacing.space4, options: GravitySpacing.purlTuneOptions))
-        .background(Color.white)
+        // Deliberately no bar background: the active feed film or topic cover
+        // continues through both the topic rail and the status-bar safe area.
+    }
+
+    /// Registers the bottom nav's back behavior for the active topic. Topic
+    /// selection is inline state, so the shared back button needs this hook.
+    private func syncTopicBackAction() {
+        if focusedStoryID != nil {
+            // Back from a subcategory returns to its parent topic in place.
+            coordinator.topicBackAction = {
+                coordinator.resetScrollState()
+                withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
+                    focusedStoryID = nil
+                }
+            }
+        } else if selectedTopicID == "for-you" {
+            coordinator.topicBackAction = nil
+        } else {
+            coordinator.topicBackAction = {
+                coordinator.resetScrollState()
+                withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
+                    selectedTopicID = "for-you"
+                }
+            }
+        }
     }
 
     private var avatar: some View {
@@ -115,7 +337,7 @@ struct HomePage: View {
                 .scaledToFill()
                 .frame(width: PurlTune.value("Pages/HomePage.swift:frame:width:131:31", default: 40), height: PurlTune.value("Pages/HomePage.swift:frame:height:131:111", default: 40))
                 .clipShape(Circle())
-                .matchedTransitionSource(id: "account-avatar", in: namespace)
+                .matchedTransitionSource(id: "account-avatar", in: heroNamespace)
                 .scaleEffect(avatarPressed ? 0.85 : 1.0)
                 .animation(.spring(response: PurlTune.value("Pages/HomePage.swift:spring:response:135:46", default: 0.2), dampingFraction: PurlTune.value("Pages/HomePage.swift:spring:dampingFraction:135:140", default: 0.7)), value: avatarPressed)
                 .gesture(
@@ -153,23 +375,27 @@ struct HomePage: View {
                 .padding(.vertical, PurlTune.value("Pages/HomePage.swift:padding:_:160:33", default: -20))
                 .padding(.leading, -20 / 2)
                 .padding(.trailing, -GravitySpacing.space16)
+                .onChange(of: selectedTopicID) { _, topicID in
+                    withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
+                        proxy.scrollTo(topicID, anchor: .leading)
+                    }
+                }
             }
     }
 
-    /// "For you" is this page itself (selected pill); other topics push their
-    /// world, zooming from the lead story's card when it's on screen.
     private func topicButton(_ topic: FeedTopic) -> some View {
         Button {
-            guard topic.id != "for-you" else { return }
+            guard selectedTopicID != topic.id || focusedStoryID != nil else { return }
             HapticFeedback.light.fire()
-            // No sourceStoryId: pills aren't zoom sources. Anchoring the
-            // zoom to the topic's first story card — usually offscreen —
-            // made pages fly in from random directions.
-            coordinator.pushRoute(.topic(topicId: topic.id, sourceStoryId: nil))
+            coordinator.resetScrollState()
+            withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
+                focusedStoryID = nil
+                selectedTopicID = topic.id
+            }
         } label: {
             topicLabel(topic)
                 .background {
-                    if topic.id == "for-you" {
+                    if selectedTopicID == topic.id {
                         Capsule()
                             .fill(Color.white.opacity(0.92))
                             .overlay {
@@ -177,27 +403,33 @@ struct HomePage: View {
                                     .strokeBorder(Color.black.opacity(0.06), lineWidth: 0.5)
                             }
                             .shadow(color: .black.opacity(0.10), radius: 12, y: 4)
+                            .matchedGeometryEffect(id: "selected-topic", in: topicSelectionNamespace)
                     }
                 }
         }
         .buttonStyle(.plain)
-        .accessibilityAddTraits(topic.id == "for-you" ? .isSelected : [])
+        .accessibilityAddTraits(selectedTopicID == topic.id ? .isSelected : [])
     }
 
     private func topicLabel(_ topic: FeedTopic) -> some View {
         Text(topic.label)
             .gravityTextStyle(GravityTypography.bodyTitleSmall)
-            .foregroundStyle(GravityColors.textFixedDark)
+            .foregroundStyle(topicLabelColor(topic))
             .padding(.horizontal, PurlTune.token("Pages/HomePage.swift:padding:_:181:37", default: GravitySpacing.space16, options: GravitySpacing.purlTuneOptions))
             .padding(.vertical, PurlTune.token("Pages/HomePage.swift:padding:_:182:37", default: GravitySpacing.space12, options: GravitySpacing.purlTuneOptions))
             .contentShape(Capsule())
     }
+
+    private func topicLabelColor(_ topic: FeedTopic) -> Color {
+        selectedTopicID == topic.id ? GravityColors.textFixedDark : GravityColors.textFixedLight
+    }
+
 }
 
 #Preview {
-    @Previewable @Namespace var ns
+    @Previewable @Namespace var namespace
     NavigationStack {
-        HomePage(namespace: ns)
+        HomePage(namespace: namespace)
     }
     .environment(NavigationCoordinator())
 }

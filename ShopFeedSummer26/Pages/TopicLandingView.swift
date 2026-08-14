@@ -10,11 +10,19 @@ struct TopicLandingView: View {
     /// Optional parent-topic theme inherited by drilled-in subtopic pages.
     var headerCoverImageName: String? = nil
     var surfaceAccentHex: String? = nil
-    /// Wayfinding for drill-ins: the parent world's name, shown as an
-    /// eyebrow above the title so a subcategory never reads as a new topic.
+    /// Compatibility with compact story chapters introduced by the richer
+    /// upstream topic navigation.
     var headerEyebrow: String? = nil
-    /// Sub-topic pages use a shorter header — they are chapters, not covers.
-    var compactHeader: Bool = false
+    var compactHeader = false
+    /// Lets a zoomed story retain the exact title shown on its source card.
+    var displayTitle: String? = nil
+    /// Allows an ambient film supplied by the parent to remain visible through
+    /// the topic surface without reducing section legibility.
+    var usesAmbientBackdrop = false
+    /// Renders only the category's complete merchandising recipe when embedded
+    /// below another hero/scroll container. The parent supplies its width so
+    /// masonry can retain the same geometry as the standalone destination.
+    var embeddedContainerWidth: CGFloat? = nil
 
     @Environment(NavigationCoordinator.self) private var coordinator
 
@@ -23,7 +31,12 @@ struct TopicLandingView: View {
     }
 
     private var effectiveCoverImageName: String? {
-        headerCoverImageName ?? stories.first?.coverImageName
+        guard !usesAmbientBackdrop else { return nil }
+        return headerCoverImageName ?? stories.first?.coverImageName
+    }
+
+    private var surfaceColor: Color {
+        backgroundColor.opacity(usesAmbientBackdrop ? 0.64 : 1)
     }
 
     private var resolvedProducts: [ResolvedStoryProduct] {
@@ -63,26 +76,11 @@ struct TopicLandingView: View {
         return result
     }
 
-    /// Products already merchandised by explicit blocks above the masonry
-    /// (bento compartments, product rails). The catch-all must not repeat
-    /// them — seeing the same binoculars twice in one screen reads as broken.
-    private var merchandisedProductIDs: Set<String> {
-        Set(merchandisingBlocks.flatMap { block -> [String] in
-            guard block.kind != .masonry else { return [] }
-            return (block.items ?? []).compactMap { item in
-                guard item.kind == .product,
-                      let merchantID = item.merchantID,
-                      let productID = item.productID else { return nil }
-                return "\(merchantID)-\(productID)"
-            }
-        })
-    }
-
     /// Mirrors the heterogeneous item stream accepted by Shop client's masonry
     /// renderer. Merchant, category/action, and post cards are interleaved with
     /// products rather than being presented as separate shelves.
     private var masonryItems: [TopicMasonryItem] {
-        let products = deepProducts.filter { !merchandisedProductIDs.contains($0.id) }
+        let products = deepProducts
         var items: [TopicMasonryItem] = []
         if products.indices.contains(0) { items.append(.product(products[0])) }
         if let merchant = relevantMerchants.first {
@@ -111,81 +109,48 @@ struct TopicLandingView: View {
         return items
     }
 
+    @ViewBuilder
     var body: some View {
-        GeometryReader { geometry in
-            ScrollViewReader { proxy in
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 0) {
-                    topicHeader
-                    VStack(alignment: .leading, spacing: 20) {
-                        ForEach(merchandisingBlocks) { block in
-                            merchandisingBlock(block, containerWidth: geometry.size.width)
-                                .id(block.id)
-                        }
-                    }
-                    // The header already plays the lead hero's film; nothing
-                    // below it may loop the same clip on this screen.
-                    .environment(\.claimedFilmURL, headerFilm?.url)
-                }
-                // A vertical ScrollView proposes an unconstrained cross-axis.
-                // Pinning its child prevents horizontal rails from making the
-                // entire topic page wider than the device and clipping it.
-                .frame(width: geometry.size.width, alignment: .leading)
+        if let embeddedContainerWidth {
+            merchandisingContent(containerWidth: embeddedContainerWidth)
+                .frame(width: embeddedContainerWidth, alignment: .leading)
                 .padding(.bottom, 40)
-            }
-            // The cover header owns the top of the screen; the top-bar pills
-            // float above it with a clear background.
-            .ignoresSafeArea(edges: .top)
-            // The default scroll-edge effect paints a heavy tinted wash under
-            // the top bar (harsh in dark scheme); .soft is blur-based.
-            .scrollEdgeEffectStyle(.soft, for: .top)
-            .onScrollGeometryChange(for: CGFloat.self) { $0.contentOffset.y } action: { _, offset in
-                coordinator.updateScrollOffset(offset)
-            }
-#if DEBUG
-            // Fast-iteration hook: `-scrollTo <blockID>` jumps to a
-            // merchandising block for screenshot loops. One-shot: the launch
-            // arg lives for the whole process, so without consuming it every
-            // topic opened in the session would auto-scroll.
-            .onAppear {
-                if let target = UserDefaults.standard.string(forKey: "scrollTo"),
-                   !Self.didConsumeScrollTo {
-                    Self.didConsumeScrollTo = true
-                    // Delay past first layout + image decode so cold
-                    // launches land correctly.
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
-                        proxy.scrollTo(target, anchor: .top)
+                .background(Color.clear)
+        } else {
+            GeometryReader { geometry in
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 0) {
+                        topicHeader
+                        merchandisingContent(containerWidth: geometry.size.width)
                     }
+                    // A vertical ScrollView proposes an unconstrained cross-axis.
+                    // Pinning its child prevents horizontal rails from making the
+                    // entire topic page wider than the device and clipping it.
+                    .frame(width: geometry.size.width, alignment: .leading)
+                    .padding(.bottom, 40)
+                }
+                // The cover header owns the top of the screen; the top-bar pills
+                // float above it with a clear background.
+                .ignoresSafeArea(edges: .top)
+                .onScrollGeometryChange(for: CGFloat.self) { $0.contentOffset.y } action: { _, offset in
+                    coordinator.updateScrollOffset(offset)
                 }
             }
-#endif
-            }
+            .background(surfaceColor.ignoresSafeArea())
         }
-        .background(backgroundColor.ignoresSafeArea())
     }
 
-#if DEBUG
-    /// Whether the `-scrollTo` launch hook has already fired this process.
-    @MainActor private static var didConsumeScrollTo = false
-#endif
-
-    /// The lead story's hero-product film — the same surface its feed card
-    /// plays, so the zoom transition hands the motion off seamlessly.
-    private var headerFilm: (url: URL, poster: String?)? {
-        guard let hero = stories.first?.resolvedProducts(from: merchants).first,
-              let url = DossierStore.ambientVideoURL(merchantID: hero.merchant.id, productID: hero.product.id) else { return nil }
-        return (url, hero.product.imageURL)
+    private func merchandisingContent(containerWidth: CGFloat) -> some View {
+        VStack(alignment: .leading, spacing: 20) {
+            ForEach(merchandisingBlocks) { block in
+                merchandisingBlock(block, containerWidth: containerWidth)
+            }
+        }
     }
 
     private var topicHeader: some View {
         ZStack(alignment: .bottomLeading) {
-            if let headerFilm {
-                Color.clear
-                    .overlay {
-                        AmbientProductVideo(videoURL: headerFilm.url, posterImageURL: headerFilm.poster)
-                    }
-                    .clipped()
-            } else if let coverImageName = effectiveCoverImageName {
+            if let coverImageName = effectiveCoverImageName {
                 // Overlay-on-clear keeps the fill image from widening the
                 // header beyond the container and displacing the page layout.
                 Color.clear
@@ -196,56 +161,103 @@ struct TopicLandingView: View {
                     }
                     .clipped()
             } else {
-                backgroundColor
+                surfaceColor
             }
 
             // Eased dissolve into the page background so the cover melts
-            // into the feed instead of ending on a hard edge. Kept low and
-            // light: the cover art stays clean and the ramp only builds in
-            // the last stretch before the feed.
+            // into the feed instead of ending on a hard edge.
             LinearGradient(
                 stops: [
-                    .init(color: backgroundColor.opacity(0), location: 0),
-                    .init(color: backgroundColor.opacity(0), location: 0.74),
-                    .init(color: backgroundColor.opacity(0.06), location: 0.82),
-                    .init(color: backgroundColor.opacity(0.24), location: 0.9),
-                    .init(color: backgroundColor.opacity(0.58), location: 0.96),
-                    .init(color: backgroundColor, location: 1),
+                    .init(color: surfaceColor.opacity(0), location: 0),
+                    .init(color: surfaceColor.opacity(0), location: 0.42),
+                    .init(color: surfaceColor.opacity(0.14), location: 0.58),
+                    .init(color: surfaceColor.opacity(0.42), location: 0.72),
+                    .init(color: surfaceColor.opacity(0.76), location: 0.85),
+                    .init(color: surfaceColor, location: 1),
                 ],
                 startPoint: .top,
                 endPoint: .bottom
             )
 
-        }
-        // Cover topics get a tall editorial header; coverless landings and
-        // drilled-in sub-topics stay compact instead of reserving atmosphere.
-        .frame(height: {
-            let hasCover = effectiveCoverImageName != nil || headerFilm != nil
-            if compactHeader { return hasCover ? 300 : 180 }
-            return hasCover ? 410 : 220
-        }())
-        // Display title sits a touch below center of the atmosphere — the
-        // bottom edge is now free for the feed to pull up underneath.
-        .overlay {
-            VStack(spacing: 6) {
-                if let headerEyebrow {
-                    Text(headerEyebrow)
-                        .font(.system(size: 12, weight: .bold))
-                        .textCase(.uppercase)
-                        .tracking(1.4)
-                        .foregroundStyle(.white.opacity(0.72))
-                }
-                Text(topic.label)
-                    .font(.system(size: compactHeader ? 30 : 40, weight: .heavy, design: .default))
-                    .tracking(compactHeader ? -0.9 : -1.4)
+            VStack(alignment: .leading, spacing: 14) {
+                // Wireframe: display title is centered, heavy, tightly tracked.
+                Text(displayTitle ?? topic.label)
+                    .font(.system(size: 40, weight: .heavy, design: .default))
+                    .tracking(-1.4)
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 16)
+
+                if showsSubtopicRail {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(subtopicPills, id: \.storyID) { subtopic in
+                            let anchor = anchorProduct(for: subtopic)
+                            Button {
+                                HapticFeedback.light.fire()
+                                coordinator.pushRoute(.story(storyId: subtopic.storyID))
+                            } label: {
+                                HStack(spacing: 8) {
+                                    if let anchor {
+                                        // Real catalog imagery, never generated:
+                                        // the chip visual is the anchor SKU.
+                                        ProductImageView(product: anchor.product, merchant: anchor.merchant, fallbackIndex: 0)
+                                            .frame(width: 32, height: 32)
+                                            .background(.white)
+                                            .clipShape(Circle())
+                                            .overlay { Circle().strokeBorder(.white.opacity(0.3), lineWidth: 0.5) }
+                                    }
+                                    Text(subtopic.label)
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(.white)
+                                }
+                                .padding(.leading, anchor != nil ? 6 : 15)
+                                .padding(.trailing, 15)
+                                .frame(height: 42)
+                                .background(.black.opacity(0.28), in: Capsule())
+                                .overlay { Capsule().strokeBorder(.white.opacity(0.22), lineWidth: 0.5) }
+                                .shadow(color: .black.opacity(0.16), radius: 10, y: 4)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 4)
+                }
+                }
             }
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, 16)
-            .offset(y: compactHeader ? 40 : 50)
+            .padding(.bottom, 4)
         }
+        // Cover topics get a tall editorial header; coverless landings stay
+        // compact instead of reserving empty atmosphere.
+        .frame(height: effectiveCoverImageName != nil ? 500 : 220)
     }
+
+    /// Curated subtopic pills; falls back to story titles for topics that
+    /// have not been given editorial subtopics yet.
+    private var subtopicPills: [FeedTopic.Subtopic] {
+        if let subtopics = topic.subtopics, !subtopics.isEmpty { return subtopics }
+        return stories.map { .init(label: shortLabel(for: $0), storyID: $0.id) }
+    }
+
+    /// Resolves a subtopic's anchor SKU for the chip visual. Returns nil for
+    /// subtopics without anchors, which render as text-only pills.
+    private func anchorProduct(for subtopic: FeedTopic.Subtopic) -> ResolvedStoryProduct? {
+        guard let merchantID = subtopic.anchorMerchantID,
+              let productID = subtopic.anchorProductID,
+              let merchant = merchants.first(where: { $0.id == merchantID }),
+              let product = merchant.products.first(where: { $0.id == productID }) else { return nil }
+        return ResolvedStoryProduct(merchant: merchant, product: product)
+    }
+
+    /// A single-story landing (a drilled-in subcategory) hides chrome that
+    /// would only link back to itself.
+    private var isSingleStoryLanding: Bool {
+        stories.count == 1 && topic.subtopics == nil
+    }
+
+    private var showsSubtopicRail: Bool { !isSingleStoryLanding }
 
     private var merchandisingBlocks: [FeedTopic.MerchandisingBlock] {
         if let blocks = topic.merchandisingBlocks, !blocks.isEmpty { return blocks }
@@ -269,7 +281,7 @@ struct TopicLandingView: View {
             }
             .padding(.top, 12)
         case .mediaCarousel:
-            mediaCarousel(block)
+            mediaCarousel(block, containerWidth: containerWidth)
         case .merchantRail:
             merchantRail(block)
         case .productRail:
@@ -305,13 +317,19 @@ struct TopicLandingView: View {
         }
     }
 
-    private func mediaCarousel(_ block: FeedTopic.MerchandisingBlock) -> some View {
+    private func mediaCarousel(
+        _ block: FeedTopic.MerchandisingBlock,
+        containerWidth: CGFloat
+    ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             sectionTitle(block.title)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 12) {
                     ForEach(Array((block.items ?? []).enumerated()), id: \.offset) { _, item in
-                        mediaCarouselItem(item)
+                        mediaCarouselItem(
+                            item,
+                            cardWidth: max(300, containerWidth - 32)
+                        )
                     }
                 }
                 .padding(.horizontal, 16)
@@ -323,14 +341,17 @@ struct TopicLandingView: View {
     }
 
     @ViewBuilder
-    private func mediaCarouselItem(_ item: FeedTopic.MerchandisingBlock.Item) -> some View {
+    private func mediaCarouselItem(
+        _ item: FeedTopic.MerchandisingBlock.Item,
+        cardWidth: CGFloat
+    ) -> some View {
         switch item.kind {
         case .story:
             if let storyID = item.storyID, let story = stories.first(where: { $0.id == storyID }) {
                 TopicFeatureCard(story: story, merchants: merchants) {
                     coordinator.pushRoute(.story(storyId: story.id))
                 }
-                .frame(width: 330)
+                .frame(width: cardWidth)
             }
         case .merchant:
             if let merchantID = item.merchantID, let merchant = merchants.first(where: { $0.id == merchantID }) {
@@ -346,8 +367,15 @@ struct TopicLandingView: View {
                 }
                 .frame(width: 190)
             }
-        case .merchantSpotlight, .avatarCluster:
-            // Bento-only kinds; a media carousel never authors them.
+        case .merchantSpotlight:
+            if let merchantID = item.merchantID,
+               let merchant = merchants.first(where: { $0.id == merchantID }) {
+                TopicMerchantSpotlight(merchant: merchant) {
+                    coordinator.pushRoute(.store(merchantId: merchant.id))
+                }
+                .frame(width: 270)
+            }
+        case .avatarCluster:
             EmptyView()
         }
     }
@@ -397,67 +425,120 @@ struct TopicLandingView: View {
         }
     }
 
-    /// Maps a bento block's items to compartments. Explicit sizes win;
-    /// unsized cells resolve from signal strength and film coverage.
-    private func bentoCompartments(_ block: FeedTopic.MerchandisingBlock) -> [BentoCompartment] {
+    /// Maps data-authored bento items into the role-based layout shared with
+    /// the upstream topic destinations.
+    private func bentoCompartments(
+        _ block: FeedTopic.MerchandisingBlock
+    ) -> [BentoCompartment] {
         let signals = ShopperSignals.current
         return (block.items ?? []).enumerated().compactMap { index, item in
             let id = "\(block.id)-\(index)"
             let role = item.role ?? ""
+
             switch item.kind {
             case .product:
                 guard let resolved = resolvedProduct(for: item) else { return nil }
-                let hasFilm = DossierStore.ambientVideoURL(merchantID: resolved.merchant.id, productID: resolved.product.id) != nil
+                let hasFilm = DossierStore.ambientVideoURL(
+                    merchantID: resolved.merchant.id,
+                    productID: resolved.product.id
+                ) != nil
                 let size = BentoCompartment.resolveSize(
                     explicit: item.size,
-                    signal: signals.strength(merchantID: resolved.merchant.id, productID: resolved.product.id),
+                    signal: signals.strength(
+                        merchantID: resolved.merchant.id,
+                        productID: resolved.product.id
+                    ),
                     hasFilm: hasFilm
                 )
-                return BentoCompartment(id: id, role: role, size: size, surface: .product(resolved)) {
-                    // Straight to the PDP unless a dossier with real content
-                    // (payload or films) has landed — pre-seeded manifest
-                    // entries alone must not earn an empty interstitial.
-                    if let dossier = DossierStore.dossier(merchantID: resolved.merchant.id, productID: resolved.product.id),
-                       dossier.payload != nil || dossier.hasAmbientVideo {
-                        coordinator.pushRoute(.deepDive(merchantId: resolved.merchant.id, productId: resolved.product.id))
-                    } else {
-                        coordinator.pushRoute(.product(merchantId: resolved.merchant.id, productId: resolved.product.id))
-                    }
+                return BentoCompartment(
+                    id: id,
+                    role: role,
+                    size: size,
+                    surface: .product(resolved)
+                ) {
+                    coordinator.pushRoute(
+                        .product(
+                            merchantId: resolved.merchant.id,
+                            productId: resolved.product.id
+                        )
+                    )
                 }
+
             case .merchant:
                 guard let merchantID = item.merchantID,
-                      let merchant = merchants.first(where: { $0.id == merchantID }) else { return nil }
-                let size = BentoCompartment.resolveSize(explicit: item.size, signal: .none, hasFilm: false)
-                return BentoCompartment(id: id, role: role, size: size, surface: .merchant(merchant)) {
+                      let merchant = merchants.first(where: { $0.id == merchantID }) else {
+                    return nil
+                }
+                let size = BentoCompartment.resolveSize(
+                    explicit: item.size,
+                    signal: .none,
+                    hasFilm: false
+                )
+                return BentoCompartment(
+                    id: id,
+                    role: role,
+                    size: size,
+                    surface: .merchant(merchant)
+                ) {
                     coordinator.pushRoute(.store(merchantId: merchant.id))
                 }
+
             case .merchantSpotlight:
                 guard let merchantID = item.merchantID,
-                      let merchant = merchants.first(where: { $0.id == merchantID }) else { return nil }
-                let chips = (item.productIDs ?? []).compactMap { productID in
-                    merchant.products.first(where: { $0.id == productID })
-                        .map { ResolvedStoryProduct(merchant: merchant, product: $0) }
+                      let merchant = merchants.first(where: { $0.id == merchantID }) else {
+                    return nil
                 }
-                // Always standard: the spotlight earns its height by anchoring
-                // a trio, not by claiming a full-width cell.
-                return BentoCompartment(id: id, role: role, size: .standard, surface: .merchantSpotlight(merchant, chips)) {
+                let chips = (item.productIDs ?? []).compactMap { productID in
+                    merchant.products.first(where: { $0.id == productID }).map {
+                        ResolvedStoryProduct(merchant: merchant, product: $0)
+                    }
+                }
+                return BentoCompartment(
+                    id: id,
+                    role: role,
+                    size: .standard,
+                    surface: .merchantSpotlight(merchant, chips)
+                ) {
                     coordinator.pushRoute(.store(merchantId: merchant.id))
                 }
+
             case .avatarCluster:
-                let clusterMerchants = (item.merchantIDs ?? []).compactMap { mid in
-                    merchants.first(where: { $0.id == mid })
+                let cluster = (item.merchantIDs ?? []).compactMap { merchantID in
+                    merchants.first(where: { $0.id == merchantID })
                 }
-                guard clusterMerchants.count >= 4 else { return nil }
-                // The discs are their own buttons; the compartment action is
-                // never reachable but the shape keeps the grammar uniform.
-                return BentoCompartment(id: id, role: role, size: .standard, surface: .avatarCluster(clusterMerchants), action: {})
+                guard cluster.count >= 4 else { return nil }
+                return BentoCompartment(
+                    id: id,
+                    role: role,
+                    size: .standard,
+                    surface: .avatarCluster(cluster),
+                    action: {}
+                )
+
             case .story:
                 guard let storyID = item.storyID,
-                      let story = stories.first(where: { $0.id == storyID }) ?? PersonalizedFeedStories.all.first(where: { $0.id == storyID }) else { return nil }
+                      let story = stories.first(where: { $0.id == storyID })
+                        ?? PersonalizedFeedStories.all.first(where: { $0.id == storyID }) else {
+                    return nil
+                }
                 let hero = story.resolvedProducts(from: merchants).first
-                let hasFilm = hero.map { DossierStore.ambientVideoURL(merchantID: $0.merchant.id, productID: $0.product.id) != nil } ?? false
-                let size = BentoCompartment.resolveSize(explicit: item.size, signal: .none, hasFilm: hasFilm)
-                return BentoCompartment(id: id, role: role, size: size, surface: .story(story, hero: hero)) {
+                let hasFilm = hero.map {
+                    DossierStore.ambientVideoURL(
+                        merchantID: $0.merchant.id,
+                        productID: $0.product.id
+                    ) != nil
+                } ?? false
+                let size = BentoCompartment.resolveSize(
+                    explicit: item.size,
+                    signal: .none,
+                    hasFilm: hasFilm
+                )
+                return BentoCompartment(
+                    id: id,
+                    role: role,
+                    size: size,
+                    surface: .story(story, hero: hero)
+                ) {
                     coordinator.pushRoute(.story(storyId: story.id))
                 }
             }
@@ -508,6 +589,10 @@ struct TopicLandingView: View {
         return (left, right)
     }
 
+    private func shortLabel(for story: FeedStory) -> String {
+        let words = story.title.split(separator: " ")
+        return words.prefix(3).joined(separator: " ")
+    }
 }
 
 private struct TopicFeatureCard: View {
@@ -532,7 +617,7 @@ private struct TopicFeatureCard: View {
                 Color.clear
                     .overlay {
                         if let hero = heroProduct,
-                           let film = DossierStore.ambientVideoURL(merchantID: hero.merchant.id, productID: hero.product.id) {
+                           let film = hero.product.ambientFilmURL(merchantID: hero.merchant.id) {
                             AmbientProductVideo(videoURL: film, posterImageURL: hero.product.imageURL)
                         } else if let coverImageName = story.coverImageName {
                             Image(coverImageName)
@@ -558,8 +643,9 @@ private struct TopicFeatureCard: View {
                 HStack(alignment: .bottom, spacing: 12) {
                     // Echoes the topic header's display type, scaled to the card.
                     Text(story.title)
-                        .font(.system(size: 26, weight: .heavy))
-                        .tracking(-0.9)
+                        .font(.system(size: 32, weight: .heavy).leading(.tight))
+                        .tracking(-1.1)
+                        .lineSpacing(-11)
                         .foregroundStyle(.white)
                         .multilineTextAlignment(.leading)
                         .lineLimit(3)

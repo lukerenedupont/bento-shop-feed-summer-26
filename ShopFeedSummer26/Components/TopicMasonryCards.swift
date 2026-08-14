@@ -73,7 +73,7 @@ private struct TopicMasonryMerchantCard: View {
                         Button {
                             coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
                         } label: {
-                            ProductImageView(product: item.product, merchant: item.merchant, fallbackIndex: index)
+                            ProductMediaView(product: item.product, merchant: item.merchant, fallbackIndex: index)
                                 .frame(width: cardWidth, height: cardWidth)
                                 .clipped()
                         }
@@ -153,7 +153,7 @@ private struct TopicMasonryCategoryCard: View {
         } label: {
             ZStack(alignment: .bottomLeading) {
                 if let item = products.first {
-                    ProductImageView(product: item.product, merchant: item.merchant)
+                    ProductMediaView(product: item.product, merchant: item.merchant)
                         .frame(width: cardWidth, height: cardWidth * 1.42)
                         .clipped()
                 } else {
@@ -200,7 +200,7 @@ private struct TopicMasonryPostCard: View {
             coordinator.pushRoute(.story(storyId: story.id))
         } label: {
             ZStack(alignment: .bottomLeading) {
-                ProductImageView(product: item.product, merchant: item.merchant)
+                ProductMediaView(product: item.product, merchant: item.merchant)
                     .frame(width: cardWidth, height: cardWidth * 1.25)
                     .clipped()
 

@@ -63,6 +63,8 @@ struct SampleMerchant: Identifiable {
         var allImageURLs: [String] = []
         var currencyCode: String = "USD"
         var productDescription: String?
+        /// Generated product film, when the feed supplies one.
+        var videoUrl: String? = nil
     }
 
     struct Collection: Identifiable {

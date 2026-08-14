@@ -24,7 +24,9 @@ final class NavigationCoordinator {
     /// Whether the bottom nav bar is visible at all.
     var showNavBar: Bool = true
 
-
+    /// Compatibility hooks used by Home's inline topic/story navigation.
+    var topicBackAction: (() -> Void)? = nil
+    @ObservationIgnored var inlineStoryHandler: ((String) -> Bool)? = nil
 
     /// Current scroll offset tracking.
     @ObservationIgnored var scrollOffset: CGFloat = 0
@@ -85,7 +87,7 @@ final class NavigationCoordinator {
     /// Whether the bottom bar should show its back button.
     var isNavigatedDeep: Bool {
         switch selectedPage {
-        case 0: return !homePath.isEmpty
+        case 0: return !homePath.isEmpty || topicBackAction != nil
         case 1: return !accountPath.isEmpty
         case 2: return !explorePath.isEmpty
         case 3: return !searchPath.isEmpty
@@ -110,6 +112,13 @@ final class NavigationCoordinator {
 
     /// Push a route onto the current page's navigation stack.
     func pushRoute(_ route: HomeRoute) {
+        if case .story(let storyID) = route,
+           selectedPage == 0,
+           homePath.isEmpty,
+           let inlineStoryHandler,
+           inlineStoryHandler(storyID) {
+            return
+        }
         switch selectedPage {
         case 0: homePath.append(route)
         case 1: accountPath.append(route)
@@ -138,7 +147,12 @@ final class NavigationCoordinator {
 
     func popCurrentPage() {
         switch selectedPage {
-        case 0: if !homePath.isEmpty { homePath.removeLast() }
+        case 0:
+            if !homePath.isEmpty {
+                homePath.removeLast()
+            } else {
+                topicBackAction?()
+            }
         case 1: if !accountPath.isEmpty { accountPath.removeLast() }
         case 2: if !explorePath.isEmpty { explorePath.removeLast() }
         case 3: if !searchPath.isEmpty { searchPath.removeLast() }

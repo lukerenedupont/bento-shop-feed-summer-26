@@ -6,17 +6,12 @@ import SwiftUI
 enum LocalMerchantService {
 
     static func loadMerchants() -> [SampleMerchant] {
-        // A dossier-feed-bundle on disk (via -feedBundlePath) wins over the
-        // bundled asset; a failed decode falls straight through to it.
-        if let data = FeedBundleLoader.merchantsData() {
-            let fromBundle = decodeMerchants(from: data)
-            if !fromBundle.isEmpty { return fromBundle }
-        }
         guard let asset = NSDataAsset(name: "prototype-merchants") else { return [] }
         return decodeMerchants(from: asset.data)
     }
 
-    /// Decodes a MerchantSnapshot document. Returns [] on any decode failure.
+    /// Same mapping, from any snapshot payload — the bundled asset or a live
+    /// response from the dossier-lab feed API, which emits this exact shape.
     static func decodeMerchants(from data: Data) -> [SampleMerchant] {
         guard let snapshot = try? JSONDecoder().decode(MerchantSnapshot.self, from: data) else {
             return []
@@ -36,7 +31,8 @@ enum LocalMerchantService {
                     tags: p.tags ?? [],
                     allImageURLs: p.allImageUrls ?? [p.imageUrl].compactMap { $0 },
                     currencyCode: p.currencyCode ?? "USD",
-                    productDescription: p.description
+                    productDescription: p.description,
+                    videoUrl: p.videoUrl
                 )
             }
 
@@ -140,4 +136,7 @@ private struct ProductEntry: Decodable {
     let productType: String?
     let vendor: String?
     let tags: [String]?
+    /// Present on generated feeds (dossier-lab films two clips per product);
+    /// absent from the bundled snapshot, hence optional.
+    let videoUrl: String?
 }

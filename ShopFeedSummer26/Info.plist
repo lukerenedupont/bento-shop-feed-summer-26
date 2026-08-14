@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- The dossier-lab feed API is a local Vite dev server over plain HTTP, and
+	     its image/video URLs point back at the same origin. App Transport
+	     Security blocks cleartext by default, so the feed and every generated
+	     asset would silently fail to load. This exception is scoped to local
+	     networking (localhost, *.local, link-local) and leaves ATS fully in
+	     force for everything else, including server.shop.app.
+
+	     GENERATE_INFOPLIST_FILE stays YES: Xcode merges its generated keys into
+	     this file, so the target's other Info.plist settings are unaffected. -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<!-- Required for a physical device to reach the Mac running the dev server. -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Loads the prototype feed from the dossier-lab server running on your Mac.</string>
+</dict>
+</plist>

@@ -8,14 +8,16 @@ struct PersonalizedFeedCatalog: Codable {
     /// Authored shopper-intent fixtures (cart, owned, viewed, searches).
     var signals: ShopperSignals? = nil
 
-    static let current: PersonalizedFeedCatalog = {
-        // A dossier-feed-bundle on disk (via -feedBundlePath) wins over the
-        // bundled asset; any failure falls straight through to it.
-        if let data = FeedBundleLoader.feedData(),
-           let catalog = try? JSONDecoder().decode(PersonalizedFeedCatalog.self, from: data),
-           !catalog.topics.isEmpty {
-            return catalog
-        }
+    /// The feed in force: whatever `RemoteFeedService` last loaded from the
+    /// dossier-lab API, falling back to the bundled curation so the prototype
+    /// opens with no server, no network, and no auth.
+    static var current: PersonalizedFeedCatalog { remote ?? bundled }
+
+    /// Generated catalog, set once the feed API answers. Views read it through
+    /// `current`; nothing else should write it.
+    static var remote: PersonalizedFeedCatalog?
+
+    static let bundled: PersonalizedFeedCatalog = {
         guard let asset = NSDataAsset(name: "personalized-feed"),
               let catalog = try? JSONDecoder().decode(PersonalizedFeedCatalog.self, from: asset.data) else {
             assertionFailure("personalized-feed.json is missing or invalid")

@@ -7,6 +7,7 @@
 
 # Build products
 DerivedData/
+.derivedData/
 .build/
 build/
 xcuserdata/

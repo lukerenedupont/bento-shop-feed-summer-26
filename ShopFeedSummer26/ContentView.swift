@@ -4,16 +4,25 @@ import SwiftUI
 ///
 /// The personalized assortment is bundled so the prototype opens directly
 /// into the flick-and-stick feed without requiring Shop Server authentication.
+/// When the dossier-lab feed API is reachable it takes over, replacing the
+/// curated stories with ones generated from every saved dossier; if it is not,
+/// the bundled assets stand and nothing about the prototype changes.
 struct ContentView: View {
     @ObservedObject private var merchantService = RemoteMerchantService.shared
+    @ObservedObject private var feedService = RemoteFeedService.shared
     @State private var userProfile = UserProfileService.shared
     @State private var historyClient = ConversationHistoryClient.shared
 
     var body: some View {
         RootView()
             .task {
+                await feedService.load()
                 if merchantService.merchants.isEmpty {
-                    merchantService.loadFallbackData()
+                    if feedService.isLive {
+                        merchantService.merchants = feedService.merchants
+                    } else {
+                        merchantService.loadFallbackData()
+                    }
                     userProfile.applyFallbackProfile()
                 }
                 await historyClient.fetch()

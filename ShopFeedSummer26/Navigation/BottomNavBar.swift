@@ -28,7 +28,7 @@ struct BottomNavBar: View {
                     maxBlurRadius: 8,
                     direction: .bottomBlurToTopTransparent,
                     tintColor: coordinator.navBarBlurTint,
-                    tintOpacity: 1
+                    tintOpacity: 0
                 )
                 .frame(height: PurlTune.value("Navigation/BottomNavBar.swift:frame:height:33:32", default: 80))
                 .frame(maxWidth: .infinity)
