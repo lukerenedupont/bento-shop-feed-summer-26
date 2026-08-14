@@ -47,9 +47,14 @@ struct BentoGrid: View {
     private let spacing: CGFloat = GravitySpacing.space8
     private var columnWidth: CGFloat { (containerWidth - spacing) / 2 }
 
-    private static let heights: [BentoCellSize: CGFloat] = [
-        .hero: 420, .wide: 180, .standard: 224,
-    ]
+    private func height(for size: BentoCellSize) -> CGFloat {
+        switch size {
+        case .hero: return 420
+        case .wide: return 180
+        // Paired cells are 1:1 — same square grammar as ProductCard tiles.
+        case .standard: return columnWidth
+        }
+    }
 
     var body: some View {
         VStack(spacing: spacing) {
@@ -60,7 +65,7 @@ struct BentoGrid: View {
                         BentoCompartmentCard(compartment: compartment)
                             .frame(
                                 width: row.count == 1 && compartment.size != .standard ? containerWidth : columnWidth,
-                                height: Self.heights[compartment.size] ?? 224
+                                height: height(for: compartment.size)
                             )
                     }
                 }
