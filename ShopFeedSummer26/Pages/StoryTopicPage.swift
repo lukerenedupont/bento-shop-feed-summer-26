@@ -42,7 +42,11 @@ struct StoryTopicPage: View {
                 stories: [story],
                 merchants: merchants,
                 headerCoverImageName: parentLeadStory?.coverImageName,
-                surfaceAccentHex: parentLeadStory?.accentHex ?? story.accentHex
+                surfaceAccentHex: parentLeadStory?.accentHex ?? story.accentHex,
+                // Chapters, not covers: shorter header with the parent
+                // world's name as an eyebrow so drill-ins stay oriented.
+                headerEyebrow: parentTopic?.label,
+                compactHeader: true
             )
             .environment(\.colorScheme, .dark)
             .toolbar(.hidden, for: .navigationBar)

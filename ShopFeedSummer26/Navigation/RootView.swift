@@ -76,6 +76,11 @@ struct RootView: View {
                 coordinator.pushRoute(.topic(topicId: topicID, sourceStoryId: nil))
             } else if let storyID = UserDefaults.standard.string(forKey: "openStory") {
                 coordinator.pushRoute(.story(storyId: storyID))
+            } else if let productRef = UserDefaults.standard.string(forKey: "openProduct"),
+                      let separator = productRef.lastIndex(of: "/"),
+                      let productID = Int(productRef[productRef.index(after: separator)...]) {
+                // `-openProduct <merchantID>/<productID>`
+                coordinator.pushRoute(.product(merchantId: String(productRef[..<separator]), productId: productID))
             }
         }
 #endif
@@ -88,10 +93,13 @@ struct RootView: View {
         switch route {
         case .product(let merchantId, let productId):
             ProductPage(merchantId: merchantId, productId: productId, namespace: namespace)
+                .floatingBackChip(coordinator)
         case .deepDive(let merchantId, let productId):
             DeepDivePage(merchantId: merchantId, productId: productId)
+                .floatingBackChip(coordinator)
         case .store(let merchantId):
             StorePage(merchantId: merchantId, namespace: namespace)
+                .floatingBackChip(coordinator)
         case .story(let storyId):
             StoryTopicPage(storyID: storyId)
         case .topic(let topicId, let sourceStoryId):
@@ -101,12 +109,33 @@ struct RootView: View {
                 .navigationTransition(.zoom(sourceID: "topic-hero-\(sourceStoryId ?? topicId)", in: namespace))
         case .deliveries:
             DeliveriesPage(namespace: namespace)
+                .floatingBackChip(coordinator)
         case .deliveryDetail(let deliveryId):
             DeliveryDetailPage(deliveryId: deliveryId, namespace: namespace)
+                .floatingBackChip(coordinator)
         case .account:
             AccountPage(namespace: namespace)
         case .explore:
             ExplorePage()
+        }
+    }
+}
+
+extension View {
+    /// The single back affordance for pushed pages that hide the system nav
+    /// bar: a floating chip at the top leading edge. Back never lives in the
+    /// bottom bar — topics and stories add their own chip (they also manage
+    /// nav-bar visibility and tint on pop).
+    func floatingBackChip(_ coordinator: NavigationCoordinator) -> some View {
+        safeAreaBar(edge: .top) {
+            HStack {
+                FloatingBackButton {
+                    coordinator.popCurrentPage()
+                }
+                Spacer()
+            }
+            .padding(.horizontal, GravitySpacing.space16)
+            .padding(.vertical, GravitySpacing.space4)
         }
     }
 }

@@ -197,6 +197,62 @@
       ],
       "merchandisingBlocks": [
         {
+          "id": "mirror-bento",
+          "kind": "bento",
+          "title": "The mirror wall",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "forom",
+              "productID": 7914833051779,
+              "role": "In your cart",
+              "size": "hero"
+            },
+            {
+              "kind": "product",
+              "merchantID": "forom",
+              "productID": 9080102322307,
+              "role": "On the wall"
+            },
+            {
+              "kind": "product",
+              "merchantID": "coming-soon",
+              "productID": 9603148841266,
+              "role": "On the wall"
+            },
+            {
+              "kind": "product",
+              "merchantID": "coming-soon",
+              "productID": 9908030275890,
+              "role": "Fluid forms"
+            },
+            {
+              "kind": "product",
+              "merchantID": "coming-soon",
+              "productID": 9603401253170,
+              "role": "Fluid forms"
+            },
+            {
+              "kind": "product",
+              "merchantID": "forom",
+              "productID": 9080109072515,
+              "role": "Floor presence"
+            },
+            {
+              "kind": "product",
+              "merchantID": "coming-soon",
+              "productID": 9960379842866,
+              "role": "Floor presence"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "forom",
+              "role": "Shop the world",
+              "size": "wide"
+            }
+          ]
+        },
+        {
           "id": "spotlight",
           "kind": "mediaCarousel",
           "title": null,
@@ -248,53 +304,6 @@
             {
               "kind": "merchant",
               "merchantID": "lichen"
-            }
-          ]
-        },
-        {
-          "id": "for-you",
-          "kind": "productRail",
-          "title": "For you in Sculptural mirrors",
-          "items": [
-            {
-              "kind": "product",
-              "merchantID": "forom",
-              "productID": 7914833051779
-            },
-            {
-              "kind": "product",
-              "merchantID": "forom",
-              "productID": 9080102322307
-            },
-            {
-              "kind": "product",
-              "merchantID": "coming-soon",
-              "productID": 9908030275890
-            },
-            {
-              "kind": "product",
-              "merchantID": "coming-soon",
-              "productID": 9603148841266
-            },
-            {
-              "kind": "product",
-              "merchantID": "forom",
-              "productID": 9080109072515
-            },
-            {
-              "kind": "product",
-              "merchantID": "forom",
-              "productID": 9080102715523
-            },
-            {
-              "kind": "product",
-              "merchantID": "coming-soon",
-              "productID": 9960379842866
-            },
-            {
-              "kind": "product",
-              "merchantID": "coming-soon",
-              "productID": 9603401253170
             }
           ]
         },
@@ -494,6 +503,50 @@
       ],
       "merchandisingBlocks": [
         {
+          "id": "brew-bento",
+          "kind": "bento",
+          "title": "The brew bar",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 7507479003236,
+              "role": "Brew",
+              "size": "hero"
+            },
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 2055410221171,
+              "role": "Pour"
+            },
+            {
+              "kind": "product",
+              "merchantID": "kinto",
+              "productID": 2214011961392,
+              "role": "Pour"
+            },
+            {
+              "kind": "product",
+              "merchantID": "kinto",
+              "productID": 2214023331888,
+              "role": "Sip"
+            },
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 4807420739684,
+              "role": "Sip"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "fellow",
+              "role": "Shop the world",
+              "size": "wide"
+            }
+          ]
+        },
+        {
           "id": "spotlight",
           "kind": "mediaCarousel",
           "title": null,
@@ -541,53 +594,6 @@
             {
               "kind": "merchant",
               "merchantID": "doiy"
-            }
-          ]
-        },
-        {
-          "id": "for-you",
-          "kind": "productRail",
-          "title": "For you in Coffee counter",
-          "items": [
-            {
-              "kind": "product",
-              "merchantID": "fellow",
-              "productID": 7507479003236
-            },
-            {
-              "kind": "product",
-              "merchantID": "fellow",
-              "productID": 2055410221171
-            },
-            {
-              "kind": "product",
-              "merchantID": "kinto",
-              "productID": 2214011961392
-            },
-            {
-              "kind": "product",
-              "merchantID": "kinto",
-              "productID": 2214023331888
-            },
-            {
-              "kind": "product",
-              "merchantID": "fellow",
-              "productID": 2055409762419
-            },
-            {
-              "kind": "product",
-              "merchantID": "fellow",
-              "productID": 4807420739684
-            },
-            {
-              "kind": "product",
-              "merchantID": "kinto",
-              "productID": 2214022053936
-            },
-            {
-              "kind": "product",
-              "merchantID": "kinto",
-              "productID": 2214010978352
             }
           ]
         },

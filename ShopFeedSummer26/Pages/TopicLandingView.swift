@@ -10,6 +10,11 @@ struct TopicLandingView: View {
     /// Optional parent-topic theme inherited by drilled-in subtopic pages.
     var headerCoverImageName: String? = nil
     var surfaceAccentHex: String? = nil
+    /// Wayfinding for drill-ins: the parent world's name, shown as an
+    /// eyebrow above the title so a subcategory never reads as a new topic.
+    var headerEyebrow: String? = nil
+    /// Sub-topic pages use a shorter header — they are chapters, not covers.
+    var compactHeader: Bool = false
 
     @Environment(NavigationCoordinator.self) private var coordinator
 
@@ -200,20 +205,33 @@ struct TopicLandingView: View {
             )
 
         }
-        // Cover topics get a tall editorial header; coverless landings stay
-        // compact instead of reserving empty atmosphere.
-        .frame(height: effectiveCoverImageName != nil || headerFilm != nil ? 410 : 220)
+        // Cover topics get a tall editorial header; coverless landings and
+        // drilled-in sub-topics stay compact instead of reserving atmosphere.
+        .frame(height: {
+            let hasCover = effectiveCoverImageName != nil || headerFilm != nil
+            if compactHeader { return hasCover ? 300 : 180 }
+            return hasCover ? 410 : 220
+        }())
         // Display title sits a touch below center of the atmosphere — the
         // bottom edge is now free for the feed to pull up underneath.
         .overlay {
-            Text(topic.label)
-                .font(.system(size: 40, weight: .heavy, design: .default))
-                .tracking(-1.4)
-                .foregroundStyle(.white)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 16)
-                .offset(y: 50)
+            VStack(spacing: 6) {
+                if let headerEyebrow {
+                    Text(headerEyebrow)
+                        .font(.system(size: 12, weight: .bold))
+                        .textCase(.uppercase)
+                        .tracking(1.4)
+                        .foregroundStyle(.white.opacity(0.72))
+                }
+                Text(topic.label)
+                    .font(.system(size: compactHeader ? 30 : 40, weight: .heavy, design: .default))
+                    .tracking(compactHeader ? -0.9 : -1.4)
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 16)
+            .offset(y: compactHeader ? 40 : 50)
         }
     }
 
@@ -381,8 +399,11 @@ struct TopicLandingView: View {
                     hasFilm: hasFilm
                 )
                 return BentoCompartment(id: id, role: role, size: size, surface: .product(resolved)) {
-                    // Dossier'd products get the Deep Dive; the rest, the PDP.
-                    if DossierStore.dossier(merchantID: resolved.merchant.id, productID: resolved.product.id) != nil {
+                    // Straight to the PDP unless a dossier with real content
+                    // (payload or films) has landed — pre-seeded manifest
+                    // entries alone must not earn an empty interstitial.
+                    if let dossier = DossierStore.dossier(merchantID: resolved.merchant.id, productID: resolved.product.id),
+                       dossier.payload != nil || dossier.hasAmbientVideo {
                         coordinator.pushRoute(.deepDive(merchantId: resolved.merchant.id, productId: resolved.product.id))
                     } else {
                         coordinator.pushRoute(.product(merchantId: resolved.merchant.id, productId: resolved.product.id))
