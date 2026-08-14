@@ -1,5 +1,12 @@
 import SwiftUI
 
+/// A film URL an ancestor surface on this screen is already playing.
+/// `AmbientProductVideo` consults it so the same clip never loops twice in
+/// one place — the descendant keeps its poster instead.
+extension EnvironmentValues {
+    @Entry var claimedFilmURL: URL? = nil
+}
+
 /// An ambient product surface: a muted, autoplaying, looping "in use" film
 /// with the product photo as poster/fallback.
 ///
@@ -11,7 +18,16 @@ import SwiftUI
 struct AmbientProductVideo: View {
     let videoURL: URL?
     let posterImageURL: String?
+    @Environment(\.claimedFilmURL) private var claimedFilmURL
     @State private var videoReady = false
+
+    /// The same film never plays twice on one screen: when an ancestor has
+    /// already claimed this URL (e.g. the topic header playing the lead
+    /// hero's film above a bento that contains the same product), this
+    /// surface quietly keeps its poster.
+    private var effectiveVideoURL: URL? {
+        videoURL == claimedFilmURL ? nil : videoURL
+    }
 
     /// Resolves the product's ambient film from the dossier drop zone.
     init(product: SampleMerchant.Product, merchant: SampleMerchant) {
@@ -37,7 +53,7 @@ struct AmbientProductVideo: View {
                             }
                         }
                     }
-                    if let videoURL {
+                    if let videoURL = effectiveVideoURL {
                         LoopingVideoPlayer(url: videoURL)
                             .opacity(videoReady ? 1 : 0)
                             .onAppear {

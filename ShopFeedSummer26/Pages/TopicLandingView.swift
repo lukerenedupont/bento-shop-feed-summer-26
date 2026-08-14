@@ -123,6 +123,9 @@ struct TopicLandingView: View {
                                 .id(block.id)
                         }
                     }
+                    // The header already plays the lead hero's film; nothing
+                    // below it may loop the same clip on this screen.
+                    .environment(\.claimedFilmURL, headerFilm?.url)
                 }
                 // A vertical ScrollView proposes an unconstrained cross-axis.
                 // Pinning its child prevents horizontal rails from making the
