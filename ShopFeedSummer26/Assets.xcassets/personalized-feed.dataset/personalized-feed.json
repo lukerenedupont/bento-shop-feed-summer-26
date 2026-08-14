@@ -7,7 +7,6 @@
       "storyTopicKey": null,
       "storyIDs": [
         "city-to-trail-birding",
-        "keep-shopping",
         "sculptural-mirror-hunt",
         "type-systems",
         "coffee-counter",
@@ -1027,14 +1026,6 @@
       ]
     },
     {
-      "id": "keep-shopping-topic",
-      "label": "Still on your mind",
-      "storyTopicKey": null,
-      "storyIDs": [
-        "keep-shopping"
-      ]
-    },
-    {
       "id": "new-york-graphics-topic",
       "label": "New York graphics",
       "storyTopicKey": null,
@@ -1425,34 +1416,6 @@
         }
       ],
       "coverImageName": "cover-birding"
-    },
-    {
-      "id": "keep-shopping",
-      "eyebrow": "Recent activity",
-      "title": "Still on your mind",
-      "subtitle": "A quick return to the products and ongoing hunts you have been considering.",
-      "format": "shortlist",
-      "topicKeys": [],
-      "accentHex": "#463D38",
-      "destinationLabel": "Pick up where you left off",
-      "products": [
-        {
-          "merchantID": "forom",
-          "productID": 7914833051779
-        },
-        {
-          "merchantID": "ceremonia",
-          "productID": 14886355796337
-        },
-        {
-          "merchantID": "moma",
-          "productID": 9604489248998
-        },
-        {
-          "merchantID": "fellow",
-          "productID": 7507479003236
-        }
-      ]
     },
     {
       "id": "sculptural-mirror-hunt",
