@@ -189,9 +189,10 @@ struct TopicLandingView: View {
             LinearGradient(
                 stops: [
                     .init(color: backgroundColor.opacity(0), location: 0),
-                    .init(color: backgroundColor.opacity(0), location: 0.66),
-                    .init(color: backgroundColor.opacity(0.1), location: 0.78),
-                    .init(color: backgroundColor.opacity(0.4), location: 0.88),
+                    .init(color: backgroundColor.opacity(0), location: 0.74),
+                    .init(color: backgroundColor.opacity(0.06), location: 0.82),
+                    .init(color: backgroundColor.opacity(0.24), location: 0.9),
+                    .init(color: backgroundColor.opacity(0.58), location: 0.96),
                     .init(color: backgroundColor, location: 1),
                 ],
                 startPoint: .top,

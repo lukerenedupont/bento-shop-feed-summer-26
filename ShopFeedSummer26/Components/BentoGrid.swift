@@ -95,9 +95,9 @@ struct BentoGrid: View {
     }
 }
 
-/// The compartment shell: ambient surface, legibility scrim, role eyebrow,
-/// and title. The role label is the compartment's reason for existing and is
-/// always visible.
+/// The compartment shell: ambient surface, bottom legibility scrim, and
+/// title. Roles stay data-side (sizing + validator contract) — the imagery
+/// carries the cell, and dossier films will fill these surfaces as they land.
 private struct BentoCompartmentCard: View {
     let compartment: BentoCompartment
 
@@ -106,10 +106,11 @@ private struct BentoCompartmentCard: View {
             ZStack(alignment: .bottomLeading) {
                 surface
 
+                // Bottom-only scrim for the title; the top of the cell
+                // stays untouched so the asset reads clean.
                 LinearGradient(
                     stops: [
-                        .init(color: .black.opacity(0.38), location: 0),
-                        .init(color: .clear, location: 0.28),
+                        .init(color: .clear, location: 0),
                         .init(color: .clear, location: 0.55),
                         .init(color: .black.opacity(0.72), location: 1),
                     ],
@@ -133,19 +134,6 @@ private struct BentoCompartmentCard: View {
                     }
                 }
                 .padding(12)
-            }
-            .overlay(alignment: .topLeading) {
-                // Chip, not bare text — role labels must survive white
-                // product photography.
-                Text(compartment.role)
-                    .font(.system(size: 11, weight: .semibold))
-                    .textCase(.uppercase)
-                    .tracking(0.8)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(.black.opacity(0.35), in: Capsule())
-                    .padding(10)
             }
             .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
         }
