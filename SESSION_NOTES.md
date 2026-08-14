@@ -5,23 +5,19 @@ prototype; delete sections as they land. Long-term truth lives in
 `ARCHITECTURE.md` / `README.md` — this file is only the "what was I doing"
 layer.
 
-## In flight: scale bentos to ALL remaining topics
+## DONE: bentos on all 10 topics (commit `799f9c1`)
 
-Bentos are live on **birding-gear** (`kit-bento`), **sculptural-mirrors**
-(`mirror-bento`), and **coffee-counter** (`brew-bento`). The user wants the
-same structure on every topic. Remaining 7:
+Every topic now leads with a bento; all `productRail` blocks are gone.
+Landed: `kit-bento`, `mirror-bento`, `brew-bento`, plus `type-bento`
+(The reading stack), `nursery-bento` (The kids' room — "The nursery"
+collided with the subtopic pill), `table-bento` (The table, set),
+`trail-bento` (The trailhead — owned XT-6 GTX auto-wides mid-box between
+two trios), `city-bento` (The city archive), `ritual-bento` (The Sunday
+ritual — pulled Guava shampoo `8178693210276` + hair oil `15464228749681`
+from the wider ceremonia catalog to reach trio+pair), `material-bento`
+(The material library). All screenshotted on-device; validator passes.
 
-| Topic | Suggested role grammar (from real inventory) |
-| --- | --- |
-| `type-and-transit` | Read / Reference / Wear / On the wall (standards-manual + draw-down books, Swatch, Lichen print) |
-| `design-for-kids` | Sleep / Sit / Change (babyletto cribs/table, lalo chairs) |
-| `tabletop-objects` | Hold flowers / Serve / Pour / Sip (doiy vases, MoMA flatware/espresso, kinto cups) |
-| `trail-to-street` | On trail / On street / Owned (Salomon XTs from both shops; feature-salomon 7029064368199 is OWNED → auto-wide) |
-| `new-york-graphics-topic` | Study / Wear / On the wall (NYCTA/EPA/NASA manuals, Swatch, Lichen) |
-| `scalp-care-topic` | Scrub / Condition / Refresh / Dry (only 4 ceremonia products — add a 5th from ceremonia catalog or accept trio+banner) |
-| `material-study-topic` | Leather / Steel / Glass / Wood (house-of-leon chairs, kettle, mirrors, vases — richest inventory, pick 6) |
-
-**The recipe (copy the mirrors/coffee commits `5c0c97f`, `8453c83`):**
+**The recipe, if new topics appear:**
 1. In `personalized-feed.json`, for each topic: remove the `productRail`
    block and prepend a `bento` block (id `<something>-bento`, kind `bento`,
    title = a place-name like "The reading stack", not a CTA).
