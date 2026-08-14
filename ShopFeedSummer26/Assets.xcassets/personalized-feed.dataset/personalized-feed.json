@@ -354,6 +354,62 @@
       ],
       "merchandisingBlocks": [
         {
+          "id": "type-bento",
+          "kind": "bento",
+          "title": "The reading stack",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 5842516163,
+              "role": "Reference",
+              "size": "hero"
+            },
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 1424479363,
+              "role": "Reference"
+            },
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 92039479320,
+              "role": "Reference"
+            },
+            {
+              "kind": "product",
+              "merchantID": "draw-down",
+              "productID": 1591926554714,
+              "role": "Read"
+            },
+            {
+              "kind": "product",
+              "merchantID": "draw-down",
+              "productID": 7804062892286,
+              "role": "Read"
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 9604489248998,
+              "role": "Wear"
+            },
+            {
+              "kind": "product",
+              "merchantID": "lichen",
+              "productID": 11009838154046,
+              "role": "On the wall"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "draw-down",
+              "role": "Shop the world",
+              "size": "wide"
+            }
+          ]
+        },
+        {
           "id": "spotlight",
           "kind": "mediaCarousel",
           "title": null,
@@ -401,53 +457,6 @@
             {
               "kind": "merchant",
               "merchantID": "coming-soon"
-            }
-          ]
-        },
-        {
-          "id": "for-you",
-          "kind": "productRail",
-          "title": "For you in Type & transit",
-          "items": [
-            {
-              "kind": "product",
-              "merchantID": "standards-manual",
-              "productID": 1424479363
-            },
-            {
-              "kind": "product",
-              "merchantID": "standards-manual",
-              "productID": 5842516163
-            },
-            {
-              "kind": "product",
-              "merchantID": "draw-down",
-              "productID": 1591926554714
-            },
-            {
-              "kind": "product",
-              "merchantID": "draw-down",
-              "productID": 8336413458686
-            },
-            {
-              "kind": "product",
-              "merchantID": "standards-manual",
-              "productID": 92039479320
-            },
-            {
-              "kind": "product",
-              "merchantID": "standards-manual",
-              "productID": 3933686169669
-            },
-            {
-              "kind": "product",
-              "merchantID": "draw-down",
-              "productID": 7804062892286
-            },
-            {
-              "kind": "product",
-              "merchantID": "draw-down",
-              "productID": 7955948863742
             }
           ]
         },
@@ -645,6 +654,62 @@
       ],
       "merchandisingBlocks": [
         {
+          "id": "nursery-bento",
+          "kind": "bento",
+          "title": "The kids' room",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "babyletto",
+              "productID": 6867000164406,
+              "role": "Sleep",
+              "size": "hero"
+            },
+            {
+              "kind": "product",
+              "merchantID": "babyletto",
+              "productID": 7652167647286,
+              "role": "Sleep"
+            },
+            {
+              "kind": "product",
+              "merchantID": "lalo",
+              "productID": 4363480432704,
+              "role": "Sit"
+            },
+            {
+              "kind": "product",
+              "merchantID": "lalo",
+              "productID": 4462324875328,
+              "role": "Sit"
+            },
+            {
+              "kind": "product",
+              "merchantID": "lalo",
+              "productID": 6603936137280,
+              "role": "Sit"
+            },
+            {
+              "kind": "product",
+              "merchantID": "babyletto",
+              "productID": 7652167942198,
+              "role": "Change"
+            },
+            {
+              "kind": "product",
+              "merchantID": "babyletto",
+              "productID": 7784483389494,
+              "role": "Change"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "babyletto",
+              "role": "Shop the world",
+              "size": "wide"
+            }
+          ]
+        },
+        {
           "id": "spotlight",
           "kind": "mediaCarousel",
           "title": null,
@@ -696,53 +761,6 @@
           ]
         },
         {
-          "id": "for-you",
-          "kind": "productRail",
-          "title": "For you in Design for kids",
-          "items": [
-            {
-              "kind": "product",
-              "merchantID": "babyletto",
-              "productID": 7652167942198
-            },
-            {
-              "kind": "product",
-              "merchantID": "babyletto",
-              "productID": 6867000164406
-            },
-            {
-              "kind": "product",
-              "merchantID": "lalo",
-              "productID": 4363480432704
-            },
-            {
-              "kind": "product",
-              "merchantID": "lalo",
-              "productID": 6603936137280
-            },
-            {
-              "kind": "product",
-              "merchantID": "babyletto",
-              "productID": 7652167647286
-            },
-            {
-              "kind": "product",
-              "merchantID": "babyletto",
-              "productID": 7784483389494
-            },
-            {
-              "kind": "product",
-              "merchantID": "lalo",
-              "productID": 7134036885568
-            },
-            {
-              "kind": "product",
-              "merchantID": "lalo",
-              "productID": 4462324875328
-            }
-          ]
-        },
-        {
           "id": "discover",
           "kind": "masonry",
           "title": "Discover more",
@@ -785,6 +803,62 @@
         "forom"
       ],
       "merchandisingBlocks": [
+        {
+          "id": "table-bento",
+          "kind": "bento",
+          "title": "The table, set",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 9787655160038,
+              "role": "Pour",
+              "size": "hero"
+            },
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 2055410221171,
+              "role": "Pour"
+            },
+            {
+              "kind": "product",
+              "merchantID": "doiy",
+              "productID": 8491003314332,
+              "role": "Hold flowers"
+            },
+            {
+              "kind": "product",
+              "merchantID": "doiy",
+              "productID": 8300748931228,
+              "role": "Hold flowers"
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 8909829603558,
+              "role": "Serve"
+            },
+            {
+              "kind": "product",
+              "merchantID": "kinto",
+              "productID": 2214023331888,
+              "role": "Sip"
+            },
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 2055409762419,
+              "role": "Sip"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "moma",
+              "role": "Shop the world",
+              "size": "wide"
+            }
+          ]
+        },
         {
           "id": "spotlight",
           "kind": "mediaCarousel",
@@ -845,53 +919,6 @@
           ]
         },
         {
-          "id": "for-you",
-          "kind": "productRail",
-          "title": "For you in Tabletop objects",
-          "items": [
-            {
-              "kind": "product",
-              "merchantID": "doiy",
-              "productID": 8491003314332
-            },
-            {
-              "kind": "product",
-              "merchantID": "doiy",
-              "productID": 8300748931228
-            },
-            {
-              "kind": "product",
-              "merchantID": "moma",
-              "productID": 8909829603558
-            },
-            {
-              "kind": "product",
-              "merchantID": "moma",
-              "productID": 9787655160038
-            },
-            {
-              "kind": "product",
-              "merchantID": "doiy",
-              "productID": 9135917301916
-            },
-            {
-              "kind": "product",
-              "merchantID": "doiy",
-              "productID": 8712550678684
-            },
-            {
-              "kind": "product",
-              "merchantID": "fellow",
-              "productID": 2055410221171
-            },
-            {
-              "kind": "product",
-              "merchantID": "kinto",
-              "productID": 2214022053936
-            }
-          ]
-        },
-        {
           "id": "discover",
           "kind": "masonry",
           "title": "Discover more",
@@ -933,6 +960,68 @@
         "extra-butter-salomon"
       ],
       "merchandisingBlocks": [
+        {
+          "id": "trail-bento",
+          "kind": "bento",
+          "title": "The trailhead",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "feature-salomon",
+              "productID": 6753846919239,
+              "role": "On street",
+              "size": "hero"
+            },
+            {
+              "kind": "product",
+              "merchantID": "extra-butter-salomon",
+              "productID": 8349773922487,
+              "role": "On trail"
+            },
+            {
+              "kind": "product",
+              "merchantID": "extra-butter-salomon",
+              "productID": 8151144530103,
+              "role": "On trail"
+            },
+            {
+              "kind": "product",
+              "merchantID": "feature-salomon",
+              "productID": 7243015094343,
+              "role": "On trail"
+            },
+            {
+              "kind": "product",
+              "merchantID": "feature-salomon",
+              "productID": 7029064368199,
+              "role": "Owned"
+            },
+            {
+              "kind": "product",
+              "merchantID": "extra-butter-salomon",
+              "productID": 4643336060976,
+              "role": "On street"
+            },
+            {
+              "kind": "product",
+              "merchantID": "extra-butter-salomon",
+              "productID": 7919493251255,
+              "role": "On street"
+            },
+            {
+              "kind": "product",
+              "merchantID": "feature-salomon",
+              "productID": 6753846853703,
+              "role": "On street"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "feature-salomon",
+              "role": "Shop the world",
+              "size": "wide"
+            }
+          ]
+        },
         {
           "id": "spotlight",
           "kind": "mediaCarousel",
@@ -977,53 +1066,6 @@
           ]
         },
         {
-          "id": "for-you",
-          "kind": "productRail",
-          "title": "For you in Trail to street",
-          "items": [
-            {
-              "kind": "product",
-              "merchantID": "feature-salomon",
-              "productID": 7029064368199
-            },
-            {
-              "kind": "product",
-              "merchantID": "feature-salomon",
-              "productID": 6753846919239
-            },
-            {
-              "kind": "product",
-              "merchantID": "extra-butter-salomon",
-              "productID": 8151144530103
-            },
-            {
-              "kind": "product",
-              "merchantID": "extra-butter-salomon",
-              "productID": 8349773922487
-            },
-            {
-              "kind": "product",
-              "merchantID": "feature-salomon",
-              "productID": 6753846853703
-            },
-            {
-              "kind": "product",
-              "merchantID": "extra-butter-salomon",
-              "productID": 7919493251255
-            },
-            {
-              "kind": "product",
-              "merchantID": "extra-butter-salomon",
-              "productID": 4643336060976
-            },
-            {
-              "kind": "product",
-              "merchantID": "feature-salomon",
-              "productID": 7243015094343
-            }
-          ]
-        },
-        {
           "id": "discover",
           "kind": "masonry",
           "title": "Discover more",
@@ -1060,6 +1102,56 @@
         "moma"
       ],
       "merchandisingBlocks": [
+        {
+          "id": "city-bento",
+          "kind": "bento",
+          "title": "The city archive",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 1424479363,
+              "role": "Study",
+              "size": "hero"
+            },
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 92039479320,
+              "role": "Study"
+            },
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 3933686169669,
+              "role": "Study"
+            },
+            {
+              "kind": "product",
+              "merchantID": "standards-manual",
+              "productID": 5842516163,
+              "role": "Study"
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 9604489248998,
+              "role": "Wear"
+            },
+            {
+              "kind": "product",
+              "merchantID": "lichen",
+              "productID": 11009838154046,
+              "role": "On the wall"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "standards-manual",
+              "role": "Shop the world",
+              "size": "wide"
+            }
+          ]
+        },
         {
           "id": "spotlight",
           "kind": "mediaCarousel",
@@ -1112,48 +1204,6 @@
           ]
         },
         {
-          "id": "for-you",
-          "kind": "productRail",
-          "title": "For you in New York graphics",
-          "items": [
-            {
-              "kind": "product",
-              "merchantID": "standards-manual",
-              "productID": 1424479363
-            },
-            {
-              "kind": "product",
-              "merchantID": "lichen",
-              "productID": 11009838154046
-            },
-            {
-              "kind": "product",
-              "merchantID": "moma",
-              "productID": 9604489248998
-            },
-            {
-              "kind": "product",
-              "merchantID": "draw-down",
-              "productID": 7804062892286
-            },
-            {
-              "kind": "product",
-              "merchantID": "standards-manual",
-              "productID": 92039479320
-            },
-            {
-              "kind": "product",
-              "merchantID": "standards-manual",
-              "productID": 3933686169669
-            },
-            {
-              "kind": "product",
-              "merchantID": "standards-manual",
-              "productID": 5842516163
-            }
-          ]
-        },
-        {
           "id": "discover",
           "kind": "masonry",
           "title": "Discover more",
@@ -1172,6 +1222,56 @@
         "rhode"
       ],
       "merchandisingBlocks": [
+        {
+          "id": "ritual-bento",
+          "kind": "bento",
+          "title": "The Sunday ritual",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "ceremonia",
+              "productID": 7219216580772,
+              "role": "Scrub",
+              "size": "hero"
+            },
+            {
+              "kind": "product",
+              "merchantID": "ceremonia",
+              "productID": 8178693210276,
+              "role": "Cleanse"
+            },
+            {
+              "kind": "product",
+              "merchantID": "ceremonia",
+              "productID": 6060165300388,
+              "role": "Condition"
+            },
+            {
+              "kind": "product",
+              "merchantID": "ceremonia",
+              "productID": 15464228749681,
+              "role": "Repair"
+            },
+            {
+              "kind": "product",
+              "merchantID": "ceremonia",
+              "productID": 14886355796337,
+              "role": "Refresh"
+            },
+            {
+              "kind": "product",
+              "merchantID": "ceremonia",
+              "productID": 15369056321905,
+              "role": "Dry"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "ceremonia",
+              "role": "Shop the world",
+              "size": "wide"
+            }
+          ]
+        },
         {
           "id": "spotlight",
           "kind": "mediaCarousel",
@@ -1204,33 +1304,6 @@
             {
               "kind": "merchant",
               "merchantID": "rhode"
-            }
-          ]
-        },
-        {
-          "id": "for-you",
-          "kind": "productRail",
-          "title": "For you in Scalp care",
-          "items": [
-            {
-              "kind": "product",
-              "merchantID": "ceremonia",
-              "productID": 7219216580772
-            },
-            {
-              "kind": "product",
-              "merchantID": "ceremonia",
-              "productID": 6060165300388
-            },
-            {
-              "kind": "product",
-              "merchantID": "ceremonia",
-              "productID": 14886355796337
-            },
-            {
-              "kind": "product",
-              "merchantID": "ceremonia",
-              "productID": 15369056321905
             }
           ]
         },
@@ -1276,6 +1349,62 @@
         "doiy"
       ],
       "merchandisingBlocks": [
+        {
+          "id": "material-bento",
+          "kind": "bento",
+          "title": "The material library",
+          "items": [
+            {
+              "kind": "product",
+              "merchantID": "house-of-leon",
+              "productID": 7873592721581,
+              "role": "Leather",
+              "size": "hero"
+            },
+            {
+              "kind": "product",
+              "merchantID": "house-of-leon",
+              "productID": 7873592688813,
+              "role": "Leather"
+            },
+            {
+              "kind": "product",
+              "merchantID": "fellow",
+              "productID": 2055410221171,
+              "role": "Steel"
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 8909829603558,
+              "role": "Steel"
+            },
+            {
+              "kind": "product",
+              "merchantID": "moma",
+              "productID": 9787655160038,
+              "role": "Steel"
+            },
+            {
+              "kind": "product",
+              "merchantID": "forom",
+              "productID": 9080102322307,
+              "role": "Wood"
+            },
+            {
+              "kind": "product",
+              "merchantID": "house-of-leon",
+              "productID": 7922656051373,
+              "role": "Wood"
+            },
+            {
+              "kind": "merchant",
+              "merchantID": "house-of-leon",
+              "role": "Shop the world",
+              "size": "wide"
+            }
+          ]
+        },
         {
           "id": "spotlight",
           "kind": "mediaCarousel",
@@ -1332,53 +1461,6 @@
             {
               "kind": "merchant",
               "merchantID": "forom"
-            }
-          ]
-        },
-        {
-          "id": "for-you",
-          "kind": "productRail",
-          "title": "For you in Material study",
-          "items": [
-            {
-              "kind": "product",
-              "merchantID": "house-of-leon",
-              "productID": 7873592721581
-            },
-            {
-              "kind": "product",
-              "merchantID": "moma",
-              "productID": 9604489248998
-            },
-            {
-              "kind": "product",
-              "merchantID": "fellow",
-              "productID": 2055410221171
-            },
-            {
-              "kind": "product",
-              "merchantID": "feature-salomon",
-              "productID": 6753846919239
-            },
-            {
-              "kind": "product",
-              "merchantID": "moma",
-              "productID": 9787655160038
-            },
-            {
-              "kind": "product",
-              "merchantID": "moma",
-              "productID": 8909829603558
-            },
-            {
-              "kind": "product",
-              "merchantID": "doiy",
-              "productID": 8300748931228
-            },
-            {
-              "kind": "product",
-              "merchantID": "feature-salomon",
-              "productID": 7243015094343
             }
           ]
         },
