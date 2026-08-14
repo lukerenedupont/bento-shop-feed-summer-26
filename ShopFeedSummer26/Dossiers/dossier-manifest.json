@@ -2,16 +2,85 @@
   "comment": "Maps dossier-lab keys to catalog products. Drop `<key>.json` dossiers and their mp4 films into this folder — DossierStore picks them up by filename at launch. Video files may use the dossier key or their own video key as filename; list them under videoFiles once known.",
   "source": "dossier-lab batch run 2026-08-13",
   "dossiers": [
-    { "key": "c1a5755114465ae3", "merchantID": "nocs", "productID": 10432692846871, "title": "Pro Issue 8x42 Waterproof Binoculars", "videoFiles": [] },
-    { "key": "9640e2f1575031fa", "merchantID": "nocs", "productID": 6591770722382, "title": "Zoom Tube 8x32", "videoFiles": [] },
-    { "key": "c8a9fa4adf7620e5", "merchantID": "feature-salomon", "productID": 7029064368199, "title": "XT-6 GTX — White/White/Footwear Silver", "videoFiles": [] },
-    { "key": "43e1392bea312d59", "merchantID": "extra-butter-salomon", "productID": 8151144530103, "title": "Salomon XT-Quest", "videoFiles": [] },
-    { "key": "42f78e36d9ef2495", "merchantID": "forom", "productID": 7914833051779, "title": "Lemieux Et Cie Amorphous Mirror Collection", "videoFiles": [] },
-    { "key": "c2521a166bc7d262", "merchantID": "forom", "productID": 9080102322307, "title": "Elyse Wall Mirror — Mahogany", "videoFiles": [] },
-    { "key": "4c8c4060a2d7d80d", "merchantID": "coming-soon", "productID": 9908030275890, "title": "Jelly Mirror", "videoFiles": [] },
-    { "key": "75852ab84594c04f", "merchantID": "coming-soon", "productID": 9603148841266, "title": "Gemini Mirror", "videoFiles": [] },
-    { "key": "b10dab5bbe527b0d", "merchantID": "standards-manual", "productID": 1424479363, "title": "NYCTA Graphics Standards Manual — Compact Edition", "videoFiles": [] },
-    { "key": "872b127ea23efd6b", "merchantID": "standards-manual", "productID": 5842516163, "title": "NASA Graphics Standards Manual", "videoFiles": [] },
-    { "key": "242bdd4568478f6d", "merchantID": "draw-down", "productID": 1591926554714, "title": "Theory of Type Design", "videoFiles": [] }
+    {
+      "key": "c1a5755114465ae3",
+      "merchantID": "nocs",
+      "productID": 10432692846871,
+      "title": "Pro Issue 8x42 Waterproof Binoculars",
+      "videoFiles": [
+        "0010a924323cfe68.mp4",
+        "155b65ea9bbcd9ad.mp4"
+      ]
+    },
+    {
+      "key": "9640e2f1575031fa",
+      "merchantID": "nocs",
+      "productID": 6591770722382,
+      "title": "Zoom Tube 8x32",
+      "videoFiles": []
+    },
+    {
+      "key": "c8a9fa4adf7620e5",
+      "merchantID": "feature-salomon",
+      "productID": 7029064368199,
+      "title": "XT-6 GTX — White/White/Footwear Silver",
+      "videoFiles": []
+    },
+    {
+      "key": "43e1392bea312d59",
+      "merchantID": "extra-butter-salomon",
+      "productID": 8151144530103,
+      "title": "Salomon XT-Quest",
+      "videoFiles": []
+    },
+    {
+      "key": "42f78e36d9ef2495",
+      "merchantID": "forom",
+      "productID": 7914833051779,
+      "title": "Lemieux Et Cie Amorphous Mirror Collection",
+      "videoFiles": []
+    },
+    {
+      "key": "c2521a166bc7d262",
+      "merchantID": "forom",
+      "productID": 9080102322307,
+      "title": "Elyse Wall Mirror — Mahogany",
+      "videoFiles": []
+    },
+    {
+      "key": "4c8c4060a2d7d80d",
+      "merchantID": "coming-soon",
+      "productID": 9908030275890,
+      "title": "Jelly Mirror",
+      "videoFiles": []
+    },
+    {
+      "key": "75852ab84594c04f",
+      "merchantID": "coming-soon",
+      "productID": 9603148841266,
+      "title": "Gemini Mirror",
+      "videoFiles": []
+    },
+    {
+      "key": "b10dab5bbe527b0d",
+      "merchantID": "standards-manual",
+      "productID": 1424479363,
+      "title": "NYCTA Graphics Standards Manual — Compact Edition",
+      "videoFiles": []
+    },
+    {
+      "key": "872b127ea23efd6b",
+      "merchantID": "standards-manual",
+      "productID": 5842516163,
+      "title": "NASA Graphics Standards Manual",
+      "videoFiles": []
+    },
+    {
+      "key": "242bdd4568478f6d",
+      "merchantID": "draw-down",
+      "productID": 1591926554714,
+      "title": "Theory of Type Design",
+      "videoFiles": []
+    }
   ]
 }
