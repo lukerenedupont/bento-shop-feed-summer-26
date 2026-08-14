@@ -18,10 +18,7 @@ struct BottomNavBar: View {
     private let tabPillHeight: CGFloat = 56
     private let buttonSize: CGFloat = 56
 
-    /// Pill bounce state — triggers a stretch+blur "breath" when back button appears/disappears
-    @State private var pillBounce: Bool = false
     /// Track previous depth to detect changes
-    @State private var previouslyDeep: Bool = false
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -42,33 +39,8 @@ struct BottomNavBar: View {
             // Nav bar content — layered so back/cart animate from behind tabs
             ZStack {
                 HStack(spacing: 20) {
-                    // Back button — slides out from behind the tab pill
-                    if coordinator.isNavigatedDeep {
-                        glassCircleButton(icon: .leftChevron) {
-                            withAnimation(.spring(response: PurlTune.value("Navigation/BottomNavBar.swift:spring:response:45:61", default: 0.35), dampingFraction: PurlTune.value("Navigation/BottomNavBar.swift:spring:dampingFraction:45:164", default: 0.8))) {
-                                coordinator.popCurrentPage()
-                            }
-                        }
-                        .transition(
-                            .asymmetric(
-                                insertion: .scale(scale: 0.5, anchor: .trailing)
-                                    .combined(with: .opacity)
-                                    .combined(with: .offset(x: PurlTune.value("Navigation/BottomNavBar.swift:offset:x:53:64", default: 40)))
-                                    .combined(with: .modifier(
-                                        active: BlurModifier(active: true),
-                                        identity: BlurModifier(active: false)
-                                    )),
-                                removal: .scale(scale: 0.5, anchor: .trailing)
-                                    .combined(with: .opacity)
-                                    .combined(with: .offset(x: PurlTune.value("Navigation/BottomNavBar.swift:offset:x:60:64", default: 40)))
-                                    .combined(with: .modifier(
-                                        active: BlurModifier(active: true),
-                                        identity: BlurModifier(active: false)
-                                    ))
-                            )
-                        )
-                    }
-
+                    // No back affordance here: pushed pages carry their own
+                    // back chip, and on root pages there is nowhere to go.
                     Spacer()
 
                     // Cart button — scales out from behind the tab pill
@@ -88,14 +60,8 @@ struct BottomNavBar: View {
                 }
                 .padding(.horizontal, PurlTune.value("Navigation/BottomNavBar.swift:padding:_:86:39", default: 20))
 
-                // Tab pill — always centered, bounces when depth changes
+                // Tab pill — always centered
                 tabPill
-                    .scaleEffect(
-                        x: pillBounce ? 1.06 : 1.0,
-                        y: pillBounce ? 0.97 : 1.0
-                    )
-                    .blur(radius: pillBounce ? 2.5 : 0)
-                    .animation(.spring(response: PurlTune.value("Navigation/BottomNavBar.swift:spring:response:95:50", default: 0.25), dampingFraction: PurlTune.value("Navigation/BottomNavBar.swift:spring:dampingFraction:95:153", default: 0.75)), value: pillBounce)
             }
             .padding(.bottom, PurlTune.value("Navigation/BottomNavBar.swift:padding:_:97:31", default: 28))
         }
@@ -104,18 +70,6 @@ struct BottomNavBar: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .animation(.spring(response: PurlTune.value("Navigation/BottomNavBar.swift:spring:response:102:38", default: 0.35), dampingFraction: PurlTune.value("Navigation/BottomNavBar.swift:spring:dampingFraction:102:142", default: 0.8)), value: coordinator.isNavigatedDeep)
         .animation(.spring(response: PurlTune.value("Navigation/BottomNavBar.swift:spring:response:103:38", default: 0.35), dampingFraction: PurlTune.value("Navigation/BottomNavBar.swift:spring:dampingFraction:103:142", default: 0.8)), value: showCart)
-        .onChange(of: coordinator.isNavigatedDeep) { _, isDeep in
-            if isDeep != previouslyDeep {
-                previouslyDeep = isDeep
-                // Trigger pill bounce — quick stretch+blur "breath"
-                pillBounce = true
-                HapticFeedback.light.fire()
-                Task { @MainActor in
-                    try? await Task.sleep(for: .milliseconds(120))
-                    pillBounce = false
-                }
-            }
-        }
     }
 
     // MARK: - Tab Pill
