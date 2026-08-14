@@ -33,7 +33,7 @@ struct TopicPage: View {
                 .environment(\.colorScheme, .dark)
                 .toolbar(.hidden, for: .navigationBar)
                 .safeAreaBar(edge: .top) {
-                    HStack {
+                    HStack(spacing: 8) {
                         FloatingBackButton {
                             // Bring the bar back the moment the pop starts —
                             // waiting for onDisappear reads as lag.
@@ -45,9 +45,12 @@ struct TopicPage: View {
                             }
                             coordinator.popCurrentPage()
                         }
-                        Spacer()
+                        // Subtopics share the chip's row — chrome, not
+                        // scrolled content, so they stay crisp above the
+                        // scroll-edge blur and reclaim dead atmosphere.
+                        SubtopicPillRail(topic: topic, stories: stories, merchants: merchants)
                     }
-                    .padding(.horizontal, GravitySpacing.space16)
+                    .padding(.leading, GravitySpacing.space16)
                     .padding(.vertical, GravitySpacing.space4)
                 }
                 .onAppear {

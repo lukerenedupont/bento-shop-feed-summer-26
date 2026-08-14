@@ -197,85 +197,23 @@ struct TopicLandingView: View {
                 endPoint: .bottom
             )
 
-            VStack(alignment: .leading, spacing: 14) {
-                // Wireframe: display title is centered, heavy, tightly tracked.
-                Text(topic.label)
-                    .font(.system(size: 40, weight: .heavy, design: .default))
-                    .tracking(-1.4)
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal, 16)
-
-                if showsSubtopicRail {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(subtopicPills, id: \.storyID) { subtopic in
-                            let anchor = anchorProduct(for: subtopic)
-                            Button {
-                                HapticFeedback.light.fire()
-                                coordinator.pushRoute(.story(storyId: subtopic.storyID))
-                            } label: {
-                                HStack(spacing: 8) {
-                                    if let anchor {
-                                        // Real catalog imagery, never generated:
-                                        // the chip visual is the anchor SKU.
-                                        ProductImageView(product: anchor.product, merchant: anchor.merchant, fallbackIndex: 0)
-                                            .frame(width: 32, height: 32)
-                                            .background(.white)
-                                            .clipShape(Circle())
-                                            .overlay { Circle().strokeBorder(.white.opacity(0.3), lineWidth: 0.5) }
-                                    }
-                                    Text(subtopic.label)
-                                        .font(.system(size: 14, weight: .semibold))
-                                        .foregroundStyle(.white)
-                                }
-                                .padding(.leading, anchor != nil ? 6 : 15)
-                                .padding(.trailing, 15)
-                                .frame(height: 42)
-                                .background(.black.opacity(0.28), in: Capsule())
-                                .overlay { Capsule().strokeBorder(.white.opacity(0.22), lineWidth: 0.5) }
-                                .shadow(color: .black.opacity(0.16), radius: 10, y: 4)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 4)
-                }
-                }
-            }
-            .padding(.bottom, 4)
         }
         // Cover topics get a tall editorial header; coverless landings stay
         // compact instead of reserving empty atmosphere.
-        .frame(height: effectiveCoverImageName != nil || headerFilm != nil ? 500 : 220)
+        .frame(height: effectiveCoverImageName != nil || headerFilm != nil ? 410 : 220)
+        // Display title sits a touch below center of the atmosphere — the
+        // bottom edge is now free for the feed to pull up underneath.
+        .overlay {
+            Text(topic.label)
+                .font(.system(size: 40, weight: .heavy, design: .default))
+                .tracking(-1.4)
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 16)
+                .offset(y: 50)
+        }
     }
-
-    /// Curated subtopic pills; falls back to story titles for topics that
-    /// have not been given editorial subtopics yet.
-    private var subtopicPills: [FeedTopic.Subtopic] {
-        if let subtopics = topic.subtopics, !subtopics.isEmpty { return subtopics }
-        return stories.map { .init(label: shortLabel(for: $0), storyID: $0.id) }
-    }
-
-    /// Resolves a subtopic's anchor SKU for the chip visual. Returns nil for
-    /// subtopics without anchors, which render as text-only pills.
-    private func anchorProduct(for subtopic: FeedTopic.Subtopic) -> ResolvedStoryProduct? {
-        guard let merchantID = subtopic.anchorMerchantID,
-              let productID = subtopic.anchorProductID,
-              let merchant = merchants.first(where: { $0.id == merchantID }),
-              let product = merchant.products.first(where: { $0.id == productID }) else { return nil }
-        return ResolvedStoryProduct(merchant: merchant, product: product)
-    }
-
-    /// A single-story landing (a drilled-in subcategory) hides chrome that
-    /// would only link back to itself.
-    private var isSingleStoryLanding: Bool {
-        stories.count == 1 && topic.subtopics == nil
-    }
-
-    private var showsSubtopicRail: Bool { !isSingleStoryLanding }
 
     private var merchandisingBlocks: [FeedTopic.MerchandisingBlock] {
         if let blocks = topic.merchandisingBlocks, !blocks.isEmpty { return blocks }
@@ -512,10 +450,6 @@ struct TopicLandingView: View {
         return (left, right)
     }
 
-    private func shortLabel(for story: FeedStory) -> String {
-        let words = story.title.split(separator: " ")
-        return words.prefix(3).joined(separator: " ")
-    }
 }
 
 private struct TopicFeatureCard: View {
