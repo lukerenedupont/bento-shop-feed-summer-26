@@ -162,7 +162,10 @@ struct HomePage: View {
         Button {
             guard topic.id != "for-you" else { return }
             HapticFeedback.light.fire()
-            coordinator.pushRoute(.topic(topicId: topic.id, sourceStoryId: topic.storyIDs?.first))
+            // No sourceStoryId: pills aren't zoom sources. Anchoring the
+            // zoom to the topic's first story card — usually offscreen —
+            // made pages fly in from random directions.
+            coordinator.pushRoute(.topic(topicId: topic.id, sourceStoryId: nil))
         } label: {
             topicLabel(topic)
                 .background {

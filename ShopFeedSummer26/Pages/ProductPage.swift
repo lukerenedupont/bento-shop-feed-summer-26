@@ -117,6 +117,10 @@ struct ProductPage: View {
                 }
             }
             .ignoresSafeArea(edges: .top)
+            // The floating back chip's top bar triggers a scroll-edge blur
+            // that smears the merchant identity row; the branded header
+            // provides its own contrast, so hide the effect entirely.
+            .scrollEdgeEffectHidden(for: .top)
             .onScrollGeometryChange(for: CGFloat.self) { geo in
                 geo.contentOffset.y
             } action: { _, offset in
@@ -157,10 +161,13 @@ struct ProductPage: View {
             Color.clear.frame(height: PurlTune.value("Pages/ProductPage.swift:frame:height:154:39", default: 63)) // status bar + dynamic island clearance
 
             Group {
-                // Merchant info left-aligned, overflow trailing
-                HStack {
+                // Merchant info centered — the floating back chip owns the
+                // leading corner, overflow stays trailing.
+                ZStack {
                     merchantInfoButton(merchant: merchant)
+                        .frame(maxWidth: .infinity)
 
+                    HStack {
                     Spacer()
 
                     GravityIcon.overflow.image
@@ -169,6 +176,7 @@ struct ProductPage: View {
                         .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:166:42", default: GravityColors.text, options: GravityColors.purlTuneColorOptions))
                         .frame(width: PurlTune.value("Pages/ProductPage.swift:frame:width:167:39", default: 44), height: PurlTune.value("Pages/ProductPage.swift:frame:height:167:122", default: 44))
                         .glassEffect(.regular.interactive(), in: .circle)
+                    }
                 }
             }
             .padding(.horizontal, contentPadding)

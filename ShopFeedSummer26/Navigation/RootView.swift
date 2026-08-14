@@ -103,10 +103,15 @@ struct RootView: View {
         case .story(let storyId):
             StoryTopicPage(storyID: storyId)
         case .topic(let topicId, let sourceStoryId):
-            // System zoom from the feed card that opened this world; pill-
-            // opened topics (no source registered) fall back to a plain push.
-            TopicPage(topicId: topicId)
-                .navigationTransition(.zoom(sourceID: "topic-hero-\(sourceStoryId ?? topicId)", in: namespace))
+            // System zoom only when a feed card was the actual tap target;
+            // any other entry (pills, deep links) gets the standard push so
+            // topics never zoom from an unrelated offscreen anchor.
+            if let sourceStoryId {
+                TopicPage(topicId: topicId)
+                    .navigationTransition(.zoom(sourceID: "topic-hero-\(sourceStoryId)", in: namespace))
+            } else {
+                TopicPage(topicId: topicId)
+            }
         case .deliveries:
             DeliveriesPage(namespace: namespace)
                 .floatingBackChip(coordinator)
