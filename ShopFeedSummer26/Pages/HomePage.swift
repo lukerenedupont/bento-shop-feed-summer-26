@@ -407,7 +407,7 @@ struct HomePage: View {
             }
         }
         .padding(16)
-        .frame(width: width)
+        .frame(width: width, height: 208, alignment: .top)
         .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
         .shadow(color: .black.opacity(0.10), radius: 18, y: 10)
     }
