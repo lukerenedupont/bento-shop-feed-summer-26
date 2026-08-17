@@ -3,6 +3,11 @@ import SwiftUI
 
 /// Home feed — scrollable merchant feed cards with focused topic feeds.
 struct HomePage: View {
+    private enum ForYouUtilityPresentation {
+        case carouselOnly
+        case carouselAndFullHeight
+    }
+
     /// Shared with `RootView` so a tapped feed card can zoom into the
     /// original full-screen topic content.
     var namespace: Namespace.ID
@@ -39,6 +44,9 @@ struct HomePage: View {
 
     private let retargetingCardHeight: CGFloat = 177
     private let utilityStoryID = "for-you-utility-hub"
+    /// Keep the full-height exploration available without placing it in the
+    /// live feed. Switching this recipe restores the prototype for comparison.
+    private let forYouUtilityPresentation: ForYouUtilityPresentation = .carouselOnly
 
     private var topics: [FeedTopic] { PersonalizedFeedCatalog.current.topics }
     private var navigationTopics: [FeedCategory] {
@@ -148,8 +156,10 @@ struct HomePage: View {
                     LazyVStack(spacing: 16) {
                         if selectedTopicID == "for-you" {
                             feedUtilityShelf(containerWidth: geo.size.width)
-                            fullHeightUtilityCard(width: cardWidth, height: cardHeight)
-                                .id(utilityStoryID)
+                            if forYouUtilityPresentation == .carouselAndFullHeight {
+                                fullHeightUtilityCard(width: cardWidth, height: cardHeight)
+                                    .id(utilityStoryID)
+                            }
                         }
 
                         ForEach(focusedStories) { story in
