@@ -258,8 +258,8 @@ struct StoryFeedCard: View {
                     let item = items[safeIndex]
 
                     ZStack(alignment: .leading) {
-                        productStackLayer(offset: 16, scale: 0.92)
-                        productStackLayer(offset: 8, scale: 0.96)
+                        productStackLayer(offset: 36, scale: 0.92)
+                        productStackLayer(offset: 18, scale: 0.96)
 
                         productSummaryCard(item)
                             .frame(width: geometry.size.width - 16)
