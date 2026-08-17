@@ -32,6 +32,7 @@ struct HomePage: View {
     @State private var visibleStoryID: String?
     @State private var isFeedScrolling = false
     @State private var expandingStoryID: String?
+    @State private var notificationIndex = 0
 
     private var topics: [FeedTopic] { PersonalizedFeedCatalog.current.topics }
     /// Header destinations mirror the For You card order exactly. This keeps
@@ -198,42 +199,7 @@ struct HomePage: View {
         let rails = ["Recently viewed", "Buy again", "Picked for you"]
 
         return VStack(spacing: 18) {
-            Button {
-                HapticFeedback.light.fire()
-            } label: {
-                HStack(spacing: 14) {
-                    Circle()
-                        .fill(Color.black.opacity(0.08))
-                        .frame(width: 52, height: 52)
-                        .overlay {
-                            Image(systemName: "dollarsign")
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundStyle(.black)
-                        }
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Get up to $100 Shop Cash")
-                            .font(.system(size: 18, weight: .semibold))
-                            .minimumScaleFactor(0.82)
-                        Text("Plus flash deals and exclusive offers")
-                            .font(.system(size: 15))
-                            .minimumScaleFactor(0.82)
-                    }
-                    .foregroundStyle(.black)
-                    .lineLimit(1)
-
-                    Spacer(minLength: 4)
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(.black)
-                }
-                .padding(.horizontal, 18)
-                .frame(height: 92)
-                .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
-                .shadow(color: .black.opacity(0.08), radius: 18, y: 10)
-            }
-            .buttonStyle(PressScaleButtonStyle())
-            .padding(.horizontal, 16)
+            feedNotificationStack
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
@@ -256,6 +222,80 @@ struct HomePage: View {
         .background(Color(red: 0.95, green: 0.95, blue: 0.95))
         .clipShape(RoundedRectangle(cornerRadius: 32, style: .continuous))
         .padding(.horizontal, 8)
+    }
+
+    private var feedNotifications: [(title: String, subtitle: String, icon: String)] {
+        [
+            ("Get up to $100 Shop Cash", "Plus flash deals and exclusive offers", "dollarsign"),
+            ("Your order is on the way", "Track your delivery from Design Within Reach", "shippingbox"),
+            ("20% off your saved picks", "A limited-time offer from shops you follow", "tag"),
+        ]
+    }
+
+    private var feedNotificationStack: some View {
+        let notification = feedNotifications[notificationIndex % feedNotifications.count]
+
+        return ZStack(alignment: .top) {
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .fill(.white)
+                .frame(height: 92)
+                .padding(.horizontal, 24)
+                .offset(y: 16)
+                .shadow(color: .black.opacity(0.07), radius: 18, y: 10)
+
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .fill(.white)
+                .frame(height: 92)
+                .padding(.horizontal, 12)
+                .offset(y: 8)
+                .shadow(color: .black.opacity(0.07), radius: 16, y: 8)
+
+            Button {
+                HapticFeedback.light.fire()
+                withAnimation(.smooth(duration: 0.28)) {
+                    notificationIndex = (notificationIndex + 1) % feedNotifications.count
+                }
+            } label: {
+                HStack(spacing: 14) {
+                    Circle()
+                        .fill(Color.black.opacity(0.08))
+                        .frame(width: 52, height: 52)
+                        .overlay {
+                            Image(systemName: notification.icon)
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundStyle(.black)
+                                .contentTransition(.symbolEffect(.replace))
+                        }
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(notification.title)
+                            .font(.system(size: 18, weight: .semibold))
+                        Text(notification.subtitle)
+                            .font(.system(size: 15))
+                    }
+                    .foregroundStyle(.black)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.78)
+                    .contentTransition(.opacity)
+
+                    Spacer(minLength: 4)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.black)
+                }
+                .padding(.horizontal, 18)
+                .frame(height: 92)
+                .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .strokeBorder(Color.black.opacity(0.05), lineWidth: 0.5)
+                }
+                .shadow(color: .black.opacity(0.09), radius: 18, y: 10)
+            }
+            .buttonStyle(PressScaleButtonStyle())
+        }
+        .frame(height: 108)
+        .padding(.horizontal, 16)
     }
 
     private func utilityProductRail(
