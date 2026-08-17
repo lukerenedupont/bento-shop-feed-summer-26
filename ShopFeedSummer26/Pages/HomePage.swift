@@ -198,12 +198,81 @@ struct HomePage: View {
 
     private func feedUtilityShelf(containerWidth: CGFloat) -> some View {
         VStack(spacing: 22) {
+            feedVideoProductMosaic(containerWidth: containerWidth)
             feedNotificationStack
             retargetingRailCarousel(containerWidth: containerWidth)
         }
         .padding(.top, 18)
         .padding(.bottom, 12)
         .frame(width: containerWidth)
+    }
+
+    private func feedVideoProductMosaic(containerWidth: CGFloat) -> some View {
+        let featuredItems = Array(utilityProducts.prefix(4))
+        let cardWidth = containerWidth - 32
+        let gap: CGFloat = 2
+        let cell = (cardWidth - gap) / 2
+        let cardHeight = cell * 3 + gap * 2
+        let filmURLs = featuredItems.flatMap {
+            $0.product.ambientFilmURLs(merchantID: $0.merchant.id)
+        }
+
+        return Group {
+            if let lead = featuredItems.first, featuredItems.count == 4 {
+                GeometryReader { _ in
+                    ZStack(alignment: .topLeading) {
+                        AmbientProductVideo(
+                            videoURLs: filmURLs,
+                            posterImageURL: lead.product.imageURL,
+                            playbackGroupID: "feed-utility-mosaic"
+                        )
+                        .frame(width: cell, height: cell * 2 + gap)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            if let story = focusedStories.first {
+                                openTopic(for: story)
+                            }
+                        }
+
+                        mosaicProductTile(featuredItems[0], size: cell)
+                            .offset(x: cell + gap)
+
+                        mosaicProductTile(featuredItems[1], size: cell)
+                            .offset(x: cell + gap, y: cell + gap)
+
+                        mosaicProductTile(featuredItems[2], size: cell)
+                            .offset(y: (cell + gap) * 2)
+
+                        mosaicProductTile(featuredItems[3], size: cell)
+                            .offset(x: cell + gap, y: (cell + gap) * 2)
+                    }
+                }
+                .frame(width: cardWidth, height: cardHeight)
+                .background(.black)
+                .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .strokeBorder(.white.opacity(0.14), lineWidth: 0.5)
+                }
+                .shadow(color: .black.opacity(0.22), radius: 18, y: 10)
+            }
+        }
+    }
+
+    private func mosaicProductTile(_ item: ResolvedStoryProduct, size: CGFloat) -> some View {
+        Button {
+            HapticFeedback.light.fire()
+            coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
+        } label: {
+            ProductImageView(product: item.product, merchant: item.merchant)
+                .frame(width: size, height: size)
+                .background(.white)
+                .clipped()
+                .overlay {
+                    Rectangle().strokeBorder(.black.opacity(0.16), lineWidth: 0.5)
+                }
+        }
+        .buttonStyle(.plain)
     }
 
     private func retargetingRailCarousel(containerWidth: CGFloat) -> some View {
