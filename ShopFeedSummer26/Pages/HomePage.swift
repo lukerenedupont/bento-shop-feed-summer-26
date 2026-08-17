@@ -197,14 +197,31 @@ struct HomePage: View {
     private func feedUtilityShelf(containerWidth: CGFloat) -> some View {
         VStack(spacing: 22) {
             feedNotificationStack
-            utilityProductRail(
-                title: "Recently viewed",
-                products: Array(utilityProducts.prefix(8))
-            )
+            retargetingRailCarousel(containerWidth: containerWidth)
         }
         .padding(.top, 18)
         .padding(.bottom, 12)
         .frame(width: containerWidth)
+    }
+
+    private func retargetingRailCarousel(containerWidth: CGFloat) -> some View {
+        let railWidth = min(max(containerWidth - 64, 300), 360)
+        let railTitles = ["Recently viewed", "Buy again", "Saved for later"]
+
+        return ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(Array(railTitles.enumerated()), id: \.offset) { index, title in
+                    utilityProductRail(
+                        title: title,
+                        products: Array(utilityProducts.dropFirst(index * 3).prefix(3)),
+                        width: railWidth
+                    )
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+        }
+        .scrollClipDisabled()
     }
 
     private var feedNotifications: [(title: String, subtitle: String, icon: String)] {
@@ -276,44 +293,43 @@ struct HomePage: View {
 
     private func utilityProductRail(
         title: String,
-        products: [ResolvedStoryProduct]
+        products: [ResolvedStoryProduct],
+        width: CGFloat
     ) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Text(title)
                     .font(.system(size: 24, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.black)
                 Spacer()
                 Image(systemName: "arrow.right")
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.black)
                     .frame(width: 42, height: 42)
-                    .background(.black.opacity(0.24), in: Circle())
+                    .background(Color.black.opacity(0.05), in: Circle())
             }
-            .padding(.horizontal, 16)
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 10) {
-                    ForEach(products) { item in
-                        Button {
-                            HapticFeedback.light.fire()
-                            coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
-                        } label: {
-                            ProductCard(
-                                image: nil,
-                                imageURL: item.product.imageURL,
-                                priceBadge: formatPrice(item.product.price),
-                                showFavoriteButton: true
-                            )
-                            .frame(width: 132)
-                        }
-                        .buttonStyle(PressScaleButtonStyle())
+            HStack(spacing: 10) {
+                ForEach(products) { item in
+                    Button {
+                        HapticFeedback.light.fire()
+                        coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
+                    } label: {
+                        ProductCard(
+                            image: nil,
+                            imageURL: item.product.imageURL,
+                            priceBadge: formatPrice(item.product.price),
+                            showFavoriteButton: true
+                        )
                     }
+                    .buttonStyle(PressScaleButtonStyle())
                 }
-                .padding(.horizontal, 16)
             }
-            .scrollClipDisabled()
         }
+        .padding(20)
+        .frame(width: width)
+        .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .shadow(color: .black.opacity(0.10), radius: 18, y: 10)
     }
 
     /// Pulls each card gently back toward the viewport center while it moves.
