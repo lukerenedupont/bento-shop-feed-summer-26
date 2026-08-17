@@ -318,12 +318,12 @@ struct HomePage: View {
         let notification = feedNotifications[notificationIndex % feedNotifications.count]
 
         return ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
                 .fill(.white)
-                .frame(height: 92)
-                .padding(.horizontal, 14)
-                .offset(y: 10)
-                .shadow(color: .black.opacity(0.12), radius: 18, y: 10)
+                .frame(height: 72)
+                .padding(.horizontal, 12)
+                .offset(y: 7)
+                .shadow(color: .black.opacity(0.08), radius: 12, y: 7)
 
             Button {
                 HapticFeedback.light.fire()
@@ -334,19 +334,19 @@ struct HomePage: View {
                 HStack(spacing: 14) {
                     Circle()
                         .fill(Color.black.opacity(0.08))
-                        .frame(width: 52, height: 52)
+                        .frame(width: 40, height: 40)
                         .overlay {
                             Image(systemName: notification.icon)
-                                .font(.system(size: 20, weight: .semibold))
+                                .font(.system(size: 16, weight: .semibold))
                                 .foregroundStyle(.black)
                                 .contentTransition(.symbolEffect(.replace))
                         }
 
                     VStack(alignment: .leading, spacing: 2) {
                         Text(notification.title)
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.system(size: 16, weight: .semibold))
                         Text(notification.subtitle)
-                            .font(.system(size: 15))
+                            .font(.system(size: 14))
                     }
                     .foregroundStyle(.black)
                     .lineLimit(1)
@@ -355,22 +355,22 @@ struct HomePage: View {
 
                     Spacer(minLength: 4)
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(.black)
                 }
-                .padding(.horizontal, 18)
-                .frame(height: 92)
-                .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+                .padding(.horizontal, 14)
+                .frame(height: 72)
+                .background(.white, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
                 .overlay {
-                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
                         .strokeBorder(Color.black.opacity(0.05), lineWidth: 0.5)
                 }
-                .shadow(color: .black.opacity(0.09), radius: 18, y: 10)
+                .shadow(color: .black.opacity(0.08), radius: 12, y: 7)
             }
             .buttonStyle(PressScaleButtonStyle())
         }
-        .frame(height: 102)
-        .padding(.horizontal, 12)
+        .frame(height: 79)
+        .padding(.horizontal, 16)
     }
 
     private func utilityProductRail(
