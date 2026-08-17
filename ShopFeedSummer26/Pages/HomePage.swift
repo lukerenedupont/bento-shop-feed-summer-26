@@ -32,13 +32,13 @@ struct HomePage: View {
     @State private var visibleStoryID: String?
     @State private var isFeedScrolling = false
     @State private var expandingStoryID: String?
-    @State private var notificationIndex = 0
     @State private var categoryMoveDirection = 1
     @State private var topicRailOffset: CGFloat = 0
     @State private var topicRailContentWidth: CGFloat = 0
     @GestureState private var topicRailDragOffset: CGFloat = 0
 
     private let retargetingCardHeight: CGFloat = 177
+    private let utilityStoryID = "for-you-utility-hub"
 
     private var topics: [FeedTopic] { PersonalizedFeedCatalog.current.topics }
     private var navigationTopics: [FeedCategory] {
@@ -63,6 +63,9 @@ struct HomePage: View {
     }
 
     private var activeFeedStory: FeedStory? {
+        if visibleStoryID == utilityStoryID {
+            return nil
+        }
         if let visibleStoryID,
            let visibleStory = focusedStories.first(where: { $0.id == visibleStoryID }) {
             return visibleStory
@@ -145,6 +148,8 @@ struct HomePage: View {
                     LazyVStack(spacing: 16) {
                         if selectedTopicID == "for-you" {
                             feedUtilityShelf(containerWidth: geo.size.width)
+                            fullHeightUtilityCard(width: cardWidth, height: cardHeight)
+                                .id(utilityStoryID)
                         }
 
                         ForEach(focusedStories) { story in
@@ -198,10 +203,7 @@ struct HomePage: View {
     }
 
     private func feedUtilityShelf(containerWidth: CGFloat) -> some View {
-        VStack(spacing: 22) {
-            feedNotificationStack
-            retargetingRailCarousel(containerWidth: containerWidth)
-        }
+        retargetingRailCarousel(containerWidth: containerWidth)
         .padding(.top, 18)
         .padding(.bottom, 12)
         .frame(width: containerWidth)
@@ -222,15 +224,11 @@ struct HomePage: View {
                     cartSyncCard(item: cartItem, width: railWidth)
                 }
 
+                orderTrackingRailCard(width: railWidth)
+
                 utilityProductRail(
                     title: "Recently viewed",
                     products: Array(utilityProducts.prefix(3)),
-                    width: railWidth
-                )
-
-                utilityProductRail(
-                    title: "Saved for later",
-                    products: Array(utilityProducts.dropFirst(6).prefix(3)),
                     width: railWidth
                 )
             }
@@ -241,7 +239,9 @@ struct HomePage: View {
     }
 
     private var cartSyncItem: ResolvedStoryProduct? {
-        utilityProducts.min { lhs, rhs in
+        utilityProducts
+            .filter { numericPrice($0.product.price) > 0 }
+            .min { lhs, rhs in
             numericPrice(lhs.product.price) < numericPrice(rhs.product.price)
         }
     }
@@ -315,68 +315,231 @@ struct HomePage: View {
     }
 
     @ViewBuilder
-    private var feedNotificationStack: some View {
-        if !deliveryMerchants.isEmpty {
-            let merchant = deliveryMerchants[notificationIndex % deliveryMerchants.count]
+    private func orderTrackingRailCard(width: CGFloat) -> some View {
+        if let merchant = deliveryMerchants.first {
             let deliveryProducts = Array(merchant.products.prefix(2))
-            let windows = ["Arriving today 3–6pm", "Arriving tomorrow", "Out for delivery"]
-            let arrival = windows[notificationIndex % windows.count]
-
-            ZStack(alignment: .top) {
-                RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .fill(.white)
-                    .frame(height: 74)
-                    .padding(.horizontal, 26)
-                    .offset(y: 9)
-                    .shadow(color: .black.opacity(0.07), radius: 12, y: 8)
-
-                Button {
-                    HapticFeedback.light.fire()
-                    withAnimation(.smooth(duration: 0.28)) {
-                        notificationIndex = (notificationIndex + 1) % deliveryMerchants.count
+            Button {
+                HapticFeedback.light.fire()
+                coordinator.navigateToPage(1)
+            } label: {
+                VStack(alignment: .leading, spacing: 14) {
+                    HStack {
+                        Text("Your orders")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundStyle(.black)
+                        Spacer()
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(.black)
+                            .frame(width: 36, height: 36)
+                            .background(Color.black.opacity(0.05), in: Circle())
                     }
-                } label: {
-                    HStack(spacing: 12) {
-                        MerchantLogoImage(merchant: merchant, size: 44)
+
+                    HStack(spacing: 10) {
+                        MerchantLogoImage(merchant: merchant, size: 48)
 
                         VStack(alignment: .leading, spacing: 2) {
                             Text(merchant.displayName)
-                                .font(.system(size: 15, weight: .regular))
+                                .font(.system(size: 14))
                                 .foregroundStyle(.black.opacity(0.58))
-                            Text(arrival)
-                                .font(.system(size: 17, weight: .semibold))
+                            Text("Arriving today 3–6pm")
+                                .font(.system(size: 16, weight: .semibold))
                                 .foregroundStyle(.black)
                         }
                         .lineLimit(1)
-                        .minimumScaleFactor(0.82)
-                        .contentTransition(.opacity)
+                        .minimumScaleFactor(0.78)
 
-                        Spacer(minLength: 4)
+                        Spacer(minLength: 2)
 
                         HStack(spacing: 6) {
                             ForEach(deliveryProducts) { product in
                                 ProductImageView(product: product, merchant: merchant)
-                                    .frame(width: 44, height: 44)
+                                    .frame(width: 48, height: 48)
                                     .background(.white)
                                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                             }
                         }
-                        .contentTransition(.opacity)
                     }
-                    .padding(.horizontal, 14)
-                    .frame(height: 74)
-                    .background(.white, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 24, style: .continuous)
-                            .strokeBorder(Color.black.opacity(0.05), lineWidth: 0.5)
-                    }
-                    .shadow(color: .black.opacity(0.08), radius: 12, y: 7)
                 }
-                .buttonStyle(PressScaleButtonStyle())
+                .padding(16)
+                .frame(width: width, height: retargetingCardHeight, alignment: .top)
+                .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+                .shadow(color: .black.opacity(0.10), radius: 18, y: 10)
             }
-            .frame(height: 83)
-            .padding(.horizontal, 16)
+            .buttonStyle(PressScaleButtonStyle())
         }
+    }
+
+    /// A second prototype of the same utility information at feed-card scale.
+    /// It deliberately reuses the order, cart, and product primitives from the
+    /// compact rail so the two treatments can be compared without data drift.
+    private func fullHeightUtilityCard(width: CGFloat, height: CGFloat) -> some View {
+        let buyAgain = Array(utilityProducts.dropFirst(3).prefix(3))
+        let recentlyViewed = Array(utilityProducts.prefix(4))
+        let isActive = visibleStoryID == nil || visibleStoryID == utilityStoryID
+
+        return ZStack {
+            LinearGradient(
+                colors: [
+                    deliveryMerchants.first?.brandColor.opacity(0.24) ?? Color.black.opacity(0.06),
+                    Color(hex: 0xF2F1ED),
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+
+            VStack(alignment: .leading, spacing: 14) {
+                Text("Your Shop right now")
+                    .font(FeedEditorialTypography.titleFont)
+                    .tracking(FeedEditorialTypography.titleTracking)
+                    .lineSpacing(FeedEditorialTypography.titleLineSpacing)
+                    .foregroundStyle(.black)
+                    .lineLimit(2)
+
+                if let merchant = deliveryMerchants.first {
+                    fullHeightOrderSummary(merchant: merchant)
+                }
+
+                if let cartItem = cartSyncItem {
+                    fullHeightCartSummary(item: cartItem)
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Buy again")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(.black)
+
+                    HStack(spacing: 8) {
+                        ForEach(buyAgain) { item in
+                            Button {
+                                HapticFeedback.light.fire()
+                                coordinator.pushRoute(
+                                    .product(merchantId: item.merchant.id, productId: item.product.id)
+                                )
+                            } label: {
+                                ProductCard(
+                                    image: nil,
+                                    imageURL: item.product.imageURL,
+                                    priceBadge: formatPrice(item.product.price),
+                                    showFavoriteButton: true
+                                )
+                            }
+                            .buttonStyle(PressScaleButtonStyle())
+                        }
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Recently viewed")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(.black)
+
+                    HStack(spacing: 8) {
+                        ForEach(recentlyViewed) { item in
+                            Button {
+                                HapticFeedback.light.fire()
+                                coordinator.pushRoute(
+                                    .product(merchantId: item.merchant.id, productId: item.product.id)
+                                )
+                            } label: {
+                                ProductImageView(product: item.product, merchant: item.merchant)
+                                    .frame(width: 58, height: 58)
+                                    .background(.white)
+                                    .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 15, style: .continuous)
+                                            .strokeBorder(Color.black.opacity(0.05), lineWidth: 0.5)
+                                    }
+                            }
+                            .buttonStyle(PressScaleButtonStyle())
+                        }
+                    }
+                }
+            }
+            .padding(20)
+            .opacity(isActive ? 1 : 0)
+            .animation(.easeInOut(duration: 0.2), value: isActive)
+        }
+        .frame(width: width, height: height, alignment: .topLeading)
+        .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous)
+                .strokeBorder(.white.opacity(0.24), lineWidth: 0.5)
+        }
+        .gravityShadow(GravityShadows.medium)
+    }
+
+    private func fullHeightOrderSummary(merchant: SampleMerchant) -> some View {
+        let deliveryProducts = Array(merchant.products.prefix(2))
+
+        return Button {
+            HapticFeedback.light.fire()
+            coordinator.navigateToPage(1)
+        } label: {
+            HStack(spacing: 10) {
+                MerchantLogoImage(merchant: merchant, size: 48)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(merchant.displayName)
+                        .font(.system(size: 14))
+                        .foregroundStyle(.black.opacity(0.58))
+                    Text("Arriving today 3–6pm")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.black)
+                }
+                .lineLimit(1)
+                .minimumScaleFactor(0.78)
+
+                Spacer(minLength: 2)
+
+                HStack(spacing: 5) {
+                    ForEach(deliveryProducts) { product in
+                        ProductImageView(product: product, merchant: merchant)
+                            .frame(width: 44, height: 44)
+                            .background(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
+                    }
+                }
+            }
+            .padding(12)
+            .background(.white.opacity(0.94), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        }
+        .buttonStyle(PressScaleButtonStyle())
+    }
+
+    private func fullHeightCartSummary(item: ResolvedStoryProduct) -> some View {
+        Button {
+            HapticFeedback.light.fire()
+            coordinator.navigateToPage(4)
+        } label: {
+            HStack(spacing: 12) {
+                ProductImageView(product: item.product, merchant: item.merchant)
+                    .frame(width: 64, height: 64)
+                    .background(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Cart ready")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(.black)
+                    Text("Subtotal \(formatPrice(item.product.price))")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.black.opacity(0.58))
+                }
+
+                Spacer(minLength: 4)
+
+                Text("Checkout")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 13)
+                    .frame(height: 36)
+                    .background(.black, in: Capsule())
+            }
+            .padding(12)
+            .background(.white.opacity(0.94), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        }
+        .buttonStyle(PressScaleButtonStyle())
     }
 
     private func utilityProductRail(
