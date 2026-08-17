@@ -150,6 +150,8 @@ struct HomePage: View {
 
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(spacing: 16) {
+                        feedUtilityShelf(containerWidth: geo.size.width)
+
                         ForEach(focusedStories) { story in
                             paginatedFeedCard(
                                 story,
@@ -160,7 +162,7 @@ struct HomePage: View {
                         }
                     }
                     .scrollTargetLayout()
-                    .padding(.top, max((geo.size.height - cardHeight) / 2 - 40, 8))
+                    .padding(.top, 8)
                     .padding(.bottom, max((geo.size.height - cardHeight) / 2, 8))
                 }
                 .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
@@ -172,18 +174,129 @@ struct HomePage: View {
                     coordinator.updateScrollOffset(offset)
                 }
             }
-            .onAppear {
-                if visibleStoryID == nil {
-                    visibleStoryID = focusedStories.first?.id
-                }
-            }
             .onChange(of: focusedStories.map(\.id)) { _, storyIDs in
-                guard let visibleStoryID, storyIDs.contains(visibleStoryID) else {
-                    self.visibleStoryID = storyIDs.first
+                // A nil position means the shopper is still in the utility
+                // shelf above the flick-and-stick feed. Never jump them past it.
+                guard let visibleStoryID else { return }
+                guard storyIDs.contains(visibleStoryID) else {
+                    self.visibleStoryID = nil
                     return
                 }
             }
         }
+    }
+
+    private var utilityProducts: [ResolvedStoryProduct] {
+        var seen = Set<String>()
+        return focusedStories
+            .flatMap { $0.resolvedProducts(from: merchants) }
+            .filter { seen.insert($0.id).inserted }
+    }
+
+    private func feedUtilityShelf(containerWidth: CGFloat) -> some View {
+        let railWidth = min(max(containerWidth - 48, 300), 360)
+        let rails = ["Recently viewed", "Buy again", "Picked for you"]
+
+        return VStack(spacing: 18) {
+            Button {
+                HapticFeedback.light.fire()
+            } label: {
+                HStack(spacing: 14) {
+                    Circle()
+                        .fill(Color.black.opacity(0.08))
+                        .frame(width: 52, height: 52)
+                        .overlay {
+                            Image(systemName: "dollarsign")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundStyle(.black)
+                        }
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Get up to $100 Shop Cash")
+                            .font(.system(size: 18, weight: .semibold))
+                            .minimumScaleFactor(0.82)
+                        Text("Plus flash deals and exclusive offers")
+                            .font(.system(size: 15))
+                            .minimumScaleFactor(0.82)
+                    }
+                    .foregroundStyle(.black)
+                    .lineLimit(1)
+
+                    Spacer(minLength: 4)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.black)
+                }
+                .padding(.horizontal, 18)
+                .frame(height: 92)
+                .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+                .shadow(color: .black.opacity(0.08), radius: 18, y: 10)
+            }
+            .buttonStyle(PressScaleButtonStyle())
+            .padding(.horizontal, 16)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(Array(rails.enumerated()), id: \.offset) { railIndex, title in
+                        utilityProductRail(
+                            title: title,
+                            products: Array(utilityProducts.dropFirst(railIndex * 3).prefix(3)),
+                            width: railWidth
+                        )
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 20)
+            }
+            .scrollClipDisabled()
+        }
+        .padding(.top, 18)
+        // Explicit light surface: Home uses a dark environment for its film
+        // chrome, but this utility shelf should retain Shop's soft neutral.
+        .background(Color(red: 0.95, green: 0.95, blue: 0.95))
+        .clipShape(RoundedRectangle(cornerRadius: 32, style: .continuous))
+        .padding(.horizontal, 8)
+    }
+
+    private func utilityProductRail(
+        title: String,
+        products: [ResolvedStoryProduct],
+        width: CGFloat
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Text(title)
+                    .font(.system(size: 24, weight: .semibold))
+                    .foregroundStyle(.black)
+                Spacer()
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(.black)
+                    .frame(width: 42, height: 42)
+                    .background(Color.black.opacity(0.05), in: Circle())
+            }
+
+            HStack(spacing: 10) {
+                ForEach(products) { item in
+                    Button {
+                        HapticFeedback.light.fire()
+                        coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
+                    } label: {
+                        ProductCard(
+                            image: nil,
+                            imageURL: item.product.imageURL,
+                            priceBadge: formatPrice(item.product.price),
+                            showFavoriteButton: true
+                        )
+                    }
+                    .buttonStyle(PressScaleButtonStyle())
+                }
+            }
+        }
+        .padding(20)
+        .frame(width: width)
+        .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .shadow(color: .black.opacity(0.08), radius: 18, y: 10)
     }
 
     /// Pulls each card gently back toward the viewport center while it moves.
