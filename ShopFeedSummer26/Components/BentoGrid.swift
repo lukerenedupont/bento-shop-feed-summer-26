@@ -215,7 +215,11 @@ struct GroupedTopicBento: View {
             }
 
             ForEach(productGroups, id: \.role) { group in
-                productRail(title: group.role, items: group.items)
+                if group.items.count == 1, let item = group.items.first {
+                    featuredProduct(title: group.role, item: item)
+                } else {
+                    productRail(title: group.role, items: group.items)
+                }
             }
 
             if !editorialItems.isEmpty {
@@ -243,6 +247,17 @@ struct GroupedTopicBento: View {
             }
             .scrollClipDisabled()
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+        }
+    }
+
+    private func featuredProduct(
+        title: String,
+        item: BentoCompartment
+    ) -> some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            railTitle(title)
+            BentoCompartmentCard(compartment: item)
+                .frame(width: containerWidth, height: 420)
         }
     }
 

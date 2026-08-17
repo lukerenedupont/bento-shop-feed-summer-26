@@ -50,8 +50,24 @@ struct ExpandedTopicPage: View {
     }
 
     private var selectedSubtopicStory: FeedStory? {
-        guard let selectedSubtopicID else { return nil }
-        return PersonalizedFeedCatalog.bundled.stories.first { $0.id == selectedSubtopicID }
+        guard let selectedSubtopicID,
+              let item = sourceProducts.first(where: { productSubtopicID(for: $0) == selectedSubtopicID }),
+              let sourceStory else { return nil }
+
+        return FeedStory(
+            id: selectedSubtopicID,
+            eyebrow: sourceTopic?.label ?? sourceStory.eyebrow,
+            title: item.product.title,
+            subtitle: "More from \(item.merchant.displayName)",
+            format: .shortlist,
+            topicKeys: sourceStory.topicKeys,
+            accentHex: sourceStory.accentHex,
+            coverImageName: nil,
+            destinationLabel: "Shop \(item.merchant.displayName)",
+            products: [
+                .init(merchantID: item.merchant.id, productID: item.product.id)
+            ]
+        )
     }
 
     private var windowSafeAreaTopInset: CGFloat {
@@ -105,7 +121,7 @@ struct ExpandedTopicPage: View {
                             merchandisingBlocks: nil
                         ),
                         stories: [selectedSubtopicStory],
-                        merchants: LegacyFeedArchive.merchants,
+                        merchants: SampleMerchant.all,
                         headerCoverImageName: sourceStory?.coverImageName,
                         surfaceAccentHex: sourceStory?.accentHex,
                         headerEyebrow: legacyTopic?.label,
@@ -312,11 +328,25 @@ struct ExpandedTopicPage: View {
     }
 
     private var navigationSubtopics: [FeedTopic.Subtopic] {
-        if let curated = legacyTopic?.subtopics, !curated.isEmpty { return curated }
-        return legacyStories.map { story in
-            let label = story.title.split(separator: " ").prefix(3).joined(separator: " ")
-            return FeedTopic.Subtopic(label: label, storyID: story.id)
+        sourceProducts.map { item in
+            FeedTopic.Subtopic(
+                label: shortProductLabel(item.product.title),
+                storyID: productSubtopicID(for: item),
+                anchorMerchantID: item.merchant.id,
+                anchorProductID: item.product.id
+            )
         }
+    }
+
+    private func productSubtopicID(for item: ResolvedStoryProduct) -> String {
+        "product-subtopic:\(item.merchant.id):\(item.product.id)"
+    }
+
+    private func shortProductLabel(_ title: String) -> String {
+        let cleaned = title
+            .replacingOccurrences(of: " - ", with: " ")
+            .replacingOccurrences(of: "#", with: "")
+        return cleaned.split(separator: " ").prefix(3).joined(separator: " ")
     }
 
     private var topicNavigation: some View {
