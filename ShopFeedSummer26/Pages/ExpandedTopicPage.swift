@@ -274,7 +274,7 @@ struct ExpandedTopicPage: View {
                 }
                 .scrollTargetLayout()
             }
-            .frame(height: cardWidth + 92)
+            .frame(height: cardWidth + GravitySpacing.space8)
             .contentMargins(.horizontal, (containerWidth - cardWidth) / 2, for: .scrollContent)
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
             .scrollPosition(id: $focusedProductID, anchor: .center)
@@ -289,13 +289,24 @@ struct ExpandedTopicPage: View {
         ProductCard(
             image: nil,
             imageURL: item.product.imageURL,
-            merchantName: item.merchant.displayName,
-            productName: item.product.title,
-            rating: item.merchant.totalRatings > 0 ? item.merchant.rating : nil,
-            ratingCount: item.merchant.totalRatings > 0 ? item.merchant.totalRatings : nil,
             priceBadge: formatPrice(item.product.price),
             showFavoriteButton: true
         )
+        .overlay(alignment: .bottomLeading) {
+            HStack(spacing: GravitySpacing.space8) {
+                MerchantAvatarView(merchant: item.merchant, size: 24)
+
+                Text(item.merchant.displayName)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+            }
+            .padding(.leading, 6)
+            .padding(.trailing, GravitySpacing.space12)
+            .frame(height: 36)
+            .background(.black.opacity(0.54), in: Capsule())
+            .padding(GravitySpacing.space12)
+        }
         .frame(width: width, alignment: .topLeading)
     }
 
