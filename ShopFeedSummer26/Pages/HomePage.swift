@@ -271,16 +271,16 @@ struct HomePage: View {
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(.white)
                         .frame(width: 38, height: 38)
-                        .background(Color.black.opacity(0.76), in: Circle())
+                        .background(Color.white.opacity(0.16), in: Circle())
 
                     VStack(alignment: .leading, spacing: 1) {
                         Text(item.merchant.displayName)
                             .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.white)
                             .lineLimit(1)
                         Text("Subtotal \(formatPrice(item.product.price))")
                             .font(.system(size: 14))
-                            .foregroundStyle(.black.opacity(0.58))
+                            .foregroundStyle(.white.opacity(0.64))
                             .lineLimit(1)
                     }
 
@@ -295,7 +295,7 @@ struct HomePage: View {
                                 .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(.white)
                                 .frame(width: 18, height: 18)
-                                .background(.black, in: Circle())
+                                .background(Color.white.opacity(0.18), in: Circle())
                                 .offset(x: -6, y: -6)
                         }
                 }
@@ -304,15 +304,14 @@ struct HomePage: View {
 
                 Text("Continue to checkout")
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 42)
-                    .background(Color.black.opacity(0.05), in: Capsule())
+                    .background(Color.white.opacity(0.14), in: Capsule())
             }
             .padding(16)
             .frame(width: width, height: retargetingCardHeight)
-            .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
-            .shadow(color: .black.opacity(0.10), radius: 18, y: 10)
+            .retargetingSurface()
         }
         .buttonStyle(PressScaleButtonStyle())
     }
@@ -336,13 +335,13 @@ struct HomePage: View {
                     HStack {
                         Text("Your orders")
                             .font(.system(size: 20, weight: .semibold))
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.white)
                         Spacer()
                         Image(systemName: "arrow.right")
                             .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.white)
                             .frame(width: 36, height: 36)
-                            .background(Color.black.opacity(0.05), in: Circle())
+                            .background(Color.white.opacity(0.14), in: Circle())
                     }
 
                     HStack(spacing: 10) {
@@ -351,10 +350,10 @@ struct HomePage: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(merchant.displayName)
                                 .font(.system(size: 14))
-                                .foregroundStyle(.black.opacity(0.58))
+                                .foregroundStyle(.white.opacity(0.64))
                             Text("Arriving today 3–6pm")
                                 .font(.system(size: 16, weight: .semibold))
-                                .foregroundStyle(.black)
+                                .foregroundStyle(.white)
                         }
                         .lineLimit(1)
                         .minimumScaleFactor(0.78)
@@ -373,8 +372,7 @@ struct HomePage: View {
                 }
                 .padding(16)
                 .frame(width: width, height: retargetingCardHeight, alignment: .top)
-                .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
-                .shadow(color: .black.opacity(0.10), radius: 18, y: 10)
+                .retargetingSurface()
             }
             .buttonStyle(PressScaleButtonStyle())
         }
@@ -561,13 +559,13 @@ struct HomePage: View {
             HStack {
                 Text(title)
                     .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.white)
                 Spacer()
                 Image(systemName: "arrow.right")
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.white)
                     .frame(width: 36, height: 36)
-                    .background(Color.black.opacity(0.05), in: Circle())
+                    .background(Color.white.opacity(0.14), in: Circle())
             }
 
             HStack(spacing: 10) {
@@ -589,8 +587,7 @@ struct HomePage: View {
         }
         .padding(16)
         .frame(width: width, height: retargetingCardHeight, alignment: .top)
-        .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
-        .shadow(color: .black.opacity(0.10), radius: 18, y: 10)
+        .retargetingSurface()
     }
 
     /// Pulls each card gently back toward the viewport center while it moves.
@@ -893,6 +890,22 @@ struct HomePage: View {
         selectedTopicID == topic.id ? GravityColors.textFixedDark : GravityColors.textFixedLight
     }
 
+}
+
+private extension View {
+    /// A dark wash keeps utility chrome legible while letting the feed color
+    /// remain visible beneath the card.
+    func retargetingSurface() -> some View {
+        background(
+            Color.black.opacity(0.40),
+            in: RoundedRectangle(cornerRadius: 28, style: .continuous)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .strokeBorder(.white.opacity(0.18), lineWidth: 0.5)
+        }
+        .shadow(color: .black.opacity(0.035), radius: 14, y: 7)
+    }
 }
 
 #Preview {
