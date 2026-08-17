@@ -34,6 +34,8 @@ struct HomePage: View {
     @State private var expandingStoryID: String?
     @State private var notificationIndex = 0
 
+    private let retargetingCardHeight: CGFloat = 177
+
     private var topics: [FeedTopic] { PersonalizedFeedCatalog.current.topics }
     /// Header destinations mirror the For You card order exactly. This keeps
     /// every pill paired with the card that opens the same editorial world.
@@ -297,7 +299,7 @@ struct HomePage: View {
                     .background(Color.black.opacity(0.05), in: Capsule())
             }
             .padding(16)
-            .frame(width: width, height: 208)
+            .frame(width: width, height: retargetingCardHeight)
             .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
             .shadow(color: .black.opacity(0.10), radius: 18, y: 10)
         }
@@ -407,7 +409,7 @@ struct HomePage: View {
             }
         }
         .padding(16)
-        .frame(width: width, height: 208, alignment: .top)
+        .frame(width: width, height: retargetingCardHeight, alignment: .top)
         .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
         .shadow(color: .black.opacity(0.10), radius: 18, y: 10)
     }
