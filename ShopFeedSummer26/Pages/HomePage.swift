@@ -206,22 +206,102 @@ struct HomePage: View {
 
     private func retargetingRailCarousel(containerWidth: CGFloat) -> some View {
         let railWidth = min(max(containerWidth - 64, 300), 360)
-        let railTitles = ["Recently viewed", "Buy again", "Saved for later"]
 
         return ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
-                ForEach(Array(railTitles.enumerated()), id: \.offset) { index, title in
-                    utilityProductRail(
-                        title: title,
-                        products: Array(utilityProducts.dropFirst(index * 3).prefix(3)),
-                        width: railWidth
-                    )
+                utilityProductRail(
+                    title: "Buy again",
+                    products: Array(utilityProducts.dropFirst(3).prefix(3)),
+                    width: railWidth
+                )
+
+                if let cartItem = cartSyncItem {
+                    cartSyncCard(item: cartItem, width: railWidth)
                 }
+
+                utilityProductRail(
+                    title: "Recently viewed",
+                    products: Array(utilityProducts.prefix(3)),
+                    width: railWidth
+                )
+
+                utilityProductRail(
+                    title: "Saved for later",
+                    products: Array(utilityProducts.dropFirst(6).prefix(3)),
+                    width: railWidth
+                )
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
         }
         .scrollClipDisabled()
+    }
+
+    private var cartSyncItem: ResolvedStoryProduct? {
+        utilityProducts.min { lhs, rhs in
+            numericPrice(lhs.product.price) < numericPrice(rhs.product.price)
+        }
+    }
+
+    private func numericPrice(_ price: String) -> Double {
+        Double(price.filter { $0.isNumber || $0 == "." }) ?? .greatestFiniteMagnitude
+    }
+
+    private func cartSyncCard(item: ResolvedStoryProduct, width: CGFloat) -> some View {
+        Button {
+            HapticFeedback.light.fire()
+            coordinator.navigateToPage(4)
+        } label: {
+            VStack(spacing: 0) {
+                HStack(alignment: .top, spacing: 12) {
+                    Text(item.merchant.displayName.split(separator: " ").prefix(2).compactMap(\.first).map(String.init).joined())
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .frame(width: 38, height: 38)
+                        .background(Color.black.opacity(0.76), in: Circle())
+
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(item.merchant.displayName)
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundStyle(.black)
+                            .lineLimit(1)
+                        Text("Subtotal \(formatPrice(item.product.price))")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.black.opacity(0.58))
+                            .lineLimit(1)
+                    }
+
+                    Spacer(minLength: 4)
+
+                    ProductImageView(product: item.product, merchant: item.merchant)
+                        .frame(width: 60, height: 60)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(alignment: .topLeading) {
+                            Text("1")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundStyle(.white)
+                                .frame(width: 18, height: 18)
+                                .background(.black, in: Circle())
+                                .offset(x: -6, y: -6)
+                        }
+                }
+
+                Spacer(minLength: 10)
+
+                Text("Continue to checkout")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(.black)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 42)
+                    .background(Color.black.opacity(0.05), in: Capsule())
+            }
+            .padding(16)
+            .frame(width: width, height: 208)
+            .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+            .shadow(color: .black.opacity(0.10), radius: 18, y: 10)
+        }
+        .buttonStyle(PressScaleButtonStyle())
     }
 
     private var feedNotifications: [(title: String, subtitle: String, icon: String)] {
