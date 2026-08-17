@@ -299,13 +299,13 @@ struct HomePage: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Text(title)
-                    .font(.system(size: 24, weight: .semibold))
+                    .font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(.black)
                 Spacer()
                 Image(systemName: "arrow.right")
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(.black)
-                    .frame(width: 42, height: 42)
+                    .frame(width: 36, height: 36)
                     .background(Color.black.opacity(0.05), in: Circle())
             }
 
@@ -326,7 +326,7 @@ struct HomePage: View {
                 }
             }
         }
-        .padding(20)
+        .padding(16)
         .frame(width: width)
         .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
         .shadow(color: .black.opacity(0.10), radius: 18, y: 10)
