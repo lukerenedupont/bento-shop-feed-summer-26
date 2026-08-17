@@ -26,7 +26,9 @@ struct StoryFeedCard: View {
     @Environment(NavigationCoordinator.self) private var coordinator
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var mediaIsMoving = false
-    @State private var selectedProductID: String?
+    @State private var selectedProductIndex = 0
+    @State private var productDragOffset: CGFloat = 0
+    @State private var productDeckIsSettling = false
 
     private var items: [ResolvedStoryProduct] {
         story.resolvedProducts(from: merchants)
@@ -248,28 +250,43 @@ struct StoryFeedCard: View {
     }
 
     private var productCarousel: some View {
-        GeometryReader { geometry in
-            if !items.isEmpty {
-                ZStack(alignment: .leading) {
-                    productStackLayer(offset: 16)
-                    productStackLayer(offset: 8)
+        VStack(spacing: 14) {
+            GeometryReader { geometry in
+                if !items.isEmpty {
+                    let safeIndex = min(selectedProductIndex, items.count - 1)
+                    let item = items[safeIndex]
 
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(spacing: 8) {
-                            ForEach(items) { item in
-                                productSummaryCard(item)
-                                    .frame(width: geometry.size.width - 16)
-                                    .id(item.id)
-                            }
-                        }
-                        .scrollTargetLayout()
+                    ZStack(alignment: .leading) {
+                        productStackLayer(offset: 16)
+                        productStackLayer(offset: 8)
+
+                        productSummaryCard(item)
+                            .frame(width: geometry.size.width - 16)
+                            .offset(x: productDragOffset)
+                            .shadow(color: .black.opacity(0.16), radius: 7, y: 3)
                     }
-                    .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-                    .scrollPosition(id: $selectedProductID, anchor: .center)
+                    .contentShape(Rectangle())
+                    .simultaneousGesture(productDeckGesture(width: geometry.size.width))
                 }
             }
+            .frame(height: 88)
+
+            HStack(spacing: 8) {
+                Text("\(items.count) items added 8m ago")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.white)
+
+                Spacer()
+
+                Text("Shop all")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(.white)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
         }
-        .frame(height: 88)
+        .frame(height: 126)
     }
 
     private func productSummaryCard(_ item: ResolvedStoryProduct) -> some View {
@@ -305,11 +322,8 @@ struct StoryFeedCard: View {
     }
 
     private var productStackColor: Color {
-        guard let selectedProductID,
-              let selected = items.first(where: { $0.id == selectedProductID }) else {
-            return items.first?.merchant.brandColor ?? Color(hex: story.accentHex)
-        }
-        return selected.merchant.brandColor
+        guard !items.isEmpty else { return Color(hex: story.accentHex) }
+        return items[min(selectedProductIndex, items.count - 1)].merchant.brandColor
     }
 
     private func productStackColor(for item: ResolvedStoryProduct) -> Color {
@@ -327,6 +341,46 @@ struct StoryFeedCard: View {
             .padding(.trailing, 16)
             .offset(x: offset)
             .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
+    }
+
+    private func productDeckGesture(width: CGFloat) -> some Gesture {
+        DragGesture(minimumDistance: 12)
+            .onChanged { value in
+                guard !productDeckIsSettling,
+                      abs(value.translation.width) > abs(value.translation.height) else { return }
+                productDragOffset = value.translation.width
+            }
+            .onEnded { value in
+                guard !productDeckIsSettling,
+                      items.count > 1,
+                      abs(value.translation.width) > abs(value.translation.height),
+                      abs(value.translation.width) > 42 else {
+                    withAnimation(.spring(response: 0.28, dampingFraction: 0.84)) {
+                        productDragOffset = 0
+                    }
+                    return
+                }
+
+                productDeckIsSettling = true
+                let direction = value.translation.width < 0 ? 1 : -1
+                let exitOffset = direction > 0 ? -width : width
+
+                withAnimation(.easeOut(duration: 0.20)) {
+                    productDragOffset = exitOffset
+                }
+
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(190))
+                    var transaction = Transaction()
+                    transaction.disablesAnimations = true
+                    withTransaction(transaction) {
+                        selectedProductIndex = (selectedProductIndex + direction + items.count) % items.count
+                        productDragOffset = 0
+                        productDeckIsSettling = false
+                    }
+                    HapticFeedback.light.fire()
+                }
+            }
     }
 
 }
