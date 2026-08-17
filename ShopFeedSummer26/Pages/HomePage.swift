@@ -195,33 +195,16 @@ struct HomePage: View {
     }
 
     private func feedUtilityShelf(containerWidth: CGFloat) -> some View {
-        let railWidth = min(max(containerWidth - 48, 300), 360)
-        let rails = ["Recently viewed", "Buy again", "Picked for you"]
-
-        return VStack(spacing: 18) {
+        VStack(spacing: 22) {
             feedNotificationStack
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(Array(rails.enumerated()), id: \.offset) { railIndex, title in
-                        utilityProductRail(
-                            title: title,
-                            products: Array(utilityProducts.dropFirst(railIndex * 3).prefix(3)),
-                            width: railWidth
-                        )
-                    }
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 20)
-            }
-            .scrollClipDisabled()
+            utilityProductRail(
+                title: "Recently viewed",
+                products: Array(utilityProducts.prefix(8))
+            )
         }
         .padding(.top, 18)
-        // Explicit light surface: Home uses a dark environment for its film
-        // chrome, but this utility shelf should retain Shop's soft neutral.
-        .background(Color(red: 0.95, green: 0.95, blue: 0.95))
-        .clipShape(RoundedRectangle(cornerRadius: 32, style: .continuous))
-        .padding(.horizontal, 8)
+        .padding(.bottom, 12)
+        .frame(width: containerWidth)
     }
 
     private var feedNotifications: [(title: String, subtitle: String, icon: String)] {
@@ -239,16 +222,9 @@ struct HomePage: View {
             RoundedRectangle(cornerRadius: 28, style: .continuous)
                 .fill(.white)
                 .frame(height: 92)
-                .padding(.horizontal, 24)
-                .offset(y: 16)
-                .shadow(color: .black.opacity(0.07), radius: 18, y: 10)
-
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(.white)
-                .frame(height: 92)
-                .padding(.horizontal, 12)
-                .offset(y: 8)
-                .shadow(color: .black.opacity(0.07), radius: 16, y: 8)
+                .padding(.horizontal, 14)
+                .offset(y: 10)
+                .shadow(color: .black.opacity(0.12), radius: 18, y: 10)
 
             Button {
                 HapticFeedback.light.fire()
@@ -294,49 +270,50 @@ struct HomePage: View {
             }
             .buttonStyle(PressScaleButtonStyle())
         }
-        .frame(height: 108)
-        .padding(.horizontal, 16)
+        .frame(height: 102)
+        .padding(.horizontal, 12)
     }
 
     private func utilityProductRail(
         title: String,
-        products: [ResolvedStoryProduct],
-        width: CGFloat
+        products: [ResolvedStoryProduct]
     ) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Text(title)
                     .font(.system(size: 24, weight: .semibold))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.white)
                 Spacer()
                 Image(systemName: "arrow.right")
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.white)
                     .frame(width: 42, height: 42)
-                    .background(Color.black.opacity(0.05), in: Circle())
+                    .background(.black.opacity(0.24), in: Circle())
             }
+            .padding(.horizontal, 16)
 
-            HStack(spacing: 10) {
-                ForEach(products) { item in
-                    Button {
-                        HapticFeedback.light.fire()
-                        coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
-                    } label: {
-                        ProductCard(
-                            image: nil,
-                            imageURL: item.product.imageURL,
-                            priceBadge: formatPrice(item.product.price),
-                            showFavoriteButton: true
-                        )
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    ForEach(products) { item in
+                        Button {
+                            HapticFeedback.light.fire()
+                            coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
+                        } label: {
+                            ProductCard(
+                                image: nil,
+                                imageURL: item.product.imageURL,
+                                priceBadge: formatPrice(item.product.price),
+                                showFavoriteButton: true
+                            )
+                            .frame(width: 132)
+                        }
+                        .buttonStyle(PressScaleButtonStyle())
                     }
-                    .buttonStyle(PressScaleButtonStyle())
                 }
+                .padding(.horizontal, 16)
             }
+            .scrollClipDisabled()
         }
-        .padding(20)
-        .frame(width: width)
-        .background(.white, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
-        .shadow(color: .black.opacity(0.08), radius: 18, y: 10)
     }
 
     /// Pulls each card gently back toward the viewport center while it moves.
