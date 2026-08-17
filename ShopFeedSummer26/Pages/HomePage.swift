@@ -592,36 +592,30 @@ struct HomePage: View {
     }
 
     private var topicRail: some View {
-        ScrollViewReader { proxy in
-            ScrollView(.horizontal) {
-                HStack(spacing: FeedNavigationStyle.itemSpacing) {
-                    ForEach(navigationTopics) { topic in
-                        topicButton(topic)
-                            .id(topic.id)
-                    }
+        ScrollView(.horizontal) {
+            HStack(spacing: FeedNavigationStyle.itemSpacing) {
+                ForEach(navigationTopics) { topic in
+                    topicButton(topic)
+                        .id(topic.id)
+                }
 
-                    // Lets a selected trailing topic settle beside the avatar.
-                    Color.clear
-                        .frame(width: 240, height: 1)
-                        .accessibilityHidden(true)
-                }
+                // Keeps the trailing categories reachable by a deliberate
+                // swipe without recentering the whole rail after every tap.
+                Color.clear
+                    .frame(width: 80, height: 1)
+                    .accessibilityHidden(true)
             }
-            .scrollIndicators(.hidden)
-            .contentMargins(.leading, FeedNavigationStyle.avatarSize + GravitySpacing.space8, for: .scrollContent)
-            .contentMargins(.trailing, GravitySpacing.space16)
-            .mask {
-                HStack(spacing: 0) {
-                    // Hide content only after it has travelled beneath the
-                    // avatar; the hard edge sits behind the circle, never
-                    // beside a visible pill.
-                    Color.clear.frame(width: 20)
-                    Color.black
-                }
-            }
-            .onChange(of: selectedTopicID) { _, topicID in
-                withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
-                    proxy.scrollTo(topicID, anchor: .leading)
-                }
+        }
+        .scrollIndicators(.hidden)
+        .contentMargins(.leading, FeedNavigationStyle.avatarSize + GravitySpacing.space8, for: .scrollContent)
+        .contentMargins(.trailing, GravitySpacing.space16)
+        .mask {
+            HStack(spacing: 0) {
+                // Hide content only after it has travelled beneath the
+                // avatar; the hard edge sits behind the circle, never
+                // beside a visible pill.
+                Color.clear.frame(width: 20)
+                Color.black
             }
         }
     }
