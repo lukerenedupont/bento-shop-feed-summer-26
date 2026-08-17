@@ -41,6 +41,9 @@ struct FeedTopic: Identifiable, Hashable, Codable {
                 /// Bento only: a loose grid of circular shop avatars floating
                 /// chrome-free on the topic surface. Each disc opens a store.
                 case avatarCluster
+                /// Bento only: portrait generated film paired with every
+                /// product referenced by the same story in a compact mosaic.
+                case videoProductMosaic
             }
 
             let kind: Kind

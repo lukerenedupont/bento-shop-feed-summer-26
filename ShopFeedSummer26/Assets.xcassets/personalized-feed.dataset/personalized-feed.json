@@ -65,6 +65,12 @@
               "size": "hero"
             },
             {
+              "kind": "videoProductMosaic",
+              "storyID": "city-to-trail-birding",
+              "role": "Watch and shop the field kit",
+              "size": "wide"
+            },
+            {
               "kind": "merchantSpotlight",
               "merchantID": "nocs",
               "productIDs": [

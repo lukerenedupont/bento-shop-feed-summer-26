@@ -24,6 +24,7 @@ struct BentoCompartment: Identifiable {
         /// Circular shop avatars floating chrome-free on the topic surface —
         /// 2×2 in a square cell, 2×3 in a tall one. Each disc opens a store.
         case avatarCluster([SampleMerchant])
+        case videoProductMosaic(FeedStory, [ResolvedStoryProduct])
     }
 
     let id: String
@@ -203,7 +204,15 @@ struct GroupedTopicBento: View {
     private var editorialItems: [BentoCompartment] {
         remaining.filter {
             if case .product = $0.surface { return false }
+            if case .videoProductMosaic = $0.surface { return false }
             return true
+        }
+    }
+
+    private var videoProductMosaics: [BentoCompartment] {
+        remaining.filter {
+            if case .videoProductMosaic = $0.surface { return true }
+            return false
         }
     }
 
@@ -212,6 +221,11 @@ struct GroupedTopicBento: View {
             if let lead {
                 BentoCompartmentCard(compartment: lead)
                     .frame(width: containerWidth, height: 520)
+            }
+
+            ForEach(videoProductMosaics) { item in
+                BentoCompartmentCard(compartment: item)
+                    .frame(width: containerWidth, height: containerWidth * 1.5)
             }
 
             ForEach(productGroups, id: \.role) { group in
@@ -312,6 +326,12 @@ private struct BentoCompartmentCard: View {
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("\(compartment.role): \(title)")
 
+        case .videoProductMosaic:
+            surface
+                .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel(compartment.role)
+
         default:
             card
         }
@@ -369,7 +389,7 @@ private struct BentoCompartmentCard: View {
     /// carry their own identity — the default bottom title would double up.
     private var showsTitle: Bool {
         switch compartment.surface {
-        case .merchantSpotlight, .merchant, .avatarCluster: return false
+        case .merchantSpotlight, .merchant, .avatarCluster, .videoProductMosaic: return false
         case .product, .story: return true
         }
     }
@@ -402,6 +422,8 @@ private struct BentoCompartmentCard: View {
         case .avatarCluster:
             // Handled chrome-free in `body`; never reaches the card shell.
             Color.clear
+        case .videoProductMosaic(let story, let products):
+            BentoVideoProductMosaic(story: story, products: products)
         case .story(let story, let hero):
             if let hero, !hero.product.ambientFilmURLs(merchantID: hero.merchant.id).isEmpty {
                 AmbientProductVideo(product: hero.product, merchant: hero.merchant)
@@ -423,6 +445,7 @@ private struct BentoCompartmentCard: View {
         case .merchant(let merchant): return merchant.displayName
         case .merchantSpotlight(let merchant, _): return merchant.displayName
         case .avatarCluster: return compartment.role
+        case .videoProductMosaic(let story, _): return story.title
         case .story(let story, _): return story.title
         }
     }
@@ -430,8 +453,63 @@ private struct BentoCompartmentCard: View {
     private var price: String? {
         switch compartment.surface {
         case .product(let item): return formatPrice(item.product.price)
-        case .merchant, .merchantSpotlight, .avatarCluster, .story: return nil
+        case .merchant, .merchantSpotlight, .avatarCluster, .story, .videoProductMosaic: return nil
         }
+    }
+}
+
+private struct BentoVideoProductMosaic: View {
+    let story: FeedStory
+    let products: [ResolvedStoryProduct]
+
+    @Environment(NavigationCoordinator.self) private var coordinator
+
+    private let gap: CGFloat = 2
+    private var dividerColor: Color { Color(hex: story.accentHex) }
+
+    var body: some View {
+        GeometryReader { geometry in
+            let cell = (geometry.size.width - gap) / 2
+            let featured = Array(products.prefix(4))
+            let films = products.flatMap {
+                $0.product.ambientFilmURLs(merchantID: $0.merchant.id)
+            }
+
+            if let lead = featured.first, featured.count == 4 {
+                ZStack(alignment: .topLeading) {
+                    dividerColor
+
+                    AmbientProductVideo(
+                        videoURLs: films,
+                        posterImageURL: lead.product.imageURL,
+                        playbackGroupID: "topic-mosaic-\(story.id)"
+                    )
+                    .frame(width: cell, height: cell * 2 + gap)
+
+                    productTile(featured[0], size: cell)
+                        .offset(x: cell + gap)
+                    productTile(featured[1], size: cell)
+                        .offset(x: cell + gap, y: cell + gap)
+                    productTile(featured[2], size: cell)
+                        .offset(y: (cell + gap) * 2)
+                    productTile(featured[3], size: cell)
+                        .offset(x: cell + gap, y: (cell + gap) * 2)
+                }
+            }
+        }
+    }
+
+    private func productTile(_ item: ResolvedStoryProduct, size: CGFloat) -> some View {
+        Button {
+            HapticFeedback.light.fire()
+            coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
+        } label: {
+            ProductImageView(product: item.product, merchant: item.merchant)
+                .frame(width: size, height: size)
+                .background(.white)
+                .clipped()
+        }
+        .buttonStyle(.plain)
     }
 }
 

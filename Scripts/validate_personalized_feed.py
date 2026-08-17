@@ -94,6 +94,13 @@ for topic in feed["topics"]:
                 for merchant_id in cluster_ids:
                     if merchant_id not in merchants:
                         errors.append(f"{topic['id']}/{block_id}: unknown cluster merchant {merchant_id!r}")
+            elif kind == "videoProductMosaic":
+                # Bento-only generated film paired with the exact product set
+                # authored on its source story.
+                if block.get("kind") != "bento":
+                    errors.append(f"{topic['id']}/{block_id}: videoProductMosaic is bento-only")
+                if item.get("storyID") not in story_id_set:
+                    errors.append(f"{topic['id']}/{block_id}: unknown mosaic story {item.get('storyID')!r}")
             elif kind not in {"story", "merchant", "product"}:
                 errors.append(f"{topic['id']}/{block_id}: unsupported item kind {kind!r}")
 

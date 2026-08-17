@@ -380,6 +380,8 @@ struct TopicLandingView: View {
             }
         case .avatarCluster:
             EmptyView()
+        case .videoProductMosaic:
+            EmptyView()
         }
     }
 
@@ -514,6 +516,22 @@ struct TopicLandingView: View {
                     role: role,
                     size: .standard,
                     surface: .avatarCluster(cluster),
+                    action: {}
+                )
+
+            case .videoProductMosaic:
+                guard let storyID = item.storyID,
+                      let story = stories.first(where: { $0.id == storyID })
+                        ?? PersonalizedFeedStories.all.first(where: { $0.id == storyID }) else {
+                    return nil
+                }
+                let products = story.resolvedProducts(from: merchants)
+                guard products.count >= 4 else { return nil }
+                return BentoCompartment(
+                    id: id,
+                    role: role,
+                    size: .wide,
+                    surface: .videoProductMosaic(story, products),
                     action: {}
                 )
 
