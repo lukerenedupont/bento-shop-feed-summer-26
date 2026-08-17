@@ -28,7 +28,8 @@ struct StoryFeedCard: View {
     @State private var mediaIsMoving = false
     @State private var selectedProductIndex = 0
     @State private var productDragOffset: CGFloat = 0
-    @State private var productFrontScale: CGFloat = 1
+    @State private var productPromotionProgress: CGFloat = 0
+    @State private var productDeckDirection = 1
     @State private var productDeckIsSettling = false
 
     private var items: [ResolvedStoryProduct] {
@@ -256,15 +257,25 @@ struct StoryFeedCard: View {
                 if !items.isEmpty {
                     let safeIndex = min(selectedProductIndex, items.count - 1)
                     let item = items[safeIndex]
+                    let nextItem = deckItem(from: safeIndex, offset: productDeckDirection)
+                    let farItem = deckItem(from: safeIndex, offset: productDeckDirection * 2)
 
                     ZStack(alignment: .leading) {
-                        productStackLayer(offset: 36, scale: 0.92)
-                        productStackLayer(offset: 18, scale: 0.96)
+                        productSummaryCard(farItem)
+                            .frame(width: geometry.size.width - 16)
+                            .scaleEffect(0.92 + 0.04 * productPromotionProgress, anchor: .leading)
+                            .offset(x: 36 - 18 * productPromotionProgress)
+                            .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
+
+                        productSummaryCard(nextItem)
+                            .frame(width: geometry.size.width - 16)
+                            .scaleEffect(0.96 + 0.04 * productPromotionProgress, anchor: .leading)
+                            .offset(x: 18 * (1 - productPromotionProgress))
+                            .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
 
                         productSummaryCard(item)
                             .frame(width: geometry.size.width - 16)
                             .offset(x: productDragOffset)
-                            .scaleEffect(productFrontScale, anchor: .leading)
                             .shadow(color: .black.opacity(0.16), radius: 7, y: 3)
                     }
                     .contentShape(Rectangle())
@@ -327,18 +338,9 @@ struct StoryFeedCard: View {
         items.first?.merchant.brandColor ?? Color(hex: story.accentHex)
     }
 
-    private func productStackLayer(offset: CGFloat, scale: CGFloat) -> some View {
-        RoundedRectangle(cornerRadius: 20, style: .continuous)
-            .fill(productStackColor)
-            .overlay {
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .strokeBorder(.white.opacity(0.10), lineWidth: 0.5)
-            }
-            .frame(height: 88)
-            .padding(.trailing, 16)
-            .scaleEffect(scale, anchor: .leading)
-            .offset(x: offset)
-            .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
+    private func deckItem(from index: Int, offset: Int) -> ResolvedStoryProduct {
+        let resolvedIndex = (index + offset + items.count * 2) % items.count
+        return items[resolvedIndex]
     }
 
     private func productDeckGesture(width: CGFloat) -> some Gesture {
@@ -346,7 +348,9 @@ struct StoryFeedCard: View {
             .onChanged { value in
                 guard !productDeckIsSettling,
                       abs(value.translation.width) > abs(value.translation.height) else { return }
+                productDeckDirection = value.translation.width < 0 ? 1 : -1
                 productDragOffset = value.translation.width
+                productPromotionProgress = min(abs(value.translation.width) / max(width, 1), 1)
             }
             .onEnded { value in
                 guard !productDeckIsSettling,
@@ -355,6 +359,7 @@ struct StoryFeedCard: View {
                       abs(value.translation.width) > 42 else {
                     withAnimation(.spring(response: 0.28, dampingFraction: 0.84)) {
                         productDragOffset = 0
+                        productPromotionProgress = 0
                     }
                     return
                 }
@@ -365,6 +370,7 @@ struct StoryFeedCard: View {
 
                 withAnimation(.easeOut(duration: 0.20)) {
                     productDragOffset = exitOffset
+                    productPromotionProgress = 1
                 }
 
                 Task { @MainActor in
@@ -374,11 +380,7 @@ struct StoryFeedCard: View {
                     withTransaction(transaction) {
                         selectedProductIndex = (selectedProductIndex + direction + items.count) % items.count
                         productDragOffset = 0
-                        productFrontScale = 0.96
-                    }
-                    await Task.yield()
-                    withAnimation(.spring(response: 0.30, dampingFraction: 0.86)) {
-                        productFrontScale = 1
+                        productPromotionProgress = 0
                     }
                     productDeckIsSettling = false
                     HapticFeedback.light.fire()
