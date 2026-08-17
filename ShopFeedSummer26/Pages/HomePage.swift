@@ -34,6 +34,9 @@ struct HomePage: View {
     @State private var expandingStoryID: String?
     @State private var notificationIndex = 0
     @State private var categoryMoveDirection = 1
+    @State private var topicRailOffset: CGFloat = 0
+    @State private var topicRailContentWidth: CGFloat = 0
+    @GestureState private var topicRailDragOffset: CGFloat = 0
 
     private let retargetingCardHeight: CGFloat = 177
 
@@ -68,7 +71,10 @@ struct HomePage: View {
     }
 
     var body: some View {
-        Group {
+        // This concrete container owns the persistent chrome. A transparent
+        // `Group` forwards modifiers to its changing child, which caused the
+        // safe-area bar to inherit the feed's horizontal replacement motion.
+        ZStack {
             if let focusedStoryID {
                 StoryTopicPage(storyID: focusedStoryID, namespace: namespace)
                     .id(focusedStoryID)
@@ -592,32 +598,74 @@ struct HomePage: View {
     }
 
     private var topicRail: some View {
-        ScrollView(.horizontal) {
-            HStack(spacing: FeedNavigationStyle.itemSpacing) {
-                ForEach(navigationTopics) { topic in
-                    topicButton(topic)
-                        .id(topic.id)
-                }
+        GeometryReader { geometry in
+            let leadingInset = FeedNavigationStyle.avatarSize + GravitySpacing.space8
+            let effectiveOffset = clampedTopicRailOffset(
+                proposed: topicRailOffset + topicRailDragOffset,
+                viewportWidth: geometry.size.width,
+                leadingInset: leadingInset
+            )
 
-                // Keeps the trailing categories reachable by a deliberate
-                // swipe without recentering the whole rail after every tap.
+            ZStack(alignment: .leading) {
                 Color.clear
-                    .frame(width: 80, height: 1)
-                    .accessibilityHidden(true)
+
+                HStack(spacing: FeedNavigationStyle.itemSpacing) {
+                    ForEach(navigationTopics) { topic in
+                        topicButton(topic)
+                            .id(topic.id)
+                    }
+
+                    Color.clear
+                        .frame(width: GravitySpacing.space16, height: 1)
+                        .accessibilityHidden(true)
+                }
+                .fixedSize(horizontal: true, vertical: false)
+                .offset(x: leadingInset + effectiveOffset)
+                .onGeometryChange(for: CGFloat.self) { proxy in
+                    proxy.size.width
+                } action: { _, width in
+                    topicRailContentWidth = width
+                }
+            }
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 8)
+                    .updating($topicRailDragOffset) { value, state, _ in
+                        state = value.translation.width
+                    }
+                    .onEnded { value in
+                        let proposed = topicRailOffset + value.predictedEndTranslation.width
+                        withAnimation(.easeOut(duration: 0.18)) {
+                            topicRailOffset = clampedTopicRailOffset(
+                                proposed: proposed,
+                                viewportWidth: geometry.size.width,
+                                leadingInset: leadingInset
+                            )
+                        }
+                    }
+            )
+            .mask {
+                HStack(spacing: 0) {
+                    // The strip can pass behind the avatar when explicitly
+                    // dragged, but selection never changes its offset.
+                    Color.clear.frame(width: 20)
+                    Color.black
+                }
             }
         }
-        .scrollIndicators(.hidden)
-        .contentMargins(.leading, FeedNavigationStyle.avatarSize + GravitySpacing.space8, for: .scrollContent)
-        .contentMargins(.trailing, GravitySpacing.space16)
-        .mask {
-            HStack(spacing: 0) {
-                // Hide content only after it has travelled beneath the
-                // avatar; the hard edge sits behind the circle, never
-                // beside a visible pill.
-                Color.clear.frame(width: 20)
-                Color.black
-            }
-        }
+        .frame(height: FeedNavigationStyle.controlSize)
+    }
+
+    private func clampedTopicRailOffset(
+        proposed: CGFloat,
+        viewportWidth: CGFloat,
+        leadingInset: CGFloat
+    ) -> CGFloat {
+        let minimum = min(
+            0,
+            viewportWidth - leadingInset - topicRailContentWidth
+        )
+        return min(0, max(minimum, proposed))
     }
 
     private func topicButton(_ topic: FeedCategory) -> some View {
