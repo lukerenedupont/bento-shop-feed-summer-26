@@ -247,24 +247,75 @@ struct StoryFeedCard: View {
     }
 
     private var productCarousel: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: GravitySpacing.space8) {
-                ForEach(items) { item in
-                    ProductImageView(product: item.product, merchant: item.merchant)
-                        .frame(width: 146, height: 146)
-                        .background(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                .strokeBorder(.white.opacity(0.24), lineWidth: 0.5)
+        GeometryReader { geometry in
+            if !items.isEmpty {
+                ZStack(alignment: .leading) {
+                    productStackLayer(offset: 16, opacity: 0.42)
+                    productStackLayer(offset: 8, opacity: 0.66)
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        LazyHStack(spacing: 8) {
+                            ForEach(items) { item in
+                                productSummaryCard(item)
+                                    .frame(width: geometry.size.width - 16)
+                                    .id(item.id)
+                            }
                         }
+                        .scrollTargetLayout()
+                    }
+                    .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
                 }
             }
         }
-        .contentMargins(.leading, GravitySpacing.space20, for: .scrollContent)
-        .contentMargins(.trailing, GravitySpacing.space20, for: .scrollContent)
-        .padding(.horizontal, -GravitySpacing.space20)
-        .frame(height: 146)
+        .frame(height: 88)
+    }
+
+    private func productSummaryCard(_ item: ResolvedStoryProduct) -> some View {
+        HStack(spacing: 12) {
+            ProductImageView(product: item.product, merchant: item.merchant)
+                .frame(width: 72, height: 72)
+                .background(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(item.product.title)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                Text(formatPrice(item.product.price))
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(.white)
+            }
+
+            Spacer(minLength: 6)
+
+            Image(systemName: "heart")
+                .font(.system(size: 24, weight: .medium))
+                .foregroundStyle(.white)
+                .frame(width: 38, height: 38)
+        }
+        .padding(8)
+        .background(productStackColor, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
+        }
+    }
+
+    private var productStackColor: Color {
+        Color(hex: story.accentHex).opacity(0.92)
+    }
+
+    private func productStackLayer(offset: CGFloat, opacity: Double) -> some View {
+        RoundedRectangle(cornerRadius: 20, style: .continuous)
+            .fill(productStackColor)
+            .overlay {
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .strokeBorder(.white.opacity(0.10), lineWidth: 0.5)
+            }
+            .frame(height: 88)
+            .offset(x: offset)
+            .opacity(opacity)
     }
 
 }
