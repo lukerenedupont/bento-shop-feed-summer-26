@@ -182,8 +182,9 @@ struct TopicLandingView: View {
             VStack(alignment: .leading, spacing: 14) {
                 // Wireframe: display title is centered, heavy, tightly tracked.
                 Text(displayTitle ?? topic.label)
-                    .font(.system(size: 40, weight: .heavy, design: .default))
-                    .tracking(-1.4)
+                    .font(FeedEditorialTypography.titleFont)
+                    .tracking(FeedEditorialTypography.titleTracking)
+                    .lineSpacing(FeedEditorialTypography.titleLineSpacing)
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
@@ -641,9 +642,9 @@ private struct TopicFeatureCard: View {
                 HStack(alignment: .bottom, spacing: 12) {
                     // Echoes the topic header's display type, scaled to the card.
                     Text(story.title)
-                        .font(.system(size: 32, weight: .heavy).leading(.tight))
-                        .tracking(-1.1)
-                        .lineSpacing(-11)
+                        .font(FeedEditorialTypography.titleFont)
+                        .tracking(FeedEditorialTypography.titleTracking)
+                        .lineSpacing(FeedEditorialTypography.titleLineSpacing)
                         .foregroundStyle(.white)
                         .multilineTextAlignment(.leading)
                         .lineLimit(3)

@@ -187,8 +187,9 @@ struct ExpandedTopicPage: View {
         VStack(alignment: .leading, spacing: GravitySpacing.space16) {
             if let sourceStory {
                 Text(sourceStory.title)
-                    .font(.system(size: 40, weight: .heavy).leading(.tight))
-                    .tracking(-1.2)
+                    .font(FeedEditorialTypography.titleFont)
+                    .tracking(FeedEditorialTypography.titleTracking)
+                    .lineSpacing(FeedEditorialTypography.titleLineSpacing)
                     .foregroundStyle(.white)
                     .lineLimit(3)
                     .fixedSize(horizontal: false, vertical: true)
@@ -219,8 +220,8 @@ struct ExpandedTopicPage: View {
                     .foregroundStyle(.white.opacity(0.58))
 
                 Text(sourceTopic?.label ?? "More to explore")
-                    .font(.system(size: 38, weight: .heavy))
-                    .tracking(-1.2)
+                    .font(FeedEditorialTypography.sectionFont)
+                    .tracking(FeedEditorialTypography.sectionTracking)
                     .foregroundStyle(.white)
 
                 if let subtitle = sourceStory?.subtitle, !subtitle.isEmpty {

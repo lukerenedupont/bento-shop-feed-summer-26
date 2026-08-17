@@ -1,5 +1,16 @@
 import SwiftUI
 
+/// Shared editorial display type for feed cards and their expanded topic
+/// surfaces. Compact enough for short titles to remain on one line.
+enum FeedEditorialTypography {
+    static let titleFont = Font.system(size: 32, weight: .bold).leading(.tight)
+    static let titleTracking: CGFloat = -0.8
+    static let titleLineSpacing: CGFloat = -2
+
+    static let sectionFont = Font.system(size: 28, weight: .bold).leading(.tight)
+    static let sectionTracking: CGFloat = -0.6
+}
+
 // MARK: - Font Weights
 
 /// GT Standard font family weights.

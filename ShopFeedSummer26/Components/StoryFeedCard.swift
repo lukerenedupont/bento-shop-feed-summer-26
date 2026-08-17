@@ -210,9 +210,9 @@ struct StoryFeedCard: View {
 
     private var storyHeader: some View {
         Text(story.title)
-            .font(.system(size: 40, weight: .heavy).leading(.tight))
-            .tracking(-1.3)
-            .lineSpacing(-8)
+            .font(FeedEditorialTypography.titleFont)
+            .tracking(FeedEditorialTypography.titleTracking)
+            .lineSpacing(FeedEditorialTypography.titleLineSpacing)
             .foregroundStyle(.white)
             .multilineTextAlignment(.leading)
             .lineLimit(3)
