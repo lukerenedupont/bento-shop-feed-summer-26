@@ -273,7 +273,7 @@ struct TopicLandingView: View {
         case .bento:
             VStack(alignment: .leading, spacing: 14) {
                 sectionTitle(block.title)
-                BentoGrid(
+                GroupedTopicBento(
                     compartments: bentoCompartments(block),
                     containerWidth: containerWidth - 32
                 )
@@ -596,7 +596,7 @@ private struct TopicFeatureCard: View {
     let merchants: [SampleMerchant]
     let action: () -> Void
 
-    private static let cardHeight: CGFloat = 244
+    private static let cardHeight: CGFloat = 360
 
     /// The story's lifestyle cover is the preferred backdrop; the hero
     /// product photo is an honest fallback when no cover art exists.
@@ -672,7 +672,7 @@ private struct TopicMerchantSpotlight: View {
         Button(action: action) {
             ZStack(alignment: .bottomLeading) {
                 MerchantCoverImage(merchant: merchant)
-                    .frame(height: 244)
+                    .frame(height: 360)
                     .clipped()
 
                 LinearGradient(
@@ -694,7 +694,7 @@ private struct TopicMerchantSpotlight: View {
                 }
                 .padding(16)
             }
-            .frame(height: 244)
+            .frame(height: 360)
             .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
         }
         .buttonStyle(PressScaleButtonStyle())

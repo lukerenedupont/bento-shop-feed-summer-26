@@ -165,6 +165,113 @@ struct BentoGrid: View {
     }
 }
 
+/// Topic-page presentation of the bento recipe. The authored roles become
+/// distinct horizontal product rails, while the lead and brand moments keep
+/// enough height for generated films and lifestyle imagery to breathe.
+struct GroupedTopicBento: View {
+    let compartments: [BentoCompartment]
+    let containerWidth: CGFloat
+
+    private let sectionSpacing: CGFloat = 30
+    private let railSpacing: CGFloat = GravitySpacing.space12
+
+    private var lead: BentoCompartment? {
+        compartments.first(where: { $0.size == .hero }) ?? compartments.first
+    }
+
+    private var remaining: [BentoCompartment] {
+        guard let lead else { return compartments }
+        return compartments.filter { $0.id != lead.id }
+    }
+
+    private var productGroups: [(role: String, items: [BentoCompartment])] {
+        var order: [String] = []
+        var groups: [String: [BentoCompartment]] = [:]
+
+        for item in remaining {
+            guard case .product = item.surface else { continue }
+            let role = item.role.isEmpty ? "More to explore" : item.role
+            if groups[role] == nil { order.append(role) }
+            groups[role, default: []].append(item)
+        }
+
+        return order.compactMap { role in
+            groups[role].map { (role: role, items: $0) }
+        }
+    }
+
+    private var editorialItems: [BentoCompartment] {
+        remaining.filter {
+            if case .product = $0.surface { return false }
+            return true
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: sectionSpacing) {
+            if let lead {
+                BentoCompartmentCard(compartment: lead)
+                    .frame(width: containerWidth, height: 520)
+            }
+
+            ForEach(productGroups, id: \.role) { group in
+                productRail(title: group.role, items: group.items)
+            }
+
+            if !editorialItems.isEmpty {
+                editorialRail
+            }
+        }
+        .frame(width: containerWidth, alignment: .leading)
+    }
+
+    private func productRail(
+        title: String,
+        items: [BentoCompartment]
+    ) -> some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            railTitle(title)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: railSpacing) {
+                    ForEach(items) { item in
+                        BentoCompartmentCard(compartment: item)
+                            .frame(width: min(containerWidth * 0.68, 270), height: 360)
+                    }
+                }
+                .scrollTargetLayout()
+            }
+            .scrollClipDisabled()
+            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+        }
+    }
+
+    private var editorialRail: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            railTitle("Makers and shops")
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: railSpacing) {
+                    ForEach(editorialItems) { item in
+                        BentoCompartmentCard(compartment: item)
+                            .frame(width: min(containerWidth * 0.78, 310), height: 380)
+                    }
+                }
+                .scrollTargetLayout()
+            }
+            .scrollClipDisabled()
+            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+        }
+    }
+
+    private func railTitle(_ title: String) -> some View {
+        Text(title)
+            .font(.system(size: 17, weight: .bold))
+            .tracking(-0.2)
+            .foregroundStyle(.white)
+    }
+}
+
 /// The compartment shell: ambient surface, bottom legibility scrim, and
 /// title. Roles stay data-side (sizing + validator contract) — the imagery
 /// carries the cell, and dossier films will fill these surfaces as they land.
