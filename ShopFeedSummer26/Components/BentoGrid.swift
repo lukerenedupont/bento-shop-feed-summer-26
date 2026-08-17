@@ -294,12 +294,25 @@ private struct BentoCompartmentCard: View {
     let compartment: BentoCompartment
 
     var body: some View {
+        switch compartment.surface {
         // The avatar cluster is chrome-free: no card shell, no scrim, no
         // single destination — the discs themselves are the buttons.
-        if case .avatarCluster(let merchants) = compartment.surface {
+        case .avatarCluster(let merchants):
             BentoAvatarClusterCell(merchants: merchants)
                 .accessibilityLabel(compartment.role)
-        } else {
+
+        // Spotlight surfaces contain their own product-chip buttons. Keeping
+        // them out of the generic outer Button avoids nested hit targets that
+        // steal horizontal rail gestures.
+        case .merchantSpotlight:
+            surface
+                .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                .contentShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                .onTapGesture(perform: compartment.action)
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("\(compartment.role): \(title)")
+
+        default:
             card
         }
     }
