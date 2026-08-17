@@ -12,7 +12,7 @@ struct StoryFeedCard: View {
     var showsForegroundContent = true
     var showsFooterArrow = true
     var titleAtTopLeading = false
-    var showsProductCarousel = false
+    var productLayout: FeedCardProductLayout? = nil
     var foregroundBottomPadding: CGFloat = GravitySpacing.space20
     var backgroundBlurRadius: CGFloat = 0
     var backgroundPlaybackEnabled = true
@@ -34,6 +34,27 @@ struct StoryFeedCard: View {
 
     private var items: [ResolvedStoryProduct] {
         story.resolvedProducts(from: merchants)
+    }
+
+    /// Product references lead the assortment, then the same merchants fill
+    /// it out with adjacent catalog items. Dense layouts therefore have enough
+    /// honest inventory without borrowing unrelated products from the feed.
+    private var productAssortment: [ResolvedStoryProduct] {
+        var seen = Set<String>()
+        var assortment: [ResolvedStoryProduct] = []
+
+        func append(_ item: ResolvedStoryProduct) {
+            guard seen.insert(item.id).inserted else { return }
+            assortment.append(item)
+        }
+
+        items.forEach(append)
+        for item in items {
+            for product in item.merchant.products {
+                append(ResolvedStoryProduct(merchant: item.merchant, product: product))
+            }
+        }
+        return assortment
     }
 
     private var ambientFilmURLs: [URL] {
@@ -66,12 +87,21 @@ struct StoryFeedCard: View {
 
                 if showsForegroundContent {
                     ZStack {
-                        storyHeader
-                            .frame(
-                                maxWidth: .infinity,
-                                maxHeight: .infinity,
-                                alignment: titleAtTopLeading ? .topLeading : .bottomLeading
-                            )
+                        if productLayout == .compactGrid {
+                            compactGridComposition
+                                .frame(
+                                    maxWidth: .infinity,
+                                    maxHeight: .infinity,
+                                    alignment: .bottomLeading
+                                )
+                        } else {
+                            storyHeader
+                                .frame(
+                                    maxWidth: .infinity,
+                                    maxHeight: .infinity,
+                                    alignment: titleAtTopLeading ? .topLeading : .bottomLeading
+                                )
+                        }
                         if showsFooterArrow {
                             footerArrow
                                 .frame(
@@ -80,8 +110,16 @@ struct StoryFeedCard: View {
                                     alignment: .bottomTrailing
                                 )
                         }
-                        if showsProductCarousel {
+                        if productLayout == .stackedDeck {
                             productCarousel
+                                .frame(
+                                    maxWidth: .infinity,
+                                    maxHeight: .infinity,
+                                    alignment: .bottomLeading
+                                )
+                        }
+                        if productLayout == .bottomCarousel {
+                            bottomProductCarousel
                                 .frame(
                                     maxWidth: .infinity,
                                     maxHeight: .infinity,
@@ -249,6 +287,76 @@ struct StoryFeedCard: View {
             .foregroundStyle(.white)
             .frame(width: 40, height: 40)
             .background(.white.opacity(0.12), in: Circle())
+    }
+
+    /// Three native square cards stay legible over the film while the rail can
+    /// continue horizontally when an edit contains more products.
+    private var bottomProductCarousel: some View {
+        let tileWidth = max((width - 56) / 3, 88)
+
+        return VStack(spacing: 14) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 8) {
+                    ForEach(productAssortment) { item in
+                        compactProductTile(item)
+                            .frame(width: tileWidth)
+                    }
+                }
+                .scrollTargetLayout()
+            }
+            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+
+            productFooter
+        }
+        .frame(height: tileWidth + 42)
+    }
+
+    /// A dense editorial treatment for assortment-led stories. Keeping the
+    /// title in the same composition makes it read immediately after the grid
+    /// instead of floating independently over the media.
+    private var compactGridComposition: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            LazyVGrid(
+                columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3),
+                spacing: 8
+            ) {
+                ForEach(Array(productAssortment.prefix(9))) { item in
+                    compactProductTile(item)
+                }
+            }
+
+            storyHeader
+        }
+    }
+
+    private func compactProductTile(_ item: ResolvedStoryProduct) -> some View {
+        ProductCard(
+            image: nil,
+            imageURL: item.product.imageURL,
+            priceBadge: formatPrice(item.product.price),
+            showFavoriteButton: true
+        )
+        // The whole story card is the destination at this level. Controls are
+        // presented in their native form without creating nested tap targets.
+        .allowsHitTesting(false)
+    }
+
+    private var productFooter: some View {
+        HStack(spacing: 8) {
+            Text("\(productAssortment.count) products in this edit")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+
+            Spacer()
+
+            Text("Shop all")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(.white)
+            Image(systemName: "chevron.right")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(.white)
+        }
     }
 
     private var productCarousel: some View {

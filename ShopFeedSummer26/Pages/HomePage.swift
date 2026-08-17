@@ -307,71 +307,76 @@ struct HomePage: View {
         .buttonStyle(PressScaleButtonStyle())
     }
 
-    private var feedNotifications: [(title: String, subtitle: String, icon: String)] {
-        [
-            ("Get up to $100 Shop Cash", "Plus flash deals and exclusive offers", "dollarsign"),
-            ("Your order is on the way", "Track your delivery from Design Within Reach", "shippingbox"),
-            ("20% off your saved picks", "A limited-time offer from shops you follow", "tag"),
-        ]
+    private var deliveryMerchants: [SampleMerchant] {
+        var seen = Set<String>()
+        return utilityProducts
+            .map(\.merchant)
+            .filter { seen.insert($0.id).inserted && !$0.products.isEmpty }
     }
 
+    @ViewBuilder
     private var feedNotificationStack: some View {
-        let notification = feedNotifications[notificationIndex % feedNotifications.count]
+        if !deliveryMerchants.isEmpty {
+            let merchant = deliveryMerchants[notificationIndex % deliveryMerchants.count]
+            let deliveryProducts = Array(merchant.products.prefix(2))
+            let windows = ["Arriving today 3–6pm", "Arriving tomorrow", "Out for delivery"]
+            let arrival = windows[notificationIndex % windows.count]
 
-        return ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .fill(.white)
-                .frame(height: 72)
-                .padding(.horizontal, 12)
-                .offset(y: 7)
-                .shadow(color: .black.opacity(0.08), radius: 12, y: 7)
+            ZStack(alignment: .top) {
+                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                    .fill(.white)
+                    .frame(height: 74)
+                    .padding(.horizontal, 26)
+                    .offset(y: 9)
+                    .shadow(color: .black.opacity(0.07), radius: 12, y: 8)
 
-            Button {
-                HapticFeedback.light.fire()
-                withAnimation(.smooth(duration: 0.28)) {
-                    notificationIndex = (notificationIndex + 1) % feedNotifications.count
-                }
-            } label: {
-                HStack(spacing: 14) {
-                    Circle()
-                        .fill(Color.black.opacity(0.08))
-                        .frame(width: 40, height: 40)
-                        .overlay {
-                            Image(systemName: notification.icon)
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundStyle(.black)
-                                .contentTransition(.symbolEffect(.replace))
-                        }
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(notification.title)
-                            .font(.system(size: 16, weight: .semibold))
-                        Text(notification.subtitle)
-                            .font(.system(size: 14))
+                Button {
+                    HapticFeedback.light.fire()
+                    withAnimation(.smooth(duration: 0.28)) {
+                        notificationIndex = (notificationIndex + 1) % deliveryMerchants.count
                     }
-                    .foregroundStyle(.black)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.78)
-                    .contentTransition(.opacity)
+                } label: {
+                    HStack(spacing: 12) {
+                        MerchantLogoImage(merchant: merchant, size: 44)
 
-                    Spacer(minLength: 4)
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(.black)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(merchant.displayName)
+                                .font(.system(size: 15, weight: .regular))
+                                .foregroundStyle(.black.opacity(0.58))
+                            Text(arrival)
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(.black)
+                        }
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.82)
+                        .contentTransition(.opacity)
+
+                        Spacer(minLength: 4)
+
+                        HStack(spacing: 6) {
+                            ForEach(deliveryProducts) { product in
+                                ProductImageView(product: product, merchant: merchant)
+                                    .frame(width: 44, height: 44)
+                                    .background(.white)
+                                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                            }
+                        }
+                        .contentTransition(.opacity)
+                    }
+                    .padding(.horizontal, 14)
+                    .frame(height: 74)
+                    .background(.white, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 24, style: .continuous)
+                            .strokeBorder(Color.black.opacity(0.05), lineWidth: 0.5)
+                    }
+                    .shadow(color: .black.opacity(0.08), radius: 12, y: 7)
                 }
-                .padding(.horizontal, 14)
-                .frame(height: 72)
-                .background(.white, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 24, style: .continuous)
-                        .strokeBorder(Color.black.opacity(0.05), lineWidth: 0.5)
-                }
-                .shadow(color: .black.opacity(0.08), radius: 12, y: 7)
+                .buttonStyle(PressScaleButtonStyle())
             }
-            .buttonStyle(PressScaleButtonStyle())
+            .frame(height: 83)
+            .padding(.horizontal, 16)
         }
-        .frame(height: 79)
-        .padding(.horizontal, 16)
     }
 
     private func utilityProductRail(
@@ -434,7 +439,10 @@ struct HomePage: View {
             isActive: story.id == activeFeedStory?.id,
             showsFooterArrow: false,
             titleAtTopLeading: true,
-            showsProductCarousel: true,
+            productLayout: FeedInformationArchitecture.productLayout(
+                for: story,
+                in: selectedCategory
+            ),
             backgroundPlaybackEnabled: expandingStoryID != story.id,
             freezesParallax: expandingStoryID == story.id,
             scrollViewportHeight: viewportHeight,

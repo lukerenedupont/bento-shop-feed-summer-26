@@ -9,6 +9,16 @@ struct FeedCategory: Identifiable, Hashable {
     let id: String
     let label: String
     fileprivate let candidateStoryIDs: [String]
+    fileprivate let productLayouts: [FeedCardProductLayout]
+}
+
+/// The product treatment used inside a full-screen story card. Categories own
+/// a repeating recipe instead of letting the view choose a style at random,
+/// keeping the feed varied while the merchandising remains predictable.
+enum FeedCardProductLayout: String, Hashable {
+    case stackedDeck
+    case bottomCarousel
+    case compactGrid
 }
 
 /// The one authoritative Home information architecture. Each category lists
@@ -16,7 +26,12 @@ struct FeedCategory: Identifiable, Hashable {
 /// switching feed sources does not change the navigation model.
 enum FeedInformationArchitecture {
     static let categories: [FeedCategory] = [
-        FeedCategory(id: "for-you", label: "For you", candidateStoryIDs: []),
+        FeedCategory(
+            id: "for-you",
+            label: "For you",
+            candidateStoryIDs: [],
+            productLayouts: [.stackedDeck]
+        ),
         FeedCategory(
             id: "living",
             label: "Living",
@@ -24,7 +39,8 @@ enum FeedInformationArchitecture {
                 "edit-stay-a-while", "edit-mirrors-with-presence",
                 "edit-table-as-a-scene", "sculptural-mirror-hunt",
                 "table-stranger", "mirrors-floor-presence"
-            ]
+            ],
+            productLayouts: [.bottomCarousel, .compactGrid, .stackedDeck]
         ),
         FeedCategory(
             id: "design",
@@ -34,7 +50,8 @@ enum FeedInformationArchitecture {
                 "edit-studio-in-a-bag", "edit-zero-beige-energy",
                 "type-systems", "nursery-grown-up-room",
                 "new-york-graphics", "type-making-now"
-            ]
+            ],
+            productLayouts: [.compactGrid, .stackedDeck, .bottomCarousel]
         ),
         FeedCategory(
             id: "style",
@@ -43,7 +60,8 @@ enum FeedInformationArchitecture {
                 "edit-salomons-to-know", "edit-zero-beige-energy",
                 "edit-studio-in-a-bag", "trail-to-street",
                 "black-silver-signal", "trail-light-neutrals"
-            ]
+            ],
+            productLayouts: [.bottomCarousel, .stackedDeck, .compactGrid]
         ),
         FeedCategory(
             id: "wellness",
@@ -51,7 +69,8 @@ enum FeedInformationArchitecture {
             candidateStoryIDs: [
                 "edit-wash-day-reset", "edit-stay-a-while",
                 "scalp-reset", "coffee-cup-ritual"
-            ]
+            ],
+            productLayouts: [.stackedDeck, .bottomCarousel, .compactGrid]
         ),
         FeedCategory(
             id: "morning",
@@ -61,7 +80,8 @@ enum FeedInformationArchitecture {
                 "edit-stay-a-while", "coffee-counter",
                 "coffee-fellow-workflow", "coffee-kinto-serve",
                 "coffee-cup-ritual"
-            ]
+            ],
+            productLayouts: [.bottomCarousel, .compactGrid, .stackedDeck]
         ),
         FeedCategory(
             id: "outdoors",
@@ -70,7 +90,8 @@ enum FeedInformationArchitecture {
                 "edit-gloriously-lost", "edit-salomons-to-know",
                 "city-to-trail-birding", "birding-optics-sizes",
                 "birding-wet-weather", "trail-weatherproof"
-            ]
+            ],
+            productLayouts: [.compactGrid, .bottomCarousel, .stackedDeck]
         )
     ]
 
@@ -88,6 +109,18 @@ enum FeedInformationArchitecture {
         }
 
         return category.candidateStoryIDs.compactMap { storiesByID[$0] }
+    }
+
+    static func productLayout(
+        for story: FeedStory,
+        in category: FeedCategory
+    ) -> FeedCardProductLayout {
+        guard category.id != "for-you",
+              !category.productLayouts.isEmpty,
+              let storyIndex = category.candidateStoryIDs.firstIndex(of: story.id) else {
+            return .stackedDeck
+        }
+        return category.productLayouts[storyIndex % category.productLayouts.count]
     }
 }
 
