@@ -386,6 +386,14 @@ struct ExpandedTopicPage: View {
                 }
                 .contentMargins(.leading, FeedNavigationStyle.railLeadingInset, for: .scrollContent)
                 .contentMargins(.trailing, FeedNavigationStyle.railTrailingInset, for: .scrollContent)
+                .mask {
+                    HStack(spacing: 0) {
+                        // Match Home: pills remain in the full-width rail and
+                        // disappear only after travelling beneath the control.
+                        Color.clear.frame(width: GravitySpacing.space20)
+                        Color.black
+                    }
+                }
             }
 
             Button {
