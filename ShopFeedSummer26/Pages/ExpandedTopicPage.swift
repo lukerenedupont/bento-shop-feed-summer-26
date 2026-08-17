@@ -304,7 +304,8 @@ struct ExpandedTopicPage: View {
             .padding(.leading, 6)
             .padding(.trailing, GravitySpacing.space12)
             .frame(height: 36)
-            .background(.black.opacity(0.54), in: Capsule())
+            .background(.ultraThinMaterial, in: Capsule())
+            .environment(\.colorScheme, .dark)
             .padding(GravitySpacing.space12)
         }
         .frame(width: width, alignment: .topLeading)
