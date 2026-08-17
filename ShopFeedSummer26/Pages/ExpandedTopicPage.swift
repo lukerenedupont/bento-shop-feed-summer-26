@@ -214,10 +214,8 @@ struct ExpandedTopicPage: View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: GravitySpacing.space16) {
                 Text("Inside this edit")
-                    .font(.system(size: 12, weight: .bold))
-                    .tracking(1.1)
-                    .textCase(.uppercase)
-                    .foregroundStyle(.white.opacity(0.58))
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.82))
 
                 Text(sourceTopic?.label ?? "More to explore")
                     .font(FeedEditorialTypography.sectionFont)
@@ -227,18 +225,18 @@ struct ExpandedTopicPage: View {
                 if let subtitle = sourceStory?.subtitle, !subtitle.isEmpty {
                     Text(subtitle)
                         .font(.system(size: 18, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.72))
+                        .foregroundStyle(.white.opacity(0.86))
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
             .padding(.horizontal, GravitySpacing.space20)
             .padding(.vertical, GravitySpacing.space20)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.white.opacity(0.12))
+            .background(Color.black.opacity(0.30))
             .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous))
             .overlay {
                 RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous)
-                    .strokeBorder(Color.white.opacity(0.16), lineWidth: 0.5)
+                    .strokeBorder(Color.white.opacity(0.12), lineWidth: 0.5)
             }
             .padding(.horizontal, GravitySpacing.space16)
             .padding(.top, GravitySpacing.space8)

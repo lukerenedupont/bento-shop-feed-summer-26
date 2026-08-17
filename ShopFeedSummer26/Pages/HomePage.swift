@@ -33,25 +33,16 @@ struct HomePage: View {
     @State private var isFeedScrolling = false
     @State private var expandingStoryID: String?
     @State private var notificationIndex = 0
+    @State private var categoryMoveDirection = 1
 
     private let retargetingCardHeight: CGFloat = 177
 
     private var topics: [FeedTopic] { PersonalizedFeedCatalog.current.topics }
-    /// Header destinations mirror the For You card order exactly. This keeps
-    /// every pill paired with the card that opens the same editorial world.
-    private var navigationTopics: [FeedTopic] {
-        guard let forYou = topics.first(where: { $0.id == "for-you" }) else { return topics }
-        var seen = Set<String>()
-        let orderedDestinations = (forYou.storyIDs ?? []).compactMap { storyID -> FeedTopic? in
-            guard let topic = topics.first(where: {
-                $0.id != "for-you" && $0.storyIDs?.contains(storyID) == true
-            }), seen.insert(topic.id).inserted else { return nil }
-            return topic
-        }
-        return [forYou] + orderedDestinations
+    private var navigationTopics: [FeedCategory] {
+        FeedInformationArchitecture.categories
     }
-    private var selectedTopic: FeedTopic {
-        topics.first { $0.id == selectedTopicID } ?? topics[0]
+    private var selectedCategory: FeedCategory {
+        navigationTopics.first { $0.id == selectedTopicID } ?? navigationTopics[0]
     }
 
     private var pageBackgroundColor: Color {
@@ -62,13 +53,10 @@ struct HomePage: View {
     }
 
     private var focusedStories: [FeedStory] {
-        let stories = PersonalizedFeedStories.all
-        if let storyIDs = selectedTopic.storyIDs {
-            let storiesByID = Dictionary(uniqueKeysWithValues: stories.map { ($0.id, $0) })
-            return storyIDs.compactMap { storiesByID[$0] }
-        }
-        guard let topicKey = selectedTopic.storyTopicKey else { return stories }
-        return stories.filter { $0.topicKeys.contains(topicKey) }
+        FeedInformationArchitecture.stories(
+            for: selectedCategory,
+            in: PersonalizedFeedCatalog.current
+        )
     }
 
     private var activeFeedStory: FeedStory? {
@@ -84,17 +72,11 @@ struct HomePage: View {
             if let focusedStoryID {
                 StoryTopicPage(storyID: focusedStoryID, namespace: namespace)
                     .id(focusedStoryID)
-            } else if selectedTopicID == "for-you" {
-                storyFeed
             } else {
-                TopicLandingView(topic: selectedTopic, stories: focusedStories, merchants: merchants)
+                storyFeed
                     .id(selectedTopicID)
+                    .transition(categoryFeedTransition)
             }
-        }
-        .transaction { transaction in
-            // Topic changes replace the content immediately while the
-            // selection pill animates independently in the top bar.
-            transaction.animation = nil
         }
         .background(pageBackgroundColor.ignoresSafeArea())
         .safeAreaBar(edge: .top) {
@@ -120,6 +102,8 @@ struct HomePage: View {
             merchantService.usingFallbackData = !feedService.isLive
         }
         .onChange(of: selectedTopicID) { _, _ in
+            visibleStoryID = nil
+            expandingStoryID = nil
             withAnimation(.easeOut(duration: 0.22)) {
                 coordinator.navBarBlurTint = pageBackgroundColor
             }
@@ -153,7 +137,9 @@ struct HomePage: View {
 
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(spacing: 16) {
-                        feedUtilityShelf(containerWidth: geo.size.width)
+                        if selectedTopicID == "for-you" {
+                            feedUtilityShelf(containerWidth: geo.size.width)
+                        }
 
                         ForEach(focusedStories) { story in
                             paginatedFeedCard(
@@ -187,6 +173,15 @@ struct HomePage: View {
                 }
             }
         }
+    }
+
+    private var categoryFeedTransition: AnyTransition {
+        let incoming: Edge = categoryMoveDirection > 0 ? .trailing : .leading
+        let outgoing: Edge = categoryMoveDirection > 0 ? .leading : .trailing
+        return .asymmetric(
+            insertion: .move(edge: incoming),
+            removal: .move(edge: outgoing)
+        )
     }
 
     private var utilityProducts: [ResolvedStoryProduct] {
@@ -631,26 +626,18 @@ struct HomePage: View {
         }
     }
 
-    private func topicButton(_ topic: FeedTopic) -> some View {
+    private func topicButton(_ topic: FeedCategory) -> some View {
         Button {
-            guard topic.id != "for-you" else {
-                guard selectedTopicID != "for-you" || focusedStoryID != nil else { return }
-                HapticFeedback.light.fire()
-                coordinator.resetScrollState()
-                withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
-                    focusedStoryID = nil
-                    selectedTopicID = "for-you"
-                }
-                return
-            }
-
-            guard let storyID = topic.storyIDs?.first,
-                  let story = PersonalizedFeedStories.all.first(where: { $0.id == storyID }) else {
-                return
-            }
+            guard selectedTopicID != topic.id || focusedStoryID != nil else { return }
             HapticFeedback.light.fire()
             coordinator.resetScrollState()
-            openTopic(for: story)
+            let currentIndex = navigationTopics.firstIndex { $0.id == selectedTopicID } ?? 0
+            let nextIndex = navigationTopics.firstIndex { $0.id == topic.id } ?? currentIndex
+            categoryMoveDirection = nextIndex >= currentIndex ? 1 : -1
+            withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.28)) {
+                focusedStoryID = nil
+                selectedTopicID = topic.id
+            }
         } label: {
             topicLabel(topic)
                 .background {
@@ -670,7 +657,7 @@ struct HomePage: View {
         .accessibilityAddTraits(selectedTopicID == topic.id ? .isSelected : [])
     }
 
-    private func topicLabel(_ topic: FeedTopic) -> some View {
+    private func topicLabel(_ topic: FeedCategory) -> some View {
         Text(topic.label)
             .font(FeedNavigationStyle.labelFont)
             .foregroundStyle(topicLabelColor(topic))
@@ -679,7 +666,7 @@ struct HomePage: View {
             .contentShape(Capsule())
     }
 
-    private func topicLabelColor(_ topic: FeedTopic) -> Color {
+    private func topicLabelColor(_ topic: FeedCategory) -> Color {
         selectedTopicID == topic.id ? GravityColors.textFixedDark : GravityColors.textFixedLight
     }
 

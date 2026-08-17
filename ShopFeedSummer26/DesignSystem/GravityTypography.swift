@@ -5,7 +5,7 @@ import SwiftUI
 enum FeedEditorialTypography {
     static let titleFont = Font.system(size: 32, weight: .bold).leading(.tight)
     static let titleTracking: CGFloat = -0.8
-    static let titleLineSpacing: CGFloat = -2
+    static let titleLineSpacing: CGFloat = -5
 
     static let sectionFont = Font.system(size: 28, weight: .bold).leading(.tight)
     static let sectionTracking: CGFloat = -0.6

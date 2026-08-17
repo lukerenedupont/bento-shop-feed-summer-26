@@ -1,5 +1,96 @@
 import Foundation
 
+/// A broad, shopper-facing channel in Home's primary navigation. Categories
+/// are intentionally separate from `FeedTopic`: a category owns a feed of
+/// editorial cards, while a topic remains the deeper destination opened by a
+/// card. Keeping that distinction explicit prevents specific destinations
+/// such as "Coffee counter" from drifting back into the primary tab rail.
+struct FeedCategory: Identifiable, Hashable {
+    let id: String
+    let label: String
+    fileprivate let candidateStoryIDs: [String]
+}
+
+/// The one authoritative Home information architecture. Each category lists
+/// both dossier-bundle story IDs and their bundled fallback equivalents, so
+/// switching feed sources does not change the navigation model.
+enum FeedInformationArchitecture {
+    static let categories: [FeedCategory] = [
+        FeedCategory(id: "for-you", label: "For you", candidateStoryIDs: []),
+        FeedCategory(
+            id: "living",
+            label: "Living",
+            candidateStoryIDs: [
+                "edit-stay-a-while", "edit-mirrors-with-presence",
+                "edit-table-as-a-scene", "sculptural-mirror-hunt",
+                "table-stranger", "mirrors-floor-presence"
+            ]
+        ),
+        FeedCategory(
+            id: "design",
+            label: "Design",
+            candidateStoryIDs: [
+                "edit-design-shelf", "edit-grow-with-them",
+                "edit-studio-in-a-bag", "edit-zero-beige-energy",
+                "type-systems", "nursery-grown-up-room",
+                "new-york-graphics", "type-making-now"
+            ]
+        ),
+        FeedCategory(
+            id: "style",
+            label: "Style",
+            candidateStoryIDs: [
+                "edit-salomons-to-know", "edit-zero-beige-energy",
+                "edit-studio-in-a-bag", "trail-to-street",
+                "black-silver-signal", "trail-light-neutrals"
+            ]
+        ),
+        FeedCategory(
+            id: "wellness",
+            label: "Wellness",
+            candidateStoryIDs: [
+                "edit-wash-day-reset", "edit-stay-a-while",
+                "scalp-reset", "coffee-cup-ritual"
+            ]
+        ),
+        FeedCategory(
+            id: "morning",
+            label: "Morning",
+            candidateStoryIDs: [
+                "edit-coffee-worth-waking-for", "edit-table-as-a-scene",
+                "edit-stay-a-while", "coffee-counter",
+                "coffee-fellow-workflow", "coffee-kinto-serve",
+                "coffee-cup-ritual"
+            ]
+        ),
+        FeedCategory(
+            id: "outdoors",
+            label: "Outdoors",
+            candidateStoryIDs: [
+                "edit-gloriously-lost", "edit-salomons-to-know",
+                "city-to-trail-birding", "birding-optics-sizes",
+                "birding-wet-weather", "trail-weatherproof"
+            ]
+        )
+    ]
+
+    static func stories(
+        for category: FeedCategory,
+        in catalog: PersonalizedFeedCatalog
+    ) -> [FeedStory] {
+        let storiesByID = Dictionary(uniqueKeysWithValues: catalog.stories.map { ($0.id, $0) })
+
+        if category.id == "for-you" {
+            guard let storyIDs = catalog.topics.first(where: { $0.id == "for-you" })?.storyIDs else {
+                return catalog.stories
+            }
+            return storyIDs.compactMap { storiesByID[$0] }
+        }
+
+        return category.candidateStoryIDs.compactMap { storiesByID[$0] }
+    }
+}
+
 /// A server/data-defined channel in the personalized feed header.
 struct FeedTopic: Identifiable, Hashable, Codable {
     /// A curated slice of the topic, phrased as a shopping category rather
