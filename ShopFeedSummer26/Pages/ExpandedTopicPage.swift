@@ -186,7 +186,7 @@ struct ExpandedTopicPage: View {
 
             Spacer(minLength: GravitySpacing.space16)
         }
-        .padding(.top, windowSafeAreaTopInset + 98)
+        .padding(.top, windowSafeAreaTopInset + 118)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .opacity(showsExpandedControls ? 1 : 0)
         .offset(y: showsExpandedControls ? 0 : 10)
