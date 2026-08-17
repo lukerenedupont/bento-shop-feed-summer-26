@@ -26,6 +26,7 @@ struct StoryFeedCard: View {
     @Environment(NavigationCoordinator.self) private var coordinator
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var mediaIsMoving = false
+    @State private var selectedProductID: String?
 
     private var items: [ResolvedStoryProduct] {
         story.resolvedProducts(from: merchants)
@@ -250,8 +251,8 @@ struct StoryFeedCard: View {
         GeometryReader { geometry in
             if !items.isEmpty {
                 ZStack(alignment: .leading) {
-                    productStackLayer(offset: 16, opacity: 0.42)
-                    productStackLayer(offset: 8, opacity: 0.66)
+                    productStackLayer(offset: 16)
+                    productStackLayer(offset: 8)
 
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack(spacing: 8) {
@@ -264,6 +265,7 @@ struct StoryFeedCard: View {
                         .scrollTargetLayout()
                     }
                     .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+                    .scrollPosition(id: $selectedProductID, anchor: .center)
                 }
             }
         }
@@ -295,7 +297,7 @@ struct StoryFeedCard: View {
                 .frame(width: 38, height: 38)
         }
         .padding(8)
-        .background(productStackColor, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(productStackColor(for: item), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
@@ -303,10 +305,18 @@ struct StoryFeedCard: View {
     }
 
     private var productStackColor: Color {
-        Color(hex: story.accentHex).opacity(0.92)
+        guard let selectedProductID,
+              let selected = items.first(where: { $0.id == selectedProductID }) else {
+            return items.first?.merchant.brandColor ?? Color(hex: story.accentHex)
+        }
+        return selected.merchant.brandColor
     }
 
-    private func productStackLayer(offset: CGFloat, opacity: Double) -> some View {
+    private func productStackColor(for item: ResolvedStoryProduct) -> Color {
+        item.merchant.brandColor
+    }
+
+    private func productStackLayer(offset: CGFloat) -> some View {
         RoundedRectangle(cornerRadius: 20, style: .continuous)
             .fill(productStackColor)
             .overlay {
@@ -314,8 +324,9 @@ struct StoryFeedCard: View {
                     .strokeBorder(.white.opacity(0.10), lineWidth: 0.5)
             }
             .frame(height: 88)
+            .padding(.trailing, 16)
             .offset(x: offset)
-            .opacity(opacity)
+            .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
     }
 
 }
