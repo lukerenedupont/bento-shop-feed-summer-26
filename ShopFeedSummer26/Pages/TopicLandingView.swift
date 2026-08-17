@@ -330,6 +330,8 @@ struct TopicLandingView: View {
                             item,
                             cardWidth: max(300, containerWidth - 32)
                         )
+                        .frame(width: max(300, containerWidth - 32), height: 360)
+                        .clipped()
                     }
                 }
                 .padding(.horizontal, 16)
@@ -358,14 +360,14 @@ struct TopicLandingView: View {
                 TopicMerchantSpotlight(merchant: merchant) {
                     coordinator.pushRoute(.store(merchantId: merchant.id))
                 }
-                .frame(width: 270)
+                .frame(width: min(cardWidth, 360))
             }
         case .product:
             if let product = resolvedProduct(for: item) {
                 TopicProductRailCard(item: product) {
                     coordinator.pushRoute(.product(merchantId: product.merchant.id, productId: product.product.id))
                 }
-                .frame(width: 190)
+                .frame(width: min(cardWidth, 360))
             }
         case .merchantSpotlight:
             if let merchantID = item.merchantID,
@@ -373,7 +375,7 @@ struct TopicLandingView: View {
                 TopicMerchantSpotlight(merchant: merchant) {
                     coordinator.pushRoute(.store(merchantId: merchant.id))
                 }
-                .frame(width: 270)
+                .frame(width: cardWidth)
             }
         case .avatarCluster:
             EmptyView()
