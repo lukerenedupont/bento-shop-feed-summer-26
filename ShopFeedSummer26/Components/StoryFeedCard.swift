@@ -368,13 +368,15 @@ struct StoryFeedCard: View {
                 let direction = value.translation.width < 0 ? 1 : -1
                 let exitOffset = direction > 0 ? -width : width
 
-                withAnimation(.easeOut(duration: 0.20)) {
+                withAnimation(.easeOut(duration: 0.22)) {
                     productDragOffset = exitOffset
                     productPromotionProgress = 1
                 }
 
                 Task { @MainActor in
-                    try? await Task.sleep(for: .milliseconds(190))
+                    // Reset only after both the outgoing card and the already-
+                    // rendered rear card have reached their final geometry.
+                    try? await Task.sleep(for: .milliseconds(230))
                     var transaction = Transaction()
                     transaction.disablesAnimations = true
                     withTransaction(transaction) {
