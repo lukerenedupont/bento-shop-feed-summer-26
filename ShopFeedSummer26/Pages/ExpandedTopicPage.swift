@@ -10,12 +10,12 @@ struct ExpandedTopicPage: View {
 
     @Environment(NavigationCoordinator.self) private var coordinator
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var showsExpandedControls = false
     @State private var focusedProductID: String?
-    @State private var revealedProductIDs = Set<String>()
     @State private var verticalScrollOffset: CGFloat = 0
+    @State private var selectedSubtopicID: String?
+    @Namespace private var topicNavigationNamespace
 
     private var sourceStory: FeedStory? {
         PersonalizedFeedStories.all.first { $0.id == sourceStoryID }
@@ -47,6 +47,11 @@ struct ExpandedTopicPage: View {
 
     private var legacyStories: [FeedStory] {
         legacyTopic.map(LegacyFeedArchive.stories(for:)) ?? []
+    }
+
+    private var selectedSubtopicStory: FeedStory? {
+        guard let selectedSubtopicID else { return nil }
+        return PersonalizedFeedCatalog.bundled.stories.first { $0.id == selectedSubtopicID }
     }
 
     private var windowSafeAreaTopInset: CGFloat {
@@ -88,54 +93,49 @@ struct ExpandedTopicPage: View {
                     Color.black
                 }
 
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 0) {
-                        ZStack(alignment: .topLeading) {
-                            if let sourceStory {
-                                // Transparent copy carries the title and CTA,
-                                // leaving the persistent film visible beneath.
-                                StoryFeedCard(
-                                    story: sourceStory,
-                                    merchants: SampleMerchant.all,
-                                    width: geometry.size.width,
-                                    height: geometry.size.height,
-                                    isActive: true,
-                                    showsBackground: false,
-                                    showsFooterArrow: false,
-                                    foregroundBottomPadding: 48,
-                                    cornerRadius: 0,
-                                    freezesParallax: true,
-                                    scrollViewportHeight: geometry.size.height
-                                )
-                                .allowsHitTesting(false)
-                                .accessibilityHidden(true)
-                            }
+                if let selectedSubtopicStory {
+                    TopicLandingView(
+                        topic: FeedTopic(
+                            id: selectedSubtopicStory.id,
+                            label: selectedSubtopicStory.title,
+                            storyTopicKey: nil,
+                            storyIDs: [selectedSubtopicStory.id],
+                            subtopics: nil,
+                            relatedMerchantIDs: nil,
+                            merchandisingBlocks: nil
+                        ),
+                        stories: [selectedSubtopicStory],
+                        merchants: LegacyFeedArchive.merchants,
+                        headerCoverImageName: sourceStory?.coverImageName,
+                        surfaceAccentHex: sourceStory?.accentHex,
+                        headerEyebrow: legacyTopic?.label,
+                        compactHeader: true
+                    )
+                    .transition(.opacity)
+                } else {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(spacing: 0) {
+                            heroContent(containerWidth: geometry.size.width)
+                            // Reveal the beginning of the next card at rest so
+                            // the vertical continuation is immediately clear.
+                            .frame(
+                                width: geometry.size.width,
+                                height: max(geometry.size.height - 118, 620)
+                            )
 
-                            if !sourceProducts.isEmpty {
-                                VStack(spacing: 0) {
-                                    Spacer()
-                                    productPager(containerWidth: geometry.size.width)
-                                    Spacer()
-                                }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .opacity(showsExpandedControls ? 1 : 0)
-                                .allowsHitTesting(showsExpandedControls)
-                            }
+                            categorySection(containerWidth: geometry.size.width)
                         }
-                        .frame(width: geometry.size.width, height: geometry.size.height)
-
-                        categorySection(containerWidth: geometry.size.width)
+                    }
+                    .scrollBounceBehavior(.basedOnSize)
+                    .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                        geometry.contentOffset.y
+                    } action: { _, offset in
+                        verticalScrollOffset = max(0, offset)
                     }
                 }
-                .scrollBounceBehavior(.basedOnSize)
-                .onScrollGeometryChange(for: CGFloat.self) { geometry in
-                    geometry.contentOffset.y
-                } action: { _, offset in
-                    verticalScrollOffset = max(0, offset)
-                }
 
-                backButton
-                    .padding(.top, windowSafeAreaTopInset + GravitySpacing.space12)
+                topicNavigation
+                    .padding(.top, windowSafeAreaTopInset + GravitySpacing.space4)
                     .opacity(showsExpandedControls ? 1 : 0)
             }
         }
@@ -146,24 +146,14 @@ struct ExpandedTopicPage: View {
         .environment(\.colorScheme, .dark)
         .task(id: sourceStoryID) {
             focusedProductID = sourceProducts.first?.id
-            revealedProductIDs = []
-            try? await Task.sleep(for: .milliseconds(500))
+            showsExpandedControls = false
+            // Let the system's shared navigation zoom settle before adding
+            // foreground content. Competing effects here cause dropped frames.
+            try? await Task.sleep(for: .milliseconds(360))
             guard !Task.isCancelled else { return }
 
-            withAnimation(.easeOut(duration: 0.22)) {
+            withAnimation(.easeOut(duration: 0.24)) {
                 showsExpandedControls = true
-            }
-
-            if reduceMotion {
-                revealedProductIDs = Set(sourceProducts.map(\.id))
-            } else {
-                for item in sourceProducts {
-                    guard !Task.isCancelled else { return }
-                    withAnimation(.spring(response: 0.42, dampingFraction: 0.88)) {
-                        _ = revealedProductIDs.insert(item.id)
-                    }
-                    try? await Task.sleep(for: .milliseconds(90))
-                }
             }
         }
         .onAppear {
@@ -173,6 +163,34 @@ struct ExpandedTopicPage: View {
             coordinator.resetScrollState()
             coordinator.showNavBar = true
         }
+    }
+
+    /// Keeps the editorial title and its products in one layout and animation
+    /// group so the expanded card reads as a single shared surface.
+    private func heroContent(containerWidth: CGFloat) -> some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
+            if let sourceStory {
+                Text(sourceStory.title)
+                    .font(.system(size: 40, weight: .heavy).leading(.tight))
+                    .tracking(-1.2)
+                    .foregroundStyle(.white)
+                    .lineLimit(3)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, GravitySpacing.space20)
+                    .accessibilityAddTraits(.isHeader)
+            }
+
+            if !sourceProducts.isEmpty {
+                productPager(containerWidth: containerWidth)
+            }
+
+            Spacer(minLength: GravitySpacing.space16)
+        }
+        .padding(.top, windowSafeAreaTopInset + 68)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .opacity(showsExpandedControls ? 1 : 0)
+        .offset(y: showsExpandedControls ? 0 : 10)
+        .allowsHitTesting(showsExpandedControls)
     }
 
     private func categorySection(containerWidth: CGFloat) -> some View {
@@ -197,8 +215,17 @@ struct ExpandedTopicPage: View {
                 }
             }
             .padding(.horizontal, GravitySpacing.space20)
-            .padding(.top, 34)
-            .padding(.bottom, 10)
+            .padding(.vertical, GravitySpacing.space20)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.white.opacity(0.12))
+            .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous)
+                    .strokeBorder(Color.white.opacity(0.16), lineWidth: 0.5)
+            }
+            .padding(.horizontal, GravitySpacing.space16)
+            .padding(.top, GravitySpacing.space8)
+            .padding(.bottom, GravitySpacing.space20)
 
             if let legacyTopic {
                 // Restore the complete, pre-dossier pill destination beneath
@@ -238,34 +265,20 @@ struct ExpandedTopicPage: View {
                         }
                         .buttonStyle(PressScaleButtonStyle())
                         .accessibilityLabel("\(item.product.title), \(item.product.price)")
-                        .opacity(revealedProductIDs.contains(item.id) ? 1 : 0)
-                        .blur(radius: revealedProductIDs.contains(item.id) ? 0 : 4)
-                        .offset(y: revealedProductIDs.contains(item.id) ? 0 : 18)
-                        .scaleEffect(revealedProductIDs.contains(item.id) ? 1 : 0.96)
                         .id(item.id)
                         .scrollTransition(.interactive, axis: .horizontal) { card, phase in
                             card
                                 .scaleEffect(1 - min(abs(phase.value), 1) * 0.055)
-                                .opacity(1 - min(abs(phase.value), 1) * 0.30)
                         }
                     }
                 }
                 .scrollTargetLayout()
             }
-            .frame(height: cardWidth * 1.06 + 130)
+            .frame(height: cardWidth + 92)
             .contentMargins(.horizontal, (containerWidth - cardWidth) / 2, for: .scrollContent)
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
             .scrollPosition(id: $focusedProductID, anchor: .center)
 
-            HStack(spacing: 6) {
-                ForEach(sourceProducts) { item in
-                    Capsule()
-                        .fill(.white.opacity(focusedProductID == item.id ? 0.95 : 0.34))
-                        .frame(width: focusedProductID == item.id ? 18 : 6, height: 6)
-                        .animation(.easeOut(duration: 0.18), value: focusedProductID)
-                }
-            }
-            .frame(height: 8)
         }
     }
 
@@ -273,70 +286,92 @@ struct ExpandedTopicPage: View {
         _ item: ResolvedStoryProduct,
         width: CGFloat
     ) -> some View {
-        VStack(alignment: .leading, spacing: 0) {
-            ProductImageView(product: item.product, merchant: item.merchant)
-                .frame(width: width, height: width * 1.06)
-                .background(Color(white: 0.965))
-                .clipped()
-                .overlay(alignment: .bottom) {
-                    LinearGradient(
-                        colors: [.clear, .black.opacity(0.035)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .frame(height: 44)
-                }
-
-            VStack(alignment: .leading, spacing: 8) {
-                Text(item.merchant.displayName.uppercased())
-                    .font(.system(size: 11, weight: .bold))
-                    .tracking(0.7)
-                    .foregroundStyle(.black.opacity(0.48))
-                    .lineLimit(1)
-
-                Text(item.product.title)
-                    .font(.system(size: 19, weight: .semibold))
-                    .tracking(-0.35)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.86)
-
-                Text(item.product.price)
-                    .font(.system(size: 17, weight: .bold))
-                    .monospacedDigit()
-            }
-            .foregroundStyle(.black)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 18)
-            .padding(.top, 16)
-            .padding(.bottom, 18)
-        }
-        .frame(width: width)
-        .background(Color(white: 0.985))
-        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .strokeBorder(.white.opacity(0.62), lineWidth: 0.75)
-        }
-        .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
-        .shadow(color: .black.opacity(0.24), radius: 24, y: 14)
+        ProductCard(
+            image: nil,
+            imageURL: item.product.imageURL,
+            merchantName: item.merchant.displayName,
+            productName: item.product.title,
+            rating: item.merchant.totalRatings > 0 ? item.merchant.rating : nil,
+            ratingCount: item.merchant.totalRatings > 0 ? item.merchant.totalRatings : nil,
+            priceBadge: formatPrice(item.product.price),
+            showFavoriteButton: true
+        )
+        .frame(width: width, alignment: .topLeading)
     }
 
-    private var backButton: some View {
-        Button {
-            coordinator.showNavBar = true
-            dismiss()
-        } label: {
-            Image(systemName: "chevron.left")
-                .font(.system(size: 19, weight: .bold))
-                .foregroundStyle(.black)
-                .frame(width: 54, height: 54)
-                .background(Color.white.opacity(0.94), in: Circle())
-                .shadow(color: .black.opacity(0.12), radius: 12, y: 5)
-                .contentShape(Circle())
+    private var navigationSubtopics: [FeedTopic.Subtopic] {
+        if let curated = legacyTopic?.subtopics, !curated.isEmpty { return curated }
+        return legacyStories.map { story in
+            let label = story.title.split(separator: " ").prefix(3).joined(separator: " ")
+            return FeedTopic.Subtopic(label: label, storyID: story.id)
         }
-        .buttonStyle(PressScaleButtonStyle())
-        .padding(.leading, GravitySpacing.space16)
-        .accessibilityLabel("Back")
+    }
+
+    private var topicNavigation: some View {
+        ZStack(alignment: .leading) {
+            if !navigationSubtopics.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: FeedNavigationStyle.itemSpacing) {
+                        ForEach(navigationSubtopics, id: \.storyID) { subtopic in
+                            Button {
+                                HapticFeedback.light.fire()
+                                withAnimation(.smooth(duration: 0.36)) {
+                                    selectedSubtopicID = subtopic.storyID
+                                }
+                            } label: {
+                                Text(subtopic.label)
+                                    .font(FeedNavigationStyle.labelFont)
+                                    .foregroundStyle(
+                                        selectedSubtopicID == subtopic.storyID ? .black : .white
+                                    )
+                                    .lineLimit(1)
+                                    .padding(.horizontal, FeedNavigationStyle.pillHorizontalPadding)
+                                    .frame(height: FeedNavigationStyle.controlSize)
+                                    .background {
+                                        if selectedSubtopicID == subtopic.storyID {
+                                            Capsule()
+                                                .fill(FeedNavigationStyle.selectedFill)
+                                                .matchedGeometryEffect(
+                                                    id: "selected-subtopic",
+                                                    in: topicNavigationNamespace
+                                                )
+                                        }
+                                    }
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+                .contentMargins(.leading, FeedNavigationStyle.railLeadingInset, for: .scrollContent)
+                .contentMargins(.trailing, FeedNavigationStyle.railTrailingInset, for: .scrollContent)
+            }
+
+            Button {
+                HapticFeedback.light.fire()
+                if selectedSubtopicID != nil {
+                    withAnimation(.smooth(duration: 0.36)) {
+                        selectedSubtopicID = nil
+                    }
+                } else {
+                    coordinator.showNavBar = true
+                    dismiss()
+                }
+            } label: {
+                Image(systemName: selectedSubtopicID == nil ? "xmark" : "chevron.left")
+                    .font(FeedNavigationStyle.iconFont)
+                    .foregroundStyle(.black)
+                    .frame(width: FeedNavigationStyle.controlSize, height: FeedNavigationStyle.controlSize)
+                    .background(FeedNavigationStyle.selectedFill, in: Circle())
+                    .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
+                    .contentShape(Circle())
+                    .contentTransition(.symbolEffect(.replace))
+            }
+            .buttonStyle(PressScaleButtonStyle())
+            .padding(.leading, GravitySpacing.space16)
+            .accessibilityLabel(selectedSubtopicID == nil ? "Close" : "Back")
+            .zIndex(1)
+        }
+        .frame(maxWidth: .infinity, minHeight: FeedNavigationStyle.controlSize, alignment: .leading)
     }
 
 }

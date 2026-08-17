@@ -30,7 +30,7 @@ final class UserProfileService {
     }
 
     /// Name used when no live profile is available.
-    private var fallbackName = "Shop prototype"
+    private var fallbackName = "Luke Dupont"
 
     /// Avatar shown when no live profile is available (bundled asset or SF Symbol).
     var fallbackAvatarSystemName: String? {
@@ -38,7 +38,7 @@ final class UserProfileService {
     }
 
     /// Call this to apply a sample-data profile when running without a token.
-    func applyFallbackProfile(name: String = "Shop prototype") {
+    func applyFallbackProfile(name: String = "Luke Dupont") {
         firstName = nil
         lastName = nil
         avatarURL = nil

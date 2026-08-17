@@ -161,4 +161,30 @@ final class NavigationCoordinator {
         default: break
         }
     }
+
+    /// Switches between sibling destinations without adding another level to
+    /// the back stack (for example, adjacent subtopics in the same topic).
+    func replaceCurrentRoute(_ route: HomeRoute) {
+        switch selectedPage {
+        case 0:
+            if !homePath.isEmpty { homePath.removeLast() }
+            homePath.append(route)
+        case 1:
+            if !accountPath.isEmpty { accountPath.removeLast() }
+            accountPath.append(route)
+        case 2:
+            if !explorePath.isEmpty { explorePath.removeLast() }
+            explorePath.append(route)
+        case 3:
+            if !searchPath.isEmpty { searchPath.removeLast() }
+            searchPath.append(route)
+        case 4:
+            if !cartPath.isEmpty { cartPath.removeLast() }
+            cartPath.append(route)
+        case 5:
+            if !favoritesPath.isEmpty { favoritesPath.removeLast() }
+            favoritesPath.append(route)
+        default: break
+        }
+    }
 }

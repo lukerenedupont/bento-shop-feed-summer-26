@@ -133,7 +133,12 @@ struct BentoGrid: View {
 
         func flushRun() {
             while !run.isEmpty {
-                if run.count == 1 {
+                // Give longer standard runs an editorial breath: promote one
+                // compartment to a full-width media banner before packing the
+                // remaining products back into the tighter bento rhythm.
+                if run.count >= 4 {
+                    rows.append(.banner(run.removeFirst()))
+                } else if run.count == 1 {
                     rows.append(.banner(run.removeFirst()))
                 } else if run.count == 2 {
                     rows.append(.pair(run.removeFirst(), run.removeFirst()))
@@ -263,8 +268,8 @@ private struct BentoCompartmentCard: View {
             // Handled chrome-free in `body`; never reaches the card shell.
             Color.clear
         case .story(let story, let hero):
-            if let hero, let film = DossierStore.ambientVideoURL(merchantID: hero.merchant.id, productID: hero.product.id) {
-                AmbientProductVideo(videoURL: film, posterImageURL: hero.product.imageURL)
+            if let hero, !hero.product.ambientFilmURLs(merchantID: hero.merchant.id).isEmpty {
+                AmbientProductVideo(product: hero.product, merchant: hero.merchant)
             } else if let coverImageName = story.coverImageName {
                 Color.clear
                     .overlay { Image(coverImageName).resizable().scaledToFill() }

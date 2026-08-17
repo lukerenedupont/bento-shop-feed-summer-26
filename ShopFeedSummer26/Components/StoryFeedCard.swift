@@ -11,6 +11,8 @@ struct StoryFeedCard: View {
     var showsBackground = true
     var showsForegroundContent = true
     var showsFooterArrow = true
+    var titleAtTopLeading = false
+    var showsProductCarousel = false
     var foregroundBottomPadding: CGFloat = GravitySpacing.space20
     var backgroundBlurRadius: CGFloat = 0
     var backgroundPlaybackEnabled = true
@@ -31,8 +33,8 @@ struct StoryFeedCard: View {
 
     private var ambientFilmURLs: [URL] {
         guard story.coverImageName == nil else { return [] }
-        return items.compactMap {
-            $0.product.ambientFilmURL(merchantID: $0.merchant.id)
+        return items.flatMap {
+            $0.product.ambientFilmURLs(merchantID: $0.merchant.id)
         }
     }
 
@@ -58,15 +60,35 @@ struct StoryFeedCard: View {
                 }
 
                 if showsForegroundContent {
-                    VStack(alignment: .leading, spacing: 0) {
-                        Spacer(minLength: GravitySpacing.space12)
+                    ZStack {
                         storyHeader
-                        storyFooter
-                            .padding(.top, GravitySpacing.space12)
+                            .frame(
+                                maxWidth: .infinity,
+                                maxHeight: .infinity,
+                                alignment: titleAtTopLeading ? .topLeading : .bottomLeading
+                            )
+                        if showsFooterArrow {
+                            footerArrow
+                                .frame(
+                                    maxWidth: .infinity,
+                                    maxHeight: .infinity,
+                                    alignment: .bottomTrailing
+                                )
+                        }
+                        if showsProductCarousel {
+                            productCarousel
+                                .frame(
+                                    maxWidth: .infinity,
+                                    maxHeight: .infinity,
+                                    alignment: .bottomLeading
+                                )
+                        }
                     }
                     .padding(.horizontal, GravitySpacing.space20)
                     .padding(.top, GravitySpacing.space20)
                     .padding(.bottom, foregroundBottomPadding)
+                    .opacity(isActive ? 1 : 0)
+                    .animation(.easeInOut(duration: 0.2), value: isActive)
                     .transition(.opacity)
                 }
             }
@@ -110,7 +132,7 @@ struct StoryFeedCard: View {
                     AmbientProductVideo(
                         videoURLs: ambientFilmURLs,
                         posterImageURL: first.product.imageURL,
-                        playbackEnabled: backgroundPlaybackEnabled,
+                        playbackEnabled: backgroundPlaybackEnabled && isActive,
                         playbackGroupID: "story-card-\(story.id)"
                     )
                 }
@@ -187,16 +209,17 @@ struct StoryFeedCard: View {
     // MARK: - Header
 
     private var storyHeader: some View {
-        // Same hero treatment as topic-page titles: centered, heavy,
-        // tightly tracked display text.
         Text(story.title)
-            .font(.system(size: 32, weight: .heavy).leading(.tight))
-            .tracking(-1.1)
-            .lineSpacing(-11)
+            .font(.system(size: 40, weight: .heavy).leading(.tight))
+            .tracking(-1.3)
+            .lineSpacing(-8)
             .foregroundStyle(.white)
             .multilineTextAlignment(.leading)
             .lineLimit(3)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(
+                maxWidth: .infinity,
+                alignment: .leading
+            )
     }
 
     // MARK: - Stable formats
@@ -215,23 +238,33 @@ struct StoryFeedCard: View {
 
     // MARK: - Footer
 
-    private var storyFooter: some View {
-        HStack(spacing: GravitySpacing.space12) {
-            Text(story.destinationLabel)
-                .gravityTextStyle(GravityTypography.headerBold)
-                .foregroundStyle(.white)
-                .lineLimit(1)
+    private var footerArrow: some View {
+        Image(systemName: "arrow.right")
+            .font(.system(size: 15, weight: .semibold))
+            .foregroundStyle(.white)
+            .frame(width: 40, height: 40)
+            .background(.white.opacity(0.12), in: Circle())
+    }
 
-            Spacer()
-
-            if showsFooterArrow {
-                Image(systemName: "arrow.right")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: 40, height: 40)
-                    .background(.white.opacity(0.12), in: Circle())
+    private var productCarousel: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: GravitySpacing.space8) {
+                ForEach(items) { item in
+                    ProductImageView(product: item.product, merchant: item.merchant)
+                        .frame(width: 146, height: 146)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                .strokeBorder(.white.opacity(0.24), lineWidth: 0.5)
+                        }
+                }
             }
         }
+        .contentMargins(.leading, GravitySpacing.space20, for: .scrollContent)
+        .contentMargins(.trailing, GravitySpacing.space20, for: .scrollContent)
+        .padding(.horizontal, -GravitySpacing.space20)
+        .frame(height: 146)
     }
 
 }

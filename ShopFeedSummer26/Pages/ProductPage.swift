@@ -168,14 +168,29 @@ struct ProductPage: View {
                         .frame(maxWidth: .infinity)
 
                     HStack {
-                    Spacer()
+                        Button {
+                            HapticFeedback.light.fire()
+                            coordinator.popCurrentPage()
+                        } label: {
+                            GravityIcon.arrowLeft.image
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .foregroundStyle(GravityColors.text)
+                                .frame(width: 44, height: 44)
+                                .contentShape(Circle())
+                                .glassEffect(.regular.interactive(), in: .circle)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Back")
 
-                    GravityIcon.overflow.image
-                        .resizable()
-                        .frame(width: PurlTune.value("Pages/ProductPage.swift:frame:width:165:39", default: 20), height: PurlTune.value("Pages/ProductPage.swift:frame:height:165:122", default: 20))
-                        .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:166:42", default: GravityColors.text, options: GravityColors.purlTuneColorOptions))
-                        .frame(width: PurlTune.value("Pages/ProductPage.swift:frame:width:167:39", default: 44), height: PurlTune.value("Pages/ProductPage.swift:frame:height:167:122", default: 44))
-                        .glassEffect(.regular.interactive(), in: .circle)
+                        Spacer()
+
+                        GravityIcon.overflow.image
+                            .resizable()
+                            .frame(width: PurlTune.value("Pages/ProductPage.swift:frame:width:165:39", default: 20), height: PurlTune.value("Pages/ProductPage.swift:frame:height:165:122", default: 20))
+                            .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:166:42", default: GravityColors.text, options: GravityColors.purlTuneColorOptions))
+                            .frame(width: PurlTune.value("Pages/ProductPage.swift:frame:width:167:39", default: 44), height: PurlTune.value("Pages/ProductPage.swift:frame:height:167:122", default: 44))
+                            .glassEffect(.regular.interactive(), in: .circle)
                     }
                 }
             }

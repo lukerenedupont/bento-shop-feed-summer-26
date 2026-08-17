@@ -11,13 +11,12 @@ struct FloatingBackButton: View {
             HapticFeedback.light.fire()
             action()
         } label: {
-            Image(systemName: "arrow.left")
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: 44, height: 44)
-                .background(.black.opacity(0.28), in: Circle())
-                .overlay { Circle().strokeBorder(.white.opacity(0.22), lineWidth: 0.5) }
-                .shadow(color: .black.opacity(0.16), radius: 10, y: 4)
+            Image(systemName: "chevron.left")
+                .font(FeedNavigationStyle.iconFont)
+                .foregroundStyle(.black)
+                .frame(width: FeedNavigationStyle.controlSize, height: FeedNavigationStyle.controlSize)
+                .background(Color.white.opacity(0.94), in: Circle())
+                .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
         }
         .buttonStyle(PressScaleButtonStyle(scale: 0.9))
         .accessibilityLabel("Back")

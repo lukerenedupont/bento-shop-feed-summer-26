@@ -33,9 +33,15 @@ Source: Swift / shop-prototype-kit
 ## Getting Started
 
 ```bash
-git clone <this repo>
+git clone https://github.com/apx303/bento-shop-feed-summer-26.git
+git clone https://github.com/apx303/dossier-feed-bundle.git
+cd bento-shop-feed-summer-26
 open ShopFeedSummer26.xcodeproj   # committed — no generation step needed
 ```
+
+Keep both repositories in the same parent directory. The Xcode project embeds
+`../dossier-feed-bundle/bundle` as a folder reference so the complete generated
+image and video library ships in the prototype without duplicating media here.
 
 Select the **ShopFeedSummer26** scheme and run on an iOS 26 simulator. Everything
 works offline out of the box: the app falls back to the bundled catalog

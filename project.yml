@@ -35,7 +35,7 @@ targets:
         buildPhase: resources
       # Frozen dossier feed checkout. Kept as a folder reference so its
       # media/ paths remain intact inside the app bundle.
-      - path: ../../dossier-feed-bundle/bundle
+      - path: ../dossier-feed-bundle/bundle
         name: bundle
         type: folder
         buildPhase: resources

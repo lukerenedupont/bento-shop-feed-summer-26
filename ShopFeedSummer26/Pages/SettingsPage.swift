@@ -77,9 +77,11 @@ struct SettingsPage: View {
                         .frame(width: PurlTune.value("Pages/SettingsPage.swift:frame:width:74:39", default: 44), height: PurlTune.value("Pages/SettingsPage.swift:frame:height:74:122", default: 44))
                         .clipShape(Circle())
                     } else {
-                        Image(systemName: "person.crop.circle.fill")
-                            .font(.system(size: 38))
-                            .foregroundStyle(.purple)
+                        Image("luke-avatar")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 44, height: 44)
+                            .clipShape(Circle())
                     }
 
                     VStack(alignment: .leading, spacing: 2) {

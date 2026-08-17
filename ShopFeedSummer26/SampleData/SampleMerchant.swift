@@ -65,6 +65,8 @@ struct SampleMerchant: Identifiable {
         var productDescription: String?
         /// Generated product film, when the feed supplies one.
         var videoUrl: String? = nil
+        /// Complete generated film set, in editorial playback order.
+        var allVideoURLs: [String] = []
     }
 
     struct Collection: Identifiable {

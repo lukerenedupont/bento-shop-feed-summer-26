@@ -32,7 +32,8 @@ enum LocalMerchantService {
                     allImageURLs: p.allImageUrls ?? [p.imageUrl].compactMap { $0 },
                     currencyCode: p.currencyCode ?? "USD",
                     productDescription: p.description,
-                    videoUrl: p.videoUrl
+                    videoUrl: p.videoUrl,
+                    allVideoURLs: p.allVideoUrls ?? []
                 )
             }
 
@@ -139,4 +140,5 @@ private struct ProductEntry: Decodable {
     /// Present on generated feeds (dossier-lab films two clips per product);
     /// absent from the bundled snapshot, hence optional.
     let videoUrl: String?
+    let allVideoUrls: [String]?
 }

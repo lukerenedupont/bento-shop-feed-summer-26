@@ -34,6 +34,19 @@ struct HomePage: View {
     @State private var expandingStoryID: String?
 
     private var topics: [FeedTopic] { PersonalizedFeedCatalog.current.topics }
+    /// Header destinations mirror the For You card order exactly. This keeps
+    /// every pill paired with the card that opens the same editorial world.
+    private var navigationTopics: [FeedTopic] {
+        guard let forYou = topics.first(where: { $0.id == "for-you" }) else { return topics }
+        var seen = Set<String>()
+        let orderedDestinations = (forYou.storyIDs ?? []).compactMap { storyID -> FeedTopic? in
+            guard let topic = topics.first(where: {
+                $0.id != "for-you" && $0.storyIDs?.contains(storyID) == true
+            }), seen.insert(topic.id).inserted else { return nil }
+            return topic
+        }
+        return [forYou] + orderedDestinations
+    }
     private var selectedTopic: FeedTopic {
         topics.first { $0.id == selectedTopicID } ?? topics[0]
     }
@@ -66,7 +79,7 @@ struct HomePage: View {
     var body: some View {
         Group {
             if let focusedStoryID {
-                StoryTopicPage(storyID: focusedStoryID)
+                StoryTopicPage(storyID: focusedStoryID, namespace: namespace)
                     .id(focusedStoryID)
             } else if selectedTopicID == "for-you" {
                 storyFeed
@@ -190,6 +203,9 @@ struct HomePage: View {
             width: width,
             height: height,
             isActive: story.id == activeFeedStory?.id,
+            showsFooterArrow: false,
+            titleAtTopLeading: true,
+            showsProductCarousel: true,
             backgroundPlaybackEnabled: expandingStoryID != story.id,
             freezesParallax: expandingStoryID == story.id,
             scrollViewportHeight: viewportHeight,
@@ -254,8 +270,8 @@ struct HomePage: View {
     /// Rotates the story playlist by one item so the blurred backdrop never
     /// mirrors the clip currently beginning inside the foreground card.
     private func backdropFilmURLs(for story: FeedStory) -> [URL] {
-        let urls = story.resolvedProducts(from: merchants).compactMap {
-            $0.product.ambientFilmURL(merchantID: $0.merchant.id)
+        let urls = story.resolvedProducts(from: merchants).flatMap {
+            $0.product.ambientFilmURLs(merchantID: $0.merchant.id)
         }
         guard urls.count > 1 else { return urls }
         return Array(urls.dropFirst()) + [urls[0]]
@@ -297,12 +313,12 @@ struct HomePage: View {
     @State private var avatarPressed = false
 
     private var topBar: some View {
-        HStack {
-            Spacer()
+        ZStack(alignment: .leading) {
+            topicRail
             avatar
-            Spacer()
+                .zIndex(1)
         }
-        .padding(.horizontal, PurlTune.token("Pages/HomePage.swift:padding:_:164:31", default: GravitySpacing.space16, options: GravitySpacing.purlTuneOptions))
+        .padding(.leading, GravitySpacing.space16)
         .padding(.vertical, PurlTune.token("Pages/HomePage.swift:padding:_:165:29", default: GravitySpacing.space4, options: GravitySpacing.purlTuneOptions))
         // Deliberately no bar background: the active feed film or topic cover
         // continues through both the topic rail and the status-bar safe area.
@@ -335,7 +351,7 @@ struct HomePage: View {
         Image("luke-avatar")
                 .resizable()
                 .scaledToFill()
-                .frame(width: PurlTune.value("Pages/HomePage.swift:frame:width:131:31", default: 40), height: PurlTune.value("Pages/HomePage.swift:frame:height:131:111", default: 40))
+                .frame(width: FeedNavigationStyle.avatarSize, height: FeedNavigationStyle.avatarSize)
                 .clipShape(Circle())
                 .matchedTransitionSource(id: "account-avatar", in: heroNamespace)
                 .scaleEffect(avatarPressed ? 0.85 : 1.0)
@@ -353,45 +369,60 @@ struct HomePage: View {
     }
 
     private var topicRail: some View {
-            ScrollViewReader { proxy in
-                ScrollView(.horizontal) {
-                    HStack(spacing: GravitySpacing.space4) {
-                        ForEach(topics) { topic in
-                            topicButton(topic)
-                                .id(topic.id)
-                        }
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal) {
+                HStack(spacing: FeedNavigationStyle.itemSpacing) {
+                    ForEach(navigationTopics) { topic in
+                        topicButton(topic)
+                            .id(topic.id)
+                    }
 
-                        // Gives the final topics enough trailing scroll range to
-                        // become the first visible pill beside the avatar.
-                        Color.clear
-                            .frame(width: 280, height: 1)
-                            .accessibilityHidden(true)
-                    }
-                    .padding(.vertical, PurlTune.value("Pages/HomePage.swift:padding:_:155:37", default: 20))
-                }
-                .scrollIndicators(.hidden)
-                .contentMargins(.leading, 20 / 2 + GravitySpacing.space4)
-                .contentMargins(.trailing, GravitySpacing.space16)
-                .padding(.vertical, PurlTune.value("Pages/HomePage.swift:padding:_:160:33", default: -20))
-                .padding(.leading, -20 / 2)
-                .padding(.trailing, -GravitySpacing.space16)
-                .onChange(of: selectedTopicID) { _, topicID in
-                    withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
-                        proxy.scrollTo(topicID, anchor: .leading)
-                    }
+                    // Lets a selected trailing topic settle beside the avatar.
+                    Color.clear
+                        .frame(width: 240, height: 1)
+                        .accessibilityHidden(true)
                 }
             }
+            .scrollIndicators(.hidden)
+            .contentMargins(.leading, FeedNavigationStyle.avatarSize + GravitySpacing.space8, for: .scrollContent)
+            .contentMargins(.trailing, GravitySpacing.space16)
+            .mask {
+                HStack(spacing: 0) {
+                    // Hide content only after it has travelled beneath the
+                    // avatar; the hard edge sits behind the circle, never
+                    // beside a visible pill.
+                    Color.clear.frame(width: 20)
+                    Color.black
+                }
+            }
+            .onChange(of: selectedTopicID) { _, topicID in
+                withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
+                    proxy.scrollTo(topicID, anchor: .leading)
+                }
+            }
+        }
     }
 
     private func topicButton(_ topic: FeedTopic) -> some View {
         Button {
-            guard selectedTopicID != topic.id || focusedStoryID != nil else { return }
+            guard topic.id != "for-you" else {
+                guard selectedTopicID != "for-you" || focusedStoryID != nil else { return }
+                HapticFeedback.light.fire()
+                coordinator.resetScrollState()
+                withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
+                    focusedStoryID = nil
+                    selectedTopicID = "for-you"
+                }
+                return
+            }
+
+            guard let storyID = topic.storyIDs?.first,
+                  let story = PersonalizedFeedStories.all.first(where: { $0.id == storyID }) else {
+                return
+            }
             HapticFeedback.light.fire()
             coordinator.resetScrollState()
-            withAnimation(.spring(response: 0.32, dampingFraction: 0.82)) {
-                focusedStoryID = nil
-                selectedTopicID = topic.id
-            }
+            openTopic(for: story)
         } label: {
             topicLabel(topic)
                 .background {
@@ -413,10 +444,10 @@ struct HomePage: View {
 
     private func topicLabel(_ topic: FeedTopic) -> some View {
         Text(topic.label)
-            .gravityTextStyle(GravityTypography.bodyTitleSmall)
+            .font(FeedNavigationStyle.labelFont)
             .foregroundStyle(topicLabelColor(topic))
-            .padding(.horizontal, PurlTune.token("Pages/HomePage.swift:padding:_:181:37", default: GravitySpacing.space16, options: GravitySpacing.purlTuneOptions))
-            .padding(.vertical, PurlTune.token("Pages/HomePage.swift:padding:_:182:37", default: GravitySpacing.space12, options: GravitySpacing.purlTuneOptions))
+            .padding(.horizontal, FeedNavigationStyle.pillHorizontalPadding)
+            .frame(height: FeedNavigationStyle.controlSize)
             .contentShape(Capsule())
     }
 

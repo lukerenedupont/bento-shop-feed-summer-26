@@ -83,12 +83,9 @@ struct AccountPage: View {
                         }
                     }
                 } else {
-                    Circle().fill(shopGradient)
-                        .overlay(
-                            Text(userProfile.initial)
-                                .gravityTextStyle(GravityTypography.bodyTitleLarge)
-                                .foregroundStyle(.white)
-                        )
+                    Image("luke-avatar")
+                        .resizable()
+                        .scaledToFill()
                 }
             }
                 .frame(width: PurlTune.value("Pages/AccountPage.swift:frame:width:91:31", default: 44), height: PurlTune.value("Pages/AccountPage.swift:frame:height:91:113", default: 44))

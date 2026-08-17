@@ -191,7 +191,7 @@ struct TopicLandingView: View {
 
                 if showsSubtopicRail {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
+                    HStack(spacing: FeedNavigationStyle.itemSpacing) {
                         ForEach(subtopicPills, id: \.storyID) { subtopic in
                             let anchor = anchorProduct(for: subtopic)
                             Button {
@@ -209,12 +209,12 @@ struct TopicLandingView: View {
                                             .overlay { Circle().strokeBorder(.white.opacity(0.3), lineWidth: 0.5) }
                                     }
                                     Text(subtopic.label)
-                                        .font(.system(size: 14, weight: .semibold))
+                                        .font(FeedNavigationStyle.labelFont)
                                         .foregroundStyle(.white)
                                 }
-                                .padding(.leading, anchor != nil ? 6 : 15)
-                                .padding(.trailing, 15)
-                                .frame(height: 42)
+                                .padding(.leading, anchor != nil ? 6 : FeedNavigationStyle.pillHorizontalPadding)
+                                .padding(.trailing, FeedNavigationStyle.pillHorizontalPadding)
+                                .frame(height: FeedNavigationStyle.controlSize)
                                 .background(.black.opacity(0.28), in: Capsule())
                                 .overlay { Capsule().strokeBorder(.white.opacity(0.22), lineWidth: 0.5) }
                                 .shadow(color: .black.opacity(0.16), radius: 10, y: 4)
@@ -438,10 +438,9 @@ struct TopicLandingView: View {
             switch item.kind {
             case .product:
                 guard let resolved = resolvedProduct(for: item) else { return nil }
-                let hasFilm = DossierStore.ambientVideoURL(
-                    merchantID: resolved.merchant.id,
-                    productID: resolved.product.id
-                ) != nil
+                let hasFilm = !resolved.product.ambientFilmURLs(
+                    merchantID: resolved.merchant.id
+                ).isEmpty
                 let size = BentoCompartment.resolveSize(
                     explicit: item.size,
                     signal: signals.strength(
@@ -523,10 +522,7 @@ struct TopicLandingView: View {
                 }
                 let hero = story.resolvedProducts(from: merchants).first
                 let hasFilm = hero.map {
-                    DossierStore.ambientVideoURL(
-                        merchantID: $0.merchant.id,
-                        productID: $0.product.id
-                    ) != nil
+                    !$0.product.ambientFilmURLs(merchantID: $0.merchant.id).isEmpty
                 } ?? false
                 let size = BentoCompartment.resolveSize(
                     explicit: item.size,
@@ -617,8 +613,8 @@ private struct TopicFeatureCard: View {
                 Color.clear
                     .overlay {
                         if let hero = heroProduct,
-                           let film = hero.product.ambientFilmURL(merchantID: hero.merchant.id) {
-                            AmbientProductVideo(videoURL: film, posterImageURL: hero.product.imageURL)
+                           !hero.product.ambientFilmURLs(merchantID: hero.merchant.id).isEmpty {
+                            AmbientProductVideo(product: hero.product, merchant: hero.merchant)
                         } else if let coverImageName = story.coverImageName {
                             Image(coverImageName)
                                 .resizable()

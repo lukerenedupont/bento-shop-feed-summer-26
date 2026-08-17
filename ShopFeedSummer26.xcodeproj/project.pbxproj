@@ -263,7 +263,7 @@
 		F9AD617847452AF8F79A0062 /* SearchPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPage.swift; sourceTree = "<group>"; };
 		F9E4DAD75BA5C3CD796D78A1 /* ShimmerText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerText.swift; sourceTree = "<group>"; };
 		FA35C76B80BB93C38B16B89C /* Shopify Sans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Bold.otf"; sourceTree = "<group>"; };
-		FC4E7A6F86792A0E5455276C /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bundle; path = "../../dossier-feed-bundle/bundle"; sourceTree = SOURCE_ROOT; };
+		FC4E7A6F86792A0E5455276C /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bundle; path = "../dossier-feed-bundle/bundle"; sourceTree = SOURCE_ROOT; };
 		FD2F47D24C455081A6C9B863 /* RecentsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentsPanel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -402,8 +402,8 @@
 		65BEA5D54C4502D204150927 = {
 			isa = PBXGroup;
 			children = (
-				FC4E7A6F86792A0E5455276C /* bundle */,
 				F65CA5F68FD9BBBA9174AB03 /* Dossiers */,
+				FC4E7A6F86792A0E5455276C /* bundle */,
 				F023418C55850E46E86590D0 /* ShopFeedSummer26 */,
 				519BE3DCFBDA52CF1AAA4FB5 /* Products */,
 			);
@@ -581,6 +581,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DE188C12F42823E6802F132 /* Assets.xcassets in Resources */,
+				5219B96B726177F7119DD250 /* bundle in Resources */,
 				85C669EB15EF49C2F43B2618 /* Dossiers in Resources */,
 				64DABDEDA80A62E19DCFD97F /* GTStandard-LHeavy.otf in Resources */,
 				27C6901D16FDC1F6B50C61DC /* GTStandard-MBold.otf in Resources */,
@@ -603,7 +604,6 @@
 				ECCF6A2EA6F02169A525D1F9 /* Shopify Sans-Medium.otf in Resources */,
 				E90D9A254DB2B26CF0D9AA2A /* Shopify Sans-Regular Italic.otf in Resources */,
 				742ADA927F28DE885852A247 /* Shopify Sans-Regular.otf in Resources */,
-				5219B96B726177F7119DD250 /* bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

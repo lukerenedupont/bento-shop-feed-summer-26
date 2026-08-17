@@ -66,7 +66,7 @@ struct RootView: View {
         case .store(let merchantId):
             StorePage(merchantId: merchantId, namespace: namespace)
         case .story(let storyId):
-            StoryTopicPage(storyID: storyId)
+            StoryTopicPage(storyID: storyId, namespace: namespace)
         case .topicExpanded(let topicId, let sourceStoryId):
             ExpandedTopicPage(
                 topicID: topicId,

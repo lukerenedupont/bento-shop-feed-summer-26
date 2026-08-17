@@ -33,7 +33,7 @@ struct AmbientProductVideo: View {
         playbackEnabled: Bool = true,
         playbackGroupID: String? = nil
     ) {
-        self.videoURLs = product.ambientFilmURL(merchantID: merchant.id).map { [$0] } ?? []
+        self.videoURLs = product.ambientFilmURLs(merchantID: merchant.id)
         self.posterImageURL = product.imageURL
         self.playbackEnabled = playbackEnabled
         self.playbackGroupID = playbackGroupID
@@ -105,7 +105,15 @@ struct AmbientProductVideo: View {
 }
 
 extension SampleMerchant.Product {
-    /// The ambient film for this product, from whichever source has one.
+    /// All ambient films for this product, from whichever source has them.
+    func ambientFilmURLs(merchantID: String) -> [URL] {
+        let generated = allVideoURLs.compactMap(URL.init(string:))
+        if !generated.isEmpty { return generated }
+        if let videoUrl, let url = URL(string: videoUrl) { return [url] }
+        return DossierStore.dossier(merchantID: merchantID, productID: id)?.videoURLs ?? []
+    }
+
+    /// The first ambient film, for surfaces that intentionally need one clip.
     ///
     /// The feed API ships a generated clip per product on `videoUrl`; bundled
     /// products instead have films dropped into `Dossiers/` and keyed by
@@ -113,8 +121,7 @@ extension SampleMerchant.Product {
     /// films for products the bundle has never heard of, while offline runs
     /// keep working exactly as before.
     func ambientFilmURL(merchantID: String) -> URL? {
-        if let videoUrl, let url = URL(string: videoUrl) { return url }
-        return DossierStore.ambientVideoURL(merchantID: merchantID, productID: id)
+        ambientFilmURLs(merchantID: merchantID).first
     }
 }
 
@@ -132,13 +139,13 @@ struct ProductMediaView: View {
 
     @State private var filmReady = false
 
-    private var filmURL: URL? { product.ambientFilmURL(merchantID: merchant.id) }
+    private var filmURLs: [URL] { product.ambientFilmURLs(merchantID: merchant.id) }
 
     var body: some View {
         ProductImageView(product: product, merchant: merchant, fallbackIndex: fallbackIndex)
             .overlay {
-                if let filmURL {
-                    LoopingVideoPlayer(url: filmURL)
+                if !filmURLs.isEmpty {
+                    LoopingVideoPlayer(urls: filmURLs)
                         .opacity(filmReady ? 1 : 0)
                         .onAppear {
                             withAnimation(.easeIn(duration: 0.3).delay(0.15)) {
