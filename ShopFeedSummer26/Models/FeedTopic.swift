@@ -30,7 +30,7 @@ enum FeedInformationArchitecture {
             id: "for-you",
             label: "For you",
             candidateStoryIDs: [],
-            productLayouts: [.stackedDeck]
+            productLayouts: [.stackedDeck, .bottomCarousel, .compactGrid]
         ),
         FeedCategory(
             id: "living",
@@ -113,13 +113,25 @@ enum FeedInformationArchitecture {
 
     static func productLayout(
         for story: FeedStory,
-        in category: FeedCategory
+        in category: FeedCategory,
+        visibleStoryIndex: Int? = nil
     ) -> FeedCardProductLayout {
-        guard category.id != "for-you",
-              !category.productLayouts.isEmpty,
-              let storyIndex = category.candidateStoryIDs.firstIndex(of: story.id) else {
+        guard !category.productLayouts.isEmpty else {
             return .stackedDeck
         }
+
+        let storyIndex: Int
+        if category.id == "for-you" {
+            // For You is ordered by the active catalog rather than a fixed ID
+            // list. Its visible position keeps the recipe stable while still
+            // supporting newly generated stories from the remote feed.
+            storyIndex = visibleStoryIndex ?? 0
+        } else if let candidateIndex = category.candidateStoryIDs.firstIndex(of: story.id) {
+            storyIndex = candidateIndex
+        } else {
+            return .stackedDeck
+        }
+
         return category.productLayouts[storyIndex % category.productLayouts.count]
     }
 }

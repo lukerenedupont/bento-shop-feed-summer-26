@@ -617,7 +617,8 @@ struct HomePage: View {
             titleAtTopLeading: true,
             productLayout: FeedInformationArchitecture.productLayout(
                 for: story,
-                in: selectedCategory
+                in: selectedCategory,
+                visibleStoryIndex: focusedStories.firstIndex(where: { $0.id == story.id })
             ),
             backgroundPlaybackEnabled: expandingStoryID != story.id,
             freezesParallax: expandingStoryID == story.id,
