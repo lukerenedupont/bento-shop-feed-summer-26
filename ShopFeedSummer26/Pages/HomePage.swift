@@ -814,45 +814,52 @@ struct HomePage: View {
         }
         .buttonStyle(PressScaleButtonStyle())
         .accessibilityLabel("Switch preview buyer")
-        .sheet(isPresented: $showsBuyerSwitcher) {
-            VStack(spacing: 4) {
-                ForEach(BuyerPreviewStore.profiles) { profile in
-                    Button {
-                        selectBuyer(profile)
-                    } label: {
-                        HStack(spacing: 14) {
-                            BuyerPreviewAvatar(profile: profile, size: 44)
+        .fullScreenCover(isPresented: $showsBuyerSwitcher) {
+            ZStack(alignment: .bottom) {
+                Color.black.opacity(0.10)
+                    .ignoresSafeArea()
+                    .contentShape(Rectangle())
+                    .onTapGesture { showsBuyerSwitcher = false }
 
-                            Text(profile.name.split(separator: " ").first.map(String.init) ?? profile.name)
-                                .font(.system(size: 19, weight: .semibold))
-                                .foregroundStyle(.primary)
+                VStack(spacing: 4) {
+                    ForEach(BuyerPreviewStore.profiles) { profile in
+                        Button {
+                            selectBuyer(profile)
+                        } label: {
+                            HStack(spacing: 14) {
+                                BuyerPreviewAvatar(profile: profile, size: 44)
 
-                            Spacer()
+                                Text(profile.name.split(separator: " ").first.map(String.init) ?? profile.name)
+                                    .font(.system(size: 19, weight: .semibold))
+                                    .foregroundStyle(.primary)
+
+                                Spacer()
+                            }
+                            .padding(.horizontal, 12)
+                            .frame(height: 58)
+                            .background(
+                                buyerPreview.selected.id == profile.id
+                                    ? Color.primary.opacity(0.07)
+                                    : Color.clear,
+                                in: RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            )
                         }
-                        .padding(.horizontal, 12)
-                        .frame(height: 58)
-                        .background(
-                            buyerPreview.selected.id == profile.id
-                                ? Color.primary.opacity(0.07)
-                                : Color.clear,
-                            in: RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        )
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
+                .padding(16)
+                .background(
+                    .regularMaterial,
+                    in: RoundedRectangle(cornerRadius: 40, style: .continuous)
+                )
+                .shadow(color: .black.opacity(0.14), radius: 24, y: 8)
+                .padding(.horizontal, 8)
+                .padding(.bottom, 8)
             }
-            .padding(16)
-            .background(
-                .regularMaterial,
-                in: RoundedRectangle(cornerRadius: 40, style: .continuous)
-            )
-            .shadow(color: .black.opacity(0.14), radius: 24, y: 8)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 8)
-            .presentationDetents([.height(416)])
+            .ignoresSafeArea()
             .presentationBackground(.clear)
-            .presentationDragIndicator(.hidden)
             .environment(\.colorScheme, .light)
+            .accessibilityAction(.escape) { showsBuyerSwitcher = false }
         }
         .zIndex(1)
     }
