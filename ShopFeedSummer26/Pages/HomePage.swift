@@ -606,6 +606,7 @@ struct HomePage: View {
         viewportHeight: CGFloat
     ) -> some View {
         let motionIsReduced = reduceMotion
+        let storyIndex = focusedStories.firstIndex(where: { $0.id == story.id })
 
         return StoryFeedCard(
             story: story,
@@ -618,9 +619,10 @@ struct HomePage: View {
             productLayout: FeedInformationArchitecture.productLayout(
                 for: story,
                 in: selectedCategory,
-                visibleStoryIndex: focusedStories.firstIndex(where: { $0.id == story.id })
+                visibleStoryIndex: storyIndex
             ),
             backgroundPlaybackEnabled: expandingStoryID != story.id,
+            prefersVideoBackground: storyIndex?.isMultiple(of: 5) == true,
             freezesParallax: expandingStoryID == story.id,
             scrollViewportHeight: viewportHeight,
             onTap: { openTopic(for: story) }

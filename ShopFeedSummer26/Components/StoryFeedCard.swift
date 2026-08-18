@@ -16,6 +16,9 @@ struct StoryFeedCard: View {
     var foregroundBottomPadding: CGFloat = GravitySpacing.space20
     var backgroundBlurRadius: CGFloat = 0
     var backgroundPlaybackEnabled = true
+    /// Lets the feed establish a restrained motion rhythm. When a generated
+    /// film is unavailable, the card continues to use its lifestyle still.
+    var prefersVideoBackground = false
     var cornerRadius: CGFloat = GravityRadius.r28
     var freezesParallax = false
     /// Enables scroll-relative movement for the ambient film without moving
@@ -78,7 +81,10 @@ struct StoryFeedCard: View {
     }
 
     private var heroLifestyleImageURL: URL? {
-        story.lifestyleImageURL(
+        if prefersVideoBackground, leadFilmURL != nil {
+            return nil
+        }
+        return story.lifestyleImageURL(
             from: merchants,
             format: .portrait,
             role: "feed-hero"
