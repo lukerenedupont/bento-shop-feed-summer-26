@@ -9,10 +9,30 @@ enum BuyerShelfEvidence: String, Hashable {
     case discovery
 }
 
-struct BuyerFeedShelf: Hashable {
-    let categoryID: String
+/// One buyer-specific top-level tab and the exact shelf it opens. Keeping the
+/// label and destination together prevents personalized navigation from
+/// drifting back onto the shared global taxonomy.
+struct BuyerFeedTopic: Identifiable, Hashable {
+    let id: String
+    let label: String
+    /// Supplies the existing product-layout rhythm for this personalized tab.
+    let sourceCategoryID: String
     let storyIDs: [String]
     let evidence: BuyerShelfEvidence
+
+    init(
+        id: String,
+        label: String,
+        sourceCategoryID: String? = nil,
+        storyIDs: [String],
+        evidence: BuyerShelfEvidence
+    ) {
+        self.id = id
+        self.label = label
+        self.sourceCategoryID = sourceCategoryID ?? id
+        self.storyIDs = storyIDs
+        self.evidence = evidence
+    }
 }
 
 struct BuyerUtilityConfiguration: Hashable {
@@ -56,7 +76,7 @@ struct BuyerPreviewProfile: Identifiable, Hashable {
     let symbol: String
     let accentHex: String
     let avatarAssetName: String?
-    let shelves: [BuyerFeedShelf]
+    let topics: [BuyerFeedTopic]
     let utility: BuyerUtilityConfiguration
 
     var showsUtilityShelf: Bool { utility.isVisible }
@@ -74,7 +94,7 @@ final class BuyerPreviewStore {
             symbol: "🛍️",
             accentHex: "#6657E8",
             avatarAssetName: "luke-avatar",
-            shelves: [],
+            topics: [],
             utility: .fullPrototype
         ),
         BuyerPreviewProfile(
@@ -83,29 +103,31 @@ final class BuyerPreviewStore {
             symbol: "T",
             accentHex: "#5C54DF",
             avatarAssetName: "tobi-avatar",
-            shelves: [
-                .init(categoryID: "for-you", storyIDs: [
+            topics: [
+                .init(id: "for-you", label: "For you", storyIDs: [
                     "tobi-xbloom-system", "tobi-coffee-creatine",
                     "tobi-manmade-basics", "tobi-wet-shave", "tobi-sim-racing",
                     "edit-studio-in-a-bag", "edit-gloriously-lost",
                 ], evidence: .observed),
-                .init(categoryID: "living", storyIDs: [
-                    "tobi-xbloom-system", "edit-stay-a-while", "edit-table-as-a-scene",
+                .init(id: "coffee", label: "Coffee", sourceCategoryID: "morning", storyIDs: [
+                    "tobi-xbloom-system", "tobi-coffee-creatine",
+                    "edit-coffee-worth-waking-for",
+                ], evidence: .observed),
+                .init(id: "training", label: "Training", sourceCategoryID: "wellness", storyIDs: [
+                    "tobi-coffee-creatine", "edit-gloriously-lost",
+                    "edit-salomons-to-know",
                 ], evidence: .adjacent),
-                .init(categoryID: "design", storyIDs: [
-                    "tobi-sim-racing", "tobi-xbloom-system",
-                    "edit-studio-in-a-bag", "edit-design-shelf",
+                .init(id: "essentials", label: "Essentials", sourceCategoryID: "style", storyIDs: [
+                    "tobi-manmade-basics", "edit-studio-in-a-bag",
+                    "edit-salomons-to-know",
                 ], evidence: .observed),
-                .init(categoryID: "style", storyIDs: [
-                    "tobi-manmade-basics", "edit-salomons-to-know",
+                .init(id: "grooming", label: "Grooming", sourceCategoryID: "wellness", storyIDs: [
+                    "tobi-wet-shave", "edit-wash-day-reset",
                 ], evidence: .observed),
-                .init(categoryID: "wellness", storyIDs: [
-                    "tobi-coffee-creatine", "tobi-wet-shave", "edit-wash-day-reset",
+                .init(id: "sim-racing", label: "Sim racing", sourceCategoryID: "design", storyIDs: [
+                    "tobi-sim-racing", "edit-studio-in-a-bag", "edit-design-shelf",
                 ], evidence: .observed),
-                .init(categoryID: "morning", storyIDs: [
-                    "tobi-coffee-creatine", "tobi-xbloom-system", "tobi-wet-shave",
-                ], evidence: .observed),
-                .init(categoryID: "outdoors", storyIDs: [
+                .init(id: "outdoors", label: "Outdoors", storyIDs: [
                     "edit-gloriously-lost", "edit-salomons-to-know",
                 ], evidence: .discovery),
             ],
@@ -123,34 +145,36 @@ final class BuyerPreviewStore {
             symbol: "K",
             accentHex: "#29262D",
             avatarAssetName: "katarina-avatar",
-            shelves: [
-                .init(categoryID: "for-you", storyIDs: [
+            topics: [
+                .init(id: "for-you", label: "For you", storyIDs: [
                     "katarina-rick-owens", "katarina-silver",
                     "katarina-rhode-routine", "katarina-black-swim",
                     "edit-design-shelf", "edit-coffee-worth-waking-for",
                     "edit-zero-beige-energy",
                 ], evidence: .observed),
-                .init(categoryID: "living", storyIDs: [
-                    "edit-stay-a-while", "edit-mirrors-with-presence",
-                    "edit-table-as-a-scene", "edit-zero-beige-energy",
-                ], evidence: .adjacent),
-                .init(categoryID: "design", storyIDs: [
-                    "edit-design-shelf", "edit-zero-beige-energy",
-                    "edit-studio-in-a-bag",
-                ], evidence: .observed),
-                .init(categoryID: "style", storyIDs: [
+                .init(id: "style", label: "Style", storyIDs: [
                     "katarina-rick-owens", "katarina-silver",
                     "katarina-black-swim", "edit-salomons-to-know",
                 ], evidence: .observed),
-                .init(categoryID: "wellness", storyIDs: [
+                .init(id: "jewelry", label: "Jewelry", sourceCategoryID: "style", storyIDs: [
+                    "katarina-silver", "katarina-rick-owens",
+                    "edit-zero-beige-energy",
+                ], evidence: .observed),
+                .init(id: "swim", label: "Swim", sourceCategoryID: "style", storyIDs: [
+                    "katarina-black-swim", "katarina-rick-owens",
+                    "edit-salomons-to-know",
+                ], evidence: .observed),
+                .init(id: "skin", label: "Skin", sourceCategoryID: "wellness", storyIDs: [
                     "katarina-rhode-routine", "edit-wash-day-reset",
                 ], evidence: .observed),
-                .init(categoryID: "morning", storyIDs: [
-                    "edit-coffee-worth-waking-for", "katarina-rhode-routine",
+                .init(id: "design", label: "Design", storyIDs: [
+                    "edit-design-shelf", "edit-zero-beige-energy",
+                    "edit-studio-in-a-bag",
+                ], evidence: .observed),
+                .init(id: "living", label: "Living", storyIDs: [
+                    "edit-stay-a-while", "edit-mirrors-with-presence",
+                    "edit-table-as-a-scene", "edit-zero-beige-energy",
                 ], evidence: .adjacent),
-                .init(categoryID: "outdoors", storyIDs: [
-                    "edit-salomons-to-know", "edit-gloriously-lost",
-                ], evidence: .discovery),
             ],
             utility: .init(
                 buyAgainStoryID: nil,
@@ -166,12 +190,28 @@ final class BuyerPreviewStore {
             symbol: "K",
             accentHex: "#C47732",
             avatarAssetName: "kenny-avatar",
-            shelves: [
-                .init(categoryID: "for-you", storyIDs: [
+            topics: [
+                .init(id: "for-you", label: "For you", storyIDs: [
                     "edit-gloriously-lost", "edit-table-as-a-scene",
                     "edit-stay-a-while", "edit-coffee-worth-waking-for",
                     "edit-salomons-to-know", "edit-design-shelf",
                     "edit-wash-day-reset",
+                ], evidence: .discovery),
+                .init(id: "outdoors", label: "Outdoors", storyIDs: [
+                    "edit-gloriously-lost", "edit-salomons-to-know",
+                ], evidence: .discovery),
+                .init(id: "living", label: "Living", storyIDs: [
+                    "edit-table-as-a-scene", "edit-stay-a-while",
+                    "edit-mirrors-with-presence",
+                ], evidence: .discovery),
+                .init(id: "morning", label: "Morning", storyIDs: [
+                    "edit-coffee-worth-waking-for", "edit-table-as-a-scene",
+                ], evidence: .discovery),
+                .init(id: "design", label: "Design", storyIDs: [
+                    "edit-design-shelf", "edit-studio-in-a-bag",
+                ], evidence: .discovery),
+                .init(id: "style", label: "Style", storyIDs: [
+                    "edit-salomons-to-know", "edit-zero-beige-energy",
                 ], evidence: .discovery),
             ],
             utility: .none
@@ -182,33 +222,35 @@ final class BuyerPreviewStore {
             symbol: "A",
             accentHex: "#4E6651",
             avatarAssetName: "andreas-avatar",
-            shelves: [
-                .init(categoryID: "for-you", storyIDs: [
+            topics: [
+                .init(id: "for-you", label: "For you", storyIDs: [
                     "andreas-glass-hair", "andreas-smooth-blowout",
                     "andreas-minimal-comfort", "andreas-macbook-kit",
                     "edit-design-shelf", "edit-stay-a-while",
                 ], evidence: .observed),
-                .init(categoryID: "living", storyIDs: [
-                    "edit-stay-a-while", "edit-mirrors-with-presence",
-                    "edit-table-as-a-scene",
-                ], evidence: .adjacent),
-                .init(categoryID: "design", storyIDs: [
-                    "andreas-macbook-kit", "edit-design-shelf",
-                    "edit-zero-beige-energy",
-                ], evidence: .adjacent),
-                .init(categoryID: "style", storyIDs: [
-                    "andreas-minimal-comfort", "edit-salomons-to-know",
-                ], evidence: .observed),
-                .init(categoryID: "wellness", storyIDs: [
+                .init(id: "hair-care", label: "Hair care", sourceCategoryID: "wellness", storyIDs: [
                     "andreas-glass-hair", "andreas-smooth-blowout",
                     "edit-wash-day-reset",
                 ], evidence: .observed),
-                .init(categoryID: "morning", storyIDs: [
-                    "andreas-smooth-blowout", "edit-coffee-worth-waking-for",
+                .init(id: "blowouts", label: "Blowouts", sourceCategoryID: "wellness", storyIDs: [
+                    "andreas-smooth-blowout", "andreas-glass-hair",
+                    "edit-wash-day-reset",
+                ], evidence: .observed),
+                .init(id: "mac-setup", label: "Mac setup", sourceCategoryID: "design", storyIDs: [
+                    "andreas-macbook-kit", "edit-studio-in-a-bag",
+                    "edit-design-shelf",
                 ], evidence: .adjacent),
-                .init(categoryID: "outdoors", storyIDs: [
-                    "edit-salomons-to-know", "edit-gloriously-lost",
-                ], evidence: .discovery),
+                .init(id: "comfort", label: "Comfort", sourceCategoryID: "style", storyIDs: [
+                    "andreas-minimal-comfort", "edit-studio-in-a-bag",
+                ], evidence: .observed),
+                .init(id: "design", label: "Design", storyIDs: [
+                    "andreas-macbook-kit", "edit-design-shelf",
+                    "edit-zero-beige-energy",
+                ], evidence: .adjacent),
+                .init(id: "living", label: "Living", storyIDs: [
+                    "edit-stay-a-while", "edit-mirrors-with-presence",
+                    "edit-table-as-a-scene",
+                ], evidence: .adjacent),
             ],
             utility: .init(
                 buyAgainStoryID: nil,
@@ -224,12 +266,29 @@ final class BuyerPreviewStore {
             symbol: "A",
             accentHex: "#334D59",
             avatarAssetName: "archie-avatar",
-            shelves: [
-                .init(categoryID: "for-you", storyIDs: [
+            topics: [
+                .init(id: "for-you", label: "For you", storyIDs: [
                     "edit-design-shelf", "edit-gloriously-lost",
                     "edit-stay-a-while", "edit-table-as-a-scene",
                     "edit-coffee-worth-waking-for", "edit-salomons-to-know",
                     "edit-wash-day-reset",
+                ], evidence: .discovery),
+                .init(id: "design", label: "Design", storyIDs: [
+                    "edit-design-shelf", "edit-studio-in-a-bag",
+                    "edit-zero-beige-energy",
+                ], evidence: .discovery),
+                .init(id: "living", label: "Living", storyIDs: [
+                    "edit-stay-a-while", "edit-table-as-a-scene",
+                    "edit-mirrors-with-presence",
+                ], evidence: .discovery),
+                .init(id: "outdoors", label: "Outdoors", storyIDs: [
+                    "edit-gloriously-lost", "edit-salomons-to-know",
+                ], evidence: .discovery),
+                .init(id: "style", label: "Style", storyIDs: [
+                    "edit-salomons-to-know", "edit-zero-beige-energy",
+                ], evidence: .discovery),
+                .init(id: "wellness", label: "Wellness", storyIDs: [
+                    "edit-wash-day-reset", "edit-stay-a-while",
                 ], evidence: .discovery),
             ],
             utility: .none
@@ -252,16 +311,30 @@ final class BuyerPreviewStore {
         UserDefaults.standard.set(profile.id, forKey: "buyerPreviewProfileID")
     }
 
+    var navigationTopics: [BuyerFeedTopic] {
+        if !selected.topics.isEmpty { return selected.topics }
+        return FeedInformationArchitecture.categories.map { category in
+            BuyerFeedTopic(
+                id: category.id,
+                label: category.label,
+                storyIDs: [],
+                evidence: .discovery
+            )
+        }
+    }
+
     func stories(
-        for category: FeedCategory,
+        for topic: BuyerFeedTopic,
         in catalog: PersonalizedFeedCatalog
     ) -> [FeedStory] {
-        if let shelf = selected.shelves.first(where: { $0.categoryID == category.id }) {
-            let byID = Dictionary(uniqueKeysWithValues: catalog.stories.map { ($0.id, $0) })
-            let resolved = shelf.storyIDs.compactMap { byID[$0] }
-            if !resolved.isEmpty { return resolved }
-        }
-        return FeedInformationArchitecture.stories(for: category, in: catalog)
+        let byID = Dictionary(uniqueKeysWithValues: catalog.stories.map { ($0.id, $0) })
+        let resolved = topic.storyIDs.compactMap { byID[$0] }
+        if !resolved.isEmpty { return resolved }
+
+        let sourceCategory = FeedInformationArchitecture.categories.first {
+            $0.id == topic.sourceCategoryID
+        } ?? FeedInformationArchitecture.categories[0]
+        return FeedInformationArchitecture.stories(for: sourceCategory, in: catalog)
     }
 }
 

@@ -55,11 +55,16 @@ struct HomePage: View {
     private let forYouUtilityPresentation: ForYouUtilityPresentation = .carouselOnly
 
     private var topics: [FeedTopic] { PersonalizedFeedCatalog.current.topics }
-    private var navigationTopics: [FeedCategory] {
-        FeedInformationArchitecture.categories
+    private var navigationTopics: [BuyerFeedTopic] {
+        buyerPreview.navigationTopics
+    }
+    private var selectedTopic: BuyerFeedTopic {
+        navigationTopics.first { $0.id == selectedTopicID } ?? navigationTopics[0]
     }
     private var selectedCategory: FeedCategory {
-        navigationTopics.first { $0.id == selectedTopicID } ?? navigationTopics[0]
+        FeedInformationArchitecture.categories.first {
+            $0.id == selectedTopic.sourceCategoryID
+        } ?? FeedInformationArchitecture.categories[0]
     }
 
     private var pageBackgroundColor: Color {
@@ -71,7 +76,7 @@ struct HomePage: View {
 
     private var focusedStories: [FeedStory] {
         buyerPreview.stories(
-            for: selectedCategory,
+            for: selectedTopic,
             in: PersonalizedFeedCatalog.current
         )
     }
@@ -898,6 +903,7 @@ struct HomePage: View {
         expandingStoryID = nil
         focusedStoryID = nil
         selectedTopicID = "for-you"
+        topicRailOffset = 0
     }
 
     private var topicRail: some View {
@@ -971,7 +977,7 @@ struct HomePage: View {
         return min(0, max(minimum, proposed))
     }
 
-    private func topicButton(_ topic: FeedCategory) -> some View {
+    private func topicButton(_ topic: BuyerFeedTopic) -> some View {
         Button {
             guard selectedTopicID != topic.id || focusedStoryID != nil else { return }
             HapticFeedback.light.fire()
@@ -1002,7 +1008,7 @@ struct HomePage: View {
         .accessibilityAddTraits(selectedTopicID == topic.id ? .isSelected : [])
     }
 
-    private func topicLabel(_ topic: FeedCategory) -> some View {
+    private func topicLabel(_ topic: BuyerFeedTopic) -> some View {
         Text(topic.label)
             .font(FeedNavigationStyle.labelFont)
             .foregroundStyle(topicLabelColor(topic))
@@ -1011,7 +1017,7 @@ struct HomePage: View {
             .contentShape(Capsule())
     }
 
-    private func topicLabelColor(_ topic: FeedCategory) -> Color {
+    private func topicLabelColor(_ topic: BuyerFeedTopic) -> Color {
         selectedTopicID == topic.id ? GravityColors.textFixedDark : GravityColors.textFixedLight
     }
 
