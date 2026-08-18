@@ -7,6 +7,7 @@ struct StoryFeedCard: View {
     let merchants: [SampleMerchant]
     let width: CGFloat
     let height: CGFloat
+    var titleOverride: String? = nil
     var isActive = true
     var showsBackground = true
     var showsForegroundContent = true
@@ -170,7 +171,7 @@ struct StoryFeedCard: View {
         }
         .buttonStyle(PressScaleButtonStyle())
         .onAppear { mediaIsMoving = true }
-        .accessibilityLabel("\(story.title). \(story.subtitle)")
+        .accessibilityLabel("\(titleOverride ?? story.title). \(story.subtitle)")
         .accessibilityHint(story.destinationLabel)
     }
 
@@ -298,7 +299,7 @@ struct StoryFeedCard: View {
     // MARK: - Header
 
     private var storyHeader: some View {
-        Text(story.title)
+        Text(titleOverride ?? story.title)
             .font(FeedEditorialTypography.titleFont)
             .tracking(FeedEditorialTypography.titleTracking)
             .lineSpacing(FeedEditorialTypography.titleLineSpacing)

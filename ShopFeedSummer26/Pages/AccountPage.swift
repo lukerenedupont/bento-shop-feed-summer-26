@@ -7,6 +7,7 @@ struct AccountPage: View {
 #endif
     @Environment(NavigationCoordinator.self) private var coordinator
     @State private var userProfile = UserProfileService.shared
+    @State private var buyerPreview = BuyerPreviewStore.shared
     @State private var showSettings = false
     let namespace: Namespace.ID
 
@@ -68,7 +69,9 @@ struct AccountPage: View {
     private var topBar: some View {
         HStack(spacing: GravitySpacing.space12) {
             ZStack {
-                if let avatarURL = userProfile.avatarURL {
+                if buyerPreview.selected.id != "luke" {
+                    BuyerPreviewAvatar(profile: buyerPreview.selected, size: 44)
+                } else if let avatarURL = userProfile.avatarURL {
                     AsyncImage(url: avatarURL) { phase in
                         switch phase {
                         case .success(let image):
@@ -83,16 +86,14 @@ struct AccountPage: View {
                         }
                     }
                 } else {
-                    Image("luke-avatar")
-                        .resizable()
-                        .scaledToFill()
+                    BuyerPreviewAvatar(profile: buyerPreview.selected, size: 44)
                 }
             }
                 .frame(width: PurlTune.value("Pages/AccountPage.swift:frame:width:91:31", default: 44), height: PurlTune.value("Pages/AccountPage.swift:frame:height:91:113", default: 44))
                 .clipShape(Circle())
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(userProfile.displayName)
+                Text(buyerPreview.selected.id == "luke" ? userProfile.displayName : buyerPreview.selected.name)
                     .gravityTextStyle(GravityTypography.sectionTitle)
                     .foregroundStyle(PurlTune.token("Pages/AccountPage.swift:foregroundStyle:_:97:38", default: GravityColors.text, options: GravityColors.purlTuneColorOptions))
                 HStack(spacing: 2) {

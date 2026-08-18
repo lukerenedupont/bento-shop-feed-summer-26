@@ -19,6 +19,7 @@ struct HomePage: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @ObservedObject private var merchantService = RemoteMerchantService.shared
     @ObservedObject private var feedService = RemoteFeedService.shared
+    @State private var buyerPreview = BuyerPreviewStore.shared
     @Namespace private var heroNamespace
     @Namespace private var topicSelectionNamespace
 
@@ -40,6 +41,7 @@ struct HomePage: View {
     @State private var categoryMoveDirection = 1
     @State private var topicRailOffset: CGFloat = 0
     @State private var topicRailContentWidth: CGFloat = 0
+    @State private var showsBuyerSwitcher = false
     @GestureState private var topicRailDragOffset: CGFloat = 0
 
     private let retargetingCardHeight: CGFloat = 177
@@ -64,10 +66,11 @@ struct HomePage: View {
     }
 
     private var focusedStories: [FeedStory] {
-        FeedInformationArchitecture.stories(
+        let stories = FeedInformationArchitecture.stories(
             for: selectedCategory,
             in: PersonalizedFeedCatalog.current
         )
+        return selectedTopicID == "for-you" ? buyerPreview.orderedStories(stories) : stories
     }
 
     private var activeFeedStory: FeedStory? {
@@ -613,6 +616,7 @@ struct HomePage: View {
             merchants: merchants,
             width: width,
             height: height,
+            titleOverride: buyerPreview.title(for: story),
             isActive: story.id == activeFeedStory?.id,
             showsFooterArrow: false,
             titleAtTopLeading: true,
@@ -801,11 +805,11 @@ struct HomePage: View {
     }
 
     private var avatar: some View {
-        Image("luke-avatar")
-                .resizable()
-                .scaledToFill()
-                .frame(width: FeedNavigationStyle.avatarSize, height: FeedNavigationStyle.avatarSize)
-                .clipShape(Circle())
+        ZStack(alignment: .bottomTrailing) {
+            BuyerPreviewAvatar(
+                profile: buyerPreview.selected,
+                size: FeedNavigationStyle.avatarSize
+            )
                 .matchedTransitionSource(id: "account-avatar", in: heroNamespace)
                 .scaleEffect(avatarPressed ? 0.85 : 1.0)
                 .animation(.spring(response: PurlTune.value("Pages/HomePage.swift:spring:response:135:46", default: 0.2), dampingFraction: PurlTune.value("Pages/HomePage.swift:spring:dampingFraction:135:140", default: 0.7)), value: avatarPressed)
@@ -818,7 +822,43 @@ struct HomePage: View {
                             coordinator.pushRoute(.account)
                         }
                 )
-                .zIndex(1)
+
+            Button {
+                HapticFeedback.light.fire()
+                showsBuyerSwitcher = true
+            } label: {
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 8, weight: .bold))
+                    .foregroundStyle(.black)
+                    .frame(width: 18, height: 18)
+                    .background(.white, in: Circle())
+                    .shadow(color: .black.opacity(0.14), radius: 4, y: 2)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Switch preview buyer")
+        }
+        .confirmationDialog(
+            "Preview feed as",
+            isPresented: $showsBuyerSwitcher,
+            titleVisibility: .visible
+        ) {
+            ForEach(BuyerPreviewStore.profiles) { profile in
+                Button(profile.name) { selectBuyer(profile) }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Authored prototype fixtures—not live private account data.")
+        }
+        .zIndex(1)
+    }
+
+    private func selectBuyer(_ profile: BuyerPreviewProfile) {
+        buyerPreview.select(profile)
+        coordinator.resetScrollState()
+        visibleStoryID = nil
+        expandingStoryID = nil
+        focusedStoryID = nil
+        selectedTopicID = "for-you"
     }
 
     private var topicRail: some View {
