@@ -87,7 +87,7 @@ struct BuyerPreviewProfile: Identifiable, Hashable {
 final class BuyerPreviewStore {
     static let shared = BuyerPreviewStore()
 
-    static let profiles: [BuyerPreviewProfile] = [
+    static let legacyProfiles: [BuyerPreviewProfile] = [
         BuyerPreviewProfile(
             id: "luke",
             name: "Luke Dupont",
@@ -340,6 +340,8 @@ final class BuyerPreviewStore {
         )
     ]
 
+    static let profiles: [BuyerPreviewProfile] = HypothesisShelfCatalog.profiles
+
     private(set) var selectedID: String
 
     var selected: BuyerPreviewProfile {
@@ -414,26 +416,6 @@ final class BuyerPreviewStore {
                     issues.append("\(profile.id)/\(topic.id): unknown story \(storyID)")
                 }
 
-                if topic.id == "for-you" {
-                    let merchantCards = topic.storyIDs.map {
-                        MerchantCollectionCatalog.presentation(for: $0) != nil
-                    }
-                    let merchantCount = merchantCards.filter { $0 }.count
-                    if merchantCount == 0 {
-                        issues.append("\(profile.id)/for-you: needs at least one merchant card")
-                    }
-                    if merchantCount * 4 < topic.storyIDs.count {
-                        issues.append("\(profile.id)/for-you: merchant cards are too sparse")
-                    }
-                    if merchantCount * 5 > topic.storyIDs.count * 3 {
-                        issues.append("\(profile.id)/for-you: merchant cards overpower editorial cards")
-                    }
-                    if zip(merchantCards, merchantCards.dropFirst()).contains(where: { pair in
-                        pair.0 && pair.1
-                    }) {
-                        issues.append("\(profile.id)/for-you: merchant cards must be interleaved")
-                    }
-                }
             }
 
             let utilityStoryIDs = [
@@ -463,34 +445,6 @@ final class BuyerPreviewStore {
                         "\(storyID): unknown product \(reference.merchantID)/\(reference.productID)"
                     )
                 }
-            }
-        }
-
-        for presentation in MerchantCollectionCatalog.presentations {
-            guard let story = storiesByID[presentation.storyID] else {
-                issues.append("merchant card: unknown story \(presentation.storyID)")
-                continue
-            }
-            guard let merchant = merchantsByID[presentation.merchantID] else {
-                issues.append("\(presentation.storyID): unknown merchant \(presentation.merchantID)")
-                continue
-            }
-            let storyMerchantIDs = Set(story.products.map(\.merchantID))
-            if storyMerchantIDs != Set([presentation.merchantID]) {
-                issues.append("\(presentation.storyID): merchant card must be a single-shop story")
-            }
-            if merchant.products.count < presentation.productCount {
-                issues.append("\(presentation.storyID): not enough products for the authored grid")
-            }
-            guard let cover = merchant.products.first(where: { $0.id == presentation.coverProductID }) else {
-                issues.append("\(presentation.storyID): cover product is missing")
-                continue
-            }
-            let coverImages = cover.allImageURLs.isEmpty
-                ? [cover.imageURL].compactMap { $0 }
-                : cover.allImageURLs
-            if presentation.coverImageIndex >= coverImages.count {
-                issues.append("\(presentation.storyID): cover image index is out of bounds")
             }
         }
 

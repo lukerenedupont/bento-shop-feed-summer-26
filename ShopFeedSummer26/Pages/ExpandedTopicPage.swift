@@ -143,26 +143,16 @@ struct ExpandedTopicPage: View {
     /// scroll edge so section copy never remains readable beneath the status
     /// bar or navigation rail.
     private var navigationBackdrop: some View {
-        ZStack {
-            Rectangle().fill(.ultraThinMaterial)
-            LinearGradient(
-                colors: [.black.opacity(0.68), .black.opacity(0.48)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        }
-            .frame(height: windowSafeAreaTopInset + 92)
-            .mask {
-                LinearGradient(
-                    stops: [
-                        .init(color: .black, location: 0),
-                        .init(color: .black, location: 0.72),
-                        .init(color: .clear, location: 1),
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            }
+        LinearGradient(
+            stops: [
+                .init(color: .black.opacity(0.22), location: 0),
+                .init(color: .black.opacity(0.10), location: 0.58),
+                .init(color: .clear, location: 1),
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+            .frame(height: windowSafeAreaTopInset + 56)
             .environment(\.colorScheme, .dark)
             .opacity(min(max(verticalScrollOffset / 56, 0), 1))
             .allowsHitTesting(false)

@@ -33,7 +33,7 @@ struct HomePage: View {
         LocalMerchantService.mergeMerchants([
             feedService.merchants,
             bundledMerchants,
-            BuyerPersonalizationCatalog.merchants,
+            HypothesisShelfCatalog.merchants,
         ])
     }
     @State private var selectedTopicID = "for-you"
@@ -101,7 +101,8 @@ struct HomePage: View {
                 StoryTopicPage(
                     storyID: focusedStoryID,
                     namespace: namespace,
-                    contextTopicID: selectedTopicID
+                    contextTopicID: selectedTopicID,
+                    closeOnlyNavigation: buyerPreview.selected.id == "luke"
                 )
                     .id(focusedStoryID)
             } else {
@@ -124,7 +125,17 @@ struct HomePage: View {
             .ignoresSafeArea()
         }
         .safeAreaBar(edge: .top) {
-            topBar
+            if buyerPreview.selected.id != "luke" || focusedStoryID == nil {
+                topBar
+            }
+        }
+        .overlay {
+            if showsBuyerSwitcher {
+                Color.black.opacity(0.10)
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
+                    .transition(.opacity)
+            }
         }
         // Every Home surface now sits on imagery. Keep status-bar chrome light
         // so the transparent top rail remains legible over the moving backdrop.
@@ -268,10 +279,12 @@ struct HomePage: View {
         return ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
                 if let storyID = buyerPreview.selected.utility.buyAgainStoryID {
-                    let products = utilityProducts(for: storyID)
+                    let products = utilityProducts(for: storyID).filter {
+                        $0.product.tags.contains("buyer-buy-again")
+                    }
                     utilityProductRail(
                         title: "Buy again",
-                        products: Array((storyID.isEmpty ? products.dropFirst(3) : products[...]).prefix(3)),
+                        products: Array(products.prefix(3)),
                         width: railWidth
                     )
                 }
@@ -285,17 +298,23 @@ struct HomePage: View {
                 }
 
                 if let storyID = buyerPreview.selected.utility.recentlyViewedStoryID {
+                    let products = utilityProducts(for: storyID).filter {
+                        $0.product.tags.contains("buyer-saved")
+                    }
                     utilityProductRail(
-                        title: "Recently viewed",
-                        products: Array(utilityProducts(for: storyID).prefix(3)),
+                        title: "Saved",
+                        products: Array(products.prefix(3)),
                         width: railWidth
                     )
                 }
 
                 if let storyID = buyerPreview.selected.utility.ownedAdjacencyStoryID {
+                    let products = utilityProducts(for: storyID).filter {
+                        $0.product.tags.contains("buyer-open-loop")
+                    }
                     utilityProductRail(
-                        title: storyID == "andreas-macbook-kit" ? "For your MacBook" : "For what you own",
-                        products: Array(utilityProducts(for: storyID).prefix(3)),
+                        title: "Pick up where you left off",
+                        products: Array(products.prefix(3)),
                         width: railWidth
                     )
                 }
@@ -690,7 +709,9 @@ struct HomePage: View {
                     prefersVideoBackground: storyIndex?.isMultiple(of: 5) == true,
                     freezesParallax: expandingStoryID == story.id,
                     scrollViewportHeight: viewportHeight,
-                    onTap: { openTopic(for: story) }
+                    onTap: story.topicKeys.contains("merchant-card")
+                        ? nil
+                        : { openTopic(for: story) }
                 )
             }
         }
@@ -807,6 +828,23 @@ struct HomePage: View {
     /// match wins over secondary membership so cards such as New York graphics
     /// can own a destination even when they also appear in Type & transit.
     private func openTopic(for story: FeedStory) {
+        // Luke's Hypothesis shelves are authored directly into his buyer
+        // topics, rather than the legacy shared topic catalog below. Keep the
+        // drill-in inside Home so the selected topic and its sibling shelves
+        // remain available around the real shelf content.
+        if buyerPreview.selected.id == "luke",
+           selectedTopic.storyIDs.contains(story.id) {
+            coordinator.resetScrollState()
+            withAnimation(
+                reduceMotion
+                    ? nil
+                    : .spring(response: 0.32, dampingFraction: 0.82)
+            ) {
+                focusedStoryID = story.id
+            }
+            return
+        }
+
         let destinations = topics.filter { $0.id != "for-you" }
         let destination = destinations.first { $0.storyIDs?.first == story.id }
             ?? destinations.first { $0.storyIDs?.contains(story.id) == true }
@@ -884,7 +922,9 @@ struct HomePage: View {
     private var avatar: some View {
         Button {
             HapticFeedback.light.fire()
-            showsBuyerSwitcher = true
+            withAnimation(.easeOut(duration: 0.18)) {
+                showsBuyerSwitcher = true
+            }
         } label: {
             BuyerPreviewAvatar(
                 profile: buyerPreview.selected,
@@ -895,10 +935,10 @@ struct HomePage: View {
         .accessibilityLabel("Switch preview buyer")
         .fullScreenCover(isPresented: $showsBuyerSwitcher) {
             ZStack(alignment: .bottom) {
-                Color.black.opacity(0.10)
+                Color.clear
                     .ignoresSafeArea()
                     .contentShape(Rectangle())
-                    .onTapGesture { showsBuyerSwitcher = false }
+                    .onTapGesture { dismissBuyerSwitcher() }
 
                 VStack(spacing: 4) {
                     ForEach(BuyerPreviewStore.profiles) { profile in
@@ -938,20 +978,26 @@ struct HomePage: View {
             .ignoresSafeArea()
             .presentationBackground(.clear)
             .environment(\.colorScheme, .light)
-            .accessibilityAction(.escape) { showsBuyerSwitcher = false }
+            .accessibilityAction(.escape) { dismissBuyerSwitcher() }
         }
         .zIndex(1)
     }
 
     private func selectBuyer(_ profile: BuyerPreviewProfile) {
         buyerPreview.select(profile)
-        showsBuyerSwitcher = false
+        dismissBuyerSwitcher()
         coordinator.resetScrollState()
         visibleStoryID = nil
         expandingStoryID = nil
         focusedStoryID = nil
         selectedTopicID = "for-you"
         topicRailOffset = 0
+    }
+
+    private func dismissBuyerSwitcher() {
+        withAnimation(.easeOut(duration: 0.16)) {
+            showsBuyerSwitcher = false
+        }
     }
 
     private var topicRail: some View {

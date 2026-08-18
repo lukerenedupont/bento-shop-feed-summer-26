@@ -14,7 +14,7 @@ struct PersonalizedFeedCatalog: Codable {
     static var current: PersonalizedFeedCatalog {
         let base = remote ?? bundled
         let existingIDs = Set(base.stories.map(\.id))
-        let supplementalStories = BuyerPersonalizationCatalog.stories.filter {
+        let supplementalStories = HypothesisShelfCatalog.stories.filter {
             !existingIDs.contains($0.id)
         }
         guard !supplementalStories.isEmpty else { return base }

@@ -46,7 +46,7 @@ enum MerchantCollectionCatalog {
     /// High-confidence buyer matches backed by the canonical catalog fixtures.
     /// Four-up cards preserve more of the lifestyle cover; six-up is reserved
     /// for merchants with a genuinely broader assortment.
-    static let presentations: [MerchantCollectionPresentation] = [
+    private static let authoredPresentations: [MerchantCollectionPresentation] = [
         .init(
             storyID: "discovery-nocs-field-kit",
             merchantID: "nocs",
@@ -181,6 +181,10 @@ enum MerchantCollectionCatalog {
         ),
     ]
 
+    static var presentations: [MerchantCollectionPresentation] {
+        authoredPresentations + HypothesisShelfCatalog.merchantCollectionPresentations
+    }
+
     static func presentation(for storyID: String) -> MerchantCollectionPresentation? {
         presentations.first { $0.storyID == storyID }
     }
@@ -206,7 +210,8 @@ enum MerchantBrandAssets {
 
     static func hasVerifiedBundledWordmark(for merchantID: String) -> Bool {
         let assetID = aliases[merchantID] ?? merchantID
-        return !textFallbackOnly.contains(assetID)
+        return !merchantID.hasPrefix("shelf-shop-")
+            && !textFallbackOnly.contains(assetID)
     }
 
     static func wordmarkName(for merchantID: String) -> String {

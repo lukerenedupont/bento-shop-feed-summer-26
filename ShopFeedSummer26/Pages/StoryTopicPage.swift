@@ -8,6 +8,7 @@ struct StoryTopicPage: View {
     let namespace: Namespace.ID
     var contextTopicID: String? = nil
     var transitionSourceID: String? = nil
+    var closeOnlyNavigation = false
 
     @Environment(NavigationCoordinator.self) private var coordinator
     @State private var previousNavBarTint: Color?
@@ -150,8 +151,38 @@ struct StoryTopicPage: View {
         }
     }
 
+    @ViewBuilder
     private var drillInNavigation: some View {
-        ZStack(alignment: .leading) {
+        if closeOnlyNavigation {
+            HStack {
+                Button {
+                    HapticFeedback.light.fire()
+                    coordinator.popCurrentPage()
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(FeedNavigationStyle.iconFont)
+                        .foregroundStyle(.black)
+                        .frame(
+                            width: FeedNavigationStyle.controlSize,
+                            height: FeedNavigationStyle.controlSize
+                        )
+                        .background(FeedNavigationStyle.selectedFill, in: Circle())
+                        .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
+                        .contentShape(Circle())
+                }
+                .buttonStyle(PressScaleButtonStyle())
+                .accessibilityLabel("Close")
+
+                Spacer()
+            }
+            .padding(.horizontal, GravitySpacing.space16)
+            .frame(
+                maxWidth: .infinity,
+                minHeight: FeedNavigationStyle.controlSize,
+                alignment: .leading
+            )
+        } else {
+            ZStack(alignment: .leading) {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: FeedNavigationStyle.itemSpacing) {
                     ForEach(siblingSubtopics, id: \.storyID) { subtopic in
@@ -209,8 +240,9 @@ struct StoryTopicPage: View {
             .padding(.leading, GravitySpacing.space16)
             .accessibilityLabel("Back")
             .zIndex(1)
+            }
+            .frame(maxWidth: .infinity, minHeight: FeedNavigationStyle.controlSize, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, minHeight: FeedNavigationStyle.controlSize, alignment: .leading)
     }
 }
 

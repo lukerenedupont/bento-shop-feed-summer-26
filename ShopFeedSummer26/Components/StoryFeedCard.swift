@@ -44,6 +44,12 @@ struct StoryFeedCard: View {
     /// it out with adjacent catalog items. A final catalog pass guarantees the
     /// dense 4/6/9-up variants never end with a visibly empty grid slot.
     private var productAssortment: [ResolvedStoryProduct] {
+        // Hypothesis shelves are exact authored assortments. Do not pad them
+        // with products from another shelf just to fill a larger card layout.
+        if story.id.hasPrefix("shelf-") {
+            return items
+        }
+
         var seen = Set<String>()
         var assortment: [ResolvedStoryProduct] = []
 
@@ -450,13 +456,13 @@ struct StoryFeedCard: View {
                     let farItem = deckItem(from: safeIndex, offset: productDeckDirection * 2)
 
                     ZStack(alignment: .leading) {
-                        productSummaryCard(farItem)
+                        productSummaryCard(farItem, surfaceLift: 0.22)
                             .frame(width: geometry.size.width - 16)
                             .scaleEffect(0.92 + 0.04 * productPromotionProgress, anchor: .leading)
                             .offset(x: 36 - 18 * productPromotionProgress)
                             .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
 
-                        productSummaryCard(nextItem)
+                        productSummaryCard(nextItem, surfaceLift: 0.14)
                             .frame(width: geometry.size.width - 16)
                             .scaleEffect(0.96 + 0.04 * productPromotionProgress, anchor: .leading)
                             .offset(x: 18 * (1 - productPromotionProgress))
@@ -491,7 +497,10 @@ struct StoryFeedCard: View {
         .frame(height: 126)
     }
 
-    private func productSummaryCard(_ item: ResolvedStoryProduct) -> some View {
+    private func productSummaryCard(
+        _ item: ResolvedStoryProduct,
+        surfaceLift: Double = 0
+    ) -> some View {
         HStack(spacing: 12) {
             ProductImageView(product: item.product, merchant: item.merchant)
                 .frame(width: 72, height: 72)
@@ -516,7 +525,14 @@ struct StoryFeedCard: View {
                 .frame(width: 38, height: 38)
         }
         .padding(8)
-        .background(productStackColor, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background {
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(productStackColor)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .fill(.white.opacity(surfaceLift))
+                }
+        }
         .overlay {
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
