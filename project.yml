@@ -51,7 +51,28 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
       info:
         UIAppFonts:
-                  []
+          - GTStandard-LHeavy.otf
+          - GTStandard-LSemibold.otf
+          - GTStandard-MBold.otf
+          - GTStandard-MMedium.otf
+          - GTStandard-MRegular.otf
+          - GTStandard-MSemibold.otf
+          - GoodSans-Bold.otf
+          - GoodSans-Medium.otf
+          - GoodSans-Regular.otf
+          - GoodSansText-Bold.otf
+          - GoodSansText-Medium.otf
+          - GoodSansText-Regular.otf
+          - Shopify Sans-Black Italic.otf
+          - Shopify Sans-Black.otf
+          - Shopify Sans-Bold Italic.otf
+          - Shopify Sans-Bold.otf
+          - Shopify Sans-Light Italic.otf
+          - Shopify Sans-Light.otf
+          - Shopify Sans-Medium Italic.otf
+          - Shopify Sans-Medium.otf
+          - Shopify Sans-Regular Italic.otf
+          - Shopify Sans-Regular.otf
     preBuildScripts:
       - name: Validate Personalized Feed
         basedOnDependencyAnalysis: false

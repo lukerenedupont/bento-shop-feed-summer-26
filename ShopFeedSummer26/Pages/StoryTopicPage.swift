@@ -6,6 +6,8 @@ import SwiftUI
 struct StoryTopicPage: View {
     let storyID: String
     let namespace: Namespace.ID
+    var contextTopicID: String? = nil
+    var transitionSourceID: String? = nil
 
     @Environment(NavigationCoordinator.self) private var coordinator
     @State private var previousNavBarTint: Color?
@@ -19,6 +21,23 @@ struct StoryTopicPage: View {
     private var story: FeedStory? {
         PersonalizedFeedStories.all.first { $0.id == storyID }
             ?? PersonalizedFeedCatalog.bundled.stories.first { $0.id == storyID }
+    }
+
+    /// The personalized tab that launched an inline drill-in. The legacy
+    /// global topic graph does not know about buyer-authored shelves.
+    private var contextTopic: BuyerFeedTopic? {
+        guard let contextTopicID else { return nil }
+        return BuyerPreviewStore.shared.navigationTopics.first {
+            $0.id == contextTopicID
+        }
+    }
+
+    private var contextStories: [FeedStory] {
+        guard let contextTopic else { return [] }
+        let byID = Dictionary(
+            uniqueKeysWithValues: PersonalizedFeedCatalog.current.stories.map { ($0.id, $0) }
+        )
+        return contextTopic.storyIDs.compactMap { byID[$0] }
     }
 
     /// The parent topic whose feed contains this story — its cover and
@@ -41,16 +60,40 @@ struct StoryTopicPage: View {
     }
 
     private var siblingSubtopics: [FeedTopic.Subtopic] {
-        if let curated = parentTopic?.subtopics, !curated.isEmpty { return curated }
-        return parentStories.map {
-            .init(label: $0.title.split(separator: " ").prefix(3).joined(separator: " "), storyID: $0.id)
+        let subtopics: [FeedTopic.Subtopic]
+        if !contextStories.isEmpty {
+            subtopics = contextStories.map {
+                .init(
+                    label: $0.title.split(separator: " ").prefix(3).joined(separator: " "),
+                    storyID: $0.id
+                )
+            }
+        } else if let curated = parentTopic?.subtopics, !curated.isEmpty {
+            subtopics = curated
+        } else {
+            subtopics = parentStories.map {
+                .init(
+                    label: $0.title.split(separator: " ").prefix(3).joined(separator: " "),
+                    storyID: $0.id
+                )
+            }
         }
+
+        guard let currentIndex = subtopics.firstIndex(where: { $0.storyID == storyID }) else {
+            return subtopics
+        }
+        return Array(subtopics[currentIndex...]) + Array(subtopics[..<currentIndex])
     }
 
     private var parentLeadStory: FeedStory? {
+        if let contextualLead = contextStories.first { return contextualLead }
         guard let leadID = parentTopic?.storyIDs?.first else { return nil }
         return PersonalizedFeedStories.all.first { $0.id == leadID }
             ?? PersonalizedFeedCatalog.bundled.stories.first { $0.id == leadID }
+    }
+
+    private var collectionCoverURL: URL? {
+        MerchantCollectionCatalog.presentation(for: storyID)?.coverURL(from: merchants)
     }
 
     var body: some View {
@@ -68,16 +111,20 @@ struct StoryTopicPage: View {
                 stories: [story],
                 merchants: merchants,
                 headerCoverImageName: parentLeadStory?.coverImageName,
+                headerImageURL: collectionCoverURL,
                 surfaceAccentHex: parentLeadStory?.accentHex ?? story.accentHex,
                 // Chapters, not covers: shorter header with the parent
                 // world's name as an eyebrow so drill-ins stay oriented.
-                headerEyebrow: parentTopic?.label,
+                headerEyebrow: contextTopic?.label ?? parentTopic?.label,
                 compactHeader: true
             )
             .environment(\.colorScheme, .dark)
             .toolbar(.hidden, for: .navigationBar)
             .navigationTransition(
-                .zoom(sourceID: "subtopic-\(storyID)", in: namespace)
+                .zoom(
+                    sourceID: transitionSourceID ?? "subtopic-\(storyID)",
+                    in: namespace
+                )
             )
             .safeAreaBar(edge: .top) {
                 drillInNavigation
@@ -105,42 +152,44 @@ struct StoryTopicPage: View {
 
     private var drillInNavigation: some View {
         ZStack(alignment: .leading) {
-            ScrollViewReader { proxy in
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: FeedNavigationStyle.itemSpacing) {
-                        ForEach(siblingSubtopics, id: \.storyID) { subtopic in
-                            Button {
-                                guard subtopic.storyID != storyID else { return }
-                                HapticFeedback.light.fire()
-                                coordinator.replaceCurrentRoute(.story(storyId: subtopic.storyID))
-                            } label: {
-                                Text(subtopic.label)
-                                    .font(FeedNavigationStyle.labelFont)
-                                    .foregroundStyle(subtopic.storyID == storyID ? .black : .white)
-                                    .lineLimit(1)
-                                    .padding(.horizontal, FeedNavigationStyle.pillHorizontalPadding)
-                                    .frame(height: FeedNavigationStyle.controlSize)
-                                    .background {
-                                        if subtopic.storyID == storyID {
-                                            Capsule()
-                                                .fill(FeedNavigationStyle.selectedFill)
-                                                .shadow(color: .black.opacity(0.10), radius: 10, y: 4)
-                                        }
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: FeedNavigationStyle.itemSpacing) {
+                    ForEach(siblingSubtopics, id: \.storyID) { subtopic in
+                        Button {
+                            guard subtopic.storyID != storyID else { return }
+                            HapticFeedback.light.fire()
+                            coordinator.replaceCurrentRoute(.story(storyId: subtopic.storyID))
+                        } label: {
+                            Text(subtopic.label)
+                                .font(FeedNavigationStyle.labelFont)
+                                .foregroundStyle(subtopic.storyID == storyID ? .black : .white)
+                                .lineLimit(1)
+                                .padding(.horizontal, FeedNavigationStyle.pillHorizontalPadding)
+                                .frame(height: FeedNavigationStyle.controlSize)
+                                .background {
+                                    if subtopic.storyID == storyID {
+                                        Capsule()
+                                            .fill(FeedNavigationStyle.selectedFill)
+                                            .shadow(color: .black.opacity(0.10), radius: 10, y: 4)
                                     }
-                            }
-                            .buttonStyle(.plain)
-                            .matchedTransitionSource(
-                                id: "subtopic-\(subtopic.storyID)",
-                                in: namespace
-                            )
-                            .id(subtopic.storyID)
+                                }
                         }
+                        .buttonStyle(.plain)
+                        .matchedTransitionSource(
+                            id: "subtopic-\(subtopic.storyID)",
+                            in: namespace
+                        )
                     }
                 }
-                .contentMargins(.leading, FeedNavigationStyle.railLeadingInset, for: .scrollContent)
-                .contentMargins(.trailing, FeedNavigationStyle.railTrailingInset, for: .scrollContent)
-                .onAppear {
-                    proxy.scrollTo(storyID, anchor: .center)
+            }
+            .contentMargins(.leading, FeedNavigationStyle.railLeadingInset, for: .scrollContent)
+            .contentMargins(.trailing, FeedNavigationStyle.railTrailingInset, for: .scrollContent)
+            .mask {
+                HStack(spacing: 0) {
+                    // The active sibling is first, while this mask keeps later
+                    // manual scrolling from ever painting beneath Back.
+                    Color.clear.frame(width: FeedNavigationStyle.railLeadingInset)
+                    Color.black
                 }
             }
 

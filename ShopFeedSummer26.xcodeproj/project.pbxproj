@@ -70,6 +70,7 @@
 		6B769D7CE062065724052DB4 /* SearchResultCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E66AF39E36586723035423 /* SearchResultCount.swift */; };
 		6B959753F1BE4FD9E41B103C /* StoryDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31BC531098602EBF12CF58A9 /* StoryDetailPage.swift */; };
 		6B962694A2D5A76349334EE4 /* DeliveryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D0AC7FA7992C3C84A593D9 /* DeliveryCard.swift */; };
+		701D9E180841F535074E77E3 /* GTStandard-LSemibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 70B6EA62F63A7A6F39EC015E /* GTStandard-LSemibold.otf */; };
 		73A8C5E857F8C8D23B0AB657 /* CartPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3502071F386F04F63B93A6 /* CartPage.swift */; };
 		742ADA927F28DE885852A247 /* Shopify Sans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EAC89D255BADA19142CCCFBF /* Shopify Sans-Regular.otf */; };
 		79107058DF87EE30F6B96998 /* AgentWorkPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8AC86AF8135B7D410FFAA7 /* AgentWorkPreview.swift */; };
@@ -204,6 +205,7 @@
 		6DD5A98DA569DCD4B253C47B /* TypeaheadResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeaheadResultsView.swift; sourceTree = "<group>"; };
 		6E49E5F0F2C5F4E1E2613DF4 /* GTStandard-LHeavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTStandard-LHeavy.otf"; sourceTree = "<group>"; };
 		6EE7F83FF84386D2CADC8B02 /* GravityButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityButtons.swift; sourceTree = "<group>"; };
+		70B6EA62F63A7A6F39EC015E /* GTStandard-LSemibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTStandard-LSemibold.otf"; sourceTree = "<group>"; };
 		70C336C536108F2F50823197 /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
 		7196F22BB191093106BD6651 /* ComparisonCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonCard.swift; sourceTree = "<group>"; };
 		72ABAA98385BA17C78F00DC8 /* AgentSuggestionChips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentSuggestionChips.swift; sourceTree = "<group>"; };
@@ -369,6 +371,7 @@
 				31DD6A54D1D610CEC56F6499 /* GoodSansText-Medium.otf */,
 				BE0ED552AC81FCFE75A32C68 /* GoodSansText-Regular.otf */,
 				6E49E5F0F2C5F4E1E2613DF4 /* GTStandard-LHeavy.otf */,
+				70B6EA62F63A7A6F39EC015E /* GTStandard-LSemibold.otf */,
 				825938AC5196B6F59F942B37 /* GTStandard-MBold.otf */,
 				A287E60C566EBF6A7F6CC6B3 /* GTStandard-MMedium.otf */,
 				4AEA08A7A0F99602B0464C7B /* GTStandard-MRegular.otf */,
@@ -592,6 +595,7 @@
 				5DE188C12F42823E6802F132 /* Assets.xcassets in Resources */,
 				85C669EB15EF49C2F43B2618 /* Dossiers in Resources */,
 				64DABDEDA80A62E19DCFD97F /* GTStandard-LHeavy.otf in Resources */,
+				701D9E180841F535074E77E3 /* GTStandard-LSemibold.otf in Resources */,
 				27C6901D16FDC1F6B50C61DC /* GTStandard-MBold.otf in Resources */,
 				55E5061355B8685D36001D9F /* GTStandard-MMedium.otf in Resources */,
 				B1F85E63519B3AB3B81FC83A /* GTStandard-MRegular.otf in Resources */,

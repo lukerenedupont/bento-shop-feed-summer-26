@@ -3,12 +3,21 @@ import SwiftUI
 /// Shared editorial display type for feed cards and their expanded topic
 /// surfaces. Compact enough for short titles to remain on one line.
 enum FeedEditorialTypography {
-    static let titleFont = Font.system(size: 32, weight: .bold).leading(.tight)
-    static let titleTracking: CGFloat = -0.8
-    static let titleLineSpacing: CGFloat = -5
+    private static let titleStyle = GravityTypography.expressiveH7Heavy
+    private static let homeCardTitleStyle = GravityTypography.expressiveH7Heavy
+    private static let sectionStyle = GravityTypography.header
 
-    static let sectionFont = Font.system(size: 28, weight: .bold).leading(.tight)
-    static let sectionTracking: CGFloat = -0.6
+    static let titleFont = titleStyle.swiftUIFont
+    static let titleTracking = titleStyle.letterSpacing
+    static let titleLineSpacing = titleStyle.lineSpacing
+
+    static let homeCardTitleFont = homeCardTitleStyle.swiftUIFont
+    static let homeCardTitleTracking = homeCardTitleStyle.letterSpacing
+    static let homeCardTitleLineSpacing = homeCardTitleStyle.lineSpacing
+
+    static let sectionFont = sectionStyle.swiftUIFont
+    static let sectionTracking = sectionStyle.letterSpacing
+    static let sectionLineSpacing = sectionStyle.lineSpacing
 }
 
 // MARK: - Font Weights
@@ -20,6 +29,7 @@ enum GravityFont: String {
     case medium = "GTStandard-MMedium"
     case semiBold = "GTStandard-MSemibold"
     case bold = "GTStandard-MBold"
+    case expressiveSemiBold = "GTStandard-LSemibold"
     case expressiveBold = "GTStandard-LHeavy"
 
     func font(size: CGFloat) -> Font {
@@ -82,7 +92,15 @@ struct GravityTextStyle {
 /// Uses "phone" sizes (not smallPhone).
 enum GravityTypography {
 
-    // MARK: Expressive (GT Standard L Heavy)
+    // MARK: Expressive (GT Standard L)
+
+    /// Expressive Semibold h7 from Gravity: GT Standard L Semibold, 32/36, -0.5.
+    static let expressiveH7 = GravityTextStyle(
+        font: .expressiveSemiBold, fontSize: 32, lineHeight: 36, letterSpacing: GravityLetterSpacing.tight
+    )
+    static let expressiveH7Heavy = GravityTextStyle(
+        font: .expressiveBold, fontSize: 32, lineHeight: 36, letterSpacing: GravityLetterSpacing.tight
+    )
 
     static let posterLarge = GravityTextStyle(
         font: .expressiveBold, fontSize: 64, lineHeight: 58, letterSpacing: GravityLetterSpacing.tighter
@@ -154,6 +172,10 @@ enum GravityTypography {
     )
     static let bodySmall = GravityTextStyle(
         font: .regular, fontSize: 14, lineHeight: 18, letterSpacing: GravityLetterSpacing.cozy
+    )
+    /// Editorial Curation mobile supporting copy: Text/body, 14/20.
+    static let editorialBody = GravityTextStyle(
+        font: .regular, fontSize: 14, lineHeight: 20, letterSpacing: GravityLetterSpacing.cozy
     )
     static let bodySmallBold = GravityTextStyle(
         font: .medium, fontSize: 14, lineHeight: 18, letterSpacing: GravityLetterSpacing.cozy

@@ -166,15 +166,19 @@ struct BentoGrid: View {
     }
 }
 
-/// Topic-page presentation of the bento recipe. The authored roles become
-/// distinct horizontal product rails, while the lead and brand moments keep
-/// enough height for generated films and lifestyle imagery to breathe.
+/// Topic-page presentation of the bento recipe. Everything is locked to the
+/// vertical page grid so nested horizontal scroll state can never leave cards
+/// offset or clipped while the shopper moves through the topic.
 struct GroupedTopicBento: View {
     let compartments: [BentoCompartment]
     let containerWidth: CGFloat
 
     private let sectionSpacing: CGFloat = 30
-    private let railSpacing: CGFloat = GravitySpacing.space12
+    private let gridSpacing: CGFloat = GravitySpacing.space12
+
+    private var productColumnWidth: CGFloat {
+        (containerWidth - gridSpacing) / 2
+    }
 
     private var lead: BentoCompartment? {
         compartments.first(where: { $0.size == .hero }) ?? compartments.first
@@ -220,47 +224,51 @@ struct GroupedTopicBento: View {
         VStack(alignment: .leading, spacing: sectionSpacing) {
             if let lead {
                 BentoCompartmentCard(compartment: lead)
-                    .frame(width: containerWidth, height: 520)
+                    .frame(width: containerWidth, height: 360)
             }
 
             ForEach(videoProductMosaics) { item in
                 BentoCompartmentCard(compartment: item)
-                    .frame(width: containerWidth, height: containerWidth * 1.5)
+                    .frame(width: containerWidth, height: min(containerWidth, 380))
             }
 
             ForEach(productGroups, id: \.role) { group in
                 if group.items.count == 1, let item = group.items.first {
                     featuredProduct(title: group.role, item: item)
                 } else {
-                    productRail(title: group.role, items: group.items)
+                    productGrid(title: group.role, items: group.items)
                 }
             }
 
             if !editorialItems.isEmpty {
-                editorialRail
+                editorialStack
             }
         }
         .frame(width: containerWidth, alignment: .leading)
     }
 
-    private func productRail(
+    private func productGrid(
         title: String,
         items: [BentoCompartment]
     ) -> some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space12) {
             railTitle(title)
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: railSpacing) {
-                    ForEach(items) { item in
-                        BentoCompartmentCard(compartment: item)
-                            .frame(width: min(containerWidth * 0.68, 270), height: 360)
-                    }
+            LazyVGrid(
+                columns: [
+                    GridItem(.fixed(productColumnWidth), spacing: gridSpacing),
+                    GridItem(.fixed(productColumnWidth), spacing: 0),
+                ],
+                alignment: .leading,
+                spacing: gridSpacing
+            ) {
+                ForEach(items) { item in
+                    BentoCompartmentCard(compartment: item)
+                        .frame(width: productColumnWidth, height: 236)
+                        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
                 }
-                .scrollTargetLayout()
             }
-            .scrollClipDisabled()
-            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+            .frame(width: containerWidth, alignment: .leading)
         }
     }
 
@@ -271,32 +279,27 @@ struct GroupedTopicBento: View {
         VStack(alignment: .leading, spacing: GravitySpacing.space12) {
             railTitle(title)
             BentoCompartmentCard(compartment: item)
-                .frame(width: containerWidth, height: 420)
+                .frame(width: containerWidth, height: 300)
         }
     }
 
-    private var editorialRail: some View {
+    private var editorialStack: some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space12) {
             railTitle("Makers and shops")
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: railSpacing) {
-                    ForEach(editorialItems) { item in
-                        BentoCompartmentCard(compartment: item)
-                            .frame(width: min(containerWidth * 0.78, 310), height: 380)
-                    }
+            LazyVStack(spacing: gridSpacing) {
+                ForEach(editorialItems) { item in
+                    BentoCompartmentCard(compartment: item)
+                        .frame(width: containerWidth, height: 300)
                 }
-                .scrollTargetLayout()
             }
-            .scrollClipDisabled()
-            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+            .frame(width: containerWidth)
         }
     }
 
     private func railTitle(_ title: String) -> some View {
         Text(title)
-            .font(.system(size: 17, weight: .bold))
-            .tracking(-0.2)
+            .gravityTextStyle(GravityTypography.subtitle)
             .foregroundStyle(.white)
     }
 }
@@ -308,11 +311,24 @@ private struct BentoCompartmentCard: View {
     let compartment: BentoCompartment
 
     var body: some View {
+        GeometryReader { geometry in
+            content(
+                width: geometry.size.width,
+                height: geometry.size.height
+            )
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .clipped()
+        }
+    }
+
+    @ViewBuilder
+    private func content(width: CGFloat, height: CGFloat) -> some View {
         switch compartment.surface {
         // The avatar cluster is chrome-free: no card shell, no scrim, no
         // single destination — the discs themselves are the buttons.
         case .avatarCluster(let merchants):
             BentoAvatarClusterCell(merchants: merchants)
+                .frame(width: width, height: height)
                 .accessibilityLabel(compartment.role)
 
         // Spotlight surfaces contain their own product-chip buttons. Keeping
@@ -320,6 +336,7 @@ private struct BentoCompartmentCard: View {
         // steal horizontal rail gestures.
         case .merchantSpotlight:
             surface
+                .frame(width: width, height: height)
                 .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
                 .contentShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
                 .onTapGesture(perform: compartment.action)
@@ -328,19 +345,22 @@ private struct BentoCompartmentCard: View {
 
         case .videoProductMosaic:
             surface
+                .frame(width: width, height: height)
                 .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel(compartment.role)
 
         default:
-            card
+            card(width: width, height: height)
         }
     }
 
-    private var card: some View {
+    private func card(width: CGFloat, height: CGFloat) -> some View {
         Button(action: compartment.action) {
             ZStack(alignment: .bottomLeading) {
                 surface
+                    .frame(width: width, height: height)
+                    .clipped()
 
                 // Bottom-only scrim for the title; the top of the cell
                 // stays untouched so the asset reads clean. Brand-forward
@@ -357,14 +377,22 @@ private struct BentoCompartmentCard: View {
                     )
 
                     Text(title)
-                        .font(.system(size: compartment.size == .hero ? 22 : 15, weight: .bold))
-                        .tracking(-0.3)
+                        .gravityTextStyle(
+                            compartment.size == .hero
+                                ? GravityTypography.sectionTitle
+                                : GravityTypography.bodyTitleSmall
+                        )
                         .foregroundStyle(.white)
                         .lineLimit(2)
                         .multilineTextAlignment(.leading)
+                        .frame(
+                            width: max(0, width - GravitySpacing.space12 * 2),
+                            alignment: .leading
+                        )
                         .padding(12)
                 }
             }
+            .frame(width: width, height: height)
             // Same price treatment as ProductCard tiles: badge pill in the
             // top-leading corner instead of a subtitle under the title.
             .overlay(alignment: .topLeading) {
@@ -381,6 +409,7 @@ private struct BentoCompartmentCard: View {
             }
             .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
         }
+        .frame(width: width, height: height)
         .buttonStyle(PressScaleButtonStyle())
         .accessibilityLabel("\(compartment.role): \(title)")
     }
@@ -483,7 +512,7 @@ private struct BentoVideoProductMosaic: View {
                 $0.product.ambientFilmURLs(merchantID: $0.merchant.id)
             }
 
-            if let lead = featured.first, featured.count == 4 {
+            if let lead = featured.first, featured.count >= 3 {
                 ZStack(alignment: .topLeading) {
                     dividerColor
 
@@ -492,17 +521,15 @@ private struct BentoVideoProductMosaic: View {
                         posterImageURL: lead.product.imageURL,
                         playbackGroupID: "topic-mosaic-\(story.id)"
                     )
-                    .frame(width: cell, height: cell * 2 + gap)
+                    .frame(width: cell, height: geometry.size.height)
+                    .clipped()
 
-                    productTile(featured[0], size: cell)
-                        .offset(x: cell + gap)
                     productTile(featured[1], size: cell)
-                        .offset(x: cell + gap, y: cell + gap)
+                        .offset(x: cell + gap)
                     productTile(featured[2], size: cell)
-                        .offset(y: (cell + gap) * 2)
-                    productTile(featured[3], size: cell)
-                        .offset(x: cell + gap, y: (cell + gap) * 2)
+                        .offset(x: cell + gap, y: geometry.size.height - cell)
                 }
+                .clipped()
             }
         }
     }

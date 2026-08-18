@@ -9,6 +9,9 @@ struct TopicLandingView: View {
     let merchants: [SampleMerchant]
     /// Optional parent-topic theme inherited by drilled-in subtopic pages.
     var headerCoverImageName: String? = nil
+    /// A verified remote cover supplied by a story-specific presentation.
+    /// This lets feed treatments carry their actual media into drill-ins.
+    var headerImageURL: URL? = nil
     var surfaceAccentHex: String? = nil
     /// Compatibility with compact story chapters introduced by the richer
     /// upstream topic navigation.
@@ -37,6 +40,7 @@ struct TopicLandingView: View {
 
     private var headerLifestyleImageURL: URL? {
         guard !usesAmbientBackdrop else { return nil }
+        if let headerImageURL { return headerImageURL }
         let candidates = stories.compactMap {
             $0.lifestyleImageURL(
                 from: merchants,
@@ -194,11 +198,13 @@ struct TopicLandingView: View {
                         image
                             .resizable()
                             .scaledToFill()
-                    } else if case .failure = phase, let compactHeroProduct {
+                    } else if let compactHeroProduct {
                         ProductImageView(
                             product: compactHeroProduct.product,
                             merchant: compactHeroProduct.merchant
                         )
+                    } else {
+                        surfaceColor
                     }
                 }
             } else if let coverImageName = effectiveCoverImageName {
@@ -227,14 +233,14 @@ struct TopicLandingView: View {
             VStack(alignment: .leading, spacing: 7) {
                 if let headerEyebrow, !headerEyebrow.isEmpty {
                     Text(headerEyebrow)
-                        .font(.system(size: 15, weight: .semibold))
-                        .tracking(-0.15)
+                        .gravityTextStyle(GravityTypography.subtitleSmall)
                         .foregroundStyle(.white.opacity(0.82))
                 }
 
                 Text(displayTitle ?? topic.label)
-                    .font(.system(size: 32, weight: .bold).leading(.tight))
-                    .tracking(-0.8)
+                    .font(FeedEditorialTypography.titleFont)
+                    .tracking(FeedEditorialTypography.titleTracking)
+                    .lineSpacing(FeedEditorialTypography.titleLineSpacing)
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.leading)
                     .lineLimit(3)
@@ -256,11 +262,17 @@ struct TopicLandingView: View {
                                 image
                                     .resizable()
                                     .scaledToFill()
-                            } else if case .failure = phase,
-                                      let coverImageName = effectiveCoverImageName {
+                            } else if let coverImageName = effectiveCoverImageName {
                                 Image(coverImageName)
                                     .resizable()
                                     .scaledToFill()
+                            } else if let compactHeroProduct {
+                                ProductImageView(
+                                    product: compactHeroProduct.product,
+                                    merchant: compactHeroProduct.merchant
+                                )
+                            } else {
+                                surfaceColor
                             }
                         }
                     }
@@ -417,8 +429,7 @@ struct TopicLandingView: View {
             if let title, !title.isEmpty {
                 HStack(spacing: 10) {
                     Text(title)
-                        .font(.system(size: 20, weight: .bold))
-                        .tracking(-0.3)
+                        .gravityTextStyle(GravityTypography.sectionTitle)
                         .foregroundStyle(.white)
 
                     Image(systemName: "chevron.right")
@@ -532,8 +543,7 @@ struct TopicLandingView: View {
                                 }
 
                                 Text(merchant.displayName)
-                                    .font(.system(size: 13, weight: .medium))
-                                    .tracking(-0.1)
+                                    .gravityTextStyle(GravityTypography.captionMedium)
                                     .foregroundStyle(.white)
                                     .lineLimit(1)
                                     .frame(width: 82)
@@ -860,7 +870,7 @@ private struct TopicMerchantSpotlight: View {
                 HStack(spacing: 10) {
                     MerchantLogoImage(merchant: merchant, size: 46)
                     Text(merchant.displayName)
-                        .font(.system(size: 20, weight: .bold))
+                        .gravityTextStyle(GravityTypography.sectionTitle)
                         .foregroundStyle(.white)
                         .lineLimit(2)
                     Spacer()

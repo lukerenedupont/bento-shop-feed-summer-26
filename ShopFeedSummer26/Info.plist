@@ -19,5 +19,30 @@
 	<!-- Required for a physical device to reach the Mac running the dev server. -->
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Loads the prototype feed from the dossier-lab server running on your Mac.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>GTStandard-LHeavy.otf</string>
+		<string>GTStandard-LSemibold.otf</string>
+		<string>GTStandard-MBold.otf</string>
+		<string>GTStandard-MMedium.otf</string>
+		<string>GTStandard-MRegular.otf</string>
+		<string>GTStandard-MSemibold.otf</string>
+		<string>GoodSans-Bold.otf</string>
+		<string>GoodSans-Medium.otf</string>
+		<string>GoodSans-Regular.otf</string>
+		<string>GoodSansText-Bold.otf</string>
+		<string>GoodSansText-Medium.otf</string>
+		<string>GoodSansText-Regular.otf</string>
+		<string>Shopify Sans-Black Italic.otf</string>
+		<string>Shopify Sans-Black.otf</string>
+		<string>Shopify Sans-Bold Italic.otf</string>
+		<string>Shopify Sans-Bold.otf</string>
+		<string>Shopify Sans-Light Italic.otf</string>
+		<string>Shopify Sans-Light.otf</string>
+		<string>Shopify Sans-Medium Italic.otf</string>
+		<string>Shopify Sans-Medium.otf</string>
+		<string>Shopify Sans-Regular Italic.otf</string>
+		<string>Shopify Sans-Regular.otf</string>
+	</array>
 </dict>
 </plist>

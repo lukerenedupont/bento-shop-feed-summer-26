@@ -4,7 +4,10 @@ import Foundation
 enum HomeRoute: Hashable {
     case product(merchantId: String, productId: Int)
     case store(merchantId: String)
-    case story(storyId: String)
+    /// Opens a story, optionally naming the matched transition source that
+    /// initiated the push. Home feed cards provide their own story ID; topic
+    /// chrome keeps using the legacy subtopic source when this is nil.
+    case story(storyId: String, sourceId: String? = nil)
     /// Opens the original topic page through its source feed card.
     case topicExpanded(topicId: String, sourceStoryId: String)
     case deliveries

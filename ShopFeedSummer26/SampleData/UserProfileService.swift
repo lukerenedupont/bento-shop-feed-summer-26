@@ -106,8 +106,9 @@ final class BuyerPreviewStore {
             topics: [
                 .init(id: "for-you", label: "For you", storyIDs: [
                     "tobi-xbloom-system", "tobi-coffee-creatine",
-                    "tobi-manmade-basics", "tobi-wet-shave", "tobi-sim-racing",
-                    "edit-studio-in-a-bag", "edit-gloriously-lost",
+                    "tobi-manmade-basics", "edit-studio-in-a-bag",
+                    "tobi-wet-shave", "edit-gloriously-lost",
+                    "tobi-sim-racing",
                 ], evidence: .observed),
                 .init(id: "coffee", label: "Coffee", sourceCategoryID: "morning", storyIDs: [
                     "tobi-xbloom-system", "tobi-coffee-creatine",
@@ -147,22 +148,23 @@ final class BuyerPreviewStore {
             avatarAssetName: "katarina-avatar",
             topics: [
                 .init(id: "for-you", label: "For you", storyIDs: [
-                    "katarina-rick-owens", "katarina-silver",
-                    "katarina-rhode-routine", "katarina-black-swim",
-                    "edit-design-shelf", "edit-coffee-worth-waking-for",
-                    "edit-zero-beige-energy",
+                    "katarina-rick-owens", "edit-design-shelf",
+                    "katarina-silver", "edit-coffee-worth-waking-for",
+                    "katarina-rhode-routine", "edit-zero-beige-energy",
+                    "katarina-black-swim",
                 ], evidence: .observed),
                 .init(id: "style", label: "Style", storyIDs: [
-                    "katarina-rick-owens", "katarina-silver",
-                    "katarina-black-swim", "edit-salomons-to-know",
+                    "katarina-rick-owens", "edit-salomons-to-know",
+                    "katarina-silver", "edit-zero-beige-energy",
+                    "katarina-black-swim",
                 ], evidence: .observed),
                 .init(id: "jewelry", label: "Jewelry", sourceCategoryID: "style", storyIDs: [
-                    "katarina-silver", "katarina-rick-owens",
-                    "edit-zero-beige-energy",
+                    "katarina-silver", "edit-zero-beige-energy",
+                    "katarina-rick-owens",
                 ], evidence: .observed),
                 .init(id: "swim", label: "Swim", sourceCategoryID: "style", storyIDs: [
-                    "katarina-black-swim", "katarina-rick-owens",
-                    "edit-salomons-to-know",
+                    "katarina-black-swim", "edit-salomons-to-know",
+                    "katarina-rick-owens",
                 ], evidence: .observed),
                 .init(id: "skin", label: "Skin", sourceCategoryID: "wellness", storyIDs: [
                     "katarina-rhode-routine", "edit-wash-day-reset",
@@ -192,23 +194,26 @@ final class BuyerPreviewStore {
             avatarAssetName: "kenny-avatar",
             topics: [
                 .init(id: "for-you", label: "For you", storyIDs: [
-                    "edit-gloriously-lost", "edit-table-as-a-scene",
-                    "edit-stay-a-while", "edit-coffee-worth-waking-for",
-                    "edit-salomons-to-know", "edit-design-shelf",
-                    "edit-wash-day-reset",
+                    "edit-gloriously-lost", "discovery-nocs-field-kit",
+                    "edit-table-as-a-scene", "discovery-house-of-leon-reading-room",
+                    "edit-coffee-worth-waking-for", "discovery-fellow-coffee-workflow",
+                    "edit-design-shelf",
                 ], evidence: .discovery),
                 .init(id: "outdoors", label: "Outdoors", storyIDs: [
-                    "edit-gloriously-lost", "edit-salomons-to-know",
+                    "edit-gloriously-lost", "discovery-nocs-field-kit",
+                    "edit-salomons-to-know",
                 ], evidence: .discovery),
                 .init(id: "living", label: "Living", storyIDs: [
-                    "edit-table-as-a-scene", "edit-stay-a-while",
-                    "edit-mirrors-with-presence",
+                    "edit-table-as-a-scene", "discovery-house-of-leon-reading-room",
+                    "edit-stay-a-while", "edit-mirrors-with-presence",
                 ], evidence: .discovery),
                 .init(id: "morning", label: "Morning", storyIDs: [
-                    "edit-coffee-worth-waking-for", "edit-table-as-a-scene",
+                    "edit-coffee-worth-waking-for", "discovery-fellow-coffee-workflow",
+                    "edit-table-as-a-scene",
                 ], evidence: .discovery),
                 .init(id: "design", label: "Design", storyIDs: [
-                    "edit-design-shelf", "edit-studio-in-a-bag",
+                    "edit-design-shelf", "discovery-draw-down-type-books",
+                    "edit-studio-in-a-bag",
                 ], evidence: .discovery),
                 .init(id: "style", label: "Style", storyIDs: [
                     "edit-salomons-to-know", "edit-zero-beige-energy",
@@ -224,17 +229,17 @@ final class BuyerPreviewStore {
             avatarAssetName: "andreas-avatar",
             topics: [
                 .init(id: "for-you", label: "For you", storyIDs: [
-                    "andreas-glass-hair", "andreas-smooth-blowout",
-                    "andreas-minimal-comfort", "andreas-macbook-kit",
-                    "edit-design-shelf", "edit-stay-a-while",
+                    "andreas-glass-hair", "andreas-minimal-comfort",
+                    "andreas-smooth-blowout", "andreas-lange-routine",
+                    "andreas-macbook-kit", "edit-stay-a-while",
                 ], evidence: .observed),
                 .init(id: "hair-care", label: "Hair care", sourceCategoryID: "wellness", storyIDs: [
-                    "andreas-glass-hair", "andreas-smooth-blowout",
-                    "edit-wash-day-reset",
+                    "andreas-glass-hair", "andreas-lange-routine",
+                    "andreas-smooth-blowout", "edit-wash-day-reset",
                 ], evidence: .observed),
                 .init(id: "blowouts", label: "Blowouts", sourceCategoryID: "wellness", storyIDs: [
-                    "andreas-smooth-blowout", "andreas-glass-hair",
-                    "edit-wash-day-reset",
+                    "andreas-smooth-blowout", "andreas-lange-routine",
+                    "andreas-glass-hair", "edit-wash-day-reset",
                 ], evidence: .observed),
                 .init(id: "mac-setup", label: "Mac setup", sourceCategoryID: "design", storyIDs: [
                     "andreas-macbook-kit", "edit-studio-in-a-bag",
@@ -268,11 +273,14 @@ final class BuyerPreviewStore {
             avatarAssetName: "kyle-avatar",
             topics: [
                 .init(id: "for-you", label: "For you", storyIDs: [
-                    "kyle-1890-collabs", "kyle-argizari-lighting",
-                    "kyle-braided-bostons", "kyle-magma-suede",
+                    "kyle-1890-collabs", "edit-zero-beige-energy",
+                    "kyle-argizari-lighting", "edit-design-shelf",
+                    "kyle-braided-bostons", "edit-salomons-to-know",
+                    "kyle-magma-suede",
                 ], evidence: .observed),
                 .init(id: "collabs", label: "Collabs", sourceCategoryID: "style", storyIDs: [
-                    "kyle-1890-collabs", "kyle-braided-bostons",
+                    "kyle-1890-collabs", "edit-zero-beige-energy",
+                    "kyle-braided-bostons",
                 ], evidence: .observed),
                 .init(id: "birkenstock", label: "Birkenstock", sourceCategoryID: "style", storyIDs: [
                     "kyle-braided-bostons",
@@ -284,7 +292,8 @@ final class BuyerPreviewStore {
                     "kyle-argizari-lighting",
                 ], evidence: .observed),
                 .init(id: "kith", label: "Kith", sourceCategoryID: "style", storyIDs: [
-                    "kyle-magma-suede", "kyle-braided-bostons", "kyle-1890-collabs",
+                    "kyle-magma-suede", "kyle-braided-bostons",
+                    "edit-zero-beige-energy", "kyle-1890-collabs",
                 ], evidence: .observed),
             ],
             utility: .init(
@@ -303,21 +312,22 @@ final class BuyerPreviewStore {
             avatarAssetName: "archie-avatar",
             topics: [
                 .init(id: "for-you", label: "For you", storyIDs: [
-                    "edit-design-shelf", "edit-gloriously-lost",
-                    "edit-stay-a-while", "edit-table-as-a-scene",
-                    "edit-coffee-worth-waking-for", "edit-salomons-to-know",
-                    "edit-wash-day-reset",
+                    "edit-design-shelf", "discovery-draw-down-type-books",
+                    "edit-stay-a-while", "discovery-house-of-leon-reading-room",
+                    "edit-gloriously-lost", "discovery-nocs-field-kit",
+                    "edit-table-as-a-scene",
                 ], evidence: .discovery),
                 .init(id: "design", label: "Design", storyIDs: [
-                    "edit-design-shelf", "edit-studio-in-a-bag",
-                    "edit-zero-beige-energy",
+                    "edit-design-shelf", "discovery-draw-down-type-books",
+                    "edit-studio-in-a-bag", "edit-zero-beige-energy",
                 ], evidence: .discovery),
                 .init(id: "living", label: "Living", storyIDs: [
-                    "edit-stay-a-while", "edit-table-as-a-scene",
-                    "edit-mirrors-with-presence",
+                    "edit-stay-a-while", "discovery-house-of-leon-reading-room",
+                    "edit-table-as-a-scene", "edit-mirrors-with-presence",
                 ], evidence: .discovery),
                 .init(id: "outdoors", label: "Outdoors", storyIDs: [
-                    "edit-gloriously-lost", "edit-salomons-to-know",
+                    "edit-gloriously-lost", "discovery-nocs-field-kit",
+                    "edit-salomons-to-know",
                 ], evidence: .discovery),
                 .init(id: "style", label: "Style", storyIDs: [
                     "edit-salomons-to-know", "edit-zero-beige-energy",
@@ -402,6 +412,27 @@ final class BuyerPreviewStore {
                 }
                 for storyID in topic.storyIDs where storiesByID[storyID] == nil {
                     issues.append("\(profile.id)/\(topic.id): unknown story \(storyID)")
+                }
+
+                if topic.id == "for-you" {
+                    let merchantCards = topic.storyIDs.map {
+                        MerchantCollectionCatalog.presentation(for: $0) != nil
+                    }
+                    let merchantCount = merchantCards.filter { $0 }.count
+                    if merchantCount == 0 {
+                        issues.append("\(profile.id)/for-you: needs at least one merchant card")
+                    }
+                    if merchantCount * 4 < topic.storyIDs.count {
+                        issues.append("\(profile.id)/for-you: merchant cards are too sparse")
+                    }
+                    if merchantCount * 5 > topic.storyIDs.count * 3 {
+                        issues.append("\(profile.id)/for-you: merchant cards overpower editorial cards")
+                    }
+                    if zip(merchantCards, merchantCards.dropFirst()).contains(where: { pair in
+                        pair.0 && pair.1
+                    }) {
+                        issues.append("\(profile.id)/for-you: merchant cards must be interleaved")
+                    }
                 }
             }
 

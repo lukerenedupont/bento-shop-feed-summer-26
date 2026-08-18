@@ -14,7 +14,7 @@ enum FeedNavigationStyle {
     static let railTrailingInset: CGFloat = GravitySpacing.space20
     static let selectedFill = Color.white.opacity(0.94)
 
-    static let labelFont = Font.system(size: labelSize, weight: .semibold)
+    static let labelFont = GravityFont.semiBold.fixedFont(size: labelSize)
     static let iconFont = Font.system(size: iconSize, weight: .semibold)
 }
 

@@ -9,6 +9,67 @@ import SwiftUI
 /// none of the profile fixtures depend on generated imagery.
 enum BuyerPersonalizationCatalog {
     static let stories: [FeedStory] = [
+        // Discovery profiles do not have observed purchase evidence. These
+        // single-shop edits are therefore phrased as category-led discovery,
+        // using merchants already present in their authored topic mix.
+        story(
+            id: "discovery-nocs-field-kit",
+            title: "Start with Nocs in the field",
+            subtitle: "Two current Nocs optics for comparing a compact monocular with a full-size waterproof binocular.",
+            keys: ["outdoors", "catalog-only-media"],
+            accent: "#4E6038",
+            products: [
+                ref("nocs", 6591770722382),
+                ref("nocs", 10432692846871),
+            ]
+        ),
+        story(
+            id: "discovery-fellow-coffee-workflow",
+            title: "Build the morning around Fellow",
+            subtitle: "A precise kettle and automatic brewer from one coherent coffee system.",
+            keys: ["coffee", "catalog-only-media"],
+            accent: "#34312D",
+            products: [
+                ref("fellow", 2055410221171),
+                ref("fellow", 7507479003236),
+            ]
+        ),
+        story(
+            id: "discovery-house-of-leon-reading-room",
+            title: "A reading room from House of Leon",
+            subtitle: "Two grounded leather and nubuck chairs that give the room one clear point of view.",
+            keys: ["living", "catalog-only-media"],
+            accent: "#6A5545",
+            products: [
+                ref("house-of-leon", 7873592721581),
+                ref("house-of-leon", 504775824223800),
+            ]
+        ),
+        story(
+            id: "discovery-draw-down-type-books",
+            title: "Type references from Draw Down",
+            subtitle: "Three focused books spanning revival, experimental practice, and type-design theory.",
+            keys: ["design", "catalog-only-media"],
+            accent: "#B24534",
+            products: [
+                ref("draw-down", 7804062892286),
+                ref("draw-down", 8336413458686),
+                ref("draw-down", 1591926554714),
+            ]
+        ),
+        story(
+            id: "andreas-lange-routine",
+            title: "The L’ange gloss-and-volume routine",
+            subtitle: "The volume tool, glass-hair finishes, and round brush already adjacent to Andreas’s observed hair-care interests.",
+            keys: ["wellness", "catalog-only-media"],
+            accent: "#765C55",
+            products: [
+                ref("lange-hair", 4804878434404),
+                ref("lange-hair", 4530431557732),
+                ref("lange-hair", 8277661745252),
+                ref("lange-hair", 8144955474020),
+            ]
+        ),
         story(
             id: "andreas-glass-hair",
             title: "Glass hair, compared properly",

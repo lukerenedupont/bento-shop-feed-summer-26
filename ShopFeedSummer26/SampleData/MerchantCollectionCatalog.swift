@@ -48,6 +48,41 @@ enum MerchantCollectionCatalog {
     /// for merchants with a genuinely broader assortment.
     static let presentations: [MerchantCollectionPresentation] = [
         .init(
+            storyID: "discovery-nocs-field-kit",
+            merchantID: "nocs",
+            productCount: 2,
+            coverProductID: 10432692846871,
+            coverImageIndex: 1
+        ),
+        .init(
+            storyID: "discovery-fellow-coffee-workflow",
+            merchantID: "fellow",
+            productCount: 2,
+            coverProductID: 2055410221171,
+            coverImageIndex: 1
+        ),
+        .init(
+            storyID: "discovery-house-of-leon-reading-room",
+            merchantID: "house-of-leon",
+            productCount: 2,
+            coverProductID: 7873592721581,
+            coverImageIndex: 1
+        ),
+        .init(
+            storyID: "discovery-draw-down-type-books",
+            merchantID: "draw-down",
+            productCount: 3,
+            coverProductID: 7804062892286,
+            coverImageIndex: 1
+        ),
+        .init(
+            storyID: "andreas-lange-routine",
+            merchantID: "lange-hair",
+            productCount: 4,
+            coverProductID: 4804878434404,
+            coverImageIndex: 1
+        ),
+        .init(
             storyID: "andreas-minimal-comfort",
             merchantID: "comfrt",
             productCount: 4,
@@ -55,10 +90,31 @@ enum MerchantCollectionCatalog {
             coverImageIndex: 1
         ),
         .init(
+            storyID: "kyle-1890-collabs",
+            merchantID: "kith",
+            productCount: 4,
+            coverProductID: 8286509564032,
+            coverImageIndex: 1
+        ),
+        .init(
+            storyID: "kyle-braided-bostons",
+            merchantID: "kith",
+            productCount: 4,
+            coverProductID: 8286022762624,
+            coverImageIndex: 1
+        ),
+        .init(
             storyID: "kyle-argizari-lighting",
             merchantID: "city-lights-sf",
             productCount: 6,
             coverProductID: 8568483807399,
+            coverImageIndex: 1
+        ),
+        .init(
+            storyID: "tobi-xbloom-system",
+            merchantID: "xbloom",
+            productCount: 4,
+            coverProductID: 8424667807968,
             coverImageIndex: 1
         ),
         .init(
@@ -112,6 +168,16 @@ enum MerchantCollectionCatalog {
             // The first three entries are duplicate packshots. This is
             // Rhode's official mobile lifestyle still for Glazing Milk.
             coverImageIndex: 4
+        ),
+        .init(
+            storyID: "edit-wash-day-reset",
+            merchantID: "ceremonia",
+            productCount: 4,
+            coverProductID: 15369056321905,
+            // Use the single-frame wash-day lifestyle still. Index 1 is a
+            // four-panel campaign collage that competes with the card's own
+            // product grid and creates an unintended grid-on-grid treatment.
+            coverImageIndex: 3
         ),
     ]
 

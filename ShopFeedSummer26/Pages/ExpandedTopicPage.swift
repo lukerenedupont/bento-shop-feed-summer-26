@@ -14,8 +14,6 @@ struct ExpandedTopicPage: View {
     @State private var showsExpandedControls = false
     @State private var focusedProductID: String?
     @State private var verticalScrollOffset: CGFloat = 0
-    @State private var selectedSubtopicID: String?
-    @Namespace private var topicNavigationNamespace
 
     private var sourceStory: FeedStory? {
         PersonalizedFeedStories.all.first { $0.id == sourceStoryID }
@@ -47,27 +45,6 @@ struct ExpandedTopicPage: View {
 
     private var legacyStories: [FeedStory] {
         legacyTopic.map(LegacyFeedArchive.stories(for:)) ?? []
-    }
-
-    private var selectedSubtopicStory: FeedStory? {
-        guard let selectedSubtopicID,
-              let item = sourceProducts.first(where: { productSubtopicID(for: $0) == selectedSubtopicID }),
-              let sourceStory else { return nil }
-
-        return FeedStory(
-            id: selectedSubtopicID,
-            eyebrow: sourceTopic?.label ?? sourceStory.eyebrow,
-            title: item.product.title,
-            subtitle: "More from \(item.merchant.displayName)",
-            format: .shortlist,
-            topicKeys: sourceStory.topicKeys,
-            accentHex: sourceStory.accentHex,
-            coverImageName: nil,
-            destinationLabel: "Shop \(item.merchant.displayName)",
-            products: [
-                .init(merchantID: item.merchant.id, productID: item.product.id)
-            ]
-        )
     }
 
     private var windowSafeAreaTopInset: CGFloat {
@@ -109,48 +86,29 @@ struct ExpandedTopicPage: View {
                     Color.black
                 }
 
-                if let selectedSubtopicStory {
-                    TopicLandingView(
-                        topic: FeedTopic(
-                            id: selectedSubtopicStory.id,
-                            label: selectedSubtopicStory.title,
-                            storyTopicKey: nil,
-                            storyIDs: [selectedSubtopicStory.id],
-                            subtopics: nil,
-                            relatedMerchantIDs: nil,
-                            merchandisingBlocks: nil
-                        ),
-                        stories: [selectedSubtopicStory],
-                        merchants: SampleMerchant.all,
-                        headerCoverImageName: sourceStory?.coverImageName,
-                        surfaceAccentHex: sourceStory?.accentHex,
-                        headerEyebrow: legacyTopic?.label,
-                        compactHeader: true
-                    )
-                    .transition(.opacity)
-                } else {
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(spacing: 0) {
-                            heroContent(containerWidth: geometry.size.width)
-                            // Reveal the beginning of the next card at rest so
-                            // the vertical continuation is immediately clear.
-                            .frame(
-                                width: geometry.size.width,
-                                height: max(geometry.size.height - 118, 620)
-                            )
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        heroContent(containerWidth: geometry.size.width)
+                        // Reveal the beginning of the next card at rest so
+                        // the vertical continuation is immediately clear.
+                        .frame(
+                            width: geometry.size.width,
+                            height: max(geometry.size.height - 118, 620)
+                        )
 
-                            categorySection(containerWidth: geometry.size.width)
-                        }
-                    }
-                    .scrollBounceBehavior(.basedOnSize)
-                    .onScrollGeometryChange(for: CGFloat.self) { geometry in
-                        geometry.contentOffset.y
-                    } action: { _, offset in
-                        verticalScrollOffset = max(0, offset)
+                        categorySection(containerWidth: geometry.size.width)
                     }
                 }
+                .scrollBounceBehavior(.basedOnSize)
+                .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                    geometry.contentOffset.y
+                } action: { _, offset in
+                    verticalScrollOffset = max(0, offset)
+                }
 
-                topicNavigation
+                navigationBackdrop
+
+                closeButton
                     .padding(.top, windowSafeAreaTopInset + GravitySpacing.space4)
                     .opacity(showsExpandedControls ? 1 : 0)
             }
@@ -179,6 +137,36 @@ struct ExpandedTopicPage: View {
             coordinator.resetScrollState()
             coordinator.showNavBar = true
         }
+    }
+
+    /// Once content leaves the hero, give the persistent controls a real
+    /// scroll edge so section copy never remains readable beneath the status
+    /// bar or navigation rail.
+    private var navigationBackdrop: some View {
+        ZStack {
+            Rectangle().fill(.ultraThinMaterial)
+            LinearGradient(
+                colors: [.black.opacity(0.68), .black.opacity(0.48)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        }
+            .frame(height: windowSafeAreaTopInset + 92)
+            .mask {
+                LinearGradient(
+                    stops: [
+                        .init(color: .black, location: 0),
+                        .init(color: .black, location: 0.72),
+                        .init(color: .clear, location: 1),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            }
+            .environment(\.colorScheme, .dark)
+            .opacity(min(max(verticalScrollOffset / 56, 0), 1))
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
     }
 
     /// Keeps the editorial title and its products in one layout and animation
@@ -214,17 +202,18 @@ struct ExpandedTopicPage: View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: GravitySpacing.space16) {
                 Text("Inside this edit")
-                    .font(.system(size: 15, weight: .semibold))
+                    .gravityTextStyle(GravityTypography.subtitleSmall)
                     .foregroundStyle(.white.opacity(0.82))
 
                 Text(sourceTopic?.label ?? "More to explore")
                     .font(FeedEditorialTypography.sectionFont)
                     .tracking(FeedEditorialTypography.sectionTracking)
+                    .lineSpacing(FeedEditorialTypography.sectionLineSpacing)
                     .foregroundStyle(.white)
 
                 if let subtitle = sourceStory?.subtitle, !subtitle.isEmpty {
                     Text(subtitle)
-                        .font(.system(size: 18, weight: .medium))
+                        .gravityTextStyle(GravityTypography.editorialBody)
                         .foregroundStyle(.white.opacity(0.86))
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -312,7 +301,7 @@ struct ExpandedTopicPage: View {
                 MerchantAvatarView(merchant: item.merchant, size: 24)
 
                 Text(item.merchant.displayName)
-                    .font(.system(size: 13, weight: .semibold))
+                    .gravityTextStyle(GravityTypography.captionBold)
                     .foregroundStyle(.white)
                     .lineLimit(1)
             }
@@ -326,100 +315,23 @@ struct ExpandedTopicPage: View {
         .frame(width: width, alignment: .topLeading)
     }
 
-    private var navigationSubtopics: [FeedTopic.Subtopic] {
-        sourceProducts.map { item in
-            FeedTopic.Subtopic(
-                label: shortProductLabel(item.product.title),
-                storyID: productSubtopicID(for: item),
-                anchorMerchantID: item.merchant.id,
-                anchorProductID: item.product.id
-            )
+    private var closeButton: some View {
+        Button {
+            HapticFeedback.light.fire()
+            coordinator.showNavBar = true
+            dismiss()
+        } label: {
+            Image(systemName: "xmark")
+                .font(FeedNavigationStyle.iconFont)
+                .foregroundStyle(.black)
+                .frame(width: FeedNavigationStyle.controlSize, height: FeedNavigationStyle.controlSize)
+                .background(FeedNavigationStyle.selectedFill, in: Circle())
+                .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
+                .contentShape(Circle())
         }
-    }
-
-    private func productSubtopicID(for item: ResolvedStoryProduct) -> String {
-        "product-subtopic:\(item.merchant.id):\(item.product.id)"
-    }
-
-    private func shortProductLabel(_ title: String) -> String {
-        let cleaned = title
-            .replacingOccurrences(of: " - ", with: " ")
-            .replacingOccurrences(of: "#", with: "")
-        return cleaned.split(separator: " ").prefix(3).joined(separator: " ")
-    }
-
-    private var topicNavigation: some View {
-        ZStack(alignment: .leading) {
-            if !navigationSubtopics.isEmpty {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: FeedNavigationStyle.itemSpacing) {
-                        ForEach(navigationSubtopics, id: \.storyID) { subtopic in
-                            Button {
-                                HapticFeedback.light.fire()
-                                withAnimation(.smooth(duration: 0.36)) {
-                                    selectedSubtopicID = subtopic.storyID
-                                }
-                            } label: {
-                                Text(subtopic.label)
-                                    .font(FeedNavigationStyle.labelFont)
-                                    .foregroundStyle(
-                                        selectedSubtopicID == subtopic.storyID ? .black : .white
-                                    )
-                                    .lineLimit(1)
-                                    .padding(.horizontal, FeedNavigationStyle.pillHorizontalPadding)
-                                    .frame(height: FeedNavigationStyle.controlSize)
-                                    .background {
-                                        if selectedSubtopicID == subtopic.storyID {
-                                            Capsule()
-                                                .fill(FeedNavigationStyle.selectedFill)
-                                                .matchedGeometryEffect(
-                                                    id: "selected-subtopic",
-                                                    in: topicNavigationNamespace
-                                                )
-                                        }
-                                    }
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                }
-                .contentMargins(.leading, FeedNavigationStyle.railLeadingInset, for: .scrollContent)
-                .contentMargins(.trailing, FeedNavigationStyle.railTrailingInset, for: .scrollContent)
-                .mask {
-                    HStack(spacing: 0) {
-                        // Match Home: pills remain in the full-width rail and
-                        // disappear only after travelling beneath the control.
-                        Color.clear.frame(width: GravitySpacing.space20)
-                        Color.black
-                    }
-                }
-            }
-
-            Button {
-                HapticFeedback.light.fire()
-                if selectedSubtopicID != nil {
-                    withAnimation(.smooth(duration: 0.36)) {
-                        selectedSubtopicID = nil
-                    }
-                } else {
-                    coordinator.showNavBar = true
-                    dismiss()
-                }
-            } label: {
-                Image(systemName: selectedSubtopicID == nil ? "xmark" : "chevron.left")
-                    .font(FeedNavigationStyle.iconFont)
-                    .foregroundStyle(.black)
-                    .frame(width: FeedNavigationStyle.controlSize, height: FeedNavigationStyle.controlSize)
-                    .background(FeedNavigationStyle.selectedFill, in: Circle())
-                    .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
-                    .contentShape(Circle())
-                    .contentTransition(.symbolEffect(.replace))
-            }
-            .buttonStyle(PressScaleButtonStyle())
-            .padding(.leading, GravitySpacing.space16)
-            .accessibilityLabel(selectedSubtopicID == nil ? "Close" : "Back")
-            .zIndex(1)
-        }
+        .buttonStyle(PressScaleButtonStyle())
+        .padding(.leading, GravitySpacing.space16)
+        .accessibilityLabel("Close")
         .frame(maxWidth: .infinity, minHeight: FeedNavigationStyle.controlSize, alignment: .leading)
     }
 

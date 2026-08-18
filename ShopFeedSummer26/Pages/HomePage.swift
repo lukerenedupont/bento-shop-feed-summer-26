@@ -98,7 +98,11 @@ struct HomePage: View {
         // safe-area bar to inherit the feed's horizontal replacement motion.
         ZStack {
             if let focusedStoryID {
-                StoryTopicPage(storyID: focusedStoryID, namespace: namespace)
+                StoryTopicPage(
+                    storyID: focusedStoryID,
+                    namespace: namespace,
+                    contextTopicID: selectedTopicID
+                )
                     .id(focusedStoryID)
             } else {
                 storyFeed
@@ -452,9 +456,9 @@ struct HomePage: View {
 
             VStack(alignment: .leading, spacing: 14) {
                 Text("Your Shop right now")
-                    .font(FeedEditorialTypography.titleFont)
-                    .tracking(FeedEditorialTypography.titleTracking)
-                    .lineSpacing(FeedEditorialTypography.titleLineSpacing)
+                    .font(FeedEditorialTypography.homeCardTitleFont)
+                    .tracking(FeedEditorialTypography.homeCardTitleTracking)
+                    .lineSpacing(FeedEditorialTypography.homeCardTitleLineSpacing)
                     .foregroundStyle(.black)
                     .lineLimit(2)
 
@@ -665,8 +669,7 @@ struct HomePage: View {
                     merchants: merchants,
                     width: width,
                     height: height,
-                    isActive: story.id == activeFeedStory?.id,
-                    onTap: { openTopic(for: story) }
+                    isActive: story.id == activeFeedStory?.id
                 )
             } else {
                 StoryFeedCard(
@@ -813,7 +816,17 @@ struct HomePage: View {
             }
 
         guard let destination else {
-            coordinator.pushRoute(.story(storyId: story.id))
+            // This is still a home-card drill-in. Name the card explicitly so
+            // NavigationCoordinator does not turn it into an inline content
+            // swap and StoryTopicPage can perform the same system zoom as an
+            // expanded topic.
+            expandingStoryID = story.id
+            Task { @MainActor in
+                await Task.yield()
+                coordinator.pushRoute(
+                    .story(storyId: story.id, sourceId: story.id)
+                )
+            }
             return
         }
 

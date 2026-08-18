@@ -317,9 +317,9 @@ struct StoryFeedCard: View {
 
     private var storyHeader: some View {
         Text(titleOverride ?? story.title)
-            .font(FeedEditorialTypography.titleFont)
-            .tracking(FeedEditorialTypography.titleTracking)
-            .lineSpacing(FeedEditorialTypography.titleLineSpacing)
+            .font(FeedEditorialTypography.homeCardTitleFont)
+            .tracking(FeedEditorialTypography.homeCardTitleTracking)
+            .lineSpacing(FeedEditorialTypography.homeCardTitleLineSpacing)
             .foregroundStyle(.white)
             .multilineTextAlignment(.leading)
             .lineLimit(3)

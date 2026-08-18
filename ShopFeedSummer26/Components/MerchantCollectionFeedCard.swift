@@ -10,7 +10,6 @@ struct MerchantCollectionFeedCard: View {
     let width: CGFloat
     let height: CGFloat
     var isActive = true
-    var onTap: (() -> Void)?
 
     @Environment(NavigationCoordinator.self) private var coordinator
 
@@ -45,11 +44,7 @@ struct MerchantCollectionFeedCard: View {
     var body: some View {
         Button {
             HapticFeedback.light.fire()
-            if let onTap {
-                onTap()
-            } else {
-                coordinator.homePath.append(HomeRoute.store(merchantId: presentation.merchantID))
-            }
+            coordinator.homePath.append(HomeRoute.store(merchantId: presentation.merchantID))
         } label: {
             ZStack {
                 collectionCover
