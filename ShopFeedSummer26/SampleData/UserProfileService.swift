@@ -371,6 +371,100 @@ final class BuyerPreviewStore {
         } ?? FeedInformationArchitecture.categories[0]
         return FeedInformationArchitecture.stories(for: sourceCategory, in: catalog)
     }
+
+    /// Validates the complete preview cohort, not only the buyer currently on
+    /// screen. The prototype intentionally keeps buyer fixtures in Swift, so
+    /// this closes the gap left by the JSON feed validator and prevents a
+    /// renamed story or removed catalog product from silently emptying a tab.
+    static func validationIssues(
+        in catalog: PersonalizedFeedCatalog,
+        merchants: [SampleMerchant]
+    ) -> [String] {
+        let storiesByID = Dictionary(uniqueKeysWithValues: catalog.stories.map { ($0.id, $0) })
+        let merchantsByID = Dictionary(uniqueKeysWithValues: merchants.map { ($0.id, $0) })
+        var issues: [String] = []
+
+        for profile in profiles where !profile.topics.isEmpty {
+            let topicIDs = profile.topics.map(\.id)
+            if topicIDs.first != "for-you" {
+                issues.append("\(profile.id): first topic must be for-you")
+            }
+            if Set(topicIDs).count != topicIDs.count {
+                issues.append("\(profile.id): topic IDs must be unique")
+            }
+
+            for topic in profile.topics {
+                if topic.storyIDs.isEmpty {
+                    issues.append("\(profile.id)/\(topic.id): topic has no stories")
+                }
+                if Set(topic.storyIDs).count != topic.storyIDs.count {
+                    issues.append("\(profile.id)/\(topic.id): story IDs must not repeat")
+                }
+                for storyID in topic.storyIDs where storiesByID[storyID] == nil {
+                    issues.append("\(profile.id)/\(topic.id): unknown story \(storyID)")
+                }
+            }
+
+            let utilityStoryIDs = [
+                profile.utility.buyAgainStoryID,
+                profile.utility.recentlyViewedStoryID,
+                profile.utility.ownedAdjacencyStoryID,
+            ].compactMap { $0 }.filter { !$0.isEmpty }
+            for storyID in utilityStoryIDs where storiesByID[storyID] == nil {
+                issues.append("\(profile.id): utility references unknown story \(storyID)")
+            }
+        }
+
+        let buyerStoryIDs = Set(
+            profiles.flatMap { profile in
+                profile.topics.flatMap(\.storyIDs)
+            }
+        )
+        for storyID in buyerStoryIDs {
+            guard let story = storiesByID[storyID] else { continue }
+            for reference in story.products {
+                guard let merchant = merchantsByID[reference.merchantID] else {
+                    issues.append("\(storyID): unknown merchant \(reference.merchantID)")
+                    continue
+                }
+                if !merchant.products.contains(where: { $0.id == reference.productID }) {
+                    issues.append(
+                        "\(storyID): unknown product \(reference.merchantID)/\(reference.productID)"
+                    )
+                }
+            }
+        }
+
+        for presentation in MerchantCollectionCatalog.presentations {
+            guard let story = storiesByID[presentation.storyID] else {
+                issues.append("merchant card: unknown story \(presentation.storyID)")
+                continue
+            }
+            guard let merchant = merchantsByID[presentation.merchantID] else {
+                issues.append("\(presentation.storyID): unknown merchant \(presentation.merchantID)")
+                continue
+            }
+            let storyMerchantIDs = Set(story.products.map(\.merchantID))
+            if storyMerchantIDs != Set([presentation.merchantID]) {
+                issues.append("\(presentation.storyID): merchant card must be a single-shop story")
+            }
+            if merchant.products.count < presentation.productCount {
+                issues.append("\(presentation.storyID): not enough products for the authored grid")
+            }
+            guard let cover = merchant.products.first(where: { $0.id == presentation.coverProductID }) else {
+                issues.append("\(presentation.storyID): cover product is missing")
+                continue
+            }
+            let coverImages = cover.allImageURLs.isEmpty
+                ? [cover.imageURL].compactMap { $0 }
+                : cover.allImageURLs
+            if presentation.coverImageIndex >= coverImages.count {
+                issues.append("\(presentation.storyID): cover image index is out of bounds")
+            }
+        }
+
+        return issues.sorted()
+    }
 }
 
 struct BuyerPreviewAvatar: View {

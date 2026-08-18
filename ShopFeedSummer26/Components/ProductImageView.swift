@@ -15,6 +15,10 @@ private func stableMediaIndex(seed: String, count: Int) -> Int {
     return Int(hash % UInt64(count))
 }
 
+private func normalizedMediaURL(_ source: String) -> URL? {
+    URL(string: source.hasPrefix("//") ? "https:\(source)" : source)
+}
+
 extension SampleMerchant.Product {
     /// Andreas's bundle places the original catalog image first, followed by
     /// two generated landscape scenes and two generated portrait scenes.
@@ -35,7 +39,7 @@ extension SampleMerchant.Product {
     func lifestyleImageURL(for format: LifestyleImageFormat, seed: String) -> URL? {
         let candidates = lifestyleImageURLs(for: format)
         guard !candidates.isEmpty else { return nil }
-        return URL(string: candidates[stableMediaIndex(seed: seed, count: candidates.count)])
+        return normalizedMediaURL(candidates[stableMediaIndex(seed: seed, count: candidates.count)])
     }
 }
 
@@ -53,7 +57,7 @@ extension FeedStory {
         }
         guard !candidates.isEmpty else { return nil }
         let seed = "\(id)-\(role)"
-        return URL(string: candidates[stableMediaIndex(seed: seed, count: candidates.count)])
+        return normalizedMediaURL(candidates[stableMediaIndex(seed: seed, count: candidates.count)])
     }
 }
 

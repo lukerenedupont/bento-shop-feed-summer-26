@@ -102,7 +102,11 @@ struct HomePage: View {
                     .id(focusedStoryID)
             } else {
                 storyFeed
-                    .id(selectedTopicID)
+                    // The selected tab often remains "for-you" while the
+                    // buyer changes. Include profile identity so SwiftUI does
+                    // not preserve the previous shopper's lazy-stack cells or
+                    // scroll position under the new persistent header.
+                    .id("\(buyerPreview.selected.id)-\(selectedTopicID)")
                     .transition(categoryFeedTransition)
             }
         }
@@ -129,6 +133,16 @@ struct HomePage: View {
             merchantService.merchants = merchants
             merchantService.usingFallbackData = !feedService.isLive
             coordinator.navBarBlurTint = pageBackgroundColor
+#if DEBUG
+            let buyerFixtureIssues = BuyerPreviewStore.validationIssues(
+                in: PersonalizedFeedCatalog.current,
+                merchants: merchants
+            )
+            assert(
+                buyerFixtureIssues.isEmpty,
+                "Invalid buyer feed fixtures:\n\(buyerFixtureIssues.joined(separator: "\n"))"
+            )
+#endif
         }
         .onChange(of: feedService.revision) { _, _ in
             // The feed usually lands after first render; re-publish so PDP and
@@ -633,6 +647,7 @@ struct HomePage: View {
     /// Pulls each card gently back toward the viewport center while it moves.
     /// Native snapping releases that resistance at the end, creating a short,
     /// interruptible rubber catch-up rather than delaying gesture response.
+    @ViewBuilder
     private func paginatedFeedCard(
         _ story: FeedStory,
         width: CGFloat,
@@ -642,26 +657,40 @@ struct HomePage: View {
         let motionIsReduced = reduceMotion
         let storyIndex = focusedStories.firstIndex(where: { $0.id == story.id })
 
-        return StoryFeedCard(
-            story: story,
-            merchants: merchants,
-            width: width,
-            height: height,
-            titleOverride: nil,
-            isActive: story.id == activeFeedStory?.id,
-            showsFooterArrow: false,
-            titleAtTopLeading: true,
-            productLayout: FeedInformationArchitecture.productLayout(
-                for: story,
-                in: selectedCategory,
-                visibleStoryIndex: storyIndex
-            ),
-            backgroundPlaybackEnabled: expandingStoryID != story.id,
-            prefersVideoBackground: storyIndex?.isMultiple(of: 5) == true,
-            freezesParallax: expandingStoryID == story.id,
-            scrollViewportHeight: viewportHeight,
-            onTap: { openTopic(for: story) }
-        )
+        Group {
+            if let collection = MerchantCollectionCatalog.presentation(for: story.id) {
+                MerchantCollectionFeedCard(
+                    story: story,
+                    presentation: collection,
+                    merchants: merchants,
+                    width: width,
+                    height: height,
+                    isActive: story.id == activeFeedStory?.id,
+                    onTap: { openTopic(for: story) }
+                )
+            } else {
+                StoryFeedCard(
+                    story: story,
+                    merchants: merchants,
+                    width: width,
+                    height: height,
+                    titleOverride: nil,
+                    isActive: story.id == activeFeedStory?.id,
+                    showsFooterArrow: false,
+                    titleAtTopLeading: true,
+                    productLayout: FeedInformationArchitecture.productLayout(
+                        for: story,
+                        in: selectedCategory,
+                        visibleStoryIndex: storyIndex
+                    ),
+                    backgroundPlaybackEnabled: expandingStoryID != story.id,
+                    prefersVideoBackground: storyIndex?.isMultiple(of: 5) == true,
+                    freezesParallax: expandingStoryID == story.id,
+                    scrollViewportHeight: viewportHeight,
+                    onTap: { openTopic(for: story) }
+                )
+            }
+        }
         .scrollTransition(
             motionIsReduced ? .identity : .interactive(timingCurve: .circularEaseOut),
             axis: .vertical
@@ -702,11 +731,16 @@ struct HomePage: View {
                 (lead?.merchant.secondaryColor ?? accent)
 
                 if let lead {
-                    if let backdropURL = story.lifestyleImageURL(
+                    let collectionBackdropURL = MerchantCollectionCatalog
+                        .presentation(for: story.id)?
+                        .coverURL(from: merchants)
+                    let backdropURL = collectionBackdropURL ?? story.lifestyleImageURL(
                         from: merchants,
                         format: .landscape,
                         role: "feed-backdrop"
-                    ) {
+                    )
+
+                    if let backdropURL {
                         CachedAsyncImage(url: backdropURL) { phase in
                             if case .success(let image) = phase {
                                 image

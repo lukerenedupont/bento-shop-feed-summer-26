@@ -454,6 +454,7 @@ enum BuyerPersonalizationCatalog {
             product(7234770337872, "The Henson Razor", "79.00", "the-henson-razor", "Henson Shaving", [
                 "https://cdn.shopify.com/s/files/1/0269/8025/3776/files/silver-pdp-new.jpg?v=1771622103",
                 "https://cdn.shopify.com/s/files/1/0269/8025/3776/files/Product_Feature_Images_1_Overview_v2_TINY.jpg?v=1771622103",
+                "https://cdn.shopify.com/s/files/1/0269/8025/3776/files/Product_Feature_Images_6_Lifestyle_Male_TINY.jpg?v=1767809200",
             ]),
             product(7375317008464, "The Protect Shave Cream", "19.99", "protect-shave-cream-can", "Henson Shaving", [
                 "https://cdn.shopify.com/s/files/1/0269/8025/3776/files/protect4x5-pdp-v02.jpg?v=1767809498",
@@ -472,6 +473,7 @@ enum BuyerPersonalizationCatalog {
             product(10209094500672, "MOZA R5 Pro Racing Simulator", "549.00", "r5-pro-bundle", "MOZA Racing", [
                 "https://cdn.shopify.com/s/files/1/0937/0802/6176/files/moza_r5_pro_bundle_1.png?v=1785492988",
                 "https://cdn.shopify.com/s/files/1/0937/0802/6176/files/R5Pro_base.png?v=1784773749",
+                "https://mozaracing.com/cdn/shop/files/r5_pro_block_1_m.png",
             ]),
             product(10078348738880, "MOZA SRP2 Pedals", "219.00", "srp2-pedals", "MOZA Racing", [
                 "https://cdn.shopify.com/s/files/1/0937/0802/6176/files/MOZA_SRP2_Pedals_Throttle_Brake_-1.png?v=1774427805",
@@ -490,6 +492,7 @@ enum BuyerPersonalizationCatalog {
             product(4415294537803, "Herringbone Chain", "50.00", "glide", "Vitaly", [
                 "https://cdn.shopify.com/s/files/1/0161/1184/files/HerringboneChain-Vitaly-SS-1.jpg?v=1753898142",
                 "https://cdn.shopify.com/s/files/1/0161/1184/files/Herringbone_Chain-Vitaly-SS-2.jpg?v=1753898142",
+                "https://cdn.shopify.com/s/files/1/0161/1184/files/Herringbone_Chain-Vitaly-OnFig-SS-1-model-stainless-steel.jpg?v=1753898051",
             ]),
             product(6796258934859, "Figaro Chain", "50.00", "figaro-chain", "Vitaly", [
                 "https://cdn.shopify.com/s/files/1/0161/1184/files/FigaroChain-Vitaly-SS-1.jpg?v=1753889158",

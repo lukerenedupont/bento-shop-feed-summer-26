@@ -195,9 +195,8 @@ struct StoryFeedCard: View {
                                         .easeInOut(duration: 8).repeatForever(autoreverses: true),
                                         value: mediaIsMoving
                                     )
-                            } else if case .failure = phase,
-                                      let first = items.first {
-                                ProductImageView(product: first.product, merchant: first.merchant)
+                            } else {
+                                loadingBackdrop
                             }
                         }
                     }
@@ -255,6 +254,23 @@ struct StoryFeedCard: View {
             }
         }
         .clipped()
+    }
+
+    /// Remote lifestyle media can take a beat on a cold launch. Keep the
+    /// card atmospheric and product-specific while it resolves instead of
+    /// exposing a flat black surface for dark stories.
+    @ViewBuilder
+    private var loadingBackdrop: some View {
+        ZStack {
+            Color.white.opacity(0.10)
+            if let first = items.first {
+                ProductImageView(product: first.product, merchant: first.merchant)
+                    .blur(radius: 18)
+                    .scaleEffect(1.18)
+                    .saturation(0.82)
+                    .opacity(0.68)
+            }
+        }
     }
 
     /// The film travels at a fraction of the card's scroll velocity. A small
@@ -408,7 +424,7 @@ struct StoryFeedCard: View {
 
     private var productFooter: some View {
         HStack(spacing: 8) {
-            Text("\(productAssortment.count) items added 8m ago")
+            Text("\(productAssortment.count) products")
                 .font(.system(size: 13, weight: .medium))
                 .foregroundStyle(.white)
                 .lineLimit(1)
@@ -458,7 +474,7 @@ struct StoryFeedCard: View {
             .frame(height: 88)
 
             HStack(spacing: 8) {
-                Text("\(items.count) items added 8m ago")
+                Text("\(items.count) products")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(.white)
 

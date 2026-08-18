@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// Loads merchant media from Shop Server image URLs.
 struct MerchantImage: View {
@@ -121,15 +122,24 @@ struct MerchantWordmarkImage: View {
     var maxHeight: CGFloat = 28
     var maxWidth: CGFloat = 120
     var tint: Color = .white
+    var bundledAssetName: String? = nil
 
     var body: some View {
         Group {
-            if let url = merchant.bestWordmarkURL, let parsed = URL(string: url) {
+            if let bundledAssetName,
+               UIImage(named: bundledAssetName) != nil {
+                Image(bundledAssetName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: maxWidth, maxHeight: maxHeight, alignment: .leading)
+            } else if merchant.bestWordmarkURL != nil,
+                      let url = merchant.bestWordmarkURL,
+                      let parsed = URL(string: url) {
                 CachedAsyncImage(url: parsed) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().scaledToFit()
-                            .frame(maxHeight: maxHeight)
+                            .frame(maxWidth: maxWidth, maxHeight: maxHeight, alignment: .leading)
                     default:
                         Text(merchant.name)
                             .gravityTextStyle(GravityTypography.bodyTitleSmall)

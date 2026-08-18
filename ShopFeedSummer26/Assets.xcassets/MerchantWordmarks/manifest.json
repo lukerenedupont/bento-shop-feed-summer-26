@@ -1,0 +1,236 @@
+{
+  "standards-manual": {
+    "name": "Standards Manual",
+    "asset": null,
+    "source": null,
+    "error": "storefront has no verified reusable wordmark asset"
+  },
+  "draw-down": {
+    "name": "Draw Down",
+    "asset": "merchant-wordmark-draw-down",
+    "source": "https://draw-down.com/cdn/shop/files/DrawDown_Logo2023_450x.png?v=1685495974",
+    "error": null
+  },
+  "moma-design-store": {
+    "name": "MoMA Design Store",
+    "asset": "merchant-wordmark-moma-design-store",
+    "source": "https://store.moma.org/cdn/shop/t/1359/assets/sprite-icon-767e27ca.svg?v=76814305896351509361786638334",
+    "error": null
+  },
+  "lichen": {
+    "name": "Lichen",
+    "asset": "merchant-wordmark-lichen",
+    "source": "https://www.lichennyc.com/cdn/shop/files/Lichen_Logo_1.png?v=1656369429&width=600",
+    "error": null
+  },
+  "forom": {
+    "name": "Forom",
+    "asset": "merchant-wordmark-forom",
+    "source": "https://www.foromshop.com/cdn/shop/files/Forom_Logo.svg?v=1784177732&width=600",
+    "error": null
+  },
+  "coming-soon": {
+    "name": "Coming Soon",
+    "asset": "merchant-wordmark-coming-soon",
+    "source": "https://comingsoonnewyork.com/cdn/shop/t/38/assets/logo@3x.png?v=39346900649826370461727886665",
+    "error": null
+  },
+  "fellow": {
+    "name": "Fellow",
+    "asset": "merchant-wordmark-fellow",
+    "source": "https://fellowproducts.com/cdn/shop/files/Fellow_Wordmark.svg?v=1770319887&width=600",
+    "error": null
+  },
+  "kinto": {
+    "name": "KINTO",
+    "asset": "merchant-wordmark-kinto",
+    "source": "https://kinto-usa.com/cdn/shop/t/129/assets/sprite.svg?v=67551792836678614101758819346",
+    "error": null
+  },
+  "xbloom": {
+    "name": "xBloom",
+    "asset": "merchant-wordmark-xbloom",
+    "source": "https://xbloom.com/cdn/shop/files/xbloom_logo_2988e005-3aa0-4291-9b12-7b1d23307bbe.png?v=1684639959&width=500",
+    "error": null
+  },
+  "promix": {
+    "name": "PROMIX",
+    "asset": "merchant-wordmark-promix",
+    "source": "https://promixnutrition.com/cdn/shop/t/175/assets/promix-protein-powder-logo.png?v=171405470187072173881772815812",
+    "error": null
+  },
+  "manmade": {
+    "name": "Manmade",
+    "asset": "merchant-wordmark-manmade",
+    "source": "https://manmadebrand.com/cdn/shop/files/manmade_logo_final_-logo-on_dark_red-full-color-rgb_logo-_gray-_rgb_copy.svg?v=1697047918&width=600",
+    "error": null
+  },
+  "henson-shaving": {
+    "name": "Henson Shaving",
+    "asset": "merchant-wordmark-henson-shaving",
+    "source": "https://hensonshaving.com/cdn/shop/files/Wordmark_Horizontal_blue.svg",
+    "error": null
+  },
+  "moza-racing": {
+    "name": "MOZA Racing",
+    "asset": "merchant-wordmark-moza-racing",
+    "source": "https://mozaracing.com/cdn/shop/files/MOZA_Racing_White.svg?v=1749175348&width=600",
+    "error": null
+  },
+  "sim-lab": {
+    "name": "Sim-Lab",
+    "asset": "merchant-wordmark-sim-lab",
+    "source": "https://sim-lab.eu/cdn/shop/files/SimLab-logo-black.png?v=1750932852&width=600",
+    "error": null
+  },
+  "svrn": {
+    "name": "SVRN",
+    "asset": "merchant-wordmark-svrn",
+    "source": "https://www.svrn.com/cdn/shop/t/55/assets/svrnlogo.svg?v=27612235397982744121767630209",
+    "error": null
+  },
+  "vitaly": {
+    "name": "Vitaly",
+    "asset": "merchant-wordmark-vitaly",
+    "source": "https://www.vitalydesign.com/cdn/shop/files/wordmark_1.png?v=1686880369&width=600",
+    "error": null
+  },
+  "matteau": {
+    "name": "Matteau",
+    "asset": "merchant-wordmark-matteau",
+    "source": "https://matteau-store.com/cdn/shop/t/36/assets/logo-black.svg?v=77362779901093983241781138080",
+    "error": null
+  },
+  "rhode": {
+    "name": "Rhode",
+    "asset": "merchant-wordmark-rhode",
+    "source": "https://www.rhodeskin.com/cdn/shop/files/rhode-footer-logo_640x.png?v=1775257872",
+    "error": null
+  },
+  "ssense": {
+    "name": "SSENSE",
+    "asset": "merchant-wordmark-ssense",
+    "source": "https://img.ssensemedia.com/images/v1571840298/SSENSE_logo/SSENSE_logo.jpg",
+    "error": null
+  },
+  "color-wow": {
+    "name": "Color Wow",
+    "asset": "merchant-wordmark-color-wow",
+    "source": "https://colorwowhair.com/cdn/shop/files/logo_8d28158c-de3c-4caa-93a2-982c492aac95_140x.jpg?v=1632491925",
+    "error": null
+  },
+  "alfaparf-milano": {
+    "name": "Alfaparf Milano",
+    "asset": "merchant-wordmark-alfaparf-milano",
+    "source": "https://www.shopalfaparfusa.com/cdn/shop/files/alfaparf-logo.png?v=1707148416&width=182",
+    "error": null
+  },
+  "lange-hair": {
+    "name": "L'ange Hair",
+    "asset": "merchant-wordmark-lange-hair",
+    "source": "https://langehair.com/cdn/shop/t/7182/assets/logo.png?v=129926594846747036411786992137",
+    "error": null
+  },
+  "youfromme": {
+    "name": "youfromme",
+    "asset": "merchant-wordmark-youfromme",
+    "source": "https://youfromme.com/cdn/shop/files/Untitled_design_39_1.png?v=1759332803&width=2060",
+    "error": null
+  },
+  "comfrt": {
+    "name": "Comfrt",
+    "asset": "merchant-wordmark-comfrt",
+    "source": "https://comfrt.com/fast-image/fl_progressive:steep/comfrt/files/Comfrt-new-logo-black.svg?v=1769094857",
+    "error": null
+  },
+  "satechi": {
+    "name": "Satechi",
+    "asset": "merchant-wordmark-satechi",
+    "source": "https://satechi.com/cdn/shop/files/logo_2.png?v=1769640076&width=600",
+    "error": null
+  },
+  "tomtoc": {
+    "name": "tomtoc",
+    "asset": "merchant-wordmark-tomtoc",
+    "source": "https://www.tomtoc.com/cdn/shop/files/542-148_220x.png?v=1785926249",
+    "error": null
+  },
+  "caldigit": {
+    "name": "CalDigit",
+    "asset": "merchant-wordmark-caldigit",
+    "source": "https://www.caldigit.com/wp-content/uploads/2022/10/CalDigit-Logo.png",
+    "error": null
+  },
+  "kith": {
+    "name": "Kith",
+    "asset": "merchant-wordmark-kith",
+    "source": "https://kith.com#inline-icon--site-logo",
+    "error": null
+  },
+  "gantri": {
+    "name": "Gantri",
+    "asset": "merchant-wordmark-gantri",
+    "source": "https://gantri.com/logo-large.png",
+    "error": null
+  },
+  "city-lights-sf": {
+    "name": "City Lights SF",
+    "asset": "merchant-wordmark-city-lights-sf",
+    "source": "https://citylightssf.com/cdn/shop/files/logo.webp?v=1717758224&width=600",
+    "error": null
+  },
+  "birkenstock": {
+    "name": "Birkenstock",
+    "asset": "merchant-wordmark-birkenstock",
+    "source": "https://www.birkenstock.com/on/demandware.static/Sites-US-Site/-/default/dw383709d8/images/logo.svg",
+    "error": null
+  },
+  "new-balance": {
+    "name": "New Balance",
+    "asset": "merchant-wordmark-new-balance",
+    "source": "https://www.newbalance.com/on/demandware.static/-/Library-Sites-NBUS-NBCA/default/dw3de6aa04/images/homepage/footer/logo.svg",
+    "error": null
+  },
+  "stone-island": {
+    "name": "Stone Island",
+    "asset": "merchant-wordmark-stone-island",
+    "source": "https://www.stoneisland.com/on/demandware.static/Sites-StoneNA-Site/-/default/dw93150bef/images/logo.png",
+    "error": null
+  },
+  "matisse-footwear": {
+    "name": "Matisse Footwear",
+    "asset": "merchant-wordmark-matisse-footwear",
+    "source": "https://www.matissefootwear.com/cdn/shop/files/Matisse_Web_Logo_f5bbd820-4b8e-4894-b899-23097a115777.svg?v=1703794352&width=600",
+    "error": null
+  },
+  "concepts": {
+    "name": "Concepts",
+    "asset": "merchant-wordmark-concepts",
+    "source": "https://cncpts.com/cdn/shop/files/Logo_3.png?v=1710165713&width=164",
+    "error": null
+  },
+  "nocs-provisions": {
+    "name": "Nocs Provisions",
+    "asset": "merchant-wordmark-nocs-provisions",
+    "source": "https://www.nocsprovisions.com/cdn/shop/t/33/assets/nocs-logo-white.svg?v=157140221280410772331688765178",
+    "error": null
+  },
+  "feature": {
+    "name": "Feature",
+    "asset": "merchant-wordmark-feature",
+    "source": "https://feature.com#inline-header-wordmark",
+    "error": null
+  },
+  "extra-butter": {
+    "name": "Extra Butter",
+    "asset": "merchant-wordmark-extra-butter",
+    "source": "http://extrabutterny.com/cdn/shop/files/new-link-logo_29652474-e353-4d5a-971e-1931326f16a5.jpg?v=1628787692",
+    "error": null
+  },
+  "house-of-leon": {
+    "name": "House of Leon",
+    "asset": "merchant-wordmark-house-of-leon",
+    "source": "https://houseofleon.com/cdn/shop/files/House_of_Leon_Logo_Dark_360x.png?v=1645092990",
+    "error": null
+  }
+}
