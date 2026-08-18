@@ -71,6 +71,7 @@ struct StoryFeedCard: View {
     }
 
     private var ambientFilmURLs: [URL] {
+        guard !story.usesCatalogOnlyMedia else { return [] }
         guard story.coverImageName == nil else { return [] }
         return items.flatMap {
             $0.product.ambientFilmURLs(merchantID: $0.merchant.id)

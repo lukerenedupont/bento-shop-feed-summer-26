@@ -28,6 +28,14 @@ struct FeedStory: Identifiable, Hashable, Codable {
     let destinationLabel: String
     let products: [ProductReference]
 
+    /// Some evidence-backed fixtures have trustworthy catalog photography but
+    /// no buyer-appropriate lifestyle media. In that case the feed should use
+    /// the real product image instead of promoting an unrelated model shot or
+    /// a generated scene into the cover.
+    var usesCatalogOnlyMedia: Bool {
+        topicKeys.contains("catalog-only-media")
+    }
+
     func resolvedProducts(from merchants: [SampleMerchant]) -> [ResolvedStoryProduct] {
         products.compactMap { reference in
             guard let merchant = merchants.first(where: { $0.id == reference.merchantID }),

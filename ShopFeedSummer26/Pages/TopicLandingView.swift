@@ -94,6 +94,12 @@ struct TopicLandingView: View {
     /// products rather than being presented as separate shelves.
     private var masonryItems: [TopicMasonryItem] {
         let products = deepProducts
+        // A story drill-in is already the editorial context. Repeating its
+        // first SKU inside a merchant pager creates a duplicate and makes the
+        // compact page read like two recommendation systems stitched together.
+        guard !isSingleStoryLanding else {
+            return products.map(TopicMasonryItem.product)
+        }
         var items: [TopicMasonryItem] = []
         if products.indices.contains(0) { items.append(.product(products[0])) }
         if let merchant = relevantMerchants.first {
@@ -142,9 +148,10 @@ struct TopicLandingView: View {
                     .frame(width: geometry.size.width, alignment: .leading)
                     .padding(.bottom, 40)
                 }
-                // The cover header owns the top of the screen; the top-bar pills
-                // float above it with a clear background.
-                .ignoresSafeArea(edges: .top)
+                // Full topic covers own the top of the screen. A compact story
+                // drill-in begins below its persistent back/tab bar instead of
+                // drawing the title and hero underneath that navigation.
+                .ignoresSafeArea(edges: compactHeader ? [] : .top)
                 .onScrollGeometryChange(for: CGFloat.self) { $0.contentOffset.y } action: { _, offset in
                     coordinator.updateScrollOffset(offset)
                 }
@@ -161,7 +168,85 @@ struct TopicLandingView: View {
         }
     }
 
+    @ViewBuilder
     private var topicHeader: some View {
+        if compactHeader {
+            compactTopicHeader
+        } else {
+            editorialTopicHeader
+        }
+    }
+
+    private var compactHeroProduct: ResolvedStoryProduct? {
+        resolvedProducts.first
+    }
+
+    /// Story destinations use one restrained, left-aligned hero. It carries
+    /// enough media and title context to explain the drill-in while leaving the
+    /// persistent navigation completely stable above it.
+    private var compactTopicHeader: some View {
+        ZStack(alignment: .bottomLeading) {
+            surfaceColor
+
+            if let headerLifestyleImageURL {
+                CachedAsyncImage(url: headerLifestyleImageURL) { phase in
+                    if case .success(let image) = phase {
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } else if case .failure = phase, let compactHeroProduct {
+                        ProductImageView(
+                            product: compactHeroProduct.product,
+                            merchant: compactHeroProduct.merchant
+                        )
+                    }
+                }
+            } else if let coverImageName = effectiveCoverImageName {
+                Image(coverImageName)
+                    .resizable()
+                    .scaledToFill()
+            } else if let compactHeroProduct {
+                ProductImageView(
+                    product: compactHeroProduct.product,
+                    merchant: compactHeroProduct.merchant
+                )
+            }
+
+            LinearGradient(
+                stops: [
+                    .init(color: .black.opacity(0.08), location: 0),
+                    .init(color: .black.opacity(0.18), location: 0.42),
+                    .init(color: .black.opacity(0.78), location: 1),
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        }
+        .frame(height: 318)
+        .overlay(alignment: .bottomLeading) {
+            VStack(alignment: .leading, spacing: 7) {
+                if let headerEyebrow, !headerEyebrow.isEmpty {
+                    Text(headerEyebrow)
+                        .font(.system(size: 15, weight: .semibold))
+                        .tracking(-0.15)
+                        .foregroundStyle(.white.opacity(0.82))
+                }
+
+                Text(displayTitle ?? topic.label)
+                    .font(.system(size: 32, weight: .bold).leading(.tight))
+                    .tracking(-0.8)
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(3)
+                    .frame(maxWidth: 350, alignment: .leading)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 30)
+        }
+        .clipped()
+    }
+
+    private var editorialTopicHeader: some View {
         ZStack(alignment: .bottomLeading) {
             if let headerLifestyleImageURL {
                 Color.clear
@@ -430,8 +515,29 @@ struct TopicLandingView: View {
                         Button {
                             coordinator.pushRoute(.store(merchantId: merchant.id))
                         } label: {
-                            MerchantLogoImage(merchant: merchant, size: 68)
-                                .overlay { Circle().strokeBorder(.white.opacity(0.18), lineWidth: 0.5) }
+                            VStack(spacing: 7) {
+                                Group {
+                                    if merchant.bestLogoURL != nil {
+                                        MerchantLogoImage(merchant: merchant, size: 68)
+                                    } else if let product = merchant.products.first {
+                                        ProductImageView(product: product, merchant: merchant)
+                                            .frame(width: 68, height: 68)
+                                            .clipShape(Circle())
+                                    } else {
+                                        MerchantLogoImage(merchant: merchant, size: 68)
+                                    }
+                                }
+                                .overlay {
+                                    Circle().strokeBorder(.white.opacity(0.18), lineWidth: 0.5)
+                                }
+
+                                Text(merchant.displayName)
+                                    .font(.system(size: 13, weight: .medium))
+                                    .tracking(-0.1)
+                                    .foregroundStyle(.white)
+                                    .lineLimit(1)
+                                    .frame(width: 82)
+                            }
                         }
                         .buttonStyle(PressScaleButtonStyle(scale: 0.9))
                         .accessibilityLabel(merchant.name)

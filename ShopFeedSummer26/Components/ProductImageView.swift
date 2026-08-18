@@ -47,6 +47,7 @@ extension FeedStory {
         format: LifestyleImageFormat,
         role: String
     ) -> URL? {
+        guard !usesCatalogOnlyMedia else { return nil }
         let candidates = resolvedProducts(from: merchants).flatMap {
             $0.product.lifestyleImageURLs(for: format)
         }

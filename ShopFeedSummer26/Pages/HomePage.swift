@@ -758,6 +758,7 @@ struct HomePage: View {
     /// Rotates the story playlist by one item so the blurred backdrop never
     /// mirrors the clip currently beginning inside the foreground card.
     private func backdropFilmURLs(for story: FeedStory) -> [URL] {
+        guard !story.usesCatalogOnlyMedia else { return [] }
         let urls = story.resolvedProducts(from: merchants).flatMap {
             $0.product.ambientFilmURLs(merchantID: $0.merchant.id)
         }

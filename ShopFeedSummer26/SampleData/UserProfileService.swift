@@ -261,6 +261,41 @@ final class BuyerPreviewStore {
             )
         ),
         BuyerPreviewProfile(
+            id: "kyle",
+            name: "Kyle",
+            symbol: "K",
+            accentHex: "#74594D",
+            avatarAssetName: "kyle-avatar",
+            topics: [
+                .init(id: "for-you", label: "For you", storyIDs: [
+                    "kyle-1890-collabs", "kyle-argizari-lighting",
+                    "kyle-braided-bostons", "kyle-magma-suede",
+                ], evidence: .observed),
+                .init(id: "collabs", label: "Collabs", sourceCategoryID: "style", storyIDs: [
+                    "kyle-1890-collabs", "kyle-braided-bostons",
+                ], evidence: .observed),
+                .init(id: "birkenstock", label: "Birkenstock", sourceCategoryID: "style", storyIDs: [
+                    "kyle-braided-bostons",
+                ], evidence: .observed),
+                .init(id: "1890s", label: "1890s", sourceCategoryID: "style", storyIDs: [
+                    "kyle-1890-collabs",
+                ], evidence: .observed),
+                .init(id: "lighting", label: "Lighting", sourceCategoryID: "living", storyIDs: [
+                    "kyle-argizari-lighting",
+                ], evidence: .observed),
+                .init(id: "kith", label: "Kith", sourceCategoryID: "style", storyIDs: [
+                    "kyle-magma-suede", "kyle-braided-bostons", "kyle-1890-collabs",
+                ], evidence: .observed),
+            ],
+            utility: .init(
+                buyAgainStoryID: nil,
+                recentlyViewedStoryID: "kyle-magma-suede",
+                ownedAdjacencyStoryID: nil,
+                showsCart: false,
+                showsOrders: false
+            )
+        ),
+        BuyerPreviewProfile(
             id: "archie",
             name: "Archie",
             symbol: "A",

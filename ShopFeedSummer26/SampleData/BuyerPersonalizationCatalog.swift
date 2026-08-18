@@ -13,7 +13,7 @@ enum BuyerPersonalizationCatalog {
             id: "andreas-glass-hair",
             title: "Glass hair, compared properly",
             subtitle: "The exact gloss, keratin, and smoothing formulas Andreas has been comparing, kept specific and performance-led.",
-            keys: ["wellness"],
+            keys: ["wellness", "catalog-only-media"],
             accent: "#6A5047",
             products: [
                 ref("color-wow", 7023026405568),
@@ -26,7 +26,7 @@ enum BuyerPersonalizationCatalog {
             id: "andreas-smooth-blowout",
             title: "A smoother blowout, step by step",
             subtitle: "Heat protection, controlled volume, and high-gloss finish—four products with distinct jobs rather than one vague bundle.",
-            keys: ["wellness"],
+            keys: ["wellness", "catalog-only-media"],
             accent: "#765C55",
             products: [
                 ref("lange-hair", 4804878434404),
@@ -39,7 +39,7 @@ enum BuyerPersonalizationCatalog {
             id: "andreas-minimal-comfort",
             title: "Comfort, stripped back",
             subtitle: "Neutral, relaxed layers from the Comfrt line Andreas viewed—simple silhouettes with the fabric and fit doing the work.",
-            keys: ["style"],
+            keys: ["style", "catalog-only-media"],
             accent: "#4D4842",
             products: [
                 ref("comfrt", 7287683743788),
@@ -52,13 +52,60 @@ enum BuyerPersonalizationCatalog {
             id: "andreas-macbook-kit",
             title: "The useful layer around a 14-inch MacBook Pro",
             subtitle: "A fitted sleeve, travel-ready power, and practical I/O for the MacBook Andreas already owns—not another laptop recommendation.",
-            keys: ["design"],
+            keys: ["design", "catalog-only-media"],
             accent: "#394047",
             products: [
                 ref("tomtoc", 9691131248870),
                 ref("satechi", 7353257820248),
                 ref("satechi", 7485814374488),
                 ref("satechi", 7485992108120),
+            ]
+        ),
+        story(
+            id: "kyle-braided-bostons",
+            title: "Boston Braided, variant by variant",
+            subtitle: "Current Kith for Birkenstock Boston Braided variants to compare next—Thyme, Rabbit Grey, and Ultra Blue—without collapsing Kyle's saved Taupe and Mocha pairs into generic clogs.",
+            keys: ["style"],
+            accent: "#66584B",
+            products: [
+                ref("kith", 8286022762624),
+                ref("kith", 8286022959232),
+                ref("kith", 8286022992000),
+            ]
+        ),
+        story(
+            id: "kyle-1890-collabs",
+            title: "The 1890 collaboration shortlist",
+            subtitle: "Kyle's exact Stone Island favorite beside both current Action Bronson 1890 colorways, with each collaboration and colorway named plainly.",
+            keys: ["style"],
+            accent: "#3D4A3D",
+            products: [
+                ref("kith", 8286509564032),
+                ref("kith", 8286188830848),
+                ref("kith", 8286188863616),
+            ]
+        ),
+        story(
+            id: "kyle-argizari-lighting",
+            title: "Start with the Argizari in Sand",
+            subtitle: "The exact Gantri table lamp Kyle added to cart, followed by two current Gantri table-lamp alternatives—not a generic lighting shelf.",
+            keys: ["living", "design"],
+            accent: "#8B7158",
+            products: [
+                ref("city-lights-sf", 8568483807399),
+                ref("city-lights-sf", 8568484036775),
+                ref("city-lights-sf", 8568484298919),
+            ]
+        ),
+        story(
+            id: "kyle-magma-suede",
+            title: "The Magma suede pair Kyle just viewed",
+            subtitle: "Kith's Manhattan gloves and Passenger K15 bag in the exact Magma colorway from Kyle's recent activity.",
+            keys: ["style"],
+            accent: "#7A3D33",
+            products: [
+                ref("kith", 8285610606720),
+                ref("kith", 8285609853056),
             ]
         ),
         story(
@@ -237,20 +284,20 @@ enum BuyerPersonalizationCatalog {
         ]),
         merchant(id: "comfrt", name: "Comfrt", domain: "comfrt.com", color: "#514941", products: [
             product(7287683743788, "Minimalist Hoodie – Mega", "39.00", "minimalist-hoodie", "Comfrt", [
-                "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/Untitleddesign_631a1a4c-8998-43e2-821a-3f526d451959.jpg?v=1718878307",
+                "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/Walnut.jpg?v=1718878184",
                 "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/Untitleddesign_8_9eed4a70-90f2-456e-b715-5f88223cf745.jpg?v=1718878307",
             ]),
             product(7787401936940, "Minimalist Straight Leg Sweatpants", "29.00", "minimalist-straight-leg-sweatpants", "Comfrt", [
-                "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/1_03a1b226-c575-47fc-904b-361ff0fd56df.jpg?v=1762181933",
-                "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/2_a2d52ce9-59f1-44d9-bde1-14c0a09992ec.jpg?v=1740749469",
+                "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/2_3805b92e-2828-4400-81b7-7b95fbfdcaad.jpg?v=1740749561",
+                "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/6_d0eb8b7e-873d-412d-9f1d-33616fee5dc3.jpg?v=1740749561",
             ]),
             product(8444835463212, "Minimalist 7-inch Shorts", "39.00", "minimalist-7-shorts", "Comfrt", [
-                "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/1_9d6762ac-d6ba-4cd2-bb1c-d28855deb295.jpg?v=1785974801",
-                "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/2_6d5e93e7-8e45-42c9-b60f-f454be98d617.jpg?v=1785974801",
+                "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/6_430587f6-cc01-485f-a2b4-9338196e672e.jpg?v=1785974801",
+                "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/2_68b7accf-b2c3-4cb2-bff8-12d9be18c52b.jpg?v=1785975301",
             ]),
             product(8298906157100, "Halo Lightweight Hoodie – Mega", "49.00", "halo-lightweight-oversized-hoodie", "Comfrt", [
-                "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/19_8.jpg?v=1781554192",
                 "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/20_7.jpg?v=1781554191",
+                "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/22_5.jpg?v=1781554191",
             ]),
         ]),
         merchant(id: "satechi", name: "Satechi", domain: "satechi.net", color: "#4A5055", products: [
@@ -283,6 +330,74 @@ enum BuyerPersonalizationCatalog {
             product(9661687988454, "Essence-A34 Protective Laptop Bag for 14-inch MacBook Pro", "43.99", "essence-a34-briefcase-bag-for-14-inch-macbook-pro", "tomtoc", [
                 "https://cdn.shopify.com/s/files/1/0256/7979/0179/files/1_29d1d03d-f224-4038-bad5-bd5fcf5ce01c.jpg?v=1776407350",
                 "https://cdn.shopify.com/s/files/1/0256/7979/0179/files/2_4cfa68fa-1f2c-4aa9-aebb-617f2caca95e.jpg?v=1772684665",
+            ]),
+        ]),
+        merchant(id: "kith", name: "Kith", domain: "kith.com", color: "#4B423B", products: [
+            product(8286022762624, "MADE-TO-ORDER | Kith for Birkenstock Boston Braided – Thyme – PH", "295.00", "br1032180-ph", "Kith", [
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/BR1032180-Front_601a0e5a-659b-4df2-b637-4eabbb253baf.jpg?v=1764956655",
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/BR1032180-Back_1406a04c-9230-447c-9a0b-730e144a34e5.jpg?v=1764956655",
+            ]),
+            product(8286022959232, "MADE-TO-ORDER | Kith for Birkenstock Boston Braided – Rabbit Grey – PH", "295.00", "br1032161-ph", "Kith", [
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/BR1032161-Front_04141c81-c413-4a9f-a7ba-3bcdb7abe02c.jpg?v=1764956714",
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/BR1032161-Back_37659ce8-0aca-4376-b8f3-b775365c1534.jpg?v=1764956714",
+            ]),
+            product(8286022992000, "MADE-TO-ORDER | Kith for Birkenstock Boston Braided – Ultra Blue – PH", "295.00", "br1032170-ph", "Kith", [
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/BR1032170-Front_d9adf552-d7d8-48f7-9270-11a28709861f.jpg?v=1764956655",
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/BR1032170-Back_b5b9e7fa-8b9c-44f6-8db2-c0bfa6e7e60d.jpg?v=1764956654",
+            ]),
+            product(8286509564032, "New Balance x Stone Island ABZORB 1890 – Deep Forest / Olive Green", "250.00", "nbu1890st", "New Balance", [
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/5476753459_sd1.jpg?v=1780510881",
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/20-05-2026-JW_U1890ST_2_1.jpg?v=1780510881",
+            ]),
+            product(8286188830848, "New Balance x Action Bronson 1890 – Blue / Grey", "200.00", "nbu18908bn", "New Balance", [
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/NBU18908BNNewBalanceActionBronson1890Blue_0381.jpg?v=1770835668",
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/NBU18908BNNewBalanceActionBronson1890Blue_0382.jpg?v=1770835668",
+            ]),
+            product(8286188863616, "New Balance x Action Bronson 1890 – Brown / Blue", "200.00", "nbu18901dp", "New Balance", [
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/NBU18901DPNewBalanceActionBronson1890White_0388.jpg?v=1770835641",
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/NBU18901DPNewBalanceActionBronson1890White_0390.jpg?v=1770835641",
+            ]),
+            product(8285610606720, "Kith Manhattan Suede Gloves – Magma", "150.00", "khm10099-601", "Kith", [
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/KHM10099-601-Front.jpg?v=1755120301",
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/KHM10099-601-Back.jpg?v=1755120302",
+            ]),
+            product(8285609853056, "Kith Monogram Suede Passenger K15 Bag – Magma", "275.00", "khm040234-601", "Kith", [
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/KHM040234-601-Front.jpg?v=1755120289",
+                "https://cdn.shopify.com/s/files/1/0094/2252/files/KHM040234-601-Back.jpg?v=1755120288",
+            ]),
+        ]),
+        merchant(id: "city-lights-sf", name: "City Lights SF", domain: "citylightssf.com", color: "#8B7158", products: [
+            product(8568483807399, "Argizari Table Lamp", "248.00", "argizari-table-lamp-by-gantri", "Gantri", [
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-argizari-table-lamp-082325-01a.jpg?v=1755910479",
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-argizari-table-lamp-lifestyle-01_edd74045-dc8e-40c1-a5b5-c33e2c2ad249.jpg?v=1755910479",
+            ]),
+            product(8568484036775, "Smoothy Table Lamp", "398.00", "smoothy-table-lamp-by-gantri", "Gantri", [
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-smoothy-table-lamp-082325-01a.jpg?v=1755910289",
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-smoothy-table-lamp-lifestyle-01_83ea583f-c146-435c-9a48-d23d17693e09.jpg?v=1755910289",
+            ]),
+            product(8568484298919, "Gio Table Lamp", "398.00", "gio-table-lamp-by-gantri", "Gantri", [
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-gio-table-lamp-082325-01a.jpg?v=1755910244",
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-gio-table-lamp-lifestyle-01_83fe46ec-8dcd-43b9-87db-97bb25bea5e9.jpg?v=1755910244",
+            ]),
+            product(8568483905703, "Cora 10259 Pendant Light", "498.00", "cora-10259-pendant-light-by-gantri", "Gantri", [
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-cora-10259-pendant-light-082325-01a.jpg?v=1755910386",
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-cora-10259-pendant-light-lifestyle-01_dae866a0-a7b0-4627-b7a9-053c788051d7.jpg?v=1755910386",
+            ]),
+            product(8568483872935, "Croissant Pendant Light", "598.00", "croissant-pendant-light-by-gantri", "Gantri", [
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-croissant-pendant-light-082325-01a.jpg?v=1755910427",
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-croissant-pendant-light-lifestyle-01_01b63c06-1319-4b3d-b7ea-00bd8f2bbeda.jpg?v=1755910427",
+            ]),
+            product(8568484004007, "Pendulum 10268 Pendant Light", "498.00", "pendulum-10268-pendant-light-by-gantri", "Gantri", [
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-pendulum-10268-pendant-light-082325-01a.jpg?v=1755910347",
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-pendulum-10268-pendant-light-lifestyle-01_0322874f-93dc-4cff-a752-6945aef6d6bf.jpg?v=1755910347",
+            ]),
+            product(8568483840167, "Bamboo Pendant Light", "348.00", "bamboo-pendant-light-by-gantri", "Gantri", [
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-bamboo-pendant-light-01a_10da7324-0465-4d46-bc52-ce138685da1b.jpg?v=1754979114",
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-bamboo-pendant-light-lifestyle-01_4c036da3-f519-4f86-8503-8e86cebbe451.jpg?v=1754979118",
+            ]),
+            product(8568484495527, "Jai Pendant Light", "498.00", "jai-pendant-light-by-gantri", "Gantri", [
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-jai-pendant-light-082325-01a.jpg?v=1755910194",
+                "https://cdn.shopify.com/s/files/1/0503/4239/6071/files/gantri-jai-pendant-light-lifestyle-01_5e2c7aa9-b683-42da-9add-c8347b039944.jpg?v=1755910194",
             ]),
         ]),
         merchant(id: "xbloom", name: "xBloom", domain: "xbloom.com", color: "#353B39", products: [
