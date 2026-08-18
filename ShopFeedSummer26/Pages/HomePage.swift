@@ -95,7 +95,15 @@ struct HomePage: View {
                     .transition(categoryFeedTransition)
             }
         }
-        .background(pageBackgroundColor.ignoresSafeArea())
+        .background {
+            ZStack {
+                pageBackgroundColor
+                if focusedStoryID == nil {
+                    feedAmbientBackdrop
+                }
+            }
+            .ignoresSafeArea()
+        }
         .safeAreaBar(edge: .top) {
             topBar
         }
@@ -150,11 +158,6 @@ struct HomePage: View {
             let cardHeight = cardWidth * 1.71
 
             ZStack {
-                feedAmbientBackdrop
-                    .frame(width: geo.size.width, height: geo.size.height)
-                    .clipped()
-                    .ignoresSafeArea()
-
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(spacing: 16) {
                         if selectedTopicID == "for-you" {
