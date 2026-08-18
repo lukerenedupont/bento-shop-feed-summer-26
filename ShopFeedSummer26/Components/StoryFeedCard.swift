@@ -97,9 +97,11 @@ struct StoryFeedCard: View {
             ZStack {
                 if showsBackground {
                     atmosphericBackground
+                        .frame(width: width, height: height)
                         .scaleEffect(backgroundBlurRadius > 0 ? 1.12 : 1)
                         .blur(radius: backgroundBlurRadius, opaque: true)
                     backgroundScrim
+                        .frame(width: width, height: height)
                 }
 
                 if showsForegroundContent {
@@ -191,6 +193,7 @@ struct StoryFeedCard: View {
                             }
                         }
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .clipped()
             } else if let coverImageName = story.coverImageName {
                 // Overlay-on-clear keeps the fill image from expanding the
@@ -326,10 +329,11 @@ struct StoryFeedCard: View {
             .background(.white.opacity(0.12), in: Circle())
     }
 
-    /// Four native square cards stay legible over the media while the rail can
-    /// continue horizontally when an edit contains more products.
+    /// Large native square cards keep the assortment useful over the media.
+    /// The rail owns the full card width so the next product can peek through
+    /// the rounded edge instead of being clipped by the foreground inset.
     private var bottomProductCarousel: some View {
-        let tileWidth = max((width - 64) / 4, 72)
+        let tileWidth = max((width - 64) / 2, 144)
 
         return VStack(spacing: 14) {
             ScrollView(.horizontal, showsIndicators: false) {
@@ -341,6 +345,8 @@ struct StoryFeedCard: View {
                 }
                 .scrollTargetLayout()
             }
+            .contentMargins(.leading, GravitySpacing.space20, for: .scrollContent)
+            .padding(.horizontal, -GravitySpacing.space20)
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
 
             productFooter
