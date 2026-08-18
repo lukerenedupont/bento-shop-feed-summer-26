@@ -12,6 +12,7 @@ struct ContentView: View {
     @ObservedObject private var feedService = RemoteFeedService.shared
     @State private var userProfile = UserProfileService.shared
     @State private var historyClient = ConversationHistoryClient.shared
+    @State private var postService = ShopPostService.shared
 
     var body: some View {
         RootView()
@@ -26,6 +27,7 @@ struct ContentView: View {
                     userProfile.applyFallbackProfile()
                 }
                 await historyClient.fetch()
+                await postService.loadLukePosts()
             }
     }
 }

@@ -3,6 +3,41 @@ import SwiftUI
 
 /// Home feed — scrollable merchant feed cards with focused topic feeds.
 struct HomePage: View {
+    private enum FeedEntry: Identifiable {
+        case story(FeedStory)
+        case post(ShopPost)
+
+        var id: String {
+            switch self {
+            case let .story(story): story.id
+            case let .post(post): "shop-post-\(post.id)"
+            }
+        }
+    }
+
+    private struct FeedViewportLayout {
+        let compactWidth: CGFloat
+        let compactHeight: CGFloat
+        let expandedWidth: CGFloat
+        let expandedHeight: CGFloat
+        let viewportHeight: CGFloat
+        let expansionProgress: CGFloat
+        let expandedForegroundTopPadding: CGFloat
+
+        var cardWidth: CGFloat {
+            compactWidth + ((expandedWidth - compactWidth) * expansionProgress)
+        }
+
+        var cardHeight: CGFloat {
+            compactHeight + ((expandedHeight - compactHeight) * expansionProgress)
+        }
+
+        var foregroundTopPadding: CGFloat {
+            GravitySpacing.space20
+                + ((expandedForegroundTopPadding - GravitySpacing.space20) * expansionProgress)
+        }
+    }
+
     private enum ForYouUtilityPresentation {
         case carouselOnly
         case carouselAndFullHeight
@@ -19,6 +54,7 @@ struct HomePage: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @ObservedObject private var merchantService = RemoteMerchantService.shared
     @ObservedObject private var feedService = RemoteFeedService.shared
+    @State private var postService = ShopPostService.shared
     @State private var buyerPreview = BuyerPreviewStore.shared
     @Namespace private var heroNamespace
     @Namespace private var topicSelectionNamespace
@@ -45,6 +81,7 @@ struct HomePage: View {
     @State private var categoryMoveDirection = 1
     @State private var topicRailOffset: CGFloat = 0
     @State private var topicRailContentWidth: CGFloat = 0
+    @State private var feedScrollOffset: CGFloat = 0
     @State private var showsBuyerSwitcher = false
     @GestureState private var topicRailDragOffset: CGFloat = 0
 
@@ -81,15 +118,87 @@ struct HomePage: View {
         )
     }
 
+    /// Luke's verified Shop Posts are interleaved into For You without
+    /// replacing any of the authored flick-and-stick cards. Other buyer
+    /// profiles remain byte-for-byte on their existing feeds for now.
+    private var feedEntries: [FeedEntry] {
+        guard buyerPreview.selected.id == "luke", selectedTopicID == "for-you" else {
+            return focusedStories.map(FeedEntry.story)
+        }
+
+        let posts = Array(postService.lukePosts.prefix(4))
+        guard !posts.isEmpty else { return focusedStories.map(FeedEntry.story) }
+
+        var result: [FeedEntry] = []
+        var nextPostIndex = 0
+        for (index, story) in focusedStories.enumerated() {
+            result.append(.story(story))
+            if index.isMultiple(of: 2), posts.indices.contains(nextPostIndex) {
+                result.append(.post(posts[nextPostIndex]))
+                nextPostIndex += 1
+            }
+        }
+        return result
+    }
+
     private var activeFeedStory: FeedStory? {
         if visibleStoryID == utilityStoryID {
-            return nil
+            // The first story is already fully visible beneath the utility
+            // shelf, so keep its editorial content present at rest.
+            return focusedStories.first
         }
         if let visibleStoryID,
            let visibleStory = focusedStories.first(where: { $0.id == visibleStoryID }) {
             return visibleStory
         }
         return focusedStories.first
+    }
+
+    /// One continuous drag drives the utility exit and card takeover. The
+    /// smoothstep curve has zero velocity at both ends, so native snapping
+    /// can settle without handing off to a second animation.
+    private var firstStoryExpansionProgress: CGFloat {
+        guard buyerPreview.selected.id == "luke", selectedTopicID == "for-you" else {
+            return 0
+        }
+        let startOffset: CGFloat = 20
+        let endOffset: CGFloat = 264
+        let linear = max(
+            0,
+            min(1, (feedScrollOffset - startOffset) / (endOffset - startOffset))
+        )
+        return linear * linear * (3 - (2 * linear))
+    }
+
+    private var utilityShelfOpacity: CGFloat {
+        guard buyerPreview.selected.id == "luke", selectedTopicID == "for-you" else {
+            return 1
+        }
+        return max(0, min(1, 1 - (feedScrollOffset / 200)))
+    }
+
+    private var usesLightUtilityShelf: Bool {
+        buyerPreview.selected.id == "luke" && selectedTopicID == "for-you"
+    }
+
+    private var utilityPrimaryColor: Color {
+        usesLightUtilityShelf ? .black : .white
+    }
+
+    private var utilitySecondaryColor: Color {
+        utilityPrimaryColor.opacity(0.62)
+    }
+
+    private var utilityControlFill: Color {
+        utilityPrimaryColor.opacity(usesLightUtilityShelf ? 0.07 : 0.14)
+    }
+
+    private var utilitySurfaceFill: Color {
+        usesLightUtilityShelf ? .white : .black.opacity(0.40)
+    }
+
+    private var utilitySurfaceBorder: Color {
+        utilityPrimaryColor.opacity(usesLightUtilityShelf ? 0.08 : 0.18)
     }
 
     var body: some View {
@@ -124,7 +233,7 @@ struct HomePage: View {
             }
             .ignoresSafeArea()
         }
-        .safeAreaBar(edge: .top) {
+        .overlay(alignment: .top) {
             if buyerPreview.selected.id != "luke" || focusedStoryID == nil {
                 topBar
             }
@@ -137,9 +246,14 @@ struct HomePage: View {
                     .transition(.opacity)
             }
         }
-        // Every Home surface now sits on imagery. Keep status-bar chrome light
-        // so the transparent top rail remains legible over the moving backdrop.
-        .environment(\.colorScheme, .dark)
+        // Luke's resting For You surface is white; restore light system chrome
+        // until the first card has substantially taken over the viewport.
+        .environment(
+            \.colorScheme,
+            usesLightUtilityShelf && firstStoryExpansionProgress < 0.55
+                ? .light
+                : .dark
+        )
         .toolbar(.hidden, for: .navigationBar)
         .toolbarBackground(.hidden, for: .navigationBar)
         .task {
@@ -169,6 +283,7 @@ struct HomePage: View {
         .onChange(of: selectedTopicID) { _, _ in
             visibleStoryID = nil
             expandingStoryID = nil
+            feedScrollOffset = 0
             withAnimation(.easeOut(duration: 0.22)) {
                 coordinator.navBarBlurTint = pageBackgroundColor
             }
@@ -176,6 +291,9 @@ struct HomePage: View {
         }
         .onChange(of: focusedStoryID) { _, _ in
             syncTopicBackAction()
+        }
+        .onChange(of: buyerPreview.selected.id) { _, _ in
+            feedScrollOffset = 0
         }
         .onAppear {
             expandingStoryID = nil
@@ -196,50 +314,106 @@ struct HomePage: View {
         GeometryReader { geo in
             let cardWidth = min(geo.size.width - 32, 377)
             let cardHeight = cardWidth * 1.71
+            let firstStoryID = focusedStories.first?.id
+            let isLukeForYou = buyerPreview.selected.id == "luke" && selectedTopicID == "for-you"
+            let navClearance: CGFloat = 96
+            let nextCardPeek: CGFloat = 32
+            let feedSpacing: CGFloat = 16
+            let systemTopInset: CGFloat = 59
+            let expansionProgress = isLukeForYou ? firstStoryExpansionProgress : 0
+            // `geo` includes the extra top-safe-area extension used below to
+            // draw behind system chrome. Exclude it from the visible card
+            // budget so the next entry can consistently peek above bottom nav.
+            let visibleViewportHeight = geo.size.height - systemTopInset
+            let fullBleedHeight = max(
+                cardHeight,
+                visibleViewportHeight - navClearance - nextCardPeek - feedSpacing
+            )
+            let expandedForegroundTopPadding = systemTopInset
+                + FeedNavigationStyle.controlSize
+                + GravitySpacing.space12
+            let layout = FeedViewportLayout(
+                compactWidth: cardWidth,
+                compactHeight: cardHeight,
+                expandedWidth: geo.size.width,
+                expandedHeight: fullBleedHeight,
+                viewportHeight: geo.size.height,
+                expansionProgress: expansionProgress,
+                expandedForegroundTopPadding: expandedForegroundTopPadding
+            )
 
             ZStack {
                 ScrollView(.vertical, showsIndicators: false) {
-                    LazyVStack(spacing: 16) {
+                    LazyVStack(spacing: feedSpacing) {
                         if selectedTopicID == "for-you", buyerPreview.selected.showsUtilityShelf {
                             feedUtilityShelf(containerWidth: geo.size.width)
+                                .opacity(utilityShelfOpacity)
+                                .allowsHitTesting(utilityShelfOpacity > 0.05)
                             if forYouUtilityPresentation == .carouselAndFullHeight {
                                 fullHeightUtilityCard(width: cardWidth, height: cardHeight)
                                     .id(utilityStoryID)
                             }
                         }
 
-                        ForEach(focusedStories) { story in
-                            paginatedFeedCard(
-                                story,
-                                width: cardWidth,
-                                height: cardHeight,
-                                viewportHeight: geo.size.height
+                        ForEach(feedEntries) { entry in
+                            feedEntryCard(
+                                entry,
+                                layout: layout,
+                                firstEntryID: firstStoryID,
+                                fullBleedEnabled: isLukeForYou
                             )
+                            .frame(
+                                width: layout.expandedWidth,
+                                height: layout.expandedHeight,
+                                alignment: .top
+                            )
+                            .id(entry.id)
                         }
                     }
                     .scrollTargetLayout()
-                    .padding(.top, 8)
+                    // The header floats above the feed instead of reserving a
+                    // safe-area bar. Initial utility content still clears it,
+                    // while a snapped viewport card can extend behind it.
+                    .padding(
+                        .top,
+                        FeedNavigationStyle.controlSize + GravitySpacing.space16
+                    )
                     .padding(.bottom, max((geo.size.height - cardHeight) / 2, 8))
                 }
+                // The NavigationStack proposes a viewport below the status
+                // bar even though this feed draws under system chrome. Shift
+                // the viewport to the physical top, then add a scrollable
+                // launch margin so the utility shelf still rests below nav.
+                .contentMargins(
+                    .top,
+                    systemTopInset + FeedNavigationStyle.controlSize,
+                    for: .scrollContent
+                )
+                .frame(height: geo.size.height + systemTopInset)
+                .offset(y: -systemTopInset)
                 .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-                .scrollPosition(id: $visibleStoryID, anchor: .center)
+                .scrollPosition(id: $visibleStoryID, anchor: .top)
                 .onScrollPhaseChange { _, phase in
                     isFeedScrolling = phase != .idle
                 }
-                .onScrollGeometryChange(for: CGFloat.self) { $0.contentOffset.y } action: { _, offset in
+                .onScrollGeometryChange(for: CGFloat.self) {
+                    max(0, $0.contentOffset.y + $0.contentInsets.top)
+                } action: { _, offset in
+                    feedScrollOffset = offset
                     coordinator.updateScrollOffset(offset)
                 }
             }
-            .onChange(of: focusedStories.map(\.id)) { _, storyIDs in
+            .onChange(of: feedEntries.map(\.id)) { _, entryIDs in
                 // A nil position means the shopper is still in the utility
                 // shelf above the flick-and-stick feed. Never jump them past it.
                 guard let visibleStoryID else { return }
-                guard storyIDs.contains(visibleStoryID) else {
+                guard entryIDs.contains(visibleStoryID) else {
                     self.visibleStoryID = nil
                     return
                 }
             }
         }
+        .ignoresSafeArea(edges: .top)
     }
 
     private var categoryFeedTransition: AnyTransition {
@@ -346,18 +520,18 @@ struct HomePage: View {
                 HStack(alignment: .top, spacing: 12) {
                     Text(item.merchant.displayName.split(separator: " ").prefix(2).compactMap(\.first).map(String.init).joined())
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(utilityPrimaryColor)
                         .frame(width: 38, height: 38)
-                        .background(Color.white.opacity(0.16), in: Circle())
+                        .background(utilityControlFill, in: Circle())
 
                     VStack(alignment: .leading, spacing: 1) {
                         Text(item.merchant.displayName)
                             .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(utilityPrimaryColor)
                             .lineLimit(1)
                         Text("Subtotal \(formatPrice(item.product.price))")
                             .font(.system(size: 14))
-                            .foregroundStyle(.white.opacity(0.64))
+                            .foregroundStyle(utilitySecondaryColor)
                             .lineLimit(1)
                     }
 
@@ -370,9 +544,9 @@ struct HomePage: View {
                         .overlay(alignment: .topLeading) {
                             Text("1")
                                 .font(.system(size: 10, weight: .bold))
-                                .foregroundStyle(.white)
+                                .foregroundStyle(utilityPrimaryColor)
                                 .frame(width: 18, height: 18)
-                                .background(Color.white.opacity(0.18), in: Circle())
+                                .background(utilityControlFill, in: Circle())
                                 .offset(x: -6, y: -6)
                         }
                 }
@@ -381,14 +555,17 @@ struct HomePage: View {
 
                 Text("Continue to checkout")
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(utilityPrimaryColor)
                     .frame(maxWidth: .infinity)
                     .frame(height: 42)
-                    .background(Color.white.opacity(0.14), in: Capsule())
+                    .background(utilityControlFill, in: Capsule())
             }
             .padding(16)
             .frame(width: width, height: retargetingCardHeight)
-            .retargetingSurface()
+            .retargetingSurface(
+                fill: utilitySurfaceFill,
+                border: utilitySurfaceBorder
+            )
         }
         .buttonStyle(PressScaleButtonStyle())
     }
@@ -412,13 +589,13 @@ struct HomePage: View {
                     HStack {
                         Text("Your orders")
                             .font(.system(size: 20, weight: .semibold))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(utilityPrimaryColor)
                         Spacer()
                         Image(systemName: "arrow.right")
                             .font(.system(size: 14, weight: .medium))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(utilityPrimaryColor)
                             .frame(width: 36, height: 36)
-                            .background(Color.white.opacity(0.14), in: Circle())
+                            .background(utilityControlFill, in: Circle())
                     }
 
                     HStack(spacing: 10) {
@@ -427,10 +604,10 @@ struct HomePage: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(merchant.displayName)
                                 .font(.system(size: 14))
-                                .foregroundStyle(.white.opacity(0.64))
+                                .foregroundStyle(utilitySecondaryColor)
                             Text("Arriving today 3–6pm")
                                 .font(.system(size: 16, weight: .semibold))
-                                .foregroundStyle(.white)
+                                .foregroundStyle(utilityPrimaryColor)
                         }
                         .lineLimit(1)
                         .minimumScaleFactor(0.78)
@@ -449,7 +626,10 @@ struct HomePage: View {
                 }
                 .padding(16)
                 .frame(width: width, height: retargetingCardHeight, alignment: .top)
-                .retargetingSurface()
+                .retargetingSurface(
+                    fill: utilitySurfaceFill,
+                    border: utilitySurfaceBorder
+                )
             }
             .buttonStyle(PressScaleButtonStyle())
         }
@@ -636,13 +816,13 @@ struct HomePage: View {
             HStack {
                 Text(title)
                     .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(utilityPrimaryColor)
                 Spacer()
                 Image(systemName: "arrow.right")
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(utilityPrimaryColor)
                     .frame(width: 36, height: 36)
-                    .background(Color.white.opacity(0.14), in: Circle())
+                    .background(utilityControlFill, in: Circle())
             }
 
             HStack(spacing: 10) {
@@ -664,7 +844,62 @@ struct HomePage: View {
         }
         .padding(16)
         .frame(width: width, height: retargetingCardHeight, alignment: .top)
-        .retargetingSurface()
+        .retargetingSurface(
+            fill: utilitySurfaceFill,
+            border: utilitySurfaceBorder
+        )
+    }
+
+    /// Every entry owns an identical snap slot. Its surface grows inside that
+    /// stable slot during the initial takeover, so later cards inherit the
+    /// same full-bleed alignment without changing scroll geometry mid-gesture.
+    @ViewBuilder
+    private func feedEntryCard(
+        _ entry: FeedEntry,
+        layout: FeedViewportLayout,
+        firstEntryID: String?,
+        fullBleedEnabled: Bool
+    ) -> some View {
+        let isFirstEntry = entry.id == firstEntryID
+        let isSnappedEntry = visibleStoryID == entry.id
+        let hasEnteredFullBleedFeed = fullBleedEnabled
+            && layout.expansionProgress >= 0.999
+        let takeoverProgress: CGFloat = {
+            guard fullBleedEnabled else { return 0 }
+            if isFirstEntry { return layout.expansionProgress }
+            return hasEnteredFullBleedFeed && isSnappedEntry ? 1 : 0
+        }()
+        let topCornerRadius = GravityRadius.r28 * (1 - takeoverProgress)
+        let chromeOpacity = Double(1 - takeoverProgress)
+
+        switch entry {
+        case let .story(story):
+            paginatedFeedCard(
+                story,
+                width: layout.cardWidth,
+                height: layout.cardHeight,
+                viewportHeight: layout.viewportHeight,
+                cornerRadius: topCornerRadius,
+                bottomCornerRadius: fullBleedEnabled ? GravityRadius.r28 : nil,
+                topScrimOpacity: 0.36 * chromeOpacity,
+                borderOpacity: 0.12 * chromeOpacity,
+                shadowOpacity: chromeOpacity,
+                foregroundTopPadding: layout.foregroundTopPadding,
+                scrollMotionEnabled: !fullBleedEnabled
+            )
+
+        case let .post(post):
+            paginatedPostCard(
+                post,
+                width: layout.cardWidth,
+                height: layout.cardHeight,
+                cornerRadius: topCornerRadius,
+                bottomCornerRadius: fullBleedEnabled ? GravityRadius.r28 : nil,
+                borderOpacity: 0.16 * chromeOpacity,
+                shadowOpacity: chromeOpacity,
+                scrollMotionEnabled: !fullBleedEnabled
+            )
+        }
     }
 
     /// Pulls each card gently back toward the viewport center while it moves.
@@ -675,9 +910,17 @@ struct HomePage: View {
         _ story: FeedStory,
         width: CGFloat,
         height: CGFloat,
-        viewportHeight: CGFloat
+        viewportHeight: CGFloat,
+        cornerRadius: CGFloat = GravityRadius.r28,
+        bottomCornerRadius: CGFloat? = nil,
+        topScrimOpacity: Double = 0.36,
+        borderOpacity: Double = 0.12,
+        shadowOpacity: Double = 1,
+        foregroundTopPadding: CGFloat = GravitySpacing.space20,
+        scrollMotionEnabled: Bool = true
     ) -> some View {
         let motionIsReduced = reduceMotion
+        let appliesScrollMotion = !motionIsReduced && scrollMotionEnabled
         let storyIndex = focusedStories.firstIndex(where: { $0.id == story.id })
 
         Group {
@@ -705,8 +948,14 @@ struct HomePage: View {
                         in: selectedCategory,
                         visibleStoryIndex: storyIndex
                     ),
+                    foregroundTopPadding: foregroundTopPadding,
                     backgroundPlaybackEnabled: expandingStoryID != story.id,
                     prefersVideoBackground: storyIndex?.isMultiple(of: 5) == true,
+                    cornerRadius: cornerRadius,
+                    bottomCornerRadius: bottomCornerRadius,
+                    topScrimOpacity: topScrimOpacity,
+                    borderOpacity: borderOpacity,
+                    shadowOpacity: shadowOpacity,
                     freezesParallax: expandingStoryID == story.id,
                     scrollViewportHeight: viewportHeight,
                     onTap: story.topicKeys.contains("merchant-card")
@@ -716,35 +965,66 @@ struct HomePage: View {
             }
         }
         .scrollTransition(
-            motionIsReduced ? .identity : .interactive(timingCurve: .circularEaseOut),
+            appliesScrollMotion ? .interactive(timingCurve: .circularEaseOut) : .identity,
             axis: .vertical
         ) { card, phase in
             card
-                .offset(y: motionIsReduced ? 0 : -CGFloat(phase.value) * 18)
+                .offset(y: appliesScrollMotion ? -CGFloat(phase.value) * 18 : 0)
                 .scaleEffect(
-                    motionIsReduced
-                        ? 1
-                        : 1 - CGFloat(min(abs(phase.value), 1)) * 0.015
+                    appliesScrollMotion
+                        ? 1 - CGFloat(min(abs(phase.value), 1)) * 0.015
+                        : 1
                 )
         }
         .scaleEffect(motionIsReduced || story.id == activeFeedStory?.id ? 1 : 0.992)
         .animation(motionIsReduced ? nil : SpringPreset.responsive, value: activeFeedStory?.id)
         .matchedTransitionSource(id: story.id, in: namespace) { source in
             source
-                .background(.black)
-                .clipShape(
-                    RoundedRectangle(
-                        cornerRadius: GravityRadius.r28,
-                        style: .continuous
-                    )
-                )
                 .shadow(
-                    color: .black.opacity(0.24),
+                    color: .black.opacity(0.18 * shadowOpacity),
                     radius: 18,
                     y: 10
                 )
         }
-        .id(story.id)
+    }
+
+    private func paginatedPostCard(
+        _ post: ShopPost,
+        width: CGFloat,
+        height: CGFloat,
+        cornerRadius: CGFloat = GravityRadius.r28,
+        bottomCornerRadius: CGFloat? = nil,
+        borderOpacity: Double = 0.16,
+        shadowOpacity: Double = 1,
+        scrollMotionEnabled: Bool = true
+    ) -> some View {
+        let id = "shop-post-\(post.id)"
+        let motionIsReduced = reduceMotion
+        let appliesScrollMotion = !motionIsReduced && scrollMotionEnabled
+        return ShopPostFeedCard(
+            post: post,
+            width: width,
+            height: height,
+            isActive: visibleStoryID == id,
+            cornerRadius: cornerRadius,
+            bottomCornerRadius: bottomCornerRadius,
+            borderOpacity: borderOpacity,
+            shadowOpacity: shadowOpacity
+        )
+        .scrollTransition(
+            appliesScrollMotion ? .interactive(timingCurve: .circularEaseOut) : .identity,
+            axis: .vertical
+        ) { card, phase in
+            card
+                .offset(y: appliesScrollMotion ? -CGFloat(phase.value) * 18 : 0)
+                .scaleEffect(
+                    appliesScrollMotion
+                        ? 1 - CGFloat(min(abs(phase.value), 1)) * 0.015
+                        : 1
+                )
+        }
+        .scaleEffect(motionIsReduced || visibleStoryID == id ? 1 : 0.992)
+        .animation(motionIsReduced ? nil : SpringPreset.responsive, value: visibleStoryID)
     }
 
     private var feedAmbientBackdrop: some View {
@@ -806,6 +1086,16 @@ struct HomePage: View {
                 )
             } else {
                 pageBackgroundColor
+            }
+
+            if buyerPreview.selected.id == "luke",
+               selectedTopicID == "for-you",
+               let story = focusedStories.first {
+                ZStack {
+                    Color.white
+                    Color(hex: story.accentHex)
+                        .opacity(firstStoryExpansionProgress)
+                }
             }
         }
         .allowsHitTesting(false)
@@ -890,6 +1180,7 @@ struct HomePage: View {
             avatar
                 .zIndex(1)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, GravitySpacing.space16)
         .padding(.vertical, PurlTune.token("Pages/HomePage.swift:padding:_:165:29", default: GravitySpacing.space4, options: GravitySpacing.purlTuneOptions))
         // Deliberately no bar background: the active feed film or topic cover
@@ -1072,7 +1363,11 @@ struct HomePage: View {
     }
 
     private func topicButton(_ topic: BuyerFeedTopic) -> some View {
-        Button {
+        let usesDarkActivePill = buyerPreview.selected.id == "luke"
+            && selectedTopicID == "for-you"
+            && topic.id == "for-you"
+
+        return Button {
             guard selectedTopicID != topic.id || focusedStoryID != nil else { return }
             HapticFeedback.light.fire()
             coordinator.resetScrollState()
@@ -1088,10 +1383,15 @@ struct HomePage: View {
                 .background {
                     if selectedTopicID == topic.id {
                         Capsule()
-                            .fill(Color.white.opacity(0.92))
+                            .fill(usesDarkActivePill ? Color.black : Color.white.opacity(0.92))
                             .overlay {
                                 Capsule()
-                                    .strokeBorder(Color.black.opacity(0.06), lineWidth: 0.5)
+                                    .strokeBorder(
+                                        usesDarkActivePill
+                                            ? Color.clear
+                                            : Color.black.opacity(0.06),
+                                        lineWidth: 0.5
+                                    )
                             }
                             .shadow(color: .black.opacity(0.10), radius: 12, y: 4)
                             .matchedGeometryEffect(id: "selected-topic", in: topicSelectionNamespace)
@@ -1112,24 +1412,37 @@ struct HomePage: View {
     }
 
     private func topicLabelColor(_ topic: BuyerFeedTopic) -> Color {
-        selectedTopicID == topic.id ? GravityColors.textFixedDark : GravityColors.textFixedLight
+        if selectedTopicID == topic.id {
+            return buyerPreview.selected.id == "luke" && topic.id == "for-you"
+                ? GravityColors.textFixedLight
+                : GravityColors.textFixedDark
+        }
+        if buyerPreview.selected.id == "luke", selectedTopicID == "for-you" {
+            return Color(
+                .sRGB,
+                white: Double(firstStoryExpansionProgress),
+                opacity: 1
+            )
+        }
+        return GravityColors.textFixedLight
     }
 
 }
 
 private extension View {
-    /// A dark wash keeps utility chrome legible while letting the feed color
-    /// remain visible beneath the card.
-    func retargetingSurface() -> some View {
+    func retargetingSurface(
+        fill: Color,
+        border: Color
+    ) -> some View {
         background(
-            Color.black.opacity(0.40),
+            fill,
             in: RoundedRectangle(cornerRadius: 28, style: .continuous)
         )
         .overlay {
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .strokeBorder(.white.opacity(0.18), lineWidth: 0.5)
+                .strokeBorder(border, lineWidth: 0.5)
         }
-        .shadow(color: .black.opacity(0.035), radius: 14, y: 7)
+        .gravityShadow(GravityShadows.large)
     }
 }
 

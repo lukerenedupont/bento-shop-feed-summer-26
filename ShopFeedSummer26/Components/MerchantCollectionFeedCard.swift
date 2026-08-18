@@ -79,7 +79,9 @@ struct MerchantCollectionFeedCard: View {
 
     @ViewBuilder
     private var collectionCover: some View {
-        if let coverURL {
+        if !presentation.usesImageCover {
+            quietMerchantSurface
+        } else if let coverURL {
             CachedAsyncImage(url: coverURL) { phase in
                 if case .success(let image) = phase {
                     image
@@ -100,6 +102,24 @@ struct MerchantCollectionFeedCard: View {
                 .clipped()
         } else {
             Color(hex: story.accentHex)
+        }
+    }
+
+    /// A deliberately non-photographic fallback for catalog-only merchants.
+    /// It prevents packaging, promotional banners, and embedded product copy
+    /// from becoming oversized background typography behind the card UI.
+    private var quietMerchantSurface: some View {
+        ZStack {
+            Color(hex: story.accentHex)
+
+            LinearGradient(
+                colors: [
+                    (merchant?.brandColor ?? Color(hex: story.accentHex)).opacity(0.88),
+                    .black.opacity(0.42),
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         }
     }
 

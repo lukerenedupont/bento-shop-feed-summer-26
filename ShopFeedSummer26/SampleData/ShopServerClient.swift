@@ -88,6 +88,23 @@ actor ShopServerClient {
         return response.shopProductSearch.nodes
     }
 
+    func posts(feedID: String, first: Int) async throws -> [ShopPost] {
+        struct Variables: Encodable {
+            let id: String
+            let first: Int
+        }
+
+        let response: PostsFeedResponse = try await execute(
+            query: Self.postsFeedQuery,
+            variables: Variables(id: feedID, first: first)
+        )
+
+        return response.feed.sections.nodes
+            .flatMap { $0.items?.nodes ?? [] }
+            .compactMap(\.post)
+            .compactMap(\.shopPost)
+    }
+
     private func execute<Response: Decodable, Variables: Encodable>(
         query: String,
         variables: Variables
@@ -207,6 +224,52 @@ actor ShopServerClient {
       shopsFollowed(first: $first) {
         nodes {
           \(shopFields)
+        }
+      }
+    }
+    """
+
+    /// Posts are only sourced from actual PostCards in Shop's authenticated
+    /// feed response. Product video and merchant header media never enter this
+    /// path, which prevents them from being mislabeled as social content.
+    private static let postsFeedQuery = """
+    query PrototypePosts($id: ID!, $first: Int!) {
+      feed(id: $id) {
+        sections(first: $first) {
+          nodes {
+            ... on ListSection { items { nodes { ...PrototypePostCard } } }
+            ... on ShelfSection { items { nodes { ...PrototypePostCard } } }
+            ... on CarouselSection { items { nodes { ...PrototypePostCard } } }
+            ... on CustomSection { items { nodes { ...PrototypePostCard } } }
+          }
+        }
+      }
+    }
+
+    fragment PrototypePostCard on ContentNode {
+      ... on PostCard {
+        post {
+          id
+          action { label url }
+          title { segments { text } }
+          caption { segments { text } }
+          subtitle { segments { text } }
+          media {
+            source {
+              __typename
+              ... on Image { url width height }
+              ... on Video {
+                url width height
+                previewImage { url width height }
+              }
+            }
+          }
+          shop {
+            id
+            name
+            websiteUrl
+            visualTheme { logoImage { url width height } }
+          }
         }
       }
     }
@@ -354,4 +417,113 @@ struct ShopImage: Decodable {
     let altText: String?
     let width: Int?
     let height: Int?
+}
+
+private struct PostsFeedResponse: Decodable {
+    let feed: PostsFeed
+}
+
+private struct PostsFeed: Decodable {
+    let sections: PostsFeedSections
+}
+
+private struct PostsFeedSections: Decodable {
+    let nodes: [PostsFeedSection]
+}
+
+private struct PostsFeedSection: Decodable {
+    let items: PostsFeedItems?
+}
+
+private struct PostsFeedItems: Decodable {
+    let nodes: [PostsFeedContentNode]
+}
+
+private struct PostsFeedContentNode: Decodable {
+    let post: ShopServerPost?
+}
+
+private struct ShopServerPost: Decodable {
+    let id: String
+    let action: ShopServerAction?
+    let title: ShopServerRichText?
+    let caption: ShopServerRichText?
+    let subtitle: ShopServerRichText?
+    let media: ShopServerPostMedia
+    let shop: ShopServerPostShop
+
+    var shopPost: ShopPost? {
+        guard let media = media.source.shopPostMedia else { return nil }
+        return ShopPost(
+            id: id,
+            title: title?.plainText,
+            caption: caption?.plainText,
+            subtitle: subtitle?.plainText,
+            media: media,
+            merchant: ShopPost.Merchant(
+                id: shop.id,
+                name: shop.name,
+                logoURL: shop.visualTheme?.logoImage?.url.flatMap(URL.init(string:)),
+                websiteURL: shop.websiteUrl.flatMap(URL.init(string:))
+            ),
+            actionURL: action?.url.flatMap(URL.init(string:))
+        )
+    }
+}
+
+private struct ShopServerPostMedia: Decodable {
+    let source: ShopServerMediaSource
+}
+
+private struct ShopServerMediaSource: Decodable {
+    let __typename: String
+    let url: String
+    let width: Int?
+    let height: Int?
+    let previewImage: ShopImage?
+
+    var shopPostMedia: ShopPost.Media? {
+        guard let url = URL(string: url) else { return nil }
+        if __typename == "Video" {
+            return .video(
+                url: url,
+                posterURL: previewImage?.url.flatMap(URL.init(string:)),
+                width: width,
+                height: height
+            )
+        }
+        if __typename == "Image" {
+            return .image(url: url, width: width, height: height)
+        }
+        return nil
+    }
+}
+
+private struct ShopServerPostShop: Decodable {
+    let id: String
+    let name: String
+    let websiteUrl: String?
+    let visualTheme: ShopServerPostVisualTheme?
+}
+
+private struct ShopServerPostVisualTheme: Decodable {
+    let logoImage: ShopImage?
+}
+
+private struct ShopServerAction: Decodable {
+    let label: String?
+    let url: String?
+}
+
+private struct ShopServerRichText: Decodable {
+    let segments: [ShopServerRichTextSegment]
+
+    var plainText: String? {
+        let text = segments.compactMap(\.text).joined().trimmingCharacters(in: .whitespacesAndNewlines)
+        return text.isEmpty ? nil : text
+    }
+}
+
+private struct ShopServerRichTextSegment: Decodable {
+    let text: String?
 }

@@ -10,6 +10,9 @@ struct MerchantCollectionPresentation: Hashable {
     let coverProductID: Int
     let coverImageIndex: Int
     let coverYOffset: CGFloat
+    /// Only authored lifestyle media is allowed to fill the card. Generated
+    /// catalog packshots often contain labels, banners, or baked-in copy.
+    let usesImageCover: Bool
 
     init(
         storyID: String,
@@ -17,7 +20,8 @@ struct MerchantCollectionPresentation: Hashable {
         productCount: Int,
         coverProductID: Int,
         coverImageIndex: Int,
-        coverYOffset: CGFloat = 0
+        coverYOffset: CGFloat = 0,
+        usesImageCover: Bool = true
     ) {
         self.storyID = storyID
         self.merchantID = merchantID
@@ -25,6 +29,7 @@ struct MerchantCollectionPresentation: Hashable {
         self.coverProductID = coverProductID
         self.coverImageIndex = coverImageIndex
         self.coverYOffset = coverYOffset
+        self.usesImageCover = usesImageCover
     }
 
     func coverURL(from merchants: [SampleMerchant]) -> URL? {

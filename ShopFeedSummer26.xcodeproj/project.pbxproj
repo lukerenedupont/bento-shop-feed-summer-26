@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A11111111111111111111111 /* ShopPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11111111111111111111111 /* ShopPost.swift */; };
+		A22222222222222222222222 /* ShopPostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22222222222222222222222 /* ShopPostService.swift */; };
+		A33333333333333333333333 /* ShopPostFeedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33333333333333333333333 /* ShopPostFeedCard.swift */; };
 		00367ACD7CE8582CA111781C /* CategoryTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459CA6FC9ADF5F66FEA511C /* CategoryTile.swift */; };
 		01C5D6B8DAC61C865FBB857B /* ProductPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF15B9E17E009E05951942F7 /* ProductPage.swift */; };
 		035881778FD5938BEFF7430C /* GravitySpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54499965144553181DE87600 /* GravitySpacing.swift */; };
@@ -142,6 +145,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B11111111111111111111111 /* ShopPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPost.swift; sourceTree = "<group>"; };
+		B22222222222222222222222 /* ShopPostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPostService.swift; sourceTree = "<group>"; };
+		B33333333333333333333333 /* ShopPostFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPostFeedCard.swift; sourceTree = "<group>"; };
 		026F95AEE45A53AF8C50203B /* Shopify Sans-Bold Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Bold Italic.otf"; sourceTree = "<group>"; };
 		0431B7327888F447B9C4106E /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 		04CE0AD84A963D9B87DAC7A6 /* ProductCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCard.swift; sourceTree = "<group>"; };
@@ -406,6 +412,7 @@
 				F10B16167B932BDE28BA2B48 /* FeedStory.swift */,
 				281FDFAC7B3A9E95703E93EE /* FeedTopic.swift */,
 				D55DD9DD1C2856FC6D6305AD /* ImageCache.swift */,
+				B11111111111111111111111 /* ShopPost.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -459,6 +466,7 @@
 				93C7B3807AD8D7156AF55F78 /* SampleMerchant.swift */,
 				079951B34CE474B3E080B64F /* ShopperSignals.swift */,
 				CC1132BFE84890181F234405 /* ShopServerClient.swift */,
+				B22222222222222222222222 /* ShopPostService.swift */,
 				D43FBABAF01048CCC0C88C54 /* UserProfileService.swift */,
 				DBA1D81BE648CA18E4875E52 /* Agent */,
 			);
@@ -477,6 +485,7 @@
 				7F39B6F46EBC3D657496BF6D /* FloatingBackButton.swift */,
 				16A32D3620048BECC91CDCAC /* FloatingPanelSheet.swift */,
 				68957DDA92869BB303188B83 /* LoopingVideoPlayer.swift */,
+				B33333333333333333333333 /* ShopPostFeedCard.swift */,
 				B9F58EB0B320715CD835B076 /* MerchantAvatarView.swift */,
 				54E1ECE0C5E966F35189CB65 /* MerchantCollectionFeedCard.swift */,
 				4EB209BF03135794AA09F836 /* MerchantImage.swift */,
@@ -762,6 +771,9 @@
 				FDD19A90BC1AA11E24F0921A /* ShopFeedSummer26App.swift in Sources */,
 				A9281D381BB9DCCE93A992BA /* ShopSearchClient.swift in Sources */,
 				35C553E9A9B75C59FABEDC29 /* ShopServerClient.swift in Sources */,
+				A11111111111111111111111 /* ShopPost.swift in Sources */,
+				A22222222222222222222222 /* ShopPostService.swift in Sources */,
+				A33333333333333333333333 /* ShopPostFeedCard.swift in Sources */,
 				5B6C1D92E94EBDCF2D8530DC /* ShopperSignals.swift in Sources */,
 				2338DF902EB6C4BE9AA20CA6 /* SpringPresets.swift in Sources */,
 				AFBB4BEFC4B934212FBF5232 /* StorePage.swift in Sources */,

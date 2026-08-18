@@ -144,7 +144,8 @@ enum HypothesisShelfCatalog {
                     merchantID: merchantID,
                     productCount: min(items.count, 4),
                     coverProductID: lead.productID,
-                    coverImageIndex: 0
+                    coverImageIndex: 0,
+                    usesImageCover: false
                 )
             )
         }

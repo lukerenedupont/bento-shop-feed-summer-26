@@ -101,6 +101,7 @@ struct SettingsPage: View {
 
                 Button("Sign Out", role: .destructive) {
                     authService.signOut()
+                    ShopPostService.shared.reset()
                     userProfile.applyFallbackProfile()
                     merchantService.loadFallbackData()
                 }
@@ -125,6 +126,7 @@ struct SettingsPage: View {
                         if authService.hasSession {
                             await UserProfileService.shared.fetch()
                             await merchantService.loadMerchants(force: true)
+                            await ShopPostService.shared.loadLukePosts(force: true)
                         }
                     }
                 }

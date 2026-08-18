@@ -14,6 +14,7 @@ struct StoryFeedCard: View {
     var showsFooterArrow = true
     var titleAtTopLeading = false
     var productLayout: FeedCardProductLayout? = nil
+    var foregroundTopPadding: CGFloat = GravitySpacing.space20
     var foregroundBottomPadding: CGFloat = GravitySpacing.space20
     var backgroundBlurRadius: CGFloat = 0
     var backgroundPlaybackEnabled = true
@@ -21,6 +22,10 @@ struct StoryFeedCard: View {
     /// film is unavailable, the card continues to use its lifestyle still.
     var prefersVideoBackground = false
     var cornerRadius: CGFloat = GravityRadius.r28
+    var bottomCornerRadius: CGFloat? = nil
+    var topScrimOpacity: Double = 0.36
+    var borderOpacity: Double = 0.12
+    var shadowOpacity: Double = 1
     var freezesParallax = false
     /// Enables scroll-relative movement for the ambient film without moving
     /// any foreground commerce content. Nil outside a paginated feed.
@@ -86,6 +91,20 @@ struct StoryFeedCard: View {
 
     private var leadFilmURL: URL? {
         ambientFilmURLs.first
+    }
+
+    private var resolvedBottomCornerRadius: CGFloat {
+        bottomCornerRadius ?? cornerRadius
+    }
+
+    private var cardShape: UnevenRoundedRectangle {
+        UnevenRoundedRectangle(
+            topLeadingRadius: cornerRadius,
+            bottomLeadingRadius: resolvedBottomCornerRadius,
+            bottomTrailingRadius: resolvedBottomCornerRadius,
+            topTrailingRadius: cornerRadius,
+            style: .continuous
+        )
     }
 
     private var heroLifestyleImageURL: URL? {
@@ -161,7 +180,7 @@ struct StoryFeedCard: View {
                         }
                     }
                     .padding(.horizontal, GravitySpacing.space20)
-                    .padding(.top, GravitySpacing.space20)
+                    .padding(.top, foregroundTopPadding)
                     .padding(.bottom, foregroundBottomPadding)
                     .opacity(isActive ? 1 : 0)
                     .animation(.easeInOut(duration: 0.2), value: isActive)
@@ -169,12 +188,21 @@ struct StoryFeedCard: View {
                 }
             }
             .frame(width: width, height: height)
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+            .clipShape(cardShape)
             .overlay {
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
+                cardShape
+                    .strokeBorder(
+                        .white.opacity(borderOpacity),
+                        lineWidth: 0.5
+                    )
             }
-            .gravityShadow(GravityShadows.medium)
+            .compositingGroup()
+            .shadow(
+                color: .black.opacity(0.12 * shadowOpacity),
+                radius: 24,
+                x: 0,
+                y: 4
+            )
         }
         .buttonStyle(PressScaleButtonStyle())
         .onAppear { mediaIsMoving = true }
@@ -309,7 +337,7 @@ struct StoryFeedCard: View {
     private var backgroundScrim: some View {
         LinearGradient(
             stops: [
-                .init(color: .black.opacity(0.36), location: 0),
+                .init(color: .black.opacity(topScrimOpacity), location: 0),
                 .init(color: .clear, location: 0.30),
                 .init(color: .clear, location: 0.72),
                 .init(color: .black.opacity(0.34), location: 1),
