@@ -398,7 +398,12 @@ private struct BentoCompartmentCard: View {
     private var surface: some View {
         switch compartment.surface {
         case .product(let item):
-            AmbientProductVideo(product: item.product, merchant: item.merchant)
+            LifestyleProductImage(
+                product: item.product,
+                merchant: item.merchant,
+                format: compartment.size == .wide ? .landscape : .portrait,
+                seed: "bento-\(compartment.id)"
+            )
         case .merchant(let merchant):
             // Wordmark moment (per shopdotcom reference): the cover carries
             // the cell, the wordmark holds the center, rating beneath.
@@ -425,14 +430,17 @@ private struct BentoCompartmentCard: View {
         case .videoProductMosaic(let story, let products):
             BentoVideoProductMosaic(story: story, products: products)
         case .story(let story, let hero):
-            if let hero, !hero.product.ambientFilmURLs(merchantID: hero.merchant.id).isEmpty {
-                AmbientProductVideo(product: hero.product, merchant: hero.merchant)
+            if let hero {
+                LifestyleProductImage(
+                    product: hero.product,
+                    merchant: hero.merchant,
+                    format: compartment.size == .wide ? .landscape : .portrait,
+                    seed: "bento-story-\(story.id)"
+                )
             } else if let coverImageName = story.coverImageName {
                 Color.clear
                     .overlay { Image(coverImageName).resizable().scaledToFill() }
                     .clipped()
-            } else if let hero {
-                AmbientProductVideo(product: hero.product, merchant: hero.merchant)
             } else {
                 Color(hex: story.accentHex)
             }

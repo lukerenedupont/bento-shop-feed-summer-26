@@ -151,6 +151,9 @@ struct HomePage: View {
 
             ZStack {
                 feedAmbientBackdrop
+                    .frame(width: geo.size.width, height: geo.size.height)
+                    .clipped()
+                    .ignoresSafeArea()
 
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(spacing: 16) {
@@ -652,23 +655,60 @@ struct HomePage: View {
 
     private var feedAmbientBackdrop: some View {
         ZStack {
-            Color.black
+            if let story = activeFeedStory ?? focusedStories.first {
+                let accent = Color(hex: story.accentHex)
+                let lead = story.resolvedProducts(from: merchants).first
+                (lead?.merchant.secondaryColor ?? accent)
 
-            if let story = activeFeedStory,
-               let lead = story.resolvedProducts(from: merchants).first {
-                AmbientProductVideo(
-                    videoURLs: backdropFilmURLs(for: story),
-                    posterImageURL: lead.product.imageURL,
-                    playbackEnabled: isFeedScrolling
+                if let lead {
+                    if let backdropURL = story.lifestyleImageURL(
+                        from: merchants,
+                        format: .landscape,
+                        role: "feed-backdrop"
+                    ) {
+                        CachedAsyncImage(url: backdropURL) { phase in
+                            if case .success(let image) = phase {
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            } else if case .failure = phase {
+                                ProductImageView(product: lead.product, merchant: lead.merchant)
+                            } else {
+                                accent
+                            }
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .id(story.id)
+                        .scaleEffect(1.32)
+                        .blur(radius: 46, opaque: true)
+                        .saturation(1.28)
+                        .contrast(1.08)
+                        .opacity(isFeedScrolling ? 0.94 : 0.88)
+                        .transition(.opacity)
+                    } else {
+                        AmbientProductVideo(
+                            videoURLs: backdropFilmURLs(for: story),
+                            posterImageURL: lead.product.imageURL,
+                            playbackEnabled: isFeedScrolling
+                        )
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .id(story.id)
+                        .scaleEffect(1.22)
+                        .blur(radius: 38, opaque: true)
+                        .opacity(isFeedScrolling ? 0.74 : 0.62)
+                        .transition(.opacity)
+                    }
+                }
+
+                LinearGradient(
+                    colors: [.black.opacity(0.10), .clear, .black.opacity(0.12)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
                 )
-                .id(story.id)
-                .scaleEffect(1.18)
-                .blur(radius: 34, opaque: true)
-                .opacity(isFeedScrolling ? 0.64 : 0.48)
-                .transition(.opacity)
+            } else {
+                pageBackgroundColor
             }
         }
-        .ignoresSafeArea()
         .allowsHitTesting(false)
         .animation(.easeOut(duration: isFeedScrolling ? 0.18 : 0.24), value: isFeedScrolling)
         .animation(.easeInOut(duration: 0.24), value: activeFeedStory?.id)

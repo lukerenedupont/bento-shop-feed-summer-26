@@ -37,8 +37,8 @@ struct StoryFeedCard: View {
     }
 
     /// Product references lead the assortment, then the same merchants fill
-    /// it out with adjacent catalog items. Dense layouts therefore have enough
-    /// honest inventory without borrowing unrelated products from the feed.
+    /// it out with adjacent catalog items. A final catalog pass guarantees the
+    /// dense 4/6/9-up variants never end with a visibly empty grid slot.
     private var productAssortment: [ResolvedStoryProduct] {
         var seen = Set<String>()
         var assortment: [ResolvedStoryProduct] = []
@@ -54,7 +54,16 @@ struct StoryFeedCard: View {
                 append(ResolvedStoryProduct(merchant: item.merchant, product: product))
             }
         }
-        return assortment
+        if assortment.count < 10 {
+            for merchant in merchants {
+                for product in merchant.products {
+                    append(ResolvedStoryProduct(merchant: merchant, product: product))
+                    if assortment.count == 10 { break }
+                }
+                if assortment.count == 10 { break }
+            }
+        }
+        return Array(assortment.prefix(10))
     }
 
     private var ambientFilmURLs: [URL] {
@@ -66,6 +75,14 @@ struct StoryFeedCard: View {
 
     private var leadFilmURL: URL? {
         ambientFilmURLs.first
+    }
+
+    private var heroLifestyleImageURL: URL? {
+        story.lifestyleImageURL(
+            from: merchants,
+            format: .portrait,
+            role: "feed-hero"
+        )
     }
 
     var body: some View {
@@ -155,7 +172,27 @@ struct StoryFeedCard: View {
         ZStack {
             Color(hex: story.accentHex)
 
-            if let coverImageName = story.coverImageName {
+            if let heroLifestyleImageURL {
+                Color.clear
+                    .overlay {
+                        CachedAsyncImage(url: heroLifestyleImageURL) { phase in
+                            if case .success(let image) = phase {
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .scaleEffect(mediaIsMoving ? 1.0 : 1.035)
+                                    .animation(
+                                        .easeInOut(duration: 8).repeatForever(autoreverses: true),
+                                        value: mediaIsMoving
+                                    )
+                            } else if case .failure = phase,
+                                      let first = items.first {
+                                ProductImageView(product: first.product, merchant: first.merchant)
+                            }
+                        }
+                    }
+                    .clipped()
+            } else if let coverImageName = story.coverImageName {
                 // Overlay-on-clear keeps the fill image from expanding the
                 // ZStack beyond the card frame and breaking sibling layout.
                 Color.clear
@@ -170,7 +207,7 @@ struct StoryFeedCard: View {
                             )
                     }
                     .clipped()
-            } else if let first = items.first, let leadFilmURL {
+            } else if let first = items.first, leadFilmURL != nil {
                 parallaxFilm {
                     AmbientProductVideo(
                         videoURLs: ambientFilmURLs,
@@ -198,7 +235,7 @@ struct StoryFeedCard: View {
                 }
             }
 
-            if leadFilmURL == nil {
+            if leadFilmURL == nil && heroLifestyleImageURL == nil {
                 LinearGradient(
                     colors: [Color(hex: story.accentHex).opacity(0.08), Color(hex: story.accentHex).opacity(0.68)],
                     startPoint: .topLeading,
@@ -289,10 +326,10 @@ struct StoryFeedCard: View {
             .background(.white.opacity(0.12), in: Circle())
     }
 
-    /// Three native square cards stay legible over the film while the rail can
+    /// Four native square cards stay legible over the media while the rail can
     /// continue horizontally when an edit contains more products.
     private var bottomProductCarousel: some View {
-        let tileWidth = max((width - 56) / 3, 88)
+        let tileWidth = max((width - 64) / 4, 72)
 
         return VStack(spacing: 14) {
             ScrollView(.horizontal, showsIndicators: false) {
@@ -311,22 +348,36 @@ struct StoryFeedCard: View {
         .frame(height: tileWidth + 42)
     }
 
-    /// A dense editorial treatment for assortment-led stories. Keeping the
-    /// title in the same composition makes it read immediately after the grid
-    /// instead of floating independently over the media.
+    /// Dense assortment treatment: the title stays fixed at the top while the
+    /// products and edit footer form one anchored block at the bottom.
     private var compactGridComposition: some View {
-        VStack(alignment: .leading, spacing: 18) {
+        let count = compactGridItemCount
+        let columns = count == 4 ? 2 : 3
+
+        return VStack(alignment: .leading, spacing: 0) {
+            storyHeader
+
+            Spacer(minLength: 18)
+
             LazyVGrid(
-                columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3),
+                columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: columns),
                 spacing: 8
             ) {
-                ForEach(Array(productAssortment.prefix(9))) { item in
+                ForEach(Array(productAssortment.prefix(count))) { item in
                     compactProductTile(item)
                 }
             }
+            .padding(.bottom, 14)
 
-            storyHeader
+            productFooter
         }
+    }
+
+    /// Dense cards alternate between a complete 3×2 and 3×3 rhythm. The
+    /// carousel variant supplies the four-up treatment elsewhere in the feed.
+    private var compactGridItemCount: Int {
+        let stableSeed = story.id.utf8.reduce(0) { ($0 &* 31) &+ Int($1) }
+        return stableSeed.isMultiple(of: 2) ? 6 : 9
     }
 
     private func compactProductTile(_ item: ResolvedStoryProduct) -> some View {
@@ -343,7 +394,7 @@ struct StoryFeedCard: View {
 
     private var productFooter: some View {
         HStack(spacing: 8) {
-            Text("\(productAssortment.count) products in this edit")
+            Text("\(productAssortment.count) items added 8m ago")
                 .font(.system(size: 13, weight: .medium))
                 .foregroundStyle(.white)
                 .lineLimit(1)

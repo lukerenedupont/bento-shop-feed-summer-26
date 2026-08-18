@@ -35,6 +35,19 @@ struct TopicLandingView: View {
         return headerCoverImageName ?? stories.first?.coverImageName
     }
 
+    private var headerLifestyleImageURL: URL? {
+        guard !usesAmbientBackdrop else { return nil }
+        let candidates = stories.compactMap {
+            $0.lifestyleImageURL(
+                from: merchants,
+                format: .portrait,
+                role: "topic-header-\(topic.id)"
+            )
+        }
+        guard !candidates.isEmpty else { return nil }
+        return candidates[abs(topic.id.utf8.reduce(0) { ($0 &* 31) &+ Int($1) }) % candidates.count]
+    }
+
     private var surfaceColor: Color {
         backgroundColor.opacity(usesAmbientBackdrop ? 0.64 : 1)
     }
@@ -150,7 +163,24 @@ struct TopicLandingView: View {
 
     private var topicHeader: some View {
         ZStack(alignment: .bottomLeading) {
-            if let coverImageName = effectiveCoverImageName {
+            if let headerLifestyleImageURL {
+                Color.clear
+                    .overlay {
+                        CachedAsyncImage(url: headerLifestyleImageURL) { phase in
+                            if case .success(let image) = phase {
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            } else if case .failure = phase,
+                                      let coverImageName = effectiveCoverImageName {
+                                Image(coverImageName)
+                                    .resizable()
+                                    .scaledToFill()
+                            }
+                        }
+                    }
+                    .clipped()
+            } else if let coverImageName = effectiveCoverImageName {
                 // Overlay-on-clear keeps the fill image from widening the
                 // header beyond the container and displacing the page layout.
                 Color.clear
@@ -625,6 +655,14 @@ private struct TopicFeatureCard: View {
         story.resolvedProducts(from: merchants).first
     }
 
+    private var lifestyleImageURL: URL? {
+        story.lifestyleImageURL(
+            from: merchants,
+            format: .portrait,
+            role: "topic-feature"
+        )
+    }
+
     var body: some View {
         Button(action: action) {
             ZStack(alignment: .bottomLeading) {
@@ -633,13 +671,24 @@ private struct TopicFeatureCard: View {
                 // product photo are the fallbacks.
                 Color.clear
                     .overlay {
-                        if let hero = heroProduct,
-                           !hero.product.ambientFilmURLs(merchantID: hero.merchant.id).isEmpty {
-                            AmbientProductVideo(product: hero.product, merchant: hero.merchant)
+                        if let lifestyleImageURL {
+                            CachedAsyncImage(url: lifestyleImageURL) { phase in
+                                if case .success(let image) = phase {
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                } else if case .failure = phase,
+                                          let hero = heroProduct {
+                                    ProductImageView(product: hero.product, merchant: hero.merchant)
+                                }
+                            }
                         } else if let coverImageName = story.coverImageName {
                             Image(coverImageName)
                                 .resizable()
                                 .scaledToFill()
+                        } else if let hero = heroProduct,
+                                  !hero.product.ambientFilmURLs(merchantID: hero.merchant.id).isEmpty {
+                            AmbientProductVideo(product: hero.product, merchant: hero.merchant)
                         } else if let hero = heroProduct {
                             ProductImageView(product: hero.product, merchant: hero.merchant, fallbackIndex: 0)
                         } else {
