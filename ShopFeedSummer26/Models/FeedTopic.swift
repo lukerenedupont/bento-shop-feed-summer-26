@@ -126,6 +126,11 @@ enum FeedInformationArchitecture {
             // list. Its visible position keeps the recipe stable while still
             // supporting newly generated stories from the remote feed.
             storyIndex = visibleStoryIndex ?? 0
+        } else if let visibleStoryIndex {
+            // Profile-authored shelves can introduce canonical stories that
+            // are not part of the global category candidate list. Their live
+            // position still participates in the same stable layout rhythm.
+            storyIndex = visibleStoryIndex
         } else if let candidateIndex = category.candidateStoryIDs.firstIndex(of: story.id) {
             storyIndex = candidateIndex
         } else {

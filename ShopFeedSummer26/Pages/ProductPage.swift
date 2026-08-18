@@ -109,7 +109,7 @@ struct ProductPage: View {
                     // Foreground content
                     VStack(spacing: 0) {
                         // A. Branded Top Bar (in the colored area)
-                        brandedTopBar(merchant: merchant)
+                        brandedTopBar(merchant: merchant, product: product)
 
                         // B–I. Rounded white container with image + all content
                         productContainer(merchant: merchant, product: product)
@@ -155,7 +155,7 @@ struct ProductPage: View {
     }
 
     @ViewBuilder
-    private func brandedTopBar(merchant: SampleMerchant) -> some View {
+    private func brandedTopBar(merchant: SampleMerchant, product: SampleMerchant.Product) -> some View {
         // Push content below the status bar
         VStack(spacing: 0) {
             Color.clear.frame(height: PurlTune.value("Pages/ProductPage.swift:frame:height:154:39", default: 63)) // status bar + dynamic island clearance
@@ -164,7 +164,7 @@ struct ProductPage: View {
                 // Merchant info centered — the floating back chip owns the
                 // leading corner, overflow stays trailing.
                 ZStack {
-                    merchantInfoButton(merchant: merchant)
+                    merchantInfoButton(merchant: merchant, product: product)
                         .frame(maxWidth: .infinity)
 
                     HStack {
@@ -200,7 +200,7 @@ struct ProductPage: View {
     }
 
     @ViewBuilder
-    private func merchantInfoButton(merchant: SampleMerchant) -> some View {
+    private func merchantInfoButton(merchant: SampleMerchant, product: SampleMerchant.Product) -> some View {
         Button {
             coordinator.pushRoute(.store(merchantId: merchantId))
         } label: {
@@ -213,19 +213,21 @@ struct ProductPage: View {
                         .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:187:42", default: GravityColors.textFixedLight, options: GravityColors.purlTuneColorOptions))
                         .lineLimit(1)
 
-                    HStack(spacing: GravitySpacing.space2) {
-                        Text(String(format: "%.1f", merchant.rating))
-                            .gravityTextStyle(GravityTypography.caption)
-                            .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:193:46", default: GravityColors.textFixedLight, options: GravityColors.purlTuneColorOptions))
+                    if !isCanonicalCatalogProduct(product) {
+                        HStack(spacing: GravitySpacing.space2) {
+                            Text(String(format: "%.1f", merchant.rating))
+                                .gravityTextStyle(GravityTypography.caption)
+                                .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:193:46", default: GravityColors.textFixedLight, options: GravityColors.purlTuneColorOptions))
 
-                        GravityIcon.starFilled.image
-                            .resizable()
-                            .frame(width: PurlTune.value("Pages/ProductPage.swift:frame:width:197:43", default: 12), height: PurlTune.value("Pages/ProductPage.swift:frame:height:197:126", default: 12))
-                            .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:198:46", default: GravityColors.textFixedLight, options: GravityColors.purlTuneColorOptions))
+                            GravityIcon.starFilled.image
+                                .resizable()
+                                .frame(width: PurlTune.value("Pages/ProductPage.swift:frame:width:197:43", default: 12), height: PurlTune.value("Pages/ProductPage.swift:frame:height:197:126", default: 12))
+                                .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:198:46", default: GravityColors.textFixedLight, options: GravityColors.purlTuneColorOptions))
 
-                        Text("(\(formattedCount(merchant.totalRatings)))")
-                            .gravityTextStyle(GravityTypography.caption)
-                            .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:202:46", default: GravityColors.textFixedLight, options: GravityColors.purlTuneColorOptions))
+                            Text("(\(formattedCount(merchant.totalRatings)))")
+                                .gravityTextStyle(GravityTypography.caption)
+                                .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:202:46", default: GravityColors.textFixedLight, options: GravityColors.purlTuneColorOptions))
+                        }
                     }
                 }
                 .padding(.leading, PurlTune.token("Pages/ProductPage.swift:padding:_:205:36", default: GravitySpacing.space8, options: GravitySpacing.purlTuneOptions))
@@ -255,13 +257,17 @@ struct ProductPage: View {
                 buyButtons
 
                 // F. Delivery & Returns
-                deliveryCard
+                if !isCanonicalCatalogProduct(product) {
+                    deliveryCard
+                }
 
                 // G. Description
                 descriptionCard(merchant: merchant, product: product)
 
                 // H. Reviews
-                reviewsCard(merchant: merchant)
+                if !isCanonicalCatalogProduct(product) {
+                    reviewsCard(merchant: merchant)
+                }
             }
             .padding(.top, PurlTune.token("Pages/ProductPage.swift:padding:_:240:28", default: GravitySpacing.space20, options: GravitySpacing.purlTuneOptions))
             .padding(.horizontal, contentPadding)
@@ -371,21 +377,23 @@ struct ProductPage: View {
                 .padding(.trailing, PurlTune.value("Pages/ProductPage.swift:padding:_:345:37", default: 104)) // 44 + 8 + 44 + 8
 
             // Rating row tucks right under the title
-            HStack(spacing: GravitySpacing.space4) {
-                HStack(spacing: 2) {
-                    ForEach(0..<5) { index in
-                        GravityIcon.starFilled.image
-                            .resizable()
-                            .frame(width: PurlTune.value("Pages/ProductPage.swift:frame:width:353:43", default: 12), height: PurlTune.value("Pages/ProductPage.swift:frame:height:353:126", default: 12))
-                            .foregroundStyle(index < Int(merchant.rating.rounded()) ? GravityColors.iconStars : GravityColors.bgFillSecondary)
+            if !isCanonicalCatalogProduct(product) {
+                HStack(spacing: GravitySpacing.space4) {
+                    HStack(spacing: 2) {
+                        ForEach(0..<5) { index in
+                            GravityIcon.starFilled.image
+                                .resizable()
+                                .frame(width: PurlTune.value("Pages/ProductPage.swift:frame:width:353:43", default: 12), height: PurlTune.value("Pages/ProductPage.swift:frame:height:353:126", default: 12))
+                                .foregroundStyle(index < Int(merchant.rating.rounded()) ? GravityColors.iconStars : GravityColors.bgFillSecondary)
+                        }
                     }
+                    Text(String(format: "%.1f", merchant.rating))
+                        .gravityTextStyle(GravityTypography.caption)
+                        .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:359:38", default: GravityColors.textSecondary, options: GravityColors.purlTuneColorOptions))
+                    Text("(\(formattedCount(merchant.totalRatings)))")
+                        .gravityTextStyle(GravityTypography.caption)
+                        .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:362:38", default: GravityColors.textSecondary, options: GravityColors.purlTuneColorOptions))
                 }
-                Text(String(format: "%.1f", merchant.rating))
-                    .gravityTextStyle(GravityTypography.caption)
-                    .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:359:38", default: GravityColors.textSecondary, options: GravityColors.purlTuneColorOptions))
-                Text("(\(formattedCount(merchant.totalRatings)))")
-                    .gravityTextStyle(GravityTypography.caption)
-                    .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:362:38", default: GravityColors.textSecondary, options: GravityColors.purlTuneColorOptions))
             }
 
             // Badges
@@ -443,8 +451,15 @@ struct ProductPage: View {
         let isUrgent: Bool
     }
 
+    /// Products added from buyer evidence carry verified catalog fields only.
+    /// Prototype-only commerce claims must not bleed into those PDPs.
+    private func isCanonicalCatalogProduct(_ product: SampleMerchant.Product) -> Bool {
+        product.tags.contains("canonical-catalog")
+    }
+
     /// Deterministic but varied badge generation — not every product gets every badge.
     private func generateBadges(for product: SampleMerchant.Product) -> [ProductBadge] {
+        guard !isCanonicalCatalogProduct(product) else { return [] }
         let seed = abs(product.id)
         var badges: [ProductBadge] = []
 
@@ -482,7 +497,7 @@ struct ProductPage: View {
 
     /// Whether this product shows a sale price (~40% of products).
     private func hasDiscount(for product: SampleMerchant.Product) -> Bool {
-        abs(product.id) % 5 < 2
+        !isCanonicalCatalogProduct(product) && abs(product.id) % 5 < 2
     }
 
     private func discountPercent(for product: SampleMerchant.Product) -> Int {
@@ -491,7 +506,7 @@ struct ProductPage: View {
 
     /// Whether this product qualifies for free shipping (price > $100).
     private func hasFreeShipping(for product: SampleMerchant.Product) -> Bool {
-        (Double(product.price) ?? 0) >= 100
+        !isCanonicalCatalogProduct(product) && (Double(product.price) ?? 0) >= 100
     }
 
     /// Format a price with the product's currency symbol.

@@ -30,7 +30,11 @@ struct HomePage: View {
     /// bundled snapshot. Recomputes when the service publishes, so a feed that
     /// lands after first render swaps in without any manual refresh.
     private var merchants: [SampleMerchant] {
-        feedService.merchants.isEmpty ? bundledMerchants : feedService.merchants
+        LocalMerchantService.mergeMerchants([
+            feedService.merchants,
+            bundledMerchants,
+            BuyerPersonalizationCatalog.merchants,
+        ])
     }
     @State private var selectedTopicID = "for-you"
     /// A drilled-in subcategory story rendered inline so the top bar stays.
@@ -66,11 +70,10 @@ struct HomePage: View {
     }
 
     private var focusedStories: [FeedStory] {
-        let stories = FeedInformationArchitecture.stories(
+        buyerPreview.stories(
             for: selectedCategory,
             in: PersonalizedFeedCatalog.current
         )
-        return selectedTopicID == "for-you" ? buyerPreview.orderedStories(stories) : stories
     }
 
     private var activeFeedStory: FeedStory? {
@@ -214,11 +217,19 @@ struct HomePage: View {
         )
     }
 
-    private var utilityProducts: [ResolvedStoryProduct] {
+    private var defaultUtilityProducts: [ResolvedStoryProduct] {
         var seen = Set<String>()
         return focusedStories
             .flatMap { $0.resolvedProducts(from: merchants) }
             .filter { seen.insert($0.id).inserted }
+    }
+
+    private func utilityProducts(for storyID: String?) -> [ResolvedStoryProduct] {
+        guard let storyID, !storyID.isEmpty,
+              let story = PersonalizedFeedCatalog.current.stories.first(where: { $0.id == storyID }) else {
+            return defaultUtilityProducts
+        }
+        return story.resolvedProducts(from: merchants)
     }
 
     private func feedUtilityShelf(containerWidth: CGFloat) -> some View {
@@ -233,23 +244,38 @@ struct HomePage: View {
 
         return ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
-                utilityProductRail(
-                    title: "Buy again",
-                    products: Array(utilityProducts.dropFirst(3).prefix(3)),
-                    width: railWidth
-                )
+                if let storyID = buyerPreview.selected.utility.buyAgainStoryID {
+                    let products = utilityProducts(for: storyID)
+                    utilityProductRail(
+                        title: "Buy again",
+                        products: Array((storyID.isEmpty ? products.dropFirst(3) : products[...]).prefix(3)),
+                        width: railWidth
+                    )
+                }
 
-                if let cartItem = cartSyncItem {
+                if buyerPreview.selected.utility.showsCart, let cartItem = cartSyncItem {
                     cartSyncCard(item: cartItem, width: railWidth)
                 }
 
-                orderTrackingRailCard(width: railWidth)
+                if buyerPreview.selected.utility.showsOrders {
+                    orderTrackingRailCard(width: railWidth)
+                }
 
-                utilityProductRail(
-                    title: "Recently viewed",
-                    products: Array(utilityProducts.prefix(3)),
-                    width: railWidth
-                )
+                if let storyID = buyerPreview.selected.utility.recentlyViewedStoryID {
+                    utilityProductRail(
+                        title: "Recently viewed",
+                        products: Array(utilityProducts(for: storyID).prefix(3)),
+                        width: railWidth
+                    )
+                }
+
+                if let storyID = buyerPreview.selected.utility.ownedAdjacencyStoryID {
+                    utilityProductRail(
+                        title: storyID == "andreas-macbook-kit" ? "For your MacBook" : "For what you own",
+                        products: Array(utilityProducts(for: storyID).prefix(3)),
+                        width: railWidth
+                    )
+                }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
@@ -258,7 +284,7 @@ struct HomePage: View {
     }
 
     private var cartSyncItem: ResolvedStoryProduct? {
-        utilityProducts
+        defaultUtilityProducts
             .filter { numericPrice($0.product.price) > 0 }
             .min { lhs, rhs in
             numericPrice(lhs.product.price) < numericPrice(rhs.product.price)
@@ -327,7 +353,7 @@ struct HomePage: View {
 
     private var deliveryMerchants: [SampleMerchant] {
         var seen = Set<String>()
-        return utilityProducts
+        return defaultUtilityProducts
             .map(\.merchant)
             .filter { seen.insert($0.id).inserted && !$0.products.isEmpty }
     }
@@ -391,8 +417,8 @@ struct HomePage: View {
     /// It deliberately reuses the order, cart, and product primitives from the
     /// compact rail so the two treatments can be compared without data drift.
     private func fullHeightUtilityCard(width: CGFloat, height: CGFloat) -> some View {
-        let buyAgain = Array(utilityProducts.dropFirst(3).prefix(3))
-        let recentlyViewed = Array(utilityProducts.prefix(4))
+        let buyAgain = Array(defaultUtilityProducts.dropFirst(3).prefix(3))
+        let recentlyViewed = Array(defaultUtilityProducts.prefix(4))
         let isActive = visibleStoryID == nil || visibleStoryID == utilityStoryID
 
         return ZStack {
@@ -616,7 +642,7 @@ struct HomePage: View {
             merchants: merchants,
             width: width,
             height: height,
-            titleOverride: buyerPreview.title(for: story),
+            titleOverride: nil,
             isActive: story.id == activeFeedStory?.id,
             showsFooterArrow: false,
             titleAtTopLeading: true,

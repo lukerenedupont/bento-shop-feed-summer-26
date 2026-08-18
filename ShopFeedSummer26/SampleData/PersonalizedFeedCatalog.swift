@@ -11,7 +11,20 @@ struct PersonalizedFeedCatalog: Codable {
     /// The feed in force: whatever `RemoteFeedService` last loaded from the
     /// dossier-lab API, falling back to the bundled curation so the prototype
     /// opens with no server, no network, and no auth.
-    static var current: PersonalizedFeedCatalog { remote ?? bundled }
+    static var current: PersonalizedFeedCatalog {
+        let base = remote ?? bundled
+        let existingIDs = Set(base.stories.map(\.id))
+        let supplementalStories = BuyerPersonalizationCatalog.stories.filter {
+            !existingIDs.contains($0.id)
+        }
+        guard !supplementalStories.isEmpty else { return base }
+        return PersonalizedFeedCatalog(
+            version: base.version,
+            topics: base.topics,
+            stories: base.stories + supplementalStories,
+            signals: base.signals
+        )
+    }
 
     /// Generated catalog, set once the feed API answers. Views read it through
     /// `current`; nothing else should write it.

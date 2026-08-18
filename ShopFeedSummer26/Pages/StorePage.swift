@@ -147,21 +147,24 @@ struct StorePage: View {
                             .foregroundStyle(.white)
                     }
 
-                    // Rating info
-                    HStack(spacing: GravitySpacing.space4) {
-                        GravityIcon.starFilled.image
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: PurlTune.value("Pages/StorePage.swift:frame:width:152:43", default: 20), height: PurlTune.value("Pages/StorePage.swift:frame:height:152:124", default: 20))
-                            .foregroundStyle(.white)
+                    // Rating info only appears when the catalog actually
+                    // provides review evidence for this merchant.
+                    if merchant.totalRatings > 0, merchant.totalReviews > 0 {
+                        HStack(spacing: GravitySpacing.space4) {
+                            GravityIcon.starFilled.image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: PurlTune.value("Pages/StorePage.swift:frame:width:152:43", default: 20), height: PurlTune.value("Pages/StorePage.swift:frame:height:152:124", default: 20))
+                                .foregroundStyle(.white)
 
-                        Text(String(format: "%.1f", merchant.rating))
-                            .gravityTextStyle(GravityTypography.bodyTitleSmall)
-                            .foregroundStyle(.white)
+                            Text(String(format: "%.1f", merchant.rating))
+                                .gravityTextStyle(GravityTypography.bodyTitleSmall)
+                                .foregroundStyle(.white)
 
-                        Text("\(merchant.totalReviews) Reviews")
-                            .gravityTextStyle(GravityTypography.bodySmall)
-                            .foregroundStyle(.white.opacity(PurlTune.value("Pages/StorePage.swift:opacity:_:161:61", default: 0.8)))
+                            Text("\(merchant.totalReviews) Reviews")
+                                .gravityTextStyle(GravityTypography.bodySmall)
+                                .foregroundStyle(.white.opacity(PurlTune.value("Pages/StorePage.swift:opacity:_:161:61", default: 0.8)))
+                        }
                     }
 
                     Spacer()

@@ -68,6 +68,94 @@ enum LocalMerchantService {
         }
     }
 
+    /// Combines catalogs in priority order. Generated dossier media wins when
+    /// present, while the wider bundled catalog fills in real adjacent items
+    /// and the buyer fixtures add canonical products absent from both.
+    static func mergeMerchants(_ sources: [[SampleMerchant]]) -> [SampleMerchant] {
+        var orderedIDs: [String] = []
+        var merchantsByID: [String: SampleMerchant] = [:]
+
+        for source in sources {
+            for merchant in source {
+                if let primary = merchantsByID[merchant.id] {
+                    merchantsByID[merchant.id] = mergeMerchant(primary, with: merchant)
+                } else {
+                    orderedIDs.append(merchant.id)
+                    merchantsByID[merchant.id] = merchant
+                }
+            }
+        }
+
+        return orderedIDs.compactMap { merchantsByID[$0] }
+    }
+
+    private static func mergeMerchant(
+        _ primary: SampleMerchant,
+        with fallback: SampleMerchant
+    ) -> SampleMerchant {
+        var productOrder = primary.products.map(\.id)
+        var productsByID = Dictionary(uniqueKeysWithValues: primary.products.map { ($0.id, $0) })
+        for product in fallback.products {
+            if let existing = productsByID[product.id] {
+                productsByID[product.id] = mergeProduct(existing, with: product)
+            } else {
+                productOrder.append(product.id)
+                productsByID[product.id] = product
+            }
+        }
+
+        let products = productOrder.compactMap { productsByID[$0] }
+        let featured = unique(primary.featuredImageURLs + fallback.featuredImageURLs)
+
+        return SampleMerchant(
+            id: primary.id,
+            name: primary.name,
+            description: primary.description.isEmpty ? fallback.description : primary.description,
+            rating: primary.rating,
+            totalRatings: primary.totalRatings,
+            totalReviews: primary.totalReviews,
+            primaryColor: primary.primaryColor,
+            secondaryColor: primary.secondaryColor,
+            collections: primary.collections.isEmpty ? fallback.collections : primary.collections,
+            products: products,
+            featuredImageURLs: featured,
+            logoImageURL: primary.logoImageURL ?? fallback.logoImageURL,
+            wordmarkImageURL: primary.wordmarkImageURL ?? fallback.wordmarkImageURL,
+            coverImageURL: primary.coverImageURL ?? fallback.coverImageURL,
+            videoURL: primary.videoURL ?? fallback.videoURL,
+            coverDominantColor: primary.coverDominantColor ?? fallback.coverDominantColor,
+            productCategory: primary.productCategory ?? fallback.productCategory,
+            logoFitsInCircle: primary.logoFitsInCircle || fallback.logoFitsInCircle
+        )
+    }
+
+    private static func mergeProduct(
+        _ primary: SampleMerchant.Product,
+        with fallback: SampleMerchant.Product
+    ) -> SampleMerchant.Product {
+        SampleMerchant.Product(
+            id: primary.id,
+            title: primary.title,
+            price: primary.price,
+            handle: primary.handle,
+            productType: primary.productType ?? fallback.productType,
+            vendor: primary.vendor,
+            imageURL: primary.imageURL ?? fallback.imageURL,
+            shopURL: primary.shopURL ?? fallback.shopURL,
+            tags: unique(primary.tags + fallback.tags),
+            allImageURLs: unique(primary.allImageURLs + fallback.allImageURLs),
+            currencyCode: primary.currencyCode,
+            productDescription: primary.productDescription ?? fallback.productDescription,
+            videoUrl: primary.videoUrl ?? fallback.videoUrl,
+            allVideoURLs: unique(primary.allVideoURLs + fallback.allVideoURLs)
+        )
+    }
+
+    private static func unique(_ values: [String]) -> [String] {
+        var seen = Set<String>()
+        return values.filter { seen.insert($0).inserted }
+    }
+
     private static func stableId(_ raw: String?, fallback: Int) -> Int {
         guard let raw, !raw.isEmpty else { return fallback }
         if let numeric = Int(raw) { return numeric }
