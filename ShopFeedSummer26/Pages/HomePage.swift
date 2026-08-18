@@ -842,9 +842,16 @@ struct HomePage: View {
                 }
             }
             .padding(16)
-            .presentationDetents([.height(400)])
+            .background(
+                .regularMaterial,
+                in: RoundedRectangle(cornerRadius: 40, style: .continuous)
+            )
+            .shadow(color: .black.opacity(0.14), radius: 24, y: 8)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 8)
+            .presentationDetents([.height(416)])
+            .presentationBackground(.clear)
             .presentationDragIndicator(.hidden)
-            .presentationCornerRadius(30)
             .environment(\.colorScheme, .light)
         }
         .zIndex(1)
