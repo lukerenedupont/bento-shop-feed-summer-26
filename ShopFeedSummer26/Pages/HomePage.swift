@@ -163,7 +163,7 @@ struct HomePage: View {
             ZStack {
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(spacing: 16) {
-                        if selectedTopicID == "for-you" {
+                        if selectedTopicID == "for-you", buyerPreview.selected.showsUtilityShelf {
                             feedUtilityShelf(containerWidth: geo.size.width)
                             if forYouUtilityPresentation == .carouselAndFullHeight {
                                 fullHeightUtilityCard(width: cardWidth, height: cardHeight)
@@ -767,8 +767,6 @@ struct HomePage: View {
 
     // MARK: - Top Bar (Quick Links)
 
-    @State private var avatarPressed = false
-
     private var topBar: some View {
         ZStack(alignment: .leading) {
             topicRail
@@ -805,55 +803,56 @@ struct HomePage: View {
     }
 
     private var avatar: some View {
-        ZStack(alignment: .bottomTrailing) {
+        Button {
+            HapticFeedback.light.fire()
+            showsBuyerSwitcher = true
+        } label: {
             BuyerPreviewAvatar(
                 profile: buyerPreview.selected,
                 size: FeedNavigationStyle.avatarSize
             )
-                .matchedTransitionSource(id: "account-avatar", in: heroNamespace)
-                .scaleEffect(avatarPressed ? 0.85 : 1.0)
-                .animation(.spring(response: PurlTune.value("Pages/HomePage.swift:spring:response:135:46", default: 0.2), dampingFraction: PurlTune.value("Pages/HomePage.swift:spring:dampingFraction:135:140", default: 0.7)), value: avatarPressed)
-                .gesture(
-                    DragGesture(minimumDistance: 0)
-                        .onChanged { _ in avatarPressed = true }
-                        .onEnded { _ in
-                            avatarPressed = false
-                            HapticFeedback.light.fire()
-                            coordinator.pushRoute(.account)
-                        }
-                )
-
-            Button {
-                HapticFeedback.light.fire()
-                showsBuyerSwitcher = true
-            } label: {
-                Image(systemName: "chevron.down")
-                    .font(.system(size: 8, weight: .bold))
-                    .foregroundStyle(.black)
-                    .frame(width: 18, height: 18)
-                    .background(.white, in: Circle())
-                    .shadow(color: .black.opacity(0.14), radius: 4, y: 2)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Switch preview buyer")
         }
-        .confirmationDialog(
-            "Preview feed as",
-            isPresented: $showsBuyerSwitcher,
-            titleVisibility: .visible
-        ) {
-            ForEach(BuyerPreviewStore.profiles) { profile in
-                Button(profile.name) { selectBuyer(profile) }
+        .buttonStyle(PressScaleButtonStyle())
+        .accessibilityLabel("Switch preview buyer")
+        .sheet(isPresented: $showsBuyerSwitcher) {
+            VStack(spacing: 4) {
+                ForEach(BuyerPreviewStore.profiles) { profile in
+                    Button {
+                        selectBuyer(profile)
+                    } label: {
+                        HStack(spacing: 14) {
+                            BuyerPreviewAvatar(profile: profile, size: 44)
+
+                            Text(profile.name.split(separator: " ").first.map(String.init) ?? profile.name)
+                                .font(.system(size: 19, weight: .semibold))
+                                .foregroundStyle(.primary)
+
+                            Spacer()
+                        }
+                        .padding(.horizontal, 12)
+                        .frame(height: 58)
+                        .background(
+                            buyerPreview.selected.id == profile.id
+                                ? Color.primary.opacity(0.07)
+                                : Color.clear,
+                            in: RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
             }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Authored prototype fixtures—not live private account data.")
+            .padding(16)
+            .presentationDetents([.height(400)])
+            .presentationDragIndicator(.hidden)
+            .presentationCornerRadius(30)
+            .environment(\.colorScheme, .light)
         }
         .zIndex(1)
     }
 
     private func selectBuyer(_ profile: BuyerPreviewProfile) {
         buyerPreview.select(profile)
+        showsBuyerSwitcher = false
         coordinator.resetScrollState()
         visibleStoryID = nil
         expandingStoryID = nil

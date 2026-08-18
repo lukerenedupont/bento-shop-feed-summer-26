@@ -7,6 +7,8 @@ struct BuyerPreviewProfile: Identifiable, Hashable {
     let name: String
     let symbol: String
     let accentHex: String
+    let avatarAssetName: String?
+    let showsUtilityShelf: Bool
     let storyOrder: [String]
     let titleOverrides: [String: String]
 }
@@ -22,6 +24,8 @@ final class BuyerPreviewStore {
             name: "Luke Dupont",
             symbol: "🛍️",
             accentHex: "#6657E8",
+            avatarAssetName: "luke-avatar",
+            showsUtilityShelf: true,
             storyOrder: [],
             titleOverrides: [:]
         ),
@@ -30,6 +34,8 @@ final class BuyerPreviewStore {
             name: "Tobi",
             symbol: "T",
             accentHex: "#5C54DF",
+            avatarAssetName: "tobi-avatar",
+            showsUtilityShelf: true,
             storyOrder: [
                 "edit-studio-in-a-bag", "edit-coffee-worth-waking-for",
                 "edit-zero-beige-energy", "edit-salomons-to-know",
@@ -51,6 +57,8 @@ final class BuyerPreviewStore {
             name: "Katarina",
             symbol: "K",
             accentHex: "#29262D",
+            avatarAssetName: "katarina-avatar",
+            showsUtilityShelf: true,
             storyOrder: [
                 "edit-zero-beige-energy", "edit-studio-in-a-bag",
                 "edit-wash-day-reset", "edit-design-shelf",
@@ -72,6 +80,8 @@ final class BuyerPreviewStore {
             name: "Kenny",
             symbol: "K",
             accentHex: "#C47732",
+            avatarAssetName: "kenny-avatar",
+            showsUtilityShelf: true,
             storyOrder: [
                 "edit-gloriously-lost", "edit-table-as-a-scene",
                 "edit-stay-a-while", "edit-coffee-worth-waking-for",
@@ -86,6 +96,45 @@ final class BuyerPreviewStore {
                 "edit-stay-a-while": "A room you actually want to stay in",
                 "edit-coffee-worth-waking-for": "The morning ritual, upgraded",
                 "edit-salomons-to-know": "Trail gear that still works in the city"
+            ]
+        ),
+        BuyerPreviewProfile(
+            id: "andreas",
+            name: "Andreas",
+            symbol: "A",
+            accentHex: "#4E6651",
+            avatarAssetName: "andreas-avatar",
+            showsUtilityShelf: false,
+            storyOrder: [
+                "edit-stay-a-while", "edit-salomons-to-know",
+                "edit-design-shelf", "edit-coffee-worth-waking-for",
+                "edit-wash-day-reset", "edit-table-as-a-scene",
+                "edit-studio-in-a-bag", "edit-zero-beige-energy",
+                "edit-mirrors-with-presence", "edit-gloriously-lost",
+                "edit-grow-with-them"
+            ],
+            titleOverrides: [:]
+        ),
+        BuyerPreviewProfile(
+            id: "archie",
+            name: "Archie",
+            symbol: "A",
+            accentHex: "#334D59",
+            avatarAssetName: "archie-avatar",
+            showsUtilityShelf: true,
+            storyOrder: [
+                "edit-design-shelf", "edit-gloriously-lost",
+                "edit-stay-a-while", "edit-salomons-to-know",
+                "edit-table-as-a-scene", "edit-studio-in-a-bag",
+                "edit-mirrors-with-presence", "edit-coffee-worth-waking-for",
+                "edit-zero-beige-energy", "edit-wash-day-reset",
+                "edit-grow-with-them"
+            ],
+            titleOverrides: [
+                "edit-design-shelf": "Design books worth keeping close",
+                "edit-gloriously-lost": "A better kit for getting outside",
+                "edit-stay-a-while": "Modern rooms with less noise",
+                "edit-salomons-to-know": "Shoes built beyond the sidewalk"
             ]
         )
     ]
@@ -126,8 +175,8 @@ struct BuyerPreviewAvatar: View {
     let size: CGFloat
 
     var body: some View {
-        if profile.id == "luke" {
-            Image("luke-avatar")
+        if let avatarAssetName = profile.avatarAssetName {
+            Image(avatarAssetName)
                 .resizable()
                 .scaledToFill()
                 .frame(width: size, height: size)
