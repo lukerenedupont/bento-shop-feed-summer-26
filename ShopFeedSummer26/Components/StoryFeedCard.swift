@@ -15,7 +15,7 @@ struct StoryFeedCard: View {
     var titleAtTopLeading = false
     var productLayout: FeedCardProductLayout? = nil
     var foregroundTopPadding: CGFloat = GravitySpacing.space20
-    var foregroundBottomPadding: CGFloat = GravitySpacing.space20
+    var foregroundBottomPadding: CGFloat = FeedCardStyle.foregroundBottomPadding
     var backgroundBlurRadius: CGFloat = 0
     var backgroundPlaybackEnabled = true
     /// Lets the feed establish a restrained motion rhythm. When a generated
@@ -91,6 +91,18 @@ struct StoryFeedCard: View {
 
     private var leadFilmURL: URL? {
         ambientFilmURLs.first
+    }
+
+    private var authoredCover: FeedCoverPresentation? {
+        FeedCoverCatalog.presentation(for: story)
+    }
+
+    private var authoredCoverURL: URL? {
+        authoredCover?.coverURL(from: merchants)
+    }
+
+    private var fallbackEditorialCoverImageName: String {
+        FeedCoverCatalog.fallbackImageName(for: story)
     }
 
     private var resolvedBottomCornerRadius: CGFloat {
@@ -216,7 +228,28 @@ struct StoryFeedCard: View {
         ZStack {
             Color(hex: story.accentHex)
 
-            if let heroLifestyleImageURL {
+            if let authoredCover, let authoredCoverURL {
+                Color.clear
+                    .overlay {
+                        CachedAsyncImage(url: authoredCoverURL) { phase in
+                            if case .success(let image) = phase {
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .scaleEffect(authoredCover.scale)
+                                    .offset(y: authoredCover.yOffset)
+                                    .frame(
+                                        maxWidth: .infinity,
+                                        maxHeight: .infinity,
+                                        alignment: authoredCover.alignment
+                                    )
+                            } else {
+                                loadingBackdrop
+                            }
+                        }
+                    }
+                    .clipped()
+            } else if let heroLifestyleImageURL {
                 Color.clear
                     .overlay {
                         CachedAsyncImage(url: heroLifestyleImageURL) { phase in
@@ -255,36 +288,18 @@ struct StoryFeedCard: View {
                 parallaxFilm {
                     AmbientProductVideo(
                         videoURLs: ambientFilmURLs,
-                        posterImageURL: first.product.imageURL,
+                        // A PDP thumbnail is not a valid lifestyle poster.
+                        // The tonal card surface remains visible while the
+                        // approved ambient film prepares its first frame.
+                        posterImageURL: nil,
                         playbackEnabled: backgroundPlaybackEnabled && isActive,
                         playbackGroupID: "story-card-\(story.id)"
                     )
                 }
-            } else if let first = items.first,
-                      let imageURL = first.product.imageURL,
-                      let url = URL(string: imageURL) {
-                CachedAsyncImage(url: url) { phase in
-                    if case .success(let image) = phase {
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .blur(radius: 22)
-                            .scaleEffect(mediaIsMoving ? 1.08 : 1.22)
-                            .opacity(0.42)
-                            .animation(
-                                .easeInOut(duration: 8).repeatForever(autoreverses: true),
-                                value: mediaIsMoving
-                            )
-                    }
-                }
-            }
-
-            if leadFilmURL == nil && heroLifestyleImageURL == nil {
-                LinearGradient(
-                    colors: [Color(hex: story.accentHex).opacity(0.08), Color(hex: story.accentHex).opacity(0.68)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
+            } else {
+                Image(fallbackEditorialCoverImageName)
+                    .resizable()
+                    .scaledToFill()
             }
         }
         .clipped()
@@ -295,16 +310,9 @@ struct StoryFeedCard: View {
     /// exposing a flat black surface for dark stories.
     @ViewBuilder
     private var loadingBackdrop: some View {
-        ZStack {
-            Color.white.opacity(0.10)
-            if let first = items.first {
-                ProductImageView(product: first.product, merchant: first.merchant)
-                    .blur(radius: 18)
-                    .scaleEffect(1.18)
-                    .saturation(0.82)
-                    .opacity(0.68)
-            }
-        }
+        Image(fallbackEditorialCoverImageName)
+            .resizable()
+            .scaledToFill()
     }
 
     /// The film travels at a fraction of the card's scroll velocity. A small
@@ -340,7 +348,7 @@ struct StoryFeedCard: View {
                 .init(color: .black.opacity(topScrimOpacity), location: 0),
                 .init(color: .clear, location: 0.30),
                 .init(color: .clear, location: 0.72),
-                .init(color: .black.opacity(0.34), location: 1),
+                .init(color: .black.opacity(authoredCover?.textScrimOpacity ?? 0.34), location: 1),
             ],
             startPoint: .top,
             endPoint: .bottom
@@ -351,9 +359,7 @@ struct StoryFeedCard: View {
 
     private var storyHeader: some View {
         Text(titleOverride ?? story.title)
-            .font(FeedEditorialTypography.homeCardTitleFont)
-            .tracking(FeedEditorialTypography.homeCardTitleTracking)
-            .lineSpacing(FeedEditorialTypography.homeCardTitleLineSpacing)
+            .feedCardTitleStyle()
             .foregroundStyle(.white)
             .multilineTextAlignment(.leading)
             .lineLimit(3)
@@ -393,7 +399,7 @@ struct StoryFeedCard: View {
     private var bottomProductCarousel: some View {
         let tileWidth = max((width - 64) / 2, 144)
 
-        return VStack(spacing: 14) {
+        return VStack(spacing: FeedCardStyle.productFooterSpacing) {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 8) {
                     ForEach(productAssortment) { item in
@@ -409,7 +415,7 @@ struct StoryFeedCard: View {
 
             productFooter
         }
-        .frame(height: tileWidth + 42)
+        .frame(height: tileWidth + FeedCardStyle.productFooterBlockHeight)
     }
 
     /// Dense assortment treatment: the title stays fixed at the top while the
@@ -484,19 +490,25 @@ struct StoryFeedCard: View {
                     let farItem = deckItem(from: safeIndex, offset: productDeckDirection * 2)
 
                     ZStack(alignment: .leading) {
-                        productSummaryCard(farItem, surfaceLift: 0.22)
+                        productSummaryCard(
+                            farItem,
+                            surfaceTone: -0.16 + (0.08 * productPromotionProgress)
+                        )
                             .frame(width: geometry.size.width - 16)
                             .scaleEffect(0.92 + 0.04 * productPromotionProgress, anchor: .leading)
                             .offset(x: 36 - 18 * productPromotionProgress)
                             .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
 
-                        productSummaryCard(nextItem, surfaceLift: 0.14)
+                        productSummaryCard(
+                            nextItem,
+                            surfaceTone: -0.08 + (0.24 * productPromotionProgress)
+                        )
                             .frame(width: geometry.size.width - 16)
                             .scaleEffect(0.96 + 0.04 * productPromotionProgress, anchor: .leading)
                             .offset(x: 18 * (1 - productPromotionProgress))
                             .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
 
-                        productSummaryCard(item)
+                        productSummaryCard(item, surfaceTone: 0.16)
                             .frame(width: geometry.size.width - 16)
                             .offset(x: productDragOffset)
                             .shadow(color: .black.opacity(0.16), radius: 7, y: 3)
@@ -527,7 +539,7 @@ struct StoryFeedCard: View {
 
     private func productSummaryCard(
         _ item: ResolvedStoryProduct,
-        surfaceLift: Double = 0
+        surfaceTone: Double = 0
     ) -> some View {
         HStack(spacing: 12) {
             ProductImageView(product: item.product, merchant: item.merchant)
@@ -558,7 +570,10 @@ struct StoryFeedCard: View {
                 .fill(productStackColor)
                 .overlay {
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .fill(.white.opacity(surfaceLift))
+                        .fill(
+                            (surfaceTone >= 0 ? Color.white : Color.black)
+                                .opacity(abs(surfaceTone))
+                        )
                 }
         }
         .overlay {

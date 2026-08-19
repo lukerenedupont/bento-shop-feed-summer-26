@@ -43,6 +43,24 @@ enum HypothesisShelfCatalog {
         let presentation: MerchantCollectionPresentation
     }
 
+    private struct MerchantBrandPresentation {
+        let merchantID: String
+        let lifestyleCoverURL: String
+    }
+
+    /// Buyer-profile inventory keeps its source identifiers, while the few
+    /// verified matches below can reuse canonical Shop identity and media.
+    private static let merchantBrandPresentations: [String: MerchantBrandPresentation] = [
+        "shelf-shop-forom-330c94c": MerchantBrandPresentation(
+            merchantID: "forom",
+            lifestyleCoverURL: "https://cdn.shopify.com/s/files/1/0356/2795/8403/files/gallerwallmirrorsandporcupine-beaunaySQ_1100x_66a7927f-7385-46bd-8697-ab807198137b.webp?v=1697392113"
+        ),
+    ]
+
+    private static let preferredMerchantIDsByUser: [String: [String]] = [
+        "luke": ["shelf-shop-forom-330c94c"],
+    ]
+
     private static let topicPresentation: [(id: String, label: String)] = [
         ("living", "Living"),
         ("style", "Style"),
@@ -103,9 +121,13 @@ enum HypothesisShelfCatalog {
             itemsByMerchant[item.merchantID, default: []].append(item)
         }
 
+        let preferredMerchantIDs = preferredMerchantIDsByUser[user.id] ?? []
         let candidates = merchantOrder
             .filter { (itemsByMerchant[$0]?.count ?? 0) >= 2 }
             .sorted { lhs, rhs in
+                let lhsPreference = preferredMerchantIDs.firstIndex(of: lhs) ?? Int.max
+                let rhsPreference = preferredMerchantIDs.firstIndex(of: rhs) ?? Int.max
+                if lhsPreference != rhsPreference { return lhsPreference < rhsPreference }
                 let lhsCount = itemsByMerchant[lhs]?.count ?? 0
                 let rhsCount = itemsByMerchant[rhs]?.count ?? 0
                 guard lhsCount == rhsCount else { return lhsCount > rhsCount }
@@ -120,6 +142,7 @@ enum HypothesisShelfCatalog {
             var seen = Set<Int>()
             let items = sourceItems.filter { seen.insert($0.productID).inserted }
             guard items.count >= 2 else { return nil }
+            let brandPresentation = merchantBrandPresentations[merchantID]
 
             let storyID = "merchant-card-\(user.id)-\(index + 1)"
             let story = FeedStory(
@@ -142,10 +165,12 @@ enum HypothesisShelfCatalog {
                 presentation: MerchantCollectionPresentation(
                     storyID: storyID,
                     merchantID: merchantID,
+                    brandMerchantID: brandPresentation?.merchantID,
                     productCount: min(items.count, 4),
                     coverProductID: lead.productID,
                     coverImageIndex: 0,
-                    usesImageCover: false
+                    lifestyleCoverURL: brandPresentation?.lifestyleCoverURL,
+                    usesImageCover: brandPresentation != nil
                 )
             )
         }

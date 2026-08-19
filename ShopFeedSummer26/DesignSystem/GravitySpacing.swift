@@ -42,6 +42,26 @@ enum GravitySpacing {
     static let cardPadding: CGFloat = space16
 }
 
+/// Shared layout contract for every full-height feed surface. Keeping these
+/// values together prevents story, merchant, and post cards from drifting as
+/// the feed is tuned across buyers and device sizes.
+enum FeedCardStyle {
+    static let compactHorizontalInset = GravitySpacing.space16
+    static let compactMaximumWidth: CGFloat = 377
+    static let portraitAspectRatio: CGFloat = 1.71
+    static let cornerRadius: CGFloat = 40
+    static let cardSpacing = GravitySpacing.space4
+    static let nextCardPeek = GravitySpacing.space32
+    static let bottomNavigationClearance = GravitySpacing.space64 + GravitySpacing.space32
+    static let titleHeaderGap = GravitySpacing.space48
+
+    static let foregroundHorizontalPadding = GravitySpacing.space20
+    static let foregroundBottomPadding = GravitySpacing.space32
+    static let productFooterSpacing = GravitySpacing.space24
+    static let productFooterBlockHeight = GravitySpacing.space48
+        + GravitySpacing.space4
+}
+
 #Preview("Spacing scale") {
     let scale: [(String, CGFloat)] = [
         ("space2", GravitySpacing.space2),

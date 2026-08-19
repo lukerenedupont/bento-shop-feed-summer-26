@@ -1,5 +1,86 @@
 import Combine
 import SwiftUI
+import UIKit
+
+private struct FeedViewportLayout {
+    let compactWidth: CGFloat
+    let compactHeight: CGFloat
+    let expandedWidth: CGFloat
+    let expandedHeight: CGFloat
+    let viewportHeight: CGFloat
+    let expansionProgress: CGFloat
+    let expandedForegroundTopPadding: CGFloat
+
+    var cardWidth: CGFloat {
+        compactWidth + ((expandedWidth - compactWidth) * expansionProgress)
+    }
+
+    var cardHeight: CGFloat {
+        compactHeight + ((expandedHeight - compactHeight) * expansionProgress)
+    }
+
+    var foregroundTopPadding: CGFloat {
+        GravitySpacing.space20
+            + ((expandedForegroundTopPadding - GravitySpacing.space20) * expansionProgress)
+    }
+}
+
+private struct FeedViewportMetrics {
+    let containerSize: CGSize
+    let safeAreaTop: CGFloat
+    let isForYou: Bool
+    let expansionProgress: CGFloat
+
+    var compactWidth: CGFloat {
+        guard isForYou else { return containerSize.width }
+        return min(
+            containerSize.width - (FeedCardStyle.compactHorizontalInset * 2),
+            FeedCardStyle.compactMaximumWidth
+        )
+    }
+
+    var compactHeight: CGFloat {
+        compactWidth * FeedCardStyle.portraitAspectRatio
+    }
+
+    var utilityLaunchInset: CGFloat {
+        (FeedNavigationStyle.controlSize * 2) + GravitySpacing.space16
+    }
+
+    var fullBleedHeight: CGFloat {
+        let visibleHeight = containerSize.height - safeAreaTop + utilityLaunchInset
+        return max(
+            compactHeight,
+            visibleHeight
+                - FeedCardStyle.bottomNavigationClearance
+                - FeedCardStyle.nextCardPeek
+                - FeedCardStyle.cardSpacing
+        )
+    }
+
+    var layout: FeedViewportLayout {
+        FeedViewportLayout(
+            compactWidth: compactWidth,
+            compactHeight: compactHeight,
+            expandedWidth: containerSize.width,
+            expandedHeight: fullBleedHeight,
+            viewportHeight: containerSize.height,
+            expansionProgress: expansionProgress,
+            expandedForegroundTopPadding: safeAreaTop
+                + FeedNavigationStyle.controlSize
+                + GravitySpacing.space12
+                + FeedCardStyle.titleHeaderGap
+        )
+    }
+
+    var extendedViewportHeight: CGFloat {
+        containerSize.height + safeAreaTop
+    }
+
+    var bottomContentPadding: CGFloat {
+        max((containerSize.height - compactHeight) / 2, GravitySpacing.space8)
+    }
+}
 
 /// Home feed — scrollable merchant feed cards with focused topic feeds.
 struct HomePage: View {
@@ -12,29 +93,6 @@ struct HomePage: View {
             case let .story(story): story.id
             case let .post(post): "shop-post-\(post.id)"
             }
-        }
-    }
-
-    private struct FeedViewportLayout {
-        let compactWidth: CGFloat
-        let compactHeight: CGFloat
-        let expandedWidth: CGFloat
-        let expandedHeight: CGFloat
-        let viewportHeight: CGFloat
-        let expansionProgress: CGFloat
-        let expandedForegroundTopPadding: CGFloat
-
-        var cardWidth: CGFloat {
-            compactWidth + ((expandedWidth - compactWidth) * expansionProgress)
-        }
-
-        var cardHeight: CGFloat {
-            compactHeight + ((expandedHeight - compactHeight) * expansionProgress)
-        }
-
-        var foregroundTopPadding: CGFloat {
-            GravitySpacing.space20
-                + ((expandedForegroundTopPadding - GravitySpacing.space20) * expansionProgress)
         }
     }
 
@@ -76,16 +134,15 @@ struct HomePage: View {
     /// A drilled-in subcategory story rendered inline so the top bar stays.
     @State private var focusedStoryID: String?
     @State private var visibleStoryID: String?
-    @State private var isFeedScrolling = false
     @State private var expandingStoryID: String?
     @State private var categoryMoveDirection = 1
     @State private var topicRailOffset: CGFloat = 0
     @State private var topicRailContentWidth: CGFloat = 0
-    @State private var feedScrollOffset: CGFloat = 0
     @State private var showsBuyerSwitcher = false
     @GestureState private var topicRailDragOffset: CGFloat = 0
 
-    private let retargetingCardHeight: CGFloat = 177
+    private let retargetingCardHeight: CGFloat = 188
+    private let utilityRailControlSize: CGFloat = 32
     private let utilityStoryID = "for-you-utility-hub"
     /// Keep the full-height exploration available without placing it in the
     /// live feed. Switching this recipe restores the prototype for comparison.
@@ -105,10 +162,20 @@ struct HomePage: View {
     }
 
     private var pageBackgroundColor: Color {
-        guard selectedTopicID != "for-you", let leadStory = focusedStories.first else {
-            return .white
+        .white
+    }
+
+    /// The feed intentionally ignores the top safe area so its card surface
+    /// can draw behind system chrome. In that configuration GeometryProxy can
+    /// report zero; the active window remains the authoritative device inset.
+    private var windowSafeAreaTopInset: CGFloat {
+        guard let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }),
+              let keyWindow = windowScene.windows.first(where: \.isKeyWindow) else {
+            return 0
         }
-        return Color(hex: leadStory.accentHex)
+        return keyWindow.safeAreaInsets.top
     }
 
     private var focusedStories: [FeedStory] {
@@ -154,31 +221,17 @@ struct HomePage: View {
         return focusedStories.first
     }
 
-    /// One continuous drag drives the utility exit and card takeover. The
-    /// smoothstep curve has zero velocity at both ends, so native snapping
-    /// can settle without handing off to a second animation.
+    /// Keep takeover state discrete. Driving width, height, clipping, header
+    /// colors, and media from the raw scroll offset invalidated the entire
+    /// feed on every drag frame. Native scrolling now does the movement; this
+    /// value changes only when SwiftUI selects a new snap target.
     private var firstStoryExpansionProgress: CGFloat {
-        guard buyerPreview.selected.id == "luke", selectedTopicID == "for-you" else {
-            return 0
-        }
-        let startOffset: CGFloat = 20
-        let endOffset: CGFloat = 264
-        let linear = max(
-            0,
-            min(1, (feedScrollOffset - startOffset) / (endOffset - startOffset))
-        )
-        return linear * linear * (3 - (2 * linear))
-    }
-
-    private var utilityShelfOpacity: CGFloat {
-        guard buyerPreview.selected.id == "luke", selectedTopicID == "for-you" else {
-            return 1
-        }
-        return max(0, min(1, 1 - (feedScrollOffset / 200)))
+        guard let visibleStoryID else { return 0 }
+        return visibleStoryID == utilityStoryID ? 0 : 1
     }
 
     private var usesLightUtilityShelf: Bool {
-        buyerPreview.selected.id == "luke" && selectedTopicID == "for-you"
+        selectedTopicID == "for-you"
     }
 
     private var utilityPrimaryColor: Color {
@@ -250,7 +303,7 @@ struct HomePage: View {
         // until the first card has substantially taken over the viewport.
         .environment(
             \.colorScheme,
-            usesLightUtilityShelf && firstStoryExpansionProgress < 0.55
+            usesLightUtilityShelf && firstStoryExpansionProgress < 0.999
                 ? .light
                 : .dark
         )
@@ -280,10 +333,22 @@ struct HomePage: View {
             merchantService.merchants = merchants
             merchantService.usingFallbackData = !feedService.isLive
         }
-        .onChange(of: selectedTopicID) { _, _ in
-            visibleStoryID = nil
+        .onChange(of: selectedTopicID) { _, newTopicID in
+            if newTopicID != "for-you",
+               let topic = navigationTopics.first(where: { $0.id == newTopicID }) {
+                visibleStoryID = buyerPreview.stories(
+                    for: topic,
+                    in: PersonalizedFeedCatalog.current
+                ).first?.id
+            } else {
+                // `nil` leaves SwiftUI free to preserve the outgoing tab's
+                // scroll position. Target the resting utility row explicitly
+                // so returning to For You always restores the top state.
+                visibleStoryID = buyerPreview.selected.showsUtilityShelf
+                    ? utilityStoryID
+                    : focusedStories.first?.id
+            }
             expandingStoryID = nil
-            feedScrollOffset = 0
             withAnimation(.easeOut(duration: 0.22)) {
                 coordinator.navBarBlurTint = pageBackgroundColor
             }
@@ -291,9 +356,6 @@ struct HomePage: View {
         }
         .onChange(of: focusedStoryID) { _, _ in
             syncTopicBackAction()
-        }
-        .onChange(of: buyerPreview.selected.id) { _, _ in
-            feedScrollOffset = 0
         }
         .onAppear {
             expandingStoryID = nil
@@ -312,45 +374,38 @@ struct HomePage: View {
 
     private var storyFeed: some View {
         GeometryReader { geo in
-            let cardWidth = min(geo.size.width - 32, 377)
-            let cardHeight = cardWidth * 1.71
+            let isForYou = selectedTopicID == "for-you"
             let firstStoryID = focusedStories.first?.id
-            let isLukeForYou = buyerPreview.selected.id == "luke" && selectedTopicID == "for-you"
-            let navClearance: CGFloat = 96
-            let nextCardPeek: CGFloat = 32
-            let feedSpacing: CGFloat = 16
-            let systemTopInset: CGFloat = 59
-            let expansionProgress = isLukeForYou ? firstStoryExpansionProgress : 0
-            // `geo` includes the extra top-safe-area extension used below to
-            // draw behind system chrome. Exclude it from the visible card
-            // budget so the next entry can consistently peek above bottom nav.
-            let visibleViewportHeight = geo.size.height - systemTopInset
-            let fullBleedHeight = max(
-                cardHeight,
-                visibleViewportHeight - navClearance - nextCardPeek - feedSpacing
+            let metrics = FeedViewportMetrics(
+                containerSize: geo.size,
+                safeAreaTop: max(geo.safeAreaInsets.top, windowSafeAreaTopInset),
+                isForYou: isForYou,
+                expansionProgress: firstStoryExpansionProgress
             )
-            let expandedForegroundTopPadding = systemTopInset
-                + FeedNavigationStyle.controlSize
-                + GravitySpacing.space12
-            let layout = FeedViewportLayout(
-                compactWidth: cardWidth,
-                compactHeight: cardHeight,
-                expandedWidth: geo.size.width,
-                expandedHeight: fullBleedHeight,
-                viewportHeight: geo.size.height,
-                expansionProgress: expansionProgress,
-                expandedForegroundTopPadding: expandedForegroundTopPadding
-            )
+            let layout = metrics.layout
 
             ZStack {
                 ScrollView(.vertical, showsIndicators: false) {
-                    LazyVStack(spacing: feedSpacing) {
+                    LazyVStack(spacing: FeedCardStyle.cardSpacing) {
                         if selectedTopicID == "for-you", buyerPreview.selected.showsUtilityShelf {
-                            feedUtilityShelf(containerWidth: geo.size.width)
-                                .opacity(utilityShelfOpacity)
-                                .allowsHitTesting(utilityShelfOpacity > 0.05)
+                            VStack(spacing: 0) {
+                                Color.clear
+                                    .frame(height: metrics.utilityLaunchInset)
+                                    .accessibilityHidden(true)
+
+                                feedUtilityShelf(containerWidth: geo.size.width)
+                            }
+                            // The launch clearance belongs to the utility
+                            // target alone. Feed cards remain true top-aligned
+                            // snap targets instead of inheriting this inset.
+                            .opacity(metrics.expansionProgress < 0.5 ? 1 : 0)
+                            .allowsHitTesting(metrics.expansionProgress < 0.5)
+                            .id(utilityStoryID)
                             if forYouUtilityPresentation == .carouselAndFullHeight {
-                                fullHeightUtilityCard(width: cardWidth, height: cardHeight)
+                                fullHeightUtilityCard(
+                                    width: metrics.compactWidth,
+                                    height: metrics.compactHeight
+                                )
                                     .id(utilityStoryID)
                             }
                         }
@@ -359,13 +414,16 @@ struct HomePage: View {
                             feedEntryCard(
                                 entry,
                                 layout: layout,
-                                firstEntryID: firstStoryID,
-                                fullBleedEnabled: isLukeForYou
+                                firstEntryID: firstStoryID
                             )
                             .frame(
                                 width: layout.expandedWidth,
-                                height: layout.expandedHeight,
+                                height: metrics.fullBleedHeight,
                                 alignment: .top
+                            )
+                            .animation(
+                                reduceMotion ? nil : .easeOut(duration: 0.18),
+                                value: layout.expansionProgress
                             )
                             .id(entry.id)
                         }
@@ -374,40 +432,36 @@ struct HomePage: View {
                     // The header floats above the feed instead of reserving a
                     // safe-area bar. Initial utility content still clears it,
                     // while a snapped viewport card can extend behind it.
-                    .padding(
-                        .top,
-                        FeedNavigationStyle.controlSize + GravitySpacing.space16
-                    )
-                    .padding(.bottom, max((geo.size.height - cardHeight) / 2, 8))
+                    .padding(.bottom, metrics.bottomContentPadding)
                 }
                 // The NavigationStack proposes a viewport below the status
                 // bar even though this feed draws under system chrome. Shift
-                // the viewport to the physical top, then add a scrollable
-                // launch margin so the utility shelf still rests below nav.
+                // the viewport to the physical top. Keep only the system inset
+                // as a content margin so snap targets align with the physical
+                // top instead of leaving the outgoing card behind the header.
+                // The extra launch padding above keeps the utility shelf in
+                // its original resting position below navigation.
                 .contentMargins(
                     .top,
-                    systemTopInset + FeedNavigationStyle.controlSize,
+                    metrics.safeAreaTop,
                     for: .scrollContent
                 )
-                .frame(height: geo.size.height + systemTopInset)
-                .offset(y: -systemTopInset)
+                .frame(height: metrics.extendedViewportHeight)
+                .offset(y: -metrics.safeAreaTop)
                 .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
                 .scrollPosition(id: $visibleStoryID, anchor: .top)
-                .onScrollPhaseChange { _, phase in
-                    isFeedScrolling = phase != .idle
-                }
                 .onScrollGeometryChange(for: CGFloat.self) {
                     max(0, $0.contentOffset.y + $0.contentInsets.top)
                 } action: { _, offset in
-                    feedScrollOffset = offset
                     coordinator.updateScrollOffset(offset)
                 }
             }
             .onChange(of: feedEntries.map(\.id)) { _, entryIDs in
-                // A nil position means the shopper is still in the utility
-                // shelf above the flick-and-stick feed. Never jump them past it.
+                // Keep both the utility/resting target and live feed entries
+                // stable as remote content arrives or the assortment changes.
                 guard let visibleStoryID else { return }
-                guard entryIDs.contains(visibleStoryID) else {
+                guard visibleStoryID == utilityStoryID
+                    || entryIDs.contains(visibleStoryID) else {
                     self.visibleStoryID = nil
                     return
                 }
@@ -443,7 +497,6 @@ struct HomePage: View {
     private func feedUtilityShelf(containerWidth: CGFloat) -> some View {
         retargetingRailCarousel(containerWidth: containerWidth)
         .padding(.top, 18)
-        .padding(.bottom, 12)
         .frame(width: containerWidth)
     }
 
@@ -476,7 +529,7 @@ struct HomePage: View {
                         $0.product.tags.contains("buyer-saved")
                     }
                     utilityProductRail(
-                        title: "Saved",
+                        title: "Your saves",
                         products: Array(products.prefix(3)),
                         width: railWidth
                     )
@@ -588,13 +641,14 @@ struct HomePage: View {
                 VStack(alignment: .leading, spacing: 14) {
                     HStack {
                         Text("Your orders")
-                            .font(.system(size: 20, weight: .semibold))
+                            .font(.system(size: 26, weight: .bold))
                             .foregroundStyle(utilityPrimaryColor)
+                            .tracking(-0.6)
                         Spacer()
                         Image(systemName: "arrow.right")
-                            .font(.system(size: 14, weight: .medium))
+                            .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(utilityPrimaryColor)
-                            .frame(width: 36, height: 36)
+                            .frame(width: utilityRailControlSize, height: utilityRailControlSize)
                             .background(utilityControlFill, in: Circle())
                     }
 
@@ -655,9 +709,7 @@ struct HomePage: View {
 
             VStack(alignment: .leading, spacing: 14) {
                 Text("Your Shop right now")
-                    .font(FeedEditorialTypography.homeCardTitleFont)
-                    .tracking(FeedEditorialTypography.homeCardTitleTracking)
-                    .lineSpacing(FeedEditorialTypography.homeCardTitleLineSpacing)
+                    .feedCardTitleStyle()
                     .foregroundStyle(.black)
                     .lineLimit(2)
 
@@ -812,16 +864,21 @@ struct HomePage: View {
         products: [ResolvedStoryProduct],
         width: CGFloat
     ) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
+        let tileWidth = (width - 52) / 3
+
+        return VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text(title)
-                    .font(.system(size: 20, weight: .semibold))
+                    .font(.system(size: 26, weight: .bold))
                     .foregroundStyle(utilityPrimaryColor)
+                    .tracking(-0.6)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.76)
                 Spacer()
                 Image(systemName: "arrow.right")
-                    .font(.system(size: 14, weight: .medium))
+                    .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(utilityPrimaryColor)
-                    .frame(width: 36, height: 36)
+                    .frame(width: utilityRailControlSize, height: utilityRailControlSize)
                     .background(utilityControlFill, in: Circle())
             }
 
@@ -831,12 +888,7 @@ struct HomePage: View {
                         HapticFeedback.light.fire()
                         coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
                     } label: {
-                        ProductCard(
-                            image: nil,
-                            imageURL: item.product.imageURL,
-                            priceBadge: formatPrice(item.product.price),
-                            showFavoriteButton: true
-                        )
+                        utilityProductTile(item, size: tileWidth)
                     }
                     .buttonStyle(PressScaleButtonStyle())
                 }
@@ -850,6 +902,38 @@ struct HomePage: View {
         )
     }
 
+    private func utilityProductTile(
+        _ item: ResolvedStoryProduct,
+        size: CGFloat
+    ) -> some View {
+        ProductImageView(product: item.product, merchant: item.merchant)
+            .frame(width: size, height: size)
+            .background(Color.black.opacity(0.025))
+            .overlay { Color.black.opacity(0.025) }
+            .overlay(alignment: .topLeading) {
+                Text(formatPrice(item.product.price))
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 3)
+                    .background(Color.black.opacity(0.48), in: Capsule())
+                    .padding(8)
+            }
+            .overlay(alignment: .bottomTrailing) {
+                Image(systemName: "heart")
+                    .font(.system(size: 21, weight: .medium))
+                    .foregroundStyle(.white)
+                    .shadow(color: .black.opacity(0.18), radius: 2, y: 1)
+                    .padding(9)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .strokeBorder(Color.black.opacity(0.035), lineWidth: 0.5)
+            }
+            .gravityShadow(GravityShadows.small)
+    }
+
     /// Every entry owns an identical snap slot. Its surface grows inside that
     /// stable slot during the initial takeover, so later cards inherit the
     /// same full-bleed alignment without changing scroll geometry mid-gesture.
@@ -857,19 +941,20 @@ struct HomePage: View {
     private func feedEntryCard(
         _ entry: FeedEntry,
         layout: FeedViewportLayout,
-        firstEntryID: String?,
-        fullBleedEnabled: Bool
+        firstEntryID: String?
     ) -> some View {
         let isFirstEntry = entry.id == firstEntryID
         let isSnappedEntry = visibleStoryID == entry.id
-        let hasEnteredFullBleedFeed = fullBleedEnabled
-            && layout.expansionProgress >= 0.999
+        let hasEnteredFullBleedFeed = layout.expansionProgress >= 0.999
         let takeoverProgress: CGFloat = {
-            guard fullBleedEnabled else { return 0 }
             if isFirstEntry { return layout.expansionProgress }
+            // Every card keeps the same full-width slot, but only the card
+            // locked at the top loses its top radii. The incoming card stays
+            // rounded so its peek reads clearly against the white canvas.
             return hasEnteredFullBleedFeed && isSnappedEntry ? 1 : 0
         }()
-        let topCornerRadius = GravityRadius.r28 * (1 - takeoverProgress)
+        let feedCornerRadius = FeedCardStyle.cornerRadius
+        let topCornerRadius = feedCornerRadius * (1 - takeoverProgress)
         let chromeOpacity = Double(1 - takeoverProgress)
 
         switch entry {
@@ -880,12 +965,12 @@ struct HomePage: View {
                 height: layout.cardHeight,
                 viewportHeight: layout.viewportHeight,
                 cornerRadius: topCornerRadius,
-                bottomCornerRadius: fullBleedEnabled ? GravityRadius.r28 : nil,
+                bottomCornerRadius: feedCornerRadius,
                 topScrimOpacity: 0.36 * chromeOpacity,
                 borderOpacity: 0.12 * chromeOpacity,
                 shadowOpacity: chromeOpacity,
                 foregroundTopPadding: layout.foregroundTopPadding,
-                scrollMotionEnabled: !fullBleedEnabled
+                scrollMotionEnabled: false
             )
 
         case let .post(post):
@@ -894,10 +979,11 @@ struct HomePage: View {
                 width: layout.cardWidth,
                 height: layout.cardHeight,
                 cornerRadius: topCornerRadius,
-                bottomCornerRadius: fullBleedEnabled ? GravityRadius.r28 : nil,
+                bottomCornerRadius: feedCornerRadius,
+                foregroundTopPadding: layout.foregroundTopPadding,
                 borderOpacity: 0.16 * chromeOpacity,
                 shadowOpacity: chromeOpacity,
-                scrollMotionEnabled: !fullBleedEnabled
+                scrollMotionEnabled: false
             )
         }
     }
@@ -931,7 +1017,12 @@ struct HomePage: View {
                     merchants: merchants,
                     width: width,
                     height: height,
-                    isActive: story.id == activeFeedStory?.id
+                    isActive: story.id == activeFeedStory?.id,
+                    cornerRadius: cornerRadius,
+                    bottomCornerRadius: bottomCornerRadius,
+                    foregroundTopPadding: foregroundTopPadding,
+                    borderOpacity: borderOpacity,
+                    shadowOpacity: shadowOpacity
                 )
             } else {
                 StoryFeedCard(
@@ -949,6 +1040,9 @@ struct HomePage: View {
                         visibleStoryIndex: storyIndex
                     ),
                     foregroundTopPadding: foregroundTopPadding,
+                    // Resizing an active AV layer on every drag frame is the
+                    // largest source of hitching. Hold its poster while the
+                    // scroll is moving, then resume playback once locked.
                     backgroundPlaybackEnabled: expandingStoryID != story.id,
                     prefersVideoBackground: storyIndex?.isMultiple(of: 5) == true,
                     cornerRadius: cornerRadius,
@@ -957,7 +1051,10 @@ struct HomePage: View {
                     borderOpacity: borderOpacity,
                     shadowOpacity: shadowOpacity,
                     freezesParallax: expandingStoryID == story.id,
-                    scrollViewportHeight: viewportHeight,
+                    // The takeover already supplies the spatial motion for
+                    // The full-bleed takeover already supplies the spatial
+                    // motion. Avoid stacking film parallax on top of it.
+                    scrollViewportHeight: scrollMotionEnabled ? viewportHeight : nil,
                     onTap: story.topicKeys.contains("merchant-card")
                         ? nil
                         : { openTopic(for: story) }
@@ -976,8 +1073,13 @@ struct HomePage: View {
                         : 1
                 )
         }
-        .scaleEffect(motionIsReduced || story.id == activeFeedStory?.id ? 1 : 0.992)
-        .animation(motionIsReduced ? nil : SpringPreset.responsive, value: activeFeedStory?.id)
+        .scaleEffect(
+            !appliesScrollMotion || story.id == activeFeedStory?.id ? 1 : 0.992
+        )
+        .animation(
+            appliesScrollMotion ? SpringPreset.responsive : nil,
+            value: activeFeedStory?.id
+        )
         .matchedTransitionSource(id: story.id, in: namespace) { source in
             source
                 .shadow(
@@ -994,6 +1096,7 @@ struct HomePage: View {
         height: CGFloat,
         cornerRadius: CGFloat = GravityRadius.r28,
         bottomCornerRadius: CGFloat? = nil,
+        foregroundTopPadding: CGFloat = GravitySpacing.space20,
         borderOpacity: Double = 0.16,
         shadowOpacity: Double = 1,
         scrollMotionEnabled: Bool = true
@@ -1008,6 +1111,7 @@ struct HomePage: View {
             isActive: visibleStoryID == id,
             cornerRadius: cornerRadius,
             bottomCornerRadius: bottomCornerRadius,
+            foregroundTopPadding: foregroundTopPadding,
             borderOpacity: borderOpacity,
             shadowOpacity: shadowOpacity
         )
@@ -1023,95 +1127,17 @@ struct HomePage: View {
                         : 1
                 )
         }
-        .scaleEffect(motionIsReduced || visibleStoryID == id ? 1 : 0.992)
-        .animation(motionIsReduced ? nil : SpringPreset.responsive, value: visibleStoryID)
+        .scaleEffect(!appliesScrollMotion || visibleStoryID == id ? 1 : 0.992)
+        .animation(
+            appliesScrollMotion ? SpringPreset.responsive : nil,
+            value: visibleStoryID
+        )
     }
 
+    @ViewBuilder
     private var feedAmbientBackdrop: some View {
-        ZStack {
-            if let story = activeFeedStory ?? focusedStories.first {
-                let accent = Color(hex: story.accentHex)
-                let lead = story.resolvedProducts(from: merchants).first
-                (lead?.merchant.secondaryColor ?? accent)
-
-                if let lead {
-                    let collectionBackdropURL = MerchantCollectionCatalog
-                        .presentation(for: story.id)?
-                        .coverURL(from: merchants)
-                    let backdropURL = collectionBackdropURL ?? story.lifestyleImageURL(
-                        from: merchants,
-                        format: .landscape,
-                        role: "feed-backdrop"
-                    )
-
-                    if let backdropURL {
-                        CachedAsyncImage(url: backdropURL) { phase in
-                            if case .success(let image) = phase {
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                            } else if case .failure = phase {
-                                ProductImageView(product: lead.product, merchant: lead.merchant)
-                            } else {
-                                accent
-                            }
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .id(story.id)
-                        .scaleEffect(1.32)
-                        .blur(radius: 46, opaque: true)
-                        .saturation(1.28)
-                        .contrast(1.08)
-                        .opacity(isFeedScrolling ? 0.94 : 0.88)
-                        .transition(.opacity)
-                    } else {
-                        AmbientProductVideo(
-                            videoURLs: backdropFilmURLs(for: story),
-                            posterImageURL: lead.product.imageURL,
-                            playbackEnabled: isFeedScrolling
-                        )
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .id(story.id)
-                        .scaleEffect(1.22)
-                        .blur(radius: 38, opaque: true)
-                        .opacity(isFeedScrolling ? 0.74 : 0.62)
-                        .transition(.opacity)
-                    }
-                }
-
-                LinearGradient(
-                    colors: [.black.opacity(0.10), .clear, .black.opacity(0.12)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            } else {
-                pageBackgroundColor
-            }
-
-            if buyerPreview.selected.id == "luke",
-               selectedTopicID == "for-you",
-               let story = focusedStories.first {
-                ZStack {
-                    Color.white
-                    Color(hex: story.accentHex)
-                        .opacity(firstStoryExpansionProgress)
-                }
-            }
-        }
-        .allowsHitTesting(false)
-        .animation(.easeOut(duration: isFeedScrolling ? 0.18 : 0.24), value: isFeedScrolling)
-        .animation(.easeInOut(duration: 0.24), value: activeFeedStory?.id)
-    }
-
-    /// Rotates the story playlist by one item so the blurred backdrop never
-    /// mirrors the clip currently beginning inside the foreground card.
-    private func backdropFilmURLs(for story: FeedStory) -> [URL] {
-        guard !story.usesCatalogOnlyMedia else { return [] }
-        let urls = story.resolvedProducts(from: merchants).flatMap {
-            $0.product.ambientFilmURLs(merchantID: $0.merchant.id)
-        }
-        guard urls.count > 1 else { return urls }
-        return Array(urls.dropFirst()) + [urls[0]]
+        Color.white
+            .allowsHitTesting(false)
     }
 
     /// Resolves a For You story to its canonical topic. An exact lead-story
@@ -1363,10 +1389,6 @@ struct HomePage: View {
     }
 
     private func topicButton(_ topic: BuyerFeedTopic) -> some View {
-        let usesDarkActivePill = buyerPreview.selected.id == "luke"
-            && selectedTopicID == "for-you"
-            && topic.id == "for-you"
-
         return Button {
             guard selectedTopicID != topic.id || focusedStoryID != nil else { return }
             HapticFeedback.light.fire()
@@ -1383,17 +1405,16 @@ struct HomePage: View {
                 .background {
                     if selectedTopicID == topic.id {
                         Capsule()
-                            .fill(usesDarkActivePill ? Color.black : Color.white.opacity(0.92))
+                            .fill(Color.white.opacity(0.92))
                             .overlay {
                                 Capsule()
-                                    .strokeBorder(
-                                        usesDarkActivePill
-                                            ? Color.clear
-                                            : Color.black.opacity(0.06),
-                                        lineWidth: 0.5
-                                    )
+                                    .strokeBorder(Color.black.opacity(0.06), lineWidth: 0.5)
                             }
-                            .shadow(color: .black.opacity(0.10), radius: 12, y: 4)
+                            .shadow(
+                                color: .black.opacity(0.10),
+                                radius: 12,
+                                y: 4
+                            )
                             .matchedGeometryEffect(id: "selected-topic", in: topicSelectionNamespace)
                     }
                 }
@@ -1413,18 +1434,9 @@ struct HomePage: View {
 
     private func topicLabelColor(_ topic: BuyerFeedTopic) -> Color {
         if selectedTopicID == topic.id {
-            return buyerPreview.selected.id == "luke" && topic.id == "for-you"
-                ? GravityColors.textFixedLight
-                : GravityColors.textFixedDark
+            return GravityColors.textFixedDark
         }
-        if buyerPreview.selected.id == "luke", selectedTopicID == "for-you" {
-            return Color(
-                .sRGB,
-                white: Double(firstStoryExpansionProgress),
-                opacity: 1
-            )
-        }
-        return GravityColors.textFixedLight
+        return GravityColors.textTertiary
     }
 
 }

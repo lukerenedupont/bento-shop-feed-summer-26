@@ -8,6 +8,7 @@ struct ShopPostFeedCard: View {
     let isActive: Bool
     var cornerRadius: CGFloat = GravityRadius.r28
     var bottomCornerRadius: CGFloat? = nil
+    var foregroundTopPadding: CGFloat = GravitySpacing.space20
     var borderOpacity: Double = 0.16
     var shadowOpacity: Double = 1
 
@@ -25,18 +26,36 @@ struct ShopPostFeedCard: View {
         )
     }
 
+    private var fallbackCoverImageName: String {
+        FeedCoverCatalog.fallbackImageName(stableID: "shop-post-\(post.id)")
+    }
+
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack {
             media
                 .frame(width: width, height: height)
                 .clipped()
 
             LinearGradient(
-                colors: [.clear, .black.opacity(0.04), .black.opacity(0.72)],
+                stops: [
+                    .init(color: .black.opacity(0.38), location: 0),
+                    .init(color: .clear, location: 0.30),
+                    .init(color: .clear, location: 0.66),
+                    .init(color: .black.opacity(0.72), location: 1),
+                ],
                 startPoint: .top,
                 endPoint: .bottom
             )
             .allowsHitTesting(false)
+
+            Text(displayTitle)
+                .feedCardTitleStyle()
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.leading)
+                .lineLimit(3)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .padding(.horizontal, FeedCardStyle.foregroundHorizontalPadding)
+                .padding(.top, foregroundTopPadding)
 
             HStack(alignment: .bottom, spacing: 12) {
                 merchantLogo
@@ -56,7 +75,9 @@ struct ShopPostFeedCard: View {
 
                 Spacer(minLength: 0)
             }
-            .padding(18)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+            .padding(FeedCardStyle.foregroundHorizontalPadding)
+            .padding(.bottom, FeedCardStyle.foregroundBottomPadding)
         }
         .frame(width: width, height: height)
         .clipShape(cardShape)
@@ -77,7 +98,7 @@ struct ShopPostFeedCard: View {
             UIApplication.shared.open(actionURL)
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Post from \(post.merchant.name). \(primaryCopy ?? "")")
+        .accessibilityLabel("\(displayTitle). Post from \(post.merchant.name). \(primaryCopy ?? "")")
     }
 
     @ViewBuilder
@@ -86,9 +107,9 @@ struct ShopPostFeedCard: View {
         case let .video(url, posterURL, _, _):
             ZStack {
                 if let posterURL {
-                    postImage(url: posterURL, contentMode: .fill)
+                    postImage(url: posterURL, contentMode: .fill, usesCoverFallback: true)
                 } else {
-                    Color.black
+                    fallbackCover
                 }
                 if isActive {
                     LoopingVideoPlayer(url: url)
@@ -96,7 +117,7 @@ struct ShopPostFeedCard: View {
                 }
             }
         case let .image(url, _, _):
-            postImage(url: url, contentMode: .fill)
+            postImage(url: url, contentMode: .fill, usesCoverFallback: true)
         }
     }
 
@@ -117,12 +138,21 @@ struct ShopPostFeedCard: View {
     }
 
     private var primaryCopy: String? {
-        [post.title, post.caption]
+        [post.caption, post.subtitle]
             .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .first { !$0.isEmpty }
+            .first { !$0.isEmpty && $0 != displayTitle }
     }
 
-    private func postImage(url: URL, contentMode: ContentMode) -> some View {
+    private var displayTitle: String {
+        let title = post.title?.trimmingCharacters(in: .whitespacesAndNewlines)
+        return title.flatMap { $0.isEmpty ? nil : $0 } ?? post.merchant.name
+    }
+
+    private func postImage(
+        url: URL,
+        contentMode: ContentMode,
+        usesCoverFallback: Bool = false
+    ) -> some View {
         CachedAsyncImage(url: url) { phase in
             switch phase {
             case let .success(image):
@@ -130,12 +160,18 @@ struct ShopPostFeedCard: View {
                     .resizable()
                     .aspectRatio(contentMode: contentMode)
             case .empty:
-                Color.black.opacity(0.08)
+                if usesCoverFallback { fallbackCover } else { Color.black.opacity(0.08) }
             case .failure:
-                Color.black.opacity(0.14)
+                if usesCoverFallback { fallbackCover } else { Color.black.opacity(0.14) }
             @unknown default:
-                Color.black.opacity(0.08)
+                if usesCoverFallback { fallbackCover } else { Color.black.opacity(0.08) }
             }
         }
+    }
+
+    private var fallbackCover: some View {
+        Image(fallbackCoverImageName)
+            .resizable()
+            .scaledToFill()
     }
 }

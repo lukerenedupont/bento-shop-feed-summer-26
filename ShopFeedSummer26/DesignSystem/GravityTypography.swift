@@ -20,6 +20,18 @@ enum FeedEditorialTypography {
     static let sectionLineSpacing = sectionStyle.lineSpacing
 }
 
+extension View {
+    /// The single display treatment for titles on every full-height feed card.
+    /// Keeping this at the design-system layer prevents buyer, topic, merchant,
+    /// and post variants from drifting away from the original Luke treatment.
+    func feedCardTitleStyle() -> some View {
+        self
+            .font(FeedEditorialTypography.homeCardTitleFont)
+            .tracking(FeedEditorialTypography.homeCardTitleTracking)
+            .lineSpacing(FeedEditorialTypography.homeCardTitleLineSpacing)
+    }
+}
+
 // MARK: - Font Weights
 
 /// GT Standard font family weights.

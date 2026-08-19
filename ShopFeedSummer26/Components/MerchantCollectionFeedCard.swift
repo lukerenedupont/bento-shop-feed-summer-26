@@ -10,11 +10,21 @@ struct MerchantCollectionFeedCard: View {
     let width: CGFloat
     let height: CGFloat
     var isActive = true
+    var cornerRadius: CGFloat = GravityRadius.r28
+    var bottomCornerRadius: CGFloat? = nil
+    var foregroundTopPadding: CGFloat = GravitySpacing.space20
+    var borderOpacity: Double = 0.12
+    var shadowOpacity: Double = 1
 
     @Environment(NavigationCoordinator.self) private var coordinator
 
     private var merchant: SampleMerchant? {
         merchants.first { $0.id == presentation.merchantID }
+    }
+
+    private var brandMerchant: SampleMerchant? {
+        guard let brandMerchantID = presentation.brandMerchantID else { return merchant }
+        return merchants.first { $0.id == brandMerchantID } ?? merchant
     }
 
     private var products: [SampleMerchant.Product] {
@@ -41,10 +51,23 @@ struct MerchantCollectionFeedCard: View {
         products.count > 4 ? 3 : 2
     }
 
+    private var cardShape: UnevenRoundedRectangle {
+        let bottomRadius = bottomCornerRadius ?? cornerRadius
+        return UnevenRoundedRectangle(
+            topLeadingRadius: cornerRadius,
+            bottomLeadingRadius: bottomRadius,
+            bottomTrailingRadius: bottomRadius,
+            topTrailingRadius: cornerRadius,
+            style: .continuous
+        )
+    }
+
     var body: some View {
         Button {
             HapticFeedback.light.fire()
-            coordinator.homePath.append(HomeRoute.store(merchantId: presentation.merchantID))
+            coordinator.homePath.append(
+                HomeRoute.store(merchantId: presentation.brandMerchantID ?? presentation.merchantID)
+            )
         } label: {
             ZStack {
                 collectionCover
@@ -53,27 +76,40 @@ struct MerchantCollectionFeedCard: View {
                 VStack(alignment: .leading, spacing: 0) {
                     merchantHeader
 
+                    Text(story.title)
+                        .feedCardTitleStyle()
+                        .foregroundStyle(.white)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(3)
+                        .padding(.top, GravitySpacing.space16)
+
                     Spacer(minLength: 24)
 
                     productGrid
-                        .padding(.bottom, 14)
+                        .padding(.bottom, FeedCardStyle.productFooterSpacing)
 
                     collectionFooter
                 }
-                .padding(20)
+                .padding(.horizontal, FeedCardStyle.foregroundHorizontalPadding)
+                .padding(.top, foregroundTopPadding)
+                .padding(.bottom, FeedCardStyle.foregroundBottomPadding)
                 .opacity(isActive ? 1 : 0)
                 .animation(.easeInOut(duration: 0.2), value: isActive)
             }
             .frame(width: width, height: height)
-            .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous))
+            .clipShape(cardShape)
             .overlay {
-                RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous)
-                    .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
+                cardShape
+                    .strokeBorder(.white.opacity(borderOpacity), lineWidth: 0.5)
             }
-            .gravityShadow(GravityShadows.medium)
+            .shadow(
+                color: .black.opacity(0.12 * shadowOpacity),
+                radius: 24,
+                y: 4
+            )
         }
         .buttonStyle(PressScaleButtonStyle())
-        .accessibilityLabel("\(merchant?.displayName ?? "Merchant") collection")
+        .accessibilityLabel("\(brandMerchant?.displayName ?? "Merchant") collection")
         .accessibilityHint("Shop all")
     }
 
@@ -88,16 +124,14 @@ struct MerchantCollectionFeedCard: View {
                         .resizable()
                         .scaledToFill()
                         .offset(y: presentation.coverYOffset)
-                } else if let merchant {
-                    merchant.brandColor
                 } else {
-                    Color(hex: story.accentHex)
+                    editorialFallbackCover
                 }
             }
             .frame(width: width, height: height)
             .clipped()
-        } else if let merchant {
-            MerchantCoverImage(merchant: merchant)
+        } else if let brandMerchant {
+            MerchantCoverImage(merchant: brandMerchant)
                 .frame(width: width, height: height)
                 .clipped()
         } else {
@@ -110,17 +144,26 @@ struct MerchantCollectionFeedCard: View {
     /// from becoming oversized background typography behind the card UI.
     private var quietMerchantSurface: some View {
         ZStack {
+            editorialFallbackCover
+
             Color(hex: story.accentHex)
+                .opacity(0.24)
 
             LinearGradient(
                 colors: [
-                    (merchant?.brandColor ?? Color(hex: story.accentHex)).opacity(0.88),
+                    (brandMerchant?.brandColor ?? Color(hex: story.accentHex)).opacity(0.88),
                     .black.opacity(0.42),
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
         }
+    }
+
+    private var editorialFallbackCover: some View {
+        Image(FeedCoverCatalog.fallbackImageName(for: story))
+            .resizable()
+            .scaledToFill()
     }
 
     private var contrastScrim: some View {
@@ -139,29 +182,29 @@ struct MerchantCollectionFeedCard: View {
 
     private var merchantHeader: some View {
         HStack(alignment: .top, spacing: 12) {
-            if let merchant {
+            if let brandMerchant {
                 VStack(alignment: .leading, spacing: 5) {
-                    if MerchantBrandAssets.hasVerifiedBundledWordmark(for: merchant.id) {
+                    if MerchantBrandAssets.hasVerifiedBundledWordmark(for: brandMerchant.id) {
                         MerchantWordmarkImage(
-                            merchant: merchant,
+                            merchant: brandMerchant,
                             maxHeight: 42,
                             maxWidth: 174,
-                            bundledAssetName: MerchantBrandAssets.wordmarkName(for: merchant.id)
+                            bundledAssetName: MerchantBrandAssets.wordmarkName(for: brandMerchant.id)
                         )
                     } else {
-                        Text(merchant.displayName)
+                        Text(brandMerchant.displayName)
                             .font(.system(size: 28, weight: .semibold))
                             .tracking(-0.7)
                             .foregroundStyle(.white)
                             .lineLimit(1)
                     }
 
-                    if merchant.totalRatings > 0 {
+                    if brandMerchant.totalRatings > 0 {
                         HStack(spacing: 3) {
-                            Text(String(format: "%.1f", merchant.rating))
+                            Text(String(format: "%.1f", brandMerchant.rating))
                             Image(systemName: "star.fill")
                                 .font(.system(size: 10, weight: .semibold))
-                            Text("(\(merchant.totalRatings))")
+                            Text("(\(brandMerchant.totalRatings))")
                         }
                         .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(.white)

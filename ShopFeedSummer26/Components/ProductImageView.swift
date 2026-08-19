@@ -26,7 +26,11 @@ extension SampleMerchant.Product {
     /// generated for its shape instead of aggressively cropping one asset.
     func lifestyleImageURLs(for format: LifestyleImageFormat) -> [String] {
         let generated = allImageURLs.filter { $0 != imageURL }
-        guard generated.count >= 4 else { return generated }
+        // Only the authored four-scene bundle has a known media contract:
+        // two landscape lifestyle scenes followed by two portrait scenes.
+        // An arbitrary secondary PDP image may still be a rear packshot,
+        // packaging close-up, size chart, or promotional composite.
+        guard generated.count >= 4 else { return [] }
 
         switch format {
         case .landscape:
