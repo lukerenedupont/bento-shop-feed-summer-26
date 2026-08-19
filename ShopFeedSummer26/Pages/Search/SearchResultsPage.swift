@@ -138,19 +138,7 @@ struct SearchResultsPage: View {
                     .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r20))
 
                 // Favorite button
-                Button {
-                    HapticFeedback.light.fire()
-                } label: {
-                    GravityIcon.favoritesFilled.image
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: PurlTune.value("Pages/Search/SearchResultsPage.swift:frame:width:144:39", default: 16), height: PurlTune.value("Pages/Search/SearchResultsPage.swift:frame:height:144:135", default: 16))
-                        .foregroundStyle(.white)
-                        .frame(width: PurlTune.value("Pages/Search/SearchResultsPage.swift:frame:width:146:39", default: 32), height: PurlTune.value("Pages/Search/SearchResultsPage.swift:frame:height:146:135", default: 32))
-                        .background(.ultraThinMaterial, in: Circle())
-                        .environment(\.colorScheme, .dark)
-                }
-                .buttonStyle(.plain)
+                ProductFavoriteButton()
                 .padding(PurlTune.value("Pages/Search/SearchResultsPage.swift:padding:_:151:26", default: 6))
             }
 

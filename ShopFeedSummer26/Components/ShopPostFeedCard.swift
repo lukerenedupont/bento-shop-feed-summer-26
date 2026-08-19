@@ -51,6 +51,7 @@ struct ShopPostFeedCard: View {
             Text(displayTitle)
                 .feedCardTitleStyle()
                 .foregroundStyle(.white)
+                .gravityShadow(GravityShadows.feedText)
                 .multilineTextAlignment(.leading)
                 .lineLimit(3)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -78,6 +79,7 @@ struct ShopPostFeedCard: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             .padding(FeedCardStyle.foregroundHorizontalPadding)
             .padding(.bottom, FeedCardStyle.foregroundBottomPadding)
+            .gravityShadow(GravityShadows.feedText)
         }
         .frame(width: width, height: height)
         .clipShape(cardShape)

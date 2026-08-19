@@ -27,6 +27,16 @@ final class ShopPostService {
         error = nil
     }
 
+    /// Curated post availability belongs to the data service rather than the
+    /// feed view. Future buyer post sets can be added here without branching
+    /// HomePage presentation code.
+    func posts(for profile: BuyerPreviewProfile) -> [ShopPost] {
+        switch profile.id {
+        case "luke": lukePosts
+        default: []
+        }
+    }
+
     func loadLukePosts(force: Bool = false) async {
         guard !isLoading, force || lukePosts.isEmpty else { return }
         guard AuthService.shared.hasSession else { return }

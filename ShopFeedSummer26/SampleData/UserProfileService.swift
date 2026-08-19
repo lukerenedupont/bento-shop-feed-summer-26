@@ -80,6 +80,10 @@ struct BuyerPreviewProfile: Identifiable, Hashable {
     let utility: BuyerUtilityConfiguration
 
     var showsUtilityShelf: Bool { utility.isVisible }
+    /// Personalized topics can stay inside Home while preserving their
+    /// sibling rail and buyer context. Legacy fallback profiles have no
+    /// authored topics and continue through the shared route stack.
+    var usesInlineTopicNavigation: Bool { !topics.isEmpty }
 }
 
 @Observable

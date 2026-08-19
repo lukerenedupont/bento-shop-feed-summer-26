@@ -26,6 +26,31 @@ enum GravityShadows {
         y: 4
     )
 
+    /// Compact top-of-feed rail cards from the current utility-card spec.
+    static let utilityRail = GravityShadow(
+        color: Color.black.opacity(0.18),
+        radius: 20,
+        x: 0,
+        y: 3
+    )
+
+    /// Selected top-level feed chip. The broad, nearly centered falloff keeps
+    /// the white pill legible without reading like a raised card.
+    static let selectedTopic = GravityShadow(
+        color: Color.black.opacity(0.22),
+        radius: 18,
+        x: 0,
+        y: 4
+    )
+
+    /// Optical support for white labels over photographic feed media.
+    static let feedText = GravityShadow(
+        color: Color.black.opacity(0.28),
+        radius: 6,
+        x: 0,
+        y: 2
+    )
+
     /// Cards on dark/non-white backgrounds, sheets, modals
     static let large = GravityShadow(
         color: Color.black.opacity(0.24),

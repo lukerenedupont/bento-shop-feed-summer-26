@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A44444444444444444444444 /* BuyerFeedNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44444444444444444444444 /* BuyerFeedNavigationBar.swift */; };
+		A55555555555555555555555 /* HolidayFeedHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55555555555555555555555 /* HolidayFeedHeader.swift */; };
 		A11111111111111111111111 /* ShopPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11111111111111111111111 /* ShopPost.swift */; };
 		A22222222222222222222222 /* ShopPostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22222222222222222222222 /* ShopPostService.swift */; };
 		A33333333333333333333333 /* ShopPostFeedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33333333333333333333333 /* ShopPostFeedCard.swift */; };
@@ -145,6 +147,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B44444444444444444444444 /* BuyerFeedNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerFeedNavigationBar.swift; sourceTree = "<group>"; };
+		B55555555555555555555555 /* HolidayFeedHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayFeedHeader.swift; sourceTree = "<group>"; };
 		B11111111111111111111111 /* ShopPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPost.swift; sourceTree = "<group>"; };
 		B22222222222222222222222 /* ShopPostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPostService.swift; sourceTree = "<group>"; };
 		B33333333333333333333333 /* ShopPostFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPostFeedCard.swift; sourceTree = "<group>"; };
@@ -477,10 +481,12 @@
 			isa = PBXGroup;
 			children = (
 				B6E07104E33E24EFFA26DDEE /* AmbientProductVideo.swift */,
+				B44444444444444444444444 /* BuyerFeedNavigationBar.swift */,
 				7E3F31ABD00A86DFF0320BE3 /* BentoGrid.swift */,
 				2ACD1E2168C3779609CA48BE /* CachedAsyncImage.swift */,
 				5459CA6FC9ADF5F66FEA511C /* CategoryTile.swift */,
 				93D0AC7FA7992C3C84A593D9 /* DeliveryCard.swift */,
+				B55555555555555555555555 /* HolidayFeedHeader.swift */,
 				6C7BB32A48790D2BDC9C87D4 /* FeedProductCard.swift */,
 				7F39B6F46EBC3D657496BF6D /* FloatingBackButton.swift */,
 				16A32D3620048BECC91CDCAC /* FloatingPanelSheet.swift */,
@@ -731,6 +737,8 @@
 				2D4492FC2EC48CF776C60D92 /* GravityTypography.swift in Sources */,
 				AF5C03E50063298EF1FE95DF /* HapticFeedback.swift in Sources */,
 				1A3E9B20593B0BE7E22C48C4 /* HomePage.swift in Sources */,
+				A55555555555555555555555 /* HolidayFeedHeader.swift in Sources */,
+				A44444444444444444444444 /* BuyerFeedNavigationBar.swift in Sources */,
 				E30DA8088645106108A6FEA4 /* HomeRoute.swift in Sources */,
 				12EC66C26DB004D29E1B43E1 /* HypothesisShelfCatalog.swift in Sources */,
 				528183B8E45B11EBBEA93A39 /* ImageCache.swift in Sources */,

@@ -1,109 +1,100 @@
 # Codex handoff
 
-Updated: 2026-08-18
+Updated: 2026-08-19
 
 ## Repository state
 
 - Repository: `/Users/lukedupont/bento-shop-feed-summer-26`
 - Branch: `luke/feed-topic-polish`
-- Last pushed commit: `a8191a6 Polish personalized feed merchant collections`
-- The worktree is intentionally dirty. Preserve all current changes.
-- Current modified files:
-  - `ShopFeedSummer26/Navigation/HomeRoute.swift`
-  - `ShopFeedSummer26/Navigation/NavigationCoordinator.swift`
-  - `ShopFeedSummer26/Navigation/RootView.swift`
-  - `ShopFeedSummer26/Pages/HomePage.swift`
-  - `ShopFeedSummer26/Pages/StoryTopicPage.swift`
-  - `ShopFeedSummer26/Pages/TopicLandingView.swift`
+- Handoff remote: `public` (`lukerenedupont/bento-shop-feed-summer-26`)
+- Use the latest commit on this branch as the handoff baseline.
 
-## Completed but uncommitted work
+## Current prototype
 
-### Topic-view repair
+The feed is personalized for Luke, Mikhail, Tobi, Katarina, Kenny, and Archie.
+Each buyer receives authored For You and topic feeds backed by the local buyer
+profile/catalog data. Feed presentation is shared across buyers rather than
+forked into per-profile views.
 
-- Prevent blank topic heroes while remote media loads.
-- Pass verified merchant collection covers into story drill-ins.
-- Preserve personalized topic context and sibling stories.
-- Keep sibling switching inside Home when appropriate.
-- Rotate sibling chips so the active item follows Back cleanly.
-- Preserve the top-level personalized topic rail.
+### Feed and topic behavior
 
-### Home-card shared-view transition repair
+- For You opens at the utility rail and resets there when revisited.
+- The first feed card smoothly takes over the viewport as the utility rail
+  leaves, and subsequent cards share the same full-bleed snap geometry.
+- Cards retain a 40pt bottom radius and expose the next-card peek above the
+  bottom navigation.
+- Topic feeds enter in the normal full-width white-background state and reuse
+  the same header navigation component.
+- Topic drill-ins preserve buyer context and use shared-view navigation.
+- Lifestyle covers are selected from verified topic/product/merchant media;
+  merchant cards require a verified bundled wordmark and merchant-owned cover.
 
-- Home feed cards use their story ID as the matched transition source.
-- Expanded topics already use the same source ID and perform the expected
-  system zoom.
-- Fallback story routes now carry an optional `sourceId` so they bypass the
-  inline-story interception and push through `NavigationStack`.
-- `StoryTopicPage` consumes that explicit source ID for its zoom transition,
-  while legacy subtopic entry points retain their `subtopic-*` source IDs.
-- Forward zoom and return collapse were verified in Simulator.
+### Shared presentation components
 
-## Verification state
+- `BuyerFeedNavigationBar.swift` owns the buyer avatar and top-level topic
+  chips, including the selected white pill and shared shadow treatment.
+- `FeedCardStyle` owns shared card radius, spacing, peek, and bottom-navigation
+  clearance tokens.
+- `GravityShadows` and `GravityTypography` own utility, selected-topic, feed
+  contrast, and editorial typography treatments.
+- Feed cards, merchant cards, posts, and product cards share the same contrast,
+  corner, favorite-heart, and typography conventions.
+- Utility cards use a shared horizontal snap rail and consistent card/product
+  sizing. Luke currently exposes the Your orders example.
 
-- `git diff --check` passes.
-- Personalized-feed validation passes: 11 topics, 31 stories, 340 catalog
-  products, 10 covers, 0 dossiers, and 2 films.
-- Simulator build succeeds with Xcode 26.5.
-- Simulator ID: `286EAAB0-C6BC-41CB-A40C-B84318D400D8`
+### Holiday banner variant
+
+Tap the buyer avatar and use **Holiday banner** to choose:
+
+- Off
+- Header
+- Feed card
+
+`HomePage.SeasonalPlacement` is persisted through `seasonalPlacement`. The
+legacy `holidayHeaderEnabled` value is migrated on first use.
+
+`SeasonalSavingsSurface` owns the shared campaign image, copy, and CTA so the
+header and card cannot visually drift. `HolidayFeedCard` adds real buyer
+products in a horizontally snapping rail. The rail uses shared feed clearance
+tokens and interpolates its inset during takeover, keeping complete product
+tiles above the bottom navigation in both compact and snapped states.
+
+## Data boundaries
+
+- Buyer feeds and utility items come from the existing personalized catalog.
+- Merchant cards only render when a canonical merchant identity, bundled
+  wordmark, and verified lifestyle cover are available.
+- Shop Posts are exposed through `ShopPostService.posts(for:)`; curated post
+  availability is currently implemented for Luke only.
+- The holiday CTA is intentionally a prototype hook until the campaign has a
+  canonical collection destination. Product tiles route to real PDPs.
+
+## Verification
+
+Simulator:
+
+- Device ID: `286EAAB0-C6BC-41CB-A40C-B84318D400D8`
 - Bundle ID: `com.shopify.purl.prototype.shop.feed.summer.26`
-- Existing unrelated Swift warnings may remain.
-- Do not commit or push unless Luke explicitly asks.
 
-## Active task: Figma typography audit
+Build:
 
-Figma design:
+```sh
+xcodebuild -project ShopFeedSummer26.xcodeproj \
+  -scheme ShopFeedSummer26 \
+  -sdk iphonesimulator \
+  -destination 'platform=iOS Simulator,id=286EAAB0-C6BC-41CB-A40C-B84318D400D8' \
+  -derivedDataPath /tmp/shop-feed-derived build
+```
 
-`https://www.figma.com/design/C4BVYexQO4kVthmalsQIyw/Curation-Page-Improvements?node-id=1554-26674&t=e8oVOtI9cxjnbh1F-4`
+The build, personalized-feed validation phase, and `git diff --check` pass.
+Existing unrelated Swift concurrency warnings may remain.
 
-The Figma MCP server was added globally and authenticated with OAuth:
+## Design intent
 
-- Name: `figma`
-- URL: `https://mcp.figma.com/mcp`
-- Status at handoff: enabled and authenticated
-- A restarted/new Codex session is required to expose its tools.
-- OAuth was refreshed successfully after the initial setup, but the original
-  running session retained a stale MCP client. Restart Codex before inspection.
-
-Next steps:
-
-1. Inspect Figma node `1554:26674` directly through the Figma MCP tools.
-2. Record the exact family, weight, size, line height, and tracking for feed
-   card titles and topic headers.
-3. Compare those specs with the current prototype typography.
-4. Propose the mapping before implementation unless Luke asks to implement it.
-
-## Current typography audit
-
-- `FeedEditorialTypography.titleFont` currently uses system/SF Pro at 32pt
-  bold, tight leading, `-0.8` tracking, and `-5` line spacing.
-- Feed titles in `StoryFeedCard`, expanded-topic titles, and several
-  `TopicLandingView` titles consume that shared token.
-- Compact topic headers still contain a hardcoded system 32pt bold style.
-- GT Standard, Good Sans, and Shopify Sans font assets are present under
-  `ShopFeedSummer26/Fonts/` and are included as project resources.
-- `GravityFont` and the full Gravity type scale already map to GT Standard.
-- `project.yml` currently declares an empty `UIAppFonts` array, so custom-font
-  registration must be verified/fixed before relying on the bundled faces.
-- Likely implementation shape: register the required faces, split the shared
-  editorial token into feed-card, full-topic-header, compact-header, and
-  supporting-copy roles, then migrate hardcoded header styles to those tokens.
-
-## Product and visual intent
-
-- Shop UI should feel direct, restrained, native, and media-led.
-- Avoid tiny all-caps, widely tracked eyebrow styling.
-- Use sentence case and neutral/tight tracking.
-- Large editorial type should be tightly led and visually connected to media.
-- Preserve typography and navigation geometry across cards and topic pages.
-- Top-level tabs/categories use horizontal motion.
-- Card/content drill-ins use shared-view zoom transitions.
-
-## Useful files
-
-- Typography: `ShopFeedSummer26/DesignSystem/GravityTypography.swift`
-- Feed cards: `ShopFeedSummer26/Components/StoryFeedCard.swift`
-- Merchant collection cards:
-  `ShopFeedSummer26/Components/MerchantCollectionFeedCard.swift`
-- Topic surface: `ShopFeedSummer26/Pages/TopicLandingView.swift`
-- Expanded topic: `ShopFeedSummer26/Pages/ExpandedTopicPage.swift`
-- Personalized topic content reference: `TOPIC_HANDOFF.md`
+- Keep Shop UI direct, restrained, native, and media-led.
+- Preserve shared geometry across buyers; do not add per-buyer layout forks.
+- Use lifestyle media for feed covers and merchant-owned assets for merchant
+  cards.
+- Keep editorial titles heavy with controlled multiline leading.
+- Avoid bounce or content reflow in the vertical snap interaction.
+- Top-level tabs move horizontally; content drill-ins use shared-view depth.

@@ -168,6 +168,7 @@ struct ExpandedTopicPage: View {
                     .font(FeedEditorialTypography.titleFont)
                     .tracking(FeedEditorialTypography.titleTracking)
                     .lineSpacing(FeedEditorialTypography.titleLineSpacing)
+                    .tightMultilineLeading(FeedEditorialTypography.titleLineTightening)
                     .foregroundStyle(.white)
                     .lineLimit(3)
                     .fixedSize(horizontal: false, vertical: true)
@@ -199,6 +200,7 @@ struct ExpandedTopicPage: View {
                     .font(FeedEditorialTypography.sectionFont)
                     .tracking(FeedEditorialTypography.sectionTracking)
                     .lineSpacing(FeedEditorialTypography.sectionLineSpacing)
+                    .tightMultilineLeading(FeedEditorialTypography.sectionLineTightening)
                     .foregroundStyle(.white)
 
                 if let subtitle = sourceStory?.subtitle, !subtitle.isEmpty {

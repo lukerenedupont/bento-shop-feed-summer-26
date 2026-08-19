@@ -101,6 +101,14 @@ struct StoryFeedCard: View {
         authoredCover?.coverURL(from: merchants)
     }
 
+    private var authoredCoverAssetName: String? {
+        authoredCover?.source.bundledAssetName
+    }
+
+    private var authoredCoverVideoURL: URL? {
+        authoredCover?.source.videoURL
+    }
+
     private var fallbackEditorialCoverImageName: String {
         FeedCoverCatalog.fallbackImageName(for: story)
     }
@@ -216,7 +224,9 @@ struct StoryFeedCard: View {
                 y: 4
             )
         }
-        .buttonStyle(PressScaleButtonStyle())
+        // A scroll drag begins as a press. Scaling the full card here made
+        // its title spring on release just as the feed snap completed.
+        .buttonStyle(.plain)
         .onAppear { mediaIsMoving = true }
         .accessibilityLabel("\(titleOverride ?? story.title). \(story.subtitle)")
         .accessibilityHint(story.destinationLabel)
@@ -228,7 +238,31 @@ struct StoryFeedCard: View {
         ZStack {
             Color(hex: story.accentHex)
 
-            if let authoredCover, let authoredCoverURL {
+            if let authoredCoverVideoURL {
+                parallaxFilm {
+                    AmbientProductVideo(
+                        videoURLs: [authoredCoverVideoURL],
+                        posterImageURL: authoredCoverURL?.absoluteString,
+                        playbackEnabled: backgroundPlaybackEnabled && isActive,
+                        playbackGroupID: "story-cover-\(story.id)"
+                    )
+                }
+            } else if let authoredCover, let authoredCoverAssetName {
+                Color.clear
+                    .overlay {
+                        Image(authoredCoverAssetName)
+                            .resizable()
+                            .scaledToFill()
+                            .scaleEffect(authoredCover.scale)
+                            .offset(y: authoredCover.yOffset)
+                            .frame(
+                                maxWidth: .infinity,
+                                maxHeight: .infinity,
+                                alignment: authoredCover.alignment
+                            )
+                    }
+                    .clipped()
+            } else if let authoredCover, let authoredCoverURL {
                 Color.clear
                     .overlay {
                         CachedAsyncImage(url: authoredCoverURL) { phase in
@@ -343,12 +377,17 @@ struct StoryFeedCard: View {
     }
 
     private var backgroundScrim: some View {
-        LinearGradient(
+        let bottomOpacity = max(authoredCover?.textScrimOpacity ?? 0.34, 0.46)
+
+        return LinearGradient(
             stops: [
                 .init(color: .black.opacity(topScrimOpacity), location: 0),
-                .init(color: .clear, location: 0.30),
-                .init(color: .clear, location: 0.72),
-                .init(color: .black.opacity(authoredCover?.textScrimOpacity ?? 0.34), location: 1),
+                .init(color: .black.opacity(topScrimOpacity * 0.62), location: 0.14),
+                .init(color: .black.opacity(topScrimOpacity * 0.18), location: 0.30),
+                .init(color: .clear, location: 0.42),
+                .init(color: .clear, location: 0.62),
+                .init(color: .black.opacity(bottomOpacity * 0.22), location: 0.78),
+                .init(color: .black.opacity(bottomOpacity), location: 1),
             ],
             startPoint: .top,
             endPoint: .bottom
@@ -361,6 +400,7 @@ struct StoryFeedCard: View {
         Text(titleOverride ?? story.title)
             .feedCardTitleStyle()
             .foregroundStyle(.white)
+            .gravityShadow(GravityShadows.feedText)
             .multilineTextAlignment(.leading)
             .lineLimit(3)
             .frame(
@@ -478,6 +518,7 @@ struct StoryFeedCard: View {
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(.white)
         }
+        .gravityShadow(GravityShadows.feedText)
     }
 
     private var productCarousel: some View {
@@ -533,6 +574,7 @@ struct StoryFeedCard: View {
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(.white)
             }
+            .gravityShadow(GravityShadows.feedText)
         }
         .frame(height: 126)
     }
@@ -559,10 +601,7 @@ struct StoryFeedCard: View {
 
             Spacer(minLength: 6)
 
-            Image(systemName: "heart")
-                .font(.system(size: 24, weight: .medium))
-                .foregroundStyle(.white)
-                .frame(width: 38, height: 38)
+            ProductFavoriteIcon(color: .white)
         }
         .padding(8)
         .background {

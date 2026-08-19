@@ -122,19 +122,7 @@ struct ProductDetailCard: View {
             }
 
             // Favorite button
-            Button {
-                HapticFeedback.light.fire()
-            } label: {
-                GravityIcon.favoritesFilled.image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: PurlTune.value("Components/Search/Agent/ProductDetailCard.swift:frame:width:128:35", default: 16), height: PurlTune.value("Components/Search/Agent/ProductDetailCard.swift:frame:height:128:142", default: 16))
-                    .foregroundStyle(PurlTune.token("Components/Search/Agent/ProductDetailCard.swift:foregroundStyle:_:129:38", default: GravityColors.textTertiary, options: GravityColors.purlTuneColorOptions))
-                    .frame(width: PurlTune.value("Components/Search/Agent/ProductDetailCard.swift:frame:width:130:35", default: 32), height: PurlTune.value("Components/Search/Agent/ProductDetailCard.swift:frame:height:130:142", default: 32))
-                    .background(GravityColors.bgFill, in: Circle())
-                    .overlay(Circle().stroke(GravityColors.borderImage, lineWidth: 0.5))
-            }
-            .buttonStyle(PressScaleButtonStyle(scale: 0.9))
+            ProductFavoriteButton()
         }
         .padding(.horizontal, PurlTune.token("Components/Search/Agent/ProductDetailCard.swift:padding:_:136:31", default: GravitySpacing.space8, options: GravitySpacing.purlTuneOptions))
         .padding(.bottom, PurlTune.token("Components/Search/Agent/ProductDetailCard.swift:padding:_:137:27", default: GravitySpacing.space8, options: GravitySpacing.purlTuneOptions))

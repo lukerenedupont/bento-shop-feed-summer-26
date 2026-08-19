@@ -9,15 +9,38 @@ enum FeedEditorialTypography {
 
     static let titleFont = titleStyle.swiftUIFont
     static let titleTracking = titleStyle.letterSpacing
-    static let titleLineSpacing = titleStyle.lineSpacing
+    /// GT Standard L carries generous built-in leading in SwiftUI. Pull
+    /// multiline editorial headers back together so they read as one title.
+    static let titleLineSpacing: CGFloat = -14
 
     static let homeCardTitleFont = homeCardTitleStyle.swiftUIFont
     static let homeCardTitleTracking = homeCardTitleStyle.letterSpacing
-    static let homeCardTitleLineSpacing = homeCardTitleStyle.lineSpacing
+    static let homeCardTitleLineSpacing: CGFloat = -14
 
     static let sectionFont = sectionStyle.swiftUIFont
     static let sectionTracking = sectionStyle.letterSpacing
-    static let sectionLineSpacing = sectionStyle.lineSpacing
+    static let sectionLineSpacing: CGFloat = -10
+    static let titleLineTightening: CGFloat = 8
+    static let homeCardTitleLineTightening: CGFloat = 4
+    static let sectionLineTightening: CGFloat = 6
+}
+
+/// SwiftUI clamps large negative `lineSpacing` values. Draw each subsequent
+/// line slightly higher instead so GT Standard keeps the compact leading used
+/// by Shop's editorial headers even when the title wraps dynamically.
+private struct TightLineHeightRenderer: TextRenderer {
+    let tightening: CGFloat
+
+    func draw(layout: Text.Layout, in context: inout GraphicsContext) {
+        for (index, line) in layout.enumerated() {
+            var lineContext = context
+            lineContext.translateBy(
+                x: 0,
+                y: -CGFloat(index) * tightening
+            )
+            lineContext.draw(line)
+        }
+    }
 }
 
 extension View {
@@ -29,6 +52,11 @@ extension View {
             .font(FeedEditorialTypography.homeCardTitleFont)
             .tracking(FeedEditorialTypography.homeCardTitleTracking)
             .lineSpacing(FeedEditorialTypography.homeCardTitleLineSpacing)
+            .tightMultilineLeading(FeedEditorialTypography.homeCardTitleLineTightening)
+    }
+
+    func tightMultilineLeading(_ tightening: CGFloat) -> some View {
+        textRenderer(TightLineHeightRenderer(tightening: tightening))
     }
 }
 
@@ -112,6 +140,10 @@ enum GravityTypography {
     )
     static let expressiveH7Heavy = GravityTextStyle(
         font: .expressiveBold, fontSize: 32, lineHeight: 36, letterSpacing: GravityLetterSpacing.tight
+    )
+    /// Compact utility-rail title from the top-of-feed card specification.
+    static let utilityCardTitle = GravityTextStyle(
+        font: .expressiveBold, fontSize: 24, lineHeight: 26, letterSpacing: GravityLetterSpacing.tight
     )
 
     static let posterLarge = GravityTextStyle(

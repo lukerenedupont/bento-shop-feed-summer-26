@@ -1,5 +1,35 @@
 import SwiftUI
 
+/// The shared favorite affordance for product media. It intentionally mirrors
+/// the outline-only heart used by the feed's product pile and has no visible
+/// control background; the larger frame remains as an invisible tap target.
+struct ProductFavoriteIcon: View {
+    var color: Color = GravityColors.text
+
+    var body: some View {
+        Image(systemName: "heart")
+            .font(.system(size: 24, weight: .medium))
+            .foregroundStyle(color)
+            .frame(width: 38, height: 38)
+    }
+}
+
+struct ProductFavoriteButton: View {
+    var color: Color = GravityColors.text
+    var onTap: (() -> Void)? = nil
+
+    var body: some View {
+        Button {
+            HapticFeedback.light.fire()
+            onTap?()
+        } label: {
+            ProductFavoriteIcon(color: color)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 /// A flexible product card with square image, optional metadata, and optional favorites button.
 ///
 /// Adapts to any width — the image is always square, and metadata stacks below when provided.
@@ -273,32 +303,7 @@ struct ProductCard: View {
     // MARK: - Favorite Button
 
     private var favoriteButton: some View {
-        Button {
-            HapticFeedback.light.fire()
-            onFavoriteTap?()
-        } label: {
-            Circle()
-                .fill(.ultraThinMaterial)
-                .environment(\.colorScheme, .dark)
-                .frame(width: PurlTune.value("Components/ProductCard.swift:frame:width:280:31", default: 32), height: PurlTune.value("Components/ProductCard.swift:frame:height:280:119", default: 32))
-                .overlay(
-                    Group {
-                        if isFavorite {
-                            GravityIcon.favoritesFilled.image
-                                .resizable()
-                                .scaledToFit()
-                                .foregroundStyle(PurlTune.token("Components/ProductCard.swift:foregroundStyle:_:287:50", default: GravityColors.textFixedLight, options: GravityColors.purlTuneColorOptions))
-                        } else {
-                            GravityIcon.favoritesFilled.image
-                                .resizable()
-                                .scaledToFit()
-                                .foregroundStyle(PurlTune.token("Components/ProductCard.swift:foregroundStyle:_:292:50", default: GravityColors.textFixedLight, options: GravityColors.purlTuneColorOptions))
-                        }
-                    }
-                    .frame(width: PurlTune.value("Components/ProductCard.swift:frame:width:295:35", default: 16), height: PurlTune.value("Components/ProductCard.swift:frame:height:295:123", default: 16))
-                )
-        }
-        .buttonStyle(.plain)
+        ProductFavoriteButton(onTap: onFavoriteTap)
     }
 
     // MARK: - Metadata

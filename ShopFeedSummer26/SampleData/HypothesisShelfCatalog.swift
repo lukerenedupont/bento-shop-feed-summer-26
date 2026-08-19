@@ -107,9 +107,9 @@ enum HypothesisShelfCatalog {
         }
     }
 
-    /// The strongest repeated shops in each buyer's source shelves become
-    /// honest single-merchant cards. Products are never borrowed from another
-    /// profile, and a shop must occur at least twice to qualify.
+    /// A repeated shop only becomes a merchant card after its canonical Shop
+    /// identity, official wordmark, and merchant-owned lifestyle cover have
+    /// all been verified. Repetition alone is not a visual recommendation.
     private static let merchantRecommendations: [MerchantRecommendation] = payload.users.flatMap { user in
         var merchantOrder: [String] = []
         var itemsByMerchant: [String: [Item]] = [:]
@@ -123,7 +123,15 @@ enum HypothesisShelfCatalog {
 
         let preferredMerchantIDs = preferredMerchantIDsByUser[user.id] ?? []
         let candidates = merchantOrder
-            .filter { (itemsByMerchant[$0]?.count ?? 0) >= 2 }
+            .filter {
+                guard (itemsByMerchant[$0]?.count ?? 0) >= 2,
+                      let brand = merchantBrandPresentations[$0] else {
+                    return false
+                }
+                return MerchantBrandAssets.hasVerifiedBundledWordmark(
+                    for: brand.merchantID
+                )
+            }
             .sorted { lhs, rhs in
                 let lhsPreference = preferredMerchantIDs.firstIndex(of: lhs) ?? Int.max
                 let rhsPreference = preferredMerchantIDs.firstIndex(of: rhs) ?? Int.max
@@ -142,7 +150,9 @@ enum HypothesisShelfCatalog {
             var seen = Set<Int>()
             let items = sourceItems.filter { seen.insert($0.productID).inserted }
             guard items.count >= 2 else { return nil }
-            let brandPresentation = merchantBrandPresentations[merchantID]
+            guard let brandPresentation = merchantBrandPresentations[merchantID] else {
+                return nil
+            }
 
             let storyID = "merchant-card-\(user.id)-\(index + 1)"
             let story = FeedStory(
@@ -165,12 +175,12 @@ enum HypothesisShelfCatalog {
                 presentation: MerchantCollectionPresentation(
                     storyID: storyID,
                     merchantID: merchantID,
-                    brandMerchantID: brandPresentation?.merchantID,
+                    brandMerchantID: brandPresentation.merchantID,
                     productCount: min(items.count, 4),
                     coverProductID: lead.productID,
                     coverImageIndex: 0,
-                    lifestyleCoverURL: brandPresentation?.lifestyleCoverURL,
-                    usesImageCover: brandPresentation != nil
+                    lifestyleCoverURL: brandPresentation.lifestyleCoverURL,
+                    usesImageCover: true
                 )
             )
         }
@@ -232,7 +242,7 @@ enum HypothesisShelfCatalog {
                 recentlyViewedStoryID: items.contains(where: \.saved) ? "" : nil,
                 ownedAdjacencyStoryID: items.contains(where: \.openLoop) ? "" : nil,
                 showsCart: false,
-                showsOrders: false
+                showsOrders: user.id == "luke"
             )
         )
     }

@@ -17,6 +17,267 @@ enum DeliveryStatus {
     case delivered(date: String)
 }
 
+// MARK: - Top-of-feed utility cards
+
+enum UtilityRailMetrics {
+    static let cardHeight: CGFloat = 156
+    static let compactCardWidth: CGFloat = 228
+    static let cornerRadius: CGFloat = 28
+}
+
+/// Shared title treatment for every utility-belt card.
+struct UtilityRailCardHeader: View {
+    let title: String
+
+    var body: some View {
+        HStack(alignment: .bottom, spacing: GravitySpacing.space6) {
+            Text(title)
+                .gravityTextStyle(GravityTypography.utilityCardTitle)
+                .foregroundStyle(GravityColors.text)
+                .lineLimit(1)
+
+            Spacer(minLength: 0)
+
+            GravityIcon.boldRightChevron.image
+                .resizable()
+                .scaledToFit()
+                // The Gravity asset already contains the optical inset shown
+                // in Figma, so it fills the 24pt control without being scaled twice.
+                .frame(width: GravitySpacing.space24, height: GravitySpacing.space24)
+                .foregroundStyle(GravityColors.text)
+                .background(GravityColors.bgFillSecondary, in: Circle())
+        }
+    }
+}
+
+/// Product-based utility card shared by Buy again, Your saves, and Keep
+/// shopping. Product count may change width, but never typography or height.
+struct UtilityProductRailCard: View {
+    let title: String
+    let products: [ResolvedStoryProduct]
+    let maximumWidth: CGFloat
+    let fill: Color
+    let border: Color
+    var onSelectProduct: (ResolvedStoryProduct) -> Void
+
+    var body: some View {
+        let visibleProducts = Array(products.prefix(3))
+        let productCount = max(visibleProducts.count, 1)
+        let width = cardWidth(productCount: productCount)
+        let availableWidth = width - (GravitySpacing.space12 * 2)
+        let totalSpacing = GravitySpacing.space8 * CGFloat(productCount - 1)
+        let tileWidth = (availableWidth - totalSpacing) / CGFloat(productCount)
+        let tileHeight = (
+            maximumWidth
+                - (GravitySpacing.space12 * 2)
+                - (GravitySpacing.space8 * 2)
+        ) / 3
+
+        VStack(alignment: .leading, spacing: 0) {
+            UtilityRailCardHeader(title: title)
+                .padding(.horizontal, GravitySpacing.space4)
+
+            Spacer(minLength: 0)
+
+            HStack(spacing: GravitySpacing.space8) {
+                ForEach(visibleProducts) { item in
+                    Button {
+                        HapticFeedback.light.fire()
+                        onSelectProduct(item)
+                    } label: {
+                        productTile(item, width: tileWidth, height: tileHeight)
+                    }
+                    .buttonStyle(PressScaleButtonStyle())
+                }
+            }
+        }
+        .padding(GravitySpacing.space12)
+        .frame(width: width, height: UtilityRailMetrics.cardHeight, alignment: .top)
+        .utilityRailSurface(fill: fill, border: border)
+    }
+
+    private func cardWidth(productCount: Int) -> CGFloat {
+        switch productCount {
+        case 1, 2:
+            // This compact width fits every fixed utility title and lets a
+            // single product expand rather than leaving dead space.
+            min(maximumWidth, UtilityRailMetrics.compactCardWidth)
+        default:
+            maximumWidth
+        }
+    }
+
+    private func productTile(
+        _ item: ResolvedStoryProduct,
+        width: CGFloat,
+        height: CGFloat
+    ) -> some View {
+        ProductImageView(product: item.product, merchant: item.merchant)
+            .frame(width: width, height: height)
+            .background(Color.black.opacity(0.025))
+            .overlay { Color.black.opacity(0.025) }
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .strokeBorder(Color.black.opacity(0.035), lineWidth: 0.5)
+            }
+            .gravityShadow(GravityShadows.small)
+    }
+}
+
+/// Compact order status used in the top-of-feed utility rail.
+///
+/// The parent rail owns horizontal paging. This card stays deliberately
+/// static so it does not introduce a competing gesture inside that rail.
+struct OrderTrackingUtilityCard: View {
+    let merchant: SampleMerchant
+    let products: [SampleMerchant.Product]
+    let width: CGFloat
+    var onTap: () -> Void
+
+    private let progressControlSize: CGFloat = 24
+    private let deliveryProgress: CGFloat = 0.78
+
+    var body: some View {
+        Button {
+            HapticFeedback.light.fire()
+            onTap()
+        } label: {
+            VStack(alignment: .leading, spacing: 0) {
+                UtilityRailCardHeader(title: "Your orders")
+                    .padding(.horizontal, GravitySpacing.space4)
+                Spacer(minLength: 0)
+                orderSummary
+                Spacer(minLength: 0)
+                trackingProgress
+            }
+            .padding(.horizontal, GravitySpacing.space12)
+            .padding(.top, GravitySpacing.space12)
+            .padding(.bottom, GravitySpacing.space10)
+            .frame(
+                width: width,
+                height: UtilityRailMetrics.cardHeight,
+                alignment: .top
+            )
+            .utilityRailSurface(
+                fill: GravityColors.bgFill,
+                border: GravityColors.borderSecondary
+            )
+        }
+        .buttonStyle(PressScaleButtonStyle())
+        .accessibilityLabel("Your orders, \(merchant.displayName), arrives today 3 to 4 PM")
+    }
+
+    private var orderSummary: some View {
+        HStack(spacing: GravitySpacing.space4) {
+            VStack(alignment: .leading, spacing: 0) {
+                Text(merchant.displayName)
+                    .gravityTextStyle(GravityTypography.editorialBody)
+                    .foregroundStyle(GravityColors.textSecondary)
+                Text("Arrives today 3–4PM")
+                    .gravityTextStyle(GravityTypography.bodyTitleLarge)
+                    .foregroundStyle(GravityColors.text)
+            }
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+
+            Spacer(minLength: 0)
+
+            HStack(spacing: GravitySpacing.space4) {
+                ForEach(Array(products.prefix(2))) { product in
+                    ProductImageView(product: product, merchant: merchant)
+                        .frame(width: 36, height: 36)
+                        .background(GravityColors.bgFill)
+                        .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r12, style: .continuous))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: GravityRadius.r12, style: .continuous)
+                                .strokeBorder(GravityColors.borderImage, lineWidth: 0.5)
+                        }
+                }
+            }
+        }
+        .frame(height: 36)
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding(.horizontal, GravitySpacing.space4)
+    }
+
+    private var trackingProgress: some View {
+        GeometryReader { proxy in
+            let trackInset = progressControlSize / 2
+            let trackWidth = max(proxy.size.width - trackInset, 0)
+            let deliveryX = trackInset + trackWidth * deliveryProgress
+            let completedWidth = max(deliveryX - trackInset, GravitySpacing.space8)
+
+            Capsule()
+                .fill(GravityColors.bgFillSecondary)
+                .frame(width: trackWidth, height: GravitySpacing.space8)
+                .position(x: trackInset + trackWidth / 2, y: progressControlSize / 2)
+
+            Capsule()
+                .fill(
+                    LinearGradient(
+                        colors: [Color(hex: 0xB350F6), Color(hex: 0x7358EC)],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .frame(width: completedWidth, height: GravitySpacing.space8)
+                .position(x: trackInset + completedWidth / 2, y: progressControlSize / 2)
+
+            carrierBadge
+                .position(x: progressControlSize / 2, y: progressControlSize / 2)
+
+            deliveryBadge
+                .position(x: deliveryX, y: progressControlSize / 2)
+        }
+        .frame(height: progressControlSize)
+    }
+
+    private var carrierBadge: some View {
+        Text("GLS.")
+            .font(.system(size: 6, weight: .bold, design: .rounded))
+            .foregroundStyle(.white)
+            .frame(width: 18, height: 18)
+            .background(Color(hex: 0x0B1AAA), in: Circle())
+            .padding(GravitySpacing.space2)
+            .background(GravityColors.bgFill, in: Circle())
+            .overlay { Circle().strokeBorder(GravityColors.borderImage, lineWidth: 0.5) }
+            .gravityShadow(GravityShadows.small)
+    }
+
+    private var deliveryBadge: some View {
+        GravityIcon.truckFilled.image
+            .resizable()
+            .scaledToFit()
+            .frame(width: 14, height: 14)
+            .foregroundStyle(GravityColors.text)
+            .frame(width: progressControlSize, height: progressControlSize)
+            .background(GravityColors.bgFill, in: Circle())
+            .overlay { Circle().strokeBorder(GravityColors.borderImage, lineWidth: 0.5) }
+            .gravityShadow(GravityShadows.small)
+    }
+}
+
+extension View {
+    func utilityRailSurface(fill: Color, border: Color) -> some View {
+        background(
+            fill,
+            in: RoundedRectangle(
+                cornerRadius: UtilityRailMetrics.cornerRadius,
+                style: .continuous
+            )
+        )
+        .overlay {
+            RoundedRectangle(
+                cornerRadius: UtilityRailMetrics.cornerRadius,
+                style: .continuous
+            )
+                .strokeBorder(border, lineWidth: 0.5)
+        }
+        .gravityShadow(GravityShadows.utilityRail)
+    }
+}
+
 extension DeliveryItem {
     /// Short summary for compact contexts (e.g. account map card).
     var statusSubtitle: String {

@@ -10,19 +10,81 @@ enum FeedBackgroundMediaRole: String, Hashable {
     case editorial
 }
 
+/// Keeps the origin of every approved cover explicit. This lets the feed mix
+/// real shelf products, richer canonical merchant galleries, merchant posts,
+/// and bundled editorial art without turning those sources into rendering
+/// conditionals scattered through the card view.
+enum FeedCoverSource: Hashable {
+    case productGallery(merchantID: String, productID: Int, imageIndex: Int)
+    case remoteImage(url: String)
+    case remoteVideo(url: String, posterURL: String?)
+    case bundledAsset(name: String)
+
+    var bundledAssetName: String? {
+        guard case .bundledAsset(let name) = self else { return nil }
+        return name
+    }
+
+    func remoteURL(from merchants: [SampleMerchant]) -> URL? {
+        switch self {
+        case let .productGallery(merchantID, productID, imageIndex):
+            guard let merchant = merchants.first(where: { $0.id == merchantID }),
+                  let product = merchant.products.first(where: { $0.id == productID }) else {
+                return nil
+            }
+            let images = product.allImageURLs.isEmpty
+                ? [product.imageURL].compactMap { $0 }
+                : product.allImageURLs
+            guard !images.isEmpty else { return nil }
+            return Self.normalizedURL(images[min(imageIndex, images.count - 1)])
+        case .remoteImage(let url):
+            return Self.normalizedURL(url)
+        case .remoteVideo(_, let posterURL):
+            return posterURL.flatMap(Self.normalizedURL)
+        case .bundledAsset:
+            return nil
+        }
+    }
+
+    var videoURL: URL? {
+        guard case .remoteVideo(let url, _) = self else { return nil }
+        return Self.normalizedURL(url)
+    }
+
+    private static func normalizedURL(_ source: String) -> URL? {
+        URL(string: source.hasPrefix("//") ? "https:\(source)" : source)
+    }
+}
+
 /// An explicit cover decision for an editorial feed story. Product inventory
 /// remains sourced from the buyer's shelf; this layer only decides which of
 /// those real images is strong enough to become full-bleed media.
 struct FeedCoverPresentation {
     let storyID: String
-    let merchantID: String
-    let productID: Int
-    let imageIndex: Int
+    let source: FeedCoverSource
     let mediaRole: FeedBackgroundMediaRole
     let alignment: Alignment
     let yOffset: CGFloat
     let scale: CGFloat
     let textScrimOpacity: Double
+
+    init(
+        storyID: String,
+        source: FeedCoverSource,
+        mediaRole: FeedBackgroundMediaRole,
+        alignment: Alignment = .center,
+        yOffset: CGFloat = 0,
+        scale: CGFloat = 1,
+        textScrimOpacity: Double = 0.48
+    ) {
+        self.storyID = storyID
+        self.source = source
+        self.mediaRole = mediaRole
+        self.alignment = alignment
+        self.yOffset = yOffset
+        self.scale = scale
+        self.textScrimOpacity = textScrimOpacity
+    }
 
     init(
         storyID: String,
@@ -36,9 +98,29 @@ struct FeedCoverPresentation {
         textScrimOpacity: Double = 0.48
     ) {
         self.storyID = storyID
-        self.merchantID = merchantID
-        self.productID = productID
-        self.imageIndex = imageIndex
+        source = .productGallery(
+            merchantID: merchantID,
+            productID: productID,
+            imageIndex: imageIndex
+        )
+        self.mediaRole = mediaRole
+        self.alignment = alignment
+        self.yOffset = yOffset
+        self.scale = scale
+        self.textScrimOpacity = textScrimOpacity
+    }
+
+    init(
+        storyID: String,
+        bundledAssetName: String,
+        mediaRole: FeedBackgroundMediaRole = .editorial,
+        alignment: Alignment = .center,
+        yOffset: CGFloat = 0,
+        scale: CGFloat = 1,
+        textScrimOpacity: Double = 0.48
+    ) {
+        self.storyID = storyID
+        source = .bundledAsset(name: bundledAssetName)
         self.mediaRole = mediaRole
         self.alignment = alignment
         self.yOffset = yOffset
@@ -47,17 +129,7 @@ struct FeedCoverPresentation {
     }
 
     func coverURL(from merchants: [SampleMerchant]) -> URL? {
-        guard let merchant = merchants.first(where: { $0.id == merchantID }),
-              let product = merchant.products.first(where: { $0.id == productID }) else {
-            return nil
-        }
-        let images = product.allImageURLs.isEmpty
-            ? [product.imageURL].compactMap { $0 }
-            : product.allImageURLs
-        guard !images.isEmpty else { return nil }
-        let source = images[min(imageIndex, images.count - 1)]
-        let normalized = source.hasPrefix("//") ? "https:\(source)" : source
-        return URL(string: normalized)
+        source.remoteURL(from: merchants)
     }
 }
 
@@ -86,9 +158,9 @@ enum FeedCoverCatalog {
         "cover-material-study",
     ]
 
-    /// Luke's first authored pass. Every image is a real product from the
-    /// corresponding buyer shelf and has been visually checked for overlays,
-    /// promotional copy, and a useful full-height crop.
+    /// Luke's first authored pass. Real shelf or canonical merchant media wins.
+    /// Bundled editorial covers are only used when the exact shelf galleries
+    /// contain packshots, and are assigned by story rather than topic hashing.
     private static let authoredPresentations: [FeedCoverPresentation] = [
         .init(
             storyID: "shelf-luke-1-modern-bathroom-fixtures",
@@ -100,11 +172,53 @@ enum FeedCoverCatalog {
         ),
         .init(
             storyID: "shelf-luke-2-sculptural-living-room-pieces",
-            merchantID: "shelf-shop-the-oblist-02fd47c",
-            productID: 1791399064416116685,
-            mediaRole: .editorial,
+            merchantID: "shelf-shop-a-e-bowery-lighting-29b49c3",
+            productID: 1588130628707273584,
+            mediaRole: .inContext,
             alignment: .center,
             textScrimOpacity: 0.42
+        ),
+        .init(
+            storyID: "shelf-luke-3-playful-coffee-table",
+            bundledAssetName: "cover-coffee-counter",
+            textScrimOpacity: 0.42
+        ),
+        .init(
+            storyID: "shelf-luke-4-whimsical-sculptural-decor",
+            merchantID: "shelf-shop-herb-living-ff3ff2c",
+            productID: 2180918525698509762,
+            mediaRole: .inContext,
+            textScrimOpacity: 0.46
+        ),
+        .init(
+            storyID: "shelf-luke-5-modernist-graphic-design-library",
+            bundledAssetName: "cover-type-systems",
+            alignment: .top,
+            textScrimOpacity: 0.44
+        ),
+        .init(
+            storyID: "shelf-luke-6-analog-watches-desk-clocks",
+            merchantID: "shelf-shop-vhail-bcc39aa",
+            productID: 2570243354690201607,
+            mediaRole: .inContext,
+            textScrimOpacity: 0.42
+        ),
+        .init(
+            storyID: "shelf-luke-7-stylish-travel-essentials",
+            merchantID: "shelf-shop-comfrt-6d9274b",
+            productID: 8836003514488376238,
+            mediaRole: .wornOrUsed,
+            alignment: .top,
+            textScrimOpacity: 0.52
+        ),
+        .init(
+            storyID: "shelf-luke-8-ceremonia-hair-ritual",
+            merchantID: "ceremonia",
+            productID: 15369056321905,
+            imageIndex: 3,
+            mediaRole: .wornOrUsed,
+            alignment: .top,
+            textScrimOpacity: 0.5
         ),
         .init(
             storyID: "shelf-luke-11-neutral-activewear-essentials",
@@ -113,6 +227,46 @@ enum FeedCoverCatalog {
             mediaRole: .wornOrUsed,
             alignment: .top,
             textScrimOpacity: 0.48
+        ),
+        .init(
+            storyID: "shelf-luke-12-modern-kids-seating-tables",
+            merchantID: "shelf-shop-kidkraft-com-fff90d2",
+            productID: 6913395034556184462,
+            mediaRole: .wornOrUsed,
+            textScrimOpacity: 0.48
+        ),
+        .init(
+            storyID: "shelf-luke-14-sculptural-bath-finishing-touches",
+            merchantID: "shelf-shop-upton-ff049dd",
+            productID: 1360197513559918501,
+            mediaRole: .inContext,
+            textScrimOpacity: 0.5
+        ),
+        .init(
+            storyID: "shelf-luke-15-elevated-winter-knits",
+            merchantID: "shelf-shop-alo-yoga-561ac5f",
+            productID: 5790741028039858671,
+            mediaRole: .wornOrUsed,
+            alignment: .top,
+            textScrimOpacity: 0.5
+        ),
+        .init(
+            storyID: "shelf-luke-16-artist-collab-tees-hoodies-prints",
+            merchantID: "shelf-shop-classic-paris-249db76",
+            productID: 4066842927228705409,
+            mediaRole: .inContext,
+            textScrimOpacity: 0.46
+        ),
+        .init(
+            storyID: "shelf-luke-10-performance-sneakers-edit",
+            bundledAssetName: "cover-trail-to-street",
+            textScrimOpacity: 0.46
+        ),
+        .init(
+            storyID: "shelf-luke-19-race-day-and-daily-trainers",
+            bundledAssetName: "cover-trail-to-street",
+            scale: 1.08,
+            textScrimOpacity: 0.5
         ),
     ]
 
@@ -188,15 +342,11 @@ struct MerchantCollectionPresentation: Hashable {
                 : lifestyleCoverURL
             return URL(string: normalized)
         }
-        guard let merchant = merchants.first(where: { $0.id == merchantID }),
-              let product = merchant.products.first(where: { $0.id == coverProductID }) else {
+        let coverMerchantID = brandMerchantID ?? merchantID
+        guard let merchant = merchants.first(where: { $0.id == coverMerchantID }),
+              let source = merchant.bestCoverImageURL else {
             return nil
         }
-        let images = product.allImageURLs.isEmpty
-            ? [product.imageURL].compactMap { $0 }
-            : product.allImageURLs
-        guard !images.isEmpty else { return nil }
-        let source = images[min(coverImageIndex, images.count - 1)]
         let normalized = source.hasPrefix("//") ? "https:\(source)" : source
         return URL(string: normalized)
     }
