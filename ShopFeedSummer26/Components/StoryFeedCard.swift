@@ -15,6 +15,10 @@ struct StoryFeedCard: View {
     var titleAtTopLeading = false
     var productLayout: FeedCardProductLayout? = nil
     var foregroundTopPadding: CGFloat = GravitySpacing.space20
+    /// Pins a top-leading title under persistent navigation using a
+    /// compositor-only offset. This avoids invalidating the card hierarchy
+    /// while a vertical scroll gesture is in flight.
+    var scrollPinnedTitleTop: CGFloat? = nil
     var foregroundBottomPadding: CGFloat = FeedCardStyle.foregroundBottomPadding
     var backgroundBlurRadius: CGFloat = 0
     var backgroundPlaybackEnabled = true
@@ -34,7 +38,6 @@ struct StoryFeedCard: View {
 
     @Environment(NavigationCoordinator.self) private var coordinator
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var mediaIsMoving = false
     @State private var selectedProductIndex = 0
     @State private var productDragOffset: CGFloat = 0
     @State private var productPromotionProgress: CGFloat = 0
@@ -167,7 +170,7 @@ struct StoryFeedCard: View {
                                     alignment: .bottomLeading
                                 )
                         } else {
-                            storyHeader
+                            scrollAwareStoryHeader
                                 .frame(
                                     maxWidth: .infinity,
                                     maxHeight: .infinity,
@@ -227,7 +230,6 @@ struct StoryFeedCard: View {
         // A scroll drag begins as a press. Scaling the full card here made
         // its title spring on release just as the feed snap completed.
         .buttonStyle(.plain)
-        .onAppear { mediaIsMoving = true }
         .accessibilityLabel("\(titleOverride ?? story.title). \(story.subtitle)")
         .accessibilityHint(story.destinationLabel)
     }
@@ -291,11 +293,6 @@ struct StoryFeedCard: View {
                                 image
                                     .resizable()
                                     .scaledToFill()
-                                    .scaleEffect(mediaIsMoving ? 1.0 : 1.035)
-                                    .animation(
-                                        .easeInOut(duration: 8).repeatForever(autoreverses: true),
-                                        value: mediaIsMoving
-                                    )
                             } else {
                                 loadingBackdrop
                             }
@@ -311,11 +308,6 @@ struct StoryFeedCard: View {
                         Image(coverImageName)
                             .resizable()
                             .scaledToFill()
-                            .scaleEffect(mediaIsMoving ? 1.0 : 1.04)
-                            .animation(
-                                .easeInOut(duration: 8).repeatForever(autoreverses: true),
-                                value: mediaIsMoving
-                            )
                     }
                     .clipped()
             } else if let first = items.first, leadFilmURL != nil {
@@ -409,6 +401,20 @@ struct StoryFeedCard: View {
             )
     }
 
+    private var scrollAwareStoryHeader: some View {
+        storyHeader
+            .visualEffect { title, proxy in
+                title.offset(
+                    y: max(
+                        0,
+                        (scrollPinnedTitleTop
+                            ?? proxy.frame(in: .scrollView(axis: .vertical)).minY)
+                            - proxy.frame(in: .scrollView(axis: .vertical)).minY
+                    )
+                )
+            }
+    }
+
     // MARK: - Stable formats
 
     @ViewBuilder
@@ -465,7 +471,7 @@ struct StoryFeedCard: View {
         let columns = count == 4 ? 2 : 3
 
         return VStack(alignment: .leading, spacing: 0) {
-            storyHeader
+            scrollAwareStoryHeader
 
             Spacer(minLength: 18)
 

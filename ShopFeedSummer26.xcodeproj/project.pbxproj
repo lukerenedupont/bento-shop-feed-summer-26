@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A44444444444444444444444 /* BuyerFeedNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44444444444444444444444 /* BuyerFeedNavigationBar.swift */; };
 		A55555555555555555555555 /* HolidayFeedHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55555555555555555555555 /* HolidayFeedHeader.swift */; };
+		A66666666666666666666666 /* TopicDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66666666666666666666666 /* TopicDetailPage.swift */; };
 		A11111111111111111111111 /* ShopPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11111111111111111111111 /* ShopPost.swift */; };
 		A22222222222222222222222 /* ShopPostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22222222222222222222222 /* ShopPostService.swift */; };
 		A33333333333333333333333 /* ShopPostFeedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33333333333333333333333 /* ShopPostFeedCard.swift */; };
@@ -149,6 +150,7 @@
 /* Begin PBXFileReference section */
 		B44444444444444444444444 /* BuyerFeedNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerFeedNavigationBar.swift; sourceTree = "<group>"; };
 		B55555555555555555555555 /* HolidayFeedHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayFeedHeader.swift; sourceTree = "<group>"; };
+		B66666666666666666666666 /* TopicDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicDetailPage.swift; sourceTree = "<group>"; };
 		B11111111111111111111111 /* ShopPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPost.swift; sourceTree = "<group>"; };
 		B22222222222222222222222 /* ShopPostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPostService.swift; sourceTree = "<group>"; };
 		B33333333333333333333333 /* ShopPostFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPostFeedCard.swift; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 				B688BEC7F76E8968601FF28E /* StorePage.swift */,
 				31BC531098602EBF12CF58A9 /* StoryDetailPage.swift */,
 				6D860120DF5795DCF4608E92 /* StoryTopicPage.swift */,
+				B66666666666666666666666 /* TopicDetailPage.swift */,
 				5EF4BBE9215BBC7D4AEEE4A4 /* TopicLandingView.swift */,
 				2011A0FCF1C61D89093DEFFA /* TopicPage.swift */,
 				F10DF90854E86C476B522742 /* Search */,
@@ -739,6 +742,7 @@
 				1A3E9B20593B0BE7E22C48C4 /* HomePage.swift in Sources */,
 				A55555555555555555555555 /* HolidayFeedHeader.swift in Sources */,
 				A44444444444444444444444 /* BuyerFeedNavigationBar.swift in Sources */,
+				A66666666666666666666666 /* TopicDetailPage.swift in Sources */,
 				E30DA8088645106108A6FEA4 /* HomeRoute.swift in Sources */,
 				12EC66C26DB004D29E1B43E1 /* HypothesisShelfCatalog.swift in Sources */,
 				528183B8E45B11EBBEA93A39 /* ImageCache.swift in Sources */,

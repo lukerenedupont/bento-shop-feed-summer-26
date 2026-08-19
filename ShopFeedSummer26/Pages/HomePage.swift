@@ -3,25 +3,21 @@ import SwiftUI
 import UIKit
 
 private struct FeedViewportLayout {
-    let compactWidth: CGFloat
-    let compactHeight: CGFloat
     let expandedWidth: CGFloat
     let expandedHeight: CGFloat
     let viewportHeight: CGFloat
-    let expansionProgress: CGFloat
-    let expandedForegroundTopPadding: CGFloat
+    let pinnedTitleTop: CGFloat
 
     var cardWidth: CGFloat {
-        compactWidth + ((expandedWidth - compactWidth) * expansionProgress)
+        expandedWidth
     }
 
     var cardHeight: CGFloat {
-        compactHeight + ((expandedHeight - compactHeight) * expansionProgress)
+        expandedHeight
     }
 
     var foregroundTopPadding: CGFloat {
         GravitySpacing.space20
-            + ((expandedForegroundTopPadding - GravitySpacing.space20) * expansionProgress)
     }
 }
 
@@ -29,7 +25,6 @@ private struct FeedViewportMetrics {
     let containerSize: CGSize
     let safeAreaTop: CGFloat
     let isForYou: Bool
-    let expansionProgress: CGFloat
 
     var compactWidth: CGFloat {
         guard isForYou else { return containerSize.width }
@@ -60,13 +55,10 @@ private struct FeedViewportMetrics {
 
     var layout: FeedViewportLayout {
         FeedViewportLayout(
-            compactWidth: compactWidth,
-            compactHeight: compactHeight,
             expandedWidth: containerSize.width,
             expandedHeight: fullBleedHeight,
             viewportHeight: containerSize.height,
-            expansionProgress: expansionProgress,
-            expandedForegroundTopPadding: safeAreaTop
+            pinnedTitleTop: safeAreaTop
                 + FeedNavigationStyle.controlSize
                 + GravitySpacing.space12
                 + FeedCardStyle.titleHeaderGap
@@ -80,6 +72,15 @@ private struct FeedViewportMetrics {
     var bottomContentPadding: CGFloat {
         max((containerSize.height - compactHeight) / 2, GravitySpacing.space8)
     }
+}
+
+/// ScrollView writes its target binding while a drag is in flight. Keeping
+/// that transient value outside SwiftUI observation prevents the entire feed
+/// from being invalidated when the nearest snap target changes under a finger.
+@MainActor
+private final class FeedScrollState {
+    var positionID: String?
+    var isScrolling = false
 }
 
 /// Home feed — scrollable merchant feed cards with focused topic feeds.
@@ -152,6 +153,7 @@ struct HomePage: View {
     /// A drilled-in subcategory story rendered inline so the top bar stays.
     @State private var focusedStoryID: String?
     @State private var visibleStoryID: String?
+    @State private var feedScrollState = FeedScrollState()
     @State private var expandingStoryID: String?
     @State private var categoryMoveDirection = 1
     @State private var topicRailOffset: CGFloat = 0
@@ -251,10 +253,9 @@ struct HomePage: View {
         return focusedStories.first
     }
 
-    /// Keep takeover state discrete. Driving width, height, clipping, header
-    /// colors, and media from the raw scroll offset invalidated the entire
-    /// feed on every drag frame. Native scrolling now does the movement; this
-    /// value changes only when SwiftUI selects a new snap target.
+    /// Expensive feed state stays discrete. Scroll-linked title and utility
+    /// motion is handled inside the compositor with `visualEffect`, so this
+    /// value never invalidates the feed on each drag frame.
     private var firstStoryExpansionProgress: CGFloat {
         guard let visibleStoryID else { return 0 }
         return visibleStoryID == utilityStoryID ? 0 : 1
@@ -401,8 +402,7 @@ struct HomePage: View {
             let metrics = FeedViewportMetrics(
                 containerSize: geo.size,
                 safeAreaTop: max(geo.safeAreaInsets.top, windowSafeAreaTopInset),
-                isForYou: isForYou,
-                expansionProgress: firstStoryExpansionProgress
+                isForYou: isForYou
             )
             let layout = metrics.layout
 
@@ -417,8 +417,21 @@ struct HomePage: View {
                             // The launch clearance belongs to the utility
                             // target alone. Feed cards remain true top-aligned
                             // snap targets instead of inheriting this inset.
-                            .opacity(metrics.expansionProgress < 0.5 ? 1 : 0)
-                            .allowsHitTesting(metrics.expansionProgress < 0.5)
+                            .visualEffect { utility, proxy in
+                                utility.opacity(
+                                    min(
+                                        max(
+                                            proxy.frame(in: .scrollView(axis: .vertical)).maxY
+                                                / max(
+                                                    proxy.frame(in: .scrollView(axis: .vertical)).height,
+                                                    1
+                                                ),
+                                            0
+                                        ),
+                                        1
+                                    )
+                                )
+                            }
                             .id(utilityStoryID)
                             if forYouUtilityPresentation == .carouselAndFullHeight {
                                 fullHeightUtilityCard(
@@ -439,10 +452,6 @@ struct HomePage: View {
                                 width: layout.expandedWidth,
                                 height: metrics.fullBleedHeight,
                                 alignment: .top
-                            )
-                            .animation(
-                                reduceMotion ? nil : .easeOut(duration: 0.18),
-                                value: layout.expansionProgress
                             )
                             .id(entry.id)
                         }
@@ -470,21 +479,25 @@ struct HomePage: View {
                 .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
                 .scrollPosition(
                     id: Binding(
-                        get: { visibleStoryID },
+                        get: { feedScrollState.positionID ?? visibleStoryID },
                         set: { newValue in
                             // Both feeds exist briefly during the horizontal
                             // replacement transition. Ignore late position
                             // writes from the outgoing topic.
                             guard selectedTopicID == renderedTopicID else { return }
-                            visibleStoryID = newValue
+                            feedScrollState.positionID = newValue
+                            guard !feedScrollState.isScrolling else { return }
+                            commitVisibleStoryID(newValue)
                         }
                     ),
                     anchor: .top
                 )
-                .onScrollGeometryChange(for: CGFloat.self) {
-                    max(0, $0.contentOffset.y + $0.contentInsets.top)
-                } action: { _, offset in
-                    coordinator.updateScrollOffset(offset)
+                .onScrollPhaseChange { _, phase in
+                    guard selectedTopicID == renderedTopicID else { return }
+                    feedScrollState.isScrolling = phase.isScrolling
+                    if phase == .idle {
+                        commitVisibleStoryID(feedScrollState.positionID)
+                    }
                 }
             }
             .onChange(of: feedEntries.map(\.id)) { _, entryIDs in
@@ -953,9 +966,9 @@ struct HomePage: View {
         )
     }
 
-    /// Every entry owns an identical snap slot. Its surface grows inside that
-    /// stable slot during the initial takeover, so later cards inherit the
-    /// same full-bleed alignment without changing scroll geometry mid-gesture.
+    /// Every entry owns the final full-bleed geometry from its resting state.
+    /// Scrolling only translates the stable snap slots; it never resizes a
+    /// card mid-gesture, so the first takeover and later cards behave alike.
     @ViewBuilder
     private func feedEntryCard(
         _ entry: FeedEntry,
@@ -964,9 +977,10 @@ struct HomePage: View {
     ) -> some View {
         let isFirstEntry = entry.id == firstEntryID
         let isSnappedEntry = visibleStoryID == entry.id
-        let hasEnteredFullBleedFeed = layout.expansionProgress >= 0.999
+        let expansionProgress = firstStoryExpansionProgress
+        let hasEnteredFullBleedFeed = expansionProgress >= 0.999
         let takeoverProgress: CGFloat = {
-            if isFirstEntry { return layout.expansionProgress }
+            if isFirstEntry { return expansionProgress }
             // Every card keeps the same full-width slot, but only the card
             // locked at the top loses its top radii. The incoming card stays
             // rounded so its peek reads clearly against the white canvas.
@@ -985,7 +999,7 @@ struct HomePage: View {
                 topCornerRadius: topCornerRadius,
                 bottomCornerRadius: feedCornerRadius,
                 foregroundTopPadding: layout.foregroundTopPadding,
-                expansionProgress: layout.expansionProgress,
+                expansionProgress: expansionProgress,
                 borderOpacity: 0.12 * chromeOpacity,
                 shadowOpacity: chromeOpacity
             ) {
@@ -1014,6 +1028,7 @@ struct HomePage: View {
                 borderOpacity: 0.12 * chromeOpacity,
                 shadowOpacity: chromeOpacity,
                 foregroundTopPadding: layout.foregroundTopPadding,
+                scrollPinnedTitleTop: layout.pinnedTitleTop,
                 scrollMotionEnabled: false
             )
 
@@ -1047,6 +1062,7 @@ struct HomePage: View {
         borderOpacity: Double = 0.12,
         shadowOpacity: Double = 1,
         foregroundTopPadding: CGFloat = GravitySpacing.space20,
+        scrollPinnedTitleTop: CGFloat? = nil,
         scrollMotionEnabled: Bool = true
     ) -> some View {
         let motionIsReduced = reduceMotion
@@ -1084,6 +1100,7 @@ struct HomePage: View {
                         visibleStoryIndex: storyIndex
                     ),
                     foregroundTopPadding: foregroundTopPadding,
+                    scrollPinnedTitleTop: scrollPinnedTitleTop,
                     // Resizing an active AV layer on every drag frame is the
                     // largest source of hitching. Hold its poster while the
                     // scroll is moving, then resume playback once locked.
@@ -1188,17 +1205,17 @@ struct HomePage: View {
     /// match wins over secondary membership so cards such as New York graphics
     /// can own a destination even when they also appear in Type & transit.
     private func openTopic(for story: FeedStory) {
-        // Authored buyer shelves stay inside Home so the selected topic and
-        // its sibling shelves remain available around the real shelf content.
+        // Authored buyer shelves use the same explicit source ID as the feed
+        // card so NavigationStack can perform the native shared-view zoom.
         if buyerPreview.selected.usesInlineTopicNavigation,
            selectedTopic.storyIDs.contains(story.id) {
             coordinator.resetScrollState()
-            withAnimation(
-                reduceMotion
-                    ? nil
-                    : .spring(response: 0.32, dampingFraction: 0.82)
-            ) {
-                focusedStoryID = story.id
+            expandingStoryID = story.id
+            Task { @MainActor in
+                await Task.yield()
+                coordinator.pushRoute(
+                    .story(storyId: story.id, sourceId: story.id)
+                )
             }
             return
         }
@@ -1418,18 +1435,32 @@ struct HomePage: View {
         expandingStoryID = nil
 
         if topicID == "for-you" {
-            visibleStoryID = buyerPreview.selected.showsUtilityShelf
+            let targetID = buyerPreview.selected.showsUtilityShelf
                 ? utilityStoryID
                 : feedEntries.first?.id
+            feedScrollState.positionID = targetID
+            visibleStoryID = targetID
         } else if let topic = navigationTopics.first(where: { $0.id == topicID }) {
-            visibleStoryID = buyerPreview.stories(
+            let targetID = buyerPreview.stories(
                 for: topic,
                 in: PersonalizedFeedCatalog.current
             ).first?.id
+            feedScrollState.positionID = targetID
+            visibleStoryID = targetID
         } else {
+            feedScrollState.positionID = nil
             visibleStoryID = nil
         }
 
+    }
+
+    private func commitVisibleStoryID(_ newValue: String?) {
+        guard visibleStoryID != newValue else { return }
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            visibleStoryID = newValue
+        }
     }
 
 }

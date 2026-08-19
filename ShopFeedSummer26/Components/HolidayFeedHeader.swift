@@ -196,7 +196,7 @@ private struct SeasonalSavingsSurface: View {
                     .foregroundStyle(GravityColors.textFixedDark)
                     .padding(.horizontal, GravitySpacing.space16)
                     .frame(height: 36)
-                    .background(.white.opacity(0.85), in: Capsule())
+                    .background(.white, in: Capsule())
                     .overlay {
                         Capsule()
                             .strokeBorder(.white.opacity(0.52), lineWidth: 0.5)

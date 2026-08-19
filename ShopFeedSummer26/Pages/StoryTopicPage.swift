@@ -99,52 +99,54 @@ struct StoryTopicPage: View {
 
     var body: some View {
         if let story {
-            TopicLandingView(
-                topic: FeedTopic(
-                    id: story.id,
-                    label: story.title,
-                    storyTopicKey: nil,
-                    storyIDs: [story.id],
-                    subtopics: nil,
-                    relatedMerchantIDs: nil,
-                    merchandisingBlocks: nil
-                ),
-                stories: [story],
-                merchants: merchants,
-                headerCoverImageName: parentLeadStory?.coverImageName,
-                headerImageURL: collectionCoverURL,
-                surfaceAccentHex: parentLeadStory?.accentHex ?? story.accentHex,
-                // Chapters, not covers: shorter header with the parent
-                // world's name as an eyebrow so drill-ins stay oriented.
-                headerEyebrow: contextTopic?.label ?? parentTopic?.label,
-                compactHeader: true
-            )
-            .environment(\.colorScheme, .dark)
-            .toolbar(.hidden, for: .navigationBar)
-            .navigationTransition(
-                .zoom(
-                    sourceID: transitionSourceID ?? "subtopic-\(storyID)",
-                    in: namespace
+            if let transitionSourceID {
+                TopicDetailPage(story: story, merchants: merchants)
+                    .navigationTransition(
+                        .zoom(sourceID: transitionSourceID, in: namespace)
+                    )
+            } else {
+                TopicLandingView(
+                    topic: FeedTopic(
+                        id: story.id,
+                        label: story.title,
+                        storyTopicKey: nil,
+                        storyIDs: [story.id],
+                        subtopics: nil,
+                        relatedMerchantIDs: nil,
+                        merchandisingBlocks: nil
+                    ),
+                    stories: [story],
+                    merchants: merchants,
+                    headerCoverImageName: parentLeadStory?.coverImageName,
+                    headerImageURL: collectionCoverURL,
+                    surfaceAccentHex: parentLeadStory?.accentHex ?? story.accentHex,
+                    // Chapters, not covers: shorter header with the parent
+                    // world's name as an eyebrow so drill-ins stay oriented.
+                    headerEyebrow: contextTopic?.label ?? parentTopic?.label,
+                    compactHeader: true
                 )
-            )
-            .safeAreaBar(edge: .top) {
-                drillInNavigation
-                .padding(.vertical, GravitySpacing.space4)
-            }
-            .onAppear {
-                previousNavBarTint = coordinator.navBarBlurTint
-                withAnimation(.easeOut(duration: 0.22)) {
-                    // Same immersive treatment as TopicPage: top chip only.
-                    coordinator.showNavBar = false
-                    coordinator.navBarBlurTint = Color(hex: parentLeadStory?.accentHex ?? story.accentHex)
+                .environment(\.colorScheme, .dark)
+                .toolbar(.hidden, for: .navigationBar)
+                .navigationTransition(
+                    .zoom(sourceID: "subtopic-\(storyID)", in: namespace)
+                )
+                .safeAreaBar(edge: .top) {
+                    drillInNavigation
+                    .padding(.vertical, GravitySpacing.space4)
                 }
-            }
-            .onDisappear {
-                // Fallback for swipe-back pops; idempotent after the chip.
-                withAnimation(.easeOut(duration: 0.15)) {
-                    coordinator.showNavBar = true
-                    if let previousNavBarTint {
-                        coordinator.navBarBlurTint = previousNavBarTint
+                .onAppear {
+                    previousNavBarTint = coordinator.navBarBlurTint
+                    withAnimation(.easeOut(duration: 0.22)) {
+                        coordinator.showNavBar = false
+                        coordinator.navBarBlurTint = Color(hex: parentLeadStory?.accentHex ?? story.accentHex)
+                    }
+                }
+                .onDisappear {
+                    withAnimation(.easeOut(duration: 0.15)) {
+                        coordinator.showNavBar = true
+                        if let previousNavBarTint {
+                            coordinator.navBarBlurTint = previousNavBarTint
+                        }
                     }
                 }
             }
