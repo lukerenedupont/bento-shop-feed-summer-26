@@ -12,12 +12,8 @@ struct BuyerFeedNavigationBar: View {
     var usesInverseStyle = false
     var usesFeedBackdropStyle = false
     let selectionNamespace: Namespace.ID
-    @Binding var railOffset: CGFloat
-    @Binding var railContentWidth: CGFloat
     var onSelectTopic: (BuyerFeedTopic) -> Void
     var onSelectBuyer: () -> Void
-
-    @GestureState private var dragOffset: CGFloat = 0
 
     var body: some View {
         ZStack(alignment: .leading) {
@@ -45,52 +41,41 @@ struct BuyerFeedNavigationBar: View {
     }
 
     private var topicRail: some View {
-        GeometryReader { geometry in
+        ScrollViewReader { proxy in
             let leadingInset = FeedNavigationStyle.avatarSize + GravitySpacing.space8
-            let effectiveOffset = clampedOffset(
-                railOffset + dragOffset,
-                viewportWidth: geometry.size.width,
-                leadingInset: leadingInset
-            )
-
-            ZStack(alignment: .leading) {
-                Color.clear
-
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: FeedNavigationStyle.itemSpacing) {
                     ForEach(topics) { topic in
                         topicButton(topic)
                             .id(topic.id)
                     }
-
-                    Color.clear
-                        .frame(width: GravitySpacing.space16, height: 1)
-                        .accessibilityHidden(true)
                 }
                 .fixedSize(horizontal: true, vertical: false)
-                .offset(x: leadingInset + effectiveOffset)
-                .onGeometryChange(for: CGFloat.self) { proxy in
-                    proxy.size.width
-                } action: { _, width in
-                    railContentWidth = width
+                .scrollTargetLayout()
+            }
+            .contentMargins(.leading, leadingInset, for: .scrollContent)
+            .contentMargins(.trailing, GravitySpacing.space16, for: .scrollContent)
+            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+            .scrollClipDisabled()
+            .mask {
+                HStack(spacing: 0) {
+                    // Let labels travel beneath the avatar, then remove them
+                    // before they can emerge from its opposite edge. The
+                    // vertical expansion preserves the selected-pill shadow.
+                    Color.clear
+                        .frame(width: FeedNavigationStyle.avatarSize / 2)
+                    Color.black
+                }
+                .padding(.vertical, -GravitySpacing.space16)
+            }
+            .onChange(of: selectedTopicID) { _, _ in
+                withAnimation(.easeOut(duration: 0.20)) {
+                    proxy.scrollTo(selectedTopicID, anchor: .center)
                 }
             }
-            .contentShape(Rectangle())
-            .gesture(
-                DragGesture(minimumDistance: 8)
-                    .updating($dragOffset) { value, state, _ in
-                        state = value.translation.width
-                    }
-                    .onEnded { value in
-                        let proposed = railOffset + value.predictedEndTranslation.width
-                        withAnimation(.easeOut(duration: 0.18)) {
-                            railOffset = clampedOffset(
-                                proposed,
-                                viewportWidth: geometry.size.width,
-                                leadingInset: leadingInset
-                            )
-                        }
-                    }
-            )
+            .onChange(of: profile.id) { _, _ in
+                proxy.scrollTo(selectedTopicID, anchor: .leading)
+            }
         }
         .frame(height: FeedNavigationStyle.controlSize)
     }
@@ -107,9 +92,9 @@ struct BuyerFeedNavigationBar: View {
                 .shadow(
                     color: topic.id == selectedTopicID
                         ? .clear
-                        : .black.opacity(0.18 * feedExpansionProgress),
-                    radius: 4,
-                    y: 1
+                        : .black.opacity(0.28 * feedExpansionProgress),
+                    radius: 7,
+                    y: 2
                 )
                 .padding(.horizontal, FeedNavigationStyle.pillHorizontalPadding)
                 .frame(height: FeedNavigationStyle.controlSize)
@@ -117,17 +102,11 @@ struct BuyerFeedNavigationBar: View {
                 .background {
                     if topic.id == selectedTopicID {
                         Capsule()
-                            .fill(
-                                usesInverseStyle
-                                    ? Color.white.opacity(0.20)
-                                    : Color.white
-                            )
+                            .fill(FeedNavigationStyle.selectedFill)
                             .overlay {
                                 Capsule()
                                     .strokeBorder(
-                                        usesInverseStyle
-                                            ? Color.white.opacity(0.18)
-                                            : Color.black.opacity(0.06),
+                                        Color.black.opacity(0.06),
                                         lineWidth: 0.5
                                     )
                             }
@@ -144,29 +123,16 @@ struct BuyerFeedNavigationBar: View {
     }
 
     private func labelColor(for topic: BuyerFeedTopic) -> Color {
+        if topic.id == selectedTopicID {
+            return GravityColors.textFixedDark
+        }
         if usesInverseStyle {
-            return topic.id == selectedTopicID
-                ? .white
-                : .white.opacity(0.75)
+            return .white.opacity(0.75)
         }
         if usesFeedBackdropStyle {
-            // The selected chip remains the established white surface with
-            // dark type; only the uncontained rail labels invert over media.
-            return topic.id == selectedTopicID
-                ? GravityColors.textFixedDark
-                : .white.opacity(0.82)
+            return .white.opacity(0.82)
         }
-        return topic.id == selectedTopicID
-            ? GravityColors.textFixedDark
-            : GravityColors.textTertiary
+        return GravityColors.textTertiary
     }
 
-    private func clampedOffset(
-        _ proposed: CGFloat,
-        viewportWidth: CGFloat,
-        leadingInset: CGFloat
-    ) -> CGFloat {
-        let minimum = min(0, viewportWidth - leadingInset - railContentWidth)
-        return min(0, max(minimum, proposed))
-    }
 }

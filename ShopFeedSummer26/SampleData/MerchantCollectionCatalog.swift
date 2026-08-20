@@ -18,11 +18,12 @@ enum FeedCoverSource: Hashable {
     case productGallery(merchantID: String, productID: Int, imageIndex: Int)
     case remoteImage(url: String)
     case remoteVideo(url: String, posterURL: String?)
+    case bundledVideo(resource: String, fileExtension: String)
     case bundledAsset(name: String)
 
     var bundledAssetName: String? {
-        guard case .bundledAsset(let name) = self else { return nil }
-        return name
+        if case .bundledAsset(let name) = self { return name }
+        return nil
     }
 
     func remoteURL(from merchants: [SampleMerchant]) -> URL? {
@@ -41,14 +42,20 @@ enum FeedCoverSource: Hashable {
             return Self.normalizedURL(url)
         case .remoteVideo(_, let posterURL):
             return posterURL.flatMap(Self.normalizedURL)
-        case .bundledAsset:
+        case .bundledVideo, .bundledAsset:
             return nil
         }
     }
 
     var videoURL: URL? {
-        guard case .remoteVideo(let url, _) = self else { return nil }
-        return Self.normalizedURL(url)
+        switch self {
+        case .remoteVideo(let url, _):
+            return Self.normalizedURL(url)
+        case .bundledVideo(let resource, let fileExtension):
+            return Bundle.main.url(forResource: resource, withExtension: fileExtension)
+        default:
+            return nil
+        }
     }
 
     private static func normalizedURL(_ source: String) -> URL? {
@@ -162,6 +169,102 @@ enum FeedCoverCatalog {
     /// Bundled editorial covers are only used when the exact shelf galleries
     /// contain packshots, and are assigned by story rather than topic hashing.
     private static let authoredPresentations: [FeedCoverPresentation] = [
+        // Canonical topic covers. Each source is merchant-owned media tied to
+        // the exact product, collection, or editorial world behind the story.
+        // Source page: nocsprovisions.com/blogs/digest/edge-clarity
+        .init(
+            storyID: "city-to-trail-birding",
+            source: .remoteImage(
+                url: "https://www.nocsprovisions.com/cdn/shop/articles/edge-b-hero_cd5db1cf-b51e-4da6-9e6b-61420b46ea37.jpg?v=1782774502&width=1600"
+            ),
+            mediaRole: .editorial,
+            alignment: .center,
+            textScrimOpacity: 0.46
+        ),
+        .init(
+            storyID: "sculptural-mirror-hunt",
+            merchantID: "forom",
+            productID: 7914833051779,
+            imageIndex: 0,
+            mediaRole: .inContext,
+            alignment: .center,
+            textScrimOpacity: 0.46
+        ),
+        .init(
+            storyID: "type-systems",
+            merchantID: "draw-down",
+            productID: 1591926554714,
+            imageIndex: 2,
+            mediaRole: .editorial,
+            alignment: .center,
+            textScrimOpacity: 0.48
+        ),
+        .init(
+            storyID: "coffee-counter",
+            // Source page: fellowproducts.com/products/aiden-precision-coffee-maker
+            source: .remoteImage(
+                url: "https://fellowproducts.com/cdn/shop/files/Web_HP-Module_AidenColdBrewBundle.jpg?v=1785966992"
+            ),
+            mediaRole: .editorial,
+            alignment: .center,
+            textScrimOpacity: 0.44
+        ),
+        .init(
+            storyID: "table-stranger",
+            merchantID: "doiy",
+            productID: 8300748931228,
+            imageIndex: 2,
+            mediaRole: .inContext,
+            alignment: .center,
+            textScrimOpacity: 0.44
+        ),
+        .init(
+            storyID: "nursery-grown-up-room",
+            merchantID: "babyletto",
+            productID: 7652167942198,
+            imageIndex: 3,
+            mediaRole: .inContext,
+            alignment: .center,
+            textScrimOpacity: 0.5
+        ),
+        .init(
+            storyID: "trail-to-street",
+            // Source page: extrabutterny.com/blogs/extra-butter/
+            // salomon-fall-winter-2020-footwear-capsule
+            source: .remoteImage(
+                url: "https://cdn.shopify.com/s/files/1/0236/4333/files/Salomon_EB_Look3-3.jpg?v=1605817987"
+            ),
+            mediaRole: .editorial,
+            alignment: .center,
+            textScrimOpacity: 0.5
+        ),
+        .init(
+            storyID: "new-york-graphics",
+            merchantID: "lichen",
+            productID: 11009838154046,
+            imageIndex: 3,
+            mediaRole: .wornOrUsed,
+            alignment: .center,
+            textScrimOpacity: 0.48
+        ),
+        .init(
+            storyID: "scalp-reset",
+            merchantID: "ceremonia",
+            productID: 7219216580772,
+            imageIndex: 4,
+            mediaRole: .wornOrUsed,
+            alignment: .top,
+            textScrimOpacity: 0.5
+        ),
+        .init(
+            storyID: "black-silver-signal",
+            merchantID: "house-of-leon",
+            productID: 7873592721581,
+            imageIndex: 0,
+            mediaRole: .inContext,
+            alignment: .center,
+            textScrimOpacity: 0.46
+        ),
         .init(
             storyID: "shelf-luke-1-modern-bathroom-fixtures",
             merchantID: "shelf-shop-upton-ff049dd",
@@ -172,16 +275,20 @@ enum FeedCoverCatalog {
         ),
         .init(
             storyID: "shelf-luke-2-sculptural-living-room-pieces",
-            merchantID: "shelf-shop-a-e-bowery-lighting-29b49c3",
-            productID: 1588130628707273584,
+            source: .bundledVideo(
+                resource: "sculptural-living-room",
+                fileExtension: "mp4"
+            ),
             mediaRole: .inContext,
             alignment: .center,
             textScrimOpacity: 0.42
         ),
         .init(
             storyID: "shelf-luke-3-playful-coffee-table",
-            bundledAssetName: "cover-coffee-counter",
-            textScrimOpacity: 0.42
+            source: .bundledVideo(resource: "caraway-feed", fileExtension: "mp4"),
+            mediaRole: .wornOrUsed,
+            alignment: .center,
+            textScrimOpacity: 0.46
         ),
         .init(
             storyID: "shelf-luke-4-whimsical-sculptural-decor",
@@ -205,11 +312,10 @@ enum FeedCoverCatalog {
         ),
         .init(
             storyID: "shelf-luke-7-stylish-travel-essentials",
-            merchantID: "shelf-shop-comfrt-6d9274b",
-            productID: 8836003514488376238,
+            source: .bundledVideo(resource: "olend-travel", fileExtension: "mp4"),
             mediaRole: .wornOrUsed,
-            alignment: .top,
-            textScrimOpacity: 0.52
+            alignment: .center,
+            textScrimOpacity: 0.48
         ),
         .init(
             storyID: "shelf-luke-8-ceremonia-hair-ritual",
@@ -219,6 +325,13 @@ enum FeedCoverCatalog {
             mediaRole: .wornOrUsed,
             alignment: .top,
             textScrimOpacity: 0.5
+        ),
+        .init(
+            storyID: "shelf-luke-9-streetwear-caps-and-tees",
+            source: .bundledVideo(resource: "hoe-streetwear", fileExtension: "mp4"),
+            mediaRole: .wornOrUsed,
+            alignment: .center,
+            textScrimOpacity: 0.48
         ),
         .init(
             storyID: "shelf-luke-11-neutral-activewear-essentials",
@@ -244,23 +357,31 @@ enum FeedCoverCatalog {
         ),
         .init(
             storyID: "shelf-luke-15-elevated-winter-knits",
-            merchantID: "shelf-shop-alo-yoga-561ac5f",
-            productID: 5790741028039858671,
+            source: .bundledVideo(resource: "rcout-knit", fileExtension: "mp4"),
             mediaRole: .wornOrUsed,
-            alignment: .top,
-            textScrimOpacity: 0.5
+            alignment: .center,
+            textScrimOpacity: 0.48
         ),
         .init(
             storyID: "shelf-luke-16-artist-collab-tees-hoodies-prints",
-            merchantID: "shelf-shop-classic-paris-249db76",
-            productID: 4066842927228705409,
-            mediaRole: .inContext,
-            textScrimOpacity: 0.46
+            source: .bundledVideo(resource: "senvoler-collab", fileExtension: "mp4"),
+            mediaRole: .wornOrUsed,
+            alignment: .center,
+            textScrimOpacity: 0.5
+        ),
+        .init(
+            storyID: "shelf-luke-17-pro-level-painting-essentials",
+            source: .bundledVideo(resource: "fuumuu-painting", fileExtension: "mp4"),
+            mediaRole: .wornOrUsed,
+            alignment: .center,
+            textScrimOpacity: 0.48
         ),
         .init(
             storyID: "shelf-luke-10-performance-sneakers-edit",
-            bundledAssetName: "cover-trail-to-street",
-            textScrimOpacity: 0.46
+            source: .bundledVideo(resource: "stadium-sneakers", fileExtension: "mp4"),
+            mediaRole: .editorial,
+            alignment: .center,
+            textScrimOpacity: 0.48
         ),
         .init(
             storyID: "shelf-luke-19-race-day-and-daily-trainers",
@@ -343,10 +464,21 @@ struct MerchantCollectionPresentation: Hashable {
             return URL(string: normalized)
         }
         let coverMerchantID = brandMerchantID ?? merchantID
-        guard let merchant = merchants.first(where: { $0.id == coverMerchantID }),
-              let source = merchant.bestCoverImageURL else {
+        guard let merchant = merchants.first(where: { $0.id == coverMerchantID }) else {
             return nil
         }
+        // A single authored PDP alternate is a better full-bleed cover than a
+        // merchant-level collection collage. Existing presentations already
+        // identify the intended product and frame; relationship stories use
+        // the same contract dynamically.
+        let coverProduct = merchant.products.first { $0.id == coverProductID }
+        let source = coverProduct.flatMap { product -> String? in
+            guard product.allImageURLs.indices.contains(coverImageIndex) else {
+                return product.allImageURLs.dropFirst().first ?? product.imageURL
+            }
+            return product.allImageURLs[coverImageIndex]
+        } ?? merchant.bestCoverImageURL
+        guard let source else { return nil }
         let normalized = source.hasPrefix("//") ? "https:\(source)" : source
         return URL(string: normalized)
     }
@@ -496,7 +628,20 @@ enum MerchantCollectionCatalog {
     }
 
     static func presentation(for storyID: String) -> MerchantCollectionPresentation? {
-        presentations.first { $0.storyID == storyID }
+        if let authored = presentations.first(where: { $0.storyID == storyID }) {
+            return authored
+        }
+        let parts = storyID.components(separatedBy: "::")
+        guard parts.count == 4,
+              parts[0] == "relcollection",
+              let productID = Int(parts[2]) else { return nil }
+        return MerchantCollectionPresentation(
+            storyID: storyID,
+            merchantID: parts[1],
+            productCount: 4,
+            coverProductID: productID,
+            coverImageIndex: 2
+        )
     }
 }
 

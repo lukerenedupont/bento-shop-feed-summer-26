@@ -116,6 +116,13 @@ enum FeedInformationArchitecture {
         in category: FeedCategory,
         visibleStoryIndex: Int? = nil
     ) -> FeedCardProductLayout {
+        // This lead film is an editorial backdrop, so keep its commerce layer
+        // to one horizontally browsable row of the shelf's lamps, mirrors,
+        // side tables, and coffee tables instead of covering it with a grid.
+        if story.id == "shelf-luke-2-sculptural-living-room-pieces" {
+            return .bottomCarousel
+        }
+
         guard !category.productLayouts.isEmpty else {
             return .stackedDeck
         }

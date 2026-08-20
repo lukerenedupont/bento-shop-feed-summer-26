@@ -8,6 +8,9 @@ struct StoryTopicPage: View {
     let namespace: Namespace.ID
     var contextTopicID: String? = nil
     var transitionSourceID: String? = nil
+    var storyOverride: FeedStory? = nil
+    var merchantOverride: [SampleMerchant]? = nil
+    var enrichmentProducts: [ResolvedStoryProduct] = []
     var closeOnlyNavigation = false
 
     @Environment(NavigationCoordinator.self) private var coordinator
@@ -17,10 +20,12 @@ struct StoryTopicPage: View {
         PersonalizedFeedCatalog.current.stories.contains { $0.id == storyID } == false
     }
     private var merchants: [SampleMerchant] {
-        isLegacyStory ? LegacyFeedArchive.merchants : SampleMerchant.all
+        if let merchantOverride { return merchantOverride }
+        return isLegacyStory ? LegacyFeedArchive.merchants : SampleMerchant.all
     }
     private var story: FeedStory? {
-        PersonalizedFeedStories.all.first { $0.id == storyID }
+        if let storyOverride { return storyOverride }
+        return PersonalizedFeedStories.all.first { $0.id == storyID }
             ?? PersonalizedFeedCatalog.bundled.stories.first { $0.id == storyID }
     }
 
@@ -97,6 +102,11 @@ struct StoryTopicPage: View {
         MerchantCollectionCatalog.presentation(for: storyID)?.coverURL(from: merchants)
     }
 
+    private var storyCoverVideoURL: URL? {
+        guard let story else { return nil }
+        return FeedCoverCatalog.presentation(for: story)?.source.videoURL
+    }
+
     var body: some View {
         if let story {
             if let transitionSourceID {
@@ -119,11 +129,13 @@ struct StoryTopicPage: View {
                     merchants: merchants,
                     headerCoverImageName: parentLeadStory?.coverImageName,
                     headerImageURL: collectionCoverURL,
+                    headerVideoURL: storyCoverVideoURL,
                     surfaceAccentHex: parentLeadStory?.accentHex ?? story.accentHex,
                     // Chapters, not covers: shorter header with the parent
                     // world's name as an eyebrow so drill-ins stay oriented.
                     headerEyebrow: contextTopic?.label ?? parentTopic?.label,
-                    compactHeader: true
+                    compactHeader: true,
+                    enrichmentProducts: enrichmentProducts
                 )
                 .environment(\.colorScheme, .dark)
                 .toolbar(.hidden, for: .navigationBar)

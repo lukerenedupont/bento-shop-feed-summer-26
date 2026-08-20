@@ -26,8 +26,18 @@ forked into per-profile views.
 - Topic feeds enter in the normal full-width white-background state and reuse
   the same header navigation component.
 - Topic drill-ins preserve buyer context and use shared-view navigation.
+- Authenticated shelf exports for every preview buyer contribute privacy-safe
+  shelf type, persona, price-band, quality, and related-shelf signals. Raw
+  hypotheses, queries, activity, suppression history, and provenance stay out
+  of the app bundle.
+- Topic drill-ins use those relationships for featured collections and require
+  both semantic and price-band fit before showing canonical merchant cards.
 - Lifestyle covers are selected from verified topic/product/merchant media;
   merchant cards require a verified bundled wordmark and merchant-owned cover.
+- The 10 canonical Luke topics now prefer approved merchant-owned covers from
+  exact PDP galleries or relevant Nocs, Fellow, and Extra Butter editorial
+  pages. Feed cards, topic headers, and topic feature cards share the same
+  `FeedCoverCatalog` decision and retain the bundled covers as load fallbacks.
 
 ### Shared presentation components
 

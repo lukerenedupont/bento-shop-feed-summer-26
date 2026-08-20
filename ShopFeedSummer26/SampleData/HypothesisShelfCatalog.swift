@@ -23,6 +23,15 @@ enum HypothesisShelfCatalog {
         let subtitle: String
         let topic: String
         let items: [Item]
+        let signals: Signals?
+
+        struct Signals: Decodable {
+            let kind: String
+            let persona: String
+            let priceBandUSD: [Double]?
+            let qualityScore: Int?
+            let relatedShelfIDs: [String]
+        }
     }
 
     private struct Item: Decodable {
@@ -191,12 +200,41 @@ enum HypothesisShelfCatalog {
     static let merchantCollectionPresentations: [MerchantCollectionPresentation] =
         merchantRecommendations.map(\.presentation)
 
+    private static let shelvesByID: [String: Shelf] = Dictionary(
+        uniqueKeysWithValues: payload.users
+            .flatMap(\.shelves)
+            .map { ($0.id, $0) }
+    )
+
+    static func relatedStoryIDs(for storyID: String) -> [String] {
+        shelvesByID[storyID]?.signals?.relatedShelfIDs ?? []
+    }
+
+    static func priceBandUSD(for storyID: String) -> ClosedRange<Double>? {
+        guard let values = shelvesByID[storyID]?.signals?.priceBandUSD,
+              values.count == 2,
+              values[0] <= values[1] else { return nil }
+        return values[0]...values[1]
+    }
+
     static let profiles: [BuyerPreviewProfile] = payload.users.map { user in
         let merchantStoryIDs = merchantRecommendations
             .filter { $0.userID == user.id }
             .map { $0.story.id }
+
+        // Lead Luke's feed with the newly authored film while preserving the
+        // relative order of every other shelf and all topic-specific feeds.
+        var forYouShelves = user.shelves
+        if user.id == "luke",
+           let featuredIndex = forYouShelves.firstIndex(where: {
+               $0.id == "shelf-luke-2-sculptural-living-room-pieces"
+           }) {
+            let featuredShelf = forYouShelves.remove(at: featuredIndex)
+            forYouShelves.insert(featuredShelf, at: 0)
+        }
+
         var forYouStoryIDs: [String] = []
-        for (index, shelf) in user.shelves.enumerated() {
+        for (index, shelf) in forYouShelves.enumerated() {
             forYouStoryIDs.append(shelf.id)
             if index == 1, let first = merchantStoryIDs.first {
                 forYouStoryIDs.append(first)
@@ -205,7 +243,7 @@ enum HypothesisShelfCatalog {
                 forYouStoryIDs.append(merchantStoryIDs[1])
             }
         }
-        if user.shelves.count <= 5, merchantStoryIDs.indices.contains(1) {
+        if forYouShelves.count <= 5, merchantStoryIDs.indices.contains(1) {
             forYouStoryIDs.append(merchantStoryIDs[1])
         }
 

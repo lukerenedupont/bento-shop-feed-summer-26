@@ -50,6 +50,7 @@ private struct FeedViewportMetrics {
                 - FeedCardStyle.bottomNavigationClearance
                 - FeedCardStyle.nextCardPeek
                 - FeedCardStyle.cardSpacing
+                + FeedCardStyle.bottomNavigationOverlap
         )
     }
 
@@ -332,6 +333,10 @@ private struct UtilityRailVerticalPanBridge: UIViewRepresentable {
             guard self.scrollView !== scrollView else { return }
             detach()
             self.scrollView = scrollView
+            // A full-height card should settle quickly after the finger
+            // releases. The default deceleration leaves this paging feed
+            // drifting before view-aligned snapping takes over.
+            scrollView.decelerationRate = .fast
             scrollView.addGestureRecognizer(pan)
             scrollView.panGestureRecognizer.require(toFail: pan)
         }
@@ -358,6 +363,12 @@ private struct UtilityRailVerticalPanBridge: UIViewRepresentable {
 
 /// Home feed — scrollable merchant feed cards with focused topic feeds.
 struct HomePage: View {
+    private static let bundledMerchantSnapshot = LocalMerchantService.loadMerchants()
+    private static let initialMerchantSnapshot = LocalMerchantService.mergeMerchants([
+        bundledMerchantSnapshot,
+        HypothesisShelfCatalog.merchants,
+    ])
+
     private enum FeedEntry: Identifiable {
         case seasonalSavings
         case story(FeedStory)
@@ -409,19 +420,10 @@ struct HomePage: View {
     @Namespace private var heroNamespace
     @Namespace private var topicSelectionNamespace
 
-    /// Buyer-profile-curated products bundled from official merchant catalogs.
-    @State private var bundledMerchants: [SampleMerchant] = LocalMerchantService.loadMerchants()
-
-    /// The generated assortment once the dossier-lab feed answers, else the
-    /// bundled snapshot. Recomputes when the service publishes, so a feed that
-    /// lands after first render swaps in without any manual refresh.
-    private var merchants: [SampleMerchant] {
-        LocalMerchantService.mergeMerchants([
-            feedService.merchants,
-            bundledMerchants,
-            HypothesisShelfCatalog.merchants,
-        ])
-    }
+    /// Keep the merged catalog stable across body evaluations. Rebuilding the
+    /// full merchant/product graph during a swipe or tab animation creates a
+    /// large amount of avoidable main-thread work.
+    @State private var merchants: [SampleMerchant] = HomePage.initialMerchantSnapshot
     @State private var selectedTopicID = "for-you"
     /// A drilled-in subcategory story rendered inline so the top bar stays.
     @State private var focusedStoryID: String?
@@ -431,8 +433,6 @@ struct HomePage: View {
     @State private var feedChromeIsInverted = false
     @State private var expandingStoryID: String?
     @State private var categoryMoveDirection = 1
-    @State private var topicRailOffset: CGFloat = 0
-    @State private var topicRailContentWidth: CGFloat = 0
     @State private var showsBuyerSwitcher = false
     @AppStorage("holidayHeaderEnabled") private var legacyHolidayHeaderEnabled = false
     @AppStorage("seasonalPlacement") private var seasonalPlacementRawValue = ""
@@ -443,8 +443,19 @@ struct HomePage: View {
     private let forYouUtilityPresentation: ForYouUtilityPresentation = .carouselOnly
 
     private var topics: [FeedTopic] { PersonalizedFeedCatalog.current.topics }
-    private var navigationTopics: [BuyerFeedTopic] {
+    private var baseNavigationTopics: [BuyerFeedTopic] {
         buyerPreview.navigationTopics
+    }
+
+    /// Campaign navigation changes the utility destinations at the front of
+    /// the rail without disturbing the buyer's personalized topic order.
+    private var navigationTopics: [BuyerFeedTopic] {
+        guard let forYou = baseNavigationTopics.first else { return [] }
+        let personalizedTopics = Array(baseNavigationTopics.dropFirst())
+        let utilityTopics = seasonalPlacement == .header
+            ? holidayNavigationTopics(from: forYou)
+            : evergreenNavigationTopics(from: forYou)
+        return [forYou] + utilityTopics + personalizedTopics
     }
     private var selectedTopic: BuyerFeedTopic {
         navigationTopics.first { $0.id == selectedTopicID } ?? navigationTopics[0]
@@ -466,10 +477,71 @@ struct HomePage: View {
             && visibleStoryID == utilityStoryID
     }
 
+    private var isHolidayDestination: Bool {
+        selectedTopicID == "holiday-sale" || selectedTopicID == "gift-guides"
+    }
+
+    private var isEvergreenUtilityDestination: Bool {
+        selectedTopicID == "following" || selectedTopicID == "deals"
+    }
+
+    private var isStaticUtilityDestination: Bool {
+        isHolidayDestination || isEvergreenUtilityDestination
+    }
+
     /// An empty new value migrates the original on/off prototype preference.
     private var seasonalPlacement: SeasonalPlacement {
         SeasonalPlacement(rawValue: seasonalPlacementRawValue)
             ?? (legacyHolidayHeaderEnabled ? .header : .off)
+    }
+
+    private func holidayNavigationTopics(
+        from forYou: BuyerFeedTopic
+    ) -> [BuyerFeedTopic] {
+        utilityNavigationTopics(
+            labels: [
+                (id: "holiday-sale", label: "Holiday sale"),
+                (id: "gift-guides", label: "Gift guides"),
+            ],
+            from: forYou
+        )
+    }
+
+    private func evergreenNavigationTopics(
+        from forYou: BuyerFeedTopic
+    ) -> [BuyerFeedTopic] {
+        utilityNavigationTopics(
+            labels: [
+                (id: "following", label: "Following"),
+                (id: "deals", label: "Deals"),
+            ],
+            from: forYou
+        )
+    }
+
+    /// These first-pass destinations reuse the buyer's authored assortment so
+    /// every new tab is navigable while its dedicated editorial feed is built.
+    private func utilityNavigationTopics(
+        labels: [(id: String, label: String)],
+        from forYou: BuyerFeedTopic
+    ) -> [BuyerFeedTopic] {
+        labels.enumerated().map { index, item in
+            let alternatingStories = forYou.storyIDs.enumerated().compactMap {
+                storyIndex, storyID in
+                storyIndex % labels.count == index
+                    ? storyID
+                    : nil
+            }
+            return BuyerFeedTopic(
+                id: item.id,
+                label: item.label,
+                sourceCategoryID: forYou.sourceCategoryID,
+                storyIDs: alternatingStories.isEmpty
+                    ? forYou.storyIDs
+                    : alternatingStories,
+                evidence: forYou.evidence
+            )
+        }
     }
 
     /// The feed intentionally ignores the top safe area so its card surface
@@ -486,10 +558,33 @@ struct HomePage: View {
     }
 
     private var focusedStories: [FeedStory] {
-        buyerPreview.stories(
+        let authored = buyerPreview.stories(
             for: selectedTopic,
             in: PersonalizedFeedCatalog.current
         )
+        let relationshipStories = BuyerFollowedContentCatalog.stories(
+            for: buyerPreview.selected.id,
+            topic: selectedTopic,
+            followedMerchants: activeRelationshipMerchants
+        )
+        guard !relationshipStories.isEmpty else { return authored }
+
+        // Preserve the authored shelf order, then distribute followed-shop
+        // edits through it instead of appending a separate branded section.
+        // The first card always remains the buyer's strongest authored focus.
+        var result: [FeedStory] = []
+        var relationshipIndex = 0
+        for (index, story) in authored.enumerated() {
+            result.append(story)
+            let insertionStride = selectedTopicID == "for-you" ? 2 : 1
+            if (index + 1).isMultiple(of: insertionStride),
+               relationshipStories.indices.contains(relationshipIndex) {
+                result.append(relationshipStories[relationshipIndex])
+                relationshipIndex += 1
+            }
+        }
+        result.append(contentsOf: relationshipStories.dropFirst(relationshipIndex))
+        return result
     }
 
     /// Verified buyer posts are interleaved into For You without replacing
@@ -570,11 +665,14 @@ struct HomePage: View {
                     storyID: focusedStoryID,
                     namespace: namespace,
                     contextTopicID: selectedTopicID,
+                    storyOverride: focusedStories.first { $0.id == focusedStoryID },
+                    merchantOverride: merchants,
+                    enrichmentProducts: relationshipProducts(for: selectedTopic),
                     closeOnlyNavigation: buyerPreview.selected.usesInlineTopicNavigation
                 )
                     .id(focusedStoryID)
             } else {
-                storyFeed
+                selectedFeedContent
                     // The selected tab often remains "for-you" while the
                     // buyer changes. Include profile identity so SwiftUI does
                     // not preserve the previous shopper's lazy-stack cells or
@@ -609,14 +707,16 @@ struct HomePage: View {
         // until the first card has substantially taken over the viewport.
         .environment(
             \.colorScheme,
-            usesLightUtilityShelf && !feedChromeIsInverted
-                && !isHolidayHeaderPresented
+            isStaticUtilityDestination
+                || (usesLightUtilityShelf && !feedChromeIsInverted
+                    && !isHolidayHeaderPresented)
                 ? .light
                 : .dark
         )
         .toolbar(.hidden, for: .navigationBar)
         .toolbarBackground(.hidden, for: .navigationBar)
         .task {
+            refreshMerchantSnapshot()
             // Keep the curated assortment authoritative for this prototype and
             // expose it to PDP/store lookups through SampleMerchant.all.
             merchantService.merchants = merchants
@@ -634,11 +734,22 @@ struct HomePage: View {
 #endif
         }
         .onChange(of: feedService.revision) { _, _ in
+            refreshMerchantSnapshot()
             // The feed usually lands after first render; re-publish so PDP and
             // store lookups going through SampleMerchant.all see the same
             // assortment the stories reference.
             merchantService.merchants = merchants
             merchantService.usingFallbackData = !feedService.isLive
+        }
+        .onChange(of: merchantService.revision) { _, _ in
+            refreshMerchantSnapshot()
+            // Preserve one merged lookup graph for PDP/store routing while
+            // RemoteMerchantService.followedMerchants remains the clean,
+            // relationship-backed source for Following and Deals.
+            merchantService.merchants = merchants
+        }
+        .onChange(of: visibleStoryID) { _, storyID in
+            prefetchFeedMedia(around: storyID)
         }
         .onChange(of: selectedTopicID) { _, newTopicID in
             resetFeedPosition(for: newTopicID)
@@ -667,6 +778,37 @@ struct HomePage: View {
             }
         }
         .purlInjectable()
+    }
+
+    @ViewBuilder
+    private var selectedFeedContent: some View {
+        let destinationTopInset = windowSafeAreaTopInset
+            + FeedNavigationStyle.controlSize
+            + GravitySpacing.space8
+
+        if selectedTopicID == "holiday-sale" {
+            HolidaySaleDestinationFeed(
+                products: allBuyerUtilityProducts,
+                topInset: destinationTopInset
+            )
+        } else if selectedTopicID == "gift-guides" {
+            HolidayGiftGuidesDestinationFeed(
+                products: allBuyerUtilityProducts,
+                topInset: destinationTopInset
+            )
+        } else if selectedTopicID == "following" {
+            FollowingDestinationFeed(
+                products: evergreenRelationshipProducts,
+                topInset: destinationTopInset
+            )
+        } else if selectedTopicID == "deals" {
+            DealsDestinationFeed(
+                products: evergreenRelationshipProducts,
+                topInset: destinationTopInset
+            )
+        } else {
+            storyFeed
+        }
     }
 
     private var storyFeed: some View {
@@ -911,6 +1053,42 @@ struct HomePage: View {
             .filter { seenProducts.insert($0.id).inserted }
     }
 
+    /// Luke's authenticated Shop relationship graph is the source of truth
+    /// for evergreen Following and Deals. Other preview buyers—and signed-out
+    /// development builds—use their explicit bundled relationship fixture,
+    /// then retain authored shelves only as a final safe fallback.
+    private var activeRelationshipMerchants: [SampleMerchant] {
+        if buyerPreview.selected.id == "luke",
+           !merchantService.followedMerchants.isEmpty {
+            return merchantService.followedMerchants
+        }
+        return BuyerRelationshipCatalog.followedMerchants(
+            for: buyerPreview.selected.id,
+            in: merchants
+        )
+    }
+
+    private func relationshipProducts(for topic: BuyerFeedTopic) -> [ResolvedStoryProduct] {
+        BuyerFollowedContentCatalog.products(
+            for: buyerPreview.selected.id,
+            topic: topic,
+            followedMerchants: activeRelationshipMerchants
+        )
+    }
+
+    private var evergreenRelationshipProducts: [ResolvedStoryProduct] {
+        let relationshipMerchants = activeRelationshipMerchants
+
+        guard !relationshipMerchants.isEmpty else { return allBuyerUtilityProducts }
+
+        return relationshipMerchants.flatMap { merchant in
+            merchant.products.compactMap { product in
+                guard product.imageURL != nil else { return nil }
+                return ResolvedStoryProduct(merchant: merchant, product: product)
+            }
+        }
+    }
+
     private func utilityProducts(for storyID: String?) -> [ResolvedStoryProduct] {
         guard let storyID, !storyID.isEmpty,
               let story = PersonalizedFeedCatalog.current.stories.first(where: { $0.id == storyID }) else {
@@ -950,9 +1128,11 @@ struct HomePage: View {
                 cardHeight: cardHeight
             )
         }
-        .padding(.top, 18)
+        .padding(.top, holidayUtilityShelfTopPadding)
         .frame(width: containerWidth)
     }
+
+    private var holidayUtilityShelfTopPadding: CGFloat { 18 }
 
     @ViewBuilder
     private func utilityFeedEntry(
@@ -960,10 +1140,19 @@ struct HomePage: View {
         launchInset: CGFloat
     ) -> some View {
         if seasonalPlacement == .header {
-            VStack(spacing: -70) {
+            let baseHeaderHeight = containerWidth * (428 / 402)
+            let utilityOverlap: CGFloat = 70
+            // Carry the campaign surface behind the utility card and finish
+            // its fade at the card's lower edge. Increasing the negative
+            // stack spacing by the same amount preserves the belt position.
+            let fadeExtension = UtilityRailMetrics.cardHeight
+                + holidayUtilityShelfTopPadding
+                - utilityOverlap
+
+            VStack(spacing: -(utilityOverlap + fadeExtension)) {
                 HolidayFeedHeader(
                     width: containerWidth,
-                    height: containerWidth * (428 / 402)
+                    height: baseHeaderHeight + fadeExtension
                 ) {
                     // This is an interaction hook for the prototype variant;
                     // commerce routing can be attached once the campaign has
@@ -1456,6 +1645,7 @@ struct HomePage: View {
                     cornerRadius: cornerRadius,
                     bottomCornerRadius: bottomCornerRadius,
                     foregroundTopPadding: foregroundTopPadding,
+                    scrollPinnedHeaderTop: scrollPinnedTitleTop,
                     borderOpacity: borderOpacity,
                     shadowOpacity: shadowOpacity
                 )
@@ -1640,12 +1830,10 @@ struct HomePage: View {
             topics: navigationTopics,
             selectedTopicID: selectedTopicID,
             feedExpansionProgress: firstStoryExpansionProgress,
-            usesInverseStyle: isHolidayHeaderPresented,
-            usesFeedBackdropStyle: selectedTopicID != "for-you"
-                || feedChromeIsInverted,
+            usesInverseStyle: isHolidayHeaderPresented || selectedTopicID == "holiday-sale",
+            usesFeedBackdropStyle: !isStaticUtilityDestination
+                && (selectedTopicID != "for-you" || feedChromeIsInverted),
             selectionNamespace: topicSelectionNamespace,
-            railOffset: $topicRailOffset,
-            railContentWidth: $topicRailContentWidth,
             onSelectTopic: selectTopic,
             onSelectBuyer: {
                 withAnimation(.easeOut(duration: 0.18)) {
@@ -1730,9 +1918,19 @@ struct HomePage: View {
             Color.primary.opacity(0.05),
             in: RoundedRectangle(cornerRadius: 18, style: .continuous)
         )
-        .onChange(of: seasonalPlacementRawValue) { _, _ in
-            guard selectedTopicID == "for-you" else { return }
-            resetFeedPosition(for: "for-you")
+        .onChange(of: seasonalPlacementRawValue) { oldValue, newValue in
+            let wasHolidayHeader = SeasonalPlacement(rawValue: oldValue) == .header
+            let isHolidayHeader = SeasonalPlacement(rawValue: newValue) == .header
+
+            if wasHolidayHeader != isHolidayHeader {
+                if !navigationTopics.contains(where: { $0.id == selectedTopicID }) {
+                    selectedTopicID = "for-you"
+                } else {
+                    resetFeedPosition(for: selectedTopicID)
+                }
+            } else if selectedTopicID == "for-you" {
+                resetFeedPosition(for: "for-you")
+            }
         }
     }
 
@@ -1775,7 +1973,6 @@ struct HomePage: View {
         coordinator.resetScrollState()
         focusedStoryID = nil
         selectedTopicID = "for-you"
-        topicRailOffset = 0
         resetFeedPosition(for: "for-you")
     }
 
@@ -1798,9 +1995,44 @@ struct HomePage: View {
         if topic.id == selectedTopicID {
             resetFeedPosition(for: topic.id)
         }
-        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.28)) {
+        withAnimation(reduceMotion ? nil : .easeOut(duration: 0.20)) {
             focusedStoryID = nil
             selectedTopicID = topic.id
+        }
+    }
+
+    private func refreshMerchantSnapshot() {
+        let refreshedMerchants = LocalMerchantService.mergeMerchants([
+            merchantService.followedMerchants,
+            feedService.merchants,
+            HomePage.bundledMerchantSnapshot,
+            HypothesisShelfCatalog.merchants,
+        ])
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            merchants = refreshedMerchants
+        }
+        prefetchFeedMedia(around: visibleStoryID)
+    }
+
+    private func prefetchFeedMedia(around storyID: String?) {
+        let stories = focusedStories
+        guard !stories.isEmpty else { return }
+        let currentIndex = storyID.flatMap { id in
+            stories.firstIndex(where: { $0.id == id })
+        } ?? 0
+        let urls = stories[currentIndex..<min(currentIndex + 3, stories.endIndex)]
+            .compactMap {
+                $0.lifestyleImageURL(
+                    from: merchants,
+                    format: .portrait,
+                    role: "feed-hero"
+                )
+            }
+
+        Task(priority: .utility) {
+            await ImageURLCache.shared.prefetch(urls)
         }
     }
 

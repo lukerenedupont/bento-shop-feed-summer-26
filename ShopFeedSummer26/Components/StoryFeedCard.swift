@@ -205,9 +205,6 @@ struct StoryFeedCard: View {
                     .padding(.horizontal, GravitySpacing.space20)
                     .padding(.top, foregroundTopPadding)
                     .padding(.bottom, foregroundBottomPadding)
-                    .opacity(isActive ? 1 : 0)
-                    .animation(.easeInOut(duration: 0.2), value: isActive)
-                    .transition(.opacity)
                 }
             }
             .frame(width: width, height: height)
@@ -421,11 +418,11 @@ struct StoryFeedCard: View {
     private var storyContent: some View {
         switch story.format {
         case .world:
-            StoryWorldLayout(items: items, isActive: isActive)
+            StoryWorldLayout(items: items)
         case .shortlist:
-            StoryShortlistLayout(items: items, isActive: isActive)
+            StoryShortlistLayout(items: items)
         case .setup:
-            StorySetupLayout(items: items, isActive: isActive)
+            StorySetupLayout(items: items)
         }
     }
 

@@ -26,10 +26,29 @@ struct TopicPage: View {
         return all.filter { $0.topicKeys.contains(key) }
     }
 
+    private var headerImageURL: URL? {
+        guard let leadStory = stories.first,
+              let presentation = FeedCoverCatalog.presentation(for: leadStory) else {
+            return nil
+        }
+        return presentation.coverURL(from: merchants)
+    }
+
+    private var headerVideoURL: URL? {
+        guard let leadStory = stories.first else { return nil }
+        return FeedCoverCatalog.presentation(for: leadStory)?.source.videoURL
+    }
+
     var body: some View {
         if let topic {
             let accent = Color(hex: stories.first?.accentHex ?? "#171717")
-            TopicLandingView(topic: topic, stories: stories, merchants: merchants)
+            TopicLandingView(
+                topic: topic,
+                stories: stories,
+                merchants: merchants,
+                headerImageURL: headerImageURL,
+                headerVideoURL: headerVideoURL
+            )
                 .environment(\.colorScheme, .dark)
                 .toolbar(.hidden, for: .navigationBar)
                 .safeAreaBar(edge: .top) {

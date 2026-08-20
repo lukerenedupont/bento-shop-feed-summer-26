@@ -86,6 +86,234 @@ struct BuyerPreviewProfile: Identifiable, Hashable {
     var usesInlineTopicNavigation: Bool { !topics.isEmpty }
 }
 
+/// Explicit buyer-to-merchant relationships available to the offline
+/// prototype. These are not inferred from recommendation shelves: Luke's set
+/// is the same approved merchant cohort used by the authenticated Following
+/// post feed, with full 20-product catalogs in the bundled merchant snapshot.
+enum BuyerRelationshipCatalog {
+    private static let followedMerchantIDsByBuyer: [String: [String]] = [
+        "luke": [
+            "forom",
+            "standards-manual",
+            "fellow",
+            "ceremonia",
+            "moma",
+            "draw-down",
+            "extra-butter-salomon",
+        ],
+    ]
+
+    static func followedMerchants(
+        for buyerID: String,
+        in catalog: [SampleMerchant]
+    ) -> [SampleMerchant] {
+        let merchantsByID = Dictionary(uniqueKeysWithValues: catalog.map { ($0.id, $0) })
+        return (followedMerchantIDsByBuyer[buyerID] ?? []).compactMap { merchantsByID[$0] }
+    }
+}
+
+/// Turns a buyer's explicit shop relationships into topic-aware commerce
+/// stories. This is deliberately separate from the authored shelf catalog:
+/// saved products and collections keep their editorial order, while followed
+/// shops add fresh depth wherever their actual inventory is relevant.
+enum BuyerFollowedContentCatalog {
+    private struct TopicRule {
+        let key: String
+        let merchantIDs: [String]
+        let keywords: [String]
+        let titleByMerchantID: [String: String]
+        let subtitle: String
+    }
+
+    private static let rules: [String: TopicRule] = [
+        "living": .init(
+            key: "living",
+            merchantIDs: ["forom", "moma"],
+            keywords: ["mirror", "table", "chair", "sofa", "bench", "rug", "lamp", "light", "vase", "glass", "bowl", "home", "furniture", "decor"],
+            titleByMerchantID: [
+                "forom": "A softer kind of living",
+                "moma": "Objects with a point of view",
+            ],
+            subtitle: "Furniture and objects from shops you follow"
+        ),
+        "morning": .init(
+            key: "morning",
+            merchantIDs: ["fellow", "moma"],
+            keywords: ["coffee", "brew", "kettle", "mug", "cup", "carafe", "grinder", "tea", "kitchen", "tabletop"],
+            titleByMerchantID: [
+                "fellow": "Make more of the morning",
+                "moma": "Good design before noon",
+            ],
+            subtitle: "Coffee and tabletop favorites from shops you follow"
+        ),
+        "wellness": .init(
+            key: "wellness",
+            merchantIDs: ["ceremonia"],
+            keywords: ["hair", "scalp", "shampoo", "conditioner", "mask", "oil", "serum", "ritual", "body", "wellness"],
+            titleByMerchantID: ["ceremonia": "A better wash-day ritual"],
+            subtitle: "Care essentials from a brand you follow"
+        ),
+        "style": .init(
+            key: "style",
+            merchantIDs: ["extra-butter-salomon", "moma"],
+            keywords: ["shoe", "sneaker", "salomon", "wear", "bag", "jewelry", "watch", "accessory", "apparel"],
+            titleByMerchantID: [
+                "extra-butter-salomon": "The next pair in rotation",
+                "moma": "Wearable design",
+            ],
+            subtitle: "New pieces from shops already in your orbit"
+        ),
+        "outdoors": .init(
+            key: "outdoors",
+            merchantIDs: ["extra-butter-salomon"],
+            keywords: ["trail", "running", "outdoor", "hike", "salomon", "shoe", "sneaker", "terrain"],
+            titleByMerchantID: ["extra-butter-salomon": "From trail to street"],
+            subtitle: "Technical footwear from a shop you follow"
+        ),
+        "design": .init(
+            key: "design",
+            merchantIDs: ["standards-manual", "draw-down", "moma", "fellow"],
+            keywords: ["book", "manual", "design", "type", "graphic", "architecture", "art", "object", "poster", "industrial"],
+            titleByMerchantID: [
+                "standards-manual": "Standards worth studying",
+                "draw-down": "For the design shelf",
+                "moma": "Design that earns its place",
+                "fellow": "Tools, considered",
+            ],
+            subtitle: "Books and objects selected from shops you follow"
+        ),
+    ]
+
+    private static let forYouTitles: [String: String] = [
+        "forom": "Forom, for the room",
+        "standards-manual": "Standards worth studying",
+        "fellow": "A more considered coffee setup",
+        "ceremonia": "Bring ritual back to hair care",
+        "moma": "The MoMA design edit",
+        "draw-down": "Fresh for the design shelf",
+        "extra-butter-salomon": "The next pair in rotation",
+    ]
+
+    private static let accents: [String: String] = [
+        "forom": "#6C6258",
+        "standards-manual": "#CA382D",
+        "fellow": "#3D4643",
+        "ceremonia": "#B65E48",
+        "moma": "#252525",
+        "draw-down": "#4D55A5",
+        "extra-butter-salomon": "#596459",
+    ]
+
+    static func stories(
+        for buyerID: String,
+        topic: BuyerFeedTopic,
+        followedMerchants: [SampleMerchant]
+    ) -> [FeedStory] {
+        guard buyerID == "luke", !followedMerchants.isEmpty else { return [] }
+        let topicKey = canonicalTopicKey(for: topic)
+
+        if topic.id == "for-you" {
+            return followedMerchants.compactMap { merchant in
+                makeStory(
+                    merchant: merchant,
+                    topicKey: "for-you",
+                    title: forYouTitles[merchant.id] ?? "New from \(merchant.displayName)",
+                    subtitle: "A fresh edit from a shop you follow",
+                    keywords: []
+                )
+            }
+        }
+
+        guard let rule = rules[topicKey] else { return [] }
+        let merchantsByID = Dictionary(uniqueKeysWithValues: followedMerchants.map { ($0.id, $0) })
+        return rule.merchantIDs.compactMap { merchantID in
+            guard let merchant = merchantsByID[merchantID] else { return nil }
+            return makeStory(
+                merchant: merchant,
+                topicKey: rule.key,
+                title: rule.titleByMerchantID[merchantID] ?? "Selected from \(merchant.displayName)",
+                subtitle: rule.subtitle,
+                keywords: rule.keywords
+            )
+        }
+    }
+
+    static func products(
+        for buyerID: String,
+        topic: BuyerFeedTopic,
+        followedMerchants: [SampleMerchant]
+    ) -> [ResolvedStoryProduct] {
+        stories(for: buyerID, topic: topic, followedMerchants: followedMerchants)
+            .flatMap { $0.resolvedProducts(from: followedMerchants) }
+    }
+
+    private static func canonicalTopicKey(for topic: BuyerFeedTopic) -> String {
+        let value = "\(topic.id) \(topic.sourceCategoryID) \(topic.label)".lowercased()
+        if value.contains("living") || value.contains("home") || value.contains("bath") { return "living" }
+        if value.contains("morning") || value.contains("coffee") || value.contains("food") || value.contains("drink") { return "morning" }
+        if value.contains("wellness") || value.contains("care") || value.contains("beauty") || value.contains("groom") { return "wellness" }
+        if value.contains("outdoor") || value.contains("trail") || value.contains("run") { return "outdoors" }
+        if value.contains("style") || value.contains("fashion") || value.contains("wear") || value.contains("shoe") { return "style" }
+        if value.contains("design") || value.contains("tech") || value.contains("book") { return "design" }
+        return topic.sourceCategoryID
+    }
+
+    private static func makeStory(
+        merchant: SampleMerchant,
+        topicKey: String,
+        title: String,
+        subtitle: String,
+        keywords: [String]
+    ) -> FeedStory? {
+        let ranked = merchant.products
+            .filter(isUsefulProduct)
+            .map { product in (product: product, score: score(product, keywords: keywords)) }
+            .filter { keywords.isEmpty || $0.score > 0 }
+            .sorted {
+                if $0.score == $1.score { return $0.product.id < $1.product.id }
+                return $0.score > $1.score
+            }
+        guard let coverProduct = ranked.first?.product else { return nil }
+        let products = Array(ranked.prefix(6)).map {
+            FeedStory.ProductReference(merchantID: merchant.id, productID: $0.product.id)
+        }
+        let storyID = "relcollection::\(merchant.id)::\(coverProduct.id)::\(topicKey)"
+        return FeedStory(
+            id: storyID,
+            eyebrow: "Because you follow \(merchant.displayName)",
+            title: title,
+            subtitle: subtitle,
+            format: .shortlist,
+            topicKeys: [topicKey, "followed-merchants"],
+            accentHex: accents[merchant.id] ?? "#343434",
+            coverImageName: nil,
+            destinationLabel: "Shop \(merchant.displayName)",
+            products: products
+        )
+    }
+
+    private static func isUsefulProduct(_ product: SampleMerchant.Product) -> Bool {
+        guard product.imageURL != nil || !product.allImageURLs.isEmpty else { return false }
+        let title = product.title.lowercased()
+        let filler = ["gift card", "replacement", "spare part", "swatch", "sample", "shipping", "warranty", "deposit"]
+        return !filler.contains { title.contains($0) }
+    }
+
+    private static func score(_ product: SampleMerchant.Product, keywords: [String]) -> Int {
+        let searchable = ([product.title, product.productType ?? "", product.productDescription ?? ""] + product.tags)
+            .joined(separator: " ")
+            .lowercased()
+        var result = keywords.reduce(0) { $0 + (searchable.contains($1) ? 8 : 0) }
+        let tags = product.tags.map { $0.lowercased() }
+        if tags.contains(where: { $0.contains("new") }) { result += 6 }
+        if tags.contains(where: { $0.contains("best") }) { result += 5 }
+        if tags.contains(where: { $0.contains("back in stock") }) { result += 4 }
+        if tags.contains(where: { $0.contains("sale") }) { result += 2 }
+        result += min(product.allImageURLs.count, 6)
+        return result
+    }
+}
+
 @Observable
 @MainActor
 final class BuyerPreviewStore {

@@ -22,20 +22,6 @@ struct BottomNavBar: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            // Progressive blur background — extends to bottom edge
-            if coordinator.showNavBarBlur {
-                VariableBlurView(
-                    maxBlurRadius: 8,
-                    direction: .bottomBlurToTopTransparent,
-                    tintColor: coordinator.navBarBlurTint,
-                    tintOpacity: 0
-                )
-                .frame(height: PurlTune.value("Navigation/BottomNavBar.swift:frame:height:33:32", default: 80))
-                .frame(maxWidth: .infinity)
-                .allowsHitTesting(false)
-                .transition(.opacity)
-            }
-
             // Nav bar content — layered so back/cart animate from behind tabs
             ZStack {
                 HStack(spacing: 20) {

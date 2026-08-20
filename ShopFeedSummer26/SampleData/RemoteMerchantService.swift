@@ -12,7 +12,7 @@ enum MerchantSource: String, CaseIterable {
 final class PrototypeConfig: ObservableObject {
     static let shared = PrototypeConfig()
 
-    @Published var merchantLimit: Int = 10
+    @Published var merchantLimit: Int = 30
     @Published var productsPerMerchant: Int = 24
 
     /// Source of merchants to load.
@@ -29,6 +29,11 @@ final class RemoteMerchantService: ObservableObject {
     static let shared = RemoteMerchantService()
 
     @Published var merchants: [SampleMerchant] = []
+    /// The unmodified authenticated `shopsFollowed` result. Home may publish a
+    /// larger merged lookup catalog through `merchants`, but personalized
+    /// destinations must keep using this relationship-backed collection.
+    @Published private(set) var followedMerchants: [SampleMerchant] = []
+    @Published private(set) var revision = 0
     @Published var isLoading = false
     @Published var error: String?
     @Published var needsConfiguration = false
@@ -47,6 +52,8 @@ final class RemoteMerchantService: ObservableObject {
         }
 
         merchants = local
+        followedMerchants = []
+        revision += 1
         error = nil
         isLoading = false
         needsConfiguration = false
@@ -56,13 +63,6 @@ final class RemoteMerchantService: ObservableObject {
     func loadMerchants(force: Bool = false) async {
         guard !isLoading else { return }
         guard force || merchants.isEmpty else { return }
-
-        // A dossier-feed-bundle on disk is authoritative: skip the live
-        // path entirely so a signed-in session can't shadow the fixture.
-        if FeedBundleLoader.bundleDirectory != nil {
-            loadFallbackData()
-            return
-        }
 
         isLoading = true
         error = nil
@@ -97,11 +97,14 @@ final class RemoteMerchantService: ObservableObject {
                 loadedMerchants.append(Self.map(shop: shop, products: products))
             }
 
-            merchants = loadedMerchants.filter { !$0.products.isEmpty }
+            let resolvedMerchants = loadedMerchants.filter { !$0.products.isEmpty }
+            merchants = resolvedMerchants
+            followedMerchants = config.merchantSource == .followed ? resolvedMerchants : []
             if merchants.isEmpty {
                 throw ShopServerSetupError.emptyResult
             }
             usingFallbackData = false
+            revision += 1
         } catch {
             self.error = error.localizedDescription
         }
@@ -188,4 +191,3 @@ private enum ShopServerSetupError: LocalizedError {
         }
     }
 }
-

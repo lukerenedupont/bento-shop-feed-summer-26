@@ -167,7 +167,7 @@ struct SettingsPage: View {
                     .foregroundStyle(.secondary)
             }
 
-            Stepper("Merchant limit: \(config.merchantLimit)", value: $config.merchantLimit, in: 1...30)
+            Stepper("Merchant limit: \(config.merchantLimit)", value: $config.merchantLimit, in: 1...50)
             Stepper("Products per merchant: \(config.productsPerMerchant)", value: $config.productsPerMerchant, in: 1...50)
         } header: {
             Text("Merchants")

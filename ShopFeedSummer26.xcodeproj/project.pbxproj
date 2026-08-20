@@ -7,9 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA15A1000000000000000001 /* sculptural-living-room.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = DA15A1000000000000000002 /* sculptural-living-room.mp4 */; };
+		DA15A2000000000000000001 /* caraway-feed.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = DA15A2000000000000000002 /* caraway-feed.mp4 */; };
+		DA15A3000000000000000001 /* fuumuu-painting.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = DA15A3000000000000000002 /* fuumuu-painting.mp4 */; };
+		DA15A4000000000000000001 /* hoe-streetwear.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = DA15A4000000000000000002 /* hoe-streetwear.mp4 */; };
+		DA15A5000000000000000001 /* olend-travel.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = DA15A5000000000000000002 /* olend-travel.mp4 */; };
+		DA15A6000000000000000001 /* rcout-knit.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = DA15A6000000000000000002 /* rcout-knit.mp4 */; };
+		DA15A7000000000000000001 /* senvoler-collab.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = DA15A7000000000000000002 /* senvoler-collab.mp4 */; };
+		DA15A8000000000000000001 /* stadium-sneakers.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = DA15A8000000000000000002 /* stadium-sneakers.mp4 */; };
 		A44444444444444444444444 /* BuyerFeedNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44444444444444444444444 /* BuyerFeedNavigationBar.swift */; };
 		A55555555555555555555555 /* HolidayFeedHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55555555555555555555555 /* HolidayFeedHeader.swift */; };
 		A66666666666666666666666 /* TopicDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66666666666666666666666 /* TopicDetailPage.swift */; };
+		A77777777777777777777777 /* HolidayDestinationFeeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77777777777777777777777 /* HolidayDestinationFeeds.swift */; };
+		A88888888888888888888888 /* EvergreenDestinationFeeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88888888888888888888888 /* EvergreenDestinationFeeds.swift */; };
 		A11111111111111111111111 /* ShopPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11111111111111111111111 /* ShopPost.swift */; };
 		A22222222222222222222222 /* ShopPostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22222222222222222222222 /* ShopPostService.swift */; };
 		A33333333333333333333333 /* ShopPostFeedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33333333333333333333333 /* ShopPostFeedCard.swift */; };
@@ -148,9 +158,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DA15A1000000000000000002 /* sculptural-living-room.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "Media/sculptural-living-room.mp4"; sourceTree = "<group>"; };
+		DA15A2000000000000000002 /* caraway-feed.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "Media/caraway-feed.mp4"; sourceTree = "<group>"; };
+		DA15A3000000000000000002 /* fuumuu-painting.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "Media/fuumuu-painting.mp4"; sourceTree = "<group>"; };
+		DA15A4000000000000000002 /* hoe-streetwear.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "Media/hoe-streetwear.mp4"; sourceTree = "<group>"; };
+		DA15A5000000000000000002 /* olend-travel.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "Media/olend-travel.mp4"; sourceTree = "<group>"; };
+		DA15A6000000000000000002 /* rcout-knit.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "Media/rcout-knit.mp4"; sourceTree = "<group>"; };
+		DA15A7000000000000000002 /* senvoler-collab.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "Media/senvoler-collab.mp4"; sourceTree = "<group>"; };
+		DA15A8000000000000000002 /* stadium-sneakers.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "Media/stadium-sneakers.mp4"; sourceTree = "<group>"; };
 		B44444444444444444444444 /* BuyerFeedNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerFeedNavigationBar.swift; sourceTree = "<group>"; };
 		B55555555555555555555555 /* HolidayFeedHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayFeedHeader.swift; sourceTree = "<group>"; };
 		B66666666666666666666666 /* TopicDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicDetailPage.swift; sourceTree = "<group>"; };
+		B77777777777777777777777 /* HolidayDestinationFeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayDestinationFeeds.swift; sourceTree = "<group>"; };
+		B88888888888888888888888 /* EvergreenDestinationFeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvergreenDestinationFeeds.swift; sourceTree = "<group>"; };
 		B11111111111111111111111 /* ShopPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPost.swift; sourceTree = "<group>"; };
 		B22222222222222222222222 /* ShopPostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPostService.swift; sourceTree = "<group>"; };
 		B33333333333333333333333 /* ShopPostFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPostFeedCard.swift; sourceTree = "<group>"; };
@@ -489,6 +509,8 @@
 				2ACD1E2168C3779609CA48BE /* CachedAsyncImage.swift */,
 				5459CA6FC9ADF5F66FEA511C /* CategoryTile.swift */,
 				93D0AC7FA7992C3C84A593D9 /* DeliveryCard.swift */,
+				B88888888888888888888888 /* EvergreenDestinationFeeds.swift */,
+				B77777777777777777777777 /* HolidayDestinationFeeds.swift */,
 				B55555555555555555555555 /* HolidayFeedHeader.swift */,
 				6C7BB32A48790D2BDC9C87D4 /* FeedProductCard.swift */,
 				7F39B6F46EBC3D657496BF6D /* FloatingBackButton.swift */,
@@ -526,6 +548,14 @@
 		F023418C55850E46E86590D0 /* ShopFeedSummer26 */ = {
 			isa = PBXGroup;
 			children = (
+				DA15A1000000000000000002 /* sculptural-living-room.mp4 */,
+				DA15A2000000000000000002 /* caraway-feed.mp4 */,
+				DA15A3000000000000000002 /* fuumuu-painting.mp4 */,
+				DA15A4000000000000000002 /* hoe-streetwear.mp4 */,
+				DA15A5000000000000000002 /* olend-travel.mp4 */,
+				DA15A6000000000000000002 /* rcout-knit.mp4 */,
+				DA15A7000000000000000002 /* senvoler-collab.mp4 */,
+				DA15A8000000000000000002 /* stadium-sneakers.mp4 */,
 				8CA586789D21890B00848028 /* Assets.xcassets */,
 				0966A1235C1A0B0C37736A67 /* ContentView.swift */,
 				F6915A5ED111B873EFB9D852 /* Info.plist */,
@@ -613,6 +643,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA15A1000000000000000001 /* sculptural-living-room.mp4 in Resources */,
+				DA15A2000000000000000001 /* caraway-feed.mp4 in Resources */,
+				DA15A3000000000000000001 /* fuumuu-painting.mp4 in Resources */,
+				DA15A4000000000000000001 /* hoe-streetwear.mp4 in Resources */,
+				DA15A5000000000000000001 /* olend-travel.mp4 in Resources */,
+				DA15A6000000000000000001 /* rcout-knit.mp4 in Resources */,
+				DA15A7000000000000000001 /* senvoler-collab.mp4 in Resources */,
+				DA15A8000000000000000001 /* stadium-sneakers.mp4 in Resources */,
 				5DE188C12F42823E6802F132 /* Assets.xcassets in Resources */,
 				85C669EB15EF49C2F43B2618 /* Dossiers in Resources */,
 				64DABDEDA80A62E19DCFD97F /* GTStandard-LHeavy.otf in Resources */,
@@ -740,6 +778,8 @@
 				2D4492FC2EC48CF776C60D92 /* GravityTypography.swift in Sources */,
 				AF5C03E50063298EF1FE95DF /* HapticFeedback.swift in Sources */,
 				1A3E9B20593B0BE7E22C48C4 /* HomePage.swift in Sources */,
+				A77777777777777777777777 /* HolidayDestinationFeeds.swift in Sources */,
+				A88888888888888888888888 /* EvergreenDestinationFeeds.swift in Sources */,
 				A55555555555555555555555 /* HolidayFeedHeader.swift in Sources */,
 				A44444444444444444444444 /* BuyerFeedNavigationBar.swift in Sources */,
 				A66666666666666666666666 /* TopicDetailPage.swift in Sources */,

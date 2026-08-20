@@ -50,11 +50,11 @@ enum GravityShadows {
         y: 4
     )
 
-    /// Selected top-level feed chip. The broad, nearly centered falloff keeps
-    /// the white pill legible without reading like a raised card.
+    /// Selected top-level feed chip. Keep the falloff tight so the pill reads
+    /// as floating chrome without washing out the surrounding topic rail.
     static let selectedTopic = GravityShadow(
-        color: Color.black.opacity(0.22),
-        radius: 18,
+        color: Color.black.opacity(0.10),
+        radius: 10,
         x: 0,
         y: 4
     )

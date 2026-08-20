@@ -18,6 +18,14 @@ struct ContentView: View {
         RootView()
             .task {
                 await feedService.load()
+                // A bundled editorial feed and the signed-in relationship
+                // graph are complementary. Always hydrate Luke's followed
+                // shops when a Shop session exists instead of letting the
+                // dossier snapshot shadow them.
+                if AuthService.shared.hasSession {
+                    PrototypeConfig.shared.merchantSource = .followed
+                    await merchantService.loadMerchants(force: true)
+                }
                 if merchantService.merchants.isEmpty {
                     if feedService.isLive {
                         merchantService.merchants = feedService.merchants

@@ -52,6 +52,9 @@ enum FeedCardStyle {
     static let cornerRadius: CGFloat = 40
     static let cardSpacing = GravitySpacing.space4
     static let nextCardPeek = GravitySpacing.space32
+    /// Lets the active story continue behind the floating bottom navigation.
+    /// The following card clears the pill enough to read as a swipe affordance.
+    static let bottomNavigationOverlap = GravitySpacing.space40
     static let bottomNavigationClearance = GravitySpacing.space64 + GravitySpacing.space32
     static let titleHeaderGap = GravitySpacing.space48
 

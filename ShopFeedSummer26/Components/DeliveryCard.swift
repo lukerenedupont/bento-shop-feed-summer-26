@@ -74,19 +74,24 @@ struct UtilityProductRailCard: View {
         let secondRow = Array(visibleProducts.dropFirst(3).prefix(3))
         let productCount = max(firstRow.count, 1)
         let width = cardWidth(productCount: productCount)
-        let availableWidth = width - (GravitySpacing.space12 * 2)
-        let rowSpacing = GravitySpacing.space8 * CGFloat(productCount - 1)
+        let cardPadding = GravitySpacing.space12
+        let productSpacing = GravitySpacing.space8
+        let availableWidth = width - (cardPadding * 2)
+        let rowSpacing = productSpacing * CGFloat(productCount - 1)
         let tileSize = (availableWidth - rowSpacing) / CGFloat(productCount)
-        let expansionProgress = UtilityRailMetrics.expansionProgress(for: height)
-        let secondRowReveal = min(max((expansionProgress - 0.28) / 0.72, 0), 1)
+        // Anchor the first row exactly where it sits in the collapsed card.
+        // Expansion increases only the reveal window below this point, so the
+        // title and visible products never reflow or drift during the pull.
+        let firstRowTop = UtilityRailMetrics.cardHeight - cardPadding - tileSize
+        let productRevealHeight = max(height - firstRowTop - cardPadding, tileSize)
 
-        VStack(alignment: .leading, spacing: 0) {
+        ZStack(alignment: .topLeading) {
             UtilityRailCardHeader(title: title)
                 .padding(.horizontal, GravitySpacing.space2)
+                .padding(.top, cardPadding)
+                .padding(.horizontal, cardPadding)
 
-            Spacer(minLength: 0)
-
-            VStack(spacing: GravitySpacing.space8 * secondRowReveal) {
+            VStack(spacing: productSpacing) {
                 productRow(
                     firstRow,
                     tileSize: tileSize
@@ -97,16 +102,17 @@ struct UtilityProductRailCard: View {
                         secondRow,
                         tileSize: tileSize
                     )
-                    .frame(
-                        height: tileSize * secondRowReveal,
-                        alignment: .bottom
-                    )
-                    .clipped()
                 }
             }
+            .frame(
+                width: availableWidth,
+                height: productRevealHeight,
+                alignment: .top
+            )
+            .clipped()
+            .offset(x: cardPadding, y: firstRowTop)
         }
-        .padding(GravitySpacing.space12)
-        .frame(width: width, height: height, alignment: .top)
+        .frame(width: width, height: height, alignment: .topLeading)
         .utilityRailSurface(fill: fill, border: border)
     }
 

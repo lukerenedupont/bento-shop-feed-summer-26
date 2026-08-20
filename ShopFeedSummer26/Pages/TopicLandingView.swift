@@ -12,6 +12,9 @@ struct TopicLandingView: View {
     /// A verified remote cover supplied by a story-specific presentation.
     /// This lets feed treatments carry their actual media into drill-ins.
     var headerImageURL: URL? = nil
+    /// An authored ambient film shared with the source feed card. The common
+    /// playback session keeps the transition continuous and remains muted.
+    var headerVideoURL: URL? = nil
     var surfaceAccentHex: String? = nil
     /// Compatibility with compact story chapters introduced by the richer
     /// upstream topic navigation.
@@ -22,6 +25,9 @@ struct TopicLandingView: View {
     /// Allows an ambient film supplied by the parent to remain visible through
     /// the topic surface without reducing section legibility.
     var usesAmbientBackdrop = false
+    /// Buyer-followed inventory relevant to this topic. It joins the authored
+    /// assortment below rather than replacing the story's intentional lead.
+    var enrichmentProducts: [ResolvedStoryProduct] = []
     /// Renders only the category's complete merchandising recipe when embedded
     /// below another hero/scroll container. The parent supplies its width so
     /// masonry can retain the same geometry as the standalone destination.
@@ -58,8 +64,7 @@ struct TopicLandingView: View {
 
     private var resolvedProducts: [ResolvedStoryProduct] {
         var seen = Set<String>()
-        return stories
-            .flatMap { $0.resolvedProducts(from: merchants) }
+        return (stories.flatMap { $0.resolvedProducts(from: merchants) } + enrichmentProducts)
             .filter { seen.insert($0.id).inserted }
     }
 
@@ -192,7 +197,12 @@ struct TopicLandingView: View {
         ZStack(alignment: .bottomLeading) {
             surfaceColor
 
-            if let headerLifestyleImageURL {
+            if let headerVideoURL {
+                LoopingVideoPlayer(
+                    url: headerVideoURL,
+                    playbackGroupID: stories.first.map { "story-cover-\($0.id)" }
+                )
+            } else if let headerLifestyleImageURL {
                 CachedAsyncImage(url: headerLifestyleImageURL) { phase in
                     if case .success(let image) = phase {
                         image
@@ -255,7 +265,12 @@ struct TopicLandingView: View {
 
     private var editorialTopicHeader: some View {
         ZStack(alignment: .bottomLeading) {
-            if let headerLifestyleImageURL {
+            if let headerVideoURL {
+                LoopingVideoPlayer(
+                    url: headerVideoURL,
+                    playbackGroupID: stories.first.map { "story-cover-\($0.id)" }
+                )
+            } else if let headerLifestyleImageURL {
                 Color.clear
                     .overlay {
                         CachedAsyncImage(url: headerLifestyleImageURL) { phase in
@@ -361,7 +376,13 @@ struct TopicLandingView: View {
         }
         // Cover topics get a tall editorial header; coverless landings stay
         // compact instead of reserving empty atmosphere.
-        .frame(height: effectiveCoverImageName != nil ? 500 : 220)
+        .frame(
+            height: headerVideoURL != nil
+                || headerLifestyleImageURL != nil
+                || effectiveCoverImageName != nil
+                ? 500
+                : 220
+        )
     }
 
     /// Curated subtopic pills; falls back to story titles for topics that
@@ -773,8 +794,15 @@ private struct TopicFeatureCard: View {
         story.resolvedProducts(from: merchants).first
     }
 
+    private var approvedCover: FeedCoverPresentation? {
+        FeedCoverCatalog.presentation(for: story)
+    }
+
     private var lifestyleImageURL: URL? {
-        story.lifestyleImageURL(
+        if let url = approvedCover?.coverURL(from: merchants) {
+            return url
+        }
+        return story.lifestyleImageURL(
             from: merchants,
             format: .portrait,
             role: "topic-feature"
@@ -800,7 +828,8 @@ private struct TopicFeatureCard: View {
                                     ProductImageView(product: hero.product, merchant: hero.merchant)
                                 }
                             }
-                        } else if let coverImageName = story.coverImageName {
+                        } else if let coverImageName = approvedCover?.source.bundledAssetName
+                            ?? story.coverImageName {
                             Image(coverImageName)
                                 .resizable()
                                 .scaledToFill()

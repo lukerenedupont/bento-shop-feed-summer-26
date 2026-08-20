@@ -78,6 +78,19 @@ final class ImageURLCache: @unchecked Sendable {
         memoryCache.setObject(image, forKey: url as NSURL, cost: cost)
     }
 
+    /// Warms a small set of imminent feed images without publishing view
+    /// state. The normal image view then hits memory synchronously when the
+    /// next card enters the viewport instead of decoding during the swipe.
+    func prefetch(_ urls: [URL]) async {
+        await withTaskGroup(of: Void.self) { group in
+            for url in urls where image(for: url) == nil {
+                group.addTask { [self] in
+                    _ = await loadImage(for: url)
+                }
+            }
+        }
+    }
+
     /// Load an image: memory → disk (downsampled) → network (downsampled).
     /// All decoding happens off the main thread.
     func loadImage(for url: URL) async -> AsyncImagePhase {

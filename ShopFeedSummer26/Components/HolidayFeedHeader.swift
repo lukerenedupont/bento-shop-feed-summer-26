@@ -1,5 +1,48 @@
 import SwiftUI
 
+/// Shared campaign hierarchy for the seasonal For You, sale, and gift-guide
+/// destinations. Keep these primitives together so related pages cannot drift.
+extension View {
+    func holidayCampaignTitleStyle() -> some View {
+        self
+            .font(FeedEditorialTypography.titleFont)
+            .tracking(FeedEditorialTypography.titleTracking)
+            .lineSpacing(FeedEditorialTypography.titleLineSpacing)
+            .tightMultilineLeading(FeedEditorialTypography.titleLineTightening)
+    }
+
+    func holidayCampaignSupportingTextStyle() -> some View {
+        self
+            .font(GravityFont.semiBold.fixedFont(size: 14))
+            .tracking(GravityLetterSpacing.cozy)
+    }
+}
+
+struct HolidayPrimaryCTA: View {
+    let title: String
+    let action: () -> Void
+
+    var body: some View {
+        Button {
+            HapticFeedback.light.fire()
+            action()
+        } label: {
+            Text(title)
+                .holidayCampaignSupportingTextStyle()
+                .foregroundStyle(GravityColors.textFixedDark)
+                .padding(.horizontal, GravitySpacing.space16)
+                .frame(height: 36)
+                .background(.white, in: Capsule())
+                .overlay {
+                    Capsule()
+                        .strokeBorder(.white.opacity(0.52), lineWidth: 0.5)
+                }
+                .shadow(color: .black.opacity(0.12), radius: 8, y: 2)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 /// Optional seasonal lead-in for the personalized For You feed.
 /// Home owns placement and scrolling; this file owns the shared campaign art.
 struct HolidayFeedHeader: View {
@@ -170,41 +213,20 @@ private struct SeasonalSavingsSurface: View {
     private var campaignContent: some View {
         VStack(spacing: 0) {
             Text("Season’s\nsavings")
-                .font(GravityFont.expressiveBold.fixedFont(size: 44))
-                .tracking(-1.32)
-                .lineSpacing(-26)
-                .tightMultilineLeading(16)
+                .holidayCampaignTitleStyle()
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.white)
                 .shadow(color: .black.opacity(0.24), radius: 6, y: 2)
 
             Text("Earn Shop Cash on holiday hauls\nover $50—this week only.")
-                .font(GravityFont.semiBold.fixedFont(size: 14))
-                .tracking(GravityLetterSpacing.cozy)
+                .holidayCampaignSupportingTextStyle()
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.white)
                 .shadow(color: .black.opacity(0.24), radius: 6, y: 2)
                 .padding(.top, GravitySpacing.space10)
 
-            Button {
-                HapticFeedback.light.fire()
-                onShopNow()
-            } label: {
-                Text("Shop now")
-                    .font(GravityFont.semiBold.fixedFont(size: 14))
-                    .tracking(GravityLetterSpacing.cozy)
-                    .foregroundStyle(GravityColors.textFixedDark)
-                    .padding(.horizontal, GravitySpacing.space16)
-                    .frame(height: 36)
-                    .background(.white, in: Capsule())
-                    .overlay {
-                        Capsule()
-                            .strokeBorder(.white.opacity(0.52), lineWidth: 0.5)
-                    }
-                    .shadow(color: .black.opacity(0.12), radius: 8, y: 2)
-            }
-            .buttonStyle(.plain)
-            .padding(.top, 14)
+            HolidayPrimaryCTA(title: "Shop now", action: onShopNow)
+                .padding(.top, 14)
         }
         .frame(maxWidth: .infinity)
     }

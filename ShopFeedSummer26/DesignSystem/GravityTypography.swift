@@ -3,25 +3,25 @@ import SwiftUI
 /// Shared editorial display type for feed cards and their expanded topic
 /// surfaces. Compact enough for short titles to remain on one line.
 enum FeedEditorialTypography {
-    private static let titleStyle = GravityTypography.expressiveH7Heavy
-    private static let homeCardTitleStyle = GravityTypography.expressiveH7Heavy
     private static let sectionStyle = GravityTypography.header
 
-    static let titleFont = titleStyle.swiftUIFont
-    static let titleTracking = titleStyle.letterSpacing
+    /// Shared with the Gift guides hero ("Slow Mornings"). Topic pages and
+    /// their source cards should read as the same editorial system.
+    static let titleFont = GravityFont.expressiveBold.fixedFont(size: 36)
+    static let titleTracking: CGFloat = -1.4
     /// GT Standard L carries generous built-in leading in SwiftUI. Pull
     /// multiline editorial headers back together so they read as one title.
-    static let titleLineSpacing: CGFloat = -14
+    static let titleLineSpacing: CGFloat = -8
 
-    static let homeCardTitleFont = homeCardTitleStyle.swiftUIFont
-    static let homeCardTitleTracking = homeCardTitleStyle.letterSpacing
-    static let homeCardTitleLineSpacing: CGFloat = -14
+    static let homeCardTitleFont = titleFont
+    static let homeCardTitleTracking = titleTracking
+    static let homeCardTitleLineSpacing = titleLineSpacing
 
     static let sectionFont = sectionStyle.swiftUIFont
     static let sectionTracking = sectionStyle.letterSpacing
     static let sectionLineSpacing: CGFloat = -10
     static let titleLineTightening: CGFloat = 8
-    static let homeCardTitleLineTightening: CGFloat = 4
+    static let homeCardTitleLineTightening: CGFloat = 8
     static let sectionLineTightening: CGFloat = 6
 }
 

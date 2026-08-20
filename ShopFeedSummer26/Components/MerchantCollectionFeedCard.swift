@@ -13,6 +13,7 @@ struct MerchantCollectionFeedCard: View {
     var cornerRadius: CGFloat = GravityRadius.r28
     var bottomCornerRadius: CGFloat? = nil
     var foregroundTopPadding: CGFloat = GravitySpacing.space20
+    var scrollPinnedHeaderTop: CGFloat? = nil
     var borderOpacity: Double = 0.12
     var shadowOpacity: Double = 1
 
@@ -70,8 +71,6 @@ struct MerchantCollectionFeedCard: View {
                 contrastScrim
 
                 collectionContent
-                    .opacity(isActive ? 1 : 0)
-                    .animation(.easeInOut(duration: 0.2), value: isActive)
             }
             .frame(width: width, height: height)
             .clipShape(cardShape)
@@ -149,6 +148,16 @@ struct MerchantCollectionFeedCard: View {
         return VStack(alignment: .leading, spacing: 0) {
             merchantHeader(availableWidth: availableWidth)
                 .frame(height: 62, alignment: .top)
+                .visualEffect { header, proxy in
+                    header.offset(
+                        y: max(
+                            0,
+                            (scrollPinnedHeaderTop
+                                ?? proxy.frame(in: .scrollView(axis: .vertical)).minY)
+                                - proxy.frame(in: .scrollView(axis: .vertical)).minY
+                        )
+                    )
+                }
 
             Spacer(minLength: GravitySpacing.space16)
 

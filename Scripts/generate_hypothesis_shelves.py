@@ -19,7 +19,7 @@ from pathlib import Path
 TOPICS = OrderedDict(
     [
         ("living", ("Living", ["bath", "home", "living", "furniture", "lamp", "lighting", "mirror", "decor", "vase", "chair", "sofa", "table", "bedding", "rug", "kids", "dog", "pet"])),
-        ("style", ("Style", ["style", "fashion", "apparel", "shoe", "sneaker", "trainer", "tee", "hoodie", "knit", "jewelry", "watch", "bag", "cap", "swim", "wardrobe", "denim", "jacket", "dress", "accessor"])),
+        ("style", ("Style", ["style", "fashion", "apparel", "shoe", "footwear", "sneaker", "trainer", "runner", "dunk", "samba", "tee", "hoodie", "knit", "jewelry", "watch", "bag", "cap", "swim", "wardrobe", "denim", "jacket", "dress", "accessor"])),
         ("wellness", ("Wellness", ["skin", "hair", "beauty", "groom", "fragrance", "shave", "wellness", "supplement", "fitness", "training", "activewear", "body care", "recovery"])),
         ("morning", ("Food & drink", ["coffee", "tea", "cocktail", "wine", "drink", "glassware", "cook", "kitchen", "dining", "snack", "pantry", "hydration", "brewer", "cup"])),
         ("outdoors", ("Outdoors", ["outdoor", "trail", "running", "race", "ski", "golf", "cycling", "hiking", "travel", "camp", "sport", "snow"])),
