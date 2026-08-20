@@ -91,6 +91,7 @@ private final class UtilityRailExpansionState {
     private(set) var isArmed = false
     private(set) var isExpanded = false
     private var isInteracting = false
+    private var isSettling = false
     private var collapseArmed = false
     private var dragTranslation: CGFloat = 0
 
@@ -98,24 +99,20 @@ private final class UtilityRailExpansionState {
     private let closeSnapThreshold: CGFloat = 24
     private let releaseHysteresis: CGFloat = 12
 
-    var cardHeight: CGFloat {
-        let restingHeight = isExpanded
+    var restingCardHeight: CGFloat {
+        isExpanded
             ? UtilityRailMetrics.expandedCardHeight
             : UtilityRailMetrics.cardHeight
-        return min(
-            max(
-                restingHeight + dragTranslation,
-                UtilityRailMetrics.cardHeight
-            ),
-            UtilityRailMetrics.expandedCardHeight
-        )
+    }
+
+    /// The visible card uses real geometry so media and typography retain
+    /// their proportions throughout the pull.
+    var presentationCardHeight: CGFloat {
+        restingCardHeight + dragTranslation
     }
 
     var layoutHeight: CGFloat {
-        let restingHeight = isExpanded
-            ? UtilityRailMetrics.expandedCardHeight
-            : UtilityRailMetrics.cardHeight
-        return restingHeight
+        restingCardHeight
             + UtilityRailMetrics.carouselVerticalPadding * 2
     }
 
@@ -133,7 +130,7 @@ private final class UtilityRailExpansionState {
     /// Expansion and collapse are geometry-only. The belt may retreat only
     /// after it is compact and the feed begins its separate full-bleed move.
     var keepsBeltFullyVisible: Bool {
-        isExpanded || isInteracting
+        isExpanded || isInteracting || isSettling
     }
 
     func update(dragTranslation proposedTranslation: CGFloat) {
@@ -184,13 +181,44 @@ private final class UtilityRailExpansionState {
         guard isInteracting else { return nil }
         let wasExpanded = isExpanded
         let shouldExpand = isExpanded ? !collapseArmed : isArmed
-        withAnimation(reduceMotion ? nil : .easeOut(duration: 0.24)) {
-            isExpanded = shouldExpand
-            dragTranslation = 0
-            isArmed = false
-            collapseArmed = false
-            isInteracting = false
+        let expansionTravel = UtilityRailMetrics.expandedCardHeight
+            - UtilityRailMetrics.cardHeight
+        let endpointTranslation: CGFloat = if shouldExpand == isExpanded {
+            0
+        } else if shouldExpand {
+            expansionTravel
+        } else {
+            -expansionTravel
         }
+
+        isInteracting = false
+        isSettling = true
+        isArmed = false
+        collapseArmed = false
+
+        let commitEndpoint = {
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                self.isExpanded = shouldExpand
+                self.dragTranslation = 0
+                self.isSettling = false
+            }
+        }
+
+        if reduceMotion {
+            commitEndpoint()
+        } else {
+            withAnimation(
+                .easeOut(duration: 0.20),
+                completionCriteria: .logicallyComplete
+            ) {
+                dragTranslation = endpointTranslation
+            } completion: {
+                commitEndpoint()
+            }
+        }
+
         return (wasExpanded, shouldExpand)
     }
 
@@ -201,6 +229,7 @@ private final class UtilityRailExpansionState {
             isArmed = false
             isExpanded = false
             isInteracting = false
+            isSettling = false
             collapseArmed = false
             dragTranslation = 0
         }
@@ -213,7 +242,7 @@ private struct UtilityRailExpansionHost<Content: View>: View {
     @ViewBuilder let content: (CGFloat) -> Content
 
     var body: some View {
-        content(state.cardHeight)
+        content(state.presentationCardHeight)
             .frame(height: state.layoutHeight, alignment: .top)
     }
 }
@@ -963,7 +992,7 @@ struct HomePage: View {
         let railWidth = min(max(containerWidth - 48, 300), 320)
 
         return ScrollView(.horizontal, showsIndicators: false) {
-            HStack(alignment: .top, spacing: GravitySpacing.space10) {
+            LazyHStack(alignment: .top, spacing: GravitySpacing.space10) {
                 if buyerPreview.selected.utility.showsOrders {
                     orderTrackingRailCard(width: railWidth, height: cardHeight)
                 }
