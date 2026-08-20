@@ -20,9 +20,16 @@ enum DeliveryStatus {
 // MARK: - Top-of-feed utility cards
 
 enum UtilityRailMetrics {
-    static let cardHeight: CGFloat = 156
+    static let cardHeight: CGFloat = 148
+    static let expandedCardHeight: CGFloat = cardHeight * 1.76
     static let compactCardWidth: CGFloat = 228
-    static let cornerRadius: CGFloat = 28
+    static let cornerRadius: CGFloat = 24
+    static let carouselVerticalPadding: CGFloat = 8
+
+    static func expansionProgress(for height: CGFloat) -> CGFloat {
+        let travel = expandedCardHeight - cardHeight
+        return min(max((height - cardHeight) / travel, 0), 1)
+    }
 }
 
 /// Shared title treatment for every utility-belt card.
@@ -45,7 +52,7 @@ struct UtilityRailCardHeader: View {
                 // in Figma, so it fills the 24pt control without being scaled twice.
                 .frame(width: GravitySpacing.space24, height: GravitySpacing.space24)
                 .foregroundStyle(GravityColors.text)
-                .background(GravityColors.bgFillSecondary, in: Circle())
+                .background(GravityColors.bgFill, in: Circle())
         }
     }
 }
@@ -56,43 +63,50 @@ struct UtilityProductRailCard: View {
     let title: String
     let products: [ResolvedStoryProduct]
     let maximumWidth: CGFloat
+    let height: CGFloat
     let fill: Color
     let border: Color
     var onSelectProduct: (ResolvedStoryProduct) -> Void
 
     var body: some View {
-        let visibleProducts = Array(products.prefix(3))
-        let productCount = max(visibleProducts.count, 1)
+        let visibleProducts = Array(products.prefix(6))
+        let firstRow = Array(visibleProducts.prefix(3))
+        let secondRow = Array(visibleProducts.dropFirst(3).prefix(3))
+        let productCount = max(firstRow.count, 1)
         let width = cardWidth(productCount: productCount)
         let availableWidth = width - (GravitySpacing.space12 * 2)
-        let totalSpacing = GravitySpacing.space8 * CGFloat(productCount - 1)
-        let tileWidth = (availableWidth - totalSpacing) / CGFloat(productCount)
-        let tileHeight = (
-            maximumWidth
-                - (GravitySpacing.space12 * 2)
-                - (GravitySpacing.space8 * 2)
-        ) / 3
+        let rowSpacing = GravitySpacing.space8 * CGFloat(productCount - 1)
+        let tileSize = (availableWidth - rowSpacing) / CGFloat(productCount)
+        let expansionProgress = UtilityRailMetrics.expansionProgress(for: height)
+        let secondRowReveal = min(max((expansionProgress - 0.28) / 0.72, 0), 1)
 
         VStack(alignment: .leading, spacing: 0) {
             UtilityRailCardHeader(title: title)
-                .padding(.horizontal, GravitySpacing.space4)
+                .padding(.horizontal, GravitySpacing.space2)
 
             Spacer(minLength: 0)
 
-            HStack(spacing: GravitySpacing.space8) {
-                ForEach(visibleProducts) { item in
-                    Button {
-                        HapticFeedback.light.fire()
-                        onSelectProduct(item)
-                    } label: {
-                        productTile(item, width: tileWidth, height: tileHeight)
-                    }
-                    .buttonStyle(PressScaleButtonStyle())
+            VStack(spacing: GravitySpacing.space8 * secondRowReveal) {
+                productRow(
+                    firstRow,
+                    tileSize: tileSize
+                )
+
+                if !secondRow.isEmpty {
+                    productRow(
+                        secondRow,
+                        tileSize: tileSize
+                    )
+                    .frame(
+                        height: tileSize * secondRowReveal,
+                        alignment: .bottom
+                    )
+                    .clipped()
                 }
             }
         }
         .padding(GravitySpacing.space12)
-        .frame(width: width, height: UtilityRailMetrics.cardHeight, alignment: .top)
+        .frame(width: width, height: height, alignment: .top)
         .utilityRailSurface(fill: fill, border: border)
     }
 
@@ -104,6 +118,23 @@ struct UtilityProductRailCard: View {
             min(maximumWidth, UtilityRailMetrics.compactCardWidth)
         default:
             maximumWidth
+        }
+    }
+
+    private func productRow(
+        _ items: [ResolvedStoryProduct],
+        tileSize: CGFloat
+    ) -> some View {
+        return HStack(spacing: GravitySpacing.space8) {
+            ForEach(items) { item in
+                Button {
+                    HapticFeedback.light.fire()
+                    onSelectProduct(item)
+                } label: {
+                    productTile(item, width: tileSize, height: tileSize)
+                }
+                .buttonStyle(.plain)
+            }
         }
     }
 
@@ -125,94 +156,244 @@ struct UtilityProductRailCard: View {
     }
 }
 
+/// Lightweight destination marker used only while the order map is expanded.
+/// It is code-native so it stays crisp as the utility card scales.
+private struct UtilityDestinationPin: View {
+    private let fill = LinearGradient(
+        colors: [Color(hex: 0x7A4DFF), Color(hex: 0x4F1FE8)],
+        startPoint: .top,
+        endPoint: .bottom
+    )
+
+    var body: some View {
+        UtilityDestinationPinShape()
+            .fill(fill)
+            .frame(width: 32, height: 40)
+            .overlay(alignment: .top) {
+            Circle()
+                .fill(.white)
+                    .frame(width: 10, height: 10)
+                    .padding(.top, 9)
+            }
+            .shadow(color: Color.black.opacity(0.14), radius: 3, y: 2)
+            .frame(width: 36, height: 44)
+    }
+}
+
+private struct UtilityDestinationPinShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        let centerX = rect.midX
+        var path = Path()
+
+        path.move(to: CGPoint(x: centerX, y: rect.maxY))
+        path.addCurve(
+            to: CGPoint(x: rect.minX, y: rect.height * 0.42),
+            control1: CGPoint(x: rect.width * 0.34, y: rect.height * 0.82),
+            control2: CGPoint(x: rect.minX, y: rect.height * 0.64)
+        )
+        path.addCurve(
+            to: CGPoint(x: centerX, y: rect.minY),
+            control1: CGPoint(x: rect.minX, y: rect.height * 0.16),
+            control2: CGPoint(x: rect.width * 0.14, y: rect.minY)
+        )
+        path.addCurve(
+            to: CGPoint(x: rect.maxX, y: rect.height * 0.42),
+            control1: CGPoint(x: rect.width * 0.86, y: rect.minY),
+            control2: CGPoint(x: rect.maxX, y: rect.height * 0.16)
+        )
+        path.addCurve(
+            to: CGPoint(x: centerX, y: rect.maxY),
+            control1: CGPoint(x: rect.maxX, y: rect.height * 0.64),
+            control2: CGPoint(x: rect.width * 0.66, y: rect.height * 0.82)
+        )
+        path.closeSubpath()
+        return path
+    }
+}
+
 /// Compact order status used in the top-of-feed utility rail.
 ///
 /// The parent rail owns horizontal paging. This card stays deliberately
 /// static so it does not introduce a competing gesture inside that rail.
 struct OrderTrackingUtilityCard: View {
-    let merchant: SampleMerchant
-    let products: [SampleMerchant.Product]
     let width: CGFloat
+    let height: CGFloat
     var onTap: () -> Void
 
     private let progressControlSize: CGFloat = 24
-    private let deliveryProgress: CGFloat = 0.78
+    private let orderPanelHeight: CGFloat = 92
 
     var body: some View {
         Button {
             HapticFeedback.light.fire()
             onTap()
         } label: {
-            VStack(alignment: .leading, spacing: 0) {
-                UtilityRailCardHeader(title: "Your orders")
-                    .padding(.horizontal, GravitySpacing.space4)
-                Spacer(minLength: 0)
-                orderSummary
-                Spacer(minLength: 0)
-                trackingProgress
+            ZStack {
+                orderMap
+
+                // Pull the map back so it reads as context rather than
+                // competing with the order status surface.
+                GravityColors.bgFill.opacity(0.14)
+
+                LinearGradient(
+                    stops: [
+                        .init(color: .white.opacity(0.30), location: 0),
+                        .init(color: .clear, location: 0.5),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+
+                destinationCallout
+
+                VStack(alignment: .leading, spacing: 0) {
+                    UtilityRailCardHeader(title: "Your orders")
+                        .padding(.horizontal, GravitySpacing.space2)
+
+                    Spacer(minLength: 0)
+
+                    orderPanel
+                }
+                .padding(GravitySpacing.space12)
             }
-            .padding(.horizontal, GravitySpacing.space12)
-            .padding(.top, GravitySpacing.space12)
-            .padding(.bottom, GravitySpacing.space10)
             .frame(
                 width: width,
-                height: UtilityRailMetrics.cardHeight,
+                height: height,
                 alignment: .top
             )
-            .utilityRailSurface(
-                fill: GravityColors.bgFill,
-                border: GravityColors.borderSecondary
+            .clipShape(
+                RoundedRectangle(
+                    cornerRadius: UtilityRailMetrics.cornerRadius,
+                    style: .continuous
+                )
             )
+            .overlay {
+                RoundedRectangle(
+                    cornerRadius: UtilityRailMetrics.cornerRadius,
+                    style: .continuous
+                )
+                .strokeBorder(Color.black.opacity(0.10), lineWidth: 0.5)
+            }
+            .gravityShadow(GravityShadows.orderUtilityRail)
         }
-        .buttonStyle(PressScaleButtonStyle())
-        .accessibilityLabel("Your orders, \(merchant.displayName), arrives today 3 to 4 PM")
+        .buttonStyle(.plain)
+        .accessibilityLabel("Your orders, Baggu, arrives today by 6 PM")
     }
 
-    private var orderSummary: some View {
-        HStack(spacing: GravitySpacing.space4) {
+    private var orderMap: some View {
+        let expansionProgress = UtilityRailMetrics.expansionProgress(for: height)
+        let cropOffset = -UtilityRailMetrics.cardHeight
+            * 0.2773
+            * (1 - expansionProgress)
+
+        return Image("order-card-map")
+            .resizable()
+            .scaledToFill()
+            .frame(
+                width: width + 2,
+                height: UtilityRailMetrics.cardHeight * 2.5088 + 2
+            )
+            .offset(y: cropOffset)
+            // Give the raster a one-point bleed on every edge so fractional
+            // scaling cannot expose the surface behind it as a hairline.
+            .frame(width: width, height: height)
+            .clipped()
+    }
+
+    private var destinationCallout: some View {
+        let mapContentTop = GravitySpacing.space12
+            + GravitySpacing.space24
+            + GravitySpacing.space8
+        let orderPanelTop = UtilityRailMetrics.expandedCardHeight
+            - GravitySpacing.space12
+            - orderPanelHeight
+        let destinationCenterY = (mapContentTop + orderPanelTop) / 2
+
+        return HStack(alignment: .center, spacing: -GravitySpacing.space6) {
+            UtilityDestinationPin()
+                .zIndex(1)
+
             VStack(alignment: .leading, spacing: 0) {
-                Text(merchant.displayName)
-                    .gravityTextStyle(GravityTypography.editorialBody)
+                Text("Ships to")
+                    .font(.system(size: 10, weight: .semibold))
                     .foregroundStyle(GravityColors.textSecondary)
-                Text("Arrives today 3–4PM")
-                    .gravityTextStyle(GravityTypography.bodyTitleLarge)
+                Text("Vendome, FR")
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(GravityColors.text)
             }
-            .lineLimit(1)
-            .minimumScaleFactor(0.8)
+            .padding(.horizontal, GravitySpacing.space10)
+            .frame(height: 40)
+            .background(
+                GravityColors.bgFill,
+                in: RoundedRectangle(cornerRadius: GravityRadius.r12, style: .continuous)
+            )
+            .gravityShadow(GravityShadows.small)
+        }
+        .fixedSize()
+        // The destination lives at a fixed map coordinate beneath the order
+        // panel. As the panel travels down, its top edge reveals this content
+        // directly—there is no independent fade or scale animation.
+        .position(
+            x: width * 0.54,
+            y: destinationCenterY
+        )
+        .allowsHitTesting(false)
+        .accessibilityHidden(
+            height < (UtilityRailMetrics.cardHeight + UtilityRailMetrics.expandedCardHeight) / 2
+        )
+    }
 
-            Spacer(minLength: 0)
+    private var orderPanel: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space8) {
+            HStack(spacing: GravitySpacing.space6) {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("Baggu")
+                        .gravityTextStyle(GravityTypography.captionMedium)
+                        .foregroundStyle(GravityColors.text)
+                    Text("Arrives today by 6PM")
+                        .gravityTextStyle(GravityTypography.utilityOrderStatus)
+                        .foregroundStyle(GravityColors.text)
+                }
+                .lineLimit(1)
 
-            HStack(spacing: GravitySpacing.space4) {
-                ForEach(Array(products.prefix(2))) { product in
-                    ProductImageView(product: product, merchant: merchant)
-                        .frame(width: 36, height: 36)
-                        .background(GravityColors.bgFill)
-                        .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r12, style: .continuous))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: GravityRadius.r12, style: .continuous)
-                                .strokeBorder(GravityColors.borderImage, lineWidth: 0.5)
-                        }
+                Spacer(minLength: 0)
+
+                HStack(spacing: GravitySpacing.space4) {
+                    orderProductImage("order-card-product-baggu")
+                    orderProductImage("order-card-product-glossier")
                 }
             }
+
+            trackingProgress
         }
-        .frame(height: 36)
-        .frame(maxWidth: .infinity, alignment: .center)
-        .padding(.horizontal, GravitySpacing.space4)
+        .padding(.horizontal, GravitySpacing.space10)
+        .padding(.vertical, GravitySpacing.space10)
+        .frame(maxWidth: .infinity)
+        .frame(height: orderPanelHeight)
+        .background(
+            GravityColors.bgFill,
+            in: RoundedRectangle(cornerRadius: GravityRadius.r16, style: .continuous)
+        )
+        .gravityShadow(GravityShadows.orderSummary)
+    }
+
+    private func orderProductImage(_ name: String) -> some View {
+        Image(name)
+            .resizable()
+            .scaledToFill()
+            .frame(width: 36, height: 36)
+            .background(GravityColors.bgFillSecondary)
+            .clipShape(
+                RoundedRectangle(cornerRadius: GravityRadius.r12, style: .continuous)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: GravityRadius.r12, style: .continuous)
+                    .strokeBorder(GravityColors.borderImage, lineWidth: 0.5)
+            }
     }
 
     private var trackingProgress: some View {
-        GeometryReader { proxy in
-            let trackInset = progressControlSize / 2
-            let trackWidth = max(proxy.size.width - trackInset, 0)
-            let deliveryX = trackInset + trackWidth * deliveryProgress
-            let completedWidth = max(deliveryX - trackInset, GravitySpacing.space8)
-
-            Capsule()
-                .fill(GravityColors.bgFillSecondary)
-                .frame(width: trackWidth, height: GravitySpacing.space8)
-                .position(x: trackInset + trackWidth / 2, y: progressControlSize / 2)
-
+        HStack(spacing: GravitySpacing.space4) {
             Capsule()
                 .fill(
                     LinearGradient(
@@ -221,24 +402,25 @@ struct OrderTrackingUtilityCard: View {
                         endPoint: .trailing
                     )
                 )
-                .frame(width: completedWidth, height: GravitySpacing.space8)
-                .position(x: trackInset + completedWidth / 2, y: progressControlSize / 2)
-
-            carrierBadge
-                .position(x: progressControlSize / 2, y: progressControlSize / 2)
+                .frame(maxWidth: .infinity)
+                .frame(height: GravitySpacing.space8)
 
             deliveryBadge
-                .position(x: deliveryX, y: progressControlSize / 2)
+
+            Capsule()
+                .fill(GravityColors.bgFillSecondary)
+                .frame(width: 62.5, height: GravitySpacing.space8)
         }
         .frame(height: progressControlSize)
+        .overlay(alignment: .leading) { carrierBadge }
     }
 
     private var carrierBadge: some View {
-        Text("GLS.")
-            .font(.system(size: 6, weight: .bold, design: .rounded))
-            .foregroundStyle(.white)
+        Image("order-card-carrier-gls")
+            .resizable()
+            .scaledToFill()
             .frame(width: 18, height: 18)
-            .background(Color(hex: 0x0B1AAA), in: Circle())
+            .clipShape(Circle())
             .padding(GravitySpacing.space2)
             .background(GravityColors.bgFill, in: Circle())
             .overlay { Circle().strokeBorder(GravityColors.borderImage, lineWidth: 0.5) }
@@ -246,11 +428,10 @@ struct OrderTrackingUtilityCard: View {
     }
 
     private var deliveryBadge: some View {
-        GravityIcon.truckFilled.image
+        Image("order-card-delivery-van")
             .resizable()
             .scaledToFit()
-            .frame(width: 14, height: 14)
-            .foregroundStyle(GravityColors.text)
+            .frame(width: 18, height: 18)
             .frame(width: progressControlSize, height: progressControlSize)
             .background(GravityColors.bgFill, in: Circle())
             .overlay { Circle().strokeBorder(GravityColors.borderImage, lineWidth: 0.5) }

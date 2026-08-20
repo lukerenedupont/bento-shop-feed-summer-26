@@ -83,6 +83,250 @@ private final class FeedScrollState {
     var isScrolling = false
 }
 
+/// Pull-to-expand state is reference-backed so live drag updates invalidate
+/// only the utility rail host, not the feed or persistent navigation.
+@MainActor
+@Observable
+private final class UtilityRailExpansionState {
+    private(set) var isArmed = false
+    private(set) var isExpanded = false
+    private var isInteracting = false
+    private var collapseArmed = false
+    private var dragTranslation: CGFloat = 0
+
+    private let openSnapThreshold: CGFloat = 48
+    private let closeSnapThreshold: CGFloat = 24
+    private let releaseHysteresis: CGFloat = 12
+
+    var cardHeight: CGFloat {
+        let restingHeight = isExpanded
+            ? UtilityRailMetrics.expandedCardHeight
+            : UtilityRailMetrics.cardHeight
+        return min(
+            max(
+                restingHeight + dragTranslation,
+                UtilityRailMetrics.cardHeight
+            ),
+            UtilityRailMetrics.expandedCardHeight
+        )
+    }
+
+    var layoutHeight: CGFloat {
+        let restingHeight = isExpanded
+            ? UtilityRailMetrics.expandedCardHeight
+            : UtilityRailMetrics.cardHeight
+        return restingHeight
+            + UtilityRailMetrics.carouselVerticalPadding * 2
+    }
+
+    /// Mirrors the belt's live bottom-edge travel without changing the feed's
+    /// layout during the gesture. When the endpoint commits, the new resting
+    /// layout replaces this offset in the same animation frame.
+    var feedCompensationOffset: CGFloat {
+        dragTranslation
+    }
+
+    var hasActiveInteraction: Bool {
+        isInteracting
+    }
+
+    /// Expansion and collapse are geometry-only. The belt may retreat only
+    /// after it is compact and the feed begins its separate full-bleed move.
+    var keepsBeltFullyVisible: Bool {
+        isExpanded || isInteracting
+    }
+
+    func update(dragTranslation proposedTranslation: CGFloat) {
+        // A collapsed belt only owns a downward pull. Upward travel belongs
+        // to the feed so its first card can take over the viewport natively.
+        guard isExpanded || proposedTranslation > 0 else { return }
+
+        if !isInteracting {
+            beginInteraction()
+        }
+
+        let expansionTravel = UtilityRailMetrics.expandedCardHeight
+            - UtilityRailMetrics.cardHeight
+        dragTranslation = isExpanded
+            ? min(max(proposedTranslation, -expansionTravel), 0)
+            : min(max(proposedTranslation, 0), expansionTravel)
+
+        if isExpanded {
+            let upwardTravel = max(-dragTranslation, 0)
+            if upwardTravel >= closeSnapThreshold, !collapseArmed {
+                collapseArmed = true
+                HapticFeedback.light.fire()
+            } else if upwardTravel < releaseHysteresis {
+                collapseArmed = false
+            }
+            return
+        }
+
+        let downwardOverscroll = max(dragTranslation, 0)
+
+        if downwardOverscroll >= openSnapThreshold, !isArmed {
+            isArmed = true
+            HapticFeedback.light.fire()
+        } else if downwardOverscroll < releaseHysteresis {
+            isArmed = false
+        }
+    }
+
+    func beginInteraction() {
+        isInteracting = true
+        dragTranslation = 0
+        collapseArmed = false
+        isArmed = false
+    }
+
+    @discardableResult
+    func settle(reduceMotion: Bool) -> (wasExpanded: Bool, isExpanded: Bool)? {
+        guard isInteracting else { return nil }
+        let wasExpanded = isExpanded
+        let shouldExpand = isExpanded ? !collapseArmed : isArmed
+        withAnimation(reduceMotion ? nil : .easeOut(duration: 0.24)) {
+            isExpanded = shouldExpand
+            dragTranslation = 0
+            isArmed = false
+            collapseArmed = false
+            isInteracting = false
+        }
+        return (wasExpanded, shouldExpand)
+    }
+
+    func reset() {
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            isArmed = false
+            isExpanded = false
+            isInteracting = false
+            collapseArmed = false
+            dragTranslation = 0
+        }
+    }
+}
+
+/// Observation boundary for the high-frequency pull gesture.
+private struct UtilityRailExpansionHost<Content: View>: View {
+    @Bindable var state: UtilityRailExpansionState
+    @ViewBuilder let content: (CGFloat) -> Content
+
+    var body: some View {
+        content(state.cardHeight)
+            .frame(height: state.layoutHeight, alignment: .top)
+    }
+}
+
+/// Keeps cards below the belt attached to its moving bottom edge without
+/// feeding per-frame geometry back into the vertical ScrollView.
+private struct UtilityRailFeedMotionHost<Content: View>: View {
+    @Bindable var state: UtilityRailExpansionState
+    let followsBelt: Bool
+    @ViewBuilder let content: () -> Content
+
+    @ViewBuilder
+    var body: some View {
+        if followsBelt {
+            content()
+                .offset(y: state.feedCompensationOffset)
+        } else {
+            content()
+        }
+    }
+}
+
+/// Installs an axis-aware pan recognizer directly on the native vertical
+/// scroll view. Belt gestures win only when `shouldBegin` accepts their
+/// direction; every other gesture falls through to native feed scrolling.
+private struct UtilityRailVerticalPanBridge: UIViewRepresentable {
+    var shouldBegin: (CGFloat) -> Bool
+    var onChanged: (CGFloat) -> Void
+    var onEnded: () -> Void
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView(frame: .zero)
+        view.isUserInteractionEnabled = false
+        context.coordinator.attachWhenAvailable(from: view)
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {
+        context.coordinator.parent = self
+        context.coordinator.attachWhenAvailable(from: uiView)
+    }
+
+    static func dismantleUIView(_ uiView: UIView, coordinator: Coordinator) {
+        coordinator.detach()
+    }
+
+    final class Coordinator: NSObject, UIGestureRecognizerDelegate {
+        var parent: UtilityRailVerticalPanBridge
+        private weak var scrollView: UIScrollView?
+        private lazy var pan = UIPanGestureRecognizer(
+            target: self,
+            action: #selector(handlePan(_:))
+        )
+
+        init(parent: UtilityRailVerticalPanBridge) {
+            self.parent = parent
+            super.init()
+            pan.delegate = self
+            pan.maximumNumberOfTouches = 1
+            pan.cancelsTouchesInView = true
+        }
+
+        func attachWhenAvailable(from view: UIView) {
+            DispatchQueue.main.async { [weak self, weak view] in
+                guard let self, let view else { return }
+                var ancestor = view.superview
+                while let candidate = ancestor {
+                    if let scrollView = candidate as? UIScrollView {
+                        self.attach(to: scrollView)
+                        return
+                    }
+                    ancestor = candidate.superview
+                }
+            }
+        }
+
+        func detach() {
+            scrollView?.removeGestureRecognizer(pan)
+            scrollView = nil
+        }
+
+        private func attach(to scrollView: UIScrollView) {
+            guard self.scrollView !== scrollView else { return }
+            detach()
+            self.scrollView = scrollView
+            scrollView.addGestureRecognizer(pan)
+            scrollView.panGestureRecognizer.require(toFail: pan)
+        }
+
+        func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+            guard let pan = gestureRecognizer as? UIPanGestureRecognizer else { return false }
+            let velocity = pan.velocity(in: pan.view)
+            guard abs(velocity.y) > abs(velocity.x) else { return false }
+            return parent.shouldBegin(velocity.y)
+        }
+
+        @objc private func handlePan(_ recognizer: UIPanGestureRecognizer) {
+            switch recognizer.state {
+            case .changed:
+                parent.onChanged(recognizer.translation(in: recognizer.view).y)
+            case .ended, .cancelled, .failed:
+                parent.onEnded()
+            default:
+                break
+            }
+        }
+    }
+}
+
 /// Home feed — scrollable merchant feed cards with focused topic feeds.
 struct HomePage: View {
     private enum FeedEntry: Identifiable {
@@ -154,6 +398,8 @@ struct HomePage: View {
     @State private var focusedStoryID: String?
     @State private var visibleStoryID: String?
     @State private var feedScrollState = FeedScrollState()
+    @State private var utilityRailExpansion = UtilityRailExpansionState()
+    @State private var feedChromeIsInverted = false
     @State private var expandingStoryID: String?
     @State private var categoryMoveDirection = 1
     @State private var topicRailOffset: CGFloat = 0
@@ -334,7 +580,7 @@ struct HomePage: View {
         // until the first card has substantially taken over the viewport.
         .environment(
             \.colorScheme,
-            usesLightUtilityShelf && firstStoryExpansionProgress < 0.999
+            usesLightUtilityShelf && !feedChromeIsInverted
                 && !isHolidayHeaderPresented
                 ? .light
                 : .dark
@@ -399,6 +645,8 @@ struct HomePage: View {
             let renderedTopicID = selectedTopicID
             let isForYou = selectedTopicID == "for-you"
             let firstEntryID = feedEntries.first?.id
+            let utilityScaleRetreat: CGFloat = reduceMotion ? 0 : 0.05
+            let keepsBeltFullyVisible = utilityRailExpansion.keepsBeltFullyVisible
             let metrics = FeedViewportMetrics(
                 containerSize: geo.size,
                 safeAreaTop: max(geo.safeAreaInsets.top, windowSafeAreaTopInset),
@@ -414,24 +662,35 @@ struct HomePage: View {
                                 containerWidth: geo.size.width,
                                 launchInset: metrics.utilityLaunchInset
                             )
-                            // The launch clearance belongs to the utility
-                            // target alone. Feed cards remain true top-aligned
-                            // snap targets instead of inheriting this inset.
+                            // The belt is a persistent light surface. Do not
+                            // let the active full-bleed card's dark system
+                            // chrome invert it while it is being uncovered.
+                            .environment(\.colorScheme, .light)
+                            // Keep the belt visually parked in its launch
+                            // position. Its layout slot still supplies the
+                            // native distance to the first snap target, while
+                            // the higher feed-card layer scrolls over it. The
+                            // retreat stays linear and compositor-driven so it
+                            // tracks the user's finger without another spring.
                             .visualEffect { utility, proxy in
-                                utility.opacity(
-                                    min(
-                                        max(
-                                            proxy.frame(in: .scrollView(axis: .vertical)).maxY
-                                                / max(
-                                                    proxy.frame(in: .scrollView(axis: .vertical)).height,
-                                                    1
-                                                ),
-                                            0
-                                        ),
-                                        1
+                                let minY = proxy.frame(
+                                    in: .scrollView(axis: .vertical)
+                                ).minY
+                                let retreatProgress = keepsBeltFullyVisible
+                                    ? 0
+                                    : utilityRetreatProgress(for: minY)
+                                return utility
+                                    // Pin in both directions at the compositor
+                                    // layer. Pulling no longer writes layout
+                                    // state on every scroll callback.
+                                    .offset(y: -minY)
+                                    .scaleEffect(
+                                        1 - retreatProgress * utilityScaleRetreat,
+                                        anchor: .bottom
                                     )
-                                )
+                                    .opacity(1 - retreatProgress)
                             }
+                            .zIndex(0)
                             .id(utilityStoryID)
                             if forYouUtilityPresentation == .carouselAndFullHeight {
                                 fullHeightUtilityCard(
@@ -443,20 +702,47 @@ struct HomePage: View {
                         }
 
                         ForEach(feedEntries) { entry in
-                            feedEntryCard(
-                                entry,
-                                layout: layout,
-                                firstEntryID: firstEntryID
-                            )
-                            .frame(
-                                width: layout.expandedWidth,
-                                height: metrics.fullBleedHeight,
-                                alignment: .top
-                            )
+                            UtilityRailFeedMotionHost(
+                                state: utilityRailExpansion,
+                                followsBelt: entry.id == firstEntryID
+                            ) {
+                                feedEntryCard(
+                                    entry,
+                                    layout: layout,
+                                    firstEntryID: firstEntryID
+                                )
+                                .frame(
+                                    width: layout.expandedWidth,
+                                    height: metrics.fullBleedHeight,
+                                    alignment: .top
+                                )
+                                // Switch chrome from the card's actual edge, not
+                                // the scroll-position commit that arrives after
+                                // snapping finishes. The Boolean geometry value
+                                // changes only at the crossing, avoiding per-frame
+                                // HomePage invalidations while keeping the color
+                                // response attached to the card.
+                                .onGeometryChange(for: Bool.self) { proxy in
+                                    proxy.frame(in: .global).minY <= 1
+                                } action: { _, isAtTop in
+                                    guard entry.id == firstEntryID else { return }
+                                    guard feedChromeIsInverted != isAtTop else { return }
+                                    var transaction = Transaction()
+                                    transaction.disablesAnimations = true
+                                    withTransaction(transaction) {
+                                        feedChromeIsInverted = isAtTop
+                                    }
+                                }
+                                .zIndex(1)
+                            }
                             .id(entry.id)
                         }
                     }
                     .scrollTargetLayout()
+                    .background {
+                        utilityRailPanBridge
+                            .frame(width: 0, height: 0)
+                    }
                     // The header floats above the feed instead of reserving a
                     // safe-area bar. Initial utility content still clears it,
                     // while a snapped viewport card can extend behind it.
@@ -523,6 +809,43 @@ struct HomePage: View {
         )
     }
 
+    /// Belt resizing and native feed scrolling are mutually exclusive. This
+    /// removes the feedback loop that made both layers move during one drag.
+    private var utilityRailPanBridge: some View {
+        UtilityRailVerticalPanBridge(
+            shouldBegin: { verticalVelocity in
+                guard selectedTopicID == "for-you",
+                      buyerPreview.selected.showsUtilityShelf else { return false }
+
+                if utilityRailExpansion.isExpanded {
+                    return true
+                }
+
+                let isAtUtilityTarget = feedScrollState.positionID == utilityStoryID
+                    || visibleStoryID == utilityStoryID
+                return verticalVelocity > 0
+                    && !feedChromeIsInverted
+                    && isAtUtilityTarget
+            },
+            onChanged: { verticalTravel in
+                utilityRailExpansion.update(dragTranslation: verticalTravel)
+            },
+            onEnded: {
+                guard utilityRailExpansion.hasActiveInteraction else { return }
+
+                // The native scroll never moved during a belt drag, so only
+                // the endpoint height needs to settle here.
+                var transaction = Transaction()
+                transaction.disablesAnimations = true
+                withTransaction(transaction) {
+                    feedScrollState.positionID = utilityStoryID
+                    visibleStoryID = utilityStoryID
+                }
+                utilityRailExpansion.settle(reduceMotion: reduceMotion)
+            }
+        )
+    }
+
     private var defaultUtilityProducts: [ResolvedStoryProduct] {
         var seen = Set<String>()
         return focusedStories
@@ -541,9 +864,9 @@ struct HomePage: View {
     }
 
     /// Every product supported by the selected buyer's authored shelves.
-    /// Utility cards use this only to complete a known activity type across
-    /// stories; an item is never presented as purchased/saved without its
-    /// corresponding buyer tag.
+    /// Purchased and saved utilities still require their corresponding buyer
+    /// tag. Keep shopping may use this assortment for related recommendations
+    /// after its verified open-loop products.
     private var allBuyerUtilityProducts: [ResolvedStoryProduct] {
         var seenStories = Set<String>()
         var seenProducts = Set<String>()
@@ -569,22 +892,35 @@ struct HomePage: View {
 
     /// Prefer the configured story, then complete the row with other products
     /// carrying the same verified buyer signal elsewhere in that buyer's feed.
+    /// Open-loop utilities can additionally fill their expanded grid with
+    /// related real products from the same buyer assortment.
     private func utilityProducts(
         for storyID: String?,
         matchingTag tag: String,
-        limit: Int = 3
+        completesWithRelatedProducts: Bool = false,
+        limit: Int = 6
     ) -> [ResolvedStoryProduct] {
         var seen = Set<String>()
         let primary = utilityProducts(for: storyID)
-        return (primary + allBuyerUtilityProducts)
-            .filter { $0.product.tags.contains(tag) }
+        let candidates = primary + allBuyerUtilityProducts
+        let signaled = candidates.filter { $0.product.tags.contains(tag) }
+        let source = completesWithRelatedProducts
+            ? signaled + candidates
+            : signaled
+
+        return source
             .filter { seen.insert($0.id).inserted }
             .prefix(limit)
             .map { $0 }
     }
 
     private func feedUtilityShelf(containerWidth: CGFloat) -> some View {
-        retargetingRailCarousel(containerWidth: containerWidth)
+        UtilityRailExpansionHost(state: utilityRailExpansion) { cardHeight in
+            retargetingRailCarousel(
+                containerWidth: containerWidth,
+                cardHeight: cardHeight
+            )
+        }
         .padding(.top, 18)
         .frame(width: containerWidth)
     }
@@ -620,13 +956,16 @@ struct HomePage: View {
         }
     }
 
-    private func retargetingRailCarousel(containerWidth: CGFloat) -> some View {
+    private func retargetingRailCarousel(
+        containerWidth: CGFloat,
+        cardHeight: CGFloat
+    ) -> some View {
         let railWidth = min(max(containerWidth - 48, 300), 320)
 
         return ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: GravitySpacing.space10) {
+            HStack(alignment: .top, spacing: GravitySpacing.space10) {
                 if buyerPreview.selected.utility.showsOrders {
-                    orderTrackingRailCard(width: railWidth)
+                    orderTrackingRailCard(width: railWidth, height: cardHeight)
                 }
 
                 if let storyID = buyerPreview.selected.utility.buyAgainStoryID {
@@ -638,13 +977,14 @@ struct HomePage: View {
                         utilityProductRail(
                             title: "Buy again",
                             products: products,
-                            maximumWidth: railWidth
+                            maximumWidth: railWidth,
+                            height: cardHeight
                         )
                     }
                 }
 
                 if buyerPreview.selected.utility.showsCart, let cartItem = cartSyncItem {
-                    cartSyncCard(item: cartItem, width: railWidth)
+                    cartSyncCard(item: cartItem, width: railWidth, height: cardHeight)
                 }
 
                 if let storyID = buyerPreview.selected.utility.recentlyViewedStoryID {
@@ -656,7 +996,8 @@ struct HomePage: View {
                         utilityProductRail(
                             title: "Your saves",
                             products: products,
-                            maximumWidth: railWidth
+                            maximumWidth: railWidth,
+                            height: cardHeight
                         )
                     }
                 }
@@ -664,19 +1005,21 @@ struct HomePage: View {
                 if let storyID = buyerPreview.selected.utility.ownedAdjacencyStoryID {
                     let products = utilityProducts(
                         for: storyID,
-                        matchingTag: "buyer-open-loop"
+                        matchingTag: "buyer-open-loop",
+                        completesWithRelatedProducts: true
                     )
                     if !products.isEmpty {
                         utilityProductRail(
                             title: "Keep shopping",
                             products: products,
-                            maximumWidth: railWidth
+                            maximumWidth: railWidth,
+                            height: cardHeight
                         )
                     }
                 }
             }
             .padding(.horizontal, GravitySpacing.space12)
-            .padding(.vertical, 8)
+            .padding(.vertical, UtilityRailMetrics.carouselVerticalPadding)
             .scrollTargetLayout()
         }
         .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
@@ -695,7 +1038,11 @@ struct HomePage: View {
         Double(price.filter { $0.isNumber || $0 == "." }) ?? .greatestFiniteMagnitude
     }
 
-    private func cartSyncCard(item: ResolvedStoryProduct, width: CGFloat) -> some View {
+    private func cartSyncCard(
+        item: ResolvedStoryProduct,
+        width: CGFloat,
+        height: CGFloat
+    ) -> some View {
         Button {
             HapticFeedback.light.fire()
             coordinator.navigateToPage(4)
@@ -744,14 +1091,14 @@ struct HomePage: View {
                     .frame(height: 42)
                     .background(utilityControlFill, in: Capsule())
             }
-            .padding(16)
-            .frame(width: width, height: UtilityRailMetrics.cardHeight)
+            .padding(GravitySpacing.space12)
+            .frame(width: width, height: height)
             .utilityRailSurface(
                 fill: utilitySurfaceFill,
                 border: utilitySurfaceBorder
             )
         }
-        .buttonStyle(PressScaleButtonStyle())
+        .buttonStyle(.plain)
     }
 
     private var deliveryMerchants: [SampleMerchant] {
@@ -762,15 +1109,9 @@ struct HomePage: View {
     }
 
     @ViewBuilder
-    private func orderTrackingRailCard(width: CGFloat) -> some View {
-        if let merchant = deliveryMerchants.first {
-            OrderTrackingUtilityCard(
-                merchant: merchant,
-                products: Array(merchant.products.prefix(2)),
-                width: width
-            ) {
-                coordinator.navigateToPage(1)
-            }
+    private func orderTrackingRailCard(width: CGFloat, height: CGFloat) -> some View {
+        OrderTrackingUtilityCard(width: width, height: height) {
+            coordinator.navigateToPage(1)
         }
     }
 
@@ -947,12 +1288,14 @@ struct HomePage: View {
     private func utilityProductRail(
         title: String,
         products: [ResolvedStoryProduct],
-        maximumWidth: CGFloat
+        maximumWidth: CGFloat,
+        height: CGFloat
     ) -> some View {
         UtilityProductRailCard(
             title: title,
             products: products,
             maximumWidth: maximumWidth,
+            height: height,
             fill: utilitySurfaceFill,
             border: utilitySurfaceBorder,
             onSelectProduct: { item in
@@ -979,7 +1322,7 @@ struct HomePage: View {
         let isSnappedEntry = visibleStoryID == entry.id
         let expansionProgress = firstStoryExpansionProgress
         let hasEnteredFullBleedFeed = expansionProgress >= 0.999
-        let takeoverProgress: CGFloat = {
+        let lockedTakeoverProgress: CGFloat = {
             if isFirstEntry { return expansionProgress }
             // Every card keeps the same full-width slot, but only the card
             // locked at the top loses its top radii. The incoming card stays
@@ -987,8 +1330,11 @@ struct HomePage: View {
             return hasEnteredFullBleedFeed && isSnappedEntry ? 1 : 0
         }()
         let feedCornerRadius = FeedCardStyle.cornerRadius
-        let topCornerRadius = feedCornerRadius * (1 - takeoverProgress)
-        let chromeOpacity = Double(1 - takeoverProgress)
+        // Keep the card silhouette stable while dragging and snapping. A
+        // Home-level scroll flag invalidated the entire page (including the
+        // topic rail), which made the navigation visibly blink.
+        let topCornerRadius = feedCornerRadius
+        let chromeOpacity = Double(1 - lockedTakeoverProgress)
 
         switch entry {
         case .seasonalSavings:
@@ -1144,9 +1490,9 @@ struct HomePage: View {
         .matchedTransitionSource(id: story.id, in: namespace) { source in
             source
                 .shadow(
-                    color: .black.opacity(0.18 * shadowOpacity),
-                    radius: 18,
-                    y: 10
+                    color: .black.opacity(0.10 * shadowOpacity),
+                    radius: 12,
+                    y: 5
                 )
         }
     }
@@ -1266,6 +1612,8 @@ struct HomePage: View {
             selectedTopicID: selectedTopicID,
             feedExpansionProgress: firstStoryExpansionProgress,
             usesInverseStyle: isHolidayHeaderPresented,
+            usesFeedBackdropStyle: selectedTopicID != "for-you"
+                || feedChromeIsInverted,
             selectionNamespace: topicSelectionNamespace,
             railOffset: $topicRailOffset,
             railContentWidth: $topicRailContentWidth,
@@ -1435,6 +1783,8 @@ struct HomePage: View {
         expandingStoryID = nil
 
         if topicID == "for-you" {
+            feedChromeIsInverted = false
+            utilityRailExpansion.reset()
             let targetID = buyerPreview.selected.showsUtilityShelf
                 ? utilityStoryID
                 : feedEntries.first?.id
@@ -1461,6 +1811,14 @@ struct HomePage: View {
         withTransaction(transaction) {
             visibleStoryID = newValue
         }
+    }
+
+    /// The first card travels roughly one utility-card height before it has
+    /// visually taken over the belt. Mapping that distance linearly keeps the
+    /// fade and recession attached to the drag instead of feeling animated.
+    nonisolated private func utilityRetreatProgress(for minY: CGFloat) -> CGFloat {
+        let retreatDistance = UtilityRailMetrics.cardHeight + GravitySpacing.space24
+        return min(max(-minY / retreatDistance, 0), 1)
     }
 
 }

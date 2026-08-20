@@ -143,7 +143,11 @@ enum GravityTypography {
     )
     /// Compact utility-rail title from the top-of-feed card specification.
     static let utilityCardTitle = GravityTextStyle(
-        font: .expressiveBold, fontSize: 24, lineHeight: 26, letterSpacing: GravityLetterSpacing.tight
+        font: .bold, fontSize: 18, lineHeight: 20, letterSpacing: GravityLetterSpacing.tighter
+    )
+    /// Delivery status inside the order utility card: 14/20 semibold.
+    static let utilityOrderStatus = GravityTextStyle(
+        font: .semiBold, fontSize: 14, lineHeight: 20, letterSpacing: GravityLetterSpacing.cozy
     )
 
     static let posterLarge = GravityTextStyle(

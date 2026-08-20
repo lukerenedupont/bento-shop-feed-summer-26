@@ -34,6 +34,22 @@ enum GravityShadows {
         y: 3
     )
 
+    /// Map-backed order utility card; lighter so the pale map remains clean.
+    static let orderUtilityRail = GravityShadow(
+        color: Color.black.opacity(0.10),
+        radius: 14,
+        x: 0,
+        y: 3
+    )
+
+    /// Inset order summary surface from the delivery utility-card spec.
+    static let orderSummary = GravityShadow(
+        color: Color.black.opacity(0.12),
+        radius: 12,
+        x: 0,
+        y: 4
+    )
+
     /// Selected top-level feed chip. The broad, nearly centered falloff keeps
     /// the white pill legible without reading like a raised card.
     static let selectedTopic = GravityShadow(
@@ -45,10 +61,10 @@ enum GravityShadows {
 
     /// Optical support for white labels over photographic feed media.
     static let feedText = GravityShadow(
-        color: Color.black.opacity(0.28),
-        radius: 6,
+        color: Color.black.opacity(0.16),
+        radius: 3,
         x: 0,
-        y: 2
+        y: 1
     )
 
     /// Cards on dark/non-white backgrounds, sheets, modals

@@ -221,10 +221,10 @@ struct StoryFeedCard: View {
             }
             .compositingGroup()
             .shadow(
-                color: .black.opacity(0.12 * shadowOpacity),
-                radius: 24,
+                color: .black.opacity(0.07 * shadowOpacity),
+                radius: 16,
                 x: 0,
-                y: 4
+                y: 3
             )
         }
         // A scroll drag begins as a press. Scaling the full card here made

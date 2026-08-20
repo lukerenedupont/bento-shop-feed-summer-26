@@ -10,6 +10,7 @@ struct BuyerFeedNavigationBar: View {
     let selectedTopicID: String
     let feedExpansionProgress: CGFloat
     var usesInverseStyle = false
+    var usesFeedBackdropStyle = false
     let selectionNamespace: Namespace.ID
     @Binding var railOffset: CGFloat
     @Binding var railContentWidth: CGFloat
@@ -143,14 +144,21 @@ struct BuyerFeedNavigationBar: View {
     }
 
     private func labelColor(for topic: BuyerFeedTopic) -> Color {
-        guard usesInverseStyle else {
+        if usesInverseStyle {
+            return topic.id == selectedTopicID
+                ? .white
+                : .white.opacity(0.75)
+        }
+        if usesFeedBackdropStyle {
+            // The selected chip remains the established white surface with
+            // dark type; only the uncontained rail labels invert over media.
             return topic.id == selectedTopicID
                 ? GravityColors.textFixedDark
-                : GravityColors.textTertiary
+                : .white.opacity(0.82)
         }
         return topic.id == selectedTopicID
-            ? .white
-            : .white.opacity(0.75)
+            ? GravityColors.textFixedDark
+            : GravityColors.textTertiary
     }
 
     private func clampedOffset(
