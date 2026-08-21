@@ -116,35 +116,14 @@ enum FeedInformationArchitecture {
         in category: FeedCategory,
         visibleStoryIndex: Int? = nil
     ) -> FeedCardProductLayout {
-        // This lead film is an editorial backdrop, so keep its commerce layer
-        // to one horizontally browsable row of the shelf's lamps, mirrors,
-        // side tables, and coffee tables instead of covering it with a grid.
-        if story.id == "shelf-luke-2-sculptural-living-room-pieces" {
-            return .bottomCarousel
-        }
-
-        guard !category.productLayouts.isEmpty else {
-            return .stackedDeck
-        }
-
-        let storyIndex: Int
-        if category.id == "for-you" {
-            // For You is ordered by the active catalog rather than a fixed ID
-            // list. Its visible position keeps the recipe stable while still
-            // supporting newly generated stories from the remote feed.
-            storyIndex = visibleStoryIndex ?? 0
-        } else if let visibleStoryIndex {
-            // Profile-authored shelves can introduce canonical stories that
-            // are not part of the global category candidate list. Their live
-            // position still participates in the same stable layout rhythm.
-            storyIndex = visibleStoryIndex
-        } else if let candidateIndex = category.candidateStoryIDs.firstIndex(of: story.id) {
-            storyIndex = candidateIndex
-        } else {
-            return .stackedDeck
-        }
-
-        return category.productLayouts[storyIndex % category.productLayouts.count]
+        // Full-height feed cards now share one predictable commerce pattern:
+        // a large, horizontally browsable product rail anchored at the bottom.
+        // Keep the parameters in the API so data-driven recipes can return
+        // later without changing every caller.
+        _ = story
+        _ = category
+        _ = visibleStoryIndex
+        return .bottomCarousel
     }
 }
 

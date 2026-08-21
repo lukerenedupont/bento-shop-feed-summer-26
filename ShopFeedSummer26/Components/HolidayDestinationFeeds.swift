@@ -6,10 +6,12 @@ import SwiftUI
 struct HolidaySaleDestinationFeed: View {
     let products: [ResolvedStoryProduct]
     let topInset: CGFloat
+    var onFilterPinned: (Bool) -> Void
 
     @Environment(NavigationCoordinator.self) private var coordinator
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var marketplaceRotation: Double = 0
+    @State private var filtersArePinned = false
 
     private var flashDeals: [ResolvedStoryProduct] { slice(0, count: 6) }
     private var dealsForYou: [ResolvedStoryProduct] { slice(6, count: 6) }
@@ -22,6 +24,20 @@ struct HolidaySaleDestinationFeed: View {
             LazyVStack(alignment: .leading, spacing: GravitySpacing.space24) {
                 saleLeadIn
                 HolidayFilterRail(labels: ["Women", "Beauty", "Men", "Food & drink"])
+                    .opacity(filtersArePinned ? 0 : 1)
+                    .onGeometryChange(for: Bool.self) { proxy in
+                        let stickyTop = max(
+                            topInset
+                                - FeedNavigationStyle.controlSize
+                                - GravitySpacing.space8,
+                            0
+                        )
+                        return proxy.frame(in: .global).minY <= stickyTop
+                    } action: { _, isPinned in
+                        guard filtersArePinned != isPinned else { return }
+                        filtersArePinned = isPinned
+                        onFilterPinned(isPinned)
+                    }
 
                 HolidayProductRail(
                     title: "Today’s flash deals",
@@ -57,6 +73,7 @@ struct HolidaySaleDestinationFeed: View {
         }
         .background(Color.white)
         .ignoresSafeArea(edges: .top)
+        .onDisappear { onFilterPinned(false) }
     }
 
     private var saleLeadIn: some View {
@@ -314,8 +331,9 @@ struct HolidayGiftGuidesDestinationFeed: View {
     }
 }
 
-private struct HolidayFilterRail: View {
+struct HolidayFilterRail: View {
     let labels: [String]
+    var showsStickyBackdrop = false
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -342,6 +360,44 @@ private struct HolidayFilterRail: View {
             .padding(.vertical, GravitySpacing.space4)
         }
         .scrollClipDisabled()
+        .background(alignment: .top) {
+            if showsStickyBackdrop {
+                StickyFilterBackdrop()
+            }
+        }
+    }
+}
+
+/// Shared protection for filter rails that replace the top-level topic bar.
+/// The material remains strongest through the controls, then dissolves into
+/// the scrolling page instead of reading as a separate navigation surface.
+struct StickyFilterBackdrop: View {
+    var height: CGFloat = 136
+    var opaqueStop: CGFloat = 0.54
+
+    var body: some View {
+        ZStack {
+            Rectangle().fill(.ultraThinMaterial)
+            LinearGradient(
+                colors: [.white.opacity(0.94), .white.opacity(0.76), .clear],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        }
+        .mask {
+            LinearGradient(
+                stops: [
+                    .init(color: .black, location: 0),
+                    .init(color: .black.opacity(0.92), location: opaqueStop),
+                    .init(color: .clear, location: 1),
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        }
+        .frame(height: height)
+        .ignoresSafeArea(edges: .top)
+        .allowsHitTesting(false)
     }
 }
 

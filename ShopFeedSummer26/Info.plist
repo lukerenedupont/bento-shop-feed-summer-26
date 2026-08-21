@@ -19,6 +19,10 @@
 	<!-- Required for a physical device to reach the Mac running the dev server. -->
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Loads the prototype feed from the dossier-lab server running on your Mac.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Use the front camera to preview products on you in the live fitting room.</string>
+	<key>FalTokenEndpoint</key>
+	<string>$(FAL_TOKEN_ENDPOINT)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>GTStandard-LHeavy.otf</string>

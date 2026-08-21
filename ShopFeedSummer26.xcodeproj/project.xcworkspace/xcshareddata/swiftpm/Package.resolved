@@ -1,5 +1,5 @@
 {
-  "originHash" : "ec87c901a966a0f9f36b764433349d1bbe2a33b446247aade0a1a24f52b49acb",
+  "originHash" : "492e0d598de4dee3c383b978c97b3d91bbfb4499ec6a5be4e41e4596225a09f5",
   "pins" : [
     {
       "identity" : "floatingpanel",
@@ -8,6 +8,24 @@
       "state" : {
         "revision" : "3803821e04bae3647c434495fab44fdd33cf7368",
         "version" : "3.2.3"
+      }
+    },
+    {
+      "identity" : "swift-msgpack",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nnabeyang/swift-msgpack.git",
+      "state" : {
+        "revision" : "1c8dbd506c68888df3fd5df4ff56cef9cb39c388",
+        "version" : "0.7.0"
+      }
+    },
+    {
+      "identity" : "webrtc-xcframework",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/livekit/webrtc-xcframework.git",
+      "state" : {
+        "revision" : "46f2af86f06b9a8a9158d37cadda5cb5a214e4c4",
+        "version" : "144.7559.11"
       }
     }
   ],

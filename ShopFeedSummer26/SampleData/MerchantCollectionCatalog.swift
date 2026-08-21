@@ -654,6 +654,7 @@ enum MerchantBrandAssets {
         "svrn-rick-owens": "svrn",
         "feature-salomon": "feature",
         "extra-butter-salomon": "extra-butter",
+        "shelf-shop-the-oblist-02fd47c": "the-oblist",
     ]
 
     /// Storefront scraping can surface payment sprites or campaign art near
@@ -665,7 +666,7 @@ enum MerchantBrandAssets {
 
     static func hasVerifiedBundledWordmark(for merchantID: String) -> Bool {
         let assetID = aliases[merchantID] ?? merchantID
-        return !merchantID.hasPrefix("shelf-shop-")
+        return (!merchantID.hasPrefix("shelf-shop-") || aliases[merchantID] != nil)
             && !textFallbackOnly.contains(assetID)
     }
 

@@ -15,6 +15,7 @@ struct StoryTopicPage: View {
 
     @Environment(NavigationCoordinator.self) private var coordinator
     @State private var previousNavBarTint: Color?
+    @State private var isFollowingTopic = false
 
     private var isLegacyStory: Bool {
         PersonalizedFeedCatalog.current.stories.contains { $0.id == storyID } == false
@@ -188,6 +189,8 @@ struct StoryTopicPage: View {
                 .accessibilityLabel("Close")
 
                 Spacer()
+
+                topicFollowButton
             }
             .padding(.horizontal, GravitySpacing.space16)
             .frame(
@@ -257,6 +260,29 @@ struct StoryTopicPage: View {
             }
             .frame(maxWidth: .infinity, minHeight: FeedNavigationStyle.controlSize, alignment: .leading)
         }
+    }
+
+    private var topicFollowButton: some View {
+        Button {
+            HapticFeedback.light.fire()
+            withAnimation(.easeInOut(duration: 0.18)) {
+                isFollowingTopic.toggle()
+            }
+        } label: {
+            Text(isFollowingTopic ? "Following" : "Follow")
+                .font(GravityFont.semiBold.fixedFont(size: 14))
+                .foregroundStyle(isFollowingTopic ? .white : .black)
+                .padding(.horizontal, GravitySpacing.space16)
+                .frame(height: FeedNavigationStyle.controlSize)
+                .background {
+                    Capsule()
+                        .fill(isFollowingTopic ? .black.opacity(0.34) : FeedNavigationStyle.selectedFill)
+                        .background(.ultraThinMaterial, in: Capsule())
+                }
+        }
+        .buttonStyle(PressScaleButtonStyle())
+        .accessibilityLabel(isFollowingTopic ? "Unfollow this topic" : "Follow this topic")
+        .accessibilityAddTraits(isFollowingTopic ? .isSelected : [])
     }
 }
 

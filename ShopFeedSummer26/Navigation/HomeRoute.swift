@@ -10,6 +10,7 @@ enum HomeRoute: Hashable {
     case story(storyId: String, sourceId: String? = nil)
     /// Opens the original topic page through its source feed card.
     case topicExpanded(topicId: String, sourceStoryId: String)
+    case tryOnStudio
     case deliveries
     case deliveryDetail(deliveryId: String)
     case account

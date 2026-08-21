@@ -11,6 +11,7 @@ struct TopicDetailPage: View {
     @Environment(NavigationCoordinator.self) private var coordinator
     @Environment(\.dismiss) private var dismiss
     @State private var showsControls = false
+    @State private var isFollowingTopic = false
     @State private var focusedDealID: String?
     @State private var postService = ShopPostService.shared
 
@@ -155,7 +156,8 @@ struct TopicDetailPage: View {
         var result: [SampleMerchant] = []
 
         for merchant in relatedMerchants {
-            guard !merchant.products.isEmpty,
+            guard merchant.products.count >= 3,
+                  hasRenderableDealWordmark(merchant),
                   seen.insert(merchant.id).inserted else { continue }
             result.append(merchant)
         }
@@ -164,6 +166,7 @@ struct TopicDetailPage: View {
             .filter {
                 $0.coverImageURL != nil
                     && $0.products.count >= 3
+                    && hasRenderableDealWordmark($0)
                     && relevance(of: $0) >= 2
                     && hasPriceFit($0)
             }
@@ -236,9 +239,15 @@ struct TopicDetailPage: View {
                 }
                 .scrollBounceBehavior(.basedOnSize)
 
-                closeButton
+                HStack {
+                    closeButton
+                    Spacer()
+                    followButton
+                }
+                    .frame(width: geometry.size.width)
                     .padding(.top, windowSafeAreaTopInset + GravitySpacing.space4)
                     .opacity(showsControls ? 1 : 0)
+                    .zIndex(10)
             }
         }
         .ignoresSafeArea()
@@ -536,6 +545,30 @@ struct TopicDetailPage: View {
         .accessibilityLabel("Close")
     }
 
+    private var followButton: some View {
+        Button {
+            HapticFeedback.light.fire()
+            withAnimation(.easeInOut(duration: 0.18)) {
+                isFollowingTopic.toggle()
+            }
+        } label: {
+            Text(isFollowingTopic ? "Following" : "Follow")
+                .font(GravityFont.semiBold.fixedFont(size: 14))
+                .foregroundStyle(isFollowingTopic ? .white : .black)
+                .padding(.horizontal, GravitySpacing.space16)
+                .frame(height: 40)
+                .background {
+                    Capsule()
+                        .fill(isFollowingTopic ? .black.opacity(0.34) : .white)
+                        .background(.ultraThinMaterial, in: Capsule())
+                }
+        }
+        .buttonStyle(PressScaleButtonStyle())
+        .padding(.trailing, GravitySpacing.space16)
+        .accessibilityLabel(isFollowingTopic ? "Unfollow this topic" : "Follow this topic")
+        .accessibilityAddTraits(isFollowingTopic ? .isSelected : [])
+    }
+
 }
 
 private struct RelatedDeal: Identifiable {
@@ -829,7 +862,7 @@ private struct TopicMerchantShowcaseCard: View {
     @Environment(NavigationCoordinator.self) private var coordinator
 
     private var products: [SampleMerchant.Product] {
-        Array(merchant.products.prefix(6))
+        Array(merchant.products.prefix(3))
     }
 
     var body: some View {
@@ -850,16 +883,12 @@ private struct TopicMerchantShowcaseCard: View {
 
                 VStack(spacing: GravitySpacing.space10) {
                     HStack {
-                        if MerchantBrandAssets.hasVerifiedBundledWordmark(for: merchant.id) || merchant.bestWordmarkURL != nil {
-                            MerchantWordmarkImage(
-                                merchant: merchant,
-                                maxHeight: 34,
-                                maxWidth: 150,
-                                bundledAssetName: MerchantBrandAssets.wordmarkName(for: merchant.id)
-                            )
-                        } else {
-                            MerchantLogoImage(merchant: merchant, size: 44)
-                        }
+                        MerchantWordmarkImage(
+                            merchant: merchant,
+                            maxHeight: 34,
+                            maxWidth: 150,
+                            bundledAssetName: MerchantBrandAssets.wordmarkName(for: merchant.id)
+                        )
                         Spacer()
                         if merchant.totalRatings > 0 {
                             Label(String(format: "%.1f", merchant.rating), systemImage: "star.fill")
@@ -879,6 +908,8 @@ private struct TopicMerchantShowcaseCard: View {
                                 .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r16, style: .continuous))
                         }
                     }
+
+                    Spacer(minLength: 0)
 
                     Text("Shop all")
                         .font(GravityFont.semiBold.fixedFont(size: 14))

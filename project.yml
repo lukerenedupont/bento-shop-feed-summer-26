@@ -15,6 +15,12 @@ settings:
     Debug:
       ENABLE_DEBUG_DYLIB: YES
 packages:
+  LiveKitWebRTC:
+    url: https://github.com/livekit/webrtc-xcframework.git
+    exactVersion: "144.7559.11"
+  SwiftMsgpack:
+    url: https://github.com/nnabeyang/swift-msgpack.git
+    from: "0.3.3"
   FloatingPanel:
     url: https://github.com/scenee/FloatingPanel
     from: "3.0.0"
@@ -40,9 +46,14 @@ targets:
         type: folder
         buildPhase: resources
     dependencies:
+      - package: LiveKitWebRTC
+        product: LiveKitWebRTC
+      - package: SwiftMsgpack
+        product: SwiftMsgpack
       - package: FloatingPanel
     settings:
       base:
+        FAL_TOKEN_ENDPOINT: ""
         PRODUCT_BUNDLE_IDENTIFIER: com.shopify.purl.prototype.shop.feed.summer.26
         PRODUCT_NAME: ShopFeedSummer26
         INFOPLIST_KEY_CFBundleDisplayName: "Shop Feed Summer 26"

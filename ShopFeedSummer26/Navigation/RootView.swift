@@ -77,6 +77,8 @@ struct RootView: View {
                 sourceStoryID: sourceStoryId,
                 namespace: namespace
             )
+        case .tryOnStudio:
+            TryOnStudioPage(namespace: namespace)
         case .deliveries:
             DeliveriesPage(namespace: namespace)
         case .deliveryDetail(let deliveryId):

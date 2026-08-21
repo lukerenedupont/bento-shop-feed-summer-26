@@ -78,6 +78,7 @@ MERCHANTS = [
     Merchant("feature", "Feature", "https://feature.com"),
     Merchant("extra-butter", "Extra Butter", "https://extrabutterny.com"),
     Merchant("house-of-leon", "House of Leon", "https://houseofleon.com"),
+    Merchant("the-oblist", "The Oblist", "https://oblist.com"),
 ]
 
 
@@ -111,6 +112,7 @@ OVERRIDES: dict[str, str] = {
     "promix": "https://promixnutrition.com/cdn/shop/t/175/assets/promix-protein-powder-logo.png?v=171405470187072173881772815812",
     "house-of-leon": "https://houseofleon.com/cdn/shop/files/House_of_Leon_Logo_Dark_360x.png?v=1645092990",
     "caldigit": "https://www.caldigit.com/wp-content/uploads/2022/10/CalDigit-Logo.png",
+    "the-oblist": "https://oblist.com/cdn/shop/files/THE_OBLIST_LOGO_WEBSITE_OFFICIAL.png?v=1680512369&width=1200",
 }
 
 # A small number of official theme assets are SVG symbol sheets. The exact

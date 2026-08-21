@@ -319,6 +319,30 @@ enum HypothesisShelfCatalog {
             )
         }
 
+        // The authenticated shelf contains two saved The Oblist lamps. Add a
+        // current item from the same official storefront so merchant cards
+        // can keep their fixed three-product treatment without duplicating a
+        // product or borrowing inventory from another shop.
+        let oblistID = "shelf-shop-the-oblist-02fd47c"
+        if products[oblistID, default: []].count < 3 {
+            products[oblistID, default: []].append(
+                SampleMerchant.Product(
+                    id: 8_254_326_407_433,
+                    title: "Socorro Lamp",
+                    price: "1527.00",
+                    handle: "824410-socorro-lamp",
+                    productType: "Table lamps",
+                    vendor: "The Oblist",
+                    imageURL: "https://cdn.shopify.com/s/files/1/0671/5290/4457/files/hi1bvskktqsnh1vhmuht.jpg?v=1769353096",
+                    shopURL: "https://oblist.com/products/824410-socorro-lamp",
+                    tags: ["canonical-catalog", "merchant-editorial"],
+                    allImageURLs: [
+                        "https://cdn.shopify.com/s/files/1/0671/5290/4457/files/hi1bvskktqsnh1vhmuht.jpg?v=1769353096"
+                    ]
+                )
+            )
+        }
+
         return order.compactMap { merchantID in
             guard let name = names[merchantID], let catalog = products[merchantID],
                   let cover = catalog.first?.imageURL else { return nil }

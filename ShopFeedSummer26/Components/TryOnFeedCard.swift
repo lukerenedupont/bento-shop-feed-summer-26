@@ -1,0 +1,201 @@
+import SwiftUI
+
+enum TryOnExperience {
+    static let cardID = "decart-live-try-on"
+
+    // Stable apparel references from the bundled catalog. These are kept at
+    // the front of the tray so the isolated prototype always has useful VTON
+    // inputs, even when a generated feed contains furniture or accessories.
+    private static let curatedReferences: [(merchantID: String, productID: Int)] = [
+        ("feature-salomon", 6_882_429_894_727),
+        ("feature-salomon", 6_882_429_861_959),
+        ("feature-salomon", 6_882_429_993_031),
+        ("feature-salomon", 7_580_944_400_455),
+    ]
+
+    @MainActor
+    private static let curatedProducts: [ResolvedStoryProduct] = {
+        let merchants = LocalMerchantService.loadMerchants()
+
+        return curatedReferences.compactMap { reference in
+            guard let merchant = merchants.first(where: { $0.id == reference.merchantID }),
+                  let product = merchant.products.first(where: { $0.id == reference.productID }) else {
+                return nil
+            }
+            return ResolvedStoryProduct(merchant: merchant, product: product)
+        }
+    }()
+
+    @MainActor
+    static func isCurated(_ item: ResolvedStoryProduct) -> Bool {
+        curatedProducts.contains { $0.id == item.id }
+    }
+
+    @MainActor
+    static func products(
+        stories: [FeedStory] = PersonalizedFeedStories.all,
+        merchants: [SampleMerchant]
+    ) -> [ResolvedStoryProduct] {
+        var seen = Set<String>()
+
+        let feedProducts = stories
+            .flatMap { $0.resolvedProducts(from: merchants) }
+
+        return (curatedProducts + feedProducts)
+            .filter { item in
+                guard item.product.imageURL != nil else { return false }
+                return seen.insert(item.id).inserted
+            }
+    }
+}
+
+/// The final Home feed card. It deliberately keeps the experiment separate
+/// from normal story navigation while previewing the products available in the
+/// live AI product studio.
+struct TryOnFeedCard: View {
+    let products: [ResolvedStoryProduct]
+    let width: CGFloat
+    let height: CGFloat
+    var foregroundTopPadding: CGFloat = GravitySpacing.space20
+    var scrollPinnedTitleTop: CGFloat? = nil
+    let onTap: () -> Void
+
+    var body: some View {
+        Button {
+            HapticFeedback.light.fire()
+            onTap()
+        } label: {
+            ZStack {
+                Image("try-on-studio")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: width, height: height)
+                    .clipped()
+
+                backgroundScrim
+
+                VStack(alignment: .leading, spacing: 0) {
+                    scrollAwareTitle
+
+                    Spacer(minLength: GravitySpacing.space16)
+
+                    bottomProductCarousel
+                }
+                .padding(.horizontal, FeedCardStyle.foregroundHorizontalPadding)
+                .padding(.top, foregroundTopPadding)
+                .padding(.bottom, FeedCardStyle.foregroundBottomPadding)
+            }
+            .frame(width: width, height: height)
+            .clipShape(RoundedRectangle(cornerRadius: FeedCardStyle.cornerRadius, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: FeedCardStyle.cornerRadius, style: .continuous)
+                    .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
+            }
+            .compositingGroup()
+            .shadow(color: .black.opacity(0.07), radius: 16, y: 3)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Try products from your feed live")
+        .accessibilityHint("Opens the live Decart studio and starts the camera")
+    }
+
+    private var backgroundScrim: some View {
+        LinearGradient(
+            stops: [
+                .init(color: .black.opacity(0.36), location: 0),
+                .init(color: .black.opacity(0.22), location: 0.14),
+                .init(color: .black.opacity(0.06), location: 0.30),
+                .init(color: .clear, location: 0.42),
+                .init(color: .clear, location: 0.62),
+                .init(color: .black.opacity(0.10), location: 0.78),
+                .init(color: .black.opacity(0.46), location: 1),
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+
+    private var title: some View {
+        Text("Try it live.")
+            .feedCardTitleStyle()
+            .foregroundStyle(.white)
+            .gravityShadow(GravityShadows.feedText)
+            .multilineTextAlignment(.leading)
+            .lineLimit(3)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var scrollAwareTitle: some View {
+        title
+            .visualEffect { title, proxy in
+                title.offset(
+                    y: max(
+                        0,
+                        (scrollPinnedTitleTop
+                            ?? proxy.frame(in: .scrollView(axis: .vertical)).minY)
+                            - proxy.frame(in: .scrollView(axis: .vertical)).minY
+                    )
+                )
+            }
+    }
+
+    private var footer: some View {
+        HStack(spacing: GravitySpacing.space8) {
+            Text("\(products.count) products")
+                .font(.system(size: 13, weight: .medium))
+                .lineLimit(1)
+
+            Spacer(minLength: GravitySpacing.space8)
+
+            Text("Try live")
+                .font(.system(size: 18, weight: .semibold))
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 13, weight: .semibold))
+        }
+        .foregroundStyle(.white)
+        .gravityShadow(GravityShadows.feedText)
+    }
+
+    private var bottomProductCarousel: some View {
+        let tileWidth = max((width - 64) / 2, 144)
+
+        return VStack(spacing: FeedCardStyle.productFooterSpacing) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: GravitySpacing.space8) {
+                    ForEach(products) { item in
+                        ProductCard(
+                            image: nil,
+                            imageURL: item.product.imageURL,
+                            priceBadge: formatPrice(item.product.price),
+                            showFavoriteButton: true
+                        )
+                        .allowsHitTesting(false)
+                        .frame(width: tileWidth)
+                    }
+                }
+                .scrollTargetLayout()
+            }
+            .contentMargins(.leading, GravitySpacing.space20, for: .scrollContent)
+            .padding(.horizontal, -GravitySpacing.space20)
+            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+
+            footer
+        }
+        .frame(height: tileWidth + FeedCardStyle.productFooterBlockHeight)
+    }
+}
+
+#Preview {
+    TryOnFeedCard(
+        products: TryOnExperience.products(
+            stories: FeedStory.previews,
+            merchants: SampleMerchant.previews
+        ),
+        width: 377,
+        height: 645,
+        onTap: {}
+    )
+    .padding()
+    .background(.black)
+}

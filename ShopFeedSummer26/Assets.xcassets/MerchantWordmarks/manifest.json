@@ -232,5 +232,11 @@
     "asset": "merchant-wordmark-house-of-leon",
     "source": "https://houseofleon.com/cdn/shop/files/House_of_Leon_Logo_Dark_360x.png?v=1645092990",
     "error": null
+  },
+  "the-oblist": {
+    "name": "The Oblist",
+    "asset": "merchant-wordmark-the-oblist",
+    "source": "https://oblist.com/cdn/shop/files/THE_OBLIST_LOGO_WEBSITE_OFFICIAL.png?v=1680512369&width=1200",
+    "error": null
   }
 }

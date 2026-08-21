@@ -370,12 +370,14 @@ struct HomePage: View {
     ])
 
     private enum FeedEntry: Identifiable {
+        case tryOn
         case seasonalSavings
         case story(FeedStory)
         case post(ShopPost)
 
         var id: String {
             switch self {
+            case .tryOn: TryOnExperience.cardID
             case .seasonalSavings: "seasonal-savings"
             case let .story(story): story.id
             case let .post(post): "shop-post-\(post.id)"
@@ -434,6 +436,9 @@ struct HomePage: View {
     @State private var expandingStoryID: String?
     @State private var categoryMoveDirection = 1
     @State private var showsBuyerSwitcher = false
+    @State private var holidayFiltersPinned = false
+    @State private var dealsFiltersPinned = false
+    @State private var selectedDealFilterBand: DealFilterBand = .all
     @AppStorage("holidayHeaderEnabled") private var legacyHolidayHeaderEnabled = false
     @AppStorage("seasonalPlacement") private var seasonalPlacementRawValue = ""
 
@@ -441,6 +446,10 @@ struct HomePage: View {
     /// Keep the full-height exploration available without placing it in the
     /// live feed. Switching this recipe restores the prototype for comparison.
     private let forYouUtilityPresentation: ForYouUtilityPresentation = .carouselOnly
+
+    private var destinationFiltersPinned: Bool {
+        holidayFiltersPinned || dealsFiltersPinned
+    }
 
     private var topics: [FeedTopic] { PersonalizedFeedCatalog.current.topics }
     private var baseNavigationTopics: [BuyerFeedTopic] {
@@ -595,7 +604,7 @@ struct HomePage: View {
         }
 
         let posts = Array(postService.posts(for: buyerPreview.selected).prefix(4))
-        var result: [FeedEntry] = []
+        var result: [FeedEntry] = [.tryOn]
         var nextPostIndex = 0
         for (index, story) in focusedStories.enumerated() {
             result.append(.story(story))
@@ -605,9 +614,13 @@ struct HomePage: View {
             }
         }
         if seasonalPlacement == .feedCard {
-            result.insert(.seasonalSavings, at: 0)
+            result.insert(.seasonalSavings, at: min(1, result.count))
         }
         return result
+    }
+
+    private var tryOnProducts: [ResolvedStoryProduct] {
+        TryOnExperience.products(stories: focusedStories, merchants: merchants)
     }
 
     private var activeFeedStory: FeedStory? {
@@ -691,9 +704,38 @@ struct HomePage: View {
             .ignoresSafeArea()
         }
         .overlay(alignment: .top) {
-            if !buyerPreview.selected.usesInlineTopicNavigation || focusedStoryID == nil {
-                topBar
+            ZStack(alignment: .top) {
+                if !buyerPreview.selected.usesInlineTopicNavigation || focusedStoryID == nil {
+                    topBar
+                        .offset(
+                            y: destinationFiltersPinned
+                                ? -(FeedNavigationStyle.controlSize + GravitySpacing.space16)
+                                : 0
+                        )
+                        .opacity(destinationFiltersPinned ? 0 : 1)
+                }
+
+                if selectedTopicID == "holiday-sale",
+                   focusedStoryID == nil,
+                   holidayFiltersPinned {
+                    HolidayFilterRail(
+                        labels: ["Women", "Beauty", "Men", "Food & drink"],
+                        showsStickyBackdrop: true
+                    )
+                    .transition(.opacity)
+                    .zIndex(2)
+                } else if selectedTopicID == "deals",
+                          focusedStoryID == nil,
+                          dealsFiltersPinned {
+                    DealFilterTrain(
+                        selectedBand: $selectedDealFilterBand,
+                        showsStickyBackdrop: true
+                    )
+                    .transition(.opacity)
+                    .zIndex(2)
+                }
             }
+            .animation(.easeOut(duration: 0.16), value: destinationFiltersPinned)
         }
         .overlay {
             if showsBuyerSwitcher {
@@ -752,6 +794,8 @@ struct HomePage: View {
             prefetchFeedMedia(around: storyID)
         }
         .onChange(of: selectedTopicID) { _, newTopicID in
+            holidayFiltersPinned = false
+            dealsFiltersPinned = false
             resetFeedPosition(for: newTopicID)
             withAnimation(.easeOut(duration: 0.22)) {
                 coordinator.navBarBlurTint = pageBackgroundColor
@@ -789,7 +833,10 @@ struct HomePage: View {
         if selectedTopicID == "holiday-sale" {
             HolidaySaleDestinationFeed(
                 products: allBuyerUtilityProducts,
-                topInset: destinationTopInset
+                topInset: destinationTopInset,
+                onFilterPinned: { isPinned in
+                    holidayFiltersPinned = isPinned
+                }
             )
         } else if selectedTopicID == "gift-guides" {
             HolidayGiftGuidesDestinationFeed(
@@ -804,7 +851,11 @@ struct HomePage: View {
         } else if selectedTopicID == "deals" {
             DealsDestinationFeed(
                 products: evergreenRelationshipProducts,
-                topInset: destinationTopInset
+                topInset: destinationTopInset,
+                selectedBand: $selectedDealFilterBand,
+                onFilterPinned: { isPinned in
+                    dealsFiltersPinned = isPinned
+                }
             )
         } else {
             storyFeed
@@ -817,7 +868,12 @@ struct HomePage: View {
             let isForYou = selectedTopicID == "for-you"
             let firstEntryID = feedEntries.first?.id
             let utilityScaleRetreat: CGFloat = reduceMotion ? 0 : 0.05
-            let keepsBeltFullyVisible = utilityRailExpansion.keepsBeltFullyVisible
+            // The seasonal campaign is a fixed launch surface. Its banner and
+            // utility belt stay parked while the first feed card travels over
+            // them, avoiding a second fade/scale motion during the native snap.
+            // Evergreen For You retains the belt's restrained retreat.
+            let keepsLaunchSurfaceFullyVisible = seasonalPlacement == .header
+                || utilityRailExpansion.keepsBeltFullyVisible
             let metrics = FeedViewportMetrics(
                 containerSize: geo.size,
                 safeAreaTop: max(geo.safeAreaInsets.top, windowSafeAreaTopInset),
@@ -841,13 +897,13 @@ struct HomePage: View {
                             // position. Its layout slot still supplies the
                             // native distance to the first snap target, while
                             // the higher feed-card layer scrolls over it. The
-                            // retreat stays linear and compositor-driven so it
-                            // tracks the user's finger without another spring.
+                            // evergreen retreat stays compositor-driven; the
+                            // seasonal launch surface remains fully fixed.
                             .visualEffect { utility, proxy in
                                 let minY = proxy.frame(
                                     in: .scrollView(axis: .vertical)
                                 ).minY
-                                let retreatProgress = keepsBeltFullyVisible
+                                let retreatProgress = keepsLaunchSurfaceFullyVisible
                                     ? 0
                                     : utilityRetreatProgress(for: minY)
                                 return utility
@@ -933,6 +989,10 @@ struct HomePage: View {
                 )
                 .frame(height: metrics.extendedViewportHeight)
                 .offset(y: -metrics.safeAreaTop)
+                // The feed provides its own media contrast beneath the
+                // floating topic rail. Disable iOS's automatic scroll-edge
+                // treatment so it cannot progressively blur the fixed banner.
+                .scrollEdgeEffectHidden(for: .top)
                 .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
                 .scrollPosition(
                     id: Binding(
@@ -1555,6 +1615,28 @@ struct HomePage: View {
         let chromeOpacity = Double(1 - lockedTakeoverProgress)
 
         switch entry {
+        case .tryOn:
+            TryOnFeedCard(
+                products: tryOnProducts,
+                width: layout.cardWidth,
+                height: layout.cardHeight,
+                foregroundTopPadding: layout.foregroundTopPadding,
+                scrollPinnedTitleTop: layout.pinnedTitleTop
+            ) {
+                coordinator.resetScrollState()
+                coordinator.pushRoute(.tryOnStudio)
+            }
+            .matchedTransitionSource(id: TryOnExperience.cardID, in: namespace) { source in
+                source
+                    .background(.clear)
+                    .clipShape(
+                        RoundedRectangle(
+                            cornerRadius: feedCornerRadius,
+                            style: .continuous
+                        )
+                    )
+            }
+
         case .seasonalSavings:
             HolidayFeedCard(
                 width: layout.cardWidth,
@@ -1841,6 +1923,11 @@ struct HomePage: View {
                 }
             }
         )
+        .background(alignment: .top) {
+            if selectedTopicID == "following", focusedStoryID == nil {
+                StickyFilterBackdrop(height: 164, opaqueStop: 0.60)
+            }
+        }
         .fullScreenCover(isPresented: $showsBuyerSwitcher) {
             buyerSwitcher
         }

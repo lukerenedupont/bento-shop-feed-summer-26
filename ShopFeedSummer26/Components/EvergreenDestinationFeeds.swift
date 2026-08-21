@@ -216,25 +216,17 @@ private struct FollowingHeroCard: View {
             }
             .overlay(alignment: .leading) {
                 VStack(alignment: .leading, spacing: 0) {
-                Group {
-                    if let logo = merchant.bestWordmarkURL ?? merchant.bestLogoURL,
-                       let url = URL(string: logo) {
-                        CachedAsyncImage(url: url) { phase in
-                            if case .success(let image) = phase {
-                                image.resizable().scaledToFit()
-                            } else {
-                                Text(merchant.displayName)
-                                    .font(GravityFont.bold.fixedFont(size: 18))
-                            }
-                        }
-                        .frame(width: 112, height: 34, alignment: .leading)
-                    } else {
-                        Text(merchant.displayName)
-                            .font(GravityFont.bold.fixedFont(size: 18))
-                            .lineLimit(1)
-                    }
-                }
-                .foregroundStyle(.white)
+                MerchantWordmarkImage(
+                    merchant: merchant,
+                    maxHeight: 34,
+                    maxWidth: 120,
+                    tint: .white,
+                    bundledAssetName: MerchantBrandAssets.hasVerifiedBundledWordmark(
+                        for: merchant.id
+                    )
+                        ? MerchantBrandAssets.wordmarkName(for: merchant.id)
+                        : nil
+                )
 
                 Spacer()
 
@@ -605,9 +597,11 @@ private func singleLifestyleImageURL(for merchant: SampleMerchant) -> String? {
 struct DealsDestinationFeed: View {
     let products: [ResolvedStoryProduct]
     let topInset: CGFloat
+    @Binding var selectedBand: DealFilterBand
+    var onFilterPinned: (Bool) -> Void
 
     @Environment(NavigationCoordinator.self) private var coordinator
-    @State private var selectedBand: DealFilterBand = .all
+    @State private var filtersArePinned = false
 
     private var sections: [BuyerDealSection] {
         var merchantOrder: [SampleMerchant] = []
@@ -640,7 +634,21 @@ struct DealsDestinationFeed: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
-                dealFilterTrain
+                DealFilterTrain(selectedBand: $selectedBand)
+                    .opacity(filtersArePinned ? 0 : 1)
+                    .onGeometryChange(for: Bool.self) { proxy in
+                        let stickyTop = max(
+                            topInset
+                                - FeedNavigationStyle.controlSize
+                                - GravitySpacing.space8,
+                            0
+                        )
+                        return proxy.frame(in: .global).minY <= stickyTop
+                    } action: { _, isPinned in
+                        guard filtersArePinned != isPinned else { return }
+                        filtersArePinned = isPinned
+                        onFilterPinned(isPinned)
+                    }
 
                 LazyVStack(alignment: .leading, spacing: 28) {
                     ForEach(sections) { section in
@@ -654,9 +662,24 @@ struct DealsDestinationFeed: View {
         }
         .background(Color.white)
         .ignoresSafeArea(edges: .top)
+        .onDisappear { onFilterPinned(false) }
     }
 
-    private var dealFilterTrain: some View {
+    private func reward(for merchant: SampleMerchant) -> Int {
+        let stableSeed = merchant.id.unicodeScalars.reduce(0) { $0 + Int($1.value) }
+        return [10, 20, 30][stableSeed % 3]
+    }
+
+    private func openProduct(_ merchant: SampleMerchant, _ product: SampleMerchant.Product) {
+        coordinator.pushRoute(.product(merchantId: merchant.id, productId: product.id))
+    }
+}
+
+struct DealFilterTrain: View {
+    @Binding var selectedBand: DealFilterBand
+    var showsStickyBackdrop = false
+
+    var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: GravitySpacing.space4) {
                 Button {
@@ -702,19 +725,16 @@ struct DealsDestinationFeed: View {
             .scrollTargetLayout()
         }
         .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-    }
-
-    private func reward(for merchant: SampleMerchant) -> Int {
-        let stableSeed = merchant.id.unicodeScalars.reduce(0) { $0 + Int($1.value) }
-        return [10, 20, 30][stableSeed % 3]
-    }
-
-    private func openProduct(_ merchant: SampleMerchant, _ product: SampleMerchant.Product) {
-        coordinator.pushRoute(.product(merchantId: merchant.id, productId: product.id))
+        .scrollClipDisabled()
+        .background(alignment: .top) {
+            if showsStickyBackdrop {
+                StickyFilterBackdrop()
+            }
+        }
     }
 }
 
-private enum DealFilterBand: String, CaseIterable, Identifiable {
+enum DealFilterBand: String, CaseIterable, Identifiable {
     case all = "All"
     case small = "$5 - $10 off"
     case medium = "$10 - $20 off"
