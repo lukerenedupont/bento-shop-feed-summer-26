@@ -599,23 +599,30 @@ struct HomePage: View {
     /// Verified buyer posts are interleaved into For You without replacing
     /// any of the authored flick-and-stick cards.
     private var feedEntries: [FeedEntry] {
-        guard selectedTopicID == "for-you" else {
-            return focusedStories.map(FeedEntry.story)
+        var result: [FeedEntry]
+
+        if selectedTopicID == "for-you" {
+            let posts = Array(postService.posts(for: buyerPreview.selected).prefix(4))
+            result = []
+            var nextPostIndex = 0
+            for (index, story) in focusedStories.enumerated() {
+                result.append(.story(story))
+                if index.isMultiple(of: 2), posts.indices.contains(nextPostIndex) {
+                    result.append(.post(posts[nextPostIndex]))
+                    nextPostIndex += 1
+                }
+            }
+        } else {
+            result = focusedStories.map(FeedEntry.story)
         }
 
-        let posts = Array(postService.posts(for: buyerPreview.selected).prefix(4))
-        var result: [FeedEntry] = [.tryOn]
-        var nextPostIndex = 0
-        for (index, story) in focusedStories.enumerated() {
-            result.append(.story(story))
-            if index.isMultiple(of: 2), posts.indices.contains(nextPostIndex) {
-                result.append(.post(posts[nextPostIndex]))
-                nextPostIndex += 1
-            }
-        }
         if seasonalPlacement == .feedCard {
             result.insert(.seasonalSavings, at: min(1, result.count))
         }
+
+        // Try-on is a discovery beat, not the opening statement. Keep it in
+        // a consistent third position across For You and every topic feed.
+        result.insert(.tryOn, at: min(2, result.count))
         return result
     }
 
@@ -1212,7 +1219,9 @@ struct HomePage: View {
             VStack(spacing: -(utilityOverlap + fadeExtension)) {
                 HolidayFeedHeader(
                     width: containerWidth,
-                    height: baseHeaderHeight + fadeExtension
+                    height: baseHeaderHeight + fadeExtension,
+                    playbackEnabled: visibleStoryID == nil
+                        || visibleStoryID == utilityStoryID
                 ) {
                     // This is an interaction hook for the prototype variant;
                     // commerce routing can be attached once the campaign has
@@ -1647,7 +1656,8 @@ struct HomePage: View {
                 foregroundTopPadding: layout.foregroundTopPadding,
                 expansionProgress: expansionProgress,
                 borderOpacity: 0.12 * chromeOpacity,
-                shadowOpacity: chromeOpacity
+                shadowOpacity: chromeOpacity,
+                playbackEnabled: isSnappedEntry
             ) {
                 // Campaign routing remains intentionally detached from the
                 // placement prototype until it has a canonical collection.
@@ -1912,9 +1922,12 @@ struct HomePage: View {
             topics: navigationTopics,
             selectedTopicID: selectedTopicID,
             feedExpansionProgress: firstStoryExpansionProgress,
-            usesInverseStyle: isHolidayHeaderPresented || selectedTopicID == "holiday-sale",
+            usesInverseStyle: isHolidayHeaderPresented
+                || selectedTopicID == "holiday-sale"
+                || selectedTopicID == "gift-guides",
             usesFeedBackdropStyle: !isStaticUtilityDestination
                 && (selectedTopicID != "for-you" || feedChromeIsInverted),
+            usesHolidayPillStyle: seasonalPlacement == .header,
             selectionNamespace: topicSelectionNamespace,
             onSelectTopic: selectTopic,
             onSelectBuyer: {

@@ -48,6 +48,7 @@ struct HolidayPrimaryCTA: View {
 struct HolidayFeedHeader: View {
     let width: CGFloat
     let height: CGFloat
+    var playbackEnabled = true
     var onShopNow: () -> Void
 
     var body: some View {
@@ -56,6 +57,7 @@ struct HolidayFeedHeader: View {
             height: height,
             contentTopPadding: 144,
             showsBottomFade: true,
+            playbackEnabled: playbackEnabled,
             onShopNow: onShopNow
         )
         .clipped()
@@ -73,6 +75,7 @@ struct HolidayFeedCard: View {
     let expansionProgress: CGFloat
     let borderOpacity: Double
     let shadowOpacity: Double
+    var playbackEnabled = true
     var onShopNow: () -> Void
     var onSelectProduct: (ResolvedStoryProduct) -> Void
 
@@ -109,6 +112,7 @@ struct HolidayFeedCard: View {
                 height: height,
                 contentTopPadding: max(foregroundTopPadding + 24, height * 0.14),
                 showsBottomFade: false,
+                playbackEnabled: playbackEnabled,
                 onShopNow: onShopNow
             )
 
@@ -168,7 +172,13 @@ private struct SeasonalSavingsSurface: View {
     let height: CGFloat
     let contentTopPadding: CGFloat
     let showsBottomFade: Bool
+    let playbackEnabled: Bool
     var onShopNow: () -> Void
+
+    private static let campaignVideoURL = Bundle.main.url(
+        forResource: "bfcm-holiday-header",
+        withExtension: "mp4"
+    )
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -177,6 +187,17 @@ private struct SeasonalSavingsSurface: View {
                 .scaledToFill()
                 .frame(width: width, height: height)
                 .clipped()
+
+            if let campaignVideoURL = Self.campaignVideoURL {
+                LoopingVideoPlayer(
+                    url: campaignVideoURL,
+                    playbackEnabled: playbackEnabled,
+                    playbackGroupID: "bfcm-holiday-header"
+                )
+                .frame(width: width, height: height)
+                .clipped()
+                .accessibilityHidden(true)
+            }
 
             LinearGradient(
                 stops: [

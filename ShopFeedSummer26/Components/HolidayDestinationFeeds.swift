@@ -13,6 +13,11 @@ struct HolidaySaleDestinationFeed: View {
     @State private var marketplaceRotation: Double = 0
     @State private var filtersArePinned = false
 
+    private static let campaignVideoURL = Bundle.main.url(
+        forResource: "bfcm-holiday-sale-header",
+        withExtension: "mp4"
+    )
+
     private var flashDeals: [ResolvedStoryProduct] { slice(0, count: 6) }
     private var dealsForYou: [ResolvedStoryProduct] { slice(6, count: 6) }
     private var allDeals: [ResolvedStoryProduct] {
@@ -87,46 +92,55 @@ struct HolidaySaleDestinationFeed: View {
     }
 
     private var saleHeader: some View {
-        Image("holiday-feed-banner")
-            .resizable()
-            .scaledToFill()
-            .overlay {
-                LinearGradient(
-                    stops: [
-                        .init(color: .black.opacity(0.34), location: 0),
-                        .init(color: .clear, location: 0.42),
-                        .init(color: .black.opacity(0.34), location: 1),
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            }
-            .overlay(alignment: .top) {
-                VStack(spacing: GravitySpacing.space12) {
-                    Text("Gift more,\nGet more")
-                        .holidayCampaignTitleStyle()
+        ZStack {
+            Image("holiday-feed-banner")
+                .resizable()
+                .scaledToFill()
 
-                    Text("Earn more on your holiday\nhauls. This week only.")
-                        .holidayCampaignSupportingTextStyle()
-                }
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.white)
-                .gravityShadow(GravityShadows.feedText)
-                .padding(.top, topInset + 76)
-            }
-            .overlay(alignment: .bottom) {
-                LinearGradient(
-                    stops: [
-                        .init(color: .clear, location: 0),
-                        .init(color: .white.opacity(0.64), location: 0.72),
-                        .init(color: .white, location: 1),
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
+            if let campaignVideoURL = Self.campaignVideoURL {
+                LoopingVideoPlayer(
+                    url: campaignVideoURL,
+                    playbackGroupID: "bfcm-holiday-sale-header"
                 )
-                .frame(height: 144)
-                .allowsHitTesting(false)
+                .accessibilityHidden(true)
             }
+
+            LinearGradient(
+                stops: [
+                    .init(color: .black.opacity(0.34), location: 0),
+                    .init(color: .clear, location: 0.42),
+                    .init(color: .black.opacity(0.34), location: 1),
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+
+            VStack(spacing: GravitySpacing.space12) {
+                Text("Gift more,\nGet more")
+                    .holidayCampaignTitleStyle()
+
+                Text("Earn more on your holiday\nhauls. This week only.")
+                    .holidayCampaignSupportingTextStyle()
+            }
+            .multilineTextAlignment(.center)
+            .foregroundStyle(.white)
+            .gravityShadow(GravityShadows.feedText)
+            .padding(.top, topInset + 76)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+
+            LinearGradient(
+                stops: [
+                    .init(color: .clear, location: 0),
+                    .init(color: .white.opacity(0.64), location: 0.72),
+                    .init(color: .white, location: 1),
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 144)
+            .frame(maxHeight: .infinity, alignment: .bottom)
+            .allowsHitTesting(false)
+        }
         .containerRelativeFrame(.horizontal)
         .frame(height: topInset + 360)
         .clipped()
@@ -262,7 +276,19 @@ struct HolidayGiftGuidesDestinationFeed: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack(alignment: .leading, spacing: GravitySpacing.space32) {
-                ForEach(Array(guides.enumerated()), id: \.offset) { index, guide in
+                HolidayGiftGuideHero(
+                    topInset: topInset,
+                    hero: guideProducts(for: 0).first,
+                    onSelect: open
+                )
+
+                HolidayProductRail(
+                    title: railTitle(at: 0),
+                    products: Array(guideProducts(for: 0).dropFirst().prefix(5)),
+                    onSelect: open
+                )
+
+                ForEach(Array(guides.enumerated()).dropFirst(), id: \.offset) { index, guide in
                     HolidayGiftGuide(
                         title: guide.0,
                         attribution: guide.1,
@@ -281,7 +307,6 @@ struct HolidayGiftGuidesDestinationFeed: View {
                     }
                 }
             }
-            .padding(.top, topInset + GravitySpacing.space20)
             .padding(.bottom, FeedCardStyle.bottomNavigationClearance + 40)
         }
         .background(Color.white)
@@ -328,6 +353,92 @@ struct HolidayGiftGuidesDestinationFeed: View {
 
     private func open(_ item: ResolvedStoryProduct) {
         coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
+    }
+}
+
+/// Figma's lead gift guide is a single full-bleed campaign composition rather
+/// than a generic editorial card. Keep its geometry explicit so the snowy
+/// panorama, title, curator, CTA, and market cutout maintain their hierarchy
+/// across phone widths.
+private struct HolidayGiftGuideHero: View {
+    let topInset: CGFloat
+    let hero: ResolvedStoryProduct?
+    let onSelect: (ResolvedStoryProduct) -> Void
+
+    private let referenceWidth: CGFloat = 393
+    private let referenceHeight: CGFloat = 602
+
+    var body: some View {
+        Color.clear
+            .aspectRatio(referenceWidth / referenceHeight, contentMode: .fit)
+            .overlay {
+                GeometryReader { proxy in
+                    let scale = proxy.size.width / referenceWidth
+
+                    ZStack(alignment: .top) {
+                        Image("holiday-gift-guides-background")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: proxy.size.width, height: proxy.size.height)
+                            .clipped()
+
+                        VStack(spacing: 0) {
+                            Text("Gifts for the\nTasteful Host")
+                                .font(GravityFont.expressiveBold.fixedFont(size: 36 * scale))
+                                .tracking(-1 * scale)
+                                .lineSpacing(-3 * scale)
+                                .multilineTextAlignment(.center)
+                                .foregroundStyle(.white)
+                                .frame(width: 280 * scale)
+
+                            HStack(spacing: 6 * scale) {
+                                Image("holiday-gift-guides-curator")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 20 * scale, height: 20 * scale)
+                                    .clipShape(Circle())
+
+                                Text("Curated by Jesse Jenkins")
+                                    .font(GravityFont.semiBold.fixedFont(size: 14 * scale))
+                                    .tracking(GravityLetterSpacing.cozy)
+                            }
+                            .foregroundStyle(.white)
+                            .padding(.top, 8 * scale)
+
+                            HolidayPrimaryCTA(title: "Shop now") {
+                                if let hero { onSelect(hero) }
+                            }
+                            .scaleEffect(scale)
+                            .padding(.top, 14 * scale)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, topInset + (13 * scale))
+                        .zIndex(2)
+
+                        Image("holiday-gift-guides-hero")
+                            .resizable()
+                            .frame(width: 417 * scale, height: 428 * scale)
+                            .offset(y: 318 * scale)
+                            .accessibilityHidden(true)
+
+                        LinearGradient(
+                            stops: [
+                                .init(color: .clear, location: 0),
+                                .init(color: .white.opacity(0.78), location: 0.70),
+                                .init(color: .white, location: 1),
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .frame(height: 70 * scale)
+                        .frame(maxHeight: .infinity, alignment: .bottom)
+                        .allowsHitTesting(false)
+                    }
+                    .frame(width: proxy.size.width, height: proxy.size.height)
+                    .clipped()
+                }
+            }
+            .clipped()
     }
 }
 

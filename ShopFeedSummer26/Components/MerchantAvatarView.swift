@@ -85,10 +85,10 @@ struct MerchantAvatarView: View {
 
 /// Type-erased InsettableShape so we can switch between Circle and RoundedRectangle.
 private struct AnyInsettableShape: InsettableShape {
-    private let _path: (CGRect) -> Path
-    private let _inset: (CGFloat) -> AnyInsettableShape
+    private let _path: @Sendable (CGRect) -> Path
+    private let _inset: @Sendable (CGFloat) -> AnyInsettableShape
 
-    init<S: InsettableShape>(_ shape: S) {
+    init<S: InsettableShape & Sendable>(_ shape: S) {
         _path = { shape.path(in: $0) }
         _inset = { AnyInsettableShape(shape.inset(by: $0)) }
     }

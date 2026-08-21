@@ -216,7 +216,6 @@ struct StoryFeedCard: View {
                         lineWidth: 0.5
                     )
             }
-            .compositingGroup()
             .shadow(
                 color: .black.opacity(0.07 * shadowOpacity),
                 radius: 16,
@@ -307,7 +306,7 @@ struct StoryFeedCard: View {
                             .scaledToFill()
                     }
                     .clipped()
-            } else if let first = items.first, leadFilmURL != nil {
+            } else if !items.isEmpty, leadFilmURL != nil {
                 parallaxFilm {
                     AmbientProductVideo(
                         videoURLs: ambientFilmURLs,
@@ -442,23 +441,19 @@ struct StoryFeedCard: View {
     private var bottomProductCarousel: some View {
         let tileWidth = max((width - 64) / 2, 144)
 
-        return VStack(spacing: FeedCardStyle.productFooterSpacing) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: 8) {
-                    ForEach(productAssortment) { item in
-                        compactProductTile(item)
-                            .frame(width: tileWidth)
-                    }
+        return ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 8) {
+                ForEach(productAssortment) { item in
+                    compactProductTile(item)
+                        .frame(width: tileWidth)
                 }
-                .scrollTargetLayout()
             }
-            .contentMargins(.leading, GravitySpacing.space20, for: .scrollContent)
-            .padding(.horizontal, -GravitySpacing.space20)
-            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-
-            productFooter
+            .scrollTargetLayout()
         }
-        .frame(height: tileWidth + FeedCardStyle.productFooterBlockHeight)
+        .contentMargins(.leading, GravitySpacing.space20, for: .scrollContent)
+        .padding(.horizontal, -GravitySpacing.space20)
+        .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+        .frame(height: tileWidth)
     }
 
     /// Dense assortment treatment: the title stays fixed at the top while the
@@ -480,9 +475,6 @@ struct StoryFeedCard: View {
                     compactProductTile(item)
                 }
             }
-            .padding(.bottom, 14)
-
-            productFooter
         }
     }
 
@@ -505,81 +497,43 @@ struct StoryFeedCard: View {
         .allowsHitTesting(false)
     }
 
-    private var productFooter: some View {
-        HStack(spacing: 8) {
-            Text("\(productAssortment.count) products")
-                .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(.white)
-                .lineLimit(1)
-
-            Spacer()
-
-            Text("Shop all")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(.white)
-            Image(systemName: "chevron.right")
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(.white)
-        }
-        .gravityShadow(GravityShadows.feedText)
-    }
-
     private var productCarousel: some View {
-        VStack(spacing: 14) {
-            GeometryReader { geometry in
-                if !items.isEmpty {
-                    let safeIndex = min(selectedProductIndex, items.count - 1)
-                    let item = items[safeIndex]
-                    let nextItem = deckItem(from: safeIndex, offset: productDeckDirection)
-                    let farItem = deckItem(from: safeIndex, offset: productDeckDirection * 2)
+        GeometryReader { geometry in
+            if !items.isEmpty {
+                let safeIndex = min(selectedProductIndex, items.count - 1)
+                let item = items[safeIndex]
+                let nextItem = deckItem(from: safeIndex, offset: productDeckDirection)
+                let farItem = deckItem(from: safeIndex, offset: productDeckDirection * 2)
 
-                    ZStack(alignment: .leading) {
-                        productSummaryCard(
-                            farItem,
-                            surfaceTone: -0.16 + (0.08 * productPromotionProgress)
-                        )
-                            .frame(width: geometry.size.width - 16)
-                            .scaleEffect(0.92 + 0.04 * productPromotionProgress, anchor: .leading)
-                            .offset(x: 36 - 18 * productPromotionProgress)
-                            .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
+                ZStack(alignment: .leading) {
+                    productSummaryCard(
+                        farItem,
+                        surfaceTone: -0.16 + (0.08 * productPromotionProgress)
+                    )
+                        .frame(width: geometry.size.width - 16)
+                        .scaleEffect(0.92 + 0.04 * productPromotionProgress, anchor: .leading)
+                        .offset(x: 36 - 18 * productPromotionProgress)
+                        .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
 
-                        productSummaryCard(
-                            nextItem,
-                            surfaceTone: -0.08 + (0.24 * productPromotionProgress)
-                        )
-                            .frame(width: geometry.size.width - 16)
-                            .scaleEffect(0.96 + 0.04 * productPromotionProgress, anchor: .leading)
-                            .offset(x: 18 * (1 - productPromotionProgress))
-                            .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
+                    productSummaryCard(
+                        nextItem,
+                        surfaceTone: -0.08 + (0.24 * productPromotionProgress)
+                    )
+                        .frame(width: geometry.size.width - 16)
+                        .scaleEffect(0.96 + 0.04 * productPromotionProgress, anchor: .leading)
+                        .offset(x: 18 * (1 - productPromotionProgress))
+                        .shadow(color: .black.opacity(0.12), radius: 5, y: 2)
 
-                        productSummaryCard(item, surfaceTone: 0.16)
-                            .frame(width: geometry.size.width - 16)
-                            .offset(x: productDragOffset)
-                            .shadow(color: .black.opacity(0.16), radius: 7, y: 3)
-                    }
-                    .contentShape(Rectangle())
-                    .simultaneousGesture(productDeckGesture(width: geometry.size.width))
+                    productSummaryCard(item, surfaceTone: 0.16)
+                        .frame(width: geometry.size.width - 16)
+                        .offset(x: productDragOffset)
+                        .shadow(color: .black.opacity(0.16), radius: 7, y: 3)
                 }
+                .contentShape(Rectangle())
+                .simultaneousGesture(productDeckGesture(width: geometry.size.width))
             }
-            .frame(height: 88)
-
-            HStack(spacing: 8) {
-                Text("\(items.count) products")
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(.white)
-
-                Spacer()
-
-                Text("Shop all")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(.white)
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(.white)
-            }
-            .gravityShadow(GravityShadows.feedText)
         }
-        .frame(height: 126)
+        .frame(height: 88)
     }
 
     private func productSummaryCard(

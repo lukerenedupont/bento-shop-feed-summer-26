@@ -11,6 +11,7 @@ struct BuyerFeedNavigationBar: View {
     let feedExpansionProgress: CGFloat
     var usesInverseStyle = false
     var usesFeedBackdropStyle = false
+    var usesHolidayPillStyle = false
     let selectionNamespace: Namespace.ID
     var onSelectTopic: (BuyerFeedTopic) -> Void
     var onSelectBuyer: () -> Void
@@ -27,7 +28,7 @@ struct BuyerFeedNavigationBar: View {
     }
 
     private var avatarButton: some View {
-        Button {
+        return Button {
             HapticFeedback.light.fire()
             onSelectBuyer()
         } label: {
@@ -69,6 +70,8 @@ struct BuyerFeedNavigationBar: View {
                 .padding(.vertical, -GravitySpacing.space16)
             }
             .onChange(of: selectedTopicID) { _, _ in
+                guard let selectedIndex = topics.firstIndex(where: { $0.id == selectedTopicID }),
+                      selectedIndex > 2 else { return }
                 withAnimation(.easeOut(duration: 0.20)) {
                     proxy.scrollTo(selectedTopicID, anchor: .center)
                 }
@@ -81,7 +84,11 @@ struct BuyerFeedNavigationBar: View {
     }
 
     private func topicButton(_ topic: BuyerFeedTopic) -> some View {
-        Button {
+        let isIlluminatedHolidaySelection = usesHolidayPillStyle
+            && topic.id == selectedTopicID
+            && ["for-you", "holiday-sale", "gift-guides"].contains(topic.id)
+
+        return Button {
             onSelectTopic(topic)
         } label: {
             Text(topic.label)
@@ -96,25 +103,23 @@ struct BuyerFeedNavigationBar: View {
                     radius: 7,
                     y: 2
                 )
-                .padding(.horizontal, FeedNavigationStyle.pillHorizontalPadding)
+                .padding(
+                    .horizontal,
+                    topic.id == "gift-guides"
+                        ? FeedNavigationStyle.pillHorizontalPadding + 4
+                        : FeedNavigationStyle.pillHorizontalPadding
+                )
                 .frame(height: FeedNavigationStyle.controlSize)
                 .contentShape(Capsule())
                 .background {
                     if topic.id == selectedTopicID {
-                        Capsule()
-                            .fill(FeedNavigationStyle.selectedFill)
-                            .overlay {
-                                Capsule()
-                                    .strokeBorder(
-                                        Color.black.opacity(0.06),
-                                        lineWidth: 0.5
-                                    )
-                            }
-                            .gravityShadow(GravityShadows.selectedTopic)
-                            .matchedGeometryEffect(
-                                id: "selected-topic",
-                                in: selectionNamespace
-                            )
+                        SelectedTopicPill(
+                            showsHolidayLights: isIlluminatedHolidaySelection
+                        )
+                        .matchedGeometryEffect(
+                            id: "selected-topic",
+                            in: selectionNamespace
+                        )
                     }
                 }
         }
@@ -135,4 +140,50 @@ struct BuyerFeedNavigationBar: View {
         return GravityColors.textTertiary
     }
 
+}
+
+/// One stable matched-geometry surface moves between tabs. Seasonal lights
+/// overflow that surface visually but never participate in its layout, which
+/// keeps the focus pill aligned throughout the transition.
+private struct SelectedTopicPill: View {
+    let showsHolidayLights: Bool
+
+    var body: some View {
+        Capsule()
+            .fill(FeedNavigationStyle.selectedFill)
+            .overlay {
+                Capsule()
+                    .strokeBorder(Color.black.opacity(0.06), lineWidth: 0.5)
+            }
+            .gravityShadow(GravityShadows.selectedTopic)
+            .overlay {
+                if showsHolidayLights {
+                    HolidayPillLights()
+                }
+            }
+    }
+}
+
+private struct HolidayPillLights: View {
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        GeometryReader { proxy in
+            TimelineView(.animation(minimumInterval: 0.34, paused: reduceMotion)) { context in
+                let phase = reduceMotion
+                    ? 1.0
+                    : (sin(context.date.timeIntervalSinceReferenceDate * 4.2) + 1) / 2
+
+                Image("holiday-gift-guides-nav-lights")
+                    .resizable()
+                    .frame(width: proxy.size.width + 10, height: 60)
+                    .position(x: proxy.size.width / 2, y: proxy.size.height / 2)
+                    .opacity(0.92 + (phase * 0.08))
+                    .brightness(phase * 0.025)
+                    .accessibilityHidden(true)
+            }
+        }
+        .allowsHitTesting(false)
+    }
 }

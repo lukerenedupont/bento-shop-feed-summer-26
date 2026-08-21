@@ -66,13 +66,18 @@ struct TryOnFeedCard: View {
             onTap()
         } label: {
             ZStack {
+                Color.white
+
                 Image("try-on-studio")
                     .resizable()
-                    .scaledToFill()
-                    .frame(width: width, height: height)
-                    .clipped()
-
-                backgroundScrim
+                    .scaledToFit()
+                    .frame(
+                        width: width,
+                        height: height,
+                        alignment: .bottom
+                    )
+                    .scaleEffect(0.82, anchor: .bottom)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
 
                 VStack(alignment: .leading, spacing: 0) {
                     scrollAwareTitle
@@ -89,7 +94,7 @@ struct TryOnFeedCard: View {
             .clipShape(RoundedRectangle(cornerRadius: FeedCardStyle.cornerRadius, style: .continuous))
             .overlay {
                 RoundedRectangle(cornerRadius: FeedCardStyle.cornerRadius, style: .continuous)
-                    .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
+                    .strokeBorder(.black.opacity(0.08), lineWidth: 0.5)
             }
             .compositingGroup()
             .shadow(color: .black.opacity(0.07), radius: 16, y: 3)
@@ -99,27 +104,10 @@ struct TryOnFeedCard: View {
         .accessibilityHint("Opens the live Decart studio and starts the camera")
     }
 
-    private var backgroundScrim: some View {
-        LinearGradient(
-            stops: [
-                .init(color: .black.opacity(0.36), location: 0),
-                .init(color: .black.opacity(0.22), location: 0.14),
-                .init(color: .black.opacity(0.06), location: 0.30),
-                .init(color: .clear, location: 0.42),
-                .init(color: .clear, location: 0.62),
-                .init(color: .black.opacity(0.10), location: 0.78),
-                .init(color: .black.opacity(0.46), location: 1),
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-    }
-
     private var title: some View {
         Text("Try it live.")
             .feedCardTitleStyle()
-            .foregroundStyle(.white)
-            .gravityShadow(GravityShadows.feedText)
+            .foregroundStyle(.black)
             .multilineTextAlignment(.leading)
             .lineLimit(3)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -153,8 +141,7 @@ struct TryOnFeedCard: View {
             Image(systemName: "chevron.right")
                 .font(.system(size: 13, weight: .semibold))
         }
-        .foregroundStyle(.white)
-        .gravityShadow(GravityShadows.feedText)
+        .foregroundStyle(.black)
     }
 
     private var bottomProductCarousel: some View {

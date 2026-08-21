@@ -16,6 +16,7 @@ struct TryOnStudioPage: View {
     @ObservedObject private var merchantService = RemoteMerchantService.shared
     @StateObject private var session = DecartTryOnSession()
     @State private var selectedProductID: String?
+    @State private var carouselProductID: String?
     @State private var productRailVisible = false
 
     private var products: [ResolvedStoryProduct] {
@@ -53,7 +54,16 @@ struct TryOnStudioPage: View {
             coordinator.showNavBar = false
             if selectedProductID == nil {
                 selectedProductID = products.first?.id
+                carouselProductID = products.first?.id
             }
+        }
+        .onChange(of: carouselProductID) { _, productID in
+            guard let productID,
+                  productID != selectedProductID,
+                  let product = products.first(where: { $0.id == productID }) else { return }
+            selectedProductID = productID
+            HapticFeedback.selection.fire()
+            session.apply(product: product)
         }
         .onChange(of: session.phase) { _, phase in
             guard phase != .idle, !productRailVisible else { return }
@@ -152,25 +162,6 @@ struct TryOnStudioPage: View {
                 HapticFeedback.light.fire()
                 coordinator.popCurrentPage()
             }
-
-            Spacer()
-
-            HStack(spacing: GravitySpacing.space8) {
-                Circle()
-                    .fill(session.isConnected ? Color.green : Color.white.opacity(0.34))
-                    .frame(width: 7, height: 7)
-                    .shadow(
-                        color: session.isConnected ? .green.opacity(0.7) : .clear,
-                        radius: 5
-                    )
-                Text("DECART LIVE")
-                    .font(.system(size: 11, weight: .bold))
-                    .tracking(0.8)
-            }
-            .foregroundStyle(.white)
-            .padding(.horizontal, GravitySpacing.space12)
-            .frame(height: 40)
-            .background(.black.opacity(0.28), in: Capsule())
 
             Spacer()
 
@@ -304,74 +295,71 @@ struct TryOnStudioPage: View {
     @ViewBuilder
     private var productControls: some View {
         if productRailVisible {
-            VStack(alignment: .leading, spacing: GravitySpacing.space12) {
-                if let selectedProduct {
-                    HStack(alignment: .bottom, spacing: GravitySpacing.space12) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(selectedProduct.product.title)
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundStyle(.white)
-                                .lineLimit(1)
-
-                            HStack(spacing: GravitySpacing.space8) {
-                                Text(selectedProduct.merchant.displayName)
-                                    .font(.system(size: 13, weight: .medium))
-                                    .foregroundStyle(.white.opacity(0.58))
-                                    .lineLimit(1)
-
-                                productModeChip(for: selectedProduct)
-                            }
-                        }
-
-                        Spacer()
-
-                        Text(selectedProduct.product.price)
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(.white.opacity(0.82))
-                            .monospacedDigit()
-                    }
-                    .padding(.horizontal, GravitySpacing.space4)
-                }
-
+            VStack(alignment: .leading, spacing: GravitySpacing.space16) {
                 ScrollView(.horizontal) {
-                    LazyHStack(spacing: GravitySpacing.space10) {
+                    LazyHStack(spacing: GravitySpacing.space12) {
                         ForEach(products) { item in
                             productButton(item)
+                                .id(item.id)
                         }
                     }
                     .scrollTargetLayout()
                 }
                 .scrollIndicators(.hidden)
                 .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-                .frame(height: 112)
+                .scrollPosition(id: $carouselProductID, anchor: .center)
+                .contentMargins(.horizontal, GravitySpacing.space20, for: .scrollContent)
+                .padding(.horizontal, -GravitySpacing.space16)
+                .frame(height: 148)
 
-                HStack(spacing: 7) {
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 11, weight: .semibold))
-                    Text("Tap a product to try on or place live · Powered by decart")
-                        .font(.system(size: 12, weight: .medium))
+                if let selectedProduct {
+                    HStack(alignment: .center, spacing: GravitySpacing.space16) {
+                        VStack(alignment: .leading, spacing: GravitySpacing.space4) {
+                            Text(selectedProduct.product.title)
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .lineLimit(2)
+
+                            Text(selectedProduct.product.price)
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(.white.opacity(0.72))
+                                .monospacedDigit()
+                        }
+
+                        Spacer(minLength: GravitySpacing.space8)
+
+                        Button {
+                            HapticFeedback.light.fire()
+                            coordinator.pushRoute(
+                                .product(
+                                    merchantId: selectedProduct.merchant.id,
+                                    productId: selectedProduct.product.id
+                                )
+                            )
+                        } label: {
+                            Text("View product")
+                                .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(.black)
+                            .padding(.horizontal, GravitySpacing.space16)
+                            .frame(height: 44)
+                            .background(.white, in: Capsule())
+                        }
+                        .buttonStyle(PressScaleButtonStyle(scale: 0.96))
+                    }
+                    .padding(.horizontal, GravitySpacing.space4)
                 }
-                .foregroundStyle(.white.opacity(0.58))
-                .padding(.horizontal, GravitySpacing.space4)
             }
-            .padding(GravitySpacing.space12)
-            .background(.black.opacity(0.42), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .strokeBorder(.white.opacity(0.10), lineWidth: 0.5)
-            }
-            .shadow(color: .black.opacity(0.22), radius: 24, y: 10)
             .transition(.opacity.combined(with: .offset(y: 12)))
         }
     }
 
     private func productButton(_ item: ResolvedStoryProduct) -> some View {
-        let isSelected = item.id == selectedProduct?.id
+        let isSelected = item.id == (carouselProductID ?? selectedProduct?.id)
 
         return Button {
-            selectedProductID = item.id
-            HapticFeedback.selection.fire()
-            session.apply(product: item)
+            withAnimation(reduceMotion ? nil : SpringPreset.responsive) {
+                carouselProductID = item.id
+            }
         } label: {
             Group {
                 if let imageURL = item.product.imageURL,
@@ -390,55 +378,26 @@ struct TryOnStudioPage: View {
                     Color.white.opacity(0.08)
                 }
             }
-            .frame(width: 82, height: 112)
-            .background(.white.opacity(0.06))
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .frame(width: 148, height: 148)
+            .background(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             .overlay {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .strokeBorder(
-                        isSelected ? Color.white : Color.white.opacity(0.14),
-                        lineWidth: isSelected ? 2.5 : 1
+                        isSelected ? Color.white : Color.white.opacity(0.18),
+                        lineWidth: isSelected ? 3 : 0.5
                     )
             }
-            .overlay(alignment: .topLeading) {
-                if TryOnExperience.isCurated(item) {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 9, weight: .bold))
-                        .foregroundStyle(.black)
-                        .frame(width: 20, height: 20)
-                        .background(Color.green, in: Circle())
-                        .padding(7)
-                        .accessibilityHidden(true)
-                }
-            }
             .shadow(color: .black.opacity(isSelected ? 0.28 : 0.12), radius: 10, y: 5)
-            .scaleEffect(isSelected ? 1 : 0.94)
+            .scaleEffect(isSelected ? 1 : 0.96)
             .animation(reduceMotion ? nil : SpringPreset.responsive, value: isSelected)
         }
         .buttonStyle(PressScaleButtonStyle(scale: 0.96))
         .accessibilityLabel(
             "\(DecartProductMode(product: item) == .wearable ? "Try on" : "Place") "
                 + "\(item.product.title) from \(item.merchant.displayName)"
-                + (TryOnExperience.isCurated(item) ? ", verified test product" : "")
         )
         .accessibilityAddTraits(isSelected ? .isSelected : [])
-    }
-
-    private func productModeChip(for item: ResolvedStoryProduct) -> some View {
-        let mode = DecartProductMode(product: item)
-
-        return HStack(spacing: 4) {
-            Image(systemName: mode.systemImage)
-                .font(.system(size: 9, weight: .bold))
-            Text(mode.label)
-                .font(.system(size: 9, weight: .bold))
-                .tracking(0.5)
-        }
-        .foregroundStyle(.white.opacity(0.82))
-        .padding(.horizontal, 7)
-        .frame(height: 20)
-        .background(.white.opacity(0.10), in: Capsule())
-        .accessibilityLabel(mode == .wearable ? "Fitting mode" : "Object placement mode")
     }
 
     private func circleButton(

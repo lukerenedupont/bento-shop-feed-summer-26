@@ -137,6 +137,8 @@
 		DE22D19C893994594B61124A /* Shopify Sans-Medium Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DB02EED712F616C19BAB6144 /* Shopify Sans-Medium Italic.otf */; };
 		DF2A664E61B4341B235D1085 /* GoodSansText-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = BE0ED552AC81FCFE75A32C68 /* GoodSansText-Regular.otf */; };
 		E11A9247F1749EC35F25E92A /* LoopingVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68957DDA92869BB303188B83 /* LoopingVideoPlayer.swift */; };
+		E1A2B3C4D5E60718293A4B5C /* bfcm-holiday-header.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4B5C /* bfcm-holiday-header.mp4 */; };
+		A7C8D9E0F1A2B3C4D5E60718 /* bfcm-holiday-sale-header.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B8D9E0F1A2B3C4D5E6071829 /* bfcm-holiday-sale-header.mp4 */; };
 		E231D47C9DC5088B813021BB /* QuickSearchCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A8B6A48F59AE65A5A915C9 /* QuickSearchCard.swift */; };
 		E25F56AFAC034DE3EB4D8ECF /* senvoler-collab.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5AA20BD305E837F274EA1D1A /* senvoler-collab.mp4 */; };
 		E26E101FAB34700D33AA8995 /* ComparisonShelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5307D982E8802D5BA2FABA39 /* ComparisonShelf.swift */; };
@@ -309,6 +311,8 @@
 		F6915A5ED111B873EFB9D852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F8078D239E65B41D28D2935B /* AgentProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentProduct.swift; sourceTree = "<group>"; };
 		F89CE782C969F6A33A85C461 /* olend-travel.mp4 */ = {isa = PBXFileReference; path = "olend-travel.mp4"; sourceTree = "<group>"; };
+		F1A2B3C4D5E60718293A4B5C /* bfcm-holiday-header.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "bfcm-holiday-header.mp4"; sourceTree = "<group>"; };
+		B8D9E0F1A2B3C4D5E6071829 /* bfcm-holiday-sale-header.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "bfcm-holiday-sale-header.mp4"; sourceTree = "<group>"; };
 		F8E00A10734272579AE1E29B /* FeedBundleLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBundleLoader.swift; sourceTree = "<group>"; };
 		F9AD617847452AF8F79A0062 /* SearchPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPage.swift; sourceTree = "<group>"; };
 		F9E4DAD75BA5C3CD796D78A1 /* ShimmerText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerText.swift; sourceTree = "<group>"; };
@@ -548,6 +552,8 @@
 		D4453A85ED78ACFED4FBF000 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				F1A2B3C4D5E60718293A4B5C /* bfcm-holiday-header.mp4 */,
+				B8D9E0F1A2B3C4D5E6071829 /* bfcm-holiday-sale-header.mp4 */,
 				5C93BF5FAA2E9F9509E17322 /* caraway-feed.mp4 */,
 				E85036657DD96D61D9AA923D /* fuumuu-painting.mp4 */,
 				D9F9A263E73A0DA198087CC3 /* hoe-streetwear.mp4 */,
@@ -701,6 +707,8 @@
 				500A2B7B588C8044B0EE00BF /* sculptural-living-room.mp4 in Resources */,
 				E25F56AFAC034DE3EB4D8ECF /* senvoler-collab.mp4 in Resources */,
 				649FD509AC0F44D3BEB36470 /* stadium-sneakers.mp4 in Resources */,
+				E1A2B3C4D5E60718293A4B5C /* bfcm-holiday-header.mp4 in Resources */,
+				A7C8D9E0F1A2B3C4D5E60718 /* bfcm-holiday-sale-header.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

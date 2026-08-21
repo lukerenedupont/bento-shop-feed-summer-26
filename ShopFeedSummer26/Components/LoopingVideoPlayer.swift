@@ -120,7 +120,10 @@ struct LoopingVideoPlayer: UIViewRepresentable {
                 setUp()
                 updateSessionPlayback()
             } else {
-                session?.setEnabled(false, for: clientID)
+                // Lazy feed cells can remain retained after leaving the
+                // viewport. Detach their decode pipeline immediately instead
+                // of keeping buffered frames alive off-screen.
+                tearDown()
             }
         }
 
@@ -134,11 +137,19 @@ struct LoopingVideoPlayer: UIViewRepresentable {
         }
 
         func tearDown() {
-            session?.unregister(clientID)
+            let detachedSession = session
+            detachedSession?.unregister(clientID)
+            if let playbackGroupID, let detachedSession {
+                SharedVideoPlaybackRegistry.shared.release(
+                    id: playbackGroupID,
+                    session: detachedSession
+                )
+            }
             playerLayer?.removeFromSuperlayer()
             playerLayer = nil
             session = nil
             clientID = nil
+            isSetUp = false
         }
     }
 }
@@ -158,6 +169,11 @@ private final class SharedVideoPlaybackRegistry {
         sessions[id] = session
         return session
     }
+
+    func release(id: String, session: SharedVideoPlaybackSession) {
+        guard sessions[id] === session, !session.hasClients else { return }
+        sessions[id] = nil
+    }
 }
 
 @MainActor
@@ -171,6 +187,8 @@ private final class SharedVideoPlaybackSession {
     private var clients: [UUID: Bool] = [:]
     private var ownedPlaylistItems = Set<ObjectIdentifier>()
     private var nextPlaylistIndex = 0
+
+    var hasClients: Bool { !clients.isEmpty }
 
     init(urls: [URL], loops: Bool) {
         self.urls = urls

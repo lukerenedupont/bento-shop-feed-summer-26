@@ -419,6 +419,14 @@ enum FeedCoverCatalog {
 /// genuinely a coherent assortment from one shop. This keeps a visual card
 /// variant from quietly turning a mixed editorial story into fake inventory.
 struct MerchantCollectionPresentation: Hashable {
+    /// Merchant-owned frames that have been visually checked as a single,
+    /// clean lifestyle photograph. Product galleries can include contact
+    /// sheets and campaign collages, so they must never be treated as a
+    /// universally safe full-bleed source just because they are one URL.
+    private static let approvedLifestyleCoversByMerchantID: [String: String] = [
+        "lichen": "https://cdn.shopify.com/s/files/1/0026/8907/3221/files/2024_03_22_Lichen2201copy_05fe8826-36e0-41b1-8736-3ff26985200f.jpg?v=1713408513",
+    ]
+
     let storyID: String
     /// Owns the exact buyer-profile assortment rendered in the product grid.
     let merchantID: String
@@ -464,6 +472,9 @@ struct MerchantCollectionPresentation: Hashable {
             return URL(string: normalized)
         }
         let coverMerchantID = brandMerchantID ?? merchantID
+        if let approvedLifestyleCover = Self.approvedLifestyleCoversByMerchantID[coverMerchantID] {
+            return URL(string: approvedLifestyleCover)
+        }
         guard let merchant = merchants.first(where: { $0.id == coverMerchantID }) else {
             return nil
         }

@@ -41,7 +41,9 @@ struct MerchantCollectionFeedCard: View {
         for product in merchant.products where seen.insert(product.id).inserted {
             result.append(product)
         }
-        return Array(result.prefix(presentation.productCount))
+        // Every merchant collection uses the same compact three-up rail.
+        // This keeps the lifestyle image dominant and the cards aligned.
+        return Array(result.prefix(3))
     }
 
     private var coverURL: URL? {
@@ -163,13 +165,6 @@ struct MerchantCollectionFeedCard: View {
 
             productGrid(metrics: grid)
                 .frame(maxWidth: .infinity, alignment: .center)
-
-            Color.clear
-                .frame(height: FeedCardStyle.productFooterSpacing)
-                .accessibilityHidden(true)
-
-            collectionFooter
-                .frame(height: 24)
         }
         .frame(width: availableWidth, height: availableHeight, alignment: .top)
         .padding(.horizontal, horizontalPadding)
@@ -250,9 +245,7 @@ struct MerchantCollectionFeedCard: View {
         }
         let rows = max(1, Int(ceil(Double(products.count) / Double(columns))))
         let spacing = GravitySpacing.space8
-        let fixedContentHeight: CGFloat = 62 + 24
-            + GravitySpacing.space16
-            + FeedCardStyle.productFooterSpacing
+        let fixedContentHeight: CGFloat = 62 + GravitySpacing.space16
         let gridHeight = max(0, availableHeight - fixedContentHeight)
         let widthBound = (
             availableWidth - (CGFloat(columns - 1) * spacing)
@@ -332,22 +325,4 @@ struct MerchantCollectionFeedCard: View {
             .gravityShadow(GravityShadows.small)
     }
 
-    private var collectionFooter: some View {
-        HStack(spacing: 8) {
-            Text("\(products.count) products")
-                .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(.white)
-                .lineLimit(1)
-
-            Spacer(minLength: 8)
-
-            Text("Shop all")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(.white)
-            Image(systemName: "chevron.right")
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(.white)
-        }
-        .gravityShadow(GravityShadows.feedText)
-    }
 }

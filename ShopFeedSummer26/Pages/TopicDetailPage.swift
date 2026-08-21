@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import AVFoundation
 
 /// Immersive destination for a tapped feed story. The Figma-derived header
 /// and first commerce rails resolve from the story, so every buyer and topic
@@ -14,6 +15,7 @@ struct TopicDetailPage: View {
     @State private var isFollowingTopic = false
     @State private var focusedDealID: String?
     @State private var postService = ShopPostService.shared
+    @State private var sampledSurfaceColor: DominantVideoColor?
 
     private var products: [ResolvedStoryProduct] {
         story.resolvedProducts(from: merchants)
@@ -192,7 +194,21 @@ struct TopicDetailPage: View {
         return result
     }
 
-    private var surfaceColor: Color { Color(hex: story.accentHex) }
+    private var surfaceColor: Color {
+        guard let sampledSurfaceColor else { return Color(hex: story.accentHex) }
+        return Color(
+            red: sampledSurfaceColor.red,
+            green: sampledSurfaceColor.green,
+            blue: sampledSurfaceColor.blue
+        )
+    }
+
+    private var heroVideoURL: URL? {
+        FeedCoverCatalog.presentation(for: story)?.source.videoURL
+            ?? products.lazy.flatMap {
+                $0.product.ambientFilmURLs(merchantID: $0.merchant.id)
+            }.first
+    }
 
     private var usesCuratedSculpturalHierarchy: Bool {
         story.id == "shelf-luke-2-sculptural-living-room-pieces"
@@ -263,6 +279,15 @@ struct TopicDetailPage: View {
             try? await Task.sleep(for: .milliseconds(260))
             guard !Task.isCancelled else { return }
             withAnimation(.easeOut(duration: 0.18)) { showsControls = true }
+        }
+        .task(id: heroVideoURL) {
+            sampledSurfaceColor = nil
+            guard let heroVideoURL,
+                  let color = await DominantVideoColorSampler.sample(from: heroVideoURL),
+                  !Task.isCancelled else { return }
+            withAnimation(.easeOut(duration: 0.24)) {
+                sampledSurfaceColor = color
+            }
         }
         .onAppear { coordinator.showNavBar = false }
         .onDisappear {
@@ -554,14 +579,11 @@ struct TopicDetailPage: View {
         } label: {
             Text(isFollowingTopic ? "Following" : "Follow")
                 .font(GravityFont.semiBold.fixedFont(size: 14))
-                .foregroundStyle(isFollowingTopic ? .white : .black)
+                .foregroundStyle(.white)
                 .padding(.horizontal, GravitySpacing.space16)
                 .frame(height: 40)
-                .background {
-                    Capsule()
-                        .fill(isFollowingTopic ? .black.opacity(0.34) : .white)
-                        .background(.ultraThinMaterial, in: Capsule())
-                }
+                .background(.ultraThinMaterial, in: Capsule())
+                .contentShape(Capsule())
         }
         .buttonStyle(PressScaleButtonStyle())
         .padding(.trailing, GravitySpacing.space16)
@@ -569,6 +591,88 @@ struct TopicDetailPage: View {
         .accessibilityAddTraits(isFollowingTopic ? .isSelected : [])
     }
 
+}
+
+private struct DominantVideoColor: Sendable, Equatable {
+    let red: Double
+    let green: Double
+    let blue: Double
+}
+
+/// Samples one representative video frame into a tiny quantized histogram.
+/// The work runs off the main actor once per topic and stores only three color
+/// channels, so scrolling and video playback never pay for the analysis.
+private enum DominantVideoColorSampler {
+    private struct Bucket {
+        var count = 0
+        var red = 0
+        var green = 0
+        var blue = 0
+    }
+
+    static func sample(from url: URL) async -> DominantVideoColor? {
+        await Task.detached(priority: .utility) {
+            let asset = AVURLAsset(url: url)
+            let generator = AVAssetImageGenerator(asset: asset)
+            generator.appliesPreferredTrackTransform = true
+            generator.maximumSize = CGSize(width: 96, height: 96)
+
+            let frame: CGImage
+            do {
+                frame = try await generator.image(
+                    at: CMTime(seconds: 1, preferredTimescale: 600)
+                ).image
+            } catch {
+                return nil
+            }
+            return dominantColor(in: frame)
+        }.value
+    }
+
+    private static func dominantColor(in image: CGImage) -> DominantVideoColor? {
+        let width = 48
+        let height = 48
+        let bytesPerPixel = 4
+        var pixels = [UInt8](repeating: 0, count: width * height * bytesPerPixel)
+        guard let context = CGContext(
+            data: &pixels,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: width * bytesPerPixel,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        ) else { return nil }
+
+        context.interpolationQuality = .low
+        context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+
+        var buckets: [Int: Bucket] = [:]
+        for offset in stride(from: 0, to: pixels.count, by: bytesPerPixel) {
+            let red = Int(pixels[offset])
+            let green = Int(pixels[offset + 1])
+            let blue = Int(pixels[offset + 2])
+            let alpha = Int(pixels[offset + 3])
+            let luminance = (red * 3 + green * 6 + blue) / 10
+            guard alpha > 160, luminance > 22, luminance < 238 else { continue }
+
+            let key = (red / 32 << 6) | (green / 32 << 3) | (blue / 32)
+            var bucket = buckets[key, default: Bucket()]
+            bucket.count += 1
+            bucket.red += red
+            bucket.green += green
+            bucket.blue += blue
+            buckets[key] = bucket
+        }
+
+        guard let winner = buckets.values.max(by: { $0.count < $1.count }),
+              winner.count > 0 else { return nil }
+        return DominantVideoColor(
+            red: Double(winner.red) / Double(winner.count) / 255,
+            green: Double(winner.green) / Double(winner.count) / 255,
+            blue: Double(winner.blue) / Double(winner.count) / 255
+        )
+    }
 }
 
 private struct RelatedDeal: Identifiable {
@@ -865,13 +969,24 @@ private struct TopicMerchantShowcaseCard: View {
         Array(merchant.products.prefix(3))
     }
 
+    /// Merchant cover art frequently arrives as a baked campaign collage.
+    /// Use one product's authored alternate frame instead so the card always
+    /// has a single clean photographic background.
+    private var backgroundImageURL: String? {
+        merchant.products.lazy.compactMap { product in
+            product.allImageURLs.dropFirst().first
+        }.first
+            ?? merchant.products.first?.imageURL
+            ?? merchant.featuredImageURLs.first
+    }
+
     var body: some View {
         Button {
             HapticFeedback.light.fire()
             coordinator.pushRoute(.store(merchantId: merchant.id))
         } label: {
             ZStack {
-                MerchantCoverImage(merchant: merchant)
+                MerchantImage(merchant: merchant, urlString: backgroundImageURL)
                     .frame(width: 344, height: 382)
                     .clipped()
 
@@ -881,7 +996,7 @@ private struct TopicMerchantShowcaseCard: View {
                     endPoint: .bottom
                 )
 
-                VStack(spacing: GravitySpacing.space10) {
+                VStack(spacing: 0) {
                     HStack {
                         MerchantWordmarkImage(
                             merchant: merchant,
@@ -897,25 +1012,17 @@ private struct TopicMerchantShowcaseCard: View {
                     }
                     .frame(height: 46)
 
-                    LazyVGrid(
-                        columns: Array(repeating: GridItem(.flexible(), spacing: GravitySpacing.space8), count: 3),
-                        spacing: GravitySpacing.space8
-                    ) {
+                    Spacer(minLength: GravitySpacing.space16)
+
+                    HStack(spacing: GravitySpacing.space8) {
                         ForEach(products) { product in
                             ProductImageView(product: product, merchant: merchant)
-                                .aspectRatio(1, contentMode: .fit)
+                                .frame(width: 101, height: 101)
                                 .background(.white)
                                 .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r16, style: .continuous))
+                                .gravityShadow(GravityShadows.small)
                         }
                     }
-
-                    Spacer(minLength: 0)
-
-                    Text("Shop all")
-                        .font(GravityFont.semiBold.fixedFont(size: 14))
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 42)
-                        .background(.white.opacity(0.18), in: Capsule())
                 }
                 .foregroundStyle(.white)
                 .padding(GravitySpacing.space12)
@@ -928,6 +1035,6 @@ private struct TopicMerchantShowcaseCard: View {
             }
         }
         .buttonStyle(PressScaleButtonStyle())
-        .accessibilityLabel("Shop all from \(merchant.displayName)")
+        .accessibilityLabel("Shop \(merchant.displayName)")
     }
 }
