@@ -60,7 +60,6 @@
 		4BF83845076FE56AEF1A3CA3 /* ConversationHistoryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F3FDD0745D3BA8C4C8F491 /* ConversationHistoryClient.swift */; };
 		4E2A297C87DF4ED27E7DCA73 /* ComposerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F179369E1B716061E9FD958 /* ComposerBar.swift */; };
 		500A2B7B588C8044B0EE00BF /* sculptural-living-room.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A7E71042B1CB30A4120B6D53 /* sculptural-living-room.mp4 */; };
-		5219B96B726177F7119DD250 /* bundle in Resources */ = {isa = PBXBuildFile; fileRef = FC4E7A6F86792A0E5455276C /* bundle */; };
 		528183B8E45B11EBBEA93A39 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55DD9DD1C2856FC6D6305AD /* ImageCache.swift */; };
 		533229A0EEFD8032E89E86D9 /* GoodSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0FDC586616FCB88FA39D54C5 /* GoodSans-Bold.otf */; };
 		53BACCC0E8603D526EE408C4 /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = AD09AE660CD45976C4B68F4C /* FloatingPanel */; };
@@ -317,7 +316,6 @@
 		F9AD617847452AF8F79A0062 /* SearchPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPage.swift; sourceTree = "<group>"; };
 		F9E4DAD75BA5C3CD796D78A1 /* ShimmerText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerText.swift; sourceTree = "<group>"; };
 		FA35C76B80BB93C38B16B89C /* Shopify Sans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Bold.otf"; sourceTree = "<group>"; };
-		FC4E7A6F86792A0E5455276C /* bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bundle; path = "../dossier-feed-bundle/bundle"; sourceTree = SOURCE_ROOT; };
 		FD2F47D24C455081A6C9B863 /* RecentsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentsPanel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -462,7 +460,6 @@
 		65BEA5D54C4502D204150927 = {
 			isa = PBXGroup;
 			children = (
-				FC4E7A6F86792A0E5455276C /* bundle */,
 				F65CA5F68FD9BBBA9174AB03 /* Dossiers */,
 				F023418C55850E46E86590D0 /* ShopFeedSummer26 */,
 				519BE3DCFBDA52CF1AAA4FB5 /* Products */,
@@ -697,7 +694,6 @@
 				ECCF6A2EA6F02169A525D1F9 /* Shopify Sans-Medium.otf in Resources */,
 				E90D9A254DB2B26CF0D9AA2A /* Shopify Sans-Regular Italic.otf in Resources */,
 				742ADA927F28DE885852A247 /* Shopify Sans-Regular.otf in Resources */,
-				5219B96B726177F7119DD250 /* bundle in Resources */,
 				19A9C3504C4D7BB39D703E4E /* caraway-feed.mp4 in Resources */,
 				ED2C640CEF95CE4ABD85516B /* fuumuu-painting.mp4 in Resources */,
 				0BAA615AA77D19B3910A3F92 /* hoe-streetwear.mp4 in Resources */,

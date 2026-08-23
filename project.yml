@@ -39,12 +39,10 @@ targets:
       - path: ShopFeedSummer26/Dossiers
         type: folder
         buildPhase: resources
-      # Frozen dossier feed checkout. Kept as a folder reference so its
-      # media/ paths remain intact inside the app bundle.
-      - path: ../dossier-feed-bundle/bundle
-        name: bundle
-        type: folder
-        buildPhase: resources
+      # The frozen dossier feed checkout is copied into the product by
+      # Scripts/optimize_feed_bundle.sh. Keeping the raw 584 MB folder out of
+      # Resources avoids copying it before replacing it with the optimized
+      # bundle on every build.
     dependencies:
       - package: LiveKitWebRTC
         product: LiveKitWebRTC
@@ -90,6 +88,12 @@ targets:
         script: |
           "${SRCROOT}/Scripts/validate_personalized_feed.py"
     postBuildScripts:
+      - name: Optimize Feed Bundle
+        basedOnDependencyAnalysis: false
+        outputFiles:
+          - "$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/bundle/.optimization-stamp"
+        script: |
+          "${SRCROOT}/Scripts/optimize_feed_bundle.sh"
       - name: Copy Local Shop Server Env
         basedOnDependencyAnalysis: false
         script: |

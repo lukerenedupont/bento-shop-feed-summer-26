@@ -4,7 +4,10 @@ set -euo pipefail
 SOURCE_BUNDLE_CANDIDATE="${SRCROOT}/../dossier-feed-bundle/bundle"
 SOURCE_BUNDLE="$(cd "${SOURCE_BUNDLE_CANDIDATE}" 2>/dev/null && pwd -P || true)"
 BUILT_BUNDLE="${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/bundle"
-CACHE_ROOT="${DERIVED_FILE_DIR}/OptimizedFeedBundle"
+# Keep the optimized media outside DerivedData so simulator and device builds
+# share it. A clean build should not mean recompressing hundreds of unchanged
+# images and videos.
+CACHE_ROOT="${SRCROOT}/.build-cache/OptimizedFeedBundle-v4"
 CACHE_BUNDLE="${CACHE_ROOT}/bundle"
 STAMP_FILE="${CACHE_ROOT}/source.stamp"
 
@@ -26,13 +29,13 @@ if [[ ! -d "${SOURCE_BUNDLE}/media" ]]; then
 fi
 
 case "${CACHE_ROOT}" in
-  "${DERIVED_FILE_DIR}"/*) ;;
+  "${SRCROOT}/.build-cache/"*) ;;
   *) echo "error: Refusing unsafe cache path: ${CACHE_ROOT}"; exit 1 ;;
 esac
 
 SOURCE_STAMP="$({
   find "${SOURCE_BUNDLE}" -type f -exec stat -f '%N:%m:%z' {} \;
-  printf 'image-max=1200;png-quality=62-82;jpeg-quality=76;video=540p24-crf29-fast-v3\n'
+  printf 'image-max=1200;png-quality=62-82-speed8;jpeg-quality=76;video=540p24-crf29-fast-v4\n'
 } | shasum -a 256 | awk '{print $1}')"
 
 CACHED_STAMP=""
@@ -60,7 +63,9 @@ if [[ "${SOURCE_STAMP}" != "${CACHED_STAMP}" || ! -d "${CACHE_BUNDLE}/media" ]];
           cp "${source}" "${temporary}.png"
         fi
         if [[ -x "${PNGQUANT}" ]]; then
-          "${PNGQUANT}" --force --strip --speed 1 --quality 62-82 \
+          # Speed 8 is visually equivalent at feed-card size and avoids the
+          # expensive exhaustive quantization that caused local memory alerts.
+          "${PNGQUANT}" --force --strip --speed 8 --quality 62-82 \
             --output "${output}" -- "${temporary}.png" >/dev/null 2>&1 || cp "${temporary}.png" "${output}"
         else
           cp "${temporary}.png" "${output}"

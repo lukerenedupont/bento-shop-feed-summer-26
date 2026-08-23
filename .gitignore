@@ -10,6 +10,7 @@ DerivedData/
 .derivedData/
 .build/
 build/
+.build-cache/
 xcuserdata/
 *.xcuserdata
 *.xcuserdatad
