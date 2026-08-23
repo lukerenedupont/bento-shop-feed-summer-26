@@ -4,6 +4,21 @@ import SwiftUI
 /// prototype. The bundled dataset deliberately excludes buyer activity,
 /// prompts, hypotheses, queries, and provenance.
 enum HypothesisShelfCatalog {
+    static let hypebeastStoryID = "shelf-luke-10-performance-sneakers-edit"
+
+    /// Premium sneaker photography leads both the feed-card carousel and the
+    /// topic rails. These are current, canonical products from Kith and
+    /// Sneaker Politics rather than generic stand-ins from the wider shelf.
+    private static let hypebeastProductReferences: [FeedStory.ProductReference] = [
+        .init(merchantID: "kith", productID: 8_286_509_564_032),
+        .init(merchantID: "sneaker-politics", productID: 9_405_655_777_468),
+        .init(merchantID: "kith", productID: 8_286_188_830_848),
+        .init(merchantID: "sneaker-politics", productID: 9_189_417_943_228),
+        .init(merchantID: "kith", productID: 8_286_188_863_616),
+        .init(merchantID: "sneaker-politics", productID: 9_410_290_516_156),
+        .init(merchantID: "sneaker-politics", productID: 9_346_461_434_044),
+    ]
+
     private struct Payload: Decodable {
         let version: Int
         let users: [User]
@@ -99,17 +114,36 @@ enum HypothesisShelfCatalog {
 
     private static let shelfStories: [FeedStory] = payload.users.flatMap { user in
         user.shelves.map { shelf in
-            FeedStory(
+            let isHypebeastStory = shelf.id == hypebeastStoryID
+            let sourceItems: [Item]
+            if isHypebeastStory {
+                // Footwear leads the assortment; apparel remains supporting
+                // context instead of taking over the first card and rails.
+                let sourceShelfIDs = [
+                    hypebeastStoryID,
+                    "shelf-luke-18-elevated-classics",
+                    "shelf-luke-9-streetwear-caps-and-tees",
+                ]
+                sourceItems = sourceShelfIDs.flatMap { sourceShelfID in
+                    user.shelves.first(where: { $0.id == sourceShelfID })?.items ?? []
+                }
+            } else {
+                sourceItems = shelf.items
+            }
+
+            return FeedStory(
                 id: shelf.id,
                 eyebrow: "",
-                title: shelf.title,
-                subtitle: shelf.subtitle,
+                title: isHypebeastStory ? "Hypebeast fits & sneakers" : shelf.title,
+                subtitle: isHypebeastStory
+                    ? "Rare collabs and standout sneakers from Kith, Sneaker Politics, and more"
+                    : shelf.subtitle,
                 format: .world,
                 topicKeys: [shelf.topic, "catalog-only-media"],
                 accentHex: topicAccents[shelf.topic] ?? "#706B66",
                 coverImageName: nil,
                 destinationLabel: "Explore",
-                products: shelf.items.map {
+                products: (isHypebeastStory ? hypebeastProductReferences : []) + sourceItems.map {
                     .init(merchantID: $0.merchantID, productID: $0.productID)
                 }
             )
@@ -207,7 +241,14 @@ enum HypothesisShelfCatalog {
     )
 
     static func relatedStoryIDs(for storyID: String) -> [String] {
-        shelvesByID[storyID]?.signals?.relatedShelfIDs ?? []
+        if storyID == hypebeastStoryID {
+            return [
+                "shelf-luke-18-elevated-classics",
+                "shelf-luke-16-artist-collab-tees-hoodies-prints",
+                "shelf-luke-9-streetwear-caps-and-tees",
+            ]
+        }
+        return shelvesByID[storyID]?.signals?.relatedShelfIDs ?? []
     }
 
     static func priceBandUSD(for storyID: String) -> ClosedRange<Double>? {
@@ -222,8 +263,8 @@ enum HypothesisShelfCatalog {
             .filter { $0.userID == user.id }
             .map { $0.story.id }
 
-        // Lead Luke's feed with the newly authored film while preserving the
-        // relative order of every other shelf and all topic-specific feeds.
+        // Lead Luke's feed with the two authored topic films while preserving
+        // the relative order of every other shelf and all topic-specific feeds.
         var forYouShelves = user.shelves
         if user.id == "luke",
            let featuredIndex = forYouShelves.firstIndex(where: {
@@ -231,6 +272,13 @@ enum HypothesisShelfCatalog {
            }) {
             let featuredShelf = forYouShelves.remove(at: featuredIndex)
             forYouShelves.insert(featuredShelf, at: 0)
+        }
+        if user.id == "luke",
+           let hypebeastIndex = forYouShelves.firstIndex(where: {
+               $0.id == hypebeastStoryID
+           }) {
+            let hypebeastShelf = forYouShelves.remove(at: hypebeastIndex)
+            forYouShelves.insert(hypebeastShelf, at: min(1, forYouShelves.count))
         }
 
         var forYouStoryIDs: [String] = []
@@ -343,7 +391,7 @@ enum HypothesisShelfCatalog {
             )
         }
 
-        return order.compactMap { merchantID in
+        let shelfMerchants: [SampleMerchant] = order.compactMap { merchantID in
             guard let name = names[merchantID], let catalog = products[merchantID],
                   let cover = catalog.first?.imageURL else { return nil }
             return SampleMerchant(
@@ -366,7 +414,170 @@ enum HypothesisShelfCatalog {
                 productCategory: nil
             )
         }
+        return shelfMerchants + hypebeastMerchants
     }()
+
+    private static let hypebeastMerchants: [SampleMerchant] = [
+        curatedMerchant(
+            id: "kith",
+            name: "Kith",
+            domain: "kith.com",
+            color: "#4B423B",
+            products: [
+                premiumProduct(
+                    8_286_509_564_032,
+                    "New Balance x Stone Island ABZORB 1890 – Deep Forest / Olive Green",
+                    "250.00",
+                    "nbu1890st",
+                    "New Balance",
+                    [
+                        "https://cdn.shopify.com/s/files/1/0094/2252/files/5476753459_sd1.jpg?v=1780510881",
+                        "https://cdn.shopify.com/s/files/1/0094/2252/files/20-05-2026-JW_U1890ST_2_1.jpg?v=1780510881",
+                    ]
+                ),
+                premiumProduct(
+                    8_286_188_830_848,
+                    "New Balance x Action Bronson 1890 – Blue / Grey",
+                    "200.00",
+                    "nbu18908bn",
+                    "New Balance",
+                    [
+                        "https://cdn.shopify.com/s/files/1/0094/2252/files/NBU18908BNNewBalanceActionBronson1890Blue_0381.jpg?v=1770835668",
+                        "https://cdn.shopify.com/s/files/1/0094/2252/files/NBU18908BNNewBalanceActionBronson1890Blue_0382.jpg?v=1770835668",
+                    ]
+                ),
+                premiumProduct(
+                    8_286_188_863_616,
+                    "New Balance x Action Bronson 1890 – Brown / Blue",
+                    "200.00",
+                    "nbu18901dp",
+                    "New Balance",
+                    [
+                        "https://cdn.shopify.com/s/files/1/0094/2252/files/NBU18901DPNewBalanceActionBronson1890White_0388.jpg?v=1770835641",
+                        "https://cdn.shopify.com/s/files/1/0094/2252/files/NBU18901DPNewBalanceActionBronson1890White_0390.jpg?v=1770835641",
+                    ]
+                ),
+            ]
+        ),
+        curatedMerchant(
+            id: "sneaker-politics",
+            name: "Sneaker Politics",
+            domain: "sneakerpolitics.com",
+            color: "#272727",
+            products: [
+                premiumProduct(
+                    9_405_655_777_468,
+                    "Pharrell Williams x Adidas Adistar Jellyfish – Crystal Sand / Trace Brown",
+                    "300.00",
+                    "pharrell-williams-x-adidas-adistar-jellyfish-crystal-sand-trace-brown",
+                    "Adidas",
+                    [
+                        "https://cdn.shopify.com/s/files/1/0214/7974/files/Sneaker-Politics-Adidas-PharrellWilliamsxAdidasAdistarJellyfish_CrystalSand_-KH6729-WB-1.jpg?v=1787263080",
+                        "https://cdn.shopify.com/s/files/1/0214/7974/files/Sneaker-Politics-Adidas-AdistarJellyfish-IG-1.jpg?v=1787263172",
+                    ]
+                ),
+                premiumProduct(
+                    9_189_417_943_228,
+                    "Willy Chavarria x Adidas Superstar – Core Black / Off White",
+                    "88.00",
+                    "willy-chavarria-x-adidas-superstar-core-black-off-white",
+                    "Adidas",
+                    [
+                        "https://cdn.shopify.com/s/files/1/0214/7974/files/Sneaker-Politics-ADIDAS-WillyChavarriaxAdidasSuperstar-CoreBlack-OffWhite-KI5156-WB-1.jpg?v=1779939134",
+                        "https://cdn.shopify.com/s/files/1/0214/7974/files/Sneaker-Politics-ADIDAS-WillyChavarriaxAdidasSuperstar-CoreBlack-OffWhite-KI5156-WB-5.jpg?v=1779939134",
+                    ]
+                ),
+                premiumProduct(
+                    9_410_290_516_156,
+                    "Air Jordan 8 Retro ‘Chrome’ – Black / White",
+                    "215.00",
+                    "air-jordan-8-retro-black-white-1",
+                    "Air Jordan",
+                    [
+                        "https://cdn.shopify.com/s/files/1/0214/7974/files/AURORA_305381-007_PHSLH000-2000.jpg?v=1787092878",
+                        "https://cdn.shopify.com/s/files/1/0214/7974/files/AURORA_305381-007_PHCFH001-2000.jpg?v=1787092878",
+                    ]
+                ),
+                premiumProduct(
+                    9_346_461_434_044,
+                    "Nike Kobe 10 Protro ‘Halo’ – White / Multi",
+                    "190.00",
+                    "nike-kobe-10-protro-halo-white-multi",
+                    "Nike",
+                    [
+                        "https://cdn.shopify.com/s/files/1/0214/7974/files/AURORA_IO3415-100_PHSLH000-2000.jpg?v=1786745895",
+                        "https://cdn.shopify.com/s/files/1/0214/7974/files/AURORA_IO3415-100_PHCFH001-2000.jpg?v=1786745895",
+                    ]
+                ),
+            ]
+        ),
+    ]
+
+    private static func curatedMerchant(
+        id: String,
+        name: String,
+        domain: String,
+        color: String,
+        products: [SampleMerchant.Product]
+    ) -> SampleMerchant {
+        SampleMerchant(
+            id: id,
+            name: name,
+            description: "",
+            rating: 4.9,
+            totalRatings: 0,
+            totalReviews: 0,
+            primaryColor: Color(hex: color),
+            secondaryColor: Color(hex: color),
+            collections: [],
+            products: products.map { product in
+                SampleMerchant.Product(
+                    id: product.id,
+                    title: product.title,
+                    price: product.price,
+                    handle: product.handle,
+                    productType: product.productType,
+                    vendor: product.vendor,
+                    imageURL: product.imageURL,
+                    shopURL: "https://\(domain)/products/\(product.handle)",
+                    tags: product.tags,
+                    allImageURLs: product.allImageURLs,
+                    currencyCode: product.currencyCode
+                )
+            },
+            featuredImageURLs: products.flatMap(\.allImageURLs),
+            logoImageURL: nil,
+            wordmarkImageURL: nil,
+            coverImageURL: products.first?.allImageURLs.dropFirst().first,
+            videoURL: nil,
+            coverDominantColor: color,
+            productCategory: "Sneakers",
+            logoFitsInCircle: false
+        )
+    }
+
+    private static func premiumProduct(
+        _ id: Int,
+        _ title: String,
+        _ price: String,
+        _ handle: String,
+        _ vendor: String,
+        _ images: [String]
+    ) -> SampleMerchant.Product {
+        SampleMerchant.Product(
+            id: id,
+            title: title,
+            price: price,
+            handle: handle,
+            productType: "Sneakers",
+            vendor: vendor,
+            imageURL: images.first,
+            shopURL: nil,
+            tags: ["canonical-catalog", "premium-sneakers"],
+            allImageURLs: images,
+            currencyCode: "USD"
+        )
+    }
 
     private static func avatarAssetName(for userID: String) -> String? {
         switch userID {

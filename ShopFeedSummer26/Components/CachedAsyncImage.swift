@@ -44,17 +44,22 @@ final class ImageURLCache: @unchecked Sendable {
     let urlCache: URLCache
     let session: URLSession
     private let memoryCache = NSCache<NSURL, UIImage>()
+    /// Coalesces duplicate requests from repeated carousel items. Without
+    /// this, the same product image can be downloaded and decoded several
+    /// times while an endless rail is first entering the viewport.
+    private let requestBroker = ImageRequestBroker()
 
     /// Limits concurrent network image fetches to avoid overwhelming the device.
-    private let semaphore = AsyncSemaphore(limit: 6)
+    private let semaphore = AsyncSemaphore(limit: 4)
 
-    /// Max pixel dimension to downsample to. Matches 3x of the largest card width (~377pt).
-    private let maxPixelSize: CGFloat = 1200
+    /// The largest phone surface is under 400pt wide. A 960px decode remains
+    /// crisp while avoiding 1200px allocations for every compact product tile.
+    private let maxPixelSize: CGFloat = 960
 
     private init() {
         urlCache = URLCache(
-            memoryCapacity: 100 * 1024 * 1024,
-            diskCapacity: 500 * 1024 * 1024,
+            memoryCapacity: 32 * 1024 * 1024,
+            diskCapacity: 96 * 1024 * 1024,
             directory: FileManager.default
                 .urls(for: .cachesDirectory, in: .userDomainMask).first?
                 .appendingPathComponent("PrototypeImageCache")
@@ -62,11 +67,11 @@ final class ImageURLCache: @unchecked Sendable {
         let config = URLSessionConfiguration.default
         config.urlCache = urlCache
         config.requestCachePolicy = .returnCacheDataElseLoad
-        config.httpMaximumConnectionsPerHost = 6
+        config.httpMaximumConnectionsPerHost = 4
         session = URLSession(configuration: config)
 
-        memoryCache.countLimit = 150
-        memoryCache.totalCostLimit = 150 * 1024 * 1024
+        memoryCache.countLimit = 60
+        memoryCache.totalCostLimit = 64 * 1024 * 1024
     }
 
     func image(for url: URL) -> UIImage? {
@@ -94,12 +99,37 @@ final class ImageURLCache: @unchecked Sendable {
     /// Load an image: memory → disk (downsampled) → network (downsampled).
     /// All decoding happens off the main thread.
     func loadImage(for url: URL) async -> AsyncImagePhase {
+        if let cached = image(for: url) {
+            return .success(Image(uiImage: cached))
+        }
+
+        let loaded = await requestBroker.load(url: url) { [weak self] in
+            guard let self else { return nil }
+            return await self.fetchAndDecode(for: url)
+        }
+        guard let loaded else {
+            return .failure(URLError(.cannotDecodeContentData))
+        }
+        setImage(loaded, for: url)
+        return .success(Image(uiImage: loaded))
+    }
+
+    /// Performs one physical load for a URL. `requestBroker` ensures repeated
+    /// carousel cells await this same operation instead of creating their own.
+    private func fetchAndDecode(for url: URL) async -> UIImage? {
+        // Bundled dossier media is already on disk. Routing file URLs through
+        // URLSession read the entire multi-megabyte source into memory and
+        // duplicated it in the 500 MB response cache before downsampling.
+        // ImageIO can thumbnail directly from the file off the main thread.
+        if url.isFileURL {
+            return await downsample(fileURL: url)
+        }
+
         // 1. Disk cache — decode + downsample off main thread
         let request = URLRequest(url: url)
         if let cachedResponse = urlCache.cachedResponse(for: request) {
             if let image = await downsample(data: cachedResponse.data) {
-                setImage(image, for: url)
-                return .success(Image(uiImage: image))
+                return image
             }
         }
 
@@ -109,7 +139,7 @@ final class ImageURLCache: @unchecked Sendable {
         // Re-check memory in case another task loaded it while we waited
         if let cached = image(for: url) {
             await semaphore.signal()
-            return .success(Image(uiImage: cached))
+            return cached
         }
 
         do {
@@ -122,14 +152,13 @@ final class ImageURLCache: @unchecked Sendable {
             // Downsample off main thread
             guard let image = await downsample(data: data) else {
                 await semaphore.signal()
-                return .failure(URLError(.cannotDecodeContentData))
+                return nil
             }
-            setImage(image, for: url)
             await semaphore.signal()
-            return .success(Image(uiImage: image))
+            return image
         } catch {
             await semaphore.signal()
-            return .failure(error)
+            return nil
         }
     }
 
@@ -160,6 +189,54 @@ final class ImageURLCache: @unchecked Sendable {
             }
             return UIImage(cgImage: cgImage)
         }.value
+    }
+
+    private func downsample(fileURL: URL) async -> UIImage? {
+        await Task.detached(priority: .utility) { [maxPixelSize] in
+            let sourceOptions: [CFString: Any] = [
+                kCGImageSourceShouldCache: false,
+            ]
+            guard let source = CGImageSourceCreateWithURL(
+                fileURL as CFURL,
+                sourceOptions as CFDictionary
+            ) else { return nil as UIImage? }
+
+            let thumbnailOptions: [CFString: Any] = [
+                kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,
+                kCGImageSourceCreateThumbnailFromImageAlways: true,
+                kCGImageSourceShouldCacheImmediately: true,
+                kCGImageSourceCreateThumbnailWithTransform: true,
+            ]
+            guard let cgImage = CGImageSourceCreateThumbnailAtIndex(
+                source,
+                0,
+                thumbnailOptions as CFDictionary
+            ) else { return nil as UIImage? }
+            return UIImage(cgImage: cgImage)
+        }.value
+    }
+}
+
+/// One task per URL prevents looping rails and prefetch from duplicating the
+/// same network, file IO, and ImageIO decode work.
+private actor ImageRequestBroker {
+    private var requests: [URL: Task<UIImage?, Never>] = [:]
+
+    func load(
+        url: URL,
+        operation: @escaping @Sendable () async -> UIImage?
+    ) async -> UIImage? {
+        if let request = requests[url] {
+            return await request.value
+        }
+
+        let request = Task(priority: .utility) {
+            await operation()
+        }
+        requests[url] = request
+        let image = await request.value
+        requests[url] = nil
+        return image
     }
 }
 

@@ -110,59 +110,17 @@ struct StoryTopicPage: View {
 
     var body: some View {
         if let story {
-            if let transitionSourceID {
-                TopicDetailPage(story: story, merchants: merchants)
-                    .navigationTransition(
-                        .zoom(sourceID: transitionSourceID, in: namespace)
-                    )
-            } else {
-                TopicLandingView(
-                    topic: FeedTopic(
-                        id: story.id,
-                        label: story.title,
-                        storyTopicKey: nil,
-                        storyIDs: [story.id],
-                        subtopics: nil,
-                        relatedMerchantIDs: nil,
-                        merchandisingBlocks: nil
-                    ),
-                    stories: [story],
-                    merchants: merchants,
-                    headerCoverImageName: parentLeadStory?.coverImageName,
-                    headerImageURL: collectionCoverURL,
-                    headerVideoURL: storyCoverVideoURL,
-                    surfaceAccentHex: parentLeadStory?.accentHex ?? story.accentHex,
-                    // Chapters, not covers: shorter header with the parent
-                    // world's name as an eyebrow so drill-ins stay oriented.
-                    headerEyebrow: contextTopic?.label ?? parentTopic?.label,
-                    compactHeader: true,
-                    enrichmentProducts: enrichmentProducts
+            TopicDetailPage(
+                story: story,
+                merchants: merchants,
+                enrichmentProducts: enrichmentProducts
+            )
+            .navigationTransition(
+                .zoom(
+                    sourceID: transitionSourceID ?? "subtopic-\(storyID)",
+                    in: namespace
                 )
-                .environment(\.colorScheme, .dark)
-                .toolbar(.hidden, for: .navigationBar)
-                .navigationTransition(
-                    .zoom(sourceID: "subtopic-\(storyID)", in: namespace)
-                )
-                .safeAreaBar(edge: .top) {
-                    drillInNavigation
-                    .padding(.vertical, GravitySpacing.space4)
-                }
-                .onAppear {
-                    previousNavBarTint = coordinator.navBarBlurTint
-                    withAnimation(.easeOut(duration: 0.22)) {
-                        coordinator.showNavBar = false
-                        coordinator.navBarBlurTint = Color(hex: parentLeadStory?.accentHex ?? story.accentHex)
-                    }
-                }
-                .onDisappear {
-                    withAnimation(.easeOut(duration: 0.15)) {
-                        coordinator.showNavBar = true
-                        if let previousNavBarTint {
-                            coordinator.navBarBlurTint = previousNavBarTint
-                        }
-                    }
-                }
-            }
+            )
         }
     }
 

@@ -72,10 +72,11 @@ struct RootView: View {
                 transitionSourceID: sourceId
             )
         case .topicExpanded(let topicId, let sourceStoryId):
-            ExpandedTopicPage(
-                topicID: topicId,
-                sourceStoryID: sourceStoryId,
-                namespace: namespace
+            StoryTopicPage(
+                storyID: sourceStoryId,
+                namespace: namespace,
+                contextTopicID: topicId,
+                transitionSourceID: sourceStoryId
             )
         case .tryOnStudio:
             TryOnStudioPage(namespace: namespace)

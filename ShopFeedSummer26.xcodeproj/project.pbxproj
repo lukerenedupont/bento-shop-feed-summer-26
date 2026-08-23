@@ -100,6 +100,7 @@
 		9B4BAF4923D6C00594F5C5CA /* CachedAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACD1E2168C3779609CA48BE /* CachedAsyncImage.swift */; };
 		9C9C4E768F481DBBF61445E2 /* InjectableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96694C6EED1830A1ED8C4FF /* InjectableView.swift */; };
 		A041C240A789B223C9DAE295 /* AgentSuggestionChips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72ABAA98385BA17C78F00DC8 /* AgentSuggestionChips.swift */; };
+		A7C8D9E0F1A2B3C4D5E60718 /* bfcm-holiday-sale-header.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B8D9E0F1A2B3C4D5E6071829 /* bfcm-holiday-sale-header.mp4 */; };
 		A7E88F039954B5B789BC28C5 /* HolidayFeedHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81893883E934BAC0B3B769E2 /* HolidayFeedHeader.swift */; };
 		A82E10EDFA71EA5612CAC292 /* PurlTuneRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206CA1295E8B6FC39644D1DE /* PurlTuneRuntime.swift */; };
 		A9281D381BB9DCCE93A992BA /* ShopSearchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFB55D997C32D0573A50172 /* ShopSearchClient.swift */; };
@@ -138,7 +139,6 @@
 		DF2A664E61B4341B235D1085 /* GoodSansText-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = BE0ED552AC81FCFE75A32C68 /* GoodSansText-Regular.otf */; };
 		E11A9247F1749EC35F25E92A /* LoopingVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68957DDA92869BB303188B83 /* LoopingVideoPlayer.swift */; };
 		E1A2B3C4D5E60718293A4B5C /* bfcm-holiday-header.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E60718293A4B5C /* bfcm-holiday-header.mp4 */; };
-		A7C8D9E0F1A2B3C4D5E60718 /* bfcm-holiday-sale-header.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B8D9E0F1A2B3C4D5E6071829 /* bfcm-holiday-sale-header.mp4 */; };
 		E231D47C9DC5088B813021BB /* QuickSearchCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A8B6A48F59AE65A5A915C9 /* QuickSearchCard.swift */; };
 		E25F56AFAC034DE3EB4D8ECF /* senvoler-collab.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5AA20BD305E837F274EA1D1A /* senvoler-collab.mp4 */; };
 		E26E101FAB34700D33AA8995 /* ComparisonShelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5307D982E8802D5BA2FABA39 /* ComparisonShelf.swift */; };
@@ -197,11 +197,11 @@
 		31DD6A54D1D610CEC56F6499 /* GoodSansText-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GoodSansText-Medium.otf"; sourceTree = "<group>"; };
 		3279B82B1E80A5AE1150FD8D /* GoodSans-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GoodSans-Regular.otf"; sourceTree = "<group>"; };
 		362AA9ECF0FBCBF6C312897A /* GoodSans-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GoodSans-Medium.otf"; sourceTree = "<group>"; };
-		38E8DE96062F5624D3957EF7 /* ShopFeedSummer26.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ShopFeedSummer26.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		38E8DE96062F5624D3957EF7 /* ShopFeedSummer26.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShopFeedSummer26.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C16419B525AF6EF1235C9C9 /* GTStandard-MSemibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTStandard-MSemibold.otf"; sourceTree = "<group>"; };
 		3C23C2E41BB47CB79D885200 /* Shopify Sans-Light Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Light Italic.otf"; sourceTree = "<group>"; };
 		454F86BE7F786EB1CCFC0C29 /* HomeRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRoute.swift; sourceTree = "<group>"; };
-		460DB87F92FFE7682179B32F /* rcout-knit.mp4 */ = {isa = PBXFileReference; path = "rcout-knit.mp4"; sourceTree = "<group>"; };
+		460DB87F92FFE7682179B32F /* rcout-knit.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "rcout-knit.mp4"; sourceTree = "<group>"; };
 		48BF042243E1DA796AB16D5F /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
 		4AE8652F78AC9D1AA87E0174 /* AnimatedMenuIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedMenuIcon.swift; sourceTree = "<group>"; };
 		4AEA08A7A0F99602B0464C7B /* GTStandard-MRegular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTStandard-MRegular.otf"; sourceTree = "<group>"; };
@@ -219,8 +219,8 @@
 		58F347A92FDFFB7A3E5AB042 /* TopicMasonryCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicMasonryCards.swift; sourceTree = "<group>"; };
 		59CA9E773CC1BF1555842863 /* LegacyFeedArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyFeedArchive.swift; sourceTree = "<group>"; };
 		5A91B29B5DF530EFF5D216F1 /* RemoteMerchantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMerchantService.swift; sourceTree = "<group>"; };
-		5AA20BD305E837F274EA1D1A /* senvoler-collab.mp4 */ = {isa = PBXFileReference; path = "senvoler-collab.mp4"; sourceTree = "<group>"; };
-		5C93BF5FAA2E9F9509E17322 /* caraway-feed.mp4 */ = {isa = PBXFileReference; path = "caraway-feed.mp4"; sourceTree = "<group>"; };
+		5AA20BD305E837F274EA1D1A /* senvoler-collab.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "senvoler-collab.mp4"; sourceTree = "<group>"; };
+		5C93BF5FAA2E9F9509E17322 /* caraway-feed.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "caraway-feed.mp4"; sourceTree = "<group>"; };
 		5D5503247C437CAFB0CE7681 /* SearchResultsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsPage.swift; sourceTree = "<group>"; };
 		5EF4BBE9215BBC7D4AEEE4A4 /* TopicLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicLandingView.swift; sourceTree = "<group>"; };
 		602EC1E5E7BEEEE5ED403D0E /* Shopify Sans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Light.otf"; sourceTree = "<group>"; };
@@ -263,7 +263,7 @@
 		A287E60C566EBF6A7F6CC6B3 /* GTStandard-MMedium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTStandard-MMedium.otf"; sourceTree = "<group>"; };
 		A3EB1852CA445A1A84EA1B4F /* TypewriterText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypewriterText.swift; sourceTree = "<group>"; };
 		A7413074EEDFA3679D8B3E3A /* GravityTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityTypography.swift; sourceTree = "<group>"; };
-		A7E71042B1CB30A4120B6D53 /* sculptural-living-room.mp4 */ = {isa = PBXFileReference; path = "sculptural-living-room.mp4"; sourceTree = "<group>"; };
+		A7E71042B1CB30A4120B6D53 /* sculptural-living-room.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sculptural-living-room.mp4"; sourceTree = "<group>"; };
 		AB7E22A8C16DB6B0755FE858 /* DeliveryDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryDetailPage.swift; sourceTree = "<group>"; };
 		AB9814ED8FB1597FE8380CFA /* OrdersWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersWidget.swift; sourceTree = "<group>"; };
 		AD7C5AECC27CBFF98B8E1E8D /* GravityShadows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityShadows.swift; sourceTree = "<group>"; };
@@ -276,13 +276,14 @@
 		B688BEC7F76E8968601FF28E /* StorePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorePage.swift; sourceTree = "<group>"; };
 		B6E07104E33E24EFFA26DDEE /* AmbientProductVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientProductVideo.swift; sourceTree = "<group>"; };
 		B8390B3AB280B4DA9E1B9867 /* Shopify Sans-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Black.otf"; sourceTree = "<group>"; };
+		B8D9E0F1A2B3C4D5E6071829 /* bfcm-holiday-sale-header.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "bfcm-holiday-sale-header.mp4"; sourceTree = "<group>"; };
 		B96694C6EED1830A1ED8C4FF /* InjectableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectableView.swift; sourceTree = "<group>"; };
 		B983AC901056B787D37F13CA /* AgentConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentConversationView.swift; sourceTree = "<group>"; };
 		B9D284B4531C1094FD7A9792 /* EvergreenDestinationFeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvergreenDestinationFeeds.swift; sourceTree = "<group>"; };
 		B9F58EB0B320715CD835B076 /* MerchantAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantAvatarView.swift; sourceTree = "<group>"; };
 		BB7B5177A7500A2232144B64 /* GoodSansText-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GoodSansText-Bold.otf"; sourceTree = "<group>"; };
 		BE0ED552AC81FCFE75A32C68 /* GoodSansText-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GoodSansText-Regular.otf"; sourceTree = "<group>"; };
-		BFC5DD822918A12A22B6FFA3 /* stadium-sneakers.mp4 */ = {isa = PBXFileReference; path = "stadium-sneakers.mp4"; sourceTree = "<group>"; };
+		BFC5DD822918A12A22B6FFA3 /* stadium-sneakers.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "stadium-sneakers.mp4"; sourceTree = "<group>"; };
 		C15E4F43A8568B6BFE596E7E /* Shopify Sans-Regular Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Regular Italic.otf"; sourceTree = "<group>"; };
 		C3AC86BC4EA8BB2C4C9FCDC4 /* AgentMetaRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentMetaRow.swift; sourceTree = "<group>"; };
 		CC1132BFE84890181F234405 /* ShopServerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopServerClient.swift; sourceTree = "<group>"; };
@@ -296,23 +297,22 @@
 		D55DD9DD1C2856FC6D6305AD /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		D63224A20DCCA6A2867E3E63 /* TryOnFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryOnFeedCard.swift; sourceTree = "<group>"; };
 		D980F4F049B8BD00365E5845 /* GravityIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityIcon.swift; sourceTree = "<group>"; };
-		D9F9A263E73A0DA198087CC3 /* hoe-streetwear.mp4 */ = {isa = PBXFileReference; path = "hoe-streetwear.mp4"; sourceTree = "<group>"; };
+		D9F9A263E73A0DA198087CC3 /* hoe-streetwear.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "hoe-streetwear.mp4"; sourceTree = "<group>"; };
 		DAA03D4C904C81520ECE119F /* PurlInjectionDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurlInjectionDiagnostics.swift; sourceTree = "<group>"; };
 		DB02EED712F616C19BAB6144 /* Shopify Sans-Medium Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Medium Italic.otf"; sourceTree = "<group>"; };
 		E50FED85087F954198F8D79A /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		E5CF65F7DCD67A43CB42DA84 /* ShimmerModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerModifier.swift; sourceTree = "<group>"; };
 		E670AA572DCA2DB88EE8D9C6 /* StoryFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryFeedCard.swift; sourceTree = "<group>"; };
-		E85036657DD96D61D9AA923D /* fuumuu-painting.mp4 */ = {isa = PBXFileReference; path = "fuumuu-painting.mp4"; sourceTree = "<group>"; };
+		E85036657DD96D61D9AA923D /* fuumuu-painting.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fuumuu-painting.mp4"; sourceTree = "<group>"; };
 		EAC89D255BADA19142CCCFBF /* Shopify Sans-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Regular.otf"; sourceTree = "<group>"; };
 		F10B16167B932BDE28BA2B48 /* FeedStory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStory.swift; sourceTree = "<group>"; };
+		F1A2B3C4D5E60718293A4B5C /* bfcm-holiday-header.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "bfcm-holiday-header.mp4"; sourceTree = "<group>"; };
 		F2CE543A596530FA1FB54679 /* DebugInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugInjection.swift; sourceTree = "<group>"; };
 		F4A8B6A48F59AE65A5A915C9 /* QuickSearchCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSearchCard.swift; sourceTree = "<group>"; };
 		F65CA5F68FD9BBBA9174AB03 /* Dossiers */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Dossiers; path = ShopFeedSummer26/Dossiers; sourceTree = SOURCE_ROOT; };
 		F6915A5ED111B873EFB9D852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F8078D239E65B41D28D2935B /* AgentProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentProduct.swift; sourceTree = "<group>"; };
-		F89CE782C969F6A33A85C461 /* olend-travel.mp4 */ = {isa = PBXFileReference; path = "olend-travel.mp4"; sourceTree = "<group>"; };
-		F1A2B3C4D5E60718293A4B5C /* bfcm-holiday-header.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "bfcm-holiday-header.mp4"; sourceTree = "<group>"; };
-		B8D9E0F1A2B3C4D5E6071829 /* bfcm-holiday-sale-header.mp4 */ = {isa = PBXFileReference; lastKnownFileType = video.mp4; path = "bfcm-holiday-sale-header.mp4"; sourceTree = "<group>"; };
+		F89CE782C969F6A33A85C461 /* olend-travel.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "olend-travel.mp4"; sourceTree = "<group>"; };
 		F8E00A10734272579AE1E29B /* FeedBundleLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBundleLoader.swift; sourceTree = "<group>"; };
 		F9AD617847452AF8F79A0062 /* SearchPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPage.swift; sourceTree = "<group>"; };
 		F9E4DAD75BA5C3CD796D78A1 /* ShimmerText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerText.swift; sourceTree = "<group>"; };
@@ -617,6 +617,7 @@
 				9992011C52390843FAF2FF20 /* Validate Personalized Feed */,
 				428B6FBDFC172F075E108817 /* Sources */,
 				A8337E1BF42BACDE3C03858B /* Resources */,
+				C0A1B2C3D4E5F60718293A4B /* Optimize Feed Bundle */,
 				8226EE85305E5477737FE622 /* Frameworks */,
 				A0ACB63E534E888C3378EBB3 /* Copy Local Shop Server Env */,
 			);
@@ -642,8 +643,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = 7AFEA79A61A63E40526C7A31 /* Build configuration list for PBXProject "ShopFeedSummer26" */;
 			developmentRegion = en;
@@ -752,6 +751,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "ENV_FILE=\"${SRCROOT}/.env.local\"\nDEST_DIR=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\nif [ -f \"$ENV_FILE\" ]; then\n  mkdir -p \"$DEST_DIR\"\n  cp \"$ENV_FILE\" \"$DEST_DIR/ShopServer.env\"\nelse\n  rm -f \"$DEST_DIR/ShopServer.env\"\nfi\n";
+		};
+		C0A1B2C3D4E5F60718293A4B /* Optimize Feed Bundle */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Optimize Feed Bundle";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/bundle/.optimization-stamp",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "\"${SRCROOT}/Scripts/optimize_feed_bundle.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1014,6 +1033,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = X4262S8X37;
 				FAL_TOKEN_ENDPOINT = "";
 				INFOPLIST_FILE = ShopFeedSummer26/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Shop Feed Summer 26";
@@ -1036,6 +1056,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = X4262S8X37;
 				FAL_TOKEN_ENDPOINT = "";
 				INFOPLIST_FILE = ShopFeedSummer26/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Shop Feed Summer 26";

@@ -607,7 +607,12 @@ struct HomePage: View {
             var nextPostIndex = 0
             for (index, story) in focusedStories.enumerated() {
                 result.append(.story(story))
-                if index.isMultiple(of: 2), posts.indices.contains(nextPostIndex) {
+                // Keep the two authored opening topics adjacent. Social posts
+                // begin after that pair so the feed opens Sculptural,
+                // Hypebeast, then Try It Live exactly as authored.
+                if index >= 1,
+                   (index - 1).isMultiple(of: 3),
+                   posts.indices.contains(nextPostIndex) {
                     result.append(.post(posts[nextPostIndex]))
                     nextPostIndex += 1
                 }
@@ -1868,12 +1873,12 @@ struct HomePage: View {
            selectedTopic.storyIDs.contains(story.id) {
             coordinator.resetScrollState()
             expandingStoryID = story.id
-            Task { @MainActor in
-                await Task.yield()
-                coordinator.pushRoute(
-                    .story(storyId: story.id, sourceId: story.id)
-                )
-            }
+            // Route in the same interaction turn. Waiting for another main-
+            // actor pass made a topic tap feel ignored on a physical device,
+            // especially while the active card's video was decoding.
+            coordinator.pushRoute(
+                .story(storyId: story.id, sourceId: story.id)
+            )
             return
         }
 
@@ -1891,27 +1896,18 @@ struct HomePage: View {
             // swap and StoryTopicPage can perform the same system zoom as an
             // expanded topic.
             expandingStoryID = story.id
-            Task { @MainActor in
-                await Task.yield()
-                coordinator.pushRoute(
-                    .story(storyId: story.id, sourceId: story.id)
-                )
-            }
+            coordinator.pushRoute(
+                .story(storyId: story.id, sourceId: story.id)
+            )
             return
         }
 
         coordinator.resetScrollState()
         expandingStoryID = story.id
 
-        // Commit the frozen media geometry before navigation captures the
-        // matched source. Otherwise parallax reacts to the zoom's changing
-        // coordinate space and the film appears to slide out of the card.
-        Task { @MainActor in
-            await Task.yield()
-            coordinator.pushRoute(
-                .topicExpanded(topicId: destination.id, sourceStoryId: story.id)
-            )
-        }
+        coordinator.pushRoute(
+            .topicExpanded(topicId: destination.id, sourceStoryId: story.id)
+        )
     }
 
     // MARK: - Top Bar (Quick Links)
