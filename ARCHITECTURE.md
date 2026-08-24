@@ -1,238 +1,119 @@
-# Personalized Feed Architecture
+# Shop Feed Summer 26 architecture
 
-## Intent
+## Product model
 
-The home screen is a finite set of personalized commerce stories, not a merchant marketplace or an infinite product grid. Topics are channels into a larger story catalog. A story can reference products from several merchants and opens a nested flick-and-stick feed before an individual product page.
+The prototype is a personalized, media-led commerce feed. Topics are authored
+merchandising destinations assembled from a finite block system. New content
+should normally require catalog or recipe changes, not another SwiftUI page.
 
 ## Data flow
 
 ```text
-prototype-merchants.json       personalized-feed.json
-(real catalog fixtures)        (topics + story definitions)
-             \                    /
-              FeedStory resolves stable product IDs
-                           |
-                    HomePage ranks/filters
-                           |
-                     StoryFeedCard
-                           |
-                  StoryDetailPage -> PDP
+prototype-merchants.json + personalized-feed.json + frozen dossier bundle
+                                |
+                  Local/remote catalog services
+                                |
+             Buyer personalization + stable product references
+                                |
+                  HomePage -> StoryFeedCard
+                                |
+               StoryTopicPage -> TopicDetailPage
+                                |
+                      Store / PDP / Try-on
 ```
 
-### Product catalog
+- Merchant/product identity is always `merchantID + productID`.
+- `RemoteMerchantService` publishes one merged lookup graph while retaining
+  the authenticated followed-merchant collection separately.
+- `SampleMerchant` caches merchant and product indexes per catalog generation.
+- The app renders bundled data immediately and hydrates followed shops, posts,
+  and account history independently.
+- The frozen feed bundle is optimized to 540p video and phone-sized imagery at
+  build time. A persistent fingerprinted cache prevents clean device builds
+  from recompressing unchanged media.
 
-`Assets.xcassets/prototype-merchants.dataset/prototype-merchants.json`
+## Live UI layers
 
-Contains merchant presentation data and real product metadata. Product references must use the pair `(merchantID, productID)`. Titles are display data and must not be used as foreign keys.
+- `Pages/HomePage.swift` owns feed selection and orchestration.
+- `Pages/FeedScrollInfrastructure.swift` owns high-frequency paging and
+  utility-belt gesture state.
+- `Pages/HomeFeedModels.swift` owns feed entry and seasonal placement models.
+- `Components/StoryFeedCard.swift` is the shared media-led feed card.
+- `Pages/StoryTopicPage.swift` owns topic navigation chrome.
+- `Pages/TopicDetailPage.swift` resolves content and renders a recipe.
+- `Pages/TopicPageRecipe.swift` is the finite, validated recipe catalog.
+- `Pages/TopicPageBlocks.swift` contains reusable topic card components.
+- `Navigation/RootView.swift` is the only route-to-destination switch.
 
-Loaded by `SampleData/LocalMerchantService.swift`.
+The removed `TopicPage`, `TopicLandingView`, `ExpandedTopicPage`, and
+masonry stack are not alternate extension points. All live topic routes use
+the shared detail renderer.
 
-### Personalized feed catalog
+## Topic recipes
 
-`Assets.xcassets/personalized-feed.dataset/personalized-feed.json`
+The four recipe families are:
 
-Versioned, data-driven definitions for:
+1. Sculptural living — the authored lighting/home sequence.
+2. Hypebeast — the authored sneaker/apparel sequence.
+3. Merchant — a tighter store-led sequence.
+4. Standard — a context-aware fallback shared by every other topic.
 
-- Ordered topic labels and topic keys
-- Story copy and format
-- Topic membership
-- Stable product references
-- Presentation accent and destination label
-- Optional `coverImageName` pointing at a bundled cover imageset
+Recipes use only the block primitives documented in
+[`docs/TOPIC_PAGE_BLOCK_SYSTEM.md`](docs/TOPIC_PAGE_BLOCK_SYSTEM.md).
+Each recipe validates its spacing, titles, card geometry, category depth,
+filters, and minimum product query size in Debug builds.
 
-Decoded by `SampleData/PersonalizedFeedCatalog.swift`. This bundled source can later be replaced by a generated/server response without changing the views.
+## Media runtime
 
-### Cover images
+- `CachedAsyncImage` is the only URL/file image pipeline.
+- Images are downsampled off-main-thread and cached with fixed memory/disk
+  budgets; duplicate requests coalesce and network concurrency is capped.
+- Feed prefetching is limited to the current and next two stories.
+- `LoopingVideoPlayer` detaches its player when a lazy cell leaves the window,
+  shares playback during feed-to-topic transitions, and disables autoplay for
+  Reduce Motion.
+- Local dossier images bypass URLSession to avoid buffering source files twice.
 
-Each editorial topic's lead story may carry a `coverImageName` (e.g. `cover-birding`). The same asset renders in two places:
+## Navigation
 
-- `StoryFeedCard` — full-bleed atmosphere behind the Made for You card
-- `TopicLandingView` — topic header background with a legibility scrim
+Top-level feeds move horizontally. Feed/topic drill-ins use the system shared
+zoom transition. Product and store pushes use the centralized `HomeRoute`.
+The bottom navigation is hidden only for immersive topic/try-on destinations
+and restored by the coordinator.
 
-Source art lives in `covers/<topic>/v*.png` (highest version wins) and is downscaled into `Assets.xcassets/cover-*.imageset` as ~2200px JPEGs (~500KB each) via `sips`.
+## Validation and budgets
 
-A cover story's `accentHex` is not hand-picked — it is sampled from the image itself so the header fade dissolves seamlessly *and* each topic surface carries its own cover's color. `Scripts/extract_cover_color.swift` samples the bottom ~30% of the cover (the region the fade crosses), buckets pixels by hue, and scores buckets by coverage × saturation — the cover's most characterful color wins instead of the muddy arithmetic average. The winner is normalized to a dark, white-text-safe surface tone (saturation amplified, value compressed but not flattened). Re-run it and update the feed JSON whenever a cover changes:
-
-```bash
-swift Scripts/extract_cover_color.swift ShopFeedSummer26/Assets.xcassets/cover-*.imageset/*.jpg
-``` Stories without a cover fall back to the blurred-product atmosphere, so covers are additive, never required. Covers are generated atmosphere only — commerce facts (products, prices, images, links) always come from the merchant catalog.
-
-Both fill images use the `Color.clear.overlay { Image(...) }.clipped()` pattern. A bare `resizable().scaledToFill()` image reports its intrinsic size to the layout and will blow out sibling padding — keep the overlay pattern when adding new cover surfaces.
-
-## UI layers
-
-- `Components/StoryFeedCard.swift` — shared shell, navigation, atmosphere, title, and footer.
-- `Components/StoryCardLayouts.swift` — finite visual formats (`world`, `shortlist`, `setup`).
-- `Pages/HomePage.swift` — topic selection and story filtering only.
-- `Pages/StoryDetailPage.swift` — nested snapping feed generated from the selected story.
-- `Navigation/RootView.swift` — centralized `HomeRoute` destination handling.
-
-New content should normally require data changes, not a new SwiftUI component. Add a format only when it represents a genuinely different shopping job rather than a cosmetic carousel variation.
-
-## Validation
-
-Run before building or handing off:
+Every build runs:
 
 ```bash
 Scripts/validate_personalized_feed.py
-xcodebuild -project ShopFeedSummer26.xcodeproj \
-  -scheme ShopFeedSummer26 \
-  -sdk iphonesimulator \
-  -configuration Debug build CODE_SIGNING_ALLOWED=NO
+Scripts/optimize_feed_bundle.sh
+Scripts/validate_build_product.sh
 ```
 
-The validator checks IDs, references, formats, duplicates, topic coverage, covers (every `coverImageName` must have a bundled imageset; every bundled `cover-*` imageset must be referenced by a story), and subtopics (every subtopic needs a label and must reference a story inside its own topic feed).
+Validation covers stable IDs, product references, block items, dossier
+manifests, cover assets, frozen media references, minimum story depth, source
+file line budgets, the generated media inventory, and product-size budgets.
 
-### Topic merchandising blocks
+Current hard limits:
 
-A topic may declare ordered `merchandisingBlocks` in `personalized-feed.json`. This replaces the old fixed page template. Supported block kinds are:
+- Built app: 180 MB
+- Optimized frozen feed: 100 MB
+- `HomePage.swift`: 1,900 lines
+- `TopicDetailPage.swift`: 1,200 lines
+- `TopicPageBlocks.swift`: 1,100 lines
 
-- `mediaCarousel` — swipeable, ordered mix of story/collection, merchant, and product cards
-- `merchantRail` — avatar-only related shops
-- `productRail` — titled horizontal product assortment (for example, “For you in Coffee counter”)
-- `masonry` — heterogeneous discovery stream
+## Adding content
 
-Blocks and their items can be reordered or independently curated without editing Swift. The validator checks block IDs, kinds, and every story, merchant, and product reference. Do not label a shelf “Deals” until authentic sale or compare-at-price data is present.
+1. Add or update real merchant/products in the catalog.
+2. Reference products by stable IDs in the story.
+3. Select an existing recipe family.
+4. Add an authored recipe only when block order or shopping intent differs.
+5. Add a block primitive only for a genuinely new interaction.
+6. Run validation and verify the simulator/physical-phone build.
 
-**Intent-grouped recipe (piloted on Birding gear).** Every shelf answers a
-different shopper question, stated in its title, rather than mixing formats in
-one carousel:
+## Security boundary
 
-1. `Keep shopping` (productRail) — retargeting; highest intent, first slot
-2. `Collections for you` (mediaCarousel, stories only) — the topic's editorial subcategories
-3. `Trending shops` (merchantRail) — trust, trimmed to topically relevant merchants
-4. `Discover more` (masonry) — open-ended browse; post cards stay interleaved here
-
-Roll this recipe to the remaining topics by re-authoring their
-`merchandisingBlocks` in the JSON — no Swift changes required.
-
-### Catalog depth
-
-Topic masonry streams the **full inventory of every shop on the page** —
-story-curated products lead (editorial ordering is authoritative), then the
-rest of each relevant merchant's catalog, deduped (`deepProducts` in
-`TopicLandingView`). The bundled catalog holds ~340 real products pulled from
-the 17 merchants' live storefronts via `Scripts/deepen_catalog.py`, which hits
-each shop's public `/products.json`, skips gift cards and unavailable items,
-and appends deduped entries after the hand-curated ones. Re-run it any time;
-it is idempotent. Note: a topic's `relatedMerchantIDs` now surface those
-shops' full catalogs in its masonry — prune off-topic related IDs in the JSON
-if the mix drifts.
-
-### Navigation model
-
-Pinterest-style: the For You feed is the only view with global chrome (avatar
-+ topic pills at top, bottom tab pill). Everything deeper is a real push:
-
-1. **For You** — `HomePage`, the home tab's root; avatar + topic pills live
-   only here
-2. **Topic** — `TopicPage` (route `.topic(topicId:sourceStoryId:)`), pushed
-   with the system zoom transition (`navigationTransition(.zoom)`) sourced
-   from the tapped feed card's `matchedTransitionSource`; pill-opened topics
-   fall back to a plain push
-3. **Subcategory** — `StoryTopicPage` (route `.story(storyId:)`)
-
-Topic and subcategory pages are immersive: they hide the bottom nav bar
-entirely (move+fade) and carry a single `FloatingBackButton` chip at the top.
-The bar returns on product-level pushes (PDP, Deep Dive, store), which rely on
-the bottom back button. The bottom tab pill is five tabs per the Hyperfeed
-spec — Home, Search, Cart, Orders, Favorites (`navigation-*` Gravity icons);
-Cart and Favorites are stub pages awaiting real state.
-
-The topic header renders the lead story's ambient dossier film (falling back
-to cover art) — the same surface its feed card plays — so the zoom hands the
-motion off visually. Films restart on push (separate players); a shared-player
-handoff is a known polish item once real films land.
-
-### Subtopics
-
-Each topic may declare `subtopics` — curated `{label, storyID}` pills rendered in the topic header. Labels are phrased as shopping categories (“Optics by size”, “Kinto glassware”), not truncated story titles, and each pill opens its story. Topics without subtopics fall back to story-title pills.
-
-### Merchant avatars
-
-`prototype-merchants.json → images.logo` holds a real avatar URL per merchant, sourced from each store's own favicon/touch-icon CDN asset (or Google's favicon service at 128px where the store only ships a tiny icon). `MerchantLogoImage` renders these and falls back to a brand-colored initial if a URL ever dies.
-
-## Scaling next
-
-1. Replace bundled feed JSON with a generated response conforming to the same schema.
-2. Add ranking metadata: signal source, freshness, confidence, and diversity group.
-3. Add product attributes for material, form, use case, technical specs, and cultural adjacency.
-4. Generate 6–10 distinct stories per topic, then select a diverse subset for For You.
-5. Preserve factual product assets separately from generated atmosphere or motion.
-
-## Roadmap: Shopping as a Bento
-
-The next structural evolution. Worlds answer *why am I seeing this* (the
-personal signal); the bento answers *how does this fit together* (the
-structural grammar). Topic pages evolve from linear shelves into a packed box
-of role-based compartments — for birding: *See* (optics), *Wear* (footwear),
-*Carry* (straps/bags), *Keep shopping*, *Shops* — so the page teaches what a
-kit **is**, not just what's for sale.
-
-Planned sequence:
-
-1. Bento layout engine (new `bento` block kind: compartments carry a role
-   label and a cell span), piloted on Birding gear — its four hero products
-   already have completed dossiers
-2. Compartment sizing driven by real data: cart item → large, recent search →
-   medium, taste adjacency → small; dossier/film coverage adds prominence
-3. Different bento shapes per topic (mirrors by wall/room, coffee by ritual
-   step) to prove the grammar flexes
-4. Home For You bento as a toggle experiment — covers stay the door, bento is
-   the room; masonry remains the overflow drawer below
-
-### Dossier integration (content layer)
-
-An external pipeline (dossier-lab) builds a **Deep Dive dossier** per curated
-product plus **two portrait Sora films** of the product in use. The batch is
-keyed to this prototype's stable graph keys (`merchantID + productID`), so it
-is a direct content-enrichment layer:
-
-- **Ambient films** (muted, autoplaying, looping) become bento compartment
-  texture via `AmbientProductVideo` — film #1 is the ambient cell loop,
-  film #2 is reserved for the Deep Dive page
-- **Dossier payloads** will power a Deep Dive product page replacing the
-  plain PDP for covered products: cover → bento → deep dive, each level with
-  its own content type
-- Coverage grows without code changes — see “Dossier drop zone” below
-
-Status: **bento shipped on Birding gear, Sculptural mirrors, and Coffee
-counter.**
-
-- `bento` block kind: items carry `role` (required — validator-enforced) and
-  optional `size` (`hero`/`wide`/`standard`)
-- `Components/BentoGrid.swift`: deterministic two-column packer + compartment
-  card (ambient surface, legibility scrim, ProductCard-style price badge)
-- **Rhythm grammar — a bento is never a plain grid.** Runs of standard cells
-  cluster into tall-anchored trios (one 2-row tall cell beside two stacked
-  squares, sides alternating through the box), a leftover pair sits side by
-  side, and a lone orphan is promoted to a full-width banner. Hero and wide
-  cells flush the run, so authored order still controls the shape
-- Unsized compartments resolve from data: cart signal → hero, owned/filmed →
-  wide, else standard (`BentoCompartment.resolveSize`)
-- `signals` object in `personalized-feed.json` (cart/owned/viewed/searches)
-  decoded by `ShopperSignals`; views only ever read `strength(…)`, so a live
-  signal source later touches one file
-- `Pages/DeepDivePage.swift` + `.deepDive` route: dossier'd products route to
-  the deep dive (films + generic payload sections) instead of the plain PDP;
-  bento product taps pick the destination automatically
-
-Awaiting first dossier JSONs + films to type the payload schema and light up
-the ambient surfaces; then roll bento recipes to the remaining topics.
-
-## Dossier drop zone
-
-Deep Dive dossiers + ambient films from dossier-lab plug in via `ShopFeedSummer26/Dossiers/`
-(a bundle **folder reference** — new files ship on rebuild, no project regeneration):
-
-1. Drop `<key>.json` (a saved dossier payload) into the folder.
-2. Drop its mp4 films alongside, named `<key>-*.mp4` — or any name, listed under
-   the manifest entry's `videoFiles`.
-3. Ensure the key has an entry in `dossier-manifest.json` mapping it to
-   `merchantID` + `productID` (the 11 completed batch keys are pre-seeded).
-4. Rebuild. `Scripts/validate_personalized_feed.py` verifies manifest ↔ catalog ↔ files.
-
-Runtime pieces: `DossierStore` (indexes by merchant+product, schema-tolerant payload)
-and `AmbientProductVideo` (muted autoplaying loop with product-photo poster fallback;
-pauses off-screen). `TopicFeatureCard` already prefers a hero product's ambient film
-over cover art, so dropped films appear in Collections carousels immediately.
+Secrets remain in `.env.local` and are copied only into local debug products.
+Decart/FAL token minting stays behind the Shopify AI proxy. No long-lived
+vendor credential belongs in source control or the app bundle.

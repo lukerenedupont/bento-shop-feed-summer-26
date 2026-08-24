@@ -235,10 +235,6 @@ struct ProductCard: View {
             image
                 .resizable()
                 .scaledToFill()
-        } else if let imageURL, let cached = ImageCache.shared.image(for: imageURL) {
-            cached
-                .resizable()
-                .scaledToFill()
         } else if let imageURL, let url = URL(string: imageURL) {
             CachedAsyncImage(url: url) { phase in
                 switch phase {

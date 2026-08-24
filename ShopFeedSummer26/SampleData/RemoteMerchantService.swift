@@ -34,10 +34,18 @@ final class RemoteMerchantService: ObservableObject {
     /// destinations must keep using this relationship-backed collection.
     @Published private(set) var followedMerchants: [SampleMerchant] = []
     @Published private(set) var revision = 0
+    /// Changes whenever Home republishes its merged lookup graph without
+    /// pretending a new authenticated fetch completed.
+    private(set) var lookupGeneration = 0
     @Published var isLoading = false
     @Published var error: String?
     @Published var needsConfiguration = false
     @Published var usingFallbackData = false
+
+    func publishLookupMerchants(_ value: [SampleMerchant]) {
+        merchants = value
+        lookupGeneration &+= 1
+    }
 
     /// Bypass live data and load from the bundled JSON snapshot.
     func loadFallbackData() {

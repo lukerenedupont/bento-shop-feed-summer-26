@@ -94,20 +94,38 @@ struct SampleMerchant: Identifiable {
     /// Bundled `prototype-merchants.json`, decoded once.
     private static let bundledSnapshot: [SampleMerchant] = LocalMerchantService.loadMerchants()
 
+    private static var cachedIndexKey = ""
+    private static var cachedByID: [String: SampleMerchant] = [:]
+    private static var cachedMerchantByProductID: [Int: SampleMerchant] = [:]
+
+    @MainActor
+    private static func refreshIndicesIfNeeded() {
+        let service = RemoteMerchantService.shared
+        let source = all
+        let key = "\(service.revision):\(service.lookupGeneration):\(source.count)"
+        guard key != cachedIndexKey else { return }
+
+        cachedByID = Dictionary(uniqueKeysWithValues: source.map { ($0.id, $0) })
+        var byProduct: [Int: SampleMerchant] = [:]
+        for merchant in source {
+            for product in merchant.products {
+                byProduct[product.id] = merchant
+            }
+        }
+        cachedMerchantByProductID = byProduct
+        cachedIndexKey = key
+    }
+
     @MainActor
     static var byId: [String: SampleMerchant] {
-        Dictionary(uniqueKeysWithValues: all.map { ($0.id, $0) })
+        refreshIndicesIfNeeded()
+        return cachedByID
     }
 
     @MainActor
     static var merchantByProductId: [Int: SampleMerchant] {
-        var dict: [Int: SampleMerchant] = [:]
-        for merchant in all {
-            for product in merchant.products {
-                dict[product.id] = merchant
-            }
-        }
-        return dict
+        refreshIndicesIfNeeded()
+        return cachedMerchantByProductID
     }
 }
 

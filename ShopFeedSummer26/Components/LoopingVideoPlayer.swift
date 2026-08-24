@@ -11,6 +11,7 @@ struct LoopingVideoPlayer: UIViewRepresentable {
     var loops: Bool
     var playbackEnabled: Bool
     var playbackGroupID: String?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(
         url: URL,
@@ -40,13 +41,13 @@ struct LoopingVideoPlayer: UIViewRepresentable {
         PlayerUIView(
             urls: urls,
             loops: loops,
-            playbackEnabled: playbackEnabled,
+            playbackEnabled: playbackEnabled && !reduceMotion,
             playbackGroupID: playbackGroupID
         )
     }
 
     func updateUIView(_ uiView: PlayerUIView, context: Context) {
-        uiView.setPlaybackEnabled(playbackEnabled)
+        uiView.setPlaybackEnabled(playbackEnabled && !reduceMotion)
     }
 
     static func dismantleUIView(_ uiView: PlayerUIView, coordinator: ()) {

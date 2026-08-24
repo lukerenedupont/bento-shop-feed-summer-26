@@ -1,14 +1,14 @@
 # Topic page block system
 
 Topic pages are assembled by `TopicPageRecipe` in
-`ShopFeedSummer26/Pages/TopicDetailPage.swift`. A recipe is an ordered list of
-blocks plus the vertical spacing between them. The renderer, navigation,
-loading behavior, and card components are shared.
+`ShopFeedSummer26/Pages/TopicPageRecipe.swift`. A recipe is an ordered list of
+blocks plus the vertical spacing between them. Resolution/rendering lives in
+`TopicDetailPage.swift`; reusable card components live in
+`TopicPageBlocks.swift`.
 
 Every feed-card, inline-topic, expanded-topic, related-collection, and
-subcategory story destination resolves through this renderer. `TopicLandingView`
-remains the top-level multi-story feed surface; it is no longer used as a
-second visual system for individual topic details.
+subcategory destination resolves through this renderer. There is no second
+legacy topic-page system.
 
 ## Available blocks
 
@@ -36,7 +36,7 @@ second visual system for individual topic details.
 
 ## Adding another topic
 
-1. Add a recipe keyed by the topic/story ID in `pageRecipe`.
+1. Select or add a recipe family in `TopicPageRecipeCatalog`.
 2. Choose and order existing blocks.
 3. Supply section labels, product queries, category definitions, and filters.
 4. Add a new block type only when the interaction pattern is genuinely new.
@@ -47,3 +47,17 @@ merchants, recent content, a contextually named bento rail, and Explore More.
 Its filter chips are derived only from topic terms that actually match products
 in the assortment. Merchant-card destinations use a tighter brand-specific
 recipe built from the same primitives.
+
+## Contracts
+
+Debug builds validate every resolved recipe. A recipe must have positive
+spacing, unique non-empty block titles, product queries with at least three
+results requested, supported card geometry, at least three categories, at
+least two curated looks, and an `All` filter first in Explore. The build-time
+feed validator separately verifies that story/product/media references exist.
+
+## Shared geometry
+
+Use `TopicBlockMetrics` for product widths, collection heights, and section
+spacing. New blocks should use Gravity tokens internally and expose only the
+few dimensions that represent a deliberate recipe variation.

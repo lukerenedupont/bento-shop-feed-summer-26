@@ -94,6 +94,10 @@ targets:
           - "$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/bundle/.optimization-stamp"
         script: |
           "${SRCROOT}/Scripts/optimize_feed_bundle.sh"
+      - name: Validate Build Product
+        basedOnDependencyAnalysis: false
+        script: |
+          "${SRCROOT}/Scripts/validate_build_product.sh"
       - name: Copy Local Shop Server Env
         basedOnDependencyAnalysis: false
         script: |

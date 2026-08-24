@@ -28,13 +28,20 @@ struct ContentView: View {
                 }
                 if merchantService.merchants.isEmpty {
                     if feedService.isLive {
-                        merchantService.merchants = feedService.merchants
+                        merchantService.publishLookupMerchants(feedService.merchants)
                     } else {
                         merchantService.loadFallbackData()
                     }
                     userProfile.applyFallbackProfile()
                 }
+            }
+            // Secondary account content is independent of the first feed
+            // frame. Load it concurrently so a slow history or posts request
+            // never delays merchant hydration or topic interaction.
+            .task {
                 await historyClient.fetch()
+            }
+            .task {
                 await postService.loadLukePosts()
             }
     }

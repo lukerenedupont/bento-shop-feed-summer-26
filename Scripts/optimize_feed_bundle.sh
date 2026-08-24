@@ -117,6 +117,15 @@ if [[ "${SOURCE_STAMP}" != "${CACHED_STAMP}" || ! -d "${CACHE_BUNDLE}/media" ]];
   printf '%s' "${SOURCE_STAMP}" > "${STAMP_FILE}"
 fi
 
+# Ship an auditable inventory beside the optimized media. This makes bundle
+# growth and missing-file regressions visible without opening the app.
+{
+  printf 'path\tbytes\n'
+  find "${CACHE_BUNDLE}/media" -type f -exec stat -f '%N\t%z' {} \; \
+    | sed "s#${CACHE_BUNDLE}/##" \
+    | LC_ALL=C sort
+} > "${CACHE_BUNDLE}/media-manifest.tsv"
+
 case "${BUILT_BUNDLE}" in
   "${TARGET_BUILD_DIR}"/*) ;;
   *) echo "error: Refusing unsafe product path: ${BUILT_BUNDLE}"; exit 1 ;;

@@ -284,12 +284,7 @@ struct MerchantCollectionFeedCard: View {
         Color.white
             .overlay {
                 if let source = product.imageURL,
-                   let cached = ImageCache.shared.image(for: source) {
-                    cached
-                        .resizable()
-                        .scaledToFill()
-                } else if let source = product.imageURL,
-                          let url = URL(string: source) {
+                   let url = URL(string: source) {
                     CachedAsyncImage(url: url) { phase in
                         if case .success(let image) = phase {
                             image.resizable().scaledToFill()

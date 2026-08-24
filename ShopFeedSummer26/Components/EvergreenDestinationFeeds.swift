@@ -550,9 +550,7 @@ private struct FollowingRemoteImage: View {
 
     var body: some View {
         Group {
-            if let normalizedURLString, let cached = ImageCache.shared.image(for: normalizedURLString) {
-                cached.resizable().scaledToFill()
-            } else if let normalizedURLString, let url = URL(string: normalizedURLString) {
+            if let normalizedURLString, let url = URL(string: normalizedURLString) {
                 CachedAsyncImage(url: url) { phase in
                     switch phase {
                     case .success(let image): image.resizable().scaledToFill()

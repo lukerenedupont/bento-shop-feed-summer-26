@@ -3,6 +3,7 @@
 
 import json
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,6 +14,58 @@ ASSETS_PATH = ROOT / "ShopFeedSummer26/Assets.xcassets"
 catalog = json.loads(CATALOG_PATH.read_text())
 feed = json.loads(FEED_PATH.read_text())
 errors: list[str] = []
+
+# Keep the two live composition surfaces from turning back into monoliths.
+# Supporting components can grow independently, but these orchestration files
+# should remain readable and cheap for Swift's type checker.
+SOURCE_LINE_BUDGETS = {
+    ROOT / "ShopFeedSummer26/Pages/HomePage.swift": 1900,
+    ROOT / "ShopFeedSummer26/Pages/TopicDetailPage.swift": 1200,
+    ROOT / "ShopFeedSummer26/Pages/TopicPageBlocks.swift": 1100,
+}
+for source_path, line_budget in SOURCE_LINE_BUDGETS.items():
+    line_count = len(source_path.read_text().splitlines()) if source_path.exists() else 0
+    if not line_count:
+        errors.append(f"Missing architecture source {source_path.relative_to(ROOT)}")
+    elif line_count > line_budget:
+        errors.append(
+            f"{source_path.relative_to(ROOT)} has {line_count} lines; "
+            f"extract a component before exceeding {line_budget}"
+        )
+
+# The frozen dossier bundle is optional for contributors, but when present it
+# must be internally complete. Every shipped media file should be referenced,
+# and every relative media reference must resolve, or the phone build carries
+# dead weight/broken cards.
+BUNDLE_PATH = ROOT.parent / "dossier-feed-bundle/bundle"
+bundle_media_count = 0
+if (BUNDLE_PATH / "feed.json").exists() and (BUNDLE_PATH / "merchants.json").exists():
+    bundle_documents = [
+        (BUNDLE_PATH / "feed.json").read_text(),
+        (BUNDLE_PATH / "merchants.json").read_text(),
+    ]
+    referenced_media = {
+        match
+        for document in bundle_documents
+        for match in re.findall(r'(?<![A-Za-z0-9_-])media/([^"?]+)', document)
+    }
+    media_files = {
+        path.name for path in (BUNDLE_PATH / "media").iterdir() if path.is_file()
+    }
+    bundle_media_count = len(media_files)
+    for missing in sorted(referenced_media - media_files):
+        errors.append(f"Frozen feed references missing media/{missing}")
+    for unused in sorted(media_files - referenced_media):
+        errors.append(f"Frozen feed bundles unreferenced media/{unused}")
+
+    frozen_feed = json.loads(bundle_documents[0])
+    frozen_merchants = json.loads(bundle_documents[1])
+    frozen_merchant_ids = [item.get("id") for item in frozen_merchants.get("merchants", [])]
+    if len(frozen_merchant_ids) != len(set(frozen_merchant_ids)):
+        errors.append("Frozen feed merchant IDs must be unique")
+    for story in frozen_feed.get("stories", []):
+        if len(story.get("products") or []) < 3:
+            errors.append(f"Frozen story {story.get('id')!r} needs at least 3 products")
 
 merchants = {merchant["id"]: merchant for merchant in catalog["merchants"]}
 products = {
@@ -214,5 +267,6 @@ print(
     f"Validated feed v{feed['version']}: "
     f"{len(feed['topics'])} topics, {len(feed['stories'])} stories, "
     f"{len(products)} catalog products, {len(used_covers)} covers, "
-    f"{dossier_count} dossiers, {film_count} films"
+    f"{dossier_count} dossiers, {film_count} films, "
+    f"{bundle_media_count} frozen media files"
 )
