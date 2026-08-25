@@ -132,6 +132,11 @@ struct BuyerFeedNavigationBar: View {
             label.foregroundStyle(GravityColors.textFixedDark)
         } else if usesInverseStyle {
             label.foregroundStyle(.white.opacity(0.75))
+        } else if !usesFeedBackdropStyle {
+            // Following, Deals, and the resting utility surface are authored
+            // on white. Ignore stale feed-card transition progress when those
+            // destinations replace the dark media backdrop.
+            label.foregroundStyle(GravityColors.textTertiary)
         } else {
             let progress = chromeTransitionState.progress
             ZStack {
