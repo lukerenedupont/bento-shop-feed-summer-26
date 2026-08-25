@@ -4,19 +4,16 @@ import SwiftUI
 /// prototype. The bundled dataset deliberately excludes buyer activity,
 /// prompts, hypotheses, queries, and provenance.
 enum HypothesisShelfCatalog {
-    static let hypebeastStoryID = "shelf-luke-10-performance-sneakers-edit"
+    static let streetwearStoryID = "shelf-luke-9-streetwear-caps-and-tees"
+    static let performanceSneakerStoryID = "shelf-luke-10-performance-sneakers-edit"
 
-    /// Premium sneaker photography leads both the feed-card carousel and the
-    /// topic rails. These are current, canonical products from Kith and
-    /// Sneaker Politics rather than generic stand-ins from the wider shelf.
+    /// Canonical Kith collaborations lead the performance assortment; the
+    /// exact Sneaker Politics and specialist-shop products follow from Luke's
+    /// authenticated shelf export below.
     private static let hypebeastProductReferences: [FeedStory.ProductReference] = [
         .init(merchantID: "kith", productID: 8_286_509_564_032),
-        .init(merchantID: "sneaker-politics", productID: 9_405_655_777_468),
         .init(merchantID: "kith", productID: 8_286_188_830_848),
-        .init(merchantID: "sneaker-politics", productID: 9_189_417_943_228),
         .init(merchantID: "kith", productID: 8_286_188_863_616),
-        .init(merchantID: "sneaker-politics", productID: 9_410_290_516_156),
-        .init(merchantID: "sneaker-politics", productID: 9_346_461_434_044),
     ]
 
     private struct Payload: Decodable {
@@ -114,15 +111,23 @@ enum HypothesisShelfCatalog {
 
     private static let shelfStories: [FeedStory] = payload.users.flatMap { user in
         user.shelves.map { shelf in
-            let isHypebeastStory = shelf.id == hypebeastStoryID
+            let isStreetwearStory = shelf.id == streetwearStoryID
+            let isPerformanceSneakerStory = shelf.id == performanceSneakerStoryID
             let sourceItems: [Item]
-            if isHypebeastStory {
-                // Footwear leads the assortment; apparel remains supporting
-                // context instead of taking over the first card and rails.
+            if isStreetwearStory {
                 let sourceShelfIDs = [
-                    hypebeastStoryID,
+                    streetwearStoryID,
+                    "shelf-luke-16-artist-collab-tees-hoodies-prints",
                     "shelf-luke-18-elevated-classics",
-                    "shelf-luke-9-streetwear-caps-and-tees",
+                ]
+                sourceItems = sourceShelfIDs.flatMap { sourceShelfID in
+                    user.shelves.first(where: { $0.id == sourceShelfID })?.items ?? []
+                }
+            } else if isPerformanceSneakerStory {
+                let sourceShelfIDs = [
+                    performanceSneakerStoryID,
+                    "shelf-luke-19-race-day-and-daily-trainers",
+                    "shelf-luke-18-elevated-classics",
                 ]
                 sourceItems = sourceShelfIDs.flatMap { sourceShelfID in
                     user.shelves.first(where: { $0.id == sourceShelfID })?.items ?? []
@@ -131,19 +136,40 @@ enum HypothesisShelfCatalog {
                 sourceItems = shelf.items
             }
 
+            let title = if isStreetwearStory {
+                "Streetwear staples from caps to tees"
+            } else if isPerformanceSneakerStory {
+                "Your performance sneaker edit"
+            } else {
+                shelf.title
+            }
+            let subtitle = if isStreetwearStory {
+                "Caps, graphic tees, and streetwear from the brands Luke follows"
+            } else if isPerformanceSneakerStory {
+                "Performance runners and everyday trainers from Luke's favorite sneaker shops"
+            } else {
+                shelf.subtitle
+            }
+            let coverImageName: String? = if isStreetwearStory {
+                "topic-streetwear-caps-hero"
+            } else if isPerformanceSneakerStory {
+                "topic-performance-sneaker-hero"
+            } else {
+                nil
+            }
+            let canonicalProducts = isPerformanceSneakerStory ? hypebeastProductReferences : []
+
             return FeedStory(
                 id: shelf.id,
                 eyebrow: "",
-                title: isHypebeastStory ? "Hypebeast fits & sneakers" : shelf.title,
-                subtitle: isHypebeastStory
-                    ? "Rare collabs and standout sneakers from Kith, Sneaker Politics, and more"
-                    : shelf.subtitle,
+                title: title,
+                subtitle: subtitle,
                 format: .world,
                 topicKeys: [shelf.topic, "catalog-only-media"],
                 accentHex: topicAccents[shelf.topic] ?? "#706B66",
-                coverImageName: nil,
+                coverImageName: coverImageName,
                 destinationLabel: "Explore",
-                products: (isHypebeastStory ? hypebeastProductReferences : []) + sourceItems.map {
+                products: canonicalProducts + sourceItems.map {
                     .init(merchantID: $0.merchantID, productID: $0.productID)
                 }
             )
@@ -229,7 +255,9 @@ enum HypothesisShelfCatalog {
         }
     }
 
-    static let stories: [FeedStory] = shelfStories + merchantRecommendations.map(\.story)
+    static let stories: [FeedStory] = shelfStories
+        + merchantRecommendations.map(\.story)
+        + BuyerPersonalizationCatalog.stories.filter { $0.id == "kyle-argizari-lighting" }
 
     static let merchantCollectionPresentations: [MerchantCollectionPresentation] =
         merchantRecommendations.map(\.presentation)
@@ -241,11 +269,11 @@ enum HypothesisShelfCatalog {
     )
 
     static func relatedStoryIDs(for storyID: String) -> [String] {
-        if storyID == hypebeastStoryID {
+        if storyID == performanceSneakerStoryID {
             return [
+                "shelf-luke-19-race-day-and-daily-trainers",
                 "shelf-luke-18-elevated-classics",
-                "shelf-luke-16-artist-collab-tees-hoodies-prints",
-                "shelf-luke-9-streetwear-caps-and-tees",
+                "shelf-luke-11-neutral-activewear-essentials",
             ]
         }
         return shelvesByID[storyID]?.signals?.relatedShelfIDs ?? []
@@ -275,7 +303,7 @@ enum HypothesisShelfCatalog {
         }
         if user.id == "luke",
            let hypebeastIndex = forYouShelves.firstIndex(where: {
-               $0.id == hypebeastStoryID
+               $0.id == performanceSneakerStoryID
            }) {
             let hypebeastShelf = forYouShelves.remove(at: hypebeastIndex)
             forYouShelves.insert(hypebeastShelf, at: min(1, forYouShelves.count))
@@ -293,6 +321,14 @@ enum HypothesisShelfCatalog {
         }
         if forYouShelves.count <= 5, merchantStoryIDs.indices.contains(1) {
             forYouStoryIDs.append(merchantStoryIDs[1])
+        }
+        if user.id == "luke" {
+            forYouStoryIDs.removeAll { $0 == "kyle-argizari-lighting" }
+            forYouStoryIDs.insert("kyle-argizari-lighting", at: 0)
+            forYouStoryIDs.removeAll { $0 == streetwearStoryID }
+            forYouStoryIDs.insert(streetwearStoryID, at: min(1, forYouStoryIDs.count))
+            forYouStoryIDs.removeAll { $0 == performanceSneakerStoryID }
+            forYouStoryIDs.insert(performanceSneakerStoryID, at: min(2, forYouStoryIDs.count))
         }
 
         let forYou = BuyerFeedTopic(
@@ -580,13 +616,6 @@ enum HypothesisShelfCatalog {
     }
 
     private static func avatarAssetName(for userID: String) -> String? {
-        switch userID {
-        case "luke", "mikhail", "tobi", "kenny", "archie":
-            return "\(userID)-avatar"
-        case "katrina":
-            return "katarina-avatar"
-        default:
-            return nil
-        }
+        "\(userID)-avatar"
     }
 }

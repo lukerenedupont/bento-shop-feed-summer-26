@@ -13,6 +13,14 @@
 		05D751E6996490FF59B3199C /* GravityBorderRadii.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA40258C915F1A57D84E196 /* GravityBorderRadii.swift */; };
 		09399C071718083016CE17FF /* bfcm-holiday-header.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = BBA14516121B4D65322B8E4D /* bfcm-holiday-header.mp4 */; };
 		0BAA615AA77D19B3910A3F92 /* hoe-streetwear.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D9F9A263E73A0DA198087CC3 /* hoe-streetwear.mp4 */; };
+		A11111111111111111111111 /* house-of-errors-post.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A21111111111111111111111 /* house-of-errors-post.mp4 */; };
+		A11222222222222222222222 /* house-of-errors-post-poster.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A21222222222222222222222 /* house-of-errors-post-poster.jpg */; };
+		A11333333333333333333333 /* kith-post.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A21333333333333333333333 /* kith-post.mp4 */; };
+		A11444444444444444444444 /* kith-post-poster.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A21444444444444444444444 /* kith-post-poster.jpg */; };
+		A11555555555555555555555 /* worm.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A21555555555555555555555 /* worm.mp4 */; };
+		A11888888888888888888888 /* warm-designer-lighting.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A21888888888888888888888 /* warm-designer-lighting.mp4 */; };
+		A11999999999999999999999 /* streetwear-staples.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A21999999999999999999999 /* streetwear-staples.mp4 */; };
+		A11777777777777777777777 /* utility-connect-email.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A21777777777777777777777 /* utility-connect-email.mp4 */; };
 		0C08C13F26335177E2728B05 /* FeedScrollInfrastructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7FE9B3DC8AB77C41671E1D /* FeedScrollInfrastructure.swift */; };
 		0D8258FE18916ACCB3BD85BD /* SearchResultsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D5503247C437CAFB0CE7681 /* SearchResultsPage.swift */; };
 		0EC6F69EB7B7D14036157A35 /* DeepDivePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E341D075DF8D562DB32C3EB /* DeepDivePage.swift */; };
@@ -61,6 +69,9 @@
 		4E2A297C87DF4ED27E7DCA73 /* ComposerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F179369E1B716061E9FD958 /* ComposerBar.swift */; };
 		500A2B7B588C8044B0EE00BF /* sculptural-living-room.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A7E71042B1CB30A4120B6D53 /* sculptural-living-room.mp4 */; };
 		5214052977BAFDB80B763160 /* TopicPageRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7163BC021837A3CE4059EA3A /* TopicPageRecipe.swift */; };
+		A81C442D5B684D43A70D4921 /* WarmLightingBluDotBrandCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81C442D5B684D43A70D4922 /* WarmLightingBluDotBrandCard.swift */; };
+		B91D553E6C795E54B81E5031 /* TopicPresentationBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91D553E6C795E54B81E5032 /* TopicPresentationBlockView.swift */; };
+		C02E664F7D8A6F65C92F6141 /* TopicPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02E664F7D8A6F65C92F6142 /* TopicPresentation.swift */; };
 		533229A0EEFD8032E89E86D9 /* GoodSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0FDC586616FCB88FA39D54C5 /* GoodSans-Bold.otf */; };
 		53BACCC0E8603D526EE408C4 /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = AD09AE660CD45976C4B68F4C /* FloatingPanel */; };
 		54212B0D61F3BB77B3BD9A5A /* AgentMetaRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AC86BC4EA8BB2C4C9FCDC4 /* AgentMetaRow.swift */; };
@@ -80,6 +91,7 @@
 		6B769D7CE062065724052DB4 /* SearchResultCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E66AF39E36586723035423 /* SearchResultCount.swift */; };
 		6B959753F1BE4FD9E41B103C /* StoryDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31BC531098602EBF12CF58A9 /* StoryDetailPage.swift */; };
 		6B962694A2D5A76349334EE4 /* DeliveryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D0AC7FA7992C3C84A593D9 /* DeliveryCard.swift */; };
+		A11666666666666666666666 /* UtilityBeltCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21666666666666666666666 /* UtilityBeltCustomization.swift */; };
 		701D9E180841F535074E77E3 /* GTStandard-LSemibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 70B6EA62F63A7A6F39EC015E /* GTStandard-LSemibold.otf */; };
 		73A8C5E857F8C8D23B0AB657 /* CartPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3502071F386F04F63B93A6 /* CartPage.swift */; };
 		742ADA927F28DE885852A247 /* Shopify Sans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EAC89D255BADA19142CCCFBF /* Shopify Sans-Regular.otf */; };
@@ -232,6 +244,9 @@
 		70B6EA62F63A7A6F39EC015E /* GTStandard-LSemibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTStandard-LSemibold.otf"; sourceTree = "<group>"; };
 		70C336C536108F2F50823197 /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
 		7163BC021837A3CE4059EA3A /* TopicPageRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicPageRecipe.swift; sourceTree = "<group>"; };
+		A81C442D5B684D43A70D4922 /* WarmLightingBluDotBrandCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarmLightingBluDotBrandCard.swift; sourceTree = "<group>"; };
+		B91D553E6C795E54B81E5032 /* TopicPresentationBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicPresentationBlockView.swift; sourceTree = "<group>"; };
+		C02E664F7D8A6F65C92F6142 /* TopicPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicPresentation.swift; sourceTree = "<group>"; };
 		7196F22BB191093106BD6651 /* ComparisonCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonCard.swift; sourceTree = "<group>"; };
 		72ABAA98385BA17C78F00DC8 /* AgentSuggestionChips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentSuggestionChips.swift; sourceTree = "<group>"; };
 		7441F231E112580CF7D84C6D /* ShopPostFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPostFeedCard.swift; sourceTree = "<group>"; };
@@ -251,6 +266,7 @@
 		902A5F8C87482DAA5084A6B9 /* DossierStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierStore.swift; sourceTree = "<group>"; };
 		93C7B3807AD8D7156AF55F78 /* SampleMerchant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleMerchant.swift; sourceTree = "<group>"; };
 		93D0AC7FA7992C3C84A593D9 /* DeliveryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryCard.swift; sourceTree = "<group>"; };
+		A21666666666666666666666 /* UtilityBeltCustomization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityBeltCustomization.swift; sourceTree = "<group>"; };
 		95D64725EFF88C7418AC33BE /* SearchHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHeader.swift; sourceTree = "<group>"; };
 		96B6534412DD17581C329BC2 /* FeedNavigationStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedNavigationStyle.swift; sourceTree = "<group>"; };
 		9960535F62ED2B6001EC525D /* Shopify Sans-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Medium.otf"; sourceTree = "<group>"; };
@@ -294,6 +310,14 @@
 		D63224A20DCCA6A2867E3E63 /* TryOnFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryOnFeedCard.swift; sourceTree = "<group>"; };
 		D980F4F049B8BD00365E5845 /* GravityIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityIcon.swift; sourceTree = "<group>"; };
 		D9F9A263E73A0DA198087CC3 /* hoe-streetwear.mp4 */ = {isa = PBXFileReference; path = "hoe-streetwear.mp4"; sourceTree = "<group>"; };
+		A21111111111111111111111 /* house-of-errors-post.mp4 */ = {isa = PBXFileReference; path = "house-of-errors-post.mp4"; sourceTree = "<group>"; };
+		A21222222222222222222222 /* house-of-errors-post-poster.jpg */ = {isa = PBXFileReference; path = "house-of-errors-post-poster.jpg"; sourceTree = "<group>"; };
+		A21333333333333333333333 /* kith-post.mp4 */ = {isa = PBXFileReference; path = "kith-post.mp4"; sourceTree = "<group>"; };
+		A21444444444444444444444 /* kith-post-poster.jpg */ = {isa = PBXFileReference; path = "kith-post-poster.jpg"; sourceTree = "<group>"; };
+		A21555555555555555555555 /* worm.mp4 */ = {isa = PBXFileReference; path = worm.mp4; sourceTree = "<group>"; };
+		A21888888888888888888888 /* warm-designer-lighting.mp4 */ = {isa = PBXFileReference; path = "warm-designer-lighting.mp4"; sourceTree = "<group>"; };
+		A21999999999999999999999 /* streetwear-staples.mp4 */ = {isa = PBXFileReference; path = "streetwear-staples.mp4"; sourceTree = "<group>"; };
+		A21777777777777777777777 /* utility-connect-email.mp4 */ = {isa = PBXFileReference; path = "utility-connect-email.mp4"; sourceTree = "<group>"; };
 		DAA03D4C904C81520ECE119F /* PurlInjectionDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurlInjectionDiagnostics.swift; sourceTree = "<group>"; };
 		DB02EED712F616C19BAB6144 /* Shopify Sans-Medium Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Medium Italic.otf"; sourceTree = "<group>"; };
 		E50FED85087F954198F8D79A /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -390,6 +414,9 @@
 				6CEF99F49C84054848107162 /* TopicDetailPage.swift */,
 				79B5EE001CCDA550692C9022 /* TopicPageBlocks.swift */,
 				7163BC021837A3CE4059EA3A /* TopicPageRecipe.swift */,
+				A81C442D5B684D43A70D4922 /* WarmLightingBluDotBrandCard.swift */,
+				B91D553E6C795E54B81E5032 /* TopicPresentationBlockView.swift */,
+				C02E664F7D8A6F65C92F6142 /* TopicPresentation.swift */,
 				0FBC2461909BC7E1B376CB27 /* TryOnStudioPage.swift */,
 				F10DF90854E86C476B522742 /* Search */,
 			);
@@ -519,6 +546,7 @@
 				2ACD1E2168C3779609CA48BE /* CachedAsyncImage.swift */,
 				5459CA6FC9ADF5F66FEA511C /* CategoryTile.swift */,
 				93D0AC7FA7992C3C84A593D9 /* DeliveryCard.swift */,
+				A21666666666666666666666 /* UtilityBeltCustomization.swift */,
 				B9D284B4531C1094FD7A9792 /* EvergreenDestinationFeeds.swift */,
 				7F39B6F46EBC3D657496BF6D /* FloatingBackButton.swift */,
 				16A32D3620048BECC91CDCAC /* FloatingPanelSheet.swift */,
@@ -548,6 +576,14 @@
 				5C93BF5FAA2E9F9509E17322 /* caraway-feed.mp4 */,
 				E85036657DD96D61D9AA923D /* fuumuu-painting.mp4 */,
 				D9F9A263E73A0DA198087CC3 /* hoe-streetwear.mp4 */,
+				A21111111111111111111111 /* house-of-errors-post.mp4 */,
+				A21222222222222222222222 /* house-of-errors-post-poster.jpg */,
+				A21333333333333333333333 /* kith-post.mp4 */,
+				A21444444444444444444444 /* kith-post-poster.jpg */,
+				A21555555555555555555555 /* worm.mp4 */,
+				A21888888888888888888888 /* warm-designer-lighting.mp4 */,
+				A21999999999999999999999 /* streetwear-staples.mp4 */,
+				A21777777777777777777777 /* utility-connect-email.mp4 */,
 				F89CE782C969F6A33A85C461 /* olend-travel.mp4 */,
 				460DB87F92FFE7682179B32F /* rcout-knit.mp4 */,
 				A7E71042B1CB30A4120B6D53 /* sculptural-living-room.mp4 */,
@@ -696,6 +732,14 @@
 				19A9C3504C4D7BB39D703E4E /* caraway-feed.mp4 in Resources */,
 				ED2C640CEF95CE4ABD85516B /* fuumuu-painting.mp4 in Resources */,
 				0BAA615AA77D19B3910A3F92 /* hoe-streetwear.mp4 in Resources */,
+				A11111111111111111111111 /* house-of-errors-post.mp4 in Resources */,
+				A11222222222222222222222 /* house-of-errors-post-poster.jpg in Resources */,
+				A11333333333333333333333 /* kith-post.mp4 in Resources */,
+				A11444444444444444444444 /* kith-post-poster.jpg in Resources */,
+				A11555555555555555555555 /* worm.mp4 in Resources */,
+				A11888888888888888888888 /* warm-designer-lighting.mp4 in Resources */,
+				A11999999999999999999999 /* streetwear-staples.mp4 in Resources */,
+				A11777777777777777777777 /* utility-connect-email.mp4 in Resources */,
 				40F444A54677BEB75B5275B1 /* olend-travel.mp4 in Resources */,
 				C8E812581F6F86E0A4C51E53 /* rcout-knit.mp4 in Resources */,
 				500A2B7B588C8044B0EE00BF /* sculptural-living-room.mp4 in Resources */,
@@ -822,6 +866,7 @@
 				0EC6F69EB7B7D14036157A35 /* DeepDivePage.swift in Sources */,
 				CD57B8EA0EECF704917FD500 /* DeliveriesPage.swift in Sources */,
 				6B962694A2D5A76349334EE4 /* DeliveryCard.swift in Sources */,
+				A11666666666666666666666 /* UtilityBeltCustomization.swift in Sources */,
 				69E010471B7070B1F61532D9 /* DeliveryDetailPage.swift in Sources */,
 				AD150EFC21B725F27F3546F5 /* DossierStore.swift in Sources */,
 				F55F66F4CEE6C93DEDEB195F /* EvergreenDestinationFeeds.swift in Sources */,
@@ -900,6 +945,9 @@
 				1B22F19322E62C2BD328E135 /* TopicDetailPage.swift in Sources */,
 				F8959E4172C75BEC9A15B753 /* TopicPageBlocks.swift in Sources */,
 				5214052977BAFDB80B763160 /* TopicPageRecipe.swift in Sources */,
+				A81C442D5B684D43A70D4921 /* WarmLightingBluDotBrandCard.swift in Sources */,
+				B91D553E6C795E54B81E5031 /* TopicPresentationBlockView.swift in Sources */,
+				C02E664F7D8A6F65C92F6141 /* TopicPresentation.swift in Sources */,
 				13397C055EE0093E3A5E9D24 /* TryOnFeedCard.swift in Sources */,
 				23E98555D3805A7A1243B2A3 /* TryOnStudioPage.swift in Sources */,
 				56630523C4F642C774872B2A /* TypeaheadResultsView.swift in Sources */,

@@ -84,11 +84,18 @@ struct SampleMerchant: Identifiable {
     @MainActor
     static var all: [SampleMerchant] {
         let live = RemoteMerchantService.shared.merchants
-        if !live.isEmpty { return live }
         // Previews, deep links, and pushed pages can all render before
         // HomePage seeds RemoteMerchantService — the bundled snapshot is
         // always a safe source of truth, so nothing races an empty catalog.
-        return bundledSnapshot.isEmpty ? previews : bundledSnapshot
+        let base = live.isEmpty
+            ? (bundledSnapshot.isEmpty ? previews : bundledSnapshot)
+            : live
+        let baseIDs = Set(base.map(\.id))
+        let supplementalMerchantIDs = Set(["city-lights-sf", "kith", "sneaker-politics"])
+        let supplementalMerchants = BuyerPersonalizationCatalog.merchants.filter {
+            supplementalMerchantIDs.contains($0.id) && !baseIDs.contains($0.id)
+        }
+        return base + supplementalMerchants
     }
 
     /// Bundled `prototype-merchants.json`, decoded once.

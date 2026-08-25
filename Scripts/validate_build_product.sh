@@ -10,6 +10,13 @@ FEED_BUNDLE="${APP_PATH}/bundle"
   exit 1
 }
 
+FONT_COUNT="$(find "${APP_PATH}" -maxdepth 1 -type f -name '*.otf' | wc -l | tr -d ' ')"
+EXPECTED_FONT_COUNT=22
+if [[ "${FONT_COUNT}" != "${EXPECTED_FONT_COUNT}" ]]; then
+  echo "error: App declares ${EXPECTED_FONT_COUNT} custom fonts but bundle has ${FONT_COUNT}"
+  exit 1
+fi
+
 APP_KB="$(du -sk "${APP_PATH}" | awk '{print $1}')"
 FEED_KB="$(du -sk "${FEED_BUNDLE}" | awk '{print $1}')"
 MAX_APP_KB=184320
@@ -31,4 +38,4 @@ if [[ "${MANIFEST_FILES}" != "${ACTUAL_FILES}" ]]; then
   exit 1
 fi
 
-echo "Validated product budgets: app ${APP_KB} KB, feed ${FEED_KB} KB, ${ACTUAL_FILES} media files"
+echo "Validated product budgets: app ${APP_KB} KB, feed ${FEED_KB} KB, ${ACTUAL_FILES} media files, ${FONT_COUNT} fonts"

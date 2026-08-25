@@ -178,15 +178,17 @@ struct MerchantCollectionFeedCard: View {
         HStack(alignment: .top, spacing: 12) {
             if let brandMerchant {
                 VStack(alignment: .leading, spacing: 5) {
-                    if MerchantBrandAssets.hasVerifiedBundledWordmark(for: brandMerchant.id) {
-                        MerchantWordmarkImage(
-                            merchant: brandMerchant,
-                            maxHeight: 42,
-                            maxWidth: max(0, min(174, availableWidth - 56)),
-                            bundledAssetName: MerchantBrandAssets.wordmarkName(for: brandMerchant.id)
-                        )
-                        .gravityShadow(GravityShadows.feedText)
-                    }
+                    MerchantWordmarkImage(
+                        merchant: brandMerchant,
+                        maxHeight: 48,
+                        maxWidth: max(0, availableWidth - 64),
+                        imageMaxWidth: 168,
+                        bundledAssetName: MerchantBrandAssets.hasVerifiedBundledWordmark(
+                            for: brandMerchant.id
+                        ) ? MerchantBrandAssets.wordmarkName(for: brandMerchant.id) : nil,
+                        rendersAsTemplate: true
+                    )
+                    .gravityShadow(GravityShadows.feedText)
 
                     if brandMerchant.totalRatings > 0 {
                         HStack(spacing: 3) {
@@ -200,17 +202,9 @@ struct MerchantCollectionFeedCard: View {
                         .gravityShadow(GravityShadows.feedText)
                     }
                 }
-                .frame(maxWidth: max(0, availableWidth - 44), alignment: .leading)
+                .frame(maxWidth: availableWidth, alignment: .leading)
                 .clipped()
             }
-
-            Spacer(minLength: 12)
-
-            Image(systemName: "ellipsis")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: 32, height: 32)
-                .background(.black.opacity(0.18), in: Circle())
         }
         .frame(width: availableWidth, alignment: .leading)
     }

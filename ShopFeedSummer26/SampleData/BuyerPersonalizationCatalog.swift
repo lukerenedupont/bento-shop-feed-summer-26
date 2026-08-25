@@ -148,10 +148,11 @@ enum BuyerPersonalizationCatalog {
         ),
         story(
             id: "kyle-argizari-lighting",
-            title: "Start with the Argizari in Sand",
+            title: "Warm designer lighting",
             subtitle: "The exact Gantri table lamp Kyle added to cart, followed by two current Gantri table-lamp alternatives—not a generic lighting shelf.",
             keys: ["living", "design"],
             accent: "#8B7158",
+            coverImageName: "topic-warm-lighting-hero",
             products: [
                 ref("city-lights-sf", 8568483807399),
                 ref("city-lights-sf", 8568484036775),
@@ -612,6 +613,7 @@ enum BuyerPersonalizationCatalog {
         subtitle: String,
         keys: Set<String>,
         accent: String,
+        coverImageName: String? = nil,
         products: [FeedStory.ProductReference]
     ) -> FeedStory {
         FeedStory(
@@ -622,7 +624,7 @@ enum BuyerPersonalizationCatalog {
             format: .world,
             topicKeys: keys,
             accentHex: accent,
-            coverImageName: nil,
+            coverImageName: coverImageName,
             destinationLabel: "Explore",
             products: products
         )

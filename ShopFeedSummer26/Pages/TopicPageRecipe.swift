@@ -5,7 +5,9 @@ import Foundation
 /// A topic selects a recipe; it never creates another view hierarchy.
 enum TopicPageKind {
     case sculpturalLiving
+    case warmDesignerLighting
     case hypebeast
+    case performanceSneakers
     case merchant
     case standard
 }
@@ -133,8 +135,12 @@ enum TopicPageRecipeCatalog {
         let result = switch kind {
         case .sculpturalLiving:
             sculpturalLiving
+        case .warmDesignerLighting:
+            warmDesignerLighting
         case .hypebeast:
             hypebeast
+        case .performanceSneakers:
+            performanceSneakers
         case .merchant:
             merchant(filters: automaticExploreFilters)
         case .standard:
@@ -179,14 +185,43 @@ enum TopicPageRecipeCatalog {
         ]),
     ])
 
+    private static let warmDesignerLighting = TopicPageRecipe(sectionSpacing: TopicBlockMetrics.sectionSpacing, blocks: [
+        .productRail(title: "Just dropped", query: .init(fallbackOffset: 0), cardWidth: TopicBlockMetrics.compactProductWidth),
+        .featuredDeals(title: "Featured deals"),
+        .productRail(
+            title: "Best sellers in table lamps",
+            query: .init(matching: ["table lamp", "desk lamp", "portable lamp"], fallbackOffset: 1),
+            cardWidth: TopicBlockMetrics.compactProductWidth
+        ),
+        .relatedCollections(title: "Related collections", cardHeight: TopicBlockMetrics.compactCollectionHeight),
+        .brandGrid(title: "Top brands"),
+        .categories(
+            title: "Browse by type",
+            items: [
+                .init(title: "Pendants", query: .init(matching: ["pendant", "chandelier", "ceiling"], fallbackOffset: 3, count: 5)),
+                .init(title: "Table lamps", query: .init(matching: ["table lamp", "desk lamp", "portable lamp"], fallbackOffset: 0, count: 5)),
+                .init(title: "Floor lamps", query: .init(matching: ["floor lamp", "standing lamp"], fallbackOffset: 7, count: 5)),
+            ],
+            snaps: true
+        ),
+        .recentContent(title: "Recent posts", allowsCatalogFallback: true),
+        .bento(title: "Pairs well with warm lighting"),
+        .explore(title: "Explore more", filters: [
+            .all,
+            .init(title: "Table lamps", terms: ["table lamp", "desk lamp", "portable lamp"]),
+            .init(title: "Pendants", terms: ["pendant", "chandelier", "ceiling"]),
+            .init(title: "Floor lamps", terms: ["floor lamp", "standing lamp"]),
+        ]),
+    ])
+
     private static let hypebeast = TopicPageRecipe(sectionSpacing: TopicBlockMetrics.relaxedSectionSpacing, blocks: [
         .productRail(title: "Just dropped", query: .init(fallbackOffset: 0), cardWidth: TopicBlockMetrics.compactProductWidth),
         .featuredDeals(title: "Featured deals"),
         .productRail(title: "New arrivals from your brands", query: .init(fallbackOffset: 6), cardWidth: TopicBlockMetrics.compactProductWidth),
         .relatedCollections(title: "Related collections", cardHeight: TopicBlockMetrics.collectionHeight),
         .productRail(
-            title: "Best sellers in sneakers",
-            query: .init(matching: ["sneaker", "shoe", "dunk", "samba", "nike", "new balance"], fallbackOffset: 8),
+            title: "Best sellers in caps",
+            query: .init(matching: ["cap", "hat", "snapback", "fitted", "new era"], fallbackOffset: 8),
             cardWidth: TopicBlockMetrics.compactProductWidth
         ),
         .brandGrid(title: "Brands worth the hype"),
@@ -196,11 +231,11 @@ enum TopicPageRecipeCatalog {
             .init(title: "The oxblood edit", style: .oxblood, query: .init(fallbackOffset: 9, count: 6)),
         ]),
         .categories(
-            title: "Browse apparel by category",
+            title: "Browse by apparel by category",
             items: [
                 .init(title: "T-shirts", query: .init(matching: ["shirt", "tee", "jersey"], fallbackOffset: 0, count: 5)),
-                .init(title: "Hats", query: .init(matching: ["hat", "cap", "snapback", "beanie"], fallbackOffset: 5, count: 5)),
-                .init(title: "Sneakers", query: .init(matching: ["sneaker", "shoe", "dunk", "samba"], fallbackOffset: 10, count: 5)),
+                .init(title: "Fitted caps", query: .init(matching: ["hat", "cap", "snapback", "fitted", "new era"], fallbackOffset: 5, count: 5)),
+                .init(title: "Jackets", query: .init(matching: ["jacket", "outerwear", "coat"], fallbackOffset: 10, count: 5)),
             ],
             snaps: false
         ),
@@ -209,8 +244,38 @@ enum TopicPageRecipeCatalog {
         .explore(title: "Explore more", filters: [
             .all,
             .init(title: "Apparel", terms: ["shirt", "tee", "jacket", "pant", "hoodie"]),
-            .init(title: "Sneakers", terms: ["sneaker", "shoe", "dunk", "samba"]),
-            .init(title: "Accessories", terms: ["hat", "cap", "bag", "accessory"]),
+            .init(title: "Caps", terms: ["hat", "cap", "snapback", "fitted", "new era"]),
+            .init(title: "Accessories", terms: ["bag", "watch", "sunglasses", "accessory"]),
+        ]),
+    ])
+
+    private static let performanceSneakers = TopicPageRecipe(sectionSpacing: TopicBlockMetrics.sectionSpacing, blocks: [
+        .productRail(title: "Just dropped", query: .init(fallbackOffset: 0), cardWidth: TopicBlockMetrics.compactProductWidth),
+        .featuredDeals(title: "Featured deals"),
+        .productRail(title: "New arrivals from your brands", query: .init(fallbackOffset: 5), cardWidth: TopicBlockMetrics.compactProductWidth),
+        .relatedCollections(title: "Related collections", cardHeight: TopicBlockMetrics.compactCollectionHeight),
+        .productRail(
+            title: "Best sellers in training shoes",
+            query: .init(matching: ["trainer", "training", "runner", "running", "performance"], fallbackOffset: 8),
+            cardWidth: TopicBlockMetrics.compactProductWidth
+        ),
+        .brandGrid(title: "Brands worth the hype"),
+        .recentContent(title: "Recent posts", allowsCatalogFallback: true),
+        .categories(
+            title: "Browse sneakers by category",
+            items: [
+                .init(title: "Running", query: .init(matching: ["running", "runner", "performance", "trainer"], fallbackOffset: 0, count: 5)),
+                .init(title: "Hiking", query: .init(matching: ["hiking", "trail", "outdoor", "gore-tex"], fallbackOffset: 5, count: 5)),
+                .init(title: "Training", query: .init(matching: ["training", "workout", "gym", "cross"], fallbackOffset: 10, count: 5)),
+            ],
+            snaps: true
+        ),
+        .bento(title: "Pairs well with sneakers"),
+        .explore(title: "Explore more", filters: [
+            .all,
+            .init(title: "Running", terms: ["running", "runner", "performance", "trainer"]),
+            .init(title: "New Balance", terms: ["new balance", "992", "993", "990"]),
+            .init(title: "Nike", terms: ["nike", "dunk", "p-6000"]),
         ]),
     ])
 

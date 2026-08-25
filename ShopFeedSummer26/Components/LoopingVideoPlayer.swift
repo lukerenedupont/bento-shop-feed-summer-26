@@ -11,30 +11,35 @@ struct LoopingVideoPlayer: UIViewRepresentable {
     var loops: Bool
     var playbackEnabled: Bool
     var playbackGroupID: String?
+    var videoGravity: AVLayerVideoGravity
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(
         url: URL,
         loops: Bool = true,
         playbackEnabled: Bool = true,
-        playbackGroupID: String? = nil
+        playbackGroupID: String? = nil,
+        videoGravity: AVLayerVideoGravity = .resizeAspectFill
     ) {
         self.urls = [url]
         self.loops = loops
         self.playbackEnabled = playbackEnabled
         self.playbackGroupID = playbackGroupID
+        self.videoGravity = videoGravity
     }
 
     init(
         urls: [URL],
         loops: Bool = true,
         playbackEnabled: Bool = true,
-        playbackGroupID: String? = nil
+        playbackGroupID: String? = nil,
+        videoGravity: AVLayerVideoGravity = .resizeAspectFill
     ) {
         self.urls = urls
         self.loops = loops
         self.playbackEnabled = playbackEnabled
         self.playbackGroupID = playbackGroupID
+        self.videoGravity = videoGravity
     }
 
     func makeUIView(context: Context) -> PlayerUIView {
@@ -42,12 +47,14 @@ struct LoopingVideoPlayer: UIViewRepresentable {
             urls: urls,
             loops: loops,
             playbackEnabled: playbackEnabled && !reduceMotion,
-            playbackGroupID: playbackGroupID
+            playbackGroupID: playbackGroupID,
+            videoGravity: videoGravity
         )
     }
 
     func updateUIView(_ uiView: PlayerUIView, context: Context) {
         uiView.setPlaybackEnabled(playbackEnabled && !reduceMotion)
+        uiView.setVideoGravity(videoGravity)
     }
 
     static func dismantleUIView(_ uiView: PlayerUIView, coordinator: ()) {
@@ -61,6 +68,7 @@ struct LoopingVideoPlayer: UIViewRepresentable {
         private let loops: Bool
         private let playbackGroupID: String?
         private var playbackEnabled: Bool
+        private var videoGravity: AVLayerVideoGravity
         private var session: SharedVideoPlaybackSession?
         private var clientID: UUID?
         private var playerLayer: AVPlayerLayer?
@@ -70,12 +78,14 @@ struct LoopingVideoPlayer: UIViewRepresentable {
             urls: [URL],
             loops: Bool,
             playbackEnabled: Bool,
-            playbackGroupID: String?
+            playbackGroupID: String?,
+            videoGravity: AVLayerVideoGravity
         ) {
             self.urls = urls
             self.loops = loops
             self.playbackEnabled = playbackEnabled
             self.playbackGroupID = playbackGroupID
+            self.videoGravity = videoGravity
             super.init(frame: .zero)
         }
 
@@ -103,10 +113,10 @@ struct LoopingVideoPlayer: UIViewRepresentable {
             }
 
             let clientID = session.register(enabled: playbackEnabled)
-            backgroundColor = .black
+            backgroundColor = videoGravity == .resizeAspect ? .white : .black
             let layer = AVPlayerLayer(player: session.player)
-            layer.videoGravity = .resizeAspectFill
-            layer.backgroundColor = UIColor.black.cgColor
+            layer.videoGravity = videoGravity
+            layer.backgroundColor = backgroundColor?.cgColor
             layer.frame = bounds
             self.layer.addSublayer(layer)
 
@@ -133,6 +143,11 @@ struct LoopingVideoPlayer: UIViewRepresentable {
             updateSessionPlayback()
         }
 
+        func setVideoGravity(_ gravity: AVLayerVideoGravity) {
+            videoGravity = gravity
+            playerLayer?.videoGravity = gravity
+        }
+
         private func updateSessionPlayback() {
             session?.setEnabled(playbackEnabled && window != nil, for: clientID)
         }
@@ -151,6 +166,123 @@ struct LoopingVideoPlayer: UIViewRepresentable {
             session = nil
             clientID = nil
             isSetUp = false
+        }
+    }
+}
+
+/// Plays the pull-to-refresh film as a windable cycle. It repeats while the
+/// gesture is held, then completes the in-flight cycle exactly once on release.
+struct PullRefreshVideoPlayer: UIViewRepresentable {
+    let url: URL
+    let isWinding: Bool
+    let finishRequested: Bool
+    let onFinished: () -> Void
+
+    func makeUIView(context: Context) -> PullRefreshPlayerUIView {
+        let view = PullRefreshPlayerUIView(url: url)
+        view.setState(
+            isWinding: isWinding,
+            finishRequested: finishRequested,
+            onFinished: onFinished
+        )
+        return view
+    }
+
+    func updateUIView(_ uiView: PullRefreshPlayerUIView, context: Context) {
+        uiView.setState(
+            isWinding: isWinding,
+            finishRequested: finishRequested,
+            onFinished: onFinished
+        )
+    }
+
+    static func dismantleUIView(_ uiView: PullRefreshPlayerUIView, coordinator: ()) {
+        uiView.tearDown()
+    }
+
+    final class PullRefreshPlayerUIView: UIView {
+        private let player: AVPlayer
+        private let playerLayer: AVPlayerLayer
+        private var endObserver: NSObjectProtocol?
+        private var isWinding = false
+        private var isFinishing = false
+        private var onFinished: () -> Void = {}
+
+        init(url: URL) {
+            let item = AVPlayerItem(url: url)
+            let player = AVPlayer(playerItem: item)
+            self.player = player
+            self.playerLayer = AVPlayerLayer(player: player)
+            super.init(frame: .zero)
+
+            backgroundColor = .white
+            player.isMuted = true
+            player.actionAtItemEnd = .pause
+            player.preventsDisplaySleepDuringVideoPlayback = false
+            playerLayer.videoGravity = .resizeAspectFill
+            playerLayer.backgroundColor = UIColor.white.cgColor
+            layer.addSublayer(playerLayer)
+
+            endObserver = NotificationCenter.default.addObserver(
+                forName: .AVPlayerItemDidPlayToEndTime,
+                object: item,
+                queue: .main
+            ) { [weak self] _ in
+                self?.didReachEnd()
+            }
+        }
+
+        @available(*, unavailable)
+        required init?(coder: NSCoder) { fatalError() }
+
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            playerLayer.frame = bounds
+        }
+
+        func setState(
+            isWinding: Bool,
+            finishRequested: Bool,
+            onFinished: @escaping () -> Void
+        ) {
+            self.onFinished = onFinished
+            let beganWinding = isWinding && !self.isWinding
+            let released = !isWinding && self.isWinding
+            self.isWinding = isWinding
+
+            if beganWinding {
+                isFinishing = false
+                player.seek(to: .zero, toleranceBefore: .zero, toleranceAfter: .zero) {
+                    [weak self] _ in self?.player.play()
+                }
+            } else if released, finishRequested {
+                isFinishing = true
+                player.play()
+            } else if released {
+                player.pause()
+                player.seek(to: .zero)
+            }
+        }
+
+        private func didReachEnd() {
+            if isWinding {
+                player.seek(to: .zero, toleranceBefore: .zero, toleranceAfter: .zero) {
+                    [weak self] _ in self?.player.play()
+                }
+            } else if isFinishing {
+                isFinishing = false
+                onFinished()
+            }
+        }
+
+        func tearDown() {
+            player.pause()
+            if let endObserver {
+                NotificationCenter.default.removeObserver(endObserver)
+            }
+            endObserver = nil
+            playerLayer.player = nil
+            playerLayer.removeFromSuperlayer()
         }
     }
 }

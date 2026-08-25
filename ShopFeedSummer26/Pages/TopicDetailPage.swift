@@ -1,14 +1,16 @@
 import SwiftUI
 import UIKit
 import AVFoundation
-
 struct TopicPresentedAssortment: Identifiable {
     let id = UUID()
     let title: String
     let subtitle: String
     let products: [ResolvedStoryProduct]
 }
-
+@Observable
+private final class TopicHeaderScrollState {
+    var showsTitle = false
+}
 /// Immersive destination for a tapped feed story. The Figma-derived header
 /// and first commerce rails resolve from the story, so every buyer and topic
 /// shares one presentation instead of branching into profile-specific views.
@@ -19,20 +21,19 @@ struct TopicDetailPage: View {
     /// destination. This used to scan the full merchant catalog every time
     /// SwiftUI evaluated any rail on the page.
     private let products: [ResolvedStoryProduct]
+    private let topicPresentation: TopicPresentation
     /// The long rails share one stable assortment instead of rebuilding it
     /// independently for every `productWindow` call.
     private let exploreProducts: [ResolvedStoryProduct]
-
     @Environment(NavigationCoordinator.self) private var coordinator
     @Environment(\.dismiss) private var dismiss
     @State private var showsControls = false
-    @State private var isFollowingTopic = false
-    @State private var focusedDealID: String?
+    @State private var closeMorphProgress: CGFloat = 0
+    @State private var headerScrollState = TopicHeaderScrollState()
     @State private var postService = ShopPostService.shared
     @State private var sampledSurfaceColor: DominantVideoColor?
     @State private var selectedExploreFilter = "All"
     @State private var presentedAssortment: TopicPresentedAssortment?
-
     init(
         story: FeedStory,
         merchants: [SampleMerchant],
@@ -40,23 +41,11 @@ struct TopicDetailPage: View {
     ) {
         self.story = story
         self.merchants = merchants
-
+        topicPresentation = TopicPresentationCatalog.presentation(for: story)
         var seenResolvedIDs = Set<String>()
         let resolved = (story.resolvedProducts(from: merchants) + enrichmentProducts)
             .filter { seenResolvedIDs.insert($0.id).inserted }
         products = resolved
-
-        var initialMerchantIDs: [String] = []
-        var initialSeenMerchantIDs = Set<String>()
-        for item in resolved where initialSeenMerchantIDs.insert(item.merchant.id).inserted {
-            initialMerchantIDs.append(item.merchant.id)
-        }
-        if let firstMerchantID = initialMerchantIDs.first {
-            _focusedDealID = State(
-                initialValue: "\(initialMerchantIDs.count > 1 ? 1 : 0)-\(firstMerchantID)"
-            )
-        }
-
         var seen = Set<String>()
         var expanded: [ResolvedStoryProduct] = []
         for item in resolved where seen.insert(item.id).inserted {
@@ -72,12 +61,10 @@ struct TopicDetailPage: View {
         }
         exploreProducts = expanded
     }
-
     private var relatedMerchants: [SampleMerchant] {
         var seen = Set<String>()
         return products.map(\.merchant).filter { seen.insert($0.id).inserted }
     }
-
     private var relatedDeals: [RelatedDeal] {
         // A deal is brand-led: keep the topic merchants first, but only show
         // stores whose real wordmark can render. Fill any remaining slots with
@@ -93,48 +80,23 @@ struct TopicDetailPage: View {
                 .map(\.product)
             let resolvedProducts = (topicProducts + merchant.products)
                 .filter { seen.insert($0.id).inserted }
-
             return RelatedDeal(
                 merchant: merchant,
                 products: Array(resolvedProducts.prefix(3))
             )
         }
     }
-
-    /// Repeat the authored deals around a stable middle cycle so the rail can
-    /// recenter after each swipe without exposing a first or last card.
-    private var loopingDeals: [LoopingDealItem] {
-        guard relatedDeals.count > 1 else {
-            return relatedDeals.map { LoopingDealItem(deal: $0, cycle: 0) }
-        }
-
-        return (0..<3).flatMap { cycle in
-            relatedDeals.map { LoopingDealItem(deal: $0, cycle: cycle) }
-        }
-    }
-
-    private var initialFocusedDealID: String? {
-        guard let firstDeal = relatedDeals.first else { return nil }
-        return LoopingDealItem(
-            deal: firstDeal,
-            cycle: relatedDeals.count > 1 ? 1 : 0
-        ).id
-    }
-
     private var bentoColumnCount: Int {
         max(1, Int(ceil(Double(exploreProducts.count) / 3.0)))
     }
-
     private var newProducts: [ResolvedStoryProduct] {
         Array(products.prefix(6))
     }
-
     private var bestSellerProducts: [ResolvedStoryProduct] {
         let offset = min(3, max(0, products.count - 1))
         let shifted = Array(products.dropFirst(offset).prefix(6))
         return shifted.count >= 3 ? shifted : Array(products.reversed().prefix(6))
     }
-
     /// Prefer posts from merchants already represented in this topic. The
     /// authenticated Shop feed remains the source of truth; we never invent a
     /// social tile from catalog photography.
@@ -147,14 +109,12 @@ struct TopicDetailPage: View {
         }
         return Array((topicMatches.isEmpty ? verified : topicMatches).prefix(6))
     }
-
     private func normalizedMerchantName(_ value: String) -> String {
         value
             .folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current)
             .lowercased()
             .trimmingCharacters(in: .whitespacesAndNewlines)
     }
-
     /// Deal cards are brand-led, so they only render when we have a real
     /// merchant wordmark rather than manufacturing a text approximation.
     private func hasRenderableDealWordmark(_ merchant: SampleMerchant) -> Bool {
@@ -165,7 +125,6 @@ struct TopicDetailPage: View {
               let url = URL(string: rawURL) else { return false }
         return url.pathExtension.lowercased() != "svg"
     }
-
     private var specificTopicTerms: Set<String> {
         let genericTerms: Set<String> = [
             "best", "black", "brass", "cream", "design", "designed", "designs", "featured", "high",
@@ -190,7 +149,6 @@ struct TopicDetailPage: View {
             .compactMap { term, occurrences in occurrences.count >= 2 ? term : nil }
         return copyTerms.union(recurringProductTerms)
     }
-
     private func relevance(of merchant: SampleMerchant) -> Int {
         let merchantText = "\(merchant.name) \(merchant.description) \(merchant.productCategory ?? "") \(merchant.products.map(\.title).joined(separator: " "))"
             .lowercased()
@@ -198,7 +156,6 @@ struct TopicDetailPage: View {
             score + (merchantText.contains(term) ? 1 : 0)
         }
     }
-
     private func hasPriceFit(_ merchant: SampleMerchant) -> Bool {
         guard let band = HypothesisShelfCatalog.priceBandUSD(for: story.id) else {
             return true
@@ -209,7 +166,6 @@ struct TopicDetailPage: View {
             .prefix(2)
             .count >= 2
     }
-
     private var featuredCollections: [FeedStory] {
         let curatedIDs = HypothesisShelfCatalog.relatedStoryIDs(for: story.id)
         if !curatedIDs.isEmpty {
@@ -218,7 +174,6 @@ struct TopicDetailPage: View {
             )
             return curatedIDs.compactMap { storiesByID[$0] }
         }
-
         let topicKeys = Set(story.topicKeys.filter { $0 != "catalog-only-media" })
         let currentMerchantIDs = Set(products.map(\.merchant.id))
         return PersonalizedFeedStories.all
@@ -234,18 +189,15 @@ struct TopicDetailPage: View {
             .prefix(6)
             .map { $0 }
     }
-
     private var featuredMerchants: [SampleMerchant] {
         var seen = Set<String>()
         var result: [SampleMerchant] = []
-
         for merchant in relatedMerchants {
             guard merchant.products.count >= 3,
                   hasRenderableDealWordmark(merchant),
                   seen.insert(merchant.id).inserted else { continue }
             result.append(merchant)
         }
-
         let canonicalCandidates = merchants
             .filter {
                 $0.coverImageURL != nil
@@ -255,14 +207,12 @@ struct TopicDetailPage: View {
                     && hasPriceFit($0)
             }
             .sorted { relevance(of: $0) > relevance(of: $1) }
-
         for merchant in canonicalCandidates {
             guard seen.insert(merchant.id).inserted else { continue }
             result.append(merchant)
         }
         return Array(result.prefix(6))
     }
-
     private var showcaseMerchants: [SampleMerchant] {
         var seen = Set<String>()
         let candidates = relatedMerchants + featuredMerchants + merchants
@@ -270,19 +220,16 @@ struct TopicDetailPage: View {
             .sorted { relevance(of: $0) > relevance(of: $1) }
         return Array(candidates.filter { seen.insert($0.id).inserted }.prefix(6))
     }
-
     private func productWindow(offset: Int, count: Int) -> [ResolvedStoryProduct] {
         guard !exploreProducts.isEmpty else { return [] }
         return (0..<min(count, exploreProducts.count)).map {
             exploreProducts[(offset + $0) % exploreProducts.count]
         }
     }
-
     private var surfaceColor: Color {
-        // The Figma art direction is a stable lilac surface. Sampling the
-        // sneaker film produced a late brown color jump on navigation and
-        // made the destination feel as if it loaded twice.
-        if usesHypebeastHierarchy { return Color(hex: "#9B76B4") }
+        if let fixedSurfaceHex = topicPresentation.fixedSurfaceHex {
+            return Color(hex: fixedSurfaceHex)
+        }
         guard let sampledSurfaceColor else { return Color(hex: story.accentHex) }
         return Color(
             red: sampledSurfaceColor.red,
@@ -290,37 +237,39 @@ struct TopicDetailPage: View {
             blue: sampledSurfaceColor.blue
         )
     }
-
+    /// The hero keeps the authored topic color at full strength. Commerce
+    /// content gradually washes that color toward white so long pages feel
+    /// calmer without creating a hard color seam below the film.
+    private var scrolledSurfaceBackground: some View {
+        let softeningOpacity = topicPresentation.softensLongPageSurface ? 0.09 : 0
+        return surfaceColor
+            .overlay(alignment: .top) {
+                VStack(spacing: 0) {
+                    LinearGradient(
+                        colors: [.clear, .white.opacity(softeningOpacity)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: 240)
+                    Color.white.opacity(softeningOpacity)
+                }
+            }
+    }
     private var heroVideoURL: URL? {
         FeedCoverCatalog.presentation(for: story)?.source.videoURL
             ?? products.lazy.flatMap {
                 $0.product.ambientFilmURLs(merchantID: $0.merchant.id)
             }.first
     }
-
-    private var usesCuratedSculpturalHierarchy: Bool {
-        story.id == "shelf-luke-2-sculptural-living-room-pieces"
+    private var heroTitle: String {
+        topicPresentation.heroTitleOverride ?? story.title
     }
-
-    private var usesHypebeastHierarchy: Bool {
-        story.id == HypothesisShelfCatalog.hypebeastStoryID
-    }
-
     private var pageRecipe: TopicPageRecipe {
-        TopicPageRecipeCatalog.recipe(
-            for: pageKind,
+        topicPresentation.recipe(
             contextualBentoTitle: contextualBentoTitle,
             automaticExploreFilters: automaticExploreFilters
         )
     }
-
-    private var pageKind: TopicPageKind {
-        if usesCuratedSculpturalHierarchy { return .sculpturalLiving }
-        if usesHypebeastHierarchy { return .hypebeast }
-        if story.topicKeys.contains("merchant-card") { return .merchant }
-        return .standard
-    }
-
     private var contextualBentoTitle: String {
         let context = "\(story.title) \(story.topicKeys.joined(separator: " "))".lowercased()
         if ["apparel", "fashion", "sneaker", "streetwear", "style"]
@@ -345,7 +294,6 @@ struct TopicDetailPage: View {
         }
         return "More to explore"
     }
-
     private var automaticExploreFilters: [TopicProductFilter] {
         let ignored: Set<String> = ["and", "for", "from", "into", "the", "with"]
         let terms = "\(story.title) \(story.topicKeys.joined(separator: " "))"
@@ -364,11 +312,9 @@ struct TopicDetailPage: View {
             TopicProductFilter(title: $0.capitalized, terms: [$0])
         }
     }
-
     private var heroHeight: CGFloat {
-        560
+        topicPresentation.usesExactHeroLayout ? 526 : 560
     }
-
     private var windowSafeAreaTopInset: CGFloat {
         guard let windowScene = UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene })
@@ -378,28 +324,27 @@ struct TopicDetailPage: View {
         }
         return keyWindow.safeAreaInsets.top
     }
-
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
                 surfaceColor
                     .ignoresSafeArea()
-
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(alignment: .leading, spacing: 0) {
                         hero(width: geometry.size.width)
                         merchandising(containerWidth: geometry.size.width)
+                            .background { scrolledSurfaceBackground }
                     }
                 }
                 .scrollBounceBehavior(.basedOnSize)
-
-                HStack {
-                    closeButton
-                    Spacer()
-                    followButton
+                .onScrollGeometryChange(for: CGFloat.self) { scrollGeometry in
+                    scrollGeometry.contentOffset.y
+                } action: { _, offset in
+                    let shouldShowTitle = offset > heroHeight - 96
+                    guard shouldShowTitle != headerScrollState.showsTitle else { return }
+                    headerScrollState.showsTitle = shouldShowTitle
                 }
-                    .frame(width: geometry.size.width)
-                    .padding(.top, windowSafeAreaTopInset + GravitySpacing.space4)
+                compactNavigationHeader(width: geometry.size.width)
                     .opacity(showsControls ? 1 : 0)
                     .zIndex(10)
             }
@@ -415,16 +360,28 @@ struct TopicDetailPage: View {
             var transaction = Transaction()
             transaction.disablesAnimations = true
             withTransaction(transaction) {
-                focusedDealID = initialFocusedDealID
-                // Navigation controls are part of the first useful frame.
-                // Delaying them made an otherwise-rendered topic feel as if
-                // it were still loading.
+                // Start with the same avatar silhouette as the feed header.
+                // The native card zoom then has no chrome discontinuity while
+                // the avatar resolves into the destination's close control.
                 showsControls = true
+                closeMorphProgress = 0
+            }
+            try? await Task.sleep(for: .milliseconds(90))
+            guard !Task.isCancelled else { return }
+            withAnimation(.spring(response: 0.34, dampingFraction: 0.88)) {
+                closeMorphProgress = 1
+            }
+            // Keep the bottom chrome stationary until the shared card has
+            // finished settling; moving it during the zoom reads as a bump.
+            try? await Task.sleep(for: .milliseconds(250))
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeOut(duration: 0.18)) {
+                coordinator.showNavBar = false
             }
         }
         .task(id: heroVideoURL) {
             sampledSurfaceColor = nil
-            guard !usesHypebeastHierarchy else { return }
+            guard topicPresentation.samplesVideoSurfaceColor else { return }
             guard let heroVideoURL,
                   let color = await DominantVideoColorSampler.sample(from: heroVideoURL),
                   !Task.isCancelled else { return }
@@ -432,29 +389,53 @@ struct TopicDetailPage: View {
                 sampledSurfaceColor = color
             }
         }
-        .onAppear { coordinator.showNavBar = false }
+        .onAppear { coordinator.showNavBar = true }
         .onDisappear {
             coordinator.resetScrollState()
             coordinator.showNavBar = true
         }
     }
-
     private func hero(width: CGFloat) -> some View {
         ZStack(alignment: .topLeading) {
             surfaceColor
-
-            StoryFeedCard(
-                story: story,
-                merchants: merchants,
-                width: width,
-                height: heroHeight,
-                isActive: true,
-                showsForegroundContent: false,
-                showsFooterArrow: false,
-                backgroundPlaybackEnabled: true,
-                cornerRadius: 0,
-                freezesParallax: true
-            )
+            Group {
+                if heroVideoURL != nil {
+                    // Carry the authored feed film into the destination so the
+                    // shared-card transition does not resolve into a frozen
+                    // Figma export as soon as navigation completes.
+                    StoryFeedCard(
+                        story: story,
+                        merchants: merchants,
+                        width: width,
+                        height: heroHeight,
+                        isActive: true,
+                        showsForegroundContent: false,
+                        showsFooterArrow: false,
+                        backgroundPlaybackEnabled: true,
+                        cornerRadius: 0,
+                        freezesParallax: true
+                    )
+                } else if let heroFallbackAsset = topicPresentation.heroFallbackAsset {
+                    Image(heroFallbackAsset)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: width, height: heroHeight)
+                        .clipped()
+                } else {
+                    StoryFeedCard(
+                        story: story,
+                        merchants: merchants,
+                        width: width,
+                        height: heroHeight,
+                        isActive: true,
+                        showsForegroundContent: false,
+                        showsFooterArrow: false,
+                        backgroundPlaybackEnabled: true,
+                        cornerRadius: 0,
+                        freezesParallax: true
+                    )
+                }
+            }
             .mask {
                 LinearGradient(
                     stops: [
@@ -471,7 +452,6 @@ struct TopicDetailPage: View {
             }
             .allowsHitTesting(false)
             .accessibilityHidden(true)
-
             LinearGradient(
                 stops: [
                     .init(color: .black.opacity(0.28), location: 0),
@@ -480,10 +460,8 @@ struct TopicDetailPage: View {
                 startPoint: .top,
                 endPoint: .bottom
             )
-
             VStack(spacing: 0) {
                 Spacer()
-
                 LinearGradient(
                     stops: [
                         .init(color: .clear, location: 0),
@@ -496,14 +474,27 @@ struct TopicDetailPage: View {
                     endPoint: .bottom
                 )
                 .frame(height: 190)
-
                 // A solid overlap prevents a one-pixel compositing seam where
                 // the hero hands off to the page surface.
                 surfaceColor.frame(height: 12)
             }
-
+            heroFeedbackPill
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity,
+                    alignment: .topTrailing
+                )
+                .padding(
+                    .top,
+                    windowSafeAreaTopInset
+                        + FeedNavigationStyle.controlSize
+                        + GravitySpacing.space12
+                        + FeedCardStyle.titleHeaderGap
+                )
+                .padding(.trailing, GravitySpacing.space12)
+                .offset(y: -GravitySpacing.space40)
             VStack(alignment: .leading, spacing: GravitySpacing.space10) {
-                Text(story.title)
+                Text(heroTitle)
                     .font(FeedEditorialTypography.titleFont)
                     .tracking(FeedEditorialTypography.titleTracking)
                     .lineSpacing(FeedEditorialTypography.titleLineSpacing)
@@ -511,8 +502,7 @@ struct TopicDetailPage: View {
                     .lineLimit(3)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityAddTraits(.isHeader)
-
-                if !story.subtitle.isEmpty {
+                if !topicPresentation.usesExactHeroLayout, !story.subtitle.isEmpty {
                     Text(story.subtitle)
                         .font(GravityFont.medium.fixedFont(size: 17))
                         .tracking(-0.2)
@@ -523,19 +513,18 @@ struct TopicDetailPage: View {
                 }
             }
             .foregroundStyle(.white)
-            .gravityShadow(GravityShadows.feedText)
             .frame(
                 maxWidth: width - 32,
                 maxHeight: .infinity,
-                alignment: .bottomLeading
+                alignment: topicPresentation.usesExactHeroLayout ? .topLeading : .bottomLeading
             )
             .padding(.horizontal, GravitySpacing.space16)
-            .padding(.bottom, GravitySpacing.space20)
+            .padding(.top, topicPresentation.usesExactHeroLayout ? 120 : 0)
+            .padding(.bottom, topicPresentation.usesExactHeroLayout ? 0 : GravitySpacing.space20)
         }
         .frame(width: width, height: heroHeight)
         .clipped()
     }
-
     private func productRail(
         title: String,
         items: [ResolvedStoryProduct],
@@ -543,7 +532,6 @@ struct TopicDetailPage: View {
     ) -> some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space16) {
             sectionTitle(title)
-
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(alignment: .top, spacing: GravitySpacing.space8) {
                     ForEach(items) { item in
@@ -570,7 +558,6 @@ struct TopicDetailPage: View {
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
         }
     }
-
     private func merchandising(containerWidth: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: pageRecipe.sectionSpacing) {
             ForEach(Array(pageRecipe.blocks.enumerated()), id: \.offset) { _, block in
@@ -579,52 +566,43 @@ struct TopicDetailPage: View {
         }
         .padding(.bottom, 120)
     }
-
     @ViewBuilder
     private func blockView(_ block: TopicPageBlock, containerWidth: CGFloat) -> some View {
+        if let authoredBlock = topicPresentation.authoredBlock(for: block) {
+            TopicPresentationBlockView(block: authoredBlock, surfaceColor: surfaceColor)
+        } else {
+            defaultBlockView(block, containerWidth: containerWidth)
+        }
+    }
+    @ViewBuilder
+    private func defaultBlockView(_ block: TopicPageBlock, containerWidth: CGFloat) -> some View {
         switch block {
         case .productRail(let title, let query, let cardWidth):
             productRail(title: title, items: products(for: query), cardWidth: cardWidth)
-
         case .featuredDeals(let title):
-            if !relatedDeals.isEmpty {
-                dealRail(title: title, containerWidth: containerWidth)
-            }
-
+            if !relatedDeals.isEmpty { dealRail(title: title, containerWidth: containerWidth) }
         case .relatedCollections(let title, let cardHeight):
-            if !featuredCollections.isEmpty {
-                collectionRail(title: title, cardHeight: cardHeight)
-            }
-
+            if !featuredCollections.isEmpty { collectionRail(title: title, cardHeight: cardHeight) }
         case .topMerchants(let title):
-            if !featuredMerchants.isEmpty {
-                featuredMerchantRail(title: title)
-            }
-
+            if !featuredMerchants.isEmpty { featuredMerchantRail(title: title) }
         case .brandGrid(let title):
-            if !showcaseMerchants.isEmpty {
+            if topicPresentation.merchantStyle == .warmLighting || !showcaseMerchants.isEmpty {
                 brandGridRail(title: title)
             }
-
         case .categories(let title, let items, let snaps):
             categoryRail(title: title, definitions: items, snaps: snaps)
-
         case .curatedLooks(let title, let looks):
             curatedLooksRail(title: title, looks: looks)
-
         case .recentContent(let title, let allowsCatalogFallback):
             if allowsCatalogFallback || !recentPosts.isEmpty {
                 recentContentRail(title: title, allowsCatalogFallback: allowsCatalogFallback)
             }
-
         case .bento(let title):
             completeLookRail(title: title, containerWidth: containerWidth)
-
         case .explore(let title, let filters):
             exploreMore(title: title, filters: filters, containerWidth: containerWidth)
         }
     }
-
     private func products(for query: TopicProductQuery) -> [ResolvedStoryProduct] {
         let matches = exploreProducts.filter { item in
             let searchable = ([
@@ -643,16 +621,13 @@ struct TopicDetailPage: View {
         let candidates = query.matching.isEmpty ? fallbacks : matches + fallbacks
         return Array(candidates.filter { seen.insert($0.id).inserted }.prefix(query.count))
     }
-
     private func dealRail(title: String, containerWidth: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space16) {
             sectionTitle(title)
-
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(alignment: .center, spacing: GravitySpacing.space10) {
-                    ForEach(loopingDeals) { item in
-                        RelatedDealCard(deal: item.deal)
-                            .id(item.id)
+                    ForEach(relatedDeals) { deal in
+                        RelatedDealCard(deal: deal)
                     }
                 }
                 .scrollTargetLayout()
@@ -663,26 +638,8 @@ struct TopicDetailPage: View {
                 for: .scrollContent
             )
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-            .scrollPosition(id: $focusedDealID, anchor: .center)
-            .onScrollPhaseChange { _, phase in
-                guard phase == .idle,
-                      relatedDeals.count > 1,
-                      let focusedDealID,
-                      let focusedItem = loopingDeals.first(where: { $0.id == focusedDealID }),
-                      focusedItem.cycle != 1 else { return }
-
-                var transaction = Transaction()
-                transaction.disablesAnimations = true
-                withTransaction(transaction) {
-                    self.focusedDealID = LoopingDealItem(
-                        deal: focusedItem.deal,
-                        cycle: 1
-                    ).id
-                }
-            }
         }
     }
-
     private func collectionRail(title: String, cardHeight: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space16) {
             sectionTitle(title)
@@ -702,7 +659,6 @@ struct TopicDetailPage: View {
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
         }
     }
-
     private func featuredMerchantRail(title: String) -> some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space16) {
             sectionTitle(title)
@@ -718,7 +674,6 @@ struct TopicDetailPage: View {
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
         }
     }
-
     private func recentContentRail(title: String, allowsCatalogFallback: Bool) -> some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space12) {
             sectionTitle(title)
@@ -740,14 +695,20 @@ struct TopicDetailPage: View {
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
         }
     }
-
     private func brandGridRail(title: String) -> some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space16) {
             sectionTitle(title)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: GravitySpacing.space10) {
-                    ForEach(showcaseMerchants) { merchant in
-                        TopicBrandGridCard(merchant: merchant)
+                    if topicPresentation.merchantStyle == .warmLighting {
+                        WarmLightingBluDotBrandCard()
+                        ForEach(showcaseMerchants.prefix(5)) { merchant in
+                            TopicBrandGridCard(merchant: merchant)
+                        }
+                    } else {
+                        ForEach(showcaseMerchants) { merchant in
+                            TopicBrandGridCard(merchant: merchant)
+                        }
                     }
                 }
                 .padding(.horizontal, GravitySpacing.space12)
@@ -756,7 +717,6 @@ struct TopicDetailPage: View {
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
         }
     }
-
     private func categoryRail(
         title: String,
         definitions: [TopicCategoryDefinition],
@@ -787,7 +747,6 @@ struct TopicDetailPage: View {
             .topicSnapping(enabled: snaps)
         }
     }
-
     private func curatedLooksRail(
         title: String,
         looks: [TopicCuratedLookDefinition]
@@ -815,7 +774,6 @@ struct TopicDetailPage: View {
             }
         }
     }
-
     private func completeLookRail(
         title: String = "Pairs well with warm lighting",
         containerWidth: CGFloat
@@ -842,7 +800,6 @@ struct TopicDetailPage: View {
             )
         }
     }
-
     private func exploreMore(
         title: String,
         filters: [TopicProductFilter],
@@ -856,7 +813,6 @@ struct TopicDetailPage: View {
         let indexedProducts = Array(filteredProducts.enumerated())
         let leftColumn = indexedProducts.filter { $0.offset.isMultiple(of: 2) }
         let rightColumn = indexedProducts.filter { !$0.offset.isMultiple(of: 2) }
-
         return VStack(alignment: .leading, spacing: GravitySpacing.space16) {
             sectionTitle(title)
             ScrollView(.horizontal, showsIndicators: false) {
@@ -884,7 +840,6 @@ struct TopicDetailPage: View {
                 }
                 .padding(.horizontal, padding)
             }
-
             HStack(alignment: .top, spacing: columnGap) {
                 VStack(spacing: GravitySpacing.space16) {
                     ForEach(leftColumn, id: \.element.id) { index, item in
@@ -910,7 +865,6 @@ struct TopicDetailPage: View {
             .transition(.opacity)
         }
     }
-
     private func products(matching filter: TopicProductFilter) -> [ResolvedStoryProduct] {
         guard !filter.terms.isEmpty else { return exploreProducts }
         let matches = exploreProducts.filter { item in
@@ -918,7 +872,6 @@ struct TopicDetailPage: View {
         }
         return matches
     }
-
     private func searchableText(for item: ResolvedStoryProduct) -> String {
         ([
             item.product.title,
@@ -928,20 +881,36 @@ struct TopicDetailPage: View {
             .joined(separator: " ")
             .lowercased()
     }
-
     private func sectionTitle(_ title: String) -> some View {
-        HStack(spacing: GravitySpacing.space8) {
+        HStack(spacing: GravitySpacing.space6) {
             Text(title)
             Image(systemName: "chevron.right")
-                .font(.system(size: 17, weight: .bold))
+                .font(.system(size: 13, weight: .semibold))
         }
         .font(GravityFont.expressiveBold.fixedFont(size: 20))
         .tracking(-0.45)
         .foregroundStyle(.white)
-        .gravityShadow(GravityShadows.feedText)
         .padding(.horizontal, GravitySpacing.space12)
     }
-
+    private func compactNavigationHeader(width: CGFloat) -> some View {
+        ZStack(alignment: .top) {
+            TopicCompactHeaderBackdrop(
+                state: headerScrollState,
+                title: topicPresentation.heroTitleOverride?.replacingOccurrences(of: "\n", with: " ") ?? story.title,
+                surfaceColor: surfaceColor,
+                width: width,
+                topInset: windowSafeAreaTopInset
+            )
+            .allowsHitTesting(false)
+            HStack {
+                closeButton
+                Spacer()
+            }
+            .frame(width: width)
+            .padding(.top, windowSafeAreaTopInset + GravitySpacing.space4)
+        }
+        .frame(width: width, height: windowSafeAreaTopInset + 72, alignment: .top)
+    }
     private var closeButton: some View {
         Button {
             HapticFeedback.light.fire()
@@ -952,47 +921,91 @@ struct TopicDetailPage: View {
                 dismiss()
             }
         } label: {
-            Image(systemName: "xmark")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: 40, height: 40)
-                .background(.ultraThinMaterial, in: Circle())
-                .contentShape(Circle())
+            ZStack {
+                BuyerPreviewAvatar(
+                    profile: BuyerPreviewStore.shared.selected,
+                    size: FeedNavigationStyle.avatarSize
+                )
+                .opacity(1 - closeMorphProgress)
+                .scaleEffect(1 - (0.08 * closeMorphProgress))
+
+                Circle()
+                    .fill(surfaceColor)
+                    .overlay { Circle().fill(.black.opacity(0.26)) }
+                    .overlay {
+                        Circle().strokeBorder(.white.opacity(0.14), lineWidth: 0.5)
+                    }
+                    .opacity(closeMorphProgress)
+
+                Image(systemName: "xmark")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .opacity(closeMorphProgress)
+                    .scaleEffect(0.72 + (0.28 * closeMorphProgress))
+            }
+            .frame(width: FeedNavigationStyle.controlSize, height: FeedNavigationStyle.controlSize)
+            .contentShape(Circle())
         }
         .buttonStyle(PressScaleButtonStyle())
         .padding(.leading, GravitySpacing.space16)
         .accessibilityLabel("Close")
     }
-
-    private var followButton: some View {
-        Button {
-            HapticFeedback.light.fire()
-            withAnimation(.easeInOut(duration: 0.18)) {
-                isFollowingTopic.toggle()
-            }
-        } label: {
-            Text(isFollowingTopic ? "Following" : "Follow")
-                .font(GravityFont.semiBold.fixedFont(size: 14))
-                .foregroundStyle(.white)
-                .padding(.horizontal, GravitySpacing.space16)
-                .frame(height: 40)
-                .background(.ultraThinMaterial, in: Capsule())
-                .contentShape(Capsule())
-        }
-        .buttonStyle(PressScaleButtonStyle())
-        .padding(.trailing, GravitySpacing.space16)
-        .accessibilityLabel(isFollowingTopic ? "Unfollow this topic" : "Follow this topic")
-        .accessibilityAddTraits(isFollowingTopic ? .isSelected : [])
+    private var heroFeedbackPill: some View {
+        PrototypeFeedbackActions(
+            layout: .vertical,
+            foregroundColor: .white,
+            appliesShadow: true,
+            includesOverflow: true,
+            includesVolume: false
+        )
     }
-
 }
-
+/// Owns the only scroll-responsive topic chrome. Keeping this in a separate
+/// observation boundary prevents a title visibility change from rebuilding
+/// the video hero and every merchandising rail on the page.
+private struct TopicCompactHeaderBackdrop: View {
+    let state: TopicHeaderScrollState
+    let title: String
+    let surfaceColor: Color
+    let width: CGFloat
+    let topInset: CGFloat
+    var body: some View {
+        ZStack(alignment: .top) {
+            if state.showsTitle {
+                // Resolve scrolling content into the authored topic color
+                // instead of smearing it through a system material. This
+                // keeps product photography crisp beneath a cleaner fade.
+                LinearGradient(
+                    stops: [
+                        .init(color: surfaceColor.opacity(0.98), location: 0),
+                        .init(color: surfaceColor.opacity(0.94), location: 0.56),
+                        .init(color: surfaceColor.opacity(0.72), location: 0.78),
+                        .init(color: surfaceColor.opacity(0), location: 1),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                Text(title)
+                    .font(GravityFont.semiBold.fixedFont(size: 15))
+                    .tracking(-0.2)
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
+                    .frame(maxWidth: max(120, width - 140))
+                    .padding(.top, topInset + 14)
+                    .transition(.opacity)
+                    .accessibilityAddTraits(.isHeader)
+            }
+        }
+        .frame(width: width, height: topInset + 72, alignment: .top)
+        .animation(.easeOut(duration: 0.14), value: state.showsTitle)
+    }
+}
 private struct DominantVideoColor: Sendable, Equatable {
     let red: Double
     let green: Double
     let blue: Double
 }
-
 /// Samples one representative video frame into a tiny quantized histogram.
 /// The work runs off the main actor once per topic and stores only three color
 /// channels, so scrolling and video playback never pay for the analysis.
@@ -1003,14 +1016,12 @@ private enum DominantVideoColorSampler {
         var green = 0
         var blue = 0
     }
-
     static func sample(from url: URL) async -> DominantVideoColor? {
         await Task.detached(priority: .utility) {
             let asset = AVURLAsset(url: url)
             let generator = AVAssetImageGenerator(asset: asset)
             generator.appliesPreferredTrackTransform = true
             generator.maximumSize = CGSize(width: 96, height: 96)
-
             let frame: CGImage
             do {
                 frame = try await generator.image(
@@ -1022,7 +1033,6 @@ private enum DominantVideoColorSampler {
             return dominantColor(in: frame)
         }.value
     }
-
     private static func dominantColor(in image: CGImage) -> DominantVideoColor? {
         let width = 48
         let height = 48
@@ -1037,10 +1047,8 @@ private enum DominantVideoColorSampler {
             space: CGColorSpaceCreateDeviceRGB(),
             bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
         ) else { return nil }
-
         context.interpolationQuality = .low
         context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
-
         var buckets: [Int: Bucket] = [:]
         for offset in stride(from: 0, to: pixels.count, by: bytesPerPixel) {
             let red = Int(pixels[offset])
@@ -1049,7 +1057,6 @@ private enum DominantVideoColorSampler {
             let alpha = Int(pixels[offset + 3])
             let luminance = (red * 3 + green * 6 + blue) / 10
             guard alpha > 160, luminance > 22, luminance < 238 else { continue }
-
             let key = (red / 32 << 6) | (green / 32 << 3) | (blue / 32)
             var bucket = buckets[key, default: Bucket()]
             bucket.count += 1
@@ -1058,7 +1065,6 @@ private enum DominantVideoColorSampler {
             bucket.blue += blue
             buckets[key] = bucket
         }
-
         guard let winner = buckets.values.max(by: { $0.count < $1.count }),
               winner.count > 0 else { return nil }
         return DominantVideoColor(

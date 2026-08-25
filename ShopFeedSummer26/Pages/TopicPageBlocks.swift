@@ -8,16 +8,13 @@ struct RelatedDeal: Identifiable {
     var id: String { merchant.id }
 }
 
-struct LoopingDealItem: Identifiable {
-    let deal: RelatedDeal
-    let cycle: Int
-
-    var id: String { "\(cycle)-\(deal.id)" }
-}
-
 struct RelatedDealCard: View {
     let deal: RelatedDeal
     @Environment(NavigationCoordinator.self) private var coordinator
+
+    private var backgroundProduct: SampleMerchant.Product? {
+        deal.products.first
+    }
 
     var body: some View {
         Button {
@@ -25,9 +22,15 @@ struct RelatedDealCard: View {
             coordinator.pushRoute(.store(merchantId: deal.merchant.id))
         } label: {
             ZStack {
-                MerchantCoverImage(merchant: deal.merchant)
-                    .frame(width: 266, height: 263)
-                    .clipped()
+                Group {
+                    if let backgroundProduct {
+                        ProductImageView(product: backgroundProduct, merchant: deal.merchant)
+                    } else {
+                        MerchantCoverImage(merchant: deal.merchant)
+                    }
+                }
+                .frame(width: 266, height: 263)
+                .clipped()
 
                 LinearGradient(
                     stops: [
@@ -93,7 +96,6 @@ struct RelatedDealCard: View {
             }
         }
         .foregroundStyle(.white)
-        .shadow(color: .black.opacity(0.22), radius: 8, y: 2)
         .frame(maxWidth: .infinity)
     }
 
@@ -541,9 +543,7 @@ struct TopicMerchantShowcaseCard: View {
     }
 }
 
-/// Figma's topic-only merchant module: one lifestyle photograph, six square
-/// products, and a compact store action. Feed merchant cards keep their
-/// separate three-product treatment.
+/// Generic topic merchant module for topic recipes without a Figma-specific card.
 struct TopicBrandGridCard: View {
     let merchant: SampleMerchant
 
@@ -556,9 +556,7 @@ struct TopicBrandGridCard: View {
     }
 
     private var backgroundImageURL: String? {
-        merchant.products.lazy.compactMap { $0.allImageURLs.dropFirst().first }.first
-            ?? merchant.featuredImageURLs.first
-            ?? merchant.products.first?.imageURL
+        merchant.bestCoverImageURL
     }
 
     private var isFollowing: Bool {
@@ -569,6 +567,13 @@ struct TopicBrandGridCard: View {
         Set(followedMerchantIDs.split(separator: ",").map(String.init))
     }
 
+    private var ratingCountText: String {
+        let count = merchant.totalRatings
+        if count >= 1_000_000 { return String(format: "(%.1fM)", Double(count) / 1_000_000) }
+        if count >= 1_000 { return String(format: "(%.1fK)", Double(count) / 1_000) }
+        return "(\(count))"
+    }
+
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Button {
@@ -577,7 +582,7 @@ struct TopicBrandGridCard: View {
             } label: {
                 ZStack {
                     MerchantImage(merchant: merchant, urlString: backgroundImageURL)
-                        .frame(width: 364, height: 370)
+                        .frame(width: 364, height: 388)
                         .clipped()
 
                     LinearGradient(
@@ -596,14 +601,11 @@ struct TopicBrandGridCard: View {
                             .frame(maxWidth: .infinity, minHeight: 72, alignment: .topLeading)
 
                         LazyVGrid(
-                            columns: Array(repeating: GridItem(.fixed(98), spacing: 8), count: 3),
+                            columns: Array(repeating: GridItem(.fixed(108), spacing: 8), count: 3),
                             spacing: 8
                         ) {
                             ForEach(Array(products.enumerated()), id: \.offset) { _, product in
-                                ProductImageView(product: product, merchant: merchant)
-                                    .frame(width: 98, height: 98)
-                                    .background(.white)
-                                    .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r16, style: .continuous))
+                                merchantProductTile(product)
                             }
                         }
 
@@ -616,16 +618,26 @@ struct TopicBrandGridCard: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .foregroundStyle(.white)
-                    .gravityShadow(GravityShadows.feedText)
                     .padding(GravitySpacing.space12)
                 }
-                .frame(width: 364, height: 370)
+                .frame(width: 364, height: 388)
                 .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous))
             }
             .buttonStyle(PressScaleButtonStyle())
             .accessibilityLabel("Shop all from \(merchant.displayName)")
 
-            VStack(alignment: .trailing, spacing: 7) {
+            HStack(spacing: 8) {
+                if merchant.totalRatings > 0 {
+                    HStack(spacing: 3) {
+                        Text(String(format: "%.1f", merchant.rating))
+                        Image(systemName: "star.fill")
+                            .font(.system(size: 10, weight: .bold))
+                        Text(ratingCountText)
+                    }
+                    .font(GravityFont.medium.fixedFont(size: 11))
+                    .foregroundStyle(.white)
+                }
+
                 Button {
                     toggleFollow()
                 } label: {
@@ -638,17 +650,36 @@ struct TopicBrandGridCard: View {
                 }
                 .buttonStyle(PressScaleButtonStyle())
                 .accessibilityAddTraits(isFollowing ? .isSelected : [])
-
-                if merchant.totalRatings > 0 {
-                    Label(String(format: "%.1f", merchant.rating), systemImage: "star.fill")
-                        .font(GravityFont.medium.fixedFont(size: 11))
-                        .foregroundStyle(.white)
-                        .gravityShadow(GravityShadows.feedText)
-                }
             }
-            .padding(GravitySpacing.space12)
+            .padding(.top, GravitySpacing.space12)
+            .padding(.trailing, GravitySpacing.space12)
         }
-        .frame(width: 364, height: 370)
+        .frame(width: 364, height: 388)
+    }
+
+    private func merchantProductTile(_ product: SampleMerchant.Product) -> some View {
+        ZStack {
+            ProductImageView(product: product, merchant: merchant)
+                .frame(width: 108, height: 108)
+
+            Text(formatPrice(product.price))
+                .font(GravityFont.medium.fixedFont(size: 12))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 8)
+                .frame(height: 20)
+                .background(.black.opacity(0.38), in: Capsule())
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .padding(10)
+
+            Image(systemName: "heart")
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                .padding(10)
+        }
+        .frame(width: 108, height: 108)
+        .background(.white)
+        .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r16, style: .continuous))
     }
 
     private func toggleFollow() {

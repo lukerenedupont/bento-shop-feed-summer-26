@@ -121,37 +121,57 @@ struct MerchantWordmarkImage: View {
     let merchant: SampleMerchant
     var maxHeight: CGFloat = 28
     var maxWidth: CGFloat = 120
+    var imageMaxWidth: CGFloat? = nil
     var tint: Color = .white
     var bundledAssetName: String? = nil
+    var rendersAsTemplate = false
 
     var body: some View {
         Group {
             if let bundledAssetName,
                UIImage(named: bundledAssetName) != nil {
                 Image(bundledAssetName)
+                    .renderingMode(rendersAsTemplate ? .template : .original)
                     .resizable()
                     .scaledToFit()
-                    .frame(maxWidth: maxWidth, maxHeight: maxHeight, alignment: .leading)
+                    .foregroundStyle(tint)
+                    .frame(
+                        maxWidth: imageMaxWidth ?? maxWidth,
+                        maxHeight: maxHeight,
+                        alignment: .leading
+                    )
             } else if merchant.bestWordmarkURL != nil,
                       let url = merchant.bestWordmarkURL,
                       let parsed = URL(string: url) {
                 CachedAsyncImage(url: parsed) { phase in
                     switch phase {
                     case .success(let image):
-                        image.resizable().scaledToFit()
-                            .frame(maxWidth: maxWidth, maxHeight: maxHeight, alignment: .leading)
+                        image
+                            .renderingMode(rendersAsTemplate ? .template : .original)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundStyle(tint)
+                            .frame(
+                                maxWidth: imageMaxWidth ?? maxWidth,
+                                maxHeight: maxHeight,
+                                alignment: .leading
+                            )
                     default:
                         Text(merchant.name)
-                            .gravityTextStyle(GravityTypography.bodyTitleSmall)
+                            .font(.system(size: max(16, maxHeight * 0.68), weight: .bold))
+                            .tracking(-0.5)
                             .foregroundStyle(tint)
                             .lineLimit(1)
+                            .minimumScaleFactor(0.82)
                     }
                 }
             } else {
                 Text(merchant.name)
-                    .gravityTextStyle(GravityTypography.bodyTitleSmall)
+                    .font(.system(size: max(16, maxHeight * 0.68), weight: .bold))
+                    .tracking(-0.5)
                     .foregroundStyle(tint)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.82)
             }
         }
         .frame(maxWidth: maxWidth, alignment: .leading)

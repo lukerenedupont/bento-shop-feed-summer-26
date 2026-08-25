@@ -8,7 +8,7 @@ struct BuyerFeedNavigationBar: View {
     let profile: BuyerPreviewProfile
     let topics: [BuyerFeedTopic]
     let selectedTopicID: String
-    let feedExpansionProgress: CGFloat
+    @Bindable var chromeTransitionState: FeedChromeTransitionState
     var usesInverseStyle = false
     var usesFeedBackdropStyle = false
     var usesHolidayPillStyle = false
@@ -91,15 +91,11 @@ struct BuyerFeedNavigationBar: View {
         return Button {
             onSelectTopic(topic)
         } label: {
-            Text(topic.label)
-                .font(FeedNavigationStyle.labelFont)
-                .foregroundStyle(
-                    labelColor(for: topic)
-                )
+            transitioningLabel(for: topic)
                 .shadow(
                     color: topic.id == selectedTopicID
                         ? .clear
-                        : .black.opacity(0.28 * feedExpansionProgress),
+                        : .black.opacity(0.28 * chromeTransitionState.progress),
                     radius: 7,
                     y: 2
                 )
@@ -127,17 +123,26 @@ struct BuyerFeedNavigationBar: View {
         .accessibilityAddTraits(topic.id == selectedTopicID ? .isSelected : [])
     }
 
-    private func labelColor(for topic: BuyerFeedTopic) -> Color {
+    @ViewBuilder
+    private func transitioningLabel(for topic: BuyerFeedTopic) -> some View {
+        let label = Text(topic.label)
+            .font(FeedNavigationStyle.labelFont)
+
         if topic.id == selectedTopicID {
-            return GravityColors.textFixedDark
+            label.foregroundStyle(GravityColors.textFixedDark)
+        } else if usesInverseStyle {
+            label.foregroundStyle(.white.opacity(0.75))
+        } else {
+            let progress = chromeTransitionState.progress
+            ZStack {
+                label
+                    .foregroundStyle(GravityColors.textTertiary)
+                    .opacity(1 - progress)
+                label
+                    .foregroundStyle(.white.opacity(0.82))
+                    .opacity(progress)
+            }
         }
-        if usesInverseStyle {
-            return .white.opacity(0.75)
-        }
-        if usesFeedBackdropStyle {
-            return .white.opacity(0.82)
-        }
-        return GravityColors.textTertiary
     }
 
 }

@@ -1,5 +1,145 @@
 import SwiftUI
 
+/// PROTOTYPE: lightweight, local-only feedback actions for evaluating how
+/// buyer signals and jump-off mechanics feel on feed cards and topic heroes.
+struct PrototypeFeedbackActions: View {
+    enum Layout {
+        case vertical
+        case horizontal
+    }
+
+    private enum Action: String, Hashable {
+        case more = "More"
+        case volume = "Volume"
+        case like = "Like"
+        case thread = "Thread"
+        case share = "Share"
+
+        var symbol: String {
+            switch self {
+            case .more: "ellipsis"
+            case .volume: "speaker.wave.2"
+            case .like: "heart"
+            case .thread: "bubble.left.and.bubble.right"
+            case .share: "square.and.arrow.up"
+            }
+        }
+
+        var selectedSymbol: String {
+            switch self {
+            case .more: "ellipsis"
+            case .volume: "speaker.slash"
+            case .like: "heart.fill"
+            case .thread: "bubble.left.and.bubble.right.fill"
+            case .share: "square.and.arrow.up"
+            }
+        }
+
+        var figmaAssetName: String? {
+            switch self {
+            case .more: "feedback-overflow"
+            case .volume: "feedback-volume"
+            case .like: "feedback-heart"
+            case .share: "feedback-share"
+            case .thread: nil
+            }
+        }
+    }
+
+    let layout: Layout
+    var foregroundColor: Color = .white
+    var appliesShadow = true
+    var includesOverflow = false
+    var includesVolume = false
+    @State private var selectedActions: Set<Action> = []
+
+    var body: some View {
+        Group {
+            if layout == .vertical {
+                VStack(spacing: includesVolume ? GravitySpacing.space12 : GravitySpacing.space20) {
+                    actionButtons
+                }
+            } else {
+                HStack(spacing: GravitySpacing.space20) {
+                    actionButtons
+                }
+            }
+        }
+    }
+
+    private var actions: [Action] {
+        var actions: [Action] = []
+        if includesOverflow { actions.append(.more) }
+        if includesVolume { actions.append(.volume) }
+        actions.append(contentsOf: [.like, .thread, .share])
+        return actions
+    }
+
+    @ViewBuilder
+    private var actionButtons: some View {
+        ForEach(actions, id: \.self) { action in
+            Button {
+                HapticFeedback.light.fire()
+                withAnimation(.spring(response: 0.24, dampingFraction: 0.72)) {
+                    if selectedActions.contains(action) {
+                        selectedActions.remove(action)
+                    } else {
+                        selectedActions.insert(action)
+                    }
+                }
+            } label: {
+                if layout == .vertical {
+                    verticalLabel(for: action)
+                } else {
+                    horizontalLabel(for: action)
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(action.rawValue)
+            .accessibilityAddTraits(selectedActions.contains(action) ? .isSelected : [])
+        }
+    }
+
+    private func verticalLabel(for action: Action) -> some View {
+        let isSelected = selectedActions.contains(action)
+
+        return actionImage(for: action, isSelected: isSelected)
+            .foregroundStyle(foregroundColor)
+            .frame(width: 36, height: 36)
+            .contentShape(Rectangle())
+            .shadow(
+                color: appliesShadow ? .black.opacity(0.24) : .clear,
+                radius: appliesShadow ? 4 : 0,
+                y: appliesShadow ? 2 : 0
+            )
+            .scaleEffect(isSelected ? 1.12 : 1)
+    }
+
+    private func horizontalLabel(for action: Action) -> some View {
+        let isSelected = selectedActions.contains(action)
+
+        return actionImage(for: action, isSelected: isSelected)
+            .foregroundStyle(foregroundColor)
+            .frame(width: 36, height: 36)
+            .contentShape(Rectangle())
+            .opacity(isSelected ? 1 : 0.88)
+            .scaleEffect(isSelected ? 1.1 : 1)
+    }
+
+    @ViewBuilder
+    private func actionImage(for action: Action, isSelected: Bool) -> some View {
+        if !isSelected, let assetName = action.figmaAssetName {
+            Image(assetName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 20, height: 20)
+        } else {
+            Image(systemName: isSelected ? action.selectedSymbol : action.symbol)
+                .font(.system(size: 18, weight: .semibold))
+        }
+    }
+}
+
 /// Full-screen commerce-content card. A story can mix products and merchants;
 /// the stable formats keep interaction familiar while the content supplies the novelty.
 struct StoryFeedCard: View {
@@ -15,6 +155,7 @@ struct StoryFeedCard: View {
     var titleAtTopLeading = false
     var productLayout: FeedCardProductLayout? = nil
     var foregroundTopPadding: CGFloat = GravitySpacing.space20
+    var titleTrailingPadding: CGFloat = 0
     /// Pins a top-leading title under persistent navigation using a
     /// compositor-only offset. This avoids invalidating the card hierarchy
     /// while a vertical scroll gesture is in flight.
@@ -131,6 +272,7 @@ struct StoryFeedCard: View {
     }
 
     private var heroLifestyleImageURL: URL? {
+        if story.coverImageName != nil { return nil }
         if prefersVideoBackground, leadFilmURL != nil {
             return nil
         }
@@ -391,6 +533,7 @@ struct StoryFeedCard: View {
             .gravityShadow(GravityShadows.feedText)
             .multilineTextAlignment(.leading)
             .lineLimit(3)
+            .padding(.trailing, titleTrailingPadding)
             .frame(
                 maxWidth: .infinity,
                 alignment: .leading

@@ -57,6 +57,7 @@ struct TryOnFeedCard: View {
     let width: CGFloat
     let height: CGFloat
     var foregroundTopPadding: CGFloat = GravitySpacing.space20
+    var titleTrailingPadding: CGFloat = 0
     var scrollPinnedTitleTop: CGFloat? = nil
     let onTap: () -> Void
 
@@ -110,6 +111,7 @@ struct TryOnFeedCard: View {
             .foregroundStyle(.black)
             .multilineTextAlignment(.leading)
             .lineLimit(3)
+            .padding(.trailing, titleTrailingPadding)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -127,49 +129,28 @@ struct TryOnFeedCard: View {
             }
     }
 
-    private var footer: some View {
-        HStack(spacing: GravitySpacing.space8) {
-            Text("\(products.count) products")
-                .font(.system(size: 13, weight: .medium))
-                .lineLimit(1)
-
-            Spacer(minLength: GravitySpacing.space8)
-
-            Text("Try live")
-                .font(.system(size: 18, weight: .semibold))
-
-            Image(systemName: "chevron.right")
-                .font(.system(size: 13, weight: .semibold))
-        }
-        .foregroundStyle(.black)
-    }
-
     private var bottomProductCarousel: some View {
         let tileWidth = max((width - 64) / 2, 144)
 
-        return VStack(spacing: FeedCardStyle.productFooterSpacing) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: GravitySpacing.space8) {
-                    ForEach(products) { item in
-                        ProductCard(
-                            image: nil,
-                            imageURL: item.product.imageURL,
-                            priceBadge: formatPrice(item.product.price),
-                            showFavoriteButton: true
-                        )
-                        .allowsHitTesting(false)
-                        .frame(width: tileWidth)
-                    }
+        return ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: GravitySpacing.space8) {
+                ForEach(products) { item in
+                    ProductCard(
+                        image: nil,
+                        imageURL: item.product.imageURL,
+                        priceBadge: formatPrice(item.product.price),
+                        showFavoriteButton: true
+                    )
+                    .allowsHitTesting(false)
+                    .frame(width: tileWidth)
                 }
-                .scrollTargetLayout()
             }
-            .contentMargins(.leading, GravitySpacing.space20, for: .scrollContent)
-            .padding(.horizontal, -GravitySpacing.space20)
-            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-
-            footer
+            .scrollTargetLayout()
         }
-        .frame(height: tileWidth + FeedCardStyle.productFooterBlockHeight)
+        .contentMargins(.leading, GravitySpacing.space20, for: .scrollContent)
+        .padding(.horizontal, -GravitySpacing.space20)
+        .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+        .frame(height: tileWidth)
     }
 }
 

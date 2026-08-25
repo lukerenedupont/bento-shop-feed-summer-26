@@ -34,5 +34,26 @@ struct ShopPost: Identifiable, Hashable {
     let subtitle: String?
     let media: Media
     let merchant: Merchant
+    let productReferences: [FeedStory.ProductReference]
     let actionURL: URL?
+
+    init(
+        id: String,
+        title: String?,
+        caption: String?,
+        subtitle: String?,
+        media: Media,
+        merchant: Merchant,
+        productReferences: [FeedStory.ProductReference] = [],
+        actionURL: URL?
+    ) {
+        self.id = id
+        self.title = title
+        self.caption = caption
+        self.subtitle = subtitle
+        self.media = media
+        self.merchant = merchant
+        self.productReferences = productReferences
+        self.actionURL = actionURL
+    }
 }

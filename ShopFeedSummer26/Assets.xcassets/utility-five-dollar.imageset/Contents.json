@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "utility-five-dollar.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

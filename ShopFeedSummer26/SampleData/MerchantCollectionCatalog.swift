@@ -169,6 +169,13 @@ enum FeedCoverCatalog {
     /// Bundled editorial covers are only used when the exact shelf galleries
     /// contain packshots, and are assigned by story rather than topic hashing.
     private static let authoredPresentations: [FeedCoverPresentation] = [
+        .init(
+            storyID: "kyle-argizari-lighting",
+            source: .bundledVideo(resource: "warm-designer-lighting", fileExtension: "mp4"),
+            mediaRole: .inContext,
+            alignment: .center,
+            textScrimOpacity: 0.36
+        ),
         // Canonical topic covers. Each source is merchant-owned media tied to
         // the exact product, collection, or editorial world behind the story.
         // Source page: nocsprovisions.com/blogs/digest/edge-clarity
@@ -328,10 +335,10 @@ enum FeedCoverCatalog {
         ),
         .init(
             storyID: "shelf-luke-9-streetwear-caps-and-tees",
-            source: .bundledVideo(resource: "hoe-streetwear", fileExtension: "mp4"),
-            mediaRole: .wornOrUsed,
+            source: .bundledVideo(resource: "streetwear-staples", fileExtension: "mp4"),
+            mediaRole: .editorial,
             alignment: .center,
-            textScrimOpacity: 0.48
+            textScrimOpacity: 0.38
         ),
         .init(
             storyID: "shelf-luke-11-neutral-activewear-essentials",

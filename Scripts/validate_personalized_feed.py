@@ -9,11 +9,20 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_PATH = ROOT / "ShopFeedSummer26/Assets.xcassets/prototype-merchants.dataset/prototype-merchants.json"
 FEED_PATH = ROOT / "ShopFeedSummer26/Assets.xcassets/personalized-feed.dataset/personalized-feed.json"
+HYPOTHESIS_SHELVES_PATH = ROOT / "ShopFeedSummer26/Assets.xcassets/hypothesis-shelves.dataset/hypothesis-shelves.json"
 ASSETS_PATH = ROOT / "ShopFeedSummer26/Assets.xcassets"
 
 catalog = json.loads(CATALOG_PATH.read_text())
 feed = json.loads(FEED_PATH.read_text())
+hypothesis_shelves = json.loads(HYPOTHESIS_SHELVES_PATH.read_text())
 errors: list[str] = []
+
+# Buyer portraits follow one convention so adding a profile cannot silently
+# fall back to an initial because of a hand-maintained ID mapping.
+for user in hypothesis_shelves.get("users", []):
+    avatar_name = f"{user['id']}-avatar"
+    if not (ASSETS_PATH / f"{avatar_name}.imageset" / "Contents.json").exists():
+        errors.append(f"Buyer {user['id']!r} has no {avatar_name!r} imageset")
 
 # Keep the two live composition surfaces from turning back into monoliths.
 # Supporting components can grow independently, but these orchestration files
