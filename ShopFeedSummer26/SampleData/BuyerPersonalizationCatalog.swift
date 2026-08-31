@@ -148,7 +148,7 @@ enum BuyerPersonalizationCatalog {
         ),
         story(
             id: "luke-gift-guide-for-son",
-            title: "Gifts that feel like Leon",
+            title: "Gifts for Leon",
             subtitle: "A living shortlist you can tune by age, personality, budget, and what Leon is into right now.",
             keys: ["gift", "son", "kids", "outdoors", "creative", "design"],
             accent: "#392657",

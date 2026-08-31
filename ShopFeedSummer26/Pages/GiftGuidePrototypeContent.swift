@@ -9,8 +9,8 @@ final class GiftGuidePrototypeState {
     var showsVoiceMode = false
     var age = 10.0
     var ageIsConfirmed = false
-    var setting = GiftSetting.both
-    var settingIsConfirmed = false
+    var setting = GiftSetting.outdoors
+    var settingIsConfirmed = true
     var budget = 150.0
     var budgetIsConfirmed = false
     var intent = GiftIntent.surprise
@@ -544,11 +544,7 @@ struct GiftGuideSteeringDock: View {
                     }
                 }
             } label: {
-                dockPill(
-                    "Age \(Int(state.age))",
-                    width: 74,
-                    confirmed: state.ageIsConfirmed
-                )
+                dockPill("Age \(Int(state.age))", width: 74)
             }
             .accessibilityLabel("Leon’s age")
 
@@ -561,11 +557,7 @@ struct GiftGuideSteeringDock: View {
                     }
                 }
             } label: {
-                dockPill(
-                    settingDockLabel,
-                    width: 74,
-                    confirmed: state.settingIsConfirmed
-                )
+                dockPill(settingDockLabel, width: 74)
             }
             .accessibilityLabel("Leon’s setting preference")
 
@@ -578,30 +570,21 @@ struct GiftGuideSteeringDock: View {
                     }
                 }
             } label: {
-                dockPill(
-                    "$\(Int(state.budget))",
-                    width: 74,
-                    confirmed: state.budgetIsConfirmed
-                )
+                dockPill("$\(Int(state.budget))", width: 74)
             }
             .accessibilityLabel("Gift budget")
 
             Menu {
-                ForEach(GiftIntent.allCases) { intent in
-                    Button(intent.label) {
-                        state.intent = intent
-                        state.intentIsConfirmed = true
-                        state.registerUpdate("Prioritizing \(intent.label.lowercased()) gifts")
-                    }
+                Button {
+                    HapticFeedback.light.fire()
+                    state.showsTuning = true
+                } label: {
+                    Label("Tell Shop more about Leon", systemImage: "message")
                 }
             } label: {
-                dockPill(
-                    intentDockLabel,
-                    width: 74,
-                    confirmed: state.intentIsConfirmed
-                )
+                dockPill("Leon", width: 74)
             }
-            .accessibilityLabel("Gift intent")
+            .accessibilityLabel("Gift recipient, Leon")
         }
         .frame(width: 308, height: 56)
     }
@@ -645,23 +628,14 @@ struct GiftGuideSteeringDock: View {
         switch state.setting {
         case .indoors: "Inside"
         case .both: "Both"
-        case .outdoors: "Outside"
+        case .outdoors: "Outdoors"
         }
     }
 
-    private var intentDockLabel: String {
-        switch state.intent {
-        case .surprise: "Surprise"
-        case .fun: "Fun"
-        case .useful: "Useful"
-        case .together: "Together"
-        }
-    }
-
-    private func dockPill(_ title: String, width: CGFloat, confirmed: Bool) -> some View {
+    private func dockPill(_ title: String, width: CGFloat) -> some View {
         Text(title)
             .font(GravityFont.semiBold.fixedFont(size: 12))
-            .foregroundStyle(.black.opacity(confirmed ? 0.82 : 0.58))
+            .foregroundStyle(.black.opacity(0.82))
             .frame(minWidth: width, minHeight: 56, maxHeight: 56)
             .background {
                 Capsule().fill(.white.opacity(0.48))
