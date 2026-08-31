@@ -547,7 +547,8 @@ struct TopicDetailPage: View {
                                 merchantName: item.merchant.displayName,
                                 productName: item.product.title,
                                 price: formatPrice(item.product.price),
-                                showFavoriteButton: true
+                                showFavoriteButton: true,
+                                favoriteIconHasContrastShadow: true
                             )
                             .frame(width: cardWidth)
                         }

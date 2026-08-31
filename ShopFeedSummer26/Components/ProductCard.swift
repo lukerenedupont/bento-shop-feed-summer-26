@@ -5,17 +5,24 @@ import SwiftUI
 /// control background; the larger frame remains as an invisible tap target.
 struct ProductFavoriteIcon: View {
     var color: Color = GravityColors.text
+    var addsContrastShadow = false
 
     var body: some View {
         Image(systemName: "heart")
             .font(.system(size: 24, weight: .medium))
             .foregroundStyle(color)
+            .shadow(
+                color: addsContrastShadow ? .black.opacity(0.28) : .clear,
+                radius: addsContrastShadow ? 2 : 0,
+                y: 1
+            )
             .frame(width: 38, height: 38)
     }
 }
 
 struct ProductFavoriteButton: View {
     var color: Color = GravityColors.text
+    var addsContrastShadow = false
     var onTap: (() -> Void)? = nil
 
     var body: some View {
@@ -23,8 +30,11 @@ struct ProductFavoriteButton: View {
             HapticFeedback.light.fire()
             onTap?()
         } label: {
-            ProductFavoriteIcon(color: color)
-                .contentShape(Rectangle())
+            ProductFavoriteIcon(
+                color: color,
+                addsContrastShadow: addsContrastShadow
+            )
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
@@ -71,6 +81,7 @@ struct ProductCard: View {
     var originalPrice: String? = nil
     var priceBadge: String? = nil
     var showFavoriteButton: Bool = true
+    var favoriteIconHasContrastShadow = false
     var isFavorite: Bool = false
     var onFavoriteTap: (() -> Void)? = nil
     var style: Style = .grid
@@ -299,7 +310,10 @@ struct ProductCard: View {
     // MARK: - Favorite Button
 
     private var favoriteButton: some View {
-        ProductFavoriteButton(onTap: onFavoriteTap)
+        ProductFavoriteButton(
+            addsContrastShadow: favoriteIconHasContrastShadow,
+            onTap: onFavoriteTap
+        )
     }
 
     // MARK: - Metadata

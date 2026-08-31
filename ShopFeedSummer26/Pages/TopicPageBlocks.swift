@@ -676,9 +676,7 @@ struct TopicBrandGridCard: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 .padding(10)
 
-            Image(systemName: "heart")
-                .font(.system(size: 22, weight: .semibold))
-                .foregroundStyle(.white)
+            ProductFavoriteIcon(color: .white, addsContrastShadow: true)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                 .padding(10)
         }

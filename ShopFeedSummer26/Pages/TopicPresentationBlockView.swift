@@ -62,7 +62,8 @@ struct TopicPresentationBlockView: View {
                         merchantName: product.merchant,
                         productName: product.title,
                         price: product.price,
-                        showFavoriteButton: true
+                        showFavoriteButton: true,
+                        favoriteIconHasContrastShadow: true
                     )
                     .frame(width: 116)
                 }
