@@ -351,7 +351,10 @@ struct TopicDetailPage: View {
                     .opacity(showsControls ? 1 : 0)
                     .zIndex(10)
                 if topicPresentation.usesGiftGuidePrototype {
-                    GiftGuideSteeringDock(state: giftGuideState)
+                    GiftGuideSteeringDock(
+                        state: giftGuideState,
+                        surfaceColor: surfaceColor
+                    )
                         .padding(.bottom, 28)
                         .frame(
                             width: geometry.size.width,

@@ -325,7 +325,7 @@ struct GiftGuidePrototypeContent: View {
     }
 
     private var productDeck: some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
             sectionHeading(
                 "Swipe through ideas",
                 subtitle: "A quick stack of gifts picked for Leon"
@@ -337,15 +337,15 @@ struct GiftGuidePrototypeContent: View {
                     deckCard(rankedProducts[itemIndex], depth: depth)
                 }
             }
-            .frame(height: 430)
-            .padding(.horizontal, GravitySpacing.space12)
+            .frame(height: 394)
+            .padding(.horizontal, GravitySpacing.space20)
         }
     }
 
     private func deckCard(_ item: ResolvedStoryProduct, depth: Int) -> some View {
         Color.clear
             .frame(maxWidth: .infinity)
-            .frame(height: 410)
+            .frame(height: 370)
             .overlay {
                 ProductImageView(product: item.product, merchant: item.merchant)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -359,17 +359,20 @@ struct GiftGuidePrototypeContent: View {
                 )
             }
             .overlay(alignment: .bottomLeading) {
-                VStack(alignment: .leading, spacing: GravitySpacing.space4) {
-                    Text(item.merchant.displayName)
-                        .font(GravityFont.medium.fixedFont(size: 12))
-                        .foregroundStyle(.white.opacity(0.72))
+                VStack(alignment: .leading, spacing: GravitySpacing.space6) {
                     Text(item.product.title)
-                        .font(GravityFont.expressiveBold.fixedFont(size: 24))
-                        .tracking(-0.5)
+                        .font(GravityFont.bold.fixedFont(size: 20))
+                        .tracking(-0.25)
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
-                    Text(formatPrice(item.product.price))
-                        .font(GravityFont.semiBold.fixedFont(size: 14))
+                    HStack(spacing: GravitySpacing.space6) {
+                        Text(item.merchant.displayName)
+                        Text("·")
+                            .foregroundStyle(.white.opacity(0.42))
+                        Text(formatPrice(item.product.price))
+                    }
+                    .font(GravityFont.medium.fixedFont(size: 12))
+                    .foregroundStyle(.white.opacity(0.72))
                 }
                 .foregroundStyle(.white)
                 .padding(GravitySpacing.space16)
@@ -554,6 +557,7 @@ struct GiftGuidePrototypeContent: View {
 
 struct GiftGuideSteeringDock: View {
     @Bindable var state: GiftGuidePrototypeState
+    let surfaceColor: Color
 
     var body: some View {
         ZStack {
@@ -564,7 +568,7 @@ struct GiftGuideSteeringDock: View {
             }
             .padding(.horizontal, 20)
         }
-        .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56)
+        .frame(maxWidth: .infinity, minHeight: FeedNavigationStyle.controlSize, maxHeight: FeedNavigationStyle.controlSize)
         .sheet(isPresented: $state.showsVoiceMode) {
             GiftGuideVoiceMode()
                 .presentationDetents([.height(300)])
@@ -642,12 +646,16 @@ struct GiftGuideSteeringDock: View {
             }
             .accessibilityLabel("Gift intent")
         }
-        .padding(6)
-        .frame(width: 262, height: 56)
-        .background(.white.opacity(0.75))
-        .clipShape(Capsule())
-        .glassEffect(.regular, in: .capsule)
-        .environment(\.colorScheme, .light)
+        .padding(3)
+        .frame(width: 262, height: FeedNavigationStyle.controlSize)
+        .background {
+            Capsule()
+                .fill(surfaceColor)
+                .overlay { Capsule().fill(.black.opacity(0.26)) }
+        }
+        .overlay {
+            Capsule().strokeBorder(.white.opacity(0.14), lineWidth: 0.5)
+        }
     }
 
     private var assistantMenu: some View {
@@ -666,13 +674,20 @@ struct GiftGuideSteeringDock: View {
             }
         } label: {
             Image(systemName: "waveform")
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(GravityColors.text)
-                .frame(width: 56, height: 56)
-                .background(.white.opacity(0.75))
-                .clipShape(Circle())
-                .glassEffect(.regular, in: .circle)
-                .environment(\.colorScheme, .light)
+                .font(FeedNavigationStyle.iconFont)
+                .foregroundStyle(.white)
+                .frame(
+                    width: FeedNavigationStyle.controlSize,
+                    height: FeedNavigationStyle.controlSize
+                )
+                .background {
+                    Circle()
+                        .fill(surfaceColor)
+                        .overlay { Circle().fill(.black.opacity(0.26)) }
+                }
+                .overlay {
+                    Circle().strokeBorder(.white.opacity(0.14), lineWidth: 0.5)
+                }
         }
         .buttonStyle(PressScaleButtonStyle(scale: 0.9))
         .accessibilityLabel("Voice or chat with Shop")
@@ -698,12 +713,9 @@ struct GiftGuideSteeringDock: View {
     private func dockPill(_ title: String, width: CGFloat, confirmed: Bool) -> some View {
         Text(title)
             .font(GravityFont.semiBold.fixedFont(size: 12))
-            .foregroundStyle(confirmed ? GravityColors.text : GravityColors.textTertiary)
-            .frame(width: width, height: 44)
-            .background(
-                confirmed ? GravityColors.bgOverlayFixedDark04 : .clear,
-                in: Capsule()
-            )
+            .foregroundStyle(.white.opacity(confirmed ? 1 : 0.72))
+            .frame(width: width, height: 34)
+            .background(confirmed ? .white.opacity(0.12) : .clear, in: Capsule())
     }
 }
 
