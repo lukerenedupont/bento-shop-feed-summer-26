@@ -353,7 +353,7 @@ struct TopicDetailPage: View {
                 if topicPresentation.usesGiftGuidePrototype {
                     GiftGuideSteeringDock(state: giftGuideState)
                         .padding(.horizontal, GravitySpacing.space12)
-                        .padding(.bottom, GravitySpacing.space16)
+                        .padding(.bottom, 28)
                         .frame(
                             width: geometry.size.width,
                             height: geometry.size.height,

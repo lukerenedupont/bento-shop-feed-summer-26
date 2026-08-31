@@ -17,16 +17,13 @@ final class GiftGuidePrototypeState {
     var note = ""
     var appliedNote = ""
     var updateToken = 0
-    var lastUpdate = "Built a starting point for Leon"
-
     var remainingConfirmations: Int {
         [ageIsConfirmed, settingIsConfirmed, budgetIsConfirmed, intentIsConfirmed]
             .filter { !$0 }.count
     }
 
-    func registerUpdate(_ message: String) {
+    func registerUpdate(_: String) {
         HapticFeedback.light.fire()
-        lastUpdate = message
         updateToken += 1
     }
 }
@@ -110,30 +107,18 @@ struct GiftGuidePrototypeContent: View {
             recipientBrief
                 .padding(.horizontal, GravitySpacing.space12)
 
-            updateStatus
-                .padding(.horizontal, GravitySpacing.space12)
-
             leadSection
 
-            ageQuestion
+            nextQuestion
                 .padding(.horizontal, GravitySpacing.space12)
 
             giftRoutes
-
-            settingQuestion
-                .padding(.horizontal, GravitySpacing.space12)
 
             productRail(
                 title: setting.sectionTitle,
                 subtitle: setting.sectionSubtitle,
                 products: rankedProducts
             )
-
-            intentQuestion
-                .padding(.horizontal, GravitySpacing.space12)
-
-            budgetQuestion
-                .padding(.horizontal, GravitySpacing.space12)
 
             productRail(
                 title: budgetTitle,
@@ -180,94 +165,34 @@ struct GiftGuidePrototypeContent: View {
     }
 
     private var recipientBrief: some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
-            HStack {
-                VStack(alignment: .leading, spacing: GravitySpacing.space2) {
-                    Text(state.remainingConfirmations == 0
-                         ? "Gift brief confirmed"
-                         : "\(state.remainingConfirmations) details to confirm")
-                        .font(GravityFont.medium.fixedFont(size: 12))
-                        .foregroundStyle(.white.opacity(0.58))
-                    Text("For Leon")
-                        .font(GravityFont.expressiveBold.fixedFont(size: 21))
-                        .tracking(-0.5)
-                        .foregroundStyle(.white)
-                }
-                Spacer()
-                Button {
-                    HapticFeedback.light.fire()
-                    showsTuning = true
-                } label: {
-                    Label("Tune", systemImage: "slider.horizontal.3")
-                        .font(GravityFont.semiBold.fixedFont(size: 13))
-                        .foregroundStyle(Color(hex: "#392657"))
-                        .padding(.horizontal, GravitySpacing.space12)
-                        .frame(height: 34)
-                        .background(.white, in: Capsule())
-                }
-                .buttonStyle(PressScaleButtonStyle())
+        HStack(spacing: GravitySpacing.space12) {
+            VStack(alignment: .leading, spacing: GravitySpacing.space2) {
+                Text("For Leon")
+                    .font(GravityFont.expressiveBold.fixedFont(size: 21))
+                    .tracking(-0.5)
+                Text(state.remainingConfirmations == 0
+                     ? "Gift preferences confirmed"
+                     : "\(state.remainingConfirmations) preferences to tune")
+                    .font(GravityFont.medium.fixedFont(size: 12))
+                    .foregroundStyle(.white.opacity(0.58))
             }
-
-            HStack(spacing: GravitySpacing.space6) {
-                briefChip("Age \(Int(age))\(ageIsConfirmed ? "" : "?")", confirmed: ageIsConfirmed)
-                briefChip(setting.label, confirmed: settingIsConfirmed)
-                briefChip(
-                    "Under $\(Int(budget))\(state.budgetIsConfirmed ? "" : "?")",
-                    confirmed: state.budgetIsConfirmed
-                )
-            }
-
-            if !appliedNote.isEmpty {
-                HStack(spacing: GravitySpacing.space4) {
-                    Image(systemName: "sparkles")
-                    Text(appliedNote)
-                        .lineLimit(1)
-                }
-                .font(GravityFont.medium.fixedFont(size: 12))
-                .foregroundStyle(.white.opacity(0.76))
-            }
-        }
-        .padding(14)
-        .background(.white.opacity(0.10), in: RoundedRectangle(cornerRadius: GravityRadius.r24, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: GravityRadius.r24, style: .continuous)
-                .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
-        }
-    }
-
-    private var updateStatus: some View {
-        HStack(spacing: GravitySpacing.space8) {
-            Image(systemName: "sparkles")
-                .font(.system(size: 13, weight: .semibold))
-            Text(state.lastUpdate)
-                .font(GravityFont.medium.fixedFont(size: 13))
-                .contentTransition(.opacity)
             Spacer()
-            if state.remainingConfirmations > 0 {
-                Text("\(state.remainingConfirmations) left")
-                    .font(GravityFont.medium.fixedFont(size: 11))
-                    .foregroundStyle(.white.opacity(0.48))
+            Button {
+                HapticFeedback.light.fire()
+                showsTuning = true
+            } label: {
+                Text("Edit")
+                    .font(GravityFont.semiBold.fixedFont(size: 13))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, GravitySpacing.space12)
+                    .frame(height: 34)
+                    .background(.white.opacity(0.12), in: Capsule())
             }
+            .buttonStyle(PressScaleButtonStyle())
         }
-        .foregroundStyle(.white.opacity(0.78))
-        .padding(.horizontal, GravitySpacing.space12)
-        .frame(height: 38)
-        .background(.white.opacity(0.06), in: Capsule())
-        .id(updateToken)
-        .transition(.move(edge: .top).combined(with: .opacity))
-    }
-
-    private func briefChip(_ title: String, confirmed: Bool) -> some View {
-        HStack(spacing: GravitySpacing.space4) {
-            Text(title)
-            Image(systemName: confirmed ? "checkmark" : "sparkles")
-                .font(.system(size: 9, weight: .bold))
-        }
-        .font(GravityFont.medium.fixedFont(size: 12))
         .foregroundStyle(.white)
-        .padding(.horizontal, GravitySpacing.space10)
-        .frame(height: 30)
-        .background(.white.opacity(confirmed ? 0.13 : 0.20), in: Capsule())
+        .padding(14)
+        .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: GravityRadius.r20, style: .continuous))
     }
 
     private var leadSection: some View {
@@ -330,6 +255,19 @@ struct GiftGuidePrototypeContent: View {
             .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous))
         }
         .buttonStyle(PressScaleButtonStyle())
+    }
+
+    @ViewBuilder
+    private var nextQuestion: some View {
+        if !ageIsConfirmed {
+            ageQuestion
+        } else if !settingIsConfirmed {
+            settingQuestion
+        } else if !intentIsConfirmed {
+            intentQuestion
+        } else if !state.budgetIsConfirmed {
+            budgetQuestion
+        }
     }
 
     private var ageQuestion: some View {
@@ -545,7 +483,7 @@ struct GiftGuidePrototypeContent: View {
             showsTuning = true
         } label: {
             HStack(spacing: GravitySpacing.space12) {
-                Image(systemName: "sparkles")
+                Image(systemName: "text.bubble")
                     .font(.system(size: 18, weight: .semibold))
                 VStack(alignment: .leading, spacing: GravitySpacing.space2) {
                     Text("Tell Shop more about Leon")
@@ -654,7 +592,10 @@ struct GiftGuideSteeringDock: View {
                             }
                         }
                     } label: {
-                        dockPill(state.setting.label, confirmed: state.settingIsConfirmed)
+                        dockPill(
+                            "\(state.setting.label)\(state.settingIsConfirmed ? "" : "?")",
+                            confirmed: state.settingIsConfirmed
+                        )
                     }
 
                     Menu {
@@ -666,7 +607,10 @@ struct GiftGuideSteeringDock: View {
                             }
                         }
                     } label: {
-                        dockPill("$\(Int(state.budget))", confirmed: state.budgetIsConfirmed)
+                        dockPill(
+                            "$\(Int(state.budget))\(state.budgetIsConfirmed ? "" : "?")",
+                            confirmed: state.budgetIsConfirmed
+                        )
                     }
 
                     Menu {
@@ -678,7 +622,10 @@ struct GiftGuideSteeringDock: View {
                             }
                         }
                     } label: {
-                        dockPill(state.intent.label, confirmed: state.intentIsConfirmed)
+                        dockPill(
+                            "\(state.intent.label)\(state.intentIsConfirmed ? "" : "?")",
+                            confirmed: state.intentIsConfirmed
+                        )
                     }
                 }
             }
@@ -688,33 +635,32 @@ struct GiftGuideSteeringDock: View {
                 state.showsTuning = true
             } label: {
                 Image(systemName: "slider.horizontal.3")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(Color(hex: "#392657"))
-                    .frame(width: 38, height: 38)
-                    .background(.white, in: Circle())
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(GravityColors.text)
+                    .frame(width: 44, height: 44)
+                    .background(GravityColors.bgOverlayFixedDark04, in: Circle())
             }
             .buttonStyle(PressScaleButtonStyle())
             .accessibilityLabel("Tune Leon’s gift guide")
         }
         .padding(6)
-        .background(.black.opacity(0.72), in: Capsule())
-        .overlay {
-            Capsule().strokeBorder(.white.opacity(0.18), lineWidth: 0.5)
-        }
-        .shadow(color: .black.opacity(0.22), radius: 16, y: 8)
+        .frame(width: 262, height: 56)
+        .background(.white.opacity(0.75))
+        .clipShape(Capsule())
+        .glassEffect(.regular, in: .capsule)
+        .environment(\.colorScheme, .light)
     }
 
     private func dockPill(_ title: String, confirmed: Bool) -> some View {
-        HStack(spacing: GravitySpacing.space4) {
-            Text(title)
-            Image(systemName: confirmed ? "checkmark" : "sparkles")
-                .font(.system(size: 8, weight: .bold))
-        }
-        .font(GravityFont.semiBold.fixedFont(size: 11))
-        .foregroundStyle(.white)
-        .padding(.horizontal, GravitySpacing.space10)
-        .frame(height: 38)
-        .background(.white.opacity(confirmed ? 0.16 : 0.09), in: Capsule())
+        Text(title)
+            .font(GravityFont.semiBold.fixedFont(size: 12))
+            .foregroundStyle(confirmed ? GravityColors.text : GravityColors.textTertiary)
+            .padding(.horizontal, GravitySpacing.space12)
+            .frame(height: 44)
+            .background(
+                confirmed ? GravityColors.bgOverlayFixedDark04 : .clear,
+                in: Capsule()
+            )
     }
 }
 
