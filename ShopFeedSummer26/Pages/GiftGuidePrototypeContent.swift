@@ -524,7 +524,7 @@ struct GiftGuideSteeringDock: View {
             filterBar
             assistantMenu
         }
-        .padding(.horizontal, GravitySpacing.space10)
+        .padding(.horizontal, 3)
         .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56)
         .sheet(isPresented: $state.showsVoiceMode) {
             GiftGuideVoiceMode()
@@ -544,7 +544,7 @@ struct GiftGuideSteeringDock: View {
                     }
                 }
             } label: {
-                dockPill("Age \(Int(state.age))", width: 74)
+                dockPill("Age \(Int(state.age))", width: 80)
             }
             .accessibilityLabel("Leon’s age")
 
@@ -557,7 +557,7 @@ struct GiftGuideSteeringDock: View {
                     }
                 }
             } label: {
-                dockPill(settingDockLabel, width: 74)
+                dockPill(settingDockLabel, width: 80)
             }
             .accessibilityLabel("Leon’s setting preference")
 
@@ -570,7 +570,7 @@ struct GiftGuideSteeringDock: View {
                     }
                 }
             } label: {
-                dockPill("$\(Int(state.budget))", width: 74)
+                dockPill("$\(Int(state.budget))", width: 80)
             }
             .accessibilityLabel("Gift budget")
 
@@ -582,11 +582,11 @@ struct GiftGuideSteeringDock: View {
                     Label("Tell Shop more about Leon", systemImage: "message")
                 }
             } label: {
-                dockPill("Leon", width: 74)
+                dockPill("Leon", width: 80)
             }
             .accessibilityLabel("Gift recipient, Leon")
         }
-        .frame(width: 308, height: 56)
+        .frame(width: 332, height: 56)
     }
 
     private var assistantMenu: some View {
