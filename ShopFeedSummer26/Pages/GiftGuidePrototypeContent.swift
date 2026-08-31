@@ -1,22 +1,85 @@
+import Observation
 import SwiftUI
+
+/// PROTOTYPE — Session-only state shared by the gift content and its pinned
+/// steering dock so every control visibly transforms one coherent page.
+@Observable
+final class GiftGuidePrototypeState {
+    var showsTuning = false
+    var age = 10.0
+    var ageIsConfirmed = false
+    var setting = GiftSetting.both
+    var settingIsConfirmed = false
+    var budget = 150.0
+    var budgetIsConfirmed = false
+    var intent = GiftIntent.surprise
+    var intentIsConfirmed = false
+    var note = ""
+    var appliedNote = ""
+    var updateToken = 0
+    var lastUpdate = "Built a starting point for Leon"
+
+    var remainingConfirmations: Int {
+        [ageIsConfirmed, settingIsConfirmed, budgetIsConfirmed, intentIsConfirmed]
+            .filter { !$0 }.count
+    }
+
+    func registerUpdate(_ message: String) {
+        HapticFeedback.light.fire()
+        lastUpdate = message
+        updateToken += 1
+    }
+}
 
 /// PROTOTYPE — A steerable topic that tests whether recipient controls can
 /// make a gift guide feel alive. State is intentionally session-only.
 struct GiftGuidePrototypeContent: View {
     let products: [ResolvedStoryProduct]
+    @Bindable var state: GiftGuidePrototypeState
 
     @Environment(NavigationCoordinator.self) private var coordinator
-    @State private var showsTuning = false
-    @State private var age = 10.0
-    @State private var ageIsConfirmed = false
-    @State private var setting = GiftSetting.both
-    @State private var settingIsConfirmed = false
-    @State private var budget = 150.0
-    @State private var intent = GiftIntent.surprise
-    @State private var intentIsConfirmed = false
-    @State private var note = ""
-    @State private var appliedNote = ""
-    @State private var updateToken = 0
+
+    private var showsTuning: Bool {
+        get { state.showsTuning }
+        nonmutating set { state.showsTuning = newValue }
+    }
+    private var age: Double {
+        get { state.age }
+        nonmutating set { state.age = newValue }
+    }
+    private var ageIsConfirmed: Bool {
+        get { state.ageIsConfirmed }
+        nonmutating set { state.ageIsConfirmed = newValue }
+    }
+    private var setting: GiftSetting {
+        get { state.setting }
+        nonmutating set { state.setting = newValue }
+    }
+    private var settingIsConfirmed: Bool {
+        get { state.settingIsConfirmed }
+        nonmutating set { state.settingIsConfirmed = newValue }
+    }
+    private var budget: Double {
+        get { state.budget }
+        nonmutating set { state.budget = newValue }
+    }
+    private var intent: GiftIntent {
+        get { state.intent }
+        nonmutating set { state.intent = newValue }
+    }
+    private var intentIsConfirmed: Bool {
+        get { state.intentIsConfirmed }
+        nonmutating set { state.intentIsConfirmed = newValue }
+    }
+    private var note: String {
+        get { state.note }
+        nonmutating set { state.note = newValue }
+    }
+    private var appliedNote: String {
+        get { state.appliedNote }
+        nonmutating set { state.appliedNote = newValue }
+    }
+    private var updateToken: Int { state.updateToken }
 
     private var rankedProducts: [ResolvedStoryProduct] {
         products.sorted { score($0) > score($1) }
@@ -47,9 +110,17 @@ struct GiftGuidePrototypeContent: View {
             recipientBrief
                 .padding(.horizontal, GravitySpacing.space12)
 
+            updateStatus
+                .padding(.horizontal, GravitySpacing.space12)
+
             leadSection
 
-            progressivePrompt
+            ageQuestion
+                .padding(.horizontal, GravitySpacing.space12)
+
+            giftRoutes
+
+            settingQuestion
                 .padding(.horizontal, GravitySpacing.space12)
 
             productRail(
@@ -57,6 +128,12 @@ struct GiftGuidePrototypeContent: View {
                 subtitle: setting.sectionSubtitle,
                 products: rankedProducts
             )
+
+            intentQuestion
+                .padding(.horizontal, GravitySpacing.space12)
+
+            budgetQuestion
+                .padding(.horizontal, GravitySpacing.space12)
 
             productRail(
                 title: budgetTitle,
@@ -78,16 +155,20 @@ struct GiftGuidePrototypeContent: View {
         .padding(.top, GravitySpacing.space8)
         .padding(.bottom, 140)
         .animation(.spring(response: 0.38, dampingFraction: 0.88), value: updateToken)
-        .sheet(isPresented: $showsTuning) {
+        .sheet(isPresented: Binding(
+            get: { showsTuning },
+            set: { showsTuning = $0 }
+        )) {
             GiftGuideTuningSheet(
-                age: $age,
-                setting: $setting,
-                budget: $budget,
-                intent: $intent,
-                note: $note,
+                age: Binding(get: { age }, set: { age = $0 }),
+                setting: Binding(get: { setting }, set: { setting = $0 }),
+                budget: Binding(get: { budget }, set: { budget = $0 }),
+                intent: Binding(get: { intent }, set: { intent = $0 }),
+                note: Binding(get: { note }, set: { note = $0 }),
                 apply: {
                     ageIsConfirmed = true
                     settingIsConfirmed = true
+                    state.budgetIsConfirmed = true
                     intentIsConfirmed = true
                     applyTuning()
                 }
@@ -102,7 +183,9 @@ struct GiftGuidePrototypeContent: View {
         VStack(alignment: .leading, spacing: GravitySpacing.space12) {
             HStack {
                 VStack(alignment: .leading, spacing: GravitySpacing.space2) {
-                    Text("Gift brief")
+                    Text(state.remainingConfirmations == 0
+                         ? "Gift brief confirmed"
+                         : "\(state.remainingConfirmations) details to confirm")
                         .font(GravityFont.medium.fixedFont(size: 12))
                         .foregroundStyle(.white.opacity(0.58))
                     Text("For Leon")
@@ -128,7 +211,10 @@ struct GiftGuidePrototypeContent: View {
             HStack(spacing: GravitySpacing.space6) {
                 briefChip("Age \(Int(age))\(ageIsConfirmed ? "" : "?")", confirmed: ageIsConfirmed)
                 briefChip(setting.label, confirmed: settingIsConfirmed)
-                briefChip("Under $\(Int(budget))", confirmed: true)
+                briefChip(
+                    "Under $\(Int(budget))\(state.budgetIsConfirmed ? "" : "?")",
+                    confirmed: state.budgetIsConfirmed
+                )
             }
 
             if !appliedNote.isEmpty {
@@ -147,6 +233,28 @@ struct GiftGuidePrototypeContent: View {
             RoundedRectangle(cornerRadius: GravityRadius.r24, style: .continuous)
                 .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
         }
+    }
+
+    private var updateStatus: some View {
+        HStack(spacing: GravitySpacing.space8) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 13, weight: .semibold))
+            Text(state.lastUpdate)
+                .font(GravityFont.medium.fixedFont(size: 13))
+                .contentTransition(.opacity)
+            Spacer()
+            if state.remainingConfirmations > 0 {
+                Text("\(state.remainingConfirmations) left")
+                    .font(GravityFont.medium.fixedFont(size: 11))
+                    .foregroundStyle(.white.opacity(0.48))
+            }
+        }
+        .foregroundStyle(.white.opacity(0.78))
+        .padding(.horizontal, GravitySpacing.space12)
+        .frame(height: 38)
+        .background(.white.opacity(0.06), in: Capsule())
+        .id(updateToken)
+        .transition(.move(edge: .top).combined(with: .opacity))
     }
 
     private func briefChip(_ title: String, confirmed: Bool) -> some View {
@@ -224,77 +332,156 @@ struct GiftGuidePrototypeContent: View {
         .buttonStyle(PressScaleButtonStyle())
     }
 
-    private var progressivePrompt: some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
-            HStack {
-                VStack(alignment: .leading, spacing: GravitySpacing.space2) {
-                    Text(promptEyebrow)
-                        .font(GravityFont.semiBold.fixedFont(size: 10))
-                        .tracking(1.1)
-                        .foregroundStyle(.white.opacity(0.52))
-                    Text(promptTitle)
-                        .font(GravityFont.bold.fixedFont(size: 18))
-                        .tracking(-0.35)
-                        .foregroundStyle(.white)
-                }
-                Spacer()
-                Text(promptProgress)
-                    .font(GravityFont.medium.fixedFont(size: 11))
-                    .foregroundStyle(.white.opacity(0.48))
-            }
-
-            if !ageIsConfirmed {
-                HStack(spacing: GravitySpacing.space6) {
-                    ForEach([7, 10, 13, 16], id: \.self) { option in
-                        steerButton("\(option)", selected: Int(age) == option && ageIsConfirmed) {
-                            age = Double(option)
-                            ageIsConfirmed = true
-                            registerUpdate()
-                        }
-                    }
-                }
-            } else if !settingIsConfirmed {
-                HStack(spacing: GravitySpacing.space6) {
-                    ForEach(GiftSetting.allCases) { option in
-                        steerButton(option.label, selected: setting == option && settingIsConfirmed) {
-                            setting = option
-                            settingIsConfirmed = true
-                            registerUpdate()
-                        }
-                    }
-                }
-            } else {
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: 2), spacing: 6) {
-                    ForEach(GiftIntent.allCases) { option in
-                        steerButton(option.label, selected: intent == option && intentIsConfirmed) {
-                            intent = option
-                            intentIsConfirmed = true
-                            registerUpdate()
-                        }
+    private var ageQuestion: some View {
+        questionCard(
+            title: "How old is Leon?",
+            detail: ageIsConfirmed ? "Confirmed — change it anytime" : "This has the biggest effect on the guide"
+        ) {
+            HStack(spacing: GravitySpacing.space6) {
+                ForEach([7, 10, 13, 16], id: \.self) { option in
+                    steerButton("\(option)", selected: Int(age) == option && ageIsConfirmed) {
+                        age = Double(option)
+                        ageIsConfirmed = true
+                        registerUpdate("Updated for Leon at age \(option)")
                     }
                 }
             }
         }
+    }
+
+    private var settingQuestion: some View {
+        questionCard(
+            title: "Where does Leon come alive?",
+            detail: settingIsConfirmed ? "We’ll keep this preference in the mix" : "Help us choose between projects and adventures"
+        ) {
+            HStack(spacing: GravitySpacing.space6) {
+                ForEach(GiftSetting.allCases) { option in
+                    steerButton(option.label, selected: setting == option && settingIsConfirmed) {
+                        setting = option
+                        settingIsConfirmed = true
+                        registerUpdate("Shifted the guide toward \(option.label.lowercased())")
+                    }
+                }
+            }
+        }
+    }
+
+    private var intentQuestion: some View {
+        questionCard(
+            title: "What should the gift feel like?",
+            detail: intentIsConfirmed ? "That feeling is now shaping every section" : "There isn’t one right kind of gift"
+        ) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: 2), spacing: 6) {
+                ForEach(GiftIntent.allCases) { option in
+                    steerButton(option.label, selected: intent == option && intentIsConfirmed) {
+                        intent = option
+                        intentIsConfirmed = true
+                        registerUpdate("Prioritizing \(option.label.lowercased()) gifts")
+                    }
+                }
+            }
+        }
+    }
+
+    private var budgetQuestion: some View {
+        questionCard(
+            title: "What feels comfortable?",
+            detail: state.budgetIsConfirmed ? "We’ll keep the main picks under $\(Int(budget))" : "Stretch ideas stay visible, but clearly marked"
+        ) {
+            HStack(spacing: GravitySpacing.space6) {
+                ForEach([50, 100, 150, 400], id: \.self) { option in
+                    steerButton("$\(option)", selected: Int(budget) == option && state.budgetIsConfirmed) {
+                        budget = Double(option)
+                        state.budgetIsConfirmed = true
+                        registerUpdate("Rebuilt the shortlist under $\(option)")
+                    }
+                }
+            }
+        }
+    }
+
+    private func questionCard<Content: View>(
+        title: String,
+        detail: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            VStack(alignment: .leading, spacing: GravitySpacing.space2) {
+                Text(title)
+                    .font(GravityFont.bold.fixedFont(size: 18))
+                    .tracking(-0.35)
+                    .foregroundStyle(.white)
+                Text(detail)
+                    .font(GravityFont.regular.fixedFont(size: 12))
+                    .foregroundStyle(.white.opacity(0.55))
+            }
+            content()
+        }
         .padding(GravitySpacing.space16)
         .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: GravityRadius.r24, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: GravityRadius.r24, style: .continuous)
+                .strokeBorder(.white.opacity(0.08), lineWidth: 0.5)
+        }
     }
 
-    private var promptEyebrow: String {
-        if !ageIsConfirmed { return "One quick check" }
-        if !settingIsConfirmed { return "Getting closer" }
-        return "Shape the surprise"
+    private var giftRoutes: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            sectionHeading("Ways into the gift", subtitle: "Start with the kind of moment you want to create")
+            LazyVGrid(
+                columns: Array(repeating: GridItem(.flexible(), spacing: GravitySpacing.space8), count: 2),
+                spacing: GravitySpacing.space8
+            ) {
+                ForEach(routeProducts) { item in
+                    routeCard(item)
+                }
+            }
+            .padding(.horizontal, GravitySpacing.space12)
+        }
     }
 
-    private var promptTitle: String {
-        if !ageIsConfirmed { return "How old is Leon?" }
-        if !settingIsConfirmed { return "Which sounds more like Leon?" }
-        return "What should the gift feel like?"
+    private var routeProducts: [ResolvedStoryProduct] {
+        let preferredMerchantIDs = ["tin-can-kids", "pollen-robotics", "nocs", "moma"]
+        return preferredMerchantIDs.compactMap { merchantID in
+            rankedProducts.first { $0.merchant.id == merchantID }
+        }
     }
 
-    private var promptProgress: String {
-        if !ageIsConfirmed { return "1 of 3" }
-        if !settingIsConfirmed { return "2 of 3" }
-        return "3 of 3"
+    private func routeCard(_ item: ResolvedStoryProduct) -> some View {
+        Button { open(item) } label: {
+            ZStack(alignment: .bottomLeading) {
+                ProductImageView(product: item.product, merchant: item.merchant)
+                    .aspectRatio(0.92, contentMode: .fill)
+                    .clipped()
+                LinearGradient(
+                    colors: [.clear, .black.opacity(0.68)],
+                    startPoint: .center,
+                    endPoint: .bottom
+                )
+                VStack(alignment: .leading, spacing: GravitySpacing.space2) {
+                    Text(routeTitle(for: item))
+                        .font(GravityFont.bold.fixedFont(size: 16))
+                        .lineLimit(2)
+                    Text(item.merchant.displayName)
+                        .font(GravityFont.medium.fixedFont(size: 11))
+                        .foregroundStyle(.white.opacity(0.68))
+                }
+                .foregroundStyle(.white)
+                .padding(GravitySpacing.space12)
+            }
+            .aspectRatio(0.92, contentMode: .fit)
+            .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r20, style: .continuous))
+        }
+        .buttonStyle(PressScaleButtonStyle())
+    }
+
+    private func routeTitle(for item: ResolvedStoryProduct) -> String {
+        switch item.merchant.id {
+        case "tin-can-kids": "Keep Leon connected"
+        case "pollen-robotics": "Build and code"
+        case "nocs": "Explore outside"
+        default: "Make something"
+        }
     }
 
     private func steerButton(_ title: String, selected: Bool, action: @escaping () -> Void) -> some View {
@@ -428,19 +615,110 @@ struct GiftGuidePrototypeContent: View {
         coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
     }
 
-    private func registerUpdate() {
-        HapticFeedback.light.fire()
-        updateToken += 1
+    private func registerUpdate(_ message: String) {
+        state.registerUpdate(message)
     }
 
     private func applyTuning() {
         appliedNote = note.trimmingCharacters(in: .whitespacesAndNewlines)
         showsTuning = false
-        registerUpdate()
+        registerUpdate("Rebuilt Leon’s guide from your brief")
     }
 }
 
-private enum GiftSetting: String, CaseIterable, Identifiable {
+struct GiftGuideSteeringDock: View {
+    @Bindable var state: GiftGuidePrototypeState
+
+    var body: some View {
+        HStack(spacing: GravitySpacing.space6) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: GravitySpacing.space6) {
+                    Menu {
+                        ForEach([7, 10, 13, 16], id: \.self) { age in
+                            Button("Age \(age)") {
+                                state.age = Double(age)
+                                state.ageIsConfirmed = true
+                                state.registerUpdate("Updated for Leon at age \(age)")
+                            }
+                        }
+                    } label: {
+                        dockPill("Age \(Int(state.age))\(state.ageIsConfirmed ? "" : "?")", confirmed: state.ageIsConfirmed)
+                    }
+
+                    Menu {
+                        ForEach(GiftSetting.allCases) { setting in
+                            Button(setting.label) {
+                                state.setting = setting
+                                state.settingIsConfirmed = true
+                                state.registerUpdate("Shifted the guide toward \(setting.label.lowercased())")
+                            }
+                        }
+                    } label: {
+                        dockPill(state.setting.label, confirmed: state.settingIsConfirmed)
+                    }
+
+                    Menu {
+                        ForEach([50, 100, 150, 400], id: \.self) { budget in
+                            Button("Under $\(budget)") {
+                                state.budget = Double(budget)
+                                state.budgetIsConfirmed = true
+                                state.registerUpdate("Rebuilt the shortlist under $\(budget)")
+                            }
+                        }
+                    } label: {
+                        dockPill("$\(Int(state.budget))", confirmed: state.budgetIsConfirmed)
+                    }
+
+                    Menu {
+                        ForEach(GiftIntent.allCases) { intent in
+                            Button(intent.label) {
+                                state.intent = intent
+                                state.intentIsConfirmed = true
+                                state.registerUpdate("Prioritizing \(intent.label.lowercased()) gifts")
+                            }
+                        }
+                    } label: {
+                        dockPill(state.intent.label, confirmed: state.intentIsConfirmed)
+                    }
+                }
+            }
+
+            Button {
+                HapticFeedback.light.fire()
+                state.showsTuning = true
+            } label: {
+                Image(systemName: "slider.horizontal.3")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Color(hex: "#392657"))
+                    .frame(width: 38, height: 38)
+                    .background(.white, in: Circle())
+            }
+            .buttonStyle(PressScaleButtonStyle())
+            .accessibilityLabel("Tune Leon’s gift guide")
+        }
+        .padding(6)
+        .background(.black.opacity(0.72), in: Capsule())
+        .overlay {
+            Capsule().strokeBorder(.white.opacity(0.18), lineWidth: 0.5)
+        }
+        .shadow(color: .black.opacity(0.22), radius: 16, y: 8)
+    }
+
+    private func dockPill(_ title: String, confirmed: Bool) -> some View {
+        HStack(spacing: GravitySpacing.space4) {
+            Text(title)
+            Image(systemName: confirmed ? "checkmark" : "sparkles")
+                .font(.system(size: 8, weight: .bold))
+        }
+        .font(GravityFont.semiBold.fixedFont(size: 11))
+        .foregroundStyle(.white)
+        .padding(.horizontal, GravitySpacing.space10)
+        .frame(height: 38)
+        .background(.white.opacity(confirmed ? 0.16 : 0.09), in: Capsule())
+    }
+}
+
+enum GiftSetting: String, CaseIterable, Identifiable {
     case indoors
     case both
     case outdoors
@@ -476,7 +754,7 @@ private enum GiftSetting: String, CaseIterable, Identifiable {
     }
 }
 
-private enum GiftIntent: String, CaseIterable, Identifiable {
+enum GiftIntent: String, CaseIterable, Identifiable {
     case fun
     case useful
     case together

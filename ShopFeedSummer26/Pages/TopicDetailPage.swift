@@ -34,6 +34,7 @@ struct TopicDetailPage: View {
     @State private var sampledSurfaceColor: DominantVideoColor?
     @State private var selectedExploreFilter = "All"
     @State private var presentedAssortment: TopicPresentedAssortment?
+    @State private var giftGuideState = GiftGuidePrototypeState()
     init(
         story: FeedStory,
         merchants: [SampleMerchant],
@@ -349,6 +350,17 @@ struct TopicDetailPage: View {
                 compactNavigationHeader(width: geometry.size.width)
                     .opacity(showsControls ? 1 : 0)
                     .zIndex(10)
+                if topicPresentation.usesGiftGuidePrototype {
+                    GiftGuideSteeringDock(state: giftGuideState)
+                        .padding(.horizontal, GravitySpacing.space12)
+                        .padding(.bottom, GravitySpacing.space16)
+                        .frame(
+                            width: geometry.size.width,
+                            height: geometry.size.height,
+                            alignment: .bottom
+                        )
+                        .zIndex(20)
+                }
             }
         }
         .ignoresSafeArea()
@@ -566,7 +578,7 @@ struct TopicDetailPage: View {
     @ViewBuilder
     private func merchandising(containerWidth: CGFloat) -> some View {
         if topicPresentation.usesGiftGuidePrototype {
-            GiftGuidePrototypeContent(products: products)
+            GiftGuidePrototypeContent(products: products, state: giftGuideState)
         } else {
             VStack(alignment: .leading, spacing: pageRecipe.sectionSpacing) {
                 ForEach(Array(pageRecipe.blocks.enumerated()), id: \.offset) { _, block in
