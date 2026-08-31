@@ -351,10 +351,7 @@ struct TopicDetailPage: View {
                     .opacity(showsControls ? 1 : 0)
                     .zIndex(10)
                 if topicPresentation.usesGiftGuidePrototype {
-                    GiftGuideSteeringDock(
-                        state: giftGuideState,
-                        surfaceColor: surfaceColor
-                    )
+                    GiftGuideSteeringDock(state: giftGuideState)
                         .padding(.bottom, 28)
                         .frame(
                             width: geometry.size.width,
@@ -954,27 +951,25 @@ struct TopicDetailPage: View {
                 .scaleEffect(1 - (0.08 * closeMorphProgress))
 
                 Circle()
-                    .fill(surfaceColor.opacity(0.16))
-                    .overlay { Circle().fill(.black.opacity(0.22)) }
-                    .overlay { Circle().fill(.white.opacity(0.04)) }
+                    .fill(.white.opacity(0.48))
                     .clipShape(Circle())
                     .glassEffect(.regular, in: .circle)
                     .overlay {
-                        Circle().strokeBorder(.white.opacity(0.26), lineWidth: 0.5)
+                        Circle().strokeBorder(.white.opacity(0.36), lineWidth: 0.5)
                     }
                     .opacity(closeMorphProgress)
 
                 Image(systemName: "xmark")
                     .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.black.opacity(0.82))
                     .opacity(closeMorphProgress)
                     .scaleEffect(0.72 + (0.28 * closeMorphProgress))
             }
-            .frame(width: 56, height: 56)
+            .frame(width: FeedNavigationStyle.controlSize, height: FeedNavigationStyle.controlSize)
             .contentShape(Circle())
         }
         .buttonStyle(PressScaleButtonStyle())
-        .padding(.leading, GravitySpacing.space8)
+        .padding(.leading, GravitySpacing.space16)
         .accessibilityLabel("Close")
     }
     private var heroFeedbackPill: some View {

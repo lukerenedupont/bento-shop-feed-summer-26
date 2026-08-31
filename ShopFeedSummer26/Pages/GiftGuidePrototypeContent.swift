@@ -19,11 +19,6 @@ final class GiftGuidePrototypeState {
     var appliedNote = ""
     var updateToken = 0
     var deckIndex = 0
-    var remainingConfirmations: Int {
-        [ageIsConfirmed, settingIsConfirmed, budgetIsConfirmed, intentIsConfirmed]
-            .filter { !$0 }.count
-    }
-
     func registerUpdate(_: String) {
         HapticFeedback.light.fire()
         updateToken += 1
@@ -107,9 +102,6 @@ struct GiftGuidePrototypeContent: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 30) {
-            recipientBrief
-                .padding(.horizontal, GravitySpacing.space12)
-
             leadSection
 
             giftRoutes
@@ -164,37 +156,6 @@ struct GiftGuidePrototypeContent: View {
             .presentationDragIndicator(.visible)
             .environment(\.colorScheme, .light)
         }
-    }
-
-    private var recipientBrief: some View {
-        HStack(spacing: GravitySpacing.space12) {
-            VStack(alignment: .leading, spacing: GravitySpacing.space2) {
-                Text("For Leon")
-                    .font(GravityFont.expressiveBold.fixedFont(size: 21))
-                    .tracking(-0.5)
-                Text(state.remainingConfirmations == 0
-                     ? "Gift preferences confirmed"
-                     : "\(state.remainingConfirmations) preferences to tune")
-                    .font(GravityFont.medium.fixedFont(size: 12))
-                    .foregroundStyle(.white.opacity(0.58))
-            }
-            Spacer()
-            Button {
-                HapticFeedback.light.fire()
-                showsTuning = true
-            } label: {
-                Text("Edit")
-                    .font(GravityFont.semiBold.fixedFont(size: 13))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, GravitySpacing.space12)
-                    .frame(height: 34)
-                    .background(.white.opacity(0.12), in: Capsule())
-            }
-            .buttonStyle(PressScaleButtonStyle())
-        }
-        .foregroundStyle(.white)
-        .padding(14)
-        .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: GravityRadius.r20, style: .continuous))
     }
 
     private var leadSection: some View {
@@ -557,17 +518,13 @@ struct GiftGuidePrototypeContent: View {
 
 struct GiftGuideSteeringDock: View {
     @Bindable var state: GiftGuidePrototypeState
-    let surfaceColor: Color
 
     var body: some View {
-        ZStack {
+        HStack(spacing: GravitySpacing.space8) {
             filterBar
-            HStack {
-                Spacer()
-                assistantMenu
-            }
-            .padding(.horizontal, 20)
+            assistantMenu
         }
+        .padding(.horizontal, GravitySpacing.space10)
         .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56)
         .sheet(isPresented: $state.showsVoiceMode) {
             GiftGuideVoiceMode()
@@ -589,7 +546,7 @@ struct GiftGuideSteeringDock: View {
             } label: {
                 dockPill(
                     "Age \(Int(state.age))",
-                    width: 54,
+                    width: 74,
                     confirmed: state.ageIsConfirmed
                 )
             }
@@ -606,7 +563,7 @@ struct GiftGuideSteeringDock: View {
             } label: {
                 dockPill(
                     settingDockLabel,
-                    width: 64,
+                    width: 74,
                     confirmed: state.settingIsConfirmed
                 )
             }
@@ -623,7 +580,7 @@ struct GiftGuideSteeringDock: View {
             } label: {
                 dockPill(
                     "$\(Int(state.budget))",
-                    width: 58,
+                    width: 74,
                     confirmed: state.budgetIsConfirmed
                 )
             }
@@ -646,7 +603,7 @@ struct GiftGuideSteeringDock: View {
             }
             .accessibilityLabel("Gift intent")
         }
-        .frame(width: 262, height: 56)
+        .frame(width: 308, height: 56)
     }
 
     private var assistantMenu: some View {
@@ -666,21 +623,18 @@ struct GiftGuideSteeringDock: View {
         } label: {
             Image(systemName: "waveform")
                 .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(.black.opacity(0.82))
                 .frame(
                     width: 56,
                     height: 56
                 )
                 .background {
-                    Circle()
-                        .fill(surfaceColor.opacity(0.16))
-                        .overlay { Circle().fill(.black.opacity(0.22)) }
-                        .overlay { Circle().fill(.white.opacity(0.04)) }
+                    Circle().fill(.white.opacity(0.48))
                 }
                 .clipShape(Circle())
                 .glassEffect(.regular, in: .circle)
                 .overlay {
-                    Circle().strokeBorder(.white.opacity(0.26), lineWidth: 0.5)
+                    Circle().strokeBorder(.white.opacity(0.36), lineWidth: 0.5)
                 }
         }
         .buttonStyle(PressScaleButtonStyle(scale: 0.9))
@@ -707,18 +661,15 @@ struct GiftGuideSteeringDock: View {
     private func dockPill(_ title: String, width: CGFloat, confirmed: Bool) -> some View {
         Text(title)
             .font(GravityFont.semiBold.fixedFont(size: 12))
-            .foregroundStyle(.white.opacity(confirmed ? 1 : 0.78))
-            .frame(width: width, height: 56)
+            .foregroundStyle(.black.opacity(confirmed ? 0.82 : 0.58))
+            .frame(minWidth: width, minHeight: 56, maxHeight: 56)
             .background {
-                Capsule()
-                    .fill(surfaceColor.opacity(0.16))
-                    .overlay { Capsule().fill(.black.opacity(0.22)) }
-                    .overlay { Capsule().fill(.white.opacity(0.04)) }
+                Capsule().fill(.white.opacity(0.48))
             }
             .clipShape(Capsule())
             .glassEffect(.regular, in: .capsule)
             .overlay {
-                Capsule().strokeBorder(.white.opacity(0.26), lineWidth: 0.5)
+                Capsule().strokeBorder(.white.opacity(0.36), lineWidth: 0.5)
             }
     }
 }
