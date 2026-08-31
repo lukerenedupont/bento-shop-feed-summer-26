@@ -359,7 +359,24 @@ struct TopicRecentPostCard: View {
     let post: ShopPost
     var ageLabel = "4m ago"
 
-    private var previewURL: URL? { post.media.previewURL }
+    @ViewBuilder
+    private var media: some View {
+        switch post.media {
+        case let .video(url, _, _, _):
+            LoopingVideoPlayer(
+                url: url,
+                playbackGroupID: "topic-recent-post-\(post.id)"
+            )
+        case let .image(url, _, _):
+            CachedAsyncImage(url: url) { phase in
+                if case let .success(image) = phase {
+                    image.resizable().scaledToFill()
+                } else {
+                    Color.white.opacity(0.08)
+                }
+            }
+        }
+    }
 
     var body: some View {
         Button {
@@ -367,19 +384,7 @@ struct TopicRecentPostCard: View {
             guard let actionURL = post.actionURL else { return }
             UIApplication.shared.open(actionURL)
         } label: {
-            Group {
-                if let previewURL {
-                    CachedAsyncImage(url: previewURL) { phase in
-                        if case let .success(image) = phase {
-                            image.resizable().scaledToFill()
-                        } else {
-                            Color.white.opacity(0.08)
-                        }
-                    }
-                } else {
-                    Color.white.opacity(0.08)
-                }
-            }
+            media
             .frame(width: 148, height: 219)
             .clipped()
             .overlay(alignment: .bottomLeading) {

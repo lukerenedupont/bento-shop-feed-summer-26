@@ -103,11 +103,13 @@ struct TopicDetailPage: View {
     private var recentPosts: [ShopPost] {
         let merchantNames = Set(relatedMerchants.map { normalizedMerchantName($0.displayName) })
         let verified = postService.posts(for: BuyerPreviewStore.shared.selected)
-            .filter { $0.media.previewURL != nil }
+            .filter { $0.media.isVideo || $0.media.previewURL != nil }
         let topicMatches = verified.filter {
             merchantNames.contains(normalizedMerchantName($0.merchant.name))
         }
-        return Array((topicMatches.isEmpty ? verified : topicMatches).prefix(6))
+        let topicMatchIDs = Set(topicMatches.map(\.id))
+        let remainingPosts = verified.filter { !topicMatchIDs.contains($0.id) }
+        return Array((topicMatches + remainingPosts).prefix(6))
     }
     private func normalizedMerchantName(_ value: String) -> String {
         value

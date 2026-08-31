@@ -48,7 +48,15 @@ final class ShopPostService {
     /// User-supplied social media guarantees that both post presentations can
     /// be reviewed even when Shop authentication is absent.
     private var bundledPrototypePosts: [ShopPost] {
-        [bundledHouseOfErrorsPost, bundledKithPost].compactMap { $0 }
+        [
+            bundledHouseOfErrorsPost,
+            bundledKithPost,
+            bundledRCOutdoorPost,
+            bundledSenvolerPost,
+            bundledFuumuuPost,
+            bundledOlendPost,
+            bundledCarawayPost,
+        ].compactMap { $0 }
     }
 
     private var bundledHouseOfErrorsPost: ShopPost? {
@@ -104,6 +112,100 @@ final class ShopPostService {
                 .init(merchantID: "kith", productID: 8_286_188_830_848),
                 .init(merchantID: "kith", productID: 8_286_188_863_616),
             ],
+            actionURL: nil
+        )
+    }
+
+    private var bundledRCOutdoorPost: ShopPost? {
+        bundledVideoPost(
+            resource: "rcout-knit",
+            id: "prototype-rcout-winter-knit",
+            title: "Winter layers",
+            caption: "Cold-weather knitwear from RC Outdoor Supply.",
+            merchantID: "rc-outdoor-supply",
+            merchantName: "RC Outdoor Supply",
+            width: 540,
+            height: 960
+        )
+    }
+
+    private var bundledSenvolerPost: ShopPost? {
+        bundledVideoPost(
+            resource: "senvoler-collab",
+            id: "prototype-senvoler-artist-collab",
+            title: "Artist collaboration",
+            caption: "The latest collaborative pieces from S’ENVOLER.",
+            merchantID: "senvoler",
+            merchantName: "S’ENVOLER",
+            width: 540,
+            height: 960
+        )
+    }
+
+    private var bundledFuumuuPost: ShopPost? {
+        bundledVideoPost(
+            resource: "fuumuu-painting",
+            id: "prototype-fuumuu-studio",
+            title: "Inside the studio",
+            caption: "Painting in progress with Fuumuu.",
+            merchantID: "fuumuu",
+            merchantName: "Fuumuu",
+            width: 540,
+            height: 960
+        )
+    }
+
+    private var bundledOlendPost: ShopPost? {
+        bundledVideoPost(
+            resource: "olend-travel",
+            id: "prototype-olend-travel",
+            title: "Made to travel",
+            caption: "Everyday travel essentials from Ölend.",
+            merchantID: "olend",
+            merchantName: "Ölend",
+            width: 540,
+            height: 960
+        )
+    }
+
+    private var bundledCarawayPost: ShopPost? {
+        bundledVideoPost(
+            resource: "caraway-feed",
+            id: "prototype-caraway-table",
+            title: "Around the table",
+            caption: "A new table setting from Caraway.",
+            merchantID: "caraway",
+            merchantName: "Caraway",
+            width: 540,
+            height: 646
+        )
+    }
+
+    private func bundledVideoPost(
+        resource: String,
+        id: String,
+        title: String,
+        caption: String,
+        merchantID: String,
+        merchantName: String,
+        width: Int,
+        height: Int
+    ) -> ShopPost? {
+        guard let videoURL = Bundle.main.url(forResource: resource, withExtension: "mp4") else {
+            return nil
+        }
+        return ShopPost(
+            id: id,
+            title: title,
+            caption: caption,
+            subtitle: nil,
+            media: .video(url: videoURL, posterURL: nil, width: width, height: height),
+            merchant: ShopPost.Merchant(
+                id: merchantID,
+                name: merchantName,
+                logoURL: nil,
+                websiteURL: nil
+            ),
             actionURL: nil
         )
     }
