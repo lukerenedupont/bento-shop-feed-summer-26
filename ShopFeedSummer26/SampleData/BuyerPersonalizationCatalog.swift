@@ -153,6 +153,8 @@ enum BuyerPersonalizationCatalog {
             keys: ["gift", "son", "kids", "outdoors", "creative", "design"],
             accent: "#392657",
             products: [
+                ref("tin-can-kids", 14660544102765),
+                ref("pollen-robotics", 399001),
                 ref("nocs", 9696975585559),
                 ref("moma", 9686879502566),
                 ref("moma", 9727956189414),
@@ -305,6 +307,40 @@ enum BuyerPersonalizationCatalog {
     ]
 
     static let merchants: [SampleMerchant] = [
+        merchant(id: "tin-can-kids", name: "Tin Can", domain: "tincan.kids", color: "#20A7A5", products: [
+            product(
+                14660544102765,
+                "Tin Can",
+                "100.00",
+                "tin-can",
+                "Tin Can",
+                [
+                    "https://cdn.shopify.com/s/files/1/0890/0296/7405/files/2026-06-Product-Photo-01-AnswerMeAquamarine-Master-1200x810-Web-V2-TP.png?v=1781022408",
+                    "https://tincan.kids/cdn/shop/files/2026-06-Website-Hero-Photo-mobile.jpg?v=1781018822&width=1200",
+                ],
+                shopURL: "https://tincan.kids/products/tin-can",
+                tags: ["gift", "kids", "communication", "screen-free", "useful"],
+                description: "A Wi-Fi landline for kids with no screens, texting, or strangers—only approved contacts and real conversation."
+            ),
+        ]),
+        merchant(id: "pollen-robotics", name: "Pollen Robotics", domain: "pollen-robotics.com", color: "#F2C94C", products: [
+            product(
+                399001,
+                "MicroDuck open-source robot",
+                "399.00",
+                "microduck",
+                "Pollen Robotics",
+                [
+                    "https://pollen-robotics.com/assets/microduck/pack-robot.webp",
+                    "https://pollen-robotics.com/assets/microduck/gallery/playtime.webp",
+                    "https://pollen-robotics.com/assets/microduck/squad.webp",
+                ],
+                shopURL: "https://pollen-robotics.com/microduck/",
+                tags: ["gift", "kids", "robot", "coding", "creative", "together"],
+                description: "A 25 cm biped robot with 15 motors, a camera, LiDAR, a grasping beak, and an open-source stack for teaching it new behaviours.",
+                videoURL: "https://pollen-robotics.com/assets/microduck/microduck-hero.mp4"
+            ),
+        ]),
         merchant(id: "color-wow", name: "Color Wow", domain: "colorwowhair.com", color: "#6A5047", products: [
             product(7023026405568, "Pop & Lock High Gloss Finish", "24.00", "pop-and-lock-frizzy-control-serum", "Color Wow", [
                 "https://cdn.shopify.com/s/files/1/0587/5210/6688/products/CW513_PopLock_55ml_2048x2048_101f6f21-9fb3-4348-8ba5-95b65a10a889.jpg?v=1664904611",
@@ -701,7 +737,11 @@ enum BuyerPersonalizationCatalog {
         _ price: String,
         _ handle: String,
         _ vendor: String,
-        _ images: [String]
+        _ images: [String],
+        shopURL: String? = nil,
+        tags: [String] = ["canonical-catalog"],
+        description: String? = nil,
+        videoURL: String? = nil
     ) -> SampleMerchant.Product {
         SampleMerchant.Product(
             id: id,
@@ -711,13 +751,13 @@ enum BuyerPersonalizationCatalog {
             productType: nil,
             vendor: vendor,
             imageURL: images.first,
-            shopURL: nil,
-            tags: ["canonical-catalog"],
+            shopURL: shopURL,
+            tags: tags,
             allImageURLs: images,
             currencyCode: "USD",
-            productDescription: nil,
-            videoUrl: nil,
-            allVideoURLs: []
+            productDescription: description,
+            videoUrl: videoURL,
+            allVideoURLs: videoURL.map { [$0] } ?? []
         )
     }
 }

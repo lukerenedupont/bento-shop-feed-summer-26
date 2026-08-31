@@ -8,9 +8,12 @@ struct GiftGuidePrototypeContent: View {
     @Environment(NavigationCoordinator.self) private var coordinator
     @State private var showsTuning = false
     @State private var age = 10.0
+    @State private var ageIsConfirmed = false
     @State private var setting = GiftSetting.both
+    @State private var settingIsConfirmed = false
     @State private var budget = 150.0
     @State private var intent = GiftIntent.surprise
+    @State private var intentIsConfirmed = false
     @State private var note = ""
     @State private var appliedNote = ""
     @State private var updateToken = 0
@@ -20,7 +23,12 @@ struct GiftGuidePrototypeContent: View {
     }
 
     private var leadProducts: [ResolvedStoryProduct] {
-        Array(rankedProducts.prefix(3))
+        let anchorMerchantIDs = ["tin-can-kids", "pollen-robotics"]
+        let anchors = anchorMerchantIDs.compactMap { merchantID in
+            products.first { $0.merchant.id == merchantID }
+        }
+        let anchorIDs = Set(anchors.map(\.id))
+        return Array((anchors + rankedProducts.filter { !anchorIDs.contains($0.id) }).prefix(3))
     }
 
     private var withinBudget: [ResolvedStoryProduct] {
@@ -41,7 +49,7 @@ struct GiftGuidePrototypeContent: View {
 
             leadSection
 
-            quickSteer
+            progressivePrompt
                 .padding(.horizontal, GravitySpacing.space12)
 
             productRail(
@@ -49,9 +57,6 @@ struct GiftGuidePrototypeContent: View {
                 subtitle: setting.sectionSubtitle,
                 products: rankedProducts
             )
-
-            intentPrompt
-                .padding(.horizontal, GravitySpacing.space12)
 
             productRail(
                 title: budgetTitle,
@@ -80,7 +85,12 @@ struct GiftGuidePrototypeContent: View {
                 budget: $budget,
                 intent: $intent,
                 note: $note,
-                apply: applyTuning
+                apply: {
+                    ageIsConfirmed = true
+                    settingIsConfirmed = true
+                    intentIsConfirmed = true
+                    applyTuning()
+                }
             )
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
@@ -89,19 +99,19 @@ struct GiftGuidePrototypeContent: View {
     }
 
     private var recipientBrief: some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: GravitySpacing.space4) {
-                    Text("FOR YOUR SON")
-                        .font(GravityFont.semiBold.fixedFont(size: 11))
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            HStack {
+                VStack(alignment: .leading, spacing: GravitySpacing.space2) {
+                    Text("GIFT BRIEF")
+                        .font(GravityFont.semiBold.fixedFont(size: 10))
                         .tracking(1.2)
-                        .foregroundStyle(.white.opacity(0.62))
-                    Text("A guide that changes with him")
-                        .font(GravityFont.expressiveBold.fixedFont(size: 25))
-                        .tracking(-0.7)
+                        .foregroundStyle(.white.opacity(0.58))
+                    Text("For your son")
+                        .font(GravityFont.expressiveBold.fixedFont(size: 21))
+                        .tracking(-0.5)
                         .foregroundStyle(.white)
                 }
-                Spacer(minLength: GravitySpacing.space8)
+                Spacer()
                 Button {
                     HapticFeedback.light.fire()
                     showsTuning = true
@@ -110,41 +120,33 @@ struct GiftGuidePrototypeContent: View {
                         .font(GravityFont.semiBold.fixedFont(size: 13))
                         .foregroundStyle(Color(hex: "#392657"))
                         .padding(.horizontal, GravitySpacing.space12)
-                        .frame(height: 36)
+                        .frame(height: 34)
                         .background(.white, in: Capsule())
                 }
                 .buttonStyle(PressScaleButtonStyle())
             }
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: GravitySpacing.space6) {
-                    briefChip("Age \(Int(age))", confirmed: true)
-                    briefChip(setting.label, confirmed: true)
-                    briefChip(intent.label, confirmed: true)
-                    briefChip("Under $\(Int(budget))", confirmed: true)
-                    if !appliedNote.isEmpty {
-                        briefChip(appliedNote, confirmed: false)
-                    }
-                }
+            HStack(spacing: GravitySpacing.space6) {
+                briefChip("Age \(Int(age))\(ageIsConfirmed ? "" : "?")", confirmed: ageIsConfirmed)
+                briefChip(setting.label, confirmed: settingIsConfirmed)
+                briefChip("Under $\(Int(budget))", confirmed: true)
             }
 
-            Text("Everything below is being ranked for this brief. Change one detail and the whole guide responds.")
-                .font(GravityFont.regular.fixedFont(size: 13))
-                .foregroundStyle(.white.opacity(0.72))
-                .lineSpacing(2)
+            if !appliedNote.isEmpty {
+                HStack(spacing: GravitySpacing.space4) {
+                    Image(systemName: "sparkles")
+                    Text(appliedNote)
+                        .lineLimit(1)
+                }
+                .font(GravityFont.medium.fixedFont(size: 12))
+                .foregroundStyle(.white.opacity(0.76))
+            }
         }
-        .padding(GravitySpacing.space16)
-        .background(
-            LinearGradient(
-                colors: [Color(hex: "#7455A2"), Color(hex: "#4A316E")],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ),
-            in: RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous)
-        )
+        .padding(14)
+        .background(.white.opacity(0.10), in: RoundedRectangle(cornerRadius: GravityRadius.r24, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous)
-                .strokeBorder(.white.opacity(0.14), lineWidth: 0.5)
+            RoundedRectangle(cornerRadius: GravityRadius.r24, style: .continuous)
+                .strokeBorder(.white.opacity(0.12), lineWidth: 0.5)
         }
     }
 
@@ -163,11 +165,11 @@ struct GiftGuidePrototypeContent: View {
 
     private var leadSection: some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space12) {
-            sectionHeading("Three places to start", subtitle: leadSubtitle)
+            sectionHeading("Shop’s take", subtitle: "Start with connection, then leave room for wonder")
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: GravitySpacing.space10) {
                     ForEach(Array(leadProducts.enumerated()), id: \.element.id) { index, item in
-                        leadCard(item, label: ["BEST MATCH", "UNEXPECTED PICK", "DO IT TOGETHER"][index])
+                        leadCard(item, label: leadLabel(for: item, index: index))
                     }
                 }
                 .padding(.horizontal, GravitySpacing.space12)
@@ -180,9 +182,19 @@ struct GiftGuidePrototypeContent: View {
     private func leadCard(_ item: ResolvedStoryProduct, label: String) -> some View {
         Button { open(item) } label: {
             ZStack(alignment: .bottomLeading) {
-                ProductImageView(product: item.product, merchant: item.merchant)
-                    .frame(width: 286, height: 342)
-                    .clipped()
+                Group {
+                    if let rawVideoURL = item.product.videoUrl,
+                       let videoURL = URL(string: rawVideoURL) {
+                        LoopingVideoPlayer(
+                            url: videoURL,
+                            playbackGroupID: "gift-lead-\(item.id)"
+                        )
+                    } else {
+                        ProductImageView(product: item.product, merchant: item.merchant)
+                    }
+                }
+                .frame(width: 286, height: 342)
+                .clipped()
                 LinearGradient(
                     colors: [.clear, .black.opacity(0.12), .black.opacity(0.78)],
                     startPoint: .top,
@@ -214,17 +226,53 @@ struct GiftGuidePrototypeContent: View {
         .buttonStyle(PressScaleButtonStyle())
     }
 
-    private var quickSteer: some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space10) {
-            Text("Which sounds more like him?")
-                .font(GravityFont.bold.fixedFont(size: 18))
-                .tracking(-0.35)
-                .foregroundStyle(.white)
-            HStack(spacing: GravitySpacing.space6) {
-                ForEach(GiftSetting.allCases) { option in
-                    steerButton(option.label, selected: setting == option) {
-                        setting = option
-                        registerUpdate()
+    private var progressivePrompt: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            HStack {
+                VStack(alignment: .leading, spacing: GravitySpacing.space2) {
+                    Text(promptEyebrow)
+                        .font(GravityFont.semiBold.fixedFont(size: 10))
+                        .tracking(1.1)
+                        .foregroundStyle(.white.opacity(0.52))
+                    Text(promptTitle)
+                        .font(GravityFont.bold.fixedFont(size: 18))
+                        .tracking(-0.35)
+                        .foregroundStyle(.white)
+                }
+                Spacer()
+                Text(promptProgress)
+                    .font(GravityFont.medium.fixedFont(size: 11))
+                    .foregroundStyle(.white.opacity(0.48))
+            }
+
+            if !ageIsConfirmed {
+                HStack(spacing: GravitySpacing.space6) {
+                    ForEach([7, 10, 13, 16], id: \.self) { option in
+                        steerButton("\(option)", selected: Int(age) == option && ageIsConfirmed) {
+                            age = Double(option)
+                            ageIsConfirmed = true
+                            registerUpdate()
+                        }
+                    }
+                }
+            } else if !settingIsConfirmed {
+                HStack(spacing: GravitySpacing.space6) {
+                    ForEach(GiftSetting.allCases) { option in
+                        steerButton(option.label, selected: setting == option && settingIsConfirmed) {
+                            setting = option
+                            settingIsConfirmed = true
+                            registerUpdate()
+                        }
+                    }
+                }
+            } else {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: 2), spacing: 6) {
+                    ForEach(GiftIntent.allCases) { option in
+                        steerButton(option.label, selected: intent == option && intentIsConfirmed) {
+                            intent = option
+                            intentIsConfirmed = true
+                            registerUpdate()
+                        }
                     }
                 }
             }
@@ -233,23 +281,22 @@ struct GiftGuidePrototypeContent: View {
         .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: GravityRadius.r24, style: .continuous))
     }
 
-    private var intentPrompt: some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
-            Text("What should the gift feel like?")
-                .font(GravityFont.bold.fixedFont(size: 18))
-                .tracking(-0.35)
-                .foregroundStyle(.white)
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: 2), spacing: 6) {
-                ForEach(GiftIntent.allCases) { option in
-                    steerButton(option.label, selected: intent == option) {
-                        intent = option
-                        registerUpdate()
-                    }
-                }
-            }
-        }
-        .padding(GravitySpacing.space16)
-        .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: GravityRadius.r24, style: .continuous))
+    private var promptEyebrow: String {
+        if !ageIsConfirmed { return "ONE QUICK CHECK" }
+        if !settingIsConfirmed { return "GETTING CLOSER" }
+        return "SHAPE THE SURPRISE"
+    }
+
+    private var promptTitle: String {
+        if !ageIsConfirmed { return "How old is he?" }
+        if !settingIsConfirmed { return "Which sounds more like him?" }
+        return "What should the gift feel like?"
+    }
+
+    private var promptProgress: String {
+        if !ageIsConfirmed { return "1 of 3" }
+        if !settingIsConfirmed { return "2 of 3" }
+        return "3 of 3"
     }
 
     private func steerButton(_ title: String, selected: Bool, action: @escaping () -> Void) -> some View {
@@ -334,6 +381,14 @@ struct GiftGuidePrototypeContent: View {
         .buttonStyle(PressScaleButtonStyle())
     }
 
+    private func leadLabel(for item: ResolvedStoryProduct, index: Int) -> String {
+        switch item.merchant.id {
+        case "tin-can-kids": "OUR STARTING POINT"
+        case "pollen-robotics": "THE DELIGHT PICK"
+        default: index == 2 ? "ONE TO DO TOGETHER" : "A STRONG MATCH"
+        }
+    }
+
     private var leadSubtitle: String {
         "For an \(Int(age))-year-old who is \(setting.description.lowercased())"
     }
@@ -347,14 +402,14 @@ struct GiftGuidePrototypeContent: View {
         var value = price(of: item) <= budget ? 24 : -12
         if setting == .outdoors && ["nocs", "outdoor", "binocular", "field"].contains(where: text.contains) { value += 70 }
         if setting == .indoors && ["design", "comic", "craft", "watch", "puzzle"].contains(where: text.contains) { value += 70 }
-        if setting == .both && ["nocs", "craft", "comic", "watch"].contains(where: text.contains) { value += 34 }
+        if setting == .both && ["nocs", "craft", "comic", "watch", "robot", "screen-free"].contains(where: text.contains) { value += 34 }
         if age <= 8 && ["puzzle", "craft"].contains(where: text.contains) { value += 45 }
         if age >= 12 && ["watch", "comic", "design"].contains(where: text.contains) { value += 42 }
         switch intent {
-        case .fun where ["puzzle", "neon", "comic"].contains(where: text.contains): value += 34
-        case .useful where ["watch", "binocular", "clock"].contains(where: text.contains): value += 34
-        case .together where ["field", "craft", "puzzle"].contains(where: text.contains): value += 34
-        case .surprise where ["ring", "neon", "comic"].contains(where: text.contains): value += 34
+        case .fun where ["puzzle", "neon", "comic", "robot"].contains(where: text.contains): value += 34
+        case .useful where ["watch", "binocular", "clock", "communication", "screen-free"].contains(where: text.contains): value += 34
+        case .together where ["field", "craft", "puzzle", "coding", "robot"].contains(where: text.contains): value += 34
+        case .surprise where ["ring", "neon", "comic", "robot"].contains(where: text.contains): value += 34
         default: break
         }
         return value

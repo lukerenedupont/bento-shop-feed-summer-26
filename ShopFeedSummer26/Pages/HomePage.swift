@@ -7,7 +7,13 @@ import UIKit
 struct HomePage: View {
     private static let bundledMerchantSnapshot = LocalMerchantService.loadMerchants()
     private static let personalizedMerchantSnapshot = BuyerPersonalizationCatalog.merchants.filter {
-        ["city-lights-sf", "kith", "sneaker-politics"].contains($0.id)
+        [
+            "city-lights-sf",
+            "kith",
+            "pollen-robotics",
+            "sneaker-politics",
+            "tin-can-kids",
+        ].contains($0.id)
     }
     private static let initialMerchantSnapshot = LocalMerchantService.mergeMerchants([
         bundledMerchantSnapshot,

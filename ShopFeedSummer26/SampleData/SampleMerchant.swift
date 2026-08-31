@@ -91,7 +91,13 @@ struct SampleMerchant: Identifiable {
             ? (bundledSnapshot.isEmpty ? previews : bundledSnapshot)
             : live
         let baseIDs = Set(base.map(\.id))
-        let supplementalMerchantIDs = Set(["city-lights-sf", "kith", "sneaker-politics"])
+        let supplementalMerchantIDs = Set([
+            "city-lights-sf",
+            "kith",
+            "pollen-robotics",
+            "sneaker-politics",
+            "tin-can-kids",
+        ])
         let supplementalMerchants = BuyerPersonalizationCatalog.merchants.filter {
             supplementalMerchantIDs.contains($0.id) && !baseIDs.contains($0.id)
         }

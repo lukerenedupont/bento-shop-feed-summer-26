@@ -504,7 +504,9 @@ struct TopicDetailPage: View {
                     .lineLimit(3)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityAddTraits(.isHeader)
-                if !topicPresentation.usesExactHeroLayout, !story.subtitle.isEmpty {
+                if !topicPresentation.usesExactHeroLayout,
+                   !topicPresentation.usesGiftGuidePrototype,
+                   !story.subtitle.isEmpty {
                     Text(story.subtitle)
                         .font(GravityFont.medium.fixedFont(size: 17))
                         .tracking(-0.2)
