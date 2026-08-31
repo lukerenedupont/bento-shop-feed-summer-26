@@ -352,7 +352,6 @@ struct TopicDetailPage: View {
                     .zIndex(10)
                 if topicPresentation.usesGiftGuidePrototype {
                     GiftGuideSteeringDock(state: giftGuideState)
-                        .padding(.horizontal, GravitySpacing.space12)
                         .padding(.bottom, 28)
                         .frame(
                             width: geometry.size.width,
