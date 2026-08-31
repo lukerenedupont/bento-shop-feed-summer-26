@@ -320,6 +320,8 @@ private final class SharedVideoPlaybackSession {
     private var clients: [UUID: Bool] = [:]
     private var ownedPlaylistItems = Set<ObjectIdentifier>()
     private var nextPlaylistIndex = 0
+    private var isPrerolling = false
+    private var isPrepared = false
 
     var hasClients: Bool { !clients.isEmpty }
 
@@ -329,13 +331,19 @@ private final class SharedVideoPlaybackSession {
 
         if loops, let onlyURL = urls.first, urls.count == 1 {
             let player = AVQueuePlayer()
+            let item = AVPlayerItem(url: onlyURL)
+            item.preferredForwardBufferDuration = 1
             self.player = player
             self.looper = AVPlayerLooper(
                 player: player,
-                templateItem: AVPlayerItem(url: onlyURL)
+                templateItem: item
             )
         } else {
-            let items = urls.map(AVPlayerItem.init(url:))
+            let items = urls.map { url in
+                let item = AVPlayerItem(url: url)
+                item.preferredForwardBufferDuration = 1
+                return item
+            }
             let player = AVQueuePlayer(items: items)
             self.player = player
             self.ownedPlaylistItems = Set(items.map(ObjectIdentifier.init))
@@ -356,6 +364,7 @@ private final class SharedVideoPlaybackSession {
 
         player.isMuted = true
         player.preventsDisplaySleepDuringVideoPlayback = false
+        player.automaticallyWaitsToMinimizeStalling = false
     }
 
     deinit {
@@ -385,9 +394,28 @@ private final class SharedVideoPlaybackSession {
 
     private func refreshPlayback() {
         if clients.values.contains(true) {
-            player.play()
+            player.cancelPendingPrerolls()
+            isPrerolling = false
+            isPrepared = true
+            player.playImmediately(atRate: 1)
         } else {
             player.pause()
+            prepareFirstFrame()
+        }
+    }
+
+    /// Lazy feed cells near the viewport keep a paused player registered.
+    /// Decode one frame for those cells so focus only toggles playback instead
+    /// of beginning asset preparation after the snap has already completed.
+    private func prepareFirstFrame() {
+        guard !isPrepared, !isPrerolling, player.currentItem != nil else { return }
+        isPrerolling = true
+        player.preroll(atRate: 1) { [weak self] finished in
+            Task { @MainActor in
+                guard let self else { return }
+                self.isPrerolling = false
+                self.isPrepared = finished
+            }
         }
     }
 
