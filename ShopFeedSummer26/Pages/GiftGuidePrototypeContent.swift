@@ -1,0 +1,527 @@
+import SwiftUI
+
+/// PROTOTYPE — A steerable topic that tests whether recipient controls can
+/// make a gift guide feel alive. State is intentionally session-only.
+struct GiftGuidePrototypeContent: View {
+    let products: [ResolvedStoryProduct]
+
+    @Environment(NavigationCoordinator.self) private var coordinator
+    @State private var showsTuning = false
+    @State private var age = 10.0
+    @State private var setting = GiftSetting.both
+    @State private var budget = 150.0
+    @State private var intent = GiftIntent.surprise
+    @State private var note = ""
+    @State private var appliedNote = ""
+    @State private var updateToken = 0
+
+    private var rankedProducts: [ResolvedStoryProduct] {
+        products.sorted { score($0) > score($1) }
+    }
+
+    private var leadProducts: [ResolvedStoryProduct] {
+        Array(rankedProducts.prefix(3))
+    }
+
+    private var withinBudget: [ResolvedStoryProduct] {
+        let matches = rankedProducts.filter { price(of: $0) <= budget }
+        return matches.count >= 2 ? matches : rankedProducts
+    }
+
+    private var sharedActivityProducts: [ResolvedStoryProduct] {
+        rankedProducts.sorted {
+            activityScore($0) > activityScore($1)
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 30) {
+            recipientBrief
+                .padding(.horizontal, GravitySpacing.space12)
+
+            leadSection
+
+            quickSteer
+                .padding(.horizontal, GravitySpacing.space12)
+
+            productRail(
+                title: setting.sectionTitle,
+                subtitle: setting.sectionSubtitle,
+                products: rankedProducts
+            )
+
+            intentPrompt
+                .padding(.horizontal, GravitySpacing.space12)
+
+            productRail(
+                title: budgetTitle,
+                subtitle: "Easy yeses that stay inside the brief",
+                products: withinBudget
+            )
+
+            productRail(
+                title: intent == .together ? "Things you can do together" : "A gift with a story",
+                subtitle: intent == .together
+                    ? "Projects and adventures that become shared time"
+                    : "Distinctive finds from independent shops",
+                products: sharedActivityProducts
+            )
+
+            conversationalRefinement
+                .padding(.horizontal, GravitySpacing.space12)
+        }
+        .padding(.top, GravitySpacing.space8)
+        .padding(.bottom, 140)
+        .animation(.spring(response: 0.38, dampingFraction: 0.88), value: updateToken)
+        .sheet(isPresented: $showsTuning) {
+            GiftGuideTuningSheet(
+                age: $age,
+                setting: $setting,
+                budget: $budget,
+                intent: $intent,
+                note: $note,
+                apply: applyTuning
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
+            .environment(\.colorScheme, .light)
+        }
+    }
+
+    private var recipientBrief: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: GravitySpacing.space4) {
+                    Text("FOR YOUR SON")
+                        .font(GravityFont.semiBold.fixedFont(size: 11))
+                        .tracking(1.2)
+                        .foregroundStyle(.white.opacity(0.62))
+                    Text("A guide that changes with him")
+                        .font(GravityFont.expressiveBold.fixedFont(size: 25))
+                        .tracking(-0.7)
+                        .foregroundStyle(.white)
+                }
+                Spacer(minLength: GravitySpacing.space8)
+                Button {
+                    HapticFeedback.light.fire()
+                    showsTuning = true
+                } label: {
+                    Label("Tune", systemImage: "slider.horizontal.3")
+                        .font(GravityFont.semiBold.fixedFont(size: 13))
+                        .foregroundStyle(Color(hex: "#392657"))
+                        .padding(.horizontal, GravitySpacing.space12)
+                        .frame(height: 36)
+                        .background(.white, in: Capsule())
+                }
+                .buttonStyle(PressScaleButtonStyle())
+            }
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: GravitySpacing.space6) {
+                    briefChip("Age \(Int(age))", confirmed: true)
+                    briefChip(setting.label, confirmed: true)
+                    briefChip(intent.label, confirmed: true)
+                    briefChip("Under $\(Int(budget))", confirmed: true)
+                    if !appliedNote.isEmpty {
+                        briefChip(appliedNote, confirmed: false)
+                    }
+                }
+            }
+
+            Text("Everything below is being ranked for this brief. Change one detail and the whole guide responds.")
+                .font(GravityFont.regular.fixedFont(size: 13))
+                .foregroundStyle(.white.opacity(0.72))
+                .lineSpacing(2)
+        }
+        .padding(GravitySpacing.space16)
+        .background(
+            LinearGradient(
+                colors: [Color(hex: "#7455A2"), Color(hex: "#4A316E")],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ),
+            in: RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous)
+                .strokeBorder(.white.opacity(0.14), lineWidth: 0.5)
+        }
+    }
+
+    private func briefChip(_ title: String, confirmed: Bool) -> some View {
+        HStack(spacing: GravitySpacing.space4) {
+            Text(title)
+            Image(systemName: confirmed ? "checkmark" : "sparkles")
+                .font(.system(size: 9, weight: .bold))
+        }
+        .font(GravityFont.medium.fixedFont(size: 12))
+        .foregroundStyle(.white)
+        .padding(.horizontal, GravitySpacing.space10)
+        .frame(height: 30)
+        .background(.white.opacity(confirmed ? 0.13 : 0.20), in: Capsule())
+    }
+
+    private var leadSection: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            sectionHeading("Three places to start", subtitle: leadSubtitle)
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: GravitySpacing.space10) {
+                    ForEach(Array(leadProducts.enumerated()), id: \.element.id) { index, item in
+                        leadCard(item, label: ["BEST MATCH", "UNEXPECTED PICK", "DO IT TOGETHER"][index])
+                    }
+                }
+                .padding(.horizontal, GravitySpacing.space12)
+                .scrollTargetLayout()
+            }
+            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+        }
+    }
+
+    private func leadCard(_ item: ResolvedStoryProduct, label: String) -> some View {
+        Button { open(item) } label: {
+            ZStack(alignment: .bottomLeading) {
+                ProductImageView(product: item.product, merchant: item.merchant)
+                    .frame(width: 286, height: 342)
+                    .clipped()
+                LinearGradient(
+                    colors: [.clear, .black.opacity(0.12), .black.opacity(0.78)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                VStack(alignment: .leading, spacing: GravitySpacing.space4) {
+                    Text(label)
+                        .font(GravityFont.semiBold.fixedFont(size: 10))
+                        .tracking(1.1)
+                        .foregroundStyle(.white.opacity(0.72))
+                    Text(item.product.title)
+                        .font(GravityFont.bold.fixedFont(size: 19))
+                        .tracking(-0.35)
+                        .lineLimit(2)
+                    HStack {
+                        Text(item.merchant.displayName)
+                        Spacer()
+                        Text(formatPrice(item.product.price))
+                    }
+                    .font(GravityFont.medium.fixedFont(size: 12))
+                    .foregroundStyle(.white.opacity(0.76))
+                }
+                .foregroundStyle(.white)
+                .padding(GravitySpacing.space16)
+            }
+            .frame(width: 286, height: 342)
+            .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous))
+        }
+        .buttonStyle(PressScaleButtonStyle())
+    }
+
+    private var quickSteer: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space10) {
+            Text("Which sounds more like him?")
+                .font(GravityFont.bold.fixedFont(size: 18))
+                .tracking(-0.35)
+                .foregroundStyle(.white)
+            HStack(spacing: GravitySpacing.space6) {
+                ForEach(GiftSetting.allCases) { option in
+                    steerButton(option.label, selected: setting == option) {
+                        setting = option
+                        registerUpdate()
+                    }
+                }
+            }
+        }
+        .padding(GravitySpacing.space16)
+        .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: GravityRadius.r24, style: .continuous))
+    }
+
+    private var intentPrompt: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            Text("What should the gift feel like?")
+                .font(GravityFont.bold.fixedFont(size: 18))
+                .tracking(-0.35)
+                .foregroundStyle(.white)
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: 2), spacing: 6) {
+                ForEach(GiftIntent.allCases) { option in
+                    steerButton(option.label, selected: intent == option) {
+                        intent = option
+                        registerUpdate()
+                    }
+                }
+            }
+        }
+        .padding(GravitySpacing.space16)
+        .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: GravityRadius.r24, style: .continuous))
+    }
+
+    private func steerButton(_ title: String, selected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(GravityFont.semiBold.fixedFont(size: 12))
+                .foregroundStyle(selected ? Color(hex: "#392657") : .white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 38)
+                .background(selected ? Color.white : Color.white.opacity(0.10), in: Capsule())
+        }
+        .buttonStyle(PressScaleButtonStyle())
+    }
+
+    private func productRail(
+        title: String,
+        subtitle: String,
+        products: [ResolvedStoryProduct]
+    ) -> some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            sectionHeading(title, subtitle: subtitle)
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(alignment: .top, spacing: GravitySpacing.space8) {
+                    ForEach(products) { item in
+                        Button { open(item) } label: {
+                            ProductCard(
+                                image: nil,
+                                imageURL: item.product.imageURL,
+                                merchantName: item.merchant.displayName,
+                                productName: item.product.title,
+                                price: formatPrice(item.product.price),
+                                showFavoriteButton: true,
+                                favoriteIconHasContrastShadow: true
+                            )
+                            .frame(width: 132)
+                        }
+                        .buttonStyle(PressScaleButtonStyle())
+                    }
+                }
+                .padding(.horizontal, GravitySpacing.space12)
+            }
+        }
+    }
+
+    private func sectionHeading(_ title: String, subtitle: String) -> some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space2) {
+            Text(title)
+                .font(GravityFont.expressiveBold.fixedFont(size: 21))
+                .tracking(-0.5)
+                .foregroundStyle(.white)
+            Text(subtitle)
+                .font(GravityFont.regular.fixedFont(size: 13))
+                .foregroundStyle(.white.opacity(0.62))
+        }
+        .padding(.horizontal, GravitySpacing.space12)
+    }
+
+    private var conversationalRefinement: some View {
+        Button {
+            HapticFeedback.light.fire()
+            showsTuning = true
+        } label: {
+            HStack(spacing: GravitySpacing.space12) {
+                Image(systemName: "sparkles")
+                    .font(.system(size: 18, weight: .semibold))
+                VStack(alignment: .leading, spacing: GravitySpacing.space2) {
+                    Text("Tell Shop more about him")
+                        .font(GravityFont.bold.fixedFont(size: 16))
+                    Text(appliedNote.isEmpty ? "What is he into lately?" : "“\(appliedNote)”")
+                        .font(GravityFont.regular.fixedFont(size: 13))
+                        .foregroundStyle(.white.opacity(0.62))
+                        .lineLimit(1)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .bold))
+            }
+            .foregroundStyle(.white)
+            .padding(GravitySpacing.space16)
+            .background(.white.opacity(0.10), in: RoundedRectangle(cornerRadius: GravityRadius.r24, style: .continuous))
+        }
+        .buttonStyle(PressScaleButtonStyle())
+    }
+
+    private var leadSubtitle: String {
+        "For an \(Int(age))-year-old who is \(setting.description.lowercased())"
+    }
+
+    private var budgetTitle: String {
+        "Great gifts under $\(Int(budget))"
+    }
+
+    private func score(_ item: ResolvedStoryProduct) -> Int {
+        let text = "\(item.product.title) \(item.merchant.displayName) \(item.product.tags.joined(separator: " "))".lowercased()
+        var value = price(of: item) <= budget ? 24 : -12
+        if setting == .outdoors && ["nocs", "outdoor", "binocular", "field"].contains(where: text.contains) { value += 70 }
+        if setting == .indoors && ["design", "comic", "craft", "watch", "puzzle"].contains(where: text.contains) { value += 70 }
+        if setting == .both && ["nocs", "craft", "comic", "watch"].contains(where: text.contains) { value += 34 }
+        if age <= 8 && ["puzzle", "craft"].contains(where: text.contains) { value += 45 }
+        if age >= 12 && ["watch", "comic", "design"].contains(where: text.contains) { value += 42 }
+        switch intent {
+        case .fun where ["puzzle", "neon", "comic"].contains(where: text.contains): value += 34
+        case .useful where ["watch", "binocular", "clock"].contains(where: text.contains): value += 34
+        case .together where ["field", "craft", "puzzle"].contains(where: text.contains): value += 34
+        case .surprise where ["ring", "neon", "comic"].contains(where: text.contains): value += 34
+        default: break
+        }
+        return value
+    }
+
+    private func activityScore(_ item: ResolvedStoryProduct) -> Int {
+        let text = item.product.title.lowercased()
+        return ["field", "binocular", "craft", "puzzle", "comic"]
+            .reduce(0) { $0 + (text.contains($1) ? 20 : 0) }
+    }
+
+    private func price(of item: ResolvedStoryProduct) -> Double {
+        Double(item.product.price.filter { $0.isNumber || $0 == "." }) ?? .greatestFiniteMagnitude
+    }
+
+    private func open(_ item: ResolvedStoryProduct) {
+        HapticFeedback.light.fire()
+        coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
+    }
+
+    private func registerUpdate() {
+        HapticFeedback.light.fire()
+        updateToken += 1
+    }
+
+    private func applyTuning() {
+        appliedNote = note.trimmingCharacters(in: .whitespacesAndNewlines)
+        showsTuning = false
+        registerUpdate()
+    }
+}
+
+private enum GiftSetting: String, CaseIterable, Identifiable {
+    case indoors
+    case both
+    case outdoors
+
+    var id: Self { self }
+    var label: String {
+        switch self {
+        case .indoors: "Indoors"
+        case .both: "A bit of both"
+        case .outdoors: "Outdoors"
+        }
+    }
+    var description: String {
+        switch self {
+        case .indoors: "mostly indoors"
+        case .both: "into a bit of everything"
+        case .outdoors: "mostly outdoors"
+        }
+    }
+    var sectionTitle: String {
+        switch self {
+        case .indoors: "For his world indoors"
+        case .both: "For wherever the day goes"
+        case .outdoors: "For his next adventure"
+        }
+    }
+    var sectionSubtitle: String {
+        switch self {
+        case .indoors: "Creative, curious, and designed for time at home"
+        case .both: "Things that work at home and out in the world"
+        case .outdoors: "Gear for looking closer and going farther"
+        }
+    }
+}
+
+private enum GiftIntent: String, CaseIterable, Identifiable {
+    case fun
+    case useful
+    case together
+    case surprise
+
+    var id: Self { self }
+    var label: String {
+        switch self {
+        case .fun: "Pure fun"
+        case .useful: "Something useful"
+        case .together: "Do it together"
+        case .surprise: "Surprise me"
+        }
+    }
+}
+
+private struct GiftGuideTuningSheet: View {
+    @Binding var age: Double
+    @Binding var setting: GiftSetting
+    @Binding var budget: Double
+    @Binding var intent: GiftIntent
+    @Binding var note: String
+    let apply: () -> Void
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 28) {
+                    dial(title: "How old is he?", value: "\(Int(age))") {
+                        Slider(value: $age, in: 5...17, step: 1)
+                            .tint(Color(hex: "#7455A2"))
+                    }
+
+                    VStack(alignment: .leading, spacing: GravitySpacing.space10) {
+                        Text("Where does he come alive?")
+                            .font(GravityFont.bold.fixedFont(size: 17))
+                        Picker("Setting", selection: $setting) {
+                            ForEach(GiftSetting.allCases) { Text($0.label).tag($0) }
+                        }
+                        .pickerStyle(.segmented)
+                    }
+
+                    dial(title: "Working budget", value: "Under $\(Int(budget))") {
+                        Slider(value: $budget, in: 25...300, step: 25)
+                            .tint(Color(hex: "#7455A2"))
+                    }
+
+                    VStack(alignment: .leading, spacing: GravitySpacing.space10) {
+                        Text("What should it feel like?")
+                            .font(GravityFont.bold.fixedFont(size: 17))
+                        Picker("Intent", selection: $intent) {
+                            ForEach(GiftIntent.allCases) { Text($0.label).tag($0) }
+                        }
+                        .pickerStyle(.menu)
+                        .tint(Color(hex: "#7455A2"))
+                    }
+
+                    VStack(alignment: .leading, spacing: GravitySpacing.space10) {
+                        Text("What is he into lately?")
+                            .font(GravityFont.bold.fixedFont(size: 17))
+                        TextField("Dinosaurs, making things, camping…", text: $note, axis: .vertical)
+                            .lineLimit(2...4)
+                            .padding(GravitySpacing.space12)
+                            .background(Color.black.opacity(0.05), in: RoundedRectangle(cornerRadius: GravityRadius.r16))
+                    }
+
+                    Button(action: apply) {
+                        Text("Transform this guide")
+                            .font(GravityFont.bold.fixedFont(size: 15))
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(Color(hex: "#5E3C8B"), in: Capsule())
+                    }
+                    .buttonStyle(PressScaleButtonStyle())
+                }
+                .padding(GravitySpacing.space20)
+            }
+            .navigationTitle("Tune his gift guide")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+
+    private func dial<Content: View>(
+        title: String,
+        value: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space10) {
+            HStack {
+                Text(title)
+                    .font(GravityFont.bold.fixedFont(size: 17))
+                Spacer()
+                Text(value)
+                    .font(GravityFont.semiBold.fixedFont(size: 14))
+                    .foregroundStyle(Color(hex: "#5E3C8B"))
+            }
+            content()
+        }
+    }
+}

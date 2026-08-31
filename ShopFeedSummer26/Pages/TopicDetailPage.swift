@@ -561,13 +561,18 @@ struct TopicDetailPage: View {
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
         }
     }
+    @ViewBuilder
     private func merchandising(containerWidth: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: pageRecipe.sectionSpacing) {
-            ForEach(Array(pageRecipe.blocks.enumerated()), id: \.offset) { _, block in
-                blockView(block, containerWidth: containerWidth)
+        if topicPresentation.usesGiftGuidePrototype {
+            GiftGuidePrototypeContent(products: products)
+        } else {
+            VStack(alignment: .leading, spacing: pageRecipe.sectionSpacing) {
+                ForEach(Array(pageRecipe.blocks.enumerated()), id: \.offset) { _, block in
+                    blockView(block, containerWidth: containerWidth)
+                }
             }
+            .padding(.bottom, 120)
         }
-        .padding(.bottom, 120)
     }
     @ViewBuilder
     private func blockView(_ block: TopicPageBlock, containerWidth: CGFloat) -> some View {

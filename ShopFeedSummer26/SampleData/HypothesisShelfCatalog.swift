@@ -4,6 +4,7 @@ import SwiftUI
 /// prototype. The bundled dataset deliberately excludes buyer activity,
 /// prompts, hypotheses, queries, and provenance.
 enum HypothesisShelfCatalog {
+    static let giftGuideStoryID = "luke-gift-guide-for-son"
     static let streetwearStoryID = "shelf-luke-9-streetwear-caps-and-tees"
     static let performanceSneakerStoryID = "shelf-luke-10-performance-sneakers-edit"
 
@@ -257,7 +258,9 @@ enum HypothesisShelfCatalog {
 
     static let stories: [FeedStory] = shelfStories
         + merchantRecommendations.map(\.story)
-        + BuyerPersonalizationCatalog.stories.filter { $0.id == "kyle-argizari-lighting" }
+        + BuyerPersonalizationCatalog.stories.filter {
+            $0.id == "kyle-argizari-lighting" || $0.id == giftGuideStoryID
+        }
 
     static let merchantCollectionPresentations: [MerchantCollectionPresentation] =
         merchantRecommendations.map(\.presentation)
@@ -325,10 +328,12 @@ enum HypothesisShelfCatalog {
         if user.id == "luke" {
             forYouStoryIDs.removeAll { $0 == "kyle-argizari-lighting" }
             forYouStoryIDs.insert("kyle-argizari-lighting", at: 0)
+            forYouStoryIDs.removeAll { $0 == giftGuideStoryID }
+            forYouStoryIDs.insert(giftGuideStoryID, at: min(1, forYouStoryIDs.count))
             forYouStoryIDs.removeAll { $0 == streetwearStoryID }
-            forYouStoryIDs.insert(streetwearStoryID, at: min(1, forYouStoryIDs.count))
+            forYouStoryIDs.insert(streetwearStoryID, at: min(2, forYouStoryIDs.count))
             forYouStoryIDs.removeAll { $0 == performanceSneakerStoryID }
-            forYouStoryIDs.insert(performanceSneakerStoryID, at: min(2, forYouStoryIDs.count))
+            forYouStoryIDs.insert(performanceSneakerStoryID, at: min(3, forYouStoryIDs.count))
         }
 
         let forYou = BuyerFeedTopic(

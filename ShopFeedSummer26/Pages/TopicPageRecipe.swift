@@ -8,6 +8,7 @@ enum TopicPageKind {
     case warmDesignerLighting
     case hypebeast
     case performanceSneakers
+    case giftGuidePrototype
     case merchant
     case standard
 }
@@ -141,6 +142,11 @@ enum TopicPageRecipeCatalog {
             hypebeast
         case .performanceSneakers:
             performanceSneakers
+        case .giftGuidePrototype:
+            standard(
+                bentoTitle: contextualBentoTitle,
+                filters: automaticExploreFilters
+            )
         case .merchant:
             merchant(filters: automaticExploreFilters)
         case .standard:

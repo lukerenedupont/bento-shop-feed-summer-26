@@ -147,6 +147,21 @@ enum BuyerPersonalizationCatalog {
             ]
         ),
         story(
+            id: "luke-gift-guide-for-son",
+            title: "A gift guide for your son",
+            subtitle: "A living shortlist you can tune by age, personality, budget, and what he is into right now.",
+            keys: ["gift", "son", "kids", "outdoors", "creative", "design"],
+            accent: "#392657",
+            products: [
+                ref("nocs", 9696975585559),
+                ref("moma", 9686879502566),
+                ref("moma", 9727956189414),
+                ref("standards-manual", 8342043590872),
+                ref("moma", 9604489248998),
+                ref("lalo", 7195114864704),
+            ]
+        ),
+        story(
             id: "kyle-argizari-lighting",
             title: "Warm designer lighting",
             subtitle: "The exact Gantri table lamp Kyle added to cart, followed by two current Gantri table-lamp alternatives—not a generic lighting shelf.",

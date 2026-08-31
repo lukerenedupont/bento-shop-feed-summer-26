@@ -19,6 +19,10 @@ struct TopicPresentation {
     let authoredBlocks: [String: AuthoredTopicBlock]
 
     var usesExactHeroLayout: Bool { heroFallbackAsset != nil }
+    var usesGiftGuidePrototype: Bool {
+        if case .giftGuidePrototype = kind { return true }
+        return false
+    }
     var softensLongPageSurface: Bool { !usesExactHeroLayout }
     var samplesVideoSurfaceColor: Bool { fixedSurfaceHex == nil }
 
@@ -99,6 +103,15 @@ enum TopicPresentationCatalog {
                 heroFallbackAsset: "topic-warm-lighting-hero",
                 heroTitleOverride: "Warm designer\nlighting",
                 merchantStyle: .warmLighting,
+                authoredBlocks: [:]
+            )
+        case HypothesisShelfCatalog.giftGuideStoryID:
+            result = TopicPresentation(
+                kind: .giftGuidePrototype,
+                fixedSurfaceHex: "#392657",
+                heroFallbackAsset: nil,
+                heroTitleOverride: "Gifts that feel\nlike him",
+                merchantStyle: .standard,
                 authoredBlocks: [:]
             )
         case HypothesisShelfCatalog.streetwearStoryID:
