@@ -148,8 +148,8 @@ enum BuyerPersonalizationCatalog {
         ),
         story(
             id: "luke-gift-guide-for-son",
-            title: "A gift guide for your son",
-            subtitle: "A living shortlist you can tune by age, personality, budget, and what he is into right now.",
+            title: "Gifts that feel like Leon",
+            subtitle: "A living shortlist you can tune by age, personality, budget, and what Leon is into right now.",
             keys: ["gift", "son", "kids", "outdoors", "creative", "design"],
             accent: "#392657",
             products: [

@@ -334,6 +334,15 @@ enum FeedCoverCatalog {
             textScrimOpacity: 0.5
         ),
         .init(
+            storyID: "luke-gift-guide-for-son",
+            source: .remoteImage(
+                url: "https://tincan.kids/cdn/shop/files/2026-06-Website-Hero-Photo-mobile.jpg?v=1781018822&width=1200"
+            ),
+            mediaRole: .wornOrUsed,
+            alignment: .center,
+            textScrimOpacity: 0.36
+        ),
+        .init(
             storyID: "shelf-luke-9-streetwear-caps-and-tees",
             source: .bundledVideo(resource: "streetwear-staples", fileExtension: "mp4"),
             mediaRole: .editorial,

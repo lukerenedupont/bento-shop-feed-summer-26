@@ -110,7 +110,7 @@ enum TopicPresentationCatalog {
                 kind: .giftGuidePrototype,
                 fixedSurfaceHex: "#392657",
                 heroFallbackAsset: nil,
-                heroTitleOverride: "Gifts that feel\nlike him",
+                heroTitleOverride: "Gifts that feel\nlike Leon",
                 merchantStyle: .standard,
                 authoredBlocks: [:]
             )

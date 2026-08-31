@@ -102,11 +102,10 @@ struct GiftGuidePrototypeContent: View {
         VStack(alignment: .leading, spacing: GravitySpacing.space12) {
             HStack {
                 VStack(alignment: .leading, spacing: GravitySpacing.space2) {
-                    Text("GIFT BRIEF")
-                        .font(GravityFont.semiBold.fixedFont(size: 10))
-                        .tracking(1.2)
+                    Text("Gift brief")
+                        .font(GravityFont.medium.fixedFont(size: 12))
                         .foregroundStyle(.white.opacity(0.58))
-                    Text("For your son")
+                    Text("For Leon")
                         .font(GravityFont.expressiveBold.fixedFont(size: 21))
                         .tracking(-0.5)
                         .foregroundStyle(.white)
@@ -202,8 +201,7 @@ struct GiftGuidePrototypeContent: View {
                 )
                 VStack(alignment: .leading, spacing: GravitySpacing.space4) {
                     Text(label)
-                        .font(GravityFont.semiBold.fixedFont(size: 10))
-                        .tracking(1.1)
+                        .font(GravityFont.semiBold.fixedFont(size: 12))
                         .foregroundStyle(.white.opacity(0.72))
                     Text(item.product.title)
                         .font(GravityFont.bold.fixedFont(size: 19))
@@ -282,14 +280,14 @@ struct GiftGuidePrototypeContent: View {
     }
 
     private var promptEyebrow: String {
-        if !ageIsConfirmed { return "ONE QUICK CHECK" }
-        if !settingIsConfirmed { return "GETTING CLOSER" }
-        return "SHAPE THE SURPRISE"
+        if !ageIsConfirmed { return "One quick check" }
+        if !settingIsConfirmed { return "Getting closer" }
+        return "Shape the surprise"
     }
 
     private var promptTitle: String {
-        if !ageIsConfirmed { return "How old is he?" }
-        if !settingIsConfirmed { return "Which sounds more like him?" }
+        if !ageIsConfirmed { return "How old is Leon?" }
+        if !settingIsConfirmed { return "Which sounds more like Leon?" }
         return "What should the gift feel like?"
     }
 
@@ -363,9 +361,9 @@ struct GiftGuidePrototypeContent: View {
                 Image(systemName: "sparkles")
                     .font(.system(size: 18, weight: .semibold))
                 VStack(alignment: .leading, spacing: GravitySpacing.space2) {
-                    Text("Tell Shop more about him")
+                    Text("Tell Shop more about Leon")
                         .font(GravityFont.bold.fixedFont(size: 16))
-                    Text(appliedNote.isEmpty ? "What is he into lately?" : "“\(appliedNote)”")
+                    Text(appliedNote.isEmpty ? "What is Leon into lately?" : "“\(appliedNote)”")
                         .font(GravityFont.regular.fixedFont(size: 13))
                         .foregroundStyle(.white.opacity(0.62))
                         .lineLimit(1)
@@ -383,9 +381,9 @@ struct GiftGuidePrototypeContent: View {
 
     private func leadLabel(for item: ResolvedStoryProduct, index: Int) -> String {
         switch item.merchant.id {
-        case "tin-can-kids": "OUR STARTING POINT"
-        case "pollen-robotics": "THE DELIGHT PICK"
-        default: index == 2 ? "ONE TO DO TOGETHER" : "A STRONG MATCH"
+        case "tin-can-kids": "Our starting point"
+        case "pollen-robotics": "The delight pick"
+        default: index == 2 ? "One to do together" : "A strong match"
         }
     }
 
@@ -464,9 +462,9 @@ private enum GiftSetting: String, CaseIterable, Identifiable {
     }
     var sectionTitle: String {
         switch self {
-        case .indoors: "For his world indoors"
+        case .indoors: "For Leon’s world indoors"
         case .both: "For wherever the day goes"
-        case .outdoors: "For his next adventure"
+        case .outdoors: "For Leon’s next adventure"
         }
     }
     var sectionSubtitle: String {
@@ -507,13 +505,13 @@ private struct GiftGuideTuningSheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 28) {
-                    dial(title: "How old is he?", value: "\(Int(age))") {
+                    dial(title: "How old is Leon?", value: "\(Int(age))") {
                         Slider(value: $age, in: 5...17, step: 1)
                             .tint(Color(hex: "#7455A2"))
                     }
 
                     VStack(alignment: .leading, spacing: GravitySpacing.space10) {
-                        Text("Where does he come alive?")
+                        Text("Where does Leon come alive?")
                             .font(GravityFont.bold.fixedFont(size: 17))
                         Picker("Setting", selection: $setting) {
                             ForEach(GiftSetting.allCases) { Text($0.label).tag($0) }
@@ -537,7 +535,7 @@ private struct GiftGuideTuningSheet: View {
                     }
 
                     VStack(alignment: .leading, spacing: GravitySpacing.space10) {
-                        Text("What is he into lately?")
+                        Text("What is Leon into lately?")
                             .font(GravityFont.bold.fixedFont(size: 17))
                         TextField("Dinosaurs, making things, camping…", text: $note, axis: .vertical)
                             .lineLimit(2...4)
@@ -557,7 +555,7 @@ private struct GiftGuideTuningSheet: View {
                 }
                 .padding(GravitySpacing.space20)
             }
-            .navigationTitle("Tune his gift guide")
+            .navigationTitle("Tune Leon’s gift guide")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
