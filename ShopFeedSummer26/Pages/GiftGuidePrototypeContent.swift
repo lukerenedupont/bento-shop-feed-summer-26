@@ -568,7 +568,7 @@ struct GiftGuideSteeringDock: View {
             }
             .padding(.horizontal, 20)
         }
-        .frame(maxWidth: .infinity, minHeight: FeedNavigationStyle.controlSize, maxHeight: FeedNavigationStyle.controlSize)
+        .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56)
         .sheet(isPresented: $state.showsVoiceMode) {
             GiftGuideVoiceMode()
                 .presentationDetents([.height(300)])
@@ -577,7 +577,7 @@ struct GiftGuideSteeringDock: View {
     }
 
     private var filterBar: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: GravitySpacing.space4) {
             Menu {
                 ForEach([7, 10, 13, 16], id: \.self) { age in
                     Button("Age \(age)") {
@@ -646,16 +646,7 @@ struct GiftGuideSteeringDock: View {
             }
             .accessibilityLabel("Gift intent")
         }
-        .padding(3)
-        .frame(width: 262, height: FeedNavigationStyle.controlSize)
-        .background {
-            Capsule()
-                .fill(surfaceColor)
-                .overlay { Capsule().fill(.black.opacity(0.26)) }
-        }
-        .overlay {
-            Capsule().strokeBorder(.white.opacity(0.14), lineWidth: 0.5)
-        }
+        .frame(width: 262, height: 56)
     }
 
     private var assistantMenu: some View {
@@ -674,19 +665,22 @@ struct GiftGuideSteeringDock: View {
             }
         } label: {
             Image(systemName: "waveform")
-                .font(FeedNavigationStyle.iconFont)
+                .font(.system(size: 18, weight: .semibold))
                 .foregroundStyle(.white)
                 .frame(
-                    width: FeedNavigationStyle.controlSize,
-                    height: FeedNavigationStyle.controlSize
+                    width: 56,
+                    height: 56
                 )
                 .background {
                     Circle()
-                        .fill(surfaceColor)
-                        .overlay { Circle().fill(.black.opacity(0.26)) }
+                        .fill(surfaceColor.opacity(0.16))
+                        .overlay { Circle().fill(.black.opacity(0.22)) }
+                        .overlay { Circle().fill(.white.opacity(0.04)) }
                 }
+                .clipShape(Circle())
+                .glassEffect(.regular, in: .circle)
                 .overlay {
-                    Circle().strokeBorder(.white.opacity(0.14), lineWidth: 0.5)
+                    Circle().strokeBorder(.white.opacity(0.26), lineWidth: 0.5)
                 }
         }
         .buttonStyle(PressScaleButtonStyle(scale: 0.9))
@@ -713,9 +707,19 @@ struct GiftGuideSteeringDock: View {
     private func dockPill(_ title: String, width: CGFloat, confirmed: Bool) -> some View {
         Text(title)
             .font(GravityFont.semiBold.fixedFont(size: 12))
-            .foregroundStyle(.white.opacity(confirmed ? 1 : 0.72))
-            .frame(width: width, height: 34)
-            .background(confirmed ? .white.opacity(0.12) : .clear, in: Capsule())
+            .foregroundStyle(.white.opacity(confirmed ? 1 : 0.78))
+            .frame(width: width, height: 56)
+            .background {
+                Capsule()
+                    .fill(surfaceColor.opacity(0.16))
+                    .overlay { Capsule().fill(.black.opacity(0.22)) }
+                    .overlay { Capsule().fill(.white.opacity(0.04)) }
+            }
+            .clipShape(Capsule())
+            .glassEffect(.regular, in: .capsule)
+            .overlay {
+                Capsule().strokeBorder(.white.opacity(0.26), lineWidth: 0.5)
+            }
     }
 }
 

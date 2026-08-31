@@ -70,7 +70,7 @@ struct BottomNavBar: View {
         }
         .padding(PurlTune.value("Navigation/BottomNavBar.swift:padding:_:127:18", default: 6))
         .frame(height: tabPillHeight)
-        .background(.white.opacity(PurlTune.value("Navigation/BottomNavBar.swift:opacity:_:129:36", default: 0.75)))
+        .background(.white.opacity(PurlTune.value("Navigation/BottomNavBar.swift:opacity:_:129:36", default: 0.52)))
         .clipShape(Capsule())
         .glassEffect(.regular, in: .capsule)
     }
@@ -136,7 +136,7 @@ struct BottomNavBar: View {
             if style == .brand {
                 Circle().fill(PurlTune.token("Navigation/BottomNavBar.swift:fill:_:193:31", default: GravityColors.bgFillBrand, options: GravityColors.purlTuneColorOptions))
             } else {
-                Circle().fill(.white.opacity(PurlTune.value("Navigation/BottomNavBar.swift:opacity:_:195:46", default: 0.75)))
+                Circle().fill(.white.opacity(PurlTune.value("Navigation/BottomNavBar.swift:opacity:_:195:46", default: 0.52)))
             }
         }
         .clipShape(Circle())

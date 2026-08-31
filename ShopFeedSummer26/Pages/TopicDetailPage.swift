@@ -954,10 +954,13 @@ struct TopicDetailPage: View {
                 .scaleEffect(1 - (0.08 * closeMorphProgress))
 
                 Circle()
-                    .fill(surfaceColor)
-                    .overlay { Circle().fill(.black.opacity(0.26)) }
+                    .fill(surfaceColor.opacity(0.16))
+                    .overlay { Circle().fill(.black.opacity(0.22)) }
+                    .overlay { Circle().fill(.white.opacity(0.04)) }
+                    .clipShape(Circle())
+                    .glassEffect(.regular, in: .circle)
                     .overlay {
-                        Circle().strokeBorder(.white.opacity(0.14), lineWidth: 0.5)
+                        Circle().strokeBorder(.white.opacity(0.26), lineWidth: 0.5)
                     }
                     .opacity(closeMorphProgress)
 
@@ -967,11 +970,11 @@ struct TopicDetailPage: View {
                     .opacity(closeMorphProgress)
                     .scaleEffect(0.72 + (0.28 * closeMorphProgress))
             }
-            .frame(width: FeedNavigationStyle.controlSize, height: FeedNavigationStyle.controlSize)
+            .frame(width: 56, height: 56)
             .contentShape(Circle())
         }
         .buttonStyle(PressScaleButtonStyle())
-        .padding(.leading, GravitySpacing.space16)
+        .padding(.leading, GravitySpacing.space8)
         .accessibilityLabel("Close")
     }
     private var heroFeedbackPill: some View {
