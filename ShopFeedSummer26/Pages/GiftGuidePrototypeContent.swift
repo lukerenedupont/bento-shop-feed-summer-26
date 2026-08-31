@@ -516,24 +516,10 @@ struct GiftGuidePrototypeContent: View {
     }
 }
 
-struct GiftGuideSteeringDock: View {
+struct GiftGuideTopicFilterBar: View {
     @Bindable var state: GiftGuidePrototypeState
 
     var body: some View {
-        HStack(spacing: GravitySpacing.space8) {
-            filterBar
-            assistantMenu
-        }
-        .padding(.horizontal, 3)
-        .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56)
-        .sheet(isPresented: $state.showsVoiceMode) {
-            GiftGuideVoiceMode()
-                .presentationDetents([.height(300)])
-                .presentationDragIndicator(.visible)
-        }
-    }
-
-    private var filterBar: some View {
         HStack(spacing: GravitySpacing.space4) {
             Menu {
                 ForEach([7, 10, 13, 16], id: \.self) { age in
@@ -544,22 +530,9 @@ struct GiftGuideSteeringDock: View {
                     }
                 }
             } label: {
-                dockPill("Age \(Int(state.age))", width: 80)
+                filterPill("Age \(Int(state.age))", width: 58)
             }
             .accessibilityLabel("Leon’s age")
-
-            Menu {
-                ForEach(GiftSetting.allCases) { setting in
-                    Button(setting.label) {
-                        state.setting = setting
-                        state.settingIsConfirmed = true
-                        state.registerUpdate("Shifted the guide toward \(setting.label.lowercased())")
-                    }
-                }
-            } label: {
-                dockPill(settingDockLabel, width: 80)
-            }
-            .accessibilityLabel("Leon’s setting preference")
 
             Menu {
                 ForEach([50, 100, 150, 400], id: \.self) { budget in
@@ -570,26 +543,74 @@ struct GiftGuideSteeringDock: View {
                     }
                 }
             } label: {
-                dockPill("$\(Int(state.budget))", width: 80)
+                filterPill("$\(Int(state.budget))", width: 52)
             }
             .accessibilityLabel("Gift budget")
 
             Menu {
-                Button {
-                    HapticFeedback.light.fire()
-                    state.showsTuning = true
-                } label: {
-                    Label("Tell Shop more about Leon", systemImage: "message")
+                ForEach(GiftSetting.allCases) { setting in
+                    Button(setting.label) {
+                        state.setting = setting
+                        state.settingIsConfirmed = true
+                        state.registerUpdate("Shifted the guide toward \(setting.label.lowercased())")
+                    }
                 }
             } label: {
-                dockPill("Leon", width: 80)
+                filterPill(settingLabel, width: 70)
             }
-            .accessibilityLabel("Gift recipient, Leon")
+            .accessibilityLabel("Gift category")
+
+            Menu {
+                ForEach(GiftIntent.allCases) { intent in
+                    Button(intent.label) {
+                        state.intent = intent
+                        state.intentIsConfirmed = true
+                        state.registerUpdate("Prioritizing \(intent.label.lowercased()) gifts")
+                    }
+                }
+            } label: {
+                filterPill(intentLabel, width: 68)
+            }
+            .accessibilityLabel("Gift intent")
         }
-        .frame(width: 332, height: 56)
+        .frame(height: FeedNavigationStyle.controlSize)
     }
 
-    private var assistantMenu: some View {
+    private var settingLabel: String {
+        switch state.setting {
+        case .indoors: "Inside"
+        case .both: "Both"
+        case .outdoors: "Outdoors"
+        }
+    }
+
+    private var intentLabel: String {
+        switch state.intent {
+        case .surprise: "Surprise"
+        case .fun: "Fun"
+        case .useful: "Useful"
+        case .together: "Together"
+        }
+    }
+
+    private func filterPill(_ title: String, width: CGFloat) -> some View {
+        Text(title)
+            .font(GravityFont.semiBold.fixedFont(size: 11))
+            .foregroundStyle(.black.opacity(0.82))
+            .frame(width: width, height: FeedNavigationStyle.controlSize)
+            .background { Capsule().fill(.white.opacity(0.48)) }
+            .clipShape(Capsule())
+            .glassEffect(.regular, in: .capsule)
+            .overlay {
+                Capsule().strokeBorder(.white.opacity(0.36), lineWidth: 0.5)
+            }
+    }
+}
+
+struct GiftGuideSteeringDock: View {
+    @Bindable var state: GiftGuidePrototypeState
+
+    var body: some View {
         Menu {
             Button {
                 HapticFeedback.light.fire()
@@ -607,13 +628,8 @@ struct GiftGuideSteeringDock: View {
             Image(systemName: "waveform")
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundStyle(.black.opacity(0.82))
-                .frame(
-                    width: 56,
-                    height: 56
-                )
-                .background {
-                    Circle().fill(.white.opacity(0.48))
-                }
+                .frame(width: 56, height: 56)
+                .background { Circle().fill(.white.opacity(0.48)) }
                 .clipShape(Circle())
                 .glassEffect(.regular, in: .circle)
                 .overlay {
@@ -622,29 +638,12 @@ struct GiftGuideSteeringDock: View {
         }
         .buttonStyle(PressScaleButtonStyle(scale: 0.9))
         .accessibilityLabel("Voice or chat with Shop")
-    }
-
-    private var settingDockLabel: String {
-        switch state.setting {
-        case .indoors: "Inside"
-        case .both: "Both"
-        case .outdoors: "Outdoors"
+        .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56)
+        .sheet(isPresented: $state.showsVoiceMode) {
+            GiftGuideVoiceMode()
+                .presentationDetents([.height(300)])
+                .presentationDragIndicator(.visible)
         }
-    }
-
-    private func dockPill(_ title: String, width: CGFloat) -> some View {
-        Text(title)
-            .font(GravityFont.semiBold.fixedFont(size: 12))
-            .foregroundStyle(.black.opacity(0.82))
-            .frame(minWidth: width, minHeight: 56, maxHeight: 56)
-            .background {
-                Capsule().fill(.white.opacity(0.48))
-            }
-            .clipShape(Capsule())
-            .glassEffect(.regular, in: .capsule)
-            .overlay {
-                Capsule().strokeBorder(.white.opacity(0.36), lineWidth: 0.5)
-            }
     }
 }
 

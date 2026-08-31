@@ -917,14 +917,19 @@ struct TopicDetailPage: View {
         ZStack(alignment: .top) {
             TopicCompactHeaderBackdrop(
                 state: headerScrollState,
-                title: topicPresentation.heroTitleOverride?.replacingOccurrences(of: "\n", with: " ") ?? story.title,
+                title: topicPresentation.usesGiftGuidePrototype
+                    ? ""
+                    : topicPresentation.heroTitleOverride?.replacingOccurrences(of: "\n", with: " ") ?? story.title,
                 surfaceColor: surfaceColor,
                 width: width,
                 topInset: windowSafeAreaTopInset
             )
             .allowsHitTesting(false)
-            HStack {
+            HStack(spacing: GravitySpacing.space8) {
                 closeButton
+                if topicPresentation.usesGiftGuidePrototype {
+                    GiftGuideTopicFilterBar(state: giftGuideState)
+                }
                 Spacer()
             }
             .frame(width: width)
