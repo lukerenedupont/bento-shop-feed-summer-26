@@ -515,22 +515,24 @@ struct TopicDetailPage: View {
                 // the hero hands off to the page surface.
                 surfaceColor.frame(height: 12)
             }
-            heroFeedbackPill
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity,
-                    alignment: .topTrailing
-                )
-                .padding(
-                    .top,
-                    windowSafeAreaTopInset
-                        + FeedNavigationStyle.controlSize
-                        + GravitySpacing.space12
-                        + FeedCardStyle.titleHeaderGap
-                )
-                .padding(.trailing, GravitySpacing.space12)
-                .offset(y: -GravitySpacing.space40)
-            VStack(alignment: .leading, spacing: GravitySpacing.space10) {
+            if !topicPresentation.usesExactHeroLayout {
+                heroFeedbackPill(layout: .vertical)
+                    .frame(
+                        maxWidth: .infinity,
+                        maxHeight: .infinity,
+                        alignment: .topTrailing
+                    )
+                    .padding(
+                        .top,
+                        windowSafeAreaTopInset
+                            + FeedNavigationStyle.controlSize
+                            + GravitySpacing.space12
+                            + FeedCardStyle.titleHeaderGap
+                    )
+                    .padding(.trailing, GravitySpacing.space12)
+                    .offset(y: -GravitySpacing.space40)
+            }
+            VStack(alignment: .leading, spacing: GravitySpacing.space12) {
                 Text(heroTitle)
                     .font(FeedEditorialTypography.titleFont)
                     .tracking(FeedEditorialTypography.titleTracking)
@@ -550,16 +552,18 @@ struct TopicDetailPage: View {
                         .lineLimit(2)
                         .frame(maxWidth: min(width - 48, 340), alignment: .leading)
                 }
+                if topicPresentation.usesExactHeroLayout {
+                    heroFeedbackPill(layout: .horizontal)
+                }
             }
             .foregroundStyle(.white)
             .frame(
                 maxWidth: width - 32,
                 maxHeight: .infinity,
-                alignment: topicPresentation.usesExactHeroLayout ? .topLeading : .bottomLeading
+                alignment: .bottomLeading
             )
             .padding(.horizontal, GravitySpacing.space16)
-            .padding(.top, topicPresentation.usesExactHeroLayout ? 120 : 0)
-            .padding(.bottom, topicPresentation.usesExactHeroLayout ? 0 : GravitySpacing.space20)
+            .padding(.bottom, GravitySpacing.space20)
         }
         .frame(width: width, height: heroHeight)
         .clipped()
@@ -1013,9 +1017,11 @@ struct TopicDetailPage: View {
         .padding(.leading, GravitySpacing.space16)
         .accessibilityLabel("Close")
     }
-    private var heroFeedbackPill: some View {
+    private func heroFeedbackPill(
+        layout: PrototypeFeedbackActions.Layout
+    ) -> some View {
         PrototypeFeedbackActions(
-            layout: .vertical,
+            layout: layout,
             foregroundColor: .white,
             appliesShadow: true,
             includesOverflow: true,
