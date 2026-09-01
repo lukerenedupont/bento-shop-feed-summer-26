@@ -1,8 +1,6 @@
 import Combine
 import SwiftUI
 import UIKit
-
-
 /// Home feed — scrollable merchant feed cards with focused topic feeds.
 struct HomePage: View {
     private static let bundledMerchantSnapshot = LocalMerchantService.loadMerchants()
@@ -186,10 +184,10 @@ struct HomePage: View {
     }
 
     private var focusedStories: [FeedStory] {
-        let authored = buyerPreview.stories(
-            for: selectedTopic,
-            in: PersonalizedFeedCatalog.current
-        )
+        let baseAuthored = buyerPreview.stories(for: selectedTopic, in: PersonalizedFeedCatalog.current)
+        let worldsEnabled = buyerPreview.selected.id == "luke" && selectedTopicID == "for-you"
+        let enabledWorldIDs = worldsEnabled ? WorldPrototypePreferences.shared.enabledWorldIDs : []
+        let authored = WorldPrototypeCatalog.feedStories(from: baseAuthored, available: PersonalizedFeedCatalog.current.stories, enabledIDs: enabledWorldIDs)
         let authoredIDs = Set(authored.map(\.id))
         let authoredMerchantIDs = Set(authored.compactMap(FeedMerchantDiversity.merchantID))
         let relationshipStories = BuyerFollowedContentCatalog.stories(
@@ -1450,7 +1448,8 @@ struct HomePage: View {
                 foregroundColor: feedbackForegroundColor,
                 appliesShadow: !usesDarkFeedbackIcons,
                 includesOverflow: true,
-                includesVolume: includesVolumeControl
+                includesVolume: includesVolumeControl,
+                onOverflowTap: { showsBuyerSwitcher = true }
             )
             .padding(.top, layout.pinnedTitleTop)
             .padding(.trailing, GravitySpacing.space12)
@@ -1729,6 +1728,7 @@ struct HomePage: View {
             seasonalPlacement: seasonalPlacementBinding,
             extendoEnabled: $utilityBeltExtendoEnabled,
             beltPreferences: utilityBelt,
+            worldPreferences: WorldPrototypePreferences.shared,
             onSelectProfile: selectBuyer
         )
         .environment(\.colorScheme, .light)

@@ -93,6 +93,7 @@ struct HomeFeedControlsSheet: View {
     @Binding var seasonalPlacement: SeasonalPlacement
     @Binding var extendoEnabled: Bool
     @Bindable var beltPreferences: UtilityBeltPreferences
+    @Bindable var worldPreferences: WorldPrototypePreferences
     let onSelectProfile: (BuyerPreviewProfile) -> Void
     @Environment(\.dismiss) private var dismiss
 
@@ -136,6 +137,29 @@ struct HomeFeedControlsSheet: View {
                     }
                     .pickerStyle(.segmented)
                     .labelsHidden()
+                }
+
+                Section {
+                    ForEach(WorldPrototypeCatalog.topLevelDefinitions) { definition in
+                        Toggle(
+                            isOn: Binding(
+                                get: { worldPreferences.isEnabled(definition.id) },
+                                set: { worldPreferences.setEnabled($0, for: definition.id) }
+                            )
+                        ) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(definition.title)
+                                Text(definition.primaryExperience.label)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .tint(Color(hex: "#5433EB"))
+                    }
+                } header: {
+                    Text("World prototypes")
+                } footer: {
+                    Text("Off by default. Enabled Worlds move to the front of Luke’s For You feed.")
                 }
 
                 Section {

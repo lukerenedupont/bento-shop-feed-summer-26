@@ -101,29 +101,6 @@ enum HypothesisShelfCatalog {
         "design": "#626A70",
     ]
 
-    private static let worldTitles: [String: (title: String, subtitle: String)] = [
-        performanceSneakerStoryID: (
-            "Getting back into running",
-            "Shoes, recovery, and smaller running brands for finding a rhythm again."
-        ),
-        "shelf-luke-6-analog-watches-desk-clocks": (
-            "Find my next watch",
-            "A steerable canvas of analog watches, graphic references, and independent makers."
-        ),
-        "shelf-kenny-8-wide-fit-polarized-sunglasses": (
-            "Find sunglasses that suit me",
-            "Try wide-fit polarized frames and compare the shapes that work best."
-        ),
-        "shelf-luke-2-sculptural-living-room-pieces": (
-            "Finish the living room",
-            "Place and swap warm sculptural pieces against the room you are building."
-        ),
-        "shelf-mikhail-8-high-performance-ski-setup": (
-            "Ski weekend",
-            "A working plan for equipment, mountain layers, travel, and recovery."
-        ),
-    ]
-
     private static let payload: Payload = {
         guard let asset = NSDataAsset(name: "hypothesis-shelves"),
               let value = try? JSONDecoder().decode(Payload.self, from: asset.data) else {
@@ -162,15 +139,15 @@ enum HypothesisShelfCatalog {
 
             let title = if isStreetwearStory {
                 "Streetwear staples from caps to tees"
-            } else if let world = worldTitles[shelf.id] {
-                world.title
+            } else if isPerformanceSneakerStory {
+                "Your performance sneaker edit"
             } else {
                 shelf.title
             }
             let subtitle = if isStreetwearStory {
                 "Caps, graphic tees, and streetwear from the brands Luke follows"
-            } else if let world = worldTitles[shelf.id] {
-                world.subtitle
+            } else if isPerformanceSneakerStory {
+                "Performance runners and everyday trainers from Luke's favorite sneaker shops"
             } else {
                 shelf.subtitle
             }
@@ -349,18 +326,14 @@ enum HypothesisShelfCatalog {
             forYouStoryIDs.append(merchantStoryIDs[1])
         }
         if user.id == "luke" {
-            let leadingWorldIDs = [
-                performanceSneakerStoryID,
-                "shelf-luke-6-analog-watches-desk-clocks",
-                "shelf-kenny-8-wide-fit-polarized-sunglasses",
-                "shelf-luke-2-sculptural-living-room-pieces",
-                giftGuideStoryID,
-                "shelf-mikhail-8-high-performance-ski-setup",
-                "kyle-argizari-lighting",
-                streetwearStoryID,
-            ]
-            forYouStoryIDs.removeAll { leadingWorldIDs.contains($0) }
-            forYouStoryIDs.insert(contentsOf: leadingWorldIDs, at: 0)
+            forYouStoryIDs.removeAll { $0 == "kyle-argizari-lighting" }
+            forYouStoryIDs.insert("kyle-argizari-lighting", at: 0)
+            forYouStoryIDs.removeAll { $0 == giftGuideStoryID }
+            forYouStoryIDs.insert(giftGuideStoryID, at: min(1, forYouStoryIDs.count))
+            forYouStoryIDs.removeAll { $0 == streetwearStoryID }
+            forYouStoryIDs.insert(streetwearStoryID, at: min(2, forYouStoryIDs.count))
+            forYouStoryIDs.removeAll { $0 == performanceSneakerStoryID }
+            forYouStoryIDs.insert(performanceSneakerStoryID, at: min(3, forYouStoryIDs.count))
         }
 
         let forYou = BuyerFeedTopic(

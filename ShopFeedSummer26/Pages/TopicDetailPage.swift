@@ -45,7 +45,9 @@ struct TopicDetailPage: View {
         self.story = story
         self.merchants = merchants
         topicPresentation = TopicPresentationCatalog.presentation(for: story)
-        let definition = WorldPrototypeCatalog.definition(for: story.id)
+        let definition = WorldPrototypePreferences.shared.isEnabled(story.id)
+            ? WorldPrototypeCatalog.definition(for: story.id)
+            : nil
         worldDefinition = definition
         _worldSession = State(initialValue: definition.map { WorldSessionStore.shared.session(for: $0) })
         var seenResolvedIDs = Set<String>()

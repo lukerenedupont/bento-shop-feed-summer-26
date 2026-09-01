@@ -51,6 +51,7 @@ struct PrototypeFeedbackActions: View {
     var appliesShadow = true
     var includesOverflow = false
     var includesVolume = false
+    var onOverflowTap: (() -> Void)?
     @State private var selectedActions: Set<Action> = []
 
     var body: some View {
@@ -80,6 +81,10 @@ struct PrototypeFeedbackActions: View {
         ForEach(actions, id: \.self) { action in
             Button {
                 HapticFeedback.light.fire()
+                if action == .more {
+                    onOverflowTap?()
+                    return
+                }
                 withAnimation(.spring(response: 0.24, dampingFraction: 0.72)) {
                     if selectedActions.contains(action) {
                         selectedActions.remove(action)

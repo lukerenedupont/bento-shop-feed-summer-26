@@ -8,6 +8,17 @@ enum WorldExperienceForm: String, CaseIterable, Hashable {
     case spatial
     case gifting
     case mission
+
+    var label: String {
+        switch self {
+        case .merchandised: "Merchandised"
+        case .canvas: "Canvas"
+        case .tryOn: "Try-on"
+        case .spatial: "Spatial"
+        case .gifting: "Gifting"
+        case .mission: "Mission"
+        }
+    }
 }
 
 enum WorldPurpose: String, Hashable {
@@ -181,6 +192,34 @@ final class WorldSession {
     }
 }
 
+@Observable
+@MainActor
+final class WorldPrototypePreferences {
+    static let shared = WorldPrototypePreferences()
+
+    private static let defaultsKey = "enabledWorldPrototypes"
+    private(set) var enabledWorldIDs: Set<String>
+
+    private init() {
+        enabledWorldIDs = Set(
+            UserDefaults.standard.stringArray(forKey: Self.defaultsKey) ?? []
+        )
+    }
+
+    func isEnabled(_ worldID: String) -> Bool {
+        enabledWorldIDs.contains(worldID)
+    }
+
+    func setEnabled(_ enabled: Bool, for worldID: String) {
+        if enabled {
+            enabledWorldIDs.insert(worldID)
+        } else {
+            enabledWorldIDs.remove(worldID)
+        }
+        UserDefaults.standard.set(enabledWorldIDs.sorted(), forKey: Self.defaultsKey)
+    }
+}
+
 @MainActor
 final class WorldSessionStore {
     static let shared = WorldSessionStore()
@@ -214,8 +253,56 @@ enum WorldPrototypeCatalog {
         missionID,
     ]
 
+    static var topLevelDefinitions: [WorldDefinition] {
+        topLevelWorldIDs.compactMap { definitions[$0] }
+    }
+
     static func definition(for storyID: String) -> WorldDefinition? {
         definitions[storyID]
+    }
+
+    static func feedStories(
+        from authored: [FeedStory],
+        available: [FeedStory],
+        enabledIDs: Set<String>
+    ) -> [FeedStory] {
+        guard !enabledIDs.isEmpty else { return authored }
+        let storiesByID = Dictionary(uniqueKeysWithValues: available.map { ($0.id, $0) })
+        let worlds: [FeedStory] = topLevelWorldIDs.compactMap { worldID in
+            guard enabledIDs.contains(worldID), let source = storiesByID[worldID] else {
+                return nil
+            }
+            return feedStory(from: source)
+        }
+        return worlds + authored.filter { !enabledIDs.contains($0.id) }
+    }
+
+    static func feedStory(from source: FeedStory) -> FeedStory {
+        guard let definition = definitions[source.id] else { return source }
+        return FeedStory(
+            id: source.id,
+            eyebrow: source.eyebrow,
+            title: definition.title,
+            subtitle: subtitle(for: source.id),
+            format: .world,
+            topicKeys: source.topicKeys,
+            accentHex: source.accentHex,
+            coverImageName: source.coverImageName,
+            destinationLabel: source.destinationLabel,
+            products: source.products
+        )
+    }
+
+    private static func subtitle(for worldID: String) -> String {
+        switch worldID {
+        case runningID: "Shoes, recovery, and smaller running brands for finding a rhythm again."
+        case canvasID: "A steerable canvas of analog watches, graphic references, and independent makers."
+        case tryOnID: "Try wide-fit polarized frames and compare the shapes that work best."
+        case spatialID: "Place and swap warm sculptural pieces against the room you are building."
+        case giftingID: "A living gift guide shaped around Leon, not a generic age bracket."
+        case missionID: "A working plan for equipment, mountain layers, travel, and recovery."
+        default: ""
+        }
     }
 
     static func initialContext(for definition: WorldDefinition) -> WorldContext {
