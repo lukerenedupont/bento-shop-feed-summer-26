@@ -340,6 +340,8 @@ struct TopicDetailPage: View {
                 CanvasAgentWorldDestination(
                     session: worldSession,
                     products: products,
+                    topInset: windowSafeAreaTopInset,
+                    bottomInset: geometry.safeAreaInsets.bottom,
                     onClose: closeTopic
                 )
             } else {

@@ -91,6 +91,8 @@ struct WorldSteeringDock: View {
 struct CanvasAgentWorldDestination: View {
     @Bindable var session: WorldSession
     let products: [ResolvedStoryProduct]
+    let topInset: CGFloat
+    let bottomInset: CGFloat
     let onClose: () -> Void
 
     @Environment(NavigationCoordinator.self) private var coordinator
@@ -105,10 +107,14 @@ struct CanvasAgentWorldDestination: View {
     init(
         session: WorldSession,
         products: [ResolvedStoryProduct],
+        topInset: CGFloat,
+        bottomInset: CGFloat,
         onClose: @escaping () -> Void
     ) {
         self.session = session
         self.products = products
+        self.topInset = topInset
+        self.bottomInset = bottomInset
         self.onClose = onClose
         _canvasProducts = State(initialValue: CanvasAgentProductAdapter.products(from: products))
     }
@@ -178,7 +184,7 @@ struct CanvasAgentWorldDestination: View {
             }
         }
         .padding(.horizontal, GravitySpacing.space16)
-        .padding(.top, 58)
+        .padding(.top, topInset + GravitySpacing.space4)
         .frame(maxHeight: .infinity, alignment: .top)
     }
 
@@ -199,12 +205,11 @@ struct CanvasAgentWorldDestination: View {
         .buttonStyle(PressScaleButtonStyle(scale: 0.9))
         .offset(
             x: -canvasMotion.displacement.width * 42,
-            y: -canvasMotion.displacement.height * 30
+            y: -canvasMotion.displacement.height * 30 + max(bottomInset - 28, 0)
         )
         .rotationEffect(.degrees(-Double(canvasMotion.velocity.width) * 3.5))
         .animation(.easeOut(duration: 0.16), value: canvasMotion)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-        .safeAreaPadding(.bottom, GravitySpacing.space8)
         .accessibilityLabel("Steer this canvas")
     }
 
