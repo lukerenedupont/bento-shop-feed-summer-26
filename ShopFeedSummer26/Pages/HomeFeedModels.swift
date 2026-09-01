@@ -35,11 +35,45 @@ enum WorldPrototypeFeedOrdering {
     }
 }
 
+extension FeedStory {
+    var rendersAsMerchantCard: Bool {
+        id != "kyle-argizari-lighting"
+            && MerchantCollectionCatalog.presentation(for: id) != nil
+    }
+}
+
 extension FeedEntry {
     var usesBottomAnchoredWorldChrome: Bool {
         guard case .story(let story) = self, story.format == .world else { return false }
-        return story.id == "kyle-argizari-lighting"
-            || MerchantCollectionCatalog.presentation(for: story.id) == nil
+        return !story.rendersAsMerchantCard
+    }
+}
+
+enum FeedCompositionFilter {
+    @MainActor
+    static func apply(
+        to entries: [FeedEntry],
+        feedID: String,
+        enabledWorldIDs: Set<String>
+    ) -> [FeedEntry] {
+        let preferences = FeedCompositionPreferences.shared
+        return entries.filter { entry in
+            switch entry {
+            case .post:
+                preferences.isEnabled(.posts, in: feedID)
+            case .story(let story):
+                enabledWorldIDs.contains(story.id)
+                    || preferences.isEnabled(
+                        story.rendersAsMerchantCard ? .merchantCards : .recommendations,
+                        in: feedID
+                    )
+            case .tryOn:
+                enabledWorldIDs.contains(WorldPrototypeCatalog.tryOnID)
+                    || preferences.isEnabled(.recommendations, in: feedID)
+            case .seasonalSavings:
+                true
+            }
+        }
     }
 }
 

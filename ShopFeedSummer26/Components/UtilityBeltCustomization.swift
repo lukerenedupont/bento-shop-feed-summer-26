@@ -46,6 +46,61 @@ final class FeedDestinationPreferences {
     }
 }
 
+enum FeedContentKind: String, CaseIterable, Identifiable {
+    case recommendations
+    case merchantCards
+    case posts
+
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .recommendations: "Recommendations"
+        case .merchantCards: "Merchant cards"
+        case .posts: "Posts"
+        }
+    }
+    var subtitle: String {
+        switch self {
+        case .recommendations: "Topic and product edits"
+        case .merchantCards: "Storefront-led assortments"
+        case .posts: "Merchant-authored social content"
+        }
+    }
+    var symbol: String {
+        switch self {
+        case .recommendations: "sparkles.rectangle.stack"
+        case .merchantCards: "storefront"
+        case .posts: "play.rectangle.on.rectangle"
+        }
+    }
+}
+
+@Observable
+@MainActor
+final class FeedCompositionPreferences {
+    static let shared = FeedCompositionPreferences()
+    private static let defaultsKey = "feedContentVisibilityByFeed"
+    private var overrides: [String: Bool]
+
+    private init() {
+        let stored = UserDefaults.standard.dictionary(forKey: Self.defaultsKey) ?? [:]
+        overrides = stored.compactMapValues { ($0 as? NSNumber)?.boolValue }
+    }
+
+    func isEnabled(_ kind: FeedContentKind, in feedID: String) -> Bool {
+        overrides[key(kind, feedID)] ?? true
+    }
+
+    func setEnabled(_ enabled: Bool, for kind: FeedContentKind, in feedID: String) {
+        overrides[key(kind, feedID)] = enabled
+        UserDefaults.standard.set(overrides, forKey: Self.defaultsKey)
+    }
+
+    private func key(_ kind: FeedContentKind, _ feedID: String) -> String {
+        "\(feedID).\(kind.rawValue)"
+    }
+}
+
 /// Stable identities for cards that can appear in the top-of-feed utility belt.
 enum UtilityBeltItem: String, CaseIterable, Identifiable {
     case orders
@@ -141,6 +196,9 @@ struct HomeFeedControlsSheet: View {
     @Bindable var beltPreferences: UtilityBeltPreferences
     @Bindable var worldPreferences: WorldPrototypePreferences
     @Bindable var destinationPreferences: FeedDestinationPreferences
+    @Bindable var compositionPreferences: FeedCompositionPreferences
+    let selectedFeedID: String
+    let selectedFeedTitle: String
     let onSelectProfile: (BuyerPreviewProfile) -> Void
     let onDisableDestination: (String) -> Void
     @Environment(\.dismiss) private var dismiss
@@ -206,6 +264,34 @@ struct HomeFeedControlsSheet: View {
                     Text("Feed destinations")
                 } footer: {
                     Text("Choose which destinations appear in the navigation rail.")
+                }
+
+                Section {
+                    ForEach(FeedContentKind.allCases) { kind in
+                        Toggle(
+                            isOn: Binding(
+                                get: { compositionPreferences.isEnabled(kind, in: selectedFeedID) },
+                                set: { compositionPreferences.setEnabled($0, for: kind, in: selectedFeedID) }
+                            )
+                        ) {
+                            Label {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(kind.title)
+                                    Text(kind.subtitle)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            } icon: {
+                                Image(systemName: kind.symbol)
+                                    .foregroundStyle(Color(hex: "#5433EB"))
+                            }
+                        }
+                        .tint(Color(hex: "#5433EB"))
+                    }
+                } header: {
+                    Text("\(selectedFeedTitle) cards")
+                } footer: {
+                    Text("This mix is saved independently for each feed. Enabled Worlds are managed below.")
                 }
 
                 Section("Holiday experience") {

@@ -258,6 +258,7 @@ struct HomePage: View {
 
         let enabledTryOnWorlds = buyerPreview.selected.id == "luke" && selectedTopicID == "for-you" ? WorldPrototypePreferences.shared.enabledWorldIDs : []
         result = WorldPrototypeFeedOrdering.prioritizeTryOn(in: result, enabledWorldIDs: enabledTryOnWorlds)
+        result = FeedCompositionFilter.apply(to: result, feedID: selectedTopicID, enabledWorldIDs: enabledTryOnWorlds)
         if seasonalPlacement == .feedCard {
             result.insert(.seasonalSavings, at: min(1, result.count))
         }
@@ -1480,7 +1481,7 @@ struct HomePage: View {
         let storyIndex = focusedStories.firstIndex(where: { $0.id == story.id })
 
         Group {
-            if story.id != "kyle-argizari-lighting",
+            if story.rendersAsMerchantCard,
                let collection = MerchantCollectionCatalog.presentation(for: story.id) {
                 MerchantCollectionFeedCard(
                     story: story,
@@ -1724,6 +1725,9 @@ struct HomePage: View {
             beltPreferences: utilityBelt,
             worldPreferences: WorldPrototypePreferences.shared,
             destinationPreferences: FeedDestinationPreferences.shared,
+            compositionPreferences: FeedCompositionPreferences.shared,
+            selectedFeedID: selectedTopicID,
+            selectedFeedTitle: selectedTopic.label,
             onSelectProfile: selectBuyer,
             onDisableDestination: { if selectedTopicID == $0 { selectedTopicID = "for-you" } }
         )

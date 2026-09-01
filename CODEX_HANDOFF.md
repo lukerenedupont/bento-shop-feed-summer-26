@@ -56,7 +56,9 @@ forked into per-profile views.
 
 Luke’s experimental Worlds are disabled by default and can be enabled
 individually from the avatar/overflow feed-controls sheet. Following and Deals
-can also be hidden there without altering the underlying authored feeds.
+can also be hidden there without altering the underlying authored feeds. Each
+feed independently persists its mix of general recommendations, merchant
+cards, and merchant-authored posts; enabled Worlds remain separately managed.
 
 - `WorldDomain.swift` owns World identity, context, lifetime, session state, and
   preference persistence. Parent/child relationships remain separate from
