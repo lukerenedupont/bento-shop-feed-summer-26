@@ -114,8 +114,11 @@ enum HypothesisShelfCatalog {
         user.shelves.map { shelf in
             let isStreetwearStory = shelf.id == streetwearStoryID
             let isPerformanceSneakerStory = shelf.id == performanceSneakerStoryID
+            let isCanvasWatchStory = shelf.id == "shelf-luke-6-analog-watches-desk-clocks"
             let sourceItems: [Item]
-            if isStreetwearStory {
+            if isCanvasWatchStory {
+                sourceItems = []
+            } else if isStreetwearStory {
                 let sourceShelfIDs = [
                     streetwearStoryID,
                     "shelf-luke-16-artist-collab-tees-hoodies-prints",
@@ -158,7 +161,13 @@ enum HypothesisShelfCatalog {
             } else {
                 nil
             }
-            let canonicalProducts = isPerformanceSneakerStory ? hypebeastProductReferences : []
+            let canonicalProducts: [FeedStory.ProductReference] = if isCanvasWatchStory {
+                VerySpecialWatchCatalog.productReferences
+            } else if isPerformanceSneakerStory {
+                hypebeastProductReferences
+            } else {
+                []
+            }
 
             return FeedStory(
                 id: shelf.id,
@@ -455,7 +464,7 @@ enum HypothesisShelfCatalog {
                 productCategory: nil
             )
         }
-        return shelfMerchants + hypebeastMerchants
+        return shelfMerchants + hypebeastMerchants + [VerySpecialWatchCatalog.merchant]
     }()
 
     private static let hypebeastMerchants: [SampleMerchant] = [

@@ -84,6 +84,27 @@ enum ShopDropStyle {
     static func experienceFrame(in bounds: CGRect) -> CGRect { bounds }
 }
 
+struct CanvasAgentFeedCover: View {
+    let products: [CatalogProduct]
+    @State private var hasInteracted = false
+
+    var body: some View {
+        InfiniteProductCanvas(
+            products: products,
+            resultColumnCount: 4,
+            resetToken: 0,
+            voiceCommand: nil,
+            hasInteracted: $hasInteracted,
+            onSelect: { _, _ in },
+            onRequestSimilar: { _ in },
+            onRemove: { _ in },
+            onMotion: { _ in }
+        )
+        .allowsHitTesting(false)
+        .overlay { Color.black.opacity(0.18).allowsHitTesting(false) }
+    }
+}
+
 enum CanvasAgentProductAdapter {
     static func products(from resolved: [ResolvedStoryProduct]) -> [CatalogProduct] {
         resolved.compactMap { item in

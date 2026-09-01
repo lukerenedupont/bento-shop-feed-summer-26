@@ -422,7 +422,11 @@ struct StoryFeedCard: View {
         ZStack {
             Color(hex: story.accentHex)
 
-            if let authoredCoverVideoURL {
+            if story.id == WorldPrototypeCatalog.canvasID {
+                CanvasAgentFeedCover(
+                    products: CanvasAgentProductAdapter.products(from: items)
+                )
+            } else if let authoredCoverVideoURL {
                 parallaxFilm {
                     AmbientProductVideo(
                         videoURLs: [authoredCoverVideoURL],

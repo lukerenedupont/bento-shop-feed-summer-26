@@ -296,7 +296,7 @@ enum WorldPrototypeCatalog {
     private static func subtitle(for worldID: String) -> String {
         switch worldID {
         case runningID: "Shoes, recovery, and smaller running brands for finding a rhythm again."
-        case canvasID: "A steerable canvas of analog watches, graphic references, and independent makers."
+        case canvasID: "A steerable canvas of distinctive vintage and contemporary watches from Very Special."
         case tryOnID: "Use the live camera to see products from your feed on you."
         case spatialID: "Place and swap warm sculptural pieces against the room you are building."
         case giftingID: "A living gift guide shaped around Leon, not a generic age bracket."
@@ -320,8 +320,8 @@ enum WorldPrototypeCatalog {
             context.set(WorldFact(key: "setting", value: "outdoors", source: .stated, scope: .local))
             context.set(WorldFact(key: "budget", value: "150", source: .stated, scope: .local))
         case canvasID:
-            context.set(WorldFact(key: "style", value: "analog and graphic", source: .inferred, scope: .local))
-            context.set(WorldFact(key: "budget", value: "400", source: .inferred, scope: .local))
+            context.set(WorldFact(key: "style", value: "distinctive vintage and contemporary", source: .inferred, scope: .local))
+            context.set(WorldFact(key: "merchant", value: "Very Special", source: .stated, scope: .local))
         case tryOnID:
             context.set(WorldFact(key: "subject", value: "Luke", source: .stated, scope: .subject))
             context.set(WorldFact(key: "input", value: "live camera", source: .stated, scope: .local))
