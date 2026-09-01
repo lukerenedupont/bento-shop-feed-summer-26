@@ -336,7 +336,14 @@ struct TopicDetailPage: View {
     }
     var body: some View {
         GeometryReader { geometry in
-            ZStack(alignment: .topLeading) {
+            if let worldSession, worldSession.state.activeExperience == .canvas {
+                CanvasAgentWorldDestination(
+                    session: worldSession,
+                    products: products,
+                    onClose: closeTopic
+                )
+            } else {
+                ZStack(alignment: .topLeading) {
                 surfaceColor
                     .ignoresSafeArea()
                 ScrollView(.vertical, showsIndicators: false) {
@@ -376,6 +383,7 @@ struct TopicDetailPage: View {
                         )
                         .zIndex(20)
                 }
+            }
             }
         }
         .ignoresSafeArea()
@@ -961,15 +969,19 @@ struct TopicDetailPage: View {
         }
         .frame(width: width, height: windowSafeAreaTopInset + 72, alignment: .top)
     }
+    private func closeTopic() {
+        coordinator.showNavBar = true
+        if coordinator.homePath.isEmpty, coordinator.topicBackAction != nil {
+            coordinator.popCurrentPage()
+        } else {
+            dismiss()
+        }
+    }
+
     private var closeButton: some View {
         Button {
             HapticFeedback.light.fire()
-            coordinator.showNavBar = true
-            if coordinator.homePath.isEmpty, coordinator.topicBackAction != nil {
-                coordinator.popCurrentPage()
-            } else {
-                dismiss()
-            }
+            closeTopic()
         } label: {
             ZStack {
                 BuyerPreviewAvatar(
