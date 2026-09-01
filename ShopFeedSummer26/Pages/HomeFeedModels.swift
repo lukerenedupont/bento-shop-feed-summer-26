@@ -49,27 +49,34 @@ extension FeedEntry {
     }
 }
 
+enum FeedMerchantIdentity {
+    static func normalizedName(_ value: String) -> String {
+        value
+            .folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current)
+            .lowercased()
+            .filter(\.isLetter)
+    }
+}
+
 enum FeedCompositionFilter {
     @MainActor
     static func apply(
         to entries: [FeedEntry],
-        feedID: String,
+        enabledKinds: Set<FeedContentKind>,
         enabledWorldIDs: Set<String>
     ) -> [FeedEntry] {
-        let preferences = FeedCompositionPreferences.shared
-        return entries.filter { entry in
+        entries.filter { entry in
             switch entry {
             case .post:
-                preferences.isEnabled(.posts, in: feedID)
+                enabledKinds.contains(.posts)
             case .story(let story):
                 enabledWorldIDs.contains(story.id)
-                    || preferences.isEnabled(
-                        story.rendersAsMerchantCard ? .merchantCards : .recommendations,
-                        in: feedID
+                    || enabledKinds.contains(
+                        story.rendersAsMerchantCard ? .merchantCards : .recommendations
                     )
             case .tryOn:
                 enabledWorldIDs.contains(WorldPrototypeCatalog.tryOnID)
-                    || preferences.isEnabled(.recommendations, in: feedID)
+                    || enabledKinds.contains(.recommendations)
             case .seasonalSavings:
                 true
             }

@@ -96,6 +96,10 @@ final class FeedCompositionPreferences {
         UserDefaults.standard.set(overrides, forKey: Self.defaultsKey)
     }
 
+    func enabledKinds(in feedID: String) -> Set<FeedContentKind> {
+        Set(FeedContentKind.allCases.filter { isEnabled($0, in: feedID) })
+    }
+
     private func key(_ kind: FeedContentKind, _ feedID: String) -> String {
         "\(feedID).\(kind.rawValue)"
     }
@@ -199,6 +203,7 @@ struct HomeFeedControlsSheet: View {
     @Bindable var compositionPreferences: FeedCompositionPreferences
     let selectedFeedID: String
     let selectedFeedTitle: String
+    let availableContentCounts: [FeedContentKind: Int]
     let onSelectProfile: (BuyerPreviewProfile) -> Void
     let onDisableDestination: (String) -> Void
     @Environment(\.dismiss) private var dismiss
@@ -277,7 +282,7 @@ struct HomeFeedControlsSheet: View {
                             Label {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(kind.title)
-                                    Text(kind.subtitle)
+                                    Text("\(kind.subtitle) · \(availableContentCounts[kind, default: 0]) available")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }

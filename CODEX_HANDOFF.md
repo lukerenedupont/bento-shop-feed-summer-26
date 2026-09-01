@@ -60,6 +60,10 @@ can also be hidden there without altering the underlying authored feeds. Each
 feed independently persists its mix of general recommendations, merchant
 cards, and merchant-authored posts; enabled Worlds remain separately managed.
 
+- `HomeFeedPlanner.swift` is the single feed-planning seam. It resolves authored
+  and followed content, distributes posts, prioritizes Worlds, applies each
+  feed’s composition settings, inserts campaigns, reports available card-type
+  counts, and memoizes the resulting render plan.
 - `WorldDomain.swift` owns World identity, context, lifetime, session state, and
   preference persistence. Parent/child relationships remain separate from
   identity.

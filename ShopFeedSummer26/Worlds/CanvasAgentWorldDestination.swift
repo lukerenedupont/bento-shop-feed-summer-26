@@ -29,7 +29,7 @@ struct CanvasAgentFeedCover: View {
     }
 
     private func columnProducts(_ column: Int) -> [CatalogProduct] {
-        products.enumerated().compactMap { index, product in
+        products.prefix(24).enumerated().compactMap { index, product in
             index % columnCount == column ? product : nil
         }
     }

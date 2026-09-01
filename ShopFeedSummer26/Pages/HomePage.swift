@@ -176,115 +176,24 @@ struct HomePage: View {
         return keyWindow.safeAreaInsets.top
     }
 
-    private var focusedStories: [FeedStory] {
-        let baseAuthored = buyerPreview.stories(for: selectedTopic, in: PersonalizedFeedCatalog.current)
-        let worldsEnabled = buyerPreview.selected.id == "luke" && selectedTopicID == "for-you"
-        let enabledWorldIDs = worldsEnabled ? WorldPrototypePreferences.shared.enabledWorldIDs : []
-        let authored = WorldPrototypeCatalog.feedStories(from: baseAuthored, available: PersonalizedFeedCatalog.current.stories, enabledIDs: enabledWorldIDs)
-        let authoredIDs = Set(authored.map(\.id))
-        let authoredMerchantIDs = Set(authored.compactMap(FeedMerchantDiversity.merchantID))
-        let relationshipStories = BuyerFollowedContentCatalog.stories(
-            for: buyerPreview.selected.id,
+    private var feedPlan: HomeFeedPlan {
+        let supportsWorlds = buyerPreview.selected.id == "luke" && selectedTopicID == "for-you"
+        let worldIDs = supportsWorlds ? WorldPrototypePreferences.shared.enabledWorldIDs : []
+        return HomeFeedPlanner.plan(.init(
+            buyer: buyerPreview.selected,
             topic: selectedTopic,
-            followedMerchants: activeRelationshipMerchants
-        )
-        .filter { story in
-            guard !authoredIDs.contains(story.id) else { return false }
-            guard let merchantID = FeedMerchantDiversity.merchantID(for: story) else { return true }
-            return !authoredMerchantIDs.contains(merchantID)
-        }
-        guard !relationshipStories.isEmpty else {
-            return FeedMerchantDiversity.filtered(authored)
-        }
-
-        // Preserve the authored shelf order, then distribute followed-shop
-        // edits through it instead of appending a separate branded section.
-        // The first card always remains the buyer's strongest authored focus.
-        var result: [FeedStory] = []
-        var relationshipIndex = 0
-        for (index, story) in authored.enumerated() {
-            result.append(story)
-            // Keep Luke's three authored Figma topics together before the
-            // first followed-merchant card enters For You.
-            let insertionStride = selectedTopicID == "for-you" ? 3 : 1
-            if (index + 1).isMultiple(of: insertionStride),
-               relationshipStories.indices.contains(relationshipIndex) {
-                result.append(relationshipStories[relationshipIndex])
-                relationshipIndex += 1
-            }
-        }
-        result.append(contentsOf: relationshipStories.dropFirst(relationshipIndex))
-        return FeedMerchantDiversity.filtered(result)
+            catalog: PersonalizedFeedCatalog.current,
+            merchants: merchants,
+            followedMerchants: activeRelationshipMerchants,
+            posts: postService.posts(for: buyerPreview.selected),
+            enabledWorldIDs: worldIDs,
+            enabledContentKinds: FeedCompositionPreferences.shared.enabledKinds(in: selectedTopicID),
+            seasonalPlacement: seasonalPlacement
+        ))
     }
 
-    /// Real merchant-authored posts are distributed through the story stream.
-    /// Topic feeds only accept posts from merchants already represented in the
-    /// topic; For You can use the complete personalized post set.
-    private var feedEntries: [FeedEntry] {
-        let posts = relevantFeedPosts
-        var result: [FeedEntry] = []
-        var nextPostIndex = 0
-
-        if buyerPreview.selected.id == "luke", selectedTopicID == "for-you" {
-            // The prototype's opening sequence is intentional: three authored
-            // topics, one followed-merchant card, one merchant post, then Try
-            // It Live. Continue the normal story/post cadence after that lead.
-            let leadStoryCount = min(4, focusedStories.count)
-            result.append(contentsOf: focusedStories.prefix(leadStoryCount).map(FeedEntry.story))
-            if posts.indices.contains(nextPostIndex) {
-                result.append(.post(posts[nextPostIndex]))
-                nextPostIndex += 1
-            }
-            result.append(.tryOn)
-
-            for (index, story) in focusedStories.dropFirst(leadStoryCount).enumerated() {
-                result.append(.story(story))
-                if (index + 1).isMultiple(of: 2),
-                   posts.indices.contains(nextPostIndex) {
-                    result.append(.post(posts[nextPostIndex]))
-                    nextPostIndex += 1
-                }
-            }
-        } else {
-            for (index, story) in focusedStories.enumerated() {
-                result.append(.story(story))
-                if (index + 1).isMultiple(of: 2),
-                   posts.indices.contains(nextPostIndex) {
-                    result.append(.post(posts[nextPostIndex]))
-                    nextPostIndex += 1
-                }
-            }
-        }
-
-        let enabledTryOnWorlds = buyerPreview.selected.id == "luke" && selectedTopicID == "for-you" ? WorldPrototypePreferences.shared.enabledWorldIDs : []
-        result = WorldPrototypeFeedOrdering.prioritizeTryOn(in: result, enabledWorldIDs: enabledTryOnWorlds)
-        result = FeedCompositionFilter.apply(to: result, feedID: selectedTopicID, enabledWorldIDs: enabledTryOnWorlds)
-        if seasonalPlacement == .feedCard {
-            result.insert(.seasonalSavings, at: min(1, result.count))
-        }
-        return result
-    }
-
-    private var relevantFeedPosts: [ShopPost] {
-        let posts = Array(postService.posts(for: buyerPreview.selected).prefix(6))
-        guard selectedTopicID != "for-you" else { return posts }
-
-        let topicMerchantNames = Set(
-            focusedStories
-                .flatMap { $0.resolvedProducts(from: merchants) }
-                .map { normalizedMerchantName($0.merchant.displayName) }
-        )
-        return posts.filter {
-            topicMerchantNames.contains(normalizedMerchantName($0.merchant.name))
-        }
-    }
-
-    private func normalizedMerchantName(_ value: String) -> String {
-        value
-            .folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current)
-            .lowercased()
-            .filter(\.isLetter)
-    }
+    private var focusedStories: [FeedStory] { feedPlan.stories }
+    private var feedEntries: [FeedEntry] { feedPlan.entries }
 
     private var tryOnProducts: [ResolvedStoryProduct] {
         TryOnExperience.products(stories: focusedStories, merchants: merchants)
@@ -1617,8 +1526,8 @@ struct HomePage: View {
             let color: Color = switch entry {
             case let .story(story): Color(hex: story.accentHex)
             case let .post(post): merchants.first {
-                normalizedMerchantName($0.displayName)
-                    == normalizedMerchantName(post.merchant.name)
+                FeedMerchantIdentity.normalizedName($0.displayName)
+                    == FeedMerchantIdentity.normalizedName(post.merchant.name)
             }?.brandColor ?? Color(hex: "#343038")
             case .seasonalSavings: Color(hex: "#49308F")
             case .tryOn: Color(hex: "#4A4745")
@@ -1728,6 +1637,7 @@ struct HomePage: View {
             compositionPreferences: FeedCompositionPreferences.shared,
             selectedFeedID: selectedTopicID,
             selectedFeedTitle: selectedTopic.label,
+            availableContentCounts: feedPlan.availableContentCounts,
             onSelectProfile: selectBuyer,
             onDisableDestination: { if selectedTopicID == $0 { selectedTopicID = "for-you" } }
         )
