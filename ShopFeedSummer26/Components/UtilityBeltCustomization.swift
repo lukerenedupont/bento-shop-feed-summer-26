@@ -1,5 +1,51 @@
 import SwiftUI
 
+enum OptionalFeedDestination: String, CaseIterable, Identifiable {
+    case following
+    case deals
+
+    var id: String { rawValue }
+    var title: String { rawValue.capitalized }
+    var subtitle: String {
+        switch self {
+        case .following: "Updates from shops you follow"
+        case .deals: "Personalized offers and price drops"
+        }
+    }
+    var symbol: String {
+        switch self {
+        case .following: "person.2"
+        case .deals: "tag"
+        }
+    }
+}
+
+@Observable
+@MainActor
+final class FeedDestinationPreferences {
+    static let shared = FeedDestinationPreferences()
+    private static let defaultsKey = "enabledOptionalFeedDestinations"
+    private(set) var enabledDestinations: Set<OptionalFeedDestination>
+
+    private init() {
+        if let stored = UserDefaults.standard.stringArray(forKey: Self.defaultsKey) {
+            enabledDestinations = Set(stored.compactMap(OptionalFeedDestination.init(rawValue:)))
+        } else {
+            enabledDestinations = Set(OptionalFeedDestination.allCases)
+        }
+    }
+
+    func isEnabled(_ destination: OptionalFeedDestination) -> Bool {
+        enabledDestinations.contains(destination)
+    }
+
+    func setEnabled(_ enabled: Bool, for destination: OptionalFeedDestination) {
+        if enabled { enabledDestinations.insert(destination) }
+        else { enabledDestinations.remove(destination) }
+        UserDefaults.standard.set(enabledDestinations.map(\.rawValue).sorted(), forKey: Self.defaultsKey)
+    }
+}
+
 /// Stable identities for cards that can appear in the top-of-feed utility belt.
 enum UtilityBeltItem: String, CaseIterable, Identifiable {
     case orders
@@ -94,7 +140,9 @@ struct HomeFeedControlsSheet: View {
     @Binding var extendoEnabled: Bool
     @Bindable var beltPreferences: UtilityBeltPreferences
     @Bindable var worldPreferences: WorldPrototypePreferences
+    @Bindable var destinationPreferences: FeedDestinationPreferences
     let onSelectProfile: (BuyerPreviewProfile) -> Void
+    let onDisableDestination: (String) -> Void
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -127,6 +175,37 @@ struct HomeFeedControlsSheet: View {
                         }
                     }
                     .padding(.vertical, GravitySpacing.space4)
+                }
+
+                Section {
+                    ForEach(OptionalFeedDestination.allCases) { destination in
+                        Toggle(
+                            isOn: Binding(
+                                get: { destinationPreferences.isEnabled(destination) },
+                                set: { enabled in
+                                    destinationPreferences.setEnabled(enabled, for: destination)
+                                    if !enabled { onDisableDestination(destination.id) }
+                                }
+                            )
+                        ) {
+                            Label {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(destination.title)
+                                    Text(destination.subtitle)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            } icon: {
+                                Image(systemName: destination.symbol)
+                                    .foregroundStyle(Color(hex: "#5433EB"))
+                            }
+                        }
+                        .tint(Color(hex: "#5433EB"))
+                    }
+                } header: {
+                    Text("Feed destinations")
+                } footer: {
+                    Text("Choose which destinations appear in the navigation rail.")
                 }
 
                 Section("Holiday experience") {

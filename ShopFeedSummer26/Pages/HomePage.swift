@@ -133,13 +133,9 @@ struct HomePage: View {
     private func evergreenNavigationTopics(
         from forYou: BuyerFeedTopic
     ) -> [BuyerFeedTopic] {
-        utilityNavigationTopics(
-            labels: [
-                (id: "following", label: "Following"),
-                (id: "deals", label: "Deals"),
-            ],
-            from: forYou
-        )
+        let preferences = FeedDestinationPreferences.shared
+        let labels = OptionalFeedDestination.allCases.filter(preferences.isEnabled).map { (id: $0.id, label: $0.title) }
+        return utilityNavigationTopics(labels: labels, from: forYou)
     }
 
     /// These first-pass destinations reuse the buyer's authored assortment so
@@ -1729,7 +1725,9 @@ struct HomePage: View {
             extendoEnabled: $utilityBeltExtendoEnabled,
             beltPreferences: utilityBelt,
             worldPreferences: WorldPrototypePreferences.shared,
-            onSelectProfile: selectBuyer
+            destinationPreferences: FeedDestinationPreferences.shared,
+            onSelectProfile: selectBuyer,
+            onDisableDestination: { if selectedTopicID == $0 { selectedTopicID = "for-you" } }
         )
         .environment(\.colorScheme, .light)
     }
