@@ -1446,14 +1446,11 @@ struct HomePage: View {
                 includesVolume: includesVolumeControl,
                 onOverflowTap: { showsBuyerSwitcher = true }
             )
-            .padding(.top, layout.pinnedTitleTop)
-            .padding(.trailing, GravitySpacing.space12)
-            .visualEffect { actions, proxy in
-                let minY = proxy.frame(in: .scrollView(axis: .vertical)).minY
-                let distance = max(minY - layout.pinnedTitleTop, 0)
-                let progress = min(max(1 - distance / 100, 0), 1)
-                return actions.opacity(progress)
-            }
+            .positionedFeedFeedback(
+                for: entry,
+                layout: layout,
+                showsAnchoredControls: hasEnteredFullBleedFeed && isSnappedEntry
+            )
             .allowsHitTesting(hasEnteredFullBleedFeed)
             .zIndex(4)
         }

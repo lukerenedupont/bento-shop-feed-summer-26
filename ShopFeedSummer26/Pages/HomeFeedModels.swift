@@ -1,4 +1,4 @@
-import Foundation
+import SwiftUI
 
 enum FeedEntry: Identifiable {
     case tryOn
@@ -32,6 +32,66 @@ enum WorldPrototypeFeedOrdering {
             .count
         result.insert(.tryOn, at: min(worldsBeforeTryOn, result.count))
         return result
+    }
+}
+
+extension FeedEntry {
+    var usesBottomAnchoredWorldChrome: Bool {
+        guard case .story(let story) = self, story.format == .world else { return false }
+        return story.id == "kyle-argizari-lighting"
+            || MerchantCollectionCatalog.presentation(for: story.id) == nil
+    }
+}
+
+private struct FeedFeedbackPositionModifier: ViewModifier {
+    let entry: FeedEntry
+    let layout: FeedViewportLayout
+    let showsAnchoredControls: Bool
+    @State private var reservesExploreSpace = false
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if entry.usesBottomAnchoredWorldChrome {
+            let railHeight = max((layout.cardWidth - 64) / 2, 144)
+            content
+                .padding(.bottom, railHeight + 20 + (reservesExploreSpace ? 56 : 0))
+                .padding(.trailing, GravitySpacing.space12)
+                .frame(maxHeight: .infinity, alignment: .bottomTrailing)
+                .opacity(showsAnchoredControls ? 1 : 0)
+                .animation(.easeOut(duration: 0.2), value: showsAnchoredControls)
+                .task(id: "\(entry.id)-\(showsAnchoredControls)") {
+                    reservesExploreSpace = false
+                    guard showsAnchoredControls else { return }
+                    try? await Task.sleep(for: .milliseconds(750))
+                    guard !Task.isCancelled, showsAnchoredControls else { return }
+                    withAnimation(.spring(response: 0.42, dampingFraction: 0.86)) {
+                        reservesExploreSpace = true
+                    }
+                }
+        } else {
+            content
+                .padding(.top, layout.pinnedTitleTop)
+                .padding(.trailing, GravitySpacing.space12)
+                .visualEffect { actions, geometry in
+                    let distance = max(geometry.frame(in: .scrollView).minY - layout.pinnedTitleTop, 0)
+                    let progress = min(max(1 - distance / 100, 0), 1)
+                    return actions.opacity(progress)
+                }
+        }
+    }
+}
+
+extension View {
+    func positionedFeedFeedback(
+        for entry: FeedEntry,
+        layout: FeedViewportLayout,
+        showsAnchoredControls: Bool
+    ) -> some View {
+        modifier(FeedFeedbackPositionModifier(
+            entry: entry,
+            layout: layout,
+            showsAnchoredControls: showsAnchoredControls
+        ))
     }
 }
 

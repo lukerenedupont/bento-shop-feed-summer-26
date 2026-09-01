@@ -344,7 +344,7 @@ struct StoryFeedCard: View {
         .task(id: isActive) {
             showsExploreMore = false
             guard showsDelayedExploreButton, isActive else { return }
-            try? await Task.sleep(for: .seconds(1))
+            try? await Task.sleep(for: .milliseconds(750))
             guard !Task.isCancelled, isActive else { return }
             withAnimation(.spring(response: 0.42, dampingFraction: 0.86)) {
                 showsExploreMore = true
@@ -393,8 +393,10 @@ struct StoryFeedCard: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 44)
-                    .background(.white.opacity(0.16), in: Capsule())
-                    .overlay { Capsule().strokeBorder(.white.opacity(0.08), lineWidth: 0.5) }
+                    .background(.black.opacity(0.12), in: Capsule())
+                    .glassEffect(.regular.tint(.black.opacity(0.14)), in: .capsule)
+                    .overlay { Capsule().strokeBorder(.white.opacity(0.2), lineWidth: 0.5) }
+                    .shadow(color: .black.opacity(0.12), radius: 12, y: 5)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
