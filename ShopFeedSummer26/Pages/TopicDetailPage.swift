@@ -22,6 +22,7 @@ struct TopicDetailPage: View {
     /// SwiftUI evaluated any rail on the page.
     private let products: [ResolvedStoryProduct]
     private let topicPresentation: TopicPresentation
+    private let worldDefinition: WorldDefinition?
     /// The long rails share one stable assortment instead of rebuilding it
     /// independently for every `productWindow` call.
     private let exploreProducts: [ResolvedStoryProduct]
@@ -35,6 +36,7 @@ struct TopicDetailPage: View {
     @State private var selectedExploreFilter = "All"
     @State private var presentedAssortment: TopicPresentedAssortment?
     @State private var giftGuideState = GiftGuidePrototypeState()
+    @State private var worldSession: WorldSession?
     init(
         story: FeedStory,
         merchants: [SampleMerchant],
@@ -43,6 +45,9 @@ struct TopicDetailPage: View {
         self.story = story
         self.merchants = merchants
         topicPresentation = TopicPresentationCatalog.presentation(for: story)
+        let definition = WorldPrototypeCatalog.definition(for: story.id)
+        worldDefinition = definition
+        _worldSession = State(initialValue: definition.map { WorldSessionStore.shared.session(for: $0) })
         var seenResolvedIDs = Set<String>()
         let resolved = (story.resolvedProducts(from: merchants) + enrichmentProducts)
             .filter { seenResolvedIDs.insert($0.id).inserted }
@@ -359,6 +364,15 @@ struct TopicDetailPage: View {
                             alignment: .bottom
                         )
                         .zIndex(20)
+                } else if let worldSession {
+                    WorldSteeringDock(session: worldSession)
+                        .padding(.bottom, 28)
+                        .frame(
+                            width: geometry.size.width,
+                            height: geometry.size.height,
+                            alignment: .bottom
+                        )
+                        .zIndex(20)
                 }
             }
         }
@@ -578,6 +592,14 @@ struct TopicDetailPage: View {
     private func merchandising(containerWidth: CGFloat) -> some View {
         if topicPresentation.usesGiftGuidePrototype {
             GiftGuidePrototypeContent(products: products, state: giftGuideState)
+        } else if let worldDefinition,
+                  let worldSession,
+                  worldSession.state.activeExperience != .merchandised {
+            WorldExperienceContent(
+                definition: worldDefinition,
+                session: worldSession,
+                products: products
+            )
         } else {
             VStack(alignment: .leading, spacing: pageRecipe.sectionSpacing) {
                 ForEach(Array(pageRecipe.blocks.enumerated()), id: \.offset) { _, block in
