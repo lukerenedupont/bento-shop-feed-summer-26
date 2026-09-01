@@ -238,7 +238,7 @@ final class WorldSessionStore {
 
 enum WorldPrototypeCatalog {
     static let runningID = HypothesisShelfCatalog.performanceSneakerStoryID
-    static let canvasID = "shelf-luke-6-analog-watches-desk-clocks"
+    static let canvasID = VerySpecialWatchCatalog.storyID
     static let tryOnID = TryOnExperience.cardID
     static let spatialID = "shelf-luke-2-sculptural-living-room-pieces"
     static let giftingID = HypothesisShelfCatalog.giftGuideStoryID

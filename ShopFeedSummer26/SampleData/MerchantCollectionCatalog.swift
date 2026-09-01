@@ -311,13 +311,6 @@ enum FeedCoverCatalog {
             textScrimOpacity: 0.44
         ),
         .init(
-            storyID: "shelf-luke-6-analog-watches-desk-clocks",
-            merchantID: "shelf-shop-vhail-bcc39aa",
-            productID: 2570243354690201607,
-            mediaRole: .inContext,
-            textScrimOpacity: 0.42
-        ),
-        .init(
             storyID: "shelf-luke-7-stylish-travel-essentials",
             source: .bundledVideo(resource: "olend-travel", fileExtension: "mp4"),
             mediaRole: .wornOrUsed,

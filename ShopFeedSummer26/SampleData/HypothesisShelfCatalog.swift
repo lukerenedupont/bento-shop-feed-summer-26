@@ -114,7 +114,7 @@ enum HypothesisShelfCatalog {
         user.shelves.map { shelf in
             let isStreetwearStory = shelf.id == streetwearStoryID
             let isPerformanceSneakerStory = shelf.id == performanceSneakerStoryID
-            let isCanvasWatchStory = shelf.id == "shelf-luke-6-analog-watches-desk-clocks"
+            let isCanvasWatchStory = shelf.id == VerySpecialWatchCatalog.storyID
             let sourceItems: [Item]
             if isCanvasWatchStory {
                 sourceItems = []

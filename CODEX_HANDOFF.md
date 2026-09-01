@@ -1,6 +1,6 @@
 # Codex handoff
 
-Updated: 2026-08-19
+Updated: 2026-09-01
 
 ## Repository state
 
@@ -52,6 +52,33 @@ forked into per-profile views.
 - Utility cards use a shared horizontal snap rail and consistent card/product
   sizing. Luke currently exposes the Your orders example.
 
+### Opt-in World prototypes
+
+Luke’s experimental Worlds are disabled by default and can be enabled
+individually from the avatar/overflow feed-controls sheet. Following and Deals
+can also be hidden there without altering the underlying authored feeds.
+
+- `WorldDomain.swift` owns World identity, context, lifetime, session state, and
+  preference persistence. Parent/child relationships remain separate from
+  identity.
+- `CanvasAgentWorldDestination.swift` owns the Watch Canvas presentation,
+  steering, shared chrome alignment, and feed-cover Canvas preview.
+- `CanvasAgentInfiniteProductCanvas.swift` is the source-aligned Canvas engine
+  adapted from `shopify-playground/canvas-agent` at commit `a5957f4`.
+- `CanvasAgentSupport.swift` is the adapter seam between canonical Shop
+  products and Canvas products.
+- `VerySpecialWatchCatalog.swift` owns the deterministic 47-watch snapshot from
+  Very Special’s official Watches collection, including canonical prices,
+  imagery, and PDP destinations.
+- `WorldExperienceViews.swift` contains the remaining lightweight World forms;
+  Canvas no longer shares that implementation file.
+
+The Watch Canvas feed card uses a noninteractive instance of the real Canvas
+engine as its cover. Opening it restores full pan, zoom, density, steering,
+product actions, and Shop PDP routing. The destination computes its own safe
+area chrome, so callers provide only the World session, resolved products, and
+close action.
+
 ### Holiday banner variant
 
 Tap the buyer avatar and use **Holiday banner** to choose:
@@ -96,8 +123,10 @@ xcodebuild -project ShopFeedSummer26.xcodeproj \
   -derivedDataPath /tmp/shop-feed-derived build
 ```
 
-The build, personalized-feed validation phase, and `git diff --check` pass.
-Existing unrelated Swift concurrency warnings may remain.
+The clean simulator build, personalized-feed validation phase, and
+`git diff --check` pass. The clean app product is approximately `184020 KB`
+against the enforced `184320 KB` budget. Existing unrelated Swift concurrency
+warnings may remain.
 
 ## Design intent
 

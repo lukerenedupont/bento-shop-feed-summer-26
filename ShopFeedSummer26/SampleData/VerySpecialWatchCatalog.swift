@@ -4,7 +4,9 @@ import SwiftUI
 /// Watches collection. Product identity, pricing, imagery, and destinations
 /// remain bound to the merchant's canonical storefront.
 enum VerySpecialWatchCatalog {
+    static let storyID = "shelf-luke-6-analog-watches-desk-clocks"
     static let merchantID = "very-special-watch"
+    static let sourceCollectionURL = "https://www.veryspecial.watch/collections/watches"
 
     private static let inventory: [(Int, String, String, String, String)] = [
         (10851731308856, "Patek Philippe Aquanaut 5066a in Steel Case on Uncut Brown Rubber Strap with Box & Papers", "57000.00", "patek-philippe-aquanaut-5066a-in-steel-case-on-uncut-brown-rubber-strap-with-box-papers", "https://cdn.shopify.com/s/files/1/0711/1865/1704/files/50661025.jpg?v=1788194619"),
