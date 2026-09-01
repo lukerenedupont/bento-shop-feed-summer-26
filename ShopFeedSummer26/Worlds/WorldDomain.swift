@@ -239,7 +239,7 @@ final class WorldSessionStore {
 enum WorldPrototypeCatalog {
     static let runningID = HypothesisShelfCatalog.performanceSneakerStoryID
     static let canvasID = "shelf-luke-6-analog-watches-desk-clocks"
-    static let tryOnID = "shelf-kenny-8-wide-fit-polarized-sunglasses"
+    static let tryOnID = TryOnExperience.cardID
     static let spatialID = "shelf-luke-2-sculptural-living-room-pieces"
     static let giftingID = HypothesisShelfCatalog.giftGuideStoryID
     static let missionID = "shelf-mikhail-8-high-performance-ski-setup"
@@ -297,7 +297,7 @@ enum WorldPrototypeCatalog {
         switch worldID {
         case runningID: "Shoes, recovery, and smaller running brands for finding a rhythm again."
         case canvasID: "A steerable canvas of analog watches, graphic references, and independent makers."
-        case tryOnID: "Try wide-fit polarized frames and compare the shapes that work best."
+        case tryOnID: "Use the live camera to see products from your feed on you."
         case spatialID: "Place and swap warm sculptural pieces against the room you are building."
         case giftingID: "A living gift guide shaped around Leon, not a generic age bracket."
         case missionID: "A working plan for equipment, mountain layers, travel, and recovery."
@@ -323,8 +323,8 @@ enum WorldPrototypeCatalog {
             context.set(WorldFact(key: "style", value: "analog and graphic", source: .inferred, scope: .local))
             context.set(WorldFact(key: "budget", value: "400", source: .inferred, scope: .local))
         case tryOnID:
-            context.set(WorldFact(key: "fit", value: "wide", source: .inherited, scope: .local))
-            context.set(WorldFact(key: "lens", value: "polarized", source: .observed, scope: .local))
+            context.set(WorldFact(key: "subject", value: "Luke", source: .stated, scope: .subject))
+            context.set(WorldFact(key: "input", value: "live camera", source: .stated, scope: .local))
         case spatialID:
             context.set(WorldFact(key: "room", value: "living room", source: .stated, scope: .subject))
             context.set(WorldFact(key: "mood", value: "warm and sculptural", source: .observed, scope: .local))
@@ -360,7 +360,7 @@ enum WorldPrototypeCatalog {
             ),
             WorldDefinition(
                 id: tryOnID,
-                title: "Find sunglasses that suit me",
+                title: "Try it live",
                 purpose: .intent,
                 subject: "Luke",
                 primaryExperience: .tryOn,

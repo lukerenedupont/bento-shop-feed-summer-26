@@ -18,11 +18,9 @@ struct HomePage: View {
         HypothesisShelfCatalog.merchants,
         personalizedMerchantSnapshot,
     ])
-
     /// Shared with `RootView` so a tapped feed card can zoom into the
     /// original full-screen topic content.
     var namespace: Namespace.ID
-
 #if DEBUG
     @ObservedObject private var _purlTuneRuntime = PurlTuneRuntime.shared
 #endif
@@ -263,6 +261,8 @@ struct HomePage: View {
             }
         }
 
+        let enabledTryOnWorlds = buyerPreview.selected.id == "luke" && selectedTopicID == "for-you" ? WorldPrototypePreferences.shared.enabledWorldIDs : []
+        result = WorldPrototypeFeedOrdering.prioritizeTryOn(in: result, enabledWorldIDs: enabledTryOnWorlds)
         if seasonalPlacement == .feedCard {
             result.insert(.seasonalSavings, at: min(1, result.count))
         }

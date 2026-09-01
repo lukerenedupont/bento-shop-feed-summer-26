@@ -29,6 +29,14 @@ struct TryOnStudioPage: View {
         products.first { $0.id == selectedProductID } ?? products.first
     }
 
+    private var worldSession: WorldSession? {
+        guard WorldPrototypePreferences.shared.isEnabled(WorldPrototypeCatalog.tryOnID),
+              let definition = WorldPrototypeCatalog.definition(for: WorldPrototypeCatalog.tryOnID) else {
+            return nil
+        }
+        return WorldSessionStore.shared.session(for: definition)
+    }
+
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
@@ -56,12 +64,16 @@ struct TryOnStudioPage: View {
                 selectedProductID = products.first?.id
                 carouselProductID = products.first?.id
             }
+            if let selectedProduct {
+                worldSession?.send(.viewProduct(selectedProduct.id))
+            }
         }
         .onChange(of: carouselProductID) { _, productID in
             guard let productID,
                   productID != selectedProductID,
                   let product = products.first(where: { $0.id == productID }) else { return }
             selectedProductID = productID
+            worldSession?.send(.selectProduct(product.id))
             HapticFeedback.selection.fire()
             session.apply(product: product)
         }

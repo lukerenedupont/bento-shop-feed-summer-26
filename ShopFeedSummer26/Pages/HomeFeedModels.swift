@@ -16,6 +16,25 @@ enum FeedEntry: Identifiable {
     }
 }
 
+enum WorldPrototypeFeedOrdering {
+    static func prioritizeTryOn(
+        in entries: [FeedEntry],
+        enabledWorldIDs: Set<String>
+    ) -> [FeedEntry] {
+        guard enabledWorldIDs.contains(WorldPrototypeCatalog.tryOnID) else { return entries }
+        var result = entries.filter {
+            if case .tryOn = $0 { return false }
+            return true
+        }
+        let worldsBeforeTryOn = WorldPrototypeCatalog.topLevelWorldIDs
+            .prefix { $0 != WorldPrototypeCatalog.tryOnID }
+            .filter(enabledWorldIDs.contains)
+            .count
+        result.insert(.tryOn, at: min(worldsBeforeTryOn, result.count))
+        return result
+    }
+}
+
 enum SeasonalPlacement: String, CaseIterable, Identifiable {
     case off
     case header
