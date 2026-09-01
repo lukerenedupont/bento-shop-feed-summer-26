@@ -54,7 +54,7 @@ private struct FeedFeedbackPositionModifier: ViewModifier {
         if entry.usesBottomAnchoredWorldChrome {
             let railHeight = max((layout.cardWidth - 64) / 2, 144)
             content
-                .padding(.bottom, railHeight + 20 + (reservesExploreSpace ? 56 : 0))
+                .padding(.bottom, railHeight + 32 + (reservesExploreSpace ? 56 : 0))
                 .padding(.trailing, GravitySpacing.space12)
                 .frame(maxHeight: .infinity, alignment: .bottomTrailing)
                 .opacity(showsAnchoredControls ? 1 : 0)

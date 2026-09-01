@@ -3,22 +3,50 @@ import UIKit
 
 struct CanvasAgentFeedCover: View {
     let products: [CatalogProduct]
-    @State private var hasInteracted = false
+    private let columnCount = 4
 
     var body: some View {
-        InfiniteProductCanvas(
-            products: products,
-            resultColumnCount: 4,
-            resetToken: 0,
-            voiceCommand: nil,
-            hasInteracted: $hasInteracted,
-            onSelect: { _, _ in },
-            onRequestSimilar: { _ in },
-            onRemove: { _ in },
-            onMotion: { _ in }
-        )
+        GeometryReader { geometry in
+            let spacing: CGFloat = 6
+            let tileWidth = (geometry.size.width - spacing * 3) / 4
+
+            HStack(alignment: .top, spacing: spacing) {
+                ForEach(0..<columnCount, id: \.self) { column in
+                    LazyVStack(spacing: spacing) {
+                        ForEach(columnProducts(column)) { product in
+                            canvasTile(product, width: tileWidth)
+                        }
+                    }
+                    .offset(y: column.isMultiple(of: 2) ? -54 : -112)
+                }
+            }
+            .frame(width: geometry.size.width, alignment: .top)
+        }
+        .background(Color(hex: "#EEEDE9"))
+        .overlay { Color.black.opacity(0.13).allowsHitTesting(false) }
+        .clipped()
         .allowsHitTesting(false)
-        .overlay { Color.black.opacity(0.18).allowsHitTesting(false) }
+    }
+
+    private func columnProducts(_ column: Int) -> [CatalogProduct] {
+        products.enumerated().compactMap { index, product in
+            index % columnCount == column ? product : nil
+        }
+    }
+
+    private func canvasTile(_ product: CatalogProduct, width: CGFloat) -> some View {
+        let variant = product.id.utf8.reduce(0) { ($0 + Int($1)) % 3 }
+        let height = width * ([1.18, 1.42, 1.06][variant])
+        return CachedAsyncImage(url: product.imageURL) { phase in
+            if case .success(let image) = phase {
+                image.resizable().scaledToFill()
+            } else {
+                Color.white.opacity(0.72)
+            }
+        }
+        .frame(width: width, height: height)
+        .background(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 }
 

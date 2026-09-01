@@ -1444,6 +1444,7 @@ struct HomePage: View {
                 appliesShadow: !usesDarkFeedbackIcons,
                 includesOverflow: true,
                 includesVolume: includesVolumeControl,
+                includesThread: !entry.usesBottomAnchoredWorldChrome,
                 onOverflowTap: { showsBuyerSwitcher = true }
             )
             .positionedFeedFeedback(

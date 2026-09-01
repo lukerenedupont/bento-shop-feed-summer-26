@@ -51,6 +51,7 @@ struct PrototypeFeedbackActions: View {
     var appliesShadow = true
     var includesOverflow = false
     var includesVolume = false
+    var includesThread = true
     var onOverflowTap: (() -> Void)?
     @State private var selectedActions: Set<Action> = []
 
@@ -72,7 +73,9 @@ struct PrototypeFeedbackActions: View {
         var actions: [Action] = []
         if includesOverflow { actions.append(.more) }
         if includesVolume { actions.append(.volume) }
-        actions.append(contentsOf: [.like, .thread, .share])
+        actions.append(.like)
+        if includesThread { actions.append(.thread) }
+        actions.append(.share)
         return actions
     }
 
@@ -319,7 +322,7 @@ struct StoryFeedCard: View {
                     }
                     .padding(.horizontal, GravitySpacing.space20)
                     .padding(.top, foregroundTopPadding)
-                    .padding(.bottom, foregroundBottomPadding)
+                    .padding(.bottom, showsDelayedExploreButton ? GravitySpacing.space20 : foregroundBottomPadding)
                 }
             }
             .frame(width: width, height: height)
@@ -400,6 +403,10 @@ struct StoryFeedCard: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
+        .frame(
+            width: max(width - (GravitySpacing.space20 * 2), 0),
+            alignment: .leading
+        )
     }
 
     @ViewBuilder

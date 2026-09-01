@@ -41,9 +41,14 @@ struct MerchantCollectionFeedCard: View {
         for product in merchant.products where seen.insert(product.id).inserted {
             result.append(product)
         }
-        // Every merchant collection uses the same compact three-up rail.
-        // This keeps the lifestyle image dominant and the cards aligned.
-        return Array(result.prefix(3))
+        if let brandMerchant, brandMerchant.id != merchant.id {
+            for product in brandMerchant.products where seen.insert(product.id).inserted {
+                result.append(product)
+            }
+        }
+        // Merchant cards use a complete 3×2 block. Prefer the story's exact
+        // products, then fill from the same canonical merchant catalog.
+        return Array(result.prefix(6))
     }
 
     private var coverURL: URL? {
