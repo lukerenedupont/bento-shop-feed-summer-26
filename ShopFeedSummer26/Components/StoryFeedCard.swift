@@ -165,6 +165,7 @@ struct StoryFeedCard: View {
     /// compositor-only offset. This avoids invalidating the card hierarchy
     /// while a vertical scroll gesture is in flight.
     var scrollPinnedTitleTop: CGFloat? = nil
+    var showsDelayedExploreButton = false
     var foregroundBottomPadding: CGFloat = FeedCardStyle.foregroundBottomPadding
     var backgroundBlurRadius: CGFloat = 0
     var backgroundPlaybackEnabled = true
@@ -189,6 +190,7 @@ struct StoryFeedCard: View {
     @State private var productPromotionProgress: CGFloat = 0
     @State private var productDeckDirection = 1
     @State private var productDeckIsSettling = false
+    @State private var showsExploreMore = false
 
     private var items: [ResolvedStoryProduct] {
         story.resolvedProducts(from: merchants)
@@ -308,45 +310,11 @@ struct StoryFeedCard: View {
                 }
 
                 if showsForegroundContent {
-                    ZStack {
-                        if productLayout == .compactGrid {
-                            compactGridComposition
-                                .frame(
-                                    maxWidth: .infinity,
-                                    maxHeight: .infinity,
-                                    alignment: .bottomLeading
-                                )
+                    Group {
+                        if showsDelayedExploreButton {
+                            worldCardForeground
                         } else {
-                            scrollAwareStoryHeader
-                                .frame(
-                                    maxWidth: .infinity,
-                                    maxHeight: .infinity,
-                                    alignment: titleAtTopLeading ? .topLeading : .bottomLeading
-                                )
-                        }
-                        if showsFooterArrow {
-                            footerArrow
-                                .frame(
-                                    maxWidth: .infinity,
-                                    maxHeight: .infinity,
-                                    alignment: .bottomTrailing
-                                )
-                        }
-                        if productLayout == .stackedDeck {
-                            productCarousel
-                                .frame(
-                                    maxWidth: .infinity,
-                                    maxHeight: .infinity,
-                                    alignment: .bottomLeading
-                                )
-                        }
-                        if productLayout == .bottomCarousel {
-                            bottomProductCarousel
-                                .frame(
-                                    maxWidth: .infinity,
-                                    maxHeight: .infinity,
-                                    alignment: .bottomLeading
-                                )
+                            standardForeground
                         }
                     }
                     .padding(.horizontal, GravitySpacing.space20)
@@ -373,8 +341,77 @@ struct StoryFeedCard: View {
         // A scroll drag begins as a press. Scaling the full card here made
         // its title spring on release just as the feed snap completed.
         .buttonStyle(.plain)
+        .task(id: isActive) {
+            showsExploreMore = false
+            guard showsDelayedExploreButton, isActive else { return }
+            try? await Task.sleep(for: .seconds(1))
+            guard !Task.isCancelled, isActive else { return }
+            withAnimation(.spring(response: 0.42, dampingFraction: 0.86)) {
+                showsExploreMore = true
+            }
+        }
         .accessibilityLabel("\(titleOverride ?? story.title). \(story.subtitle)")
         .accessibilityHint(story.destinationLabel)
+    }
+
+    private var standardForeground: some View {
+        ZStack {
+            if productLayout == .compactGrid {
+                compactGridComposition
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+            } else {
+                scrollAwareStoryHeader
+                    .frame(
+                        maxWidth: .infinity,
+                        maxHeight: .infinity,
+                        alignment: titleAtTopLeading ? .topLeading : .bottomLeading
+                    )
+            }
+            if showsFooterArrow {
+                footerArrow
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+            }
+            if productLayout == .stackedDeck {
+                productCarousel
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+            }
+            if productLayout == .bottomCarousel {
+                bottomProductCarousel
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+            }
+        }
+    }
+
+    private var worldCardForeground: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            Spacer(minLength: 80)
+            storyHeader
+            worldCardProducts
+            if showsExploreMore {
+                Text("Explore more")
+                    .font(GravityFont.semiBold.fixedFont(size: 16))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+                    .background(.white.opacity(0.16), in: Capsule())
+                    .overlay { Capsule().strokeBorder(.white.opacity(0.08), lineWidth: 0.5) }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var worldCardProducts: some View {
+        switch productLayout {
+        case .compactGrid:
+            compactProductGrid
+        case .stackedDeck:
+            productCarousel
+        case .bottomCarousel:
+            bottomProductCarousel
+        case nil:
+            EmptyView()
+        }
     }
 
     // MARK: - Atmosphere
@@ -607,21 +644,25 @@ struct StoryFeedCard: View {
     /// Dense assortment treatment: the title stays fixed at the top while the
     /// products and edit footer form one anchored block at the bottom.
     private var compactGridComposition: some View {
-        let count = compactGridItemCount
-        let columns = count == 4 ? 2 : 3
-
-        return VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             scrollAwareStoryHeader
 
             Spacer(minLength: 18)
 
-            LazyVGrid(
-                columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: columns),
-                spacing: 8
-            ) {
-                ForEach(Array(productAssortment.prefix(count))) { item in
-                    compactProductTile(item)
-                }
+            compactProductGrid
+        }
+    }
+
+    private var compactProductGrid: some View {
+        let count = compactGridItemCount
+        let columns = count == 4 ? 2 : 3
+
+        return LazyVGrid(
+            columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: columns),
+            spacing: 8
+        ) {
+            ForEach(Array(productAssortment.prefix(count))) { item in
+                compactProductTile(item)
             }
         }
     }

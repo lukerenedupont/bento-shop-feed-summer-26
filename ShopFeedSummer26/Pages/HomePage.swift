@@ -32,7 +32,6 @@ struct HomePage: View {
     @State private var buyerPreview = BuyerPreviewStore.shared
     @Namespace private var heroNamespace
     @Namespace private var topicSelectionNamespace
-
     /// Keep the merged catalog stable across body evaluations. Rebuilding the
     /// full merchant/product graph during a swipe or tab animation creates a
     /// large amount of avoidable main-thread work.
@@ -1521,6 +1520,7 @@ struct HomePage: View {
                     foregroundTopPadding: foregroundTopPadding,
                     titleTrailingPadding: 64,
                     scrollPinnedTitleTop: scrollPinnedTitleTop,
+                    showsDelayedExploreButton: story.format == .world,
                     // Resizing an active AV layer on every drag frame is the
                     // largest source of hitching. Hold its poster while the
                     // scroll is moving, then resume playback once locked.
