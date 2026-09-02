@@ -1,6 +1,6 @@
 # Codex handoff
 
-Updated: 2026-09-01
+Updated: 2026-09-02
 
 ## Repository state
 
@@ -77,13 +77,31 @@ cards, and merchant-authored posts; enabled Worlds remain separately managed.
   Very Special’s official Watches collection, including canonical prices,
   imagery, and PDP destinations.
 - `WorldExperienceViews.swift` contains the remaining lightweight World forms;
-  Canvas no longer shares that implementation file.
+  Canvas and Spatial no longer share that implementation file.
+- `SpatialARWorldDestination.swift` owns the camera-first Spatial destination:
+  a live ARKit surface on supported iPhones with a looping room-film fallback
+  in Simulator, a floor-finding reticle, a swipeable product picker, place and
+  remove actions, pinch-to-resize, and tap-through to real PDPs. Product
+  placement is an explicit visual prototype until production 3D assets exist.
+- `GiftGuideCreationFlow.swift` owns the gift-guide creation flow and the
+  persisted `GiftGuideBrief`/`GiftGuideBriefStore`. The utility belt leads with
+  a shared-styling `UtilityBeltPromotionCard` gift entry; completing the flow
+  personalizes and opens the existing gift World, whose recipient name,
+  occasion, and interests now flow through `GiftGuidePrototypeState` into
+  titles, steering copy, and product ranking.
 
 The Watch Canvas feed card uses a noninteractive instance of the real Canvas
 engine as its cover. Opening it restores full pan, zoom, density, steering,
 product actions, and Shop PDP routing. The destination computes its own safe
 area chrome, so callers provide only the World session, resolved products, and
 close action.
+
+World feed cards anchor their title and product treatment as one bottom
+composition (`usesWorldCardComposition` in `StoryFeedCard`). A compositor-only
+`visualEffect` lift pins that composition above the floating bottom navigation
+while the card travels toward its snap slot, mirroring the top-pinned title
+mechanism. The delayed Explore more button has been removed; the card itself
+remains the destination affordance.
 
 ### Holiday banner variant
 
@@ -130,7 +148,7 @@ xcodebuild -project ShopFeedSummer26.xcodeproj \
 ```
 
 The clean simulator build, personalized-feed validation phase, and
-`git diff --check` pass. The clean app product is approximately `184020 KB`
+`git diff --check` pass. The clean app product is approximately `183976 KB`
 against the enforced `184320 KB` budget. Existing unrelated Swift concurrency
 warnings may remain.
 

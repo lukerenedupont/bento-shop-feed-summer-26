@@ -168,7 +168,9 @@ struct StoryFeedCard: View {
     /// compositor-only offset. This avoids invalidating the card hierarchy
     /// while a vertical scroll gesture is in flight.
     var scrollPinnedTitleTop: CGFloat? = nil
-    var showsDelayedExploreButton = false
+    /// World cards anchor their title and products as one bottom composition
+    /// that stays pinned above the bottom navigation while the card travels.
+    var usesWorldCardComposition = false
     var foregroundBottomPadding: CGFloat = FeedCardStyle.foregroundBottomPadding
     var backgroundBlurRadius: CGFloat = 0
     var backgroundPlaybackEnabled = true
@@ -193,7 +195,6 @@ struct StoryFeedCard: View {
     @State private var productPromotionProgress: CGFloat = 0
     @State private var productDeckDirection = 1
     @State private var productDeckIsSettling = false
-    @State private var showsExploreMore = false
 
     private var items: [ResolvedStoryProduct] {
         story.resolvedProducts(from: merchants)
@@ -313,8 +314,10 @@ struct StoryFeedCard: View {
                 }
 
                 if showsForegroundContent {
+                    let pinsBottomChrome = usesWorldCardComposition
+                    let pinnedChromeRestingTop = foregroundTopPadding
                     Group {
-                        if showsDelayedExploreButton {
+                        if usesWorldCardComposition {
                             worldCardForeground
                         } else {
                             standardForeground
@@ -322,7 +325,27 @@ struct StoryFeedCard: View {
                     }
                     .padding(.horizontal, GravitySpacing.space20)
                     .padding(.top, foregroundTopPadding)
-                    .padding(.bottom, showsDelayedExploreButton ? GravitySpacing.space20 : foregroundBottomPadding)
+                    // 76pt keeps the pinned rail clear of the floating bottom
+                    // navigation, matching the geometry the removed explore
+                    // affordance used to reserve beneath the products.
+                    .padding(.bottom, usesWorldCardComposition ? GravitySpacing.space64 + GravitySpacing.space12 : foregroundBottomPadding)
+                    // While the card travels toward its snap slot its bottom
+                    // edge is still below the viewport, which hides the
+                    // bottom-anchored title and products behind the bottom
+                    // navigation. Lifting the composition by the card's top
+                    // offset holds it at its final on-screen position, the
+                    // same trick the top-pinned title uses in reverse.
+                    .visualEffect { content, proxy in
+                        content.offset(
+                            y: pinsBottomChrome
+                                ? -max(
+                                    0,
+                                    proxy.frame(in: .scrollView(axis: .vertical)).minY
+                                        - pinnedChromeRestingTop
+                                )
+                                : 0
+                        )
+                    }
                 }
             }
             .frame(width: width, height: height)
@@ -344,15 +367,6 @@ struct StoryFeedCard: View {
         // A scroll drag begins as a press. Scaling the full card here made
         // its title spring on release just as the feed snap completed.
         .buttonStyle(.plain)
-        .task(id: isActive) {
-            showsExploreMore = false
-            guard showsDelayedExploreButton, isActive else { return }
-            try? await Task.sleep(for: .milliseconds(750))
-            guard !Task.isCancelled, isActive else { return }
-            withAnimation(.spring(response: 0.42, dampingFraction: 0.86)) {
-                showsExploreMore = true
-            }
-        }
         .accessibilityLabel("\(titleOverride ?? story.title). \(story.subtitle)")
         .accessibilityHint(story.destinationLabel)
     }
@@ -390,18 +404,6 @@ struct StoryFeedCard: View {
             Spacer(minLength: 80)
             storyHeader
             worldCardProducts
-            if showsExploreMore {
-                Text("Explore more")
-                    .font(GravityFont.semiBold.fixedFont(size: 16))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 44)
-                    .background(.black.opacity(0.12), in: Capsule())
-                    .glassEffect(.regular.tint(.black.opacity(0.14)), in: .capsule)
-                    .overlay { Capsule().strokeBorder(.white.opacity(0.2), lineWidth: 0.5) }
-                    .shadow(color: .black.opacity(0.12), radius: 12, y: 5)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
         }
         .frame(
             width: max(width - (GravitySpacing.space20 * 2), 0),

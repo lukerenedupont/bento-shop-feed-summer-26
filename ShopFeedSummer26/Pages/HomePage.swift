@@ -1443,7 +1443,7 @@ struct HomePage: View {
                     foregroundTopPadding: foregroundTopPadding,
                     titleTrailingPadding: 64,
                     scrollPinnedTitleTop: scrollPinnedTitleTop,
-                    showsDelayedExploreButton: story.format == .world,
+                    usesWorldCardComposition: story.format == .world,
                     // Resizing an active AV layer on every drag frame is the
                     // largest source of hitching. Hold its poster while the
                     // scroll is moving, then resume playback once locked.
