@@ -76,6 +76,7 @@
 		5DE188C12F42823E6802F132 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CA586789D21890B00848028 /* Assets.xcassets */; };
 		62DA4E059CB73C9AA8567B4B /* CanvasAgentSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB61E5C81C814DE957EC6B1F /* CanvasAgentSupport.swift */; };
 		7C8D9EAF1021324354657687 /* CanvasAgentWorldDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8796A5B4C3D2E1F001122334 /* CanvasAgentWorldDestination.swift */; };
+		90A1B2C3D4E5F60718293A4B /* SpatialARWorldDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C5D6E7F8091A2B3C4D5E6F /* SpatialARWorldDestination.swift */; };
 		649FD509AC0F44D3BEB36470 /* stadium-sneakers.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = BFC5DD822918A12A22B6FFA3 /* stadium-sneakers.mp4 */; };
 		64DABDEDA80A62E19DCFD97F /* GTStandard-LHeavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6E49E5F0F2C5F4E1E2613DF4 /* GTStandard-LHeavy.otf */; };
 		652CB476ECB71B1AA3838BC2 /* GravityColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9012D58DAABA6EE0D2AC1F73 /* GravityColors.swift */; };
@@ -295,6 +296,7 @@
 		A81C442D5B684D43A70D4922 /* WarmLightingBluDotBrandCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarmLightingBluDotBrandCard.swift; sourceTree = "<group>"; };
 		AB61E5C81C814DE957EC6B1F /* CanvasAgentSupport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CanvasAgentSupport.swift; sourceTree = "<group>"; };
 		8796A5B4C3D2E1F001122334 /* CanvasAgentWorldDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasAgentWorldDestination.swift; sourceTree = "<group>"; };
+		B4C5D6E7F8091A2B3C4D5E6F /* SpatialARWorldDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialARWorldDestination.swift; sourceTree = "<group>"; };
 		AB7E22A8C16DB6B0755FE858 /* DeliveryDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryDetailPage.swift; sourceTree = "<group>"; };
 		AB9814ED8FB1597FE8380CFA /* OrdersWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersWidget.swift; sourceTree = "<group>"; };
 		AD7C5AECC27CBFF98B8E1E8D /* GravityShadows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityShadows.swift; sourceTree = "<group>"; };
@@ -460,6 +462,7 @@
 				B144B6A7C3C6E1B173D2D0A0 /* CanvasAgentInfiniteProductCanvas.swift */,
 				AB61E5C81C814DE957EC6B1F /* CanvasAgentSupport.swift */,
 				8796A5B4C3D2E1F001122334 /* CanvasAgentWorldDestination.swift */,
+				B4C5D6E7F8091A2B3C4D5E6F /* SpatialARWorldDestination.swift */,
 			);
 			name = Worlds;
 			path = Worlds;
@@ -995,6 +998,7 @@
 				EC489D81242C721C829592F6 /* CanvasAgentInfiniteProductCanvas.swift in Sources */,
 				62DA4E059CB73C9AA8567B4B /* CanvasAgentSupport.swift in Sources */,
 				7C8D9EAF1021324354657687 /* CanvasAgentWorldDestination.swift in Sources */,
+				90A1B2C3D4E5F60718293A4B /* SpatialARWorldDestination.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

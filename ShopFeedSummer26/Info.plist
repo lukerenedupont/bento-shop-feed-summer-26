@@ -20,7 +20,7 @@
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Loads the prototype feed from the dossier-lab server running on your Mac.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Use the front camera to preview products on you in the live fitting room.</string>
+	<string>Use the camera to preview products on you and place items in your space.</string>
 	<key>FalTokenEndpoint</key>
 	<string>$(FAL_TOKEN_ENDPOINT)</string>
 	<key>UIAppFonts</key>

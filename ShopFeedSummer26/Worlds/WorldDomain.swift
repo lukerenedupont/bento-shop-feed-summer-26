@@ -298,7 +298,7 @@ enum WorldPrototypeCatalog {
         case runningID: "Shoes, recovery, and smaller running brands for finding a rhythm again."
         case canvasID: "A steerable canvas of distinctive vintage and contemporary watches from Very Special."
         case tryOnID: "Use the live camera to see products from your feed on you."
-        case spatialID: "Place and swap warm sculptural pieces against the room you are building."
+        case spatialID: "Use the camera to place and compare sculptural pieces in your living room."
         case giftingID: "A living gift guide shaped around Leon, not a generic age bracket."
         case missionID: "A working plan for equipment, mountain layers, travel, and recovery."
         default: ""
@@ -327,6 +327,7 @@ enum WorldPrototypeCatalog {
             context.set(WorldFact(key: "input", value: "live camera", source: .stated, scope: .local))
         case spatialID:
             context.set(WorldFact(key: "room", value: "living room", source: .stated, scope: .subject))
+            context.set(WorldFact(key: "input", value: "rear camera and detected surfaces", source: .stated, scope: .local))
             context.set(WorldFact(key: "mood", value: "warm and sculptural", source: .observed, scope: .local))
         case missionID:
             context.set(WorldFact(key: "trip", value: "ski weekend", source: .stated, scope: .local))

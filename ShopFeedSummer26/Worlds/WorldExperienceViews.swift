@@ -12,7 +12,7 @@ struct WorldExperienceContent: View {
         case .tryOn:
             TryOnWorldView(session: session, products: products)
         case .spatial:
-            SpatialWorldView(session: session, products: products)
+            EmptyView()
         case .mission:
             MissionWorldView(session: session, products: products)
         case .merchandised, .gifting:
@@ -178,99 +178,6 @@ private struct TryOnWorldView: View {
                                                 .strokeBorder(.white, lineWidth: 3)
                                         }
                                     }
-                            }
-                            .buttonStyle(PressScaleButtonStyle())
-                        }
-                    }
-                    .padding(.horizontal, GravitySpacing.space12)
-                }
-            }
-        }
-        .padding(.bottom, 140)
-    }
-}
-
-private struct SpatialWorldView: View {
-    @Bindable var session: WorldSession
-    let products: [ResolvedStoryProduct]
-    @Environment(NavigationCoordinator.self) private var coordinator
-
-    private var selected: ResolvedStoryProduct? {
-        products.first(where: { $0.id == session.state.selectedProductID }) ?? products.first
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            worldIntro(
-                title: "Build the room in place",
-                subtitle: "Swap pieces against the same warm, sculptural direction.",
-                session: session
-            )
-
-            ZStack(alignment: .bottomLeading) {
-                Image("topic-warm-lighting-hero")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 490)
-                    .clipped()
-
-                LinearGradient(
-                    colors: [.clear, .black.opacity(0.76)],
-                    startPoint: .center,
-                    endPoint: .bottom
-                )
-
-                if let selected {
-                    HStack(spacing: GravitySpacing.space12) {
-                        ProductImageView(product: selected.product, merchant: selected.merchant)
-                            .frame(width: 96, height: 96)
-                            .clipped()
-                            .background(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r20, style: .continuous))
-                        VStack(alignment: .leading, spacing: GravitySpacing.space4) {
-                            Text("In the room")
-                                .font(GravityFont.medium.fixedFont(size: 12))
-                                .foregroundStyle(.white.opacity(0.66))
-                            Text(selected.product.title)
-                                .font(GravityFont.bold.fixedFont(size: 18))
-                                .lineLimit(2)
-                            Text(formatPrice(selected.product.price))
-                                .font(GravityFont.semiBold.fixedFont(size: 13))
-                        }
-                        Spacer()
-                    }
-                    .foregroundStyle(.white)
-                    .padding(GravitySpacing.space16)
-                }
-            }
-            .frame(height: 490)
-            .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous))
-            .padding(.horizontal, GravitySpacing.space12)
-
-            VStack(alignment: .leading, spacing: GravitySpacing.space10) {
-                Text("Swap what’s in the room")
-                    .font(GravityFont.expressiveBold.fixedFont(size: 21))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, GravitySpacing.space12)
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: GravitySpacing.space8) {
-                        ForEach(products) { item in
-                            Button {
-                                HapticFeedback.light.fire()
-                                session.send(.selectProduct(item.id))
-                            } label: {
-                                VStack(alignment: .leading, spacing: GravitySpacing.space6) {
-                                    ProductImageView(product: item.product, merchant: item.merchant)
-                                        .frame(width: 132, height: 132)
-                                        .clipped()
-                                    Text(item.product.title)
-                                        .font(GravityFont.bold.fixedFont(size: 13))
-                                        .foregroundStyle(.black)
-                                        .lineLimit(1)
-                                        .padding(.horizontal, GravitySpacing.space8)
-                                }
-                                .padding(.bottom, GravitySpacing.space8)
-                                .background(.white, in: RoundedRectangle(cornerRadius: GravityRadius.r20, style: .continuous))
                             }
                             .buttonStyle(PressScaleButtonStyle())
                         }
