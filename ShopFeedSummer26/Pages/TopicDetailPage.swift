@@ -45,6 +45,11 @@ struct TopicDetailPage: View {
         self.story = story
         self.merchants = merchants
         topicPresentation = TopicPresentationCatalog.presentation(for: story)
+        if topicPresentation.usesGiftGuidePrototype {
+            _giftGuideState = State(
+                initialValue: GiftGuidePrototypeState(brief: GiftGuideBriefStore.shared.current)
+            )
+        }
         let definition = WorldPrototypePreferences.shared.isEnabled(story.id)
             ? WorldPrototypeCatalog.definition(for: story.id)
             : nil
@@ -272,7 +277,10 @@ struct TopicDetailPage: View {
             }.first
     }
     private var heroTitle: String {
-        topicPresentation.heroTitleOverride ?? story.title
+        if topicPresentation.usesGiftGuidePrototype {
+            return "Gifts for \(giftGuideState.recipientName)"
+        }
+        return topicPresentation.heroTitleOverride ?? story.title
     }
     private var pageRecipe: TopicPageRecipe {
         topicPresentation.recipe(
@@ -338,6 +346,12 @@ struct TopicDetailPage: View {
         GeometryReader { geometry in
             if let worldSession, worldSession.state.activeExperience == .canvas {
                 CanvasAgentWorldDestination(
+                    session: worldSession,
+                    products: products,
+                    onClose: closeTopic
+                )
+            } else if let worldSession, worldSession.state.activeExperience == .spatial {
+                SpatialARWorldDestination(
                     session: worldSession,
                     products: products,
                     onClose: closeTopic

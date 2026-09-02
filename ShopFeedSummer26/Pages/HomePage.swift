@@ -45,10 +45,12 @@ struct HomePage: View {
     @State private var feedChromeTransition = FeedChromeTransitionState()
     @State private var utilityRailExpansion = UtilityRailExpansionState()
     @State private var utilityBelt = UtilityBeltPreferences.shared
+    @State private var giftGuideBriefStore = GiftGuideBriefStore.shared
     @State private var feedChromeIsInverted = false
     @State private var expandingStoryID: String?
     @State private var categoryMoveDirection = 1
     @State private var showsBuyerSwitcher = false
+    @State private var showsGiftGuideCreation = false
     @State private var holidayFiltersPinned = false
     @State private var dealsFiltersPinned = false
     @State private var selectedDealFilterBand: DealFilterBand = .all
@@ -396,6 +398,9 @@ struct HomePage: View {
         }
         .onChange(of: focusedStoryID) { _, _ in
             syncTopicBackAction()
+        }
+        .fullScreenCover(isPresented: $showsGiftGuideCreation) {
+            GiftGuideCreationFlow(onComplete: completeGiftGuideCreation)
         }
         .onAppear {
             if visibleStoryID == nil {
@@ -875,6 +880,15 @@ struct HomePage: View {
 
         return ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(alignment: .top, spacing: GravitySpacing.space10) {
+                if utilityBelt.isEnabled(.giftGuide) {
+                    UtilityBeltPromotionCard(
+                        kind: .giftGuide,
+                        width: railWidth,
+                        height: cardHeight,
+                        onTap: { showsGiftGuideCreation = true }
+                    )
+                }
+
                 if buyerPreview.selected.utility.showsOrders,
                    utilityBelt.isEnabled(.orders) {
                     orderTrackingRailCard(width: railWidth, height: cardHeight)
@@ -934,7 +948,10 @@ struct HomePage: View {
                     }
                 }
 
-                ForEach(UtilityBeltPromotionCard.Kind.allCases, id: \.self) { kind in
+                ForEach(
+                    UtilityBeltPromotionCard.Kind.allCases.filter { $0 != .giftGuide },
+                    id: \.self
+                ) { kind in
                     if utilityBelt.isEnabled(kind.beltItem) {
                         UtilityBeltPromotionCard(kind: kind, width: railWidth, height: cardHeight)
                     }
@@ -1412,7 +1429,9 @@ struct HomePage: View {
                     merchants: merchants,
                     width: width,
                     height: height,
-                    titleOverride: nil,
+                    titleOverride: story.id == HypothesisShelfCatalog.giftGuideStoryID
+                        ? "Gifts for \(giftGuideBriefStore.current.recipientName)"
+                        : nil,
                     isActive: story.id == activeFeedStory?.id,
                     showsFooterArrow: false,
                     titleAtTopLeading: true,
@@ -1542,6 +1561,22 @@ struct HomePage: View {
             colorsByEntryID: feedBackdropColors,
             utilityEntryID: utilityStoryID
         )
+    }
+
+    private func completeGiftGuideCreation(_ brief: GiftGuideBrief) {
+        GiftGuideBriefStore.shared.save(brief)
+        showsGiftGuideCreation = false
+
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(320))
+            guard let story = feedPlan.stories.first(where: {
+                $0.id == HypothesisShelfCatalog.giftGuideStoryID
+            }) ?? HypothesisShelfCatalog.stories.first(where: {
+                $0.id == HypothesisShelfCatalog.giftGuideStoryID
+            }) else { return }
+            coordinator.navigateToPage(0)
+            openTopic(for: story)
+        }
     }
 
     /// Resolves a For You story to its canonical topic. An exact lead-story
