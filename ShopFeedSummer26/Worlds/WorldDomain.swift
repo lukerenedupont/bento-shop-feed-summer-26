@@ -240,6 +240,7 @@ enum WorldPrototypeCatalog {
     static let runningID = HypothesisShelfCatalog.performanceSneakerStoryID
     static let canvasID = VerySpecialWatchCatalog.storyID
     static let tryOnID = TryOnExperience.cardID
+    static let tryFavesID = TryFavesExperience.cardID
     static let spatialID = "shelf-luke-2-sculptural-living-room-pieces"
     static let giftingID = HypothesisShelfCatalog.giftGuideStoryID
     static let missionID = "shelf-mikhail-8-high-performance-ski-setup"
@@ -248,6 +249,7 @@ enum WorldPrototypeCatalog {
         runningID,
         canvasID,
         tryOnID,
+        tryFavesID,
         spatialID,
         giftingID,
         missionID,
@@ -298,6 +300,7 @@ enum WorldPrototypeCatalog {
         case runningID: "Shoes, recovery, and smaller running brands for finding a rhythm again."
         case canvasID: "A steerable canvas of distinctive vintage and contemporary watches from Very Special."
         case tryOnID: "Use the live camera to see products from your feed on you."
+        case tryFavesID: "Style saved tops, bottoms, and one-pieces on your avatar."
         case spatialID: "Use the camera to place and compare sculptural pieces in your living room."
         case giftingID: "A living gift guide shaped around Leon, not a generic age bracket."
         case missionID: "A working plan for equipment, mountain layers, travel, and recovery."
@@ -325,6 +328,9 @@ enum WorldPrototypeCatalog {
         case tryOnID:
             context.set(WorldFact(key: "subject", value: "Luke", source: .stated, scope: .subject))
             context.set(WorldFact(key: "input", value: "live camera", source: .stated, scope: .local))
+        case tryFavesID:
+            context.set(WorldFact(key: "subject", value: "Luke", source: .stated, scope: .subject))
+            context.set(WorldFact(key: "input", value: "saved products", source: .observed, scope: .local))
         case spatialID:
             context.set(WorldFact(key: "room", value: "living room", source: .stated, scope: .subject))
             context.set(WorldFact(key: "input", value: "rear camera and detected surfaces", source: .stated, scope: .local))
@@ -367,6 +373,16 @@ enum WorldPrototypeCatalog {
                 primaryExperience: .tryOn,
                 availableExperiences: [.tryOn],
                 lifetime: .ephemeral(days: 21),
+                paths: []
+            ),
+            WorldDefinition(
+                id: tryFavesID,
+                title: "Try your faves",
+                purpose: .intent,
+                subject: "Luke",
+                primaryExperience: .tryOn,
+                availableExperiences: [.tryOn],
+                lifetime: .persistent,
                 paths: []
             ),
             WorldDefinition(

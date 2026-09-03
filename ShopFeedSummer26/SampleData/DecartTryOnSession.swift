@@ -592,7 +592,10 @@ extension DecartTryOnSession: LKRTCPeerConnectionDelegate {
     }
 }
 
-private struct FalTokenProvider {
+/// Mints short-lived fal JWTs from the server-side token endpoint. Shared by
+/// the live Decart studio and the Try your faves FASHN pipeline so the fal
+/// API key itself never ships in the app.
+struct FalTokenProvider {
     func token(for app: String) async throws -> String {
         let values = Self.configurationValues()
 

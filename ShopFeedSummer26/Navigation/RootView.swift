@@ -53,6 +53,16 @@ struct RootView: View {
 
         }
         .environment(coordinator)
+#if DEBUG
+        // Dev/demo shortcut: `simctl launch … -openTryFavesWorld 1` jumps
+        // straight into the Try your faves world without feed scrolling.
+        .task {
+            if ProcessInfo.processInfo.arguments.contains("-openTryFavesWorld") {
+                try? await Task.sleep(for: .milliseconds(400))
+                coordinator.pushRoute(.tryFavesWorld)
+            }
+        }
+#endif
         .purlInjectable()
     }
 
@@ -80,6 +90,8 @@ struct RootView: View {
             )
         case .tryOnStudio:
             TryOnStudioPage(namespace: namespace)
+        case .tryFavesWorld:
+            TryFavesWorldPage(namespace: namespace)
         case .deliveries:
             DeliveriesPage(namespace: namespace)
         case .deliveryDetail(let deliveryId):

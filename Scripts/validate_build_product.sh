@@ -19,7 +19,9 @@ fi
 
 APP_KB="$(du -sk "${APP_PATH}" | awk '{print $1}')"
 FEED_KB="$(du -sk "${FEED_BUNDLE}" | awk '{print $1}')"
-MAX_APP_KB=184320
+# 180 MB baseline + 2 MB for the Try your faves world (seed avatar asset,
+# FASHN pipeline, and world UI added on the try-on branch).
+MAX_APP_KB=186368
 MAX_FEED_KB=102400
 
 if (( APP_KB > MAX_APP_KB )); then

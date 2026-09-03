@@ -1276,6 +1276,7 @@ struct HomePage: View {
         let chromeOpacity = Double(1 - lockedTakeoverProgress)
         let usesDarkFeedbackIcons: Bool = {
             if case .tryOn = entry { return true }
+            if case .tryFaves = entry { return true }
             return false
         }()
         let includesVolumeControl: Bool = {
@@ -1299,6 +1300,28 @@ struct HomePage: View {
                 coordinator.pushRoute(.tryOnStudio)
             }
             .matchedTransitionSource(id: TryOnExperience.cardID, in: namespace) { source in
+                source
+                    .background(.clear)
+                    .clipShape(
+                        RoundedRectangle(
+                            cornerRadius: feedCornerRadius,
+                            style: .continuous
+                        )
+                    )
+            }
+
+        case .tryFaves:
+            TryFavesFeedCard(
+                width: layout.cardWidth,
+                height: layout.cardHeight,
+                foregroundTopPadding: layout.foregroundTopPadding,
+                titleTrailingPadding: 64,
+                scrollPinnedTitleTop: layout.pinnedTitleTop
+            ) {
+                coordinator.resetScrollState()
+                coordinator.pushRoute(.tryFavesWorld)
+            }
+            .matchedTransitionSource(id: TryFavesExperience.cardID, in: namespace) { source in
                 source
                     .background(.clear)
                     .clipShape(
@@ -1550,6 +1573,7 @@ struct HomePage: View {
             }?.brandColor ?? Color(hex: "#343038")
             case .seasonalSavings: Color(hex: "#49308F")
             case .tryOn: Color(hex: "#4A4745")
+            case .tryFaves: TryFavesStyle.canvas
             }
             return (entry.id, color)
         })

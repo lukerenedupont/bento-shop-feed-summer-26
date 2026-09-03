@@ -11,6 +11,7 @@ enum HomeRoute: Hashable {
     /// Opens the original topic page through its source feed card.
     case topicExpanded(topicId: String, sourceStoryId: String)
     case tryOnStudio
+    case tryFavesWorld
     case deliveries
     case deliveryDetail(deliveryId: String)
     case account
