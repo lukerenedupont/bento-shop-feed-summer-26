@@ -171,6 +171,10 @@ struct StoryFeedCard: View {
     /// World cards anchor their title and products as one bottom composition
     /// that stays pinned above the bottom navigation while the card travels.
     var usesWorldCardComposition = false
+    /// Scroll-view-space limit for the pinned composition's bottom edge. The
+    /// composition rests near the card's bottom corner and only lifts when
+    /// the card's travel would push it past this line into the navigation.
+    var worldChromeVisibleBottom: CGFloat? = nil
     var foregroundBottomPadding: CGFloat = FeedCardStyle.foregroundBottomPadding
     var backgroundBlurRadius: CGFloat = 0
     var backgroundPlaybackEnabled = true
@@ -309,13 +313,14 @@ struct StoryFeedCard: View {
                         .frame(width: width, height: height)
                         .scaleEffect(backgroundBlurRadius > 0 ? 1.12 : 1)
                         .blur(radius: backgroundBlurRadius, opaque: true)
-                    backgroundScrim
-                        .frame(width: width, height: height)
+                    if !usesLightSphereCover {
+                        backgroundScrim
+                            .frame(width: width, height: height)
+                    }
                 }
 
                 if showsForegroundContent {
-                    let pinsBottomChrome = usesWorldCardComposition
-                    let pinnedChromeRestingTop = foregroundTopPadding
+                    let chromeBottomLimit = usesWorldCardComposition ? worldChromeVisibleBottom : nil
                     Group {
                         if usesWorldCardComposition {
                             worldCardForeground
@@ -323,29 +328,25 @@ struct StoryFeedCard: View {
                             standardForeground
                         }
                     }
-                    .padding(.horizontal, GravitySpacing.space20)
-                    .padding(.top, foregroundTopPadding)
-                    // 76pt keeps the pinned rail clear of the floating bottom
-                    // navigation, matching the geometry the removed explore
-                    // affordance used to reserve beneath the products.
-                    .padding(.bottom, usesWorldCardComposition ? GravitySpacing.space64 + GravitySpacing.space12 : foregroundBottomPadding)
                     // While the card travels toward its snap slot its bottom
-                    // edge is still below the viewport, which hides the
+                    // edge is still below the viewport, which would hide the
                     // bottom-anchored title and products behind the bottom
-                    // navigation. Lifting the composition by the card's top
-                    // offset holds it at its final on-screen position, the
-                    // same trick the top-pinned title uses in reverse.
+                    // navigation. The composition only lifts by the amount its
+                    // bottom edge crosses the navigation line, so it hugs the
+                    // card's bottom corner once the card is snapped.
                     .visualEffect { content, proxy in
                         content.offset(
-                            y: pinsBottomChrome
-                                ? -max(
+                            y: chromeBottomLimit.map { limit in
+                                -max(
                                     0,
-                                    proxy.frame(in: .scrollView(axis: .vertical)).minY
-                                        - pinnedChromeRestingTop
+                                    proxy.frame(in: .scrollView(axis: .vertical)).maxY - limit
                                 )
-                                : 0
+                            } ?? 0
                         )
                     }
+                    .padding(.horizontal, GravitySpacing.space20)
+                    .padding(.top, foregroundTopPadding)
+                    .padding(.bottom, usesWorldCardComposition ? GravitySpacing.space24 : foregroundBottomPadding)
                 }
             }
             .frame(width: width, height: height)
@@ -399,16 +400,37 @@ struct StoryFeedCard: View {
         }
     }
 
+    /// The Watch Canvas cover is a rotating product sphere on white, so the
+    /// card drops the dark scrims and product rail and switches to dark type.
+    private var usesLightSphereCover: Bool {
+        story.id == WorldPrototypeCatalog.canvasID
+    }
+
+    @ViewBuilder
     private var worldCardForeground: some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
-            Spacer(minLength: 80)
-            storyHeader
-            worldCardProducts
+        if usesLightSphereCover {
+            // The sphere cover is a centered composition on white, so the
+            // title rests below it in the card's bottom chrome.
+            Text(titleOverride ?? story.title)
+                .feedCardTitleStyle()
+                .foregroundStyle(.black)
+                .multilineTextAlignment(.center)
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity,
+                    alignment: .bottom
+                )
+        } else {
+            VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+                Spacer(minLength: 80)
+                storyHeader
+                worldCardProducts
+            }
+            .frame(
+                width: max(width - (GravitySpacing.space20 * 2), 0),
+                alignment: .leading
+            )
         }
-        .frame(
-            width: max(width - (GravitySpacing.space20 * 2), 0),
-            alignment: .leading
-        )
     }
 
     @ViewBuilder
@@ -431,10 +453,12 @@ struct StoryFeedCard: View {
         ZStack {
             Color(hex: story.accentHex)
 
-            if story.id == WorldPrototypeCatalog.canvasID {
-                CanvasAgentFeedCover(
-                    products: CanvasAgentProductAdapter.products(from: items)
-                )
+            if usesLightSphereCover {
+                Color.white
+                Image("canvas-sphere-cover")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             } else if let authoredCoverVideoURL {
                 parallaxFilm {
                     AmbientProductVideo(
@@ -586,8 +610,12 @@ struct StoryFeedCard: View {
     private var storyHeader: some View {
         Text(titleOverride ?? story.title)
             .feedCardTitleStyle()
-            .foregroundStyle(.white)
-            .gravityShadow(GravityShadows.feedText)
+            .foregroundStyle(usesLightSphereCover ? Color.black : .white)
+            .gravityShadow(
+                usesLightSphereCover
+                    ? GravityShadow(color: .clear, radius: 0, x: 0, y: 0)
+                    : GravityShadows.feedText
+            )
             .multilineTextAlignment(.leading)
             .lineLimit(3)
             .padding(.trailing, titleTrailingPadding)

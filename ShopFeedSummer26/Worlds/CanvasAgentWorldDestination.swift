@@ -1,55 +1,6 @@
 import SwiftUI
 import UIKit
 
-struct CanvasAgentFeedCover: View {
-    let products: [CatalogProduct]
-    private let columnCount = 4
-
-    var body: some View {
-        GeometryReader { geometry in
-            let spacing: CGFloat = 6
-            let tileWidth = (geometry.size.width - spacing * 3) / 4
-
-            HStack(alignment: .top, spacing: spacing) {
-                ForEach(0..<columnCount, id: \.self) { column in
-                    LazyVStack(spacing: spacing) {
-                        ForEach(columnProducts(column)) { product in
-                            canvasTile(product, width: tileWidth)
-                        }
-                    }
-                    .offset(y: column.isMultiple(of: 2) ? -54 : -112)
-                }
-            }
-            .frame(width: geometry.size.width, alignment: .top)
-        }
-        .background(Color(hex: "#EEEDE9"))
-        .overlay { Color.black.opacity(0.13).allowsHitTesting(false) }
-        .clipped()
-        .allowsHitTesting(false)
-    }
-
-    private func columnProducts(_ column: Int) -> [CatalogProduct] {
-        products.prefix(24).enumerated().compactMap { index, product in
-            index % columnCount == column ? product : nil
-        }
-    }
-
-    private func canvasTile(_ product: CatalogProduct, width: CGFloat) -> some View {
-        let variant = product.id.utf8.reduce(0) { ($0 + Int($1)) % 3 }
-        let height = width * ([1.18, 1.42, 1.06][variant])
-        return CachedAsyncImage(url: product.imageURL) { phase in
-            if case .success(let image) = phase {
-                image.resizable().scaledToFill()
-            } else {
-                Color.white.opacity(0.72)
-            }
-        }
-        .frame(width: width, height: height)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-    }
-}
-
 struct CanvasAgentWorldDestination: View {
     @Bindable var session: WorldSession
     let products: [ResolvedStoryProduct]
@@ -170,10 +121,14 @@ struct CanvasAgentWorldDestination: View {
         .buttonStyle(PressScaleButtonStyle(scale: 0.9))
         .offset(
             x: -canvasMotion.displacement.width * 42,
-            y: -canvasMotion.displacement.height * 30 + max(bottomInset - 28, 0)
+            y: -canvasMotion.displacement.height * 30
         )
         .rotationEffect(.degrees(-Double(canvasMotion.velocity.width) * 3.5))
         .animation(.easeOut(duration: 0.16), value: canvasMotion)
+        // The destination spans the full screen, so the control carries its
+        // own clearance above the home indicator, matching the bottom-center
+        // position of the navigation pill it replaces.
+        .padding(.bottom, bottomInset + GravitySpacing.space12)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
         .accessibilityLabel("Steer this canvas")
     }

@@ -88,27 +88,21 @@ private struct FeedFeedbackPositionModifier: ViewModifier {
     let entry: FeedEntry
     let layout: FeedViewportLayout
     let showsAnchoredControls: Bool
-    @State private var reservesExploreSpace = false
 
     @ViewBuilder
     func body(content: Content) -> some View {
         if entry.usesBottomAnchoredWorldChrome {
+            // Align the stack's bottom with the title's bottom edge: the
+            // snapped world composition ends 24pt above the card, the rail
+            // sits above that, and the title clears the rail by its 12pt
+            // spacing.
             let railHeight = max((layout.cardWidth - 64) / 2, 144)
             content
-                .padding(.bottom, railHeight + 32 + (reservesExploreSpace ? 56 : 0))
+                .padding(.bottom, railHeight + GravitySpacing.space24 + GravitySpacing.space12)
                 .padding(.trailing, GravitySpacing.space12)
                 .frame(maxHeight: .infinity, alignment: .bottomTrailing)
                 .opacity(showsAnchoredControls ? 1 : 0)
                 .animation(.easeOut(duration: 0.2), value: showsAnchoredControls)
-                .task(id: "\(entry.id)-\(showsAnchoredControls)") {
-                    reservesExploreSpace = false
-                    guard showsAnchoredControls else { return }
-                    try? await Task.sleep(for: .milliseconds(750))
-                    guard !Task.isCancelled, showsAnchoredControls else { return }
-                    withAnimation(.spring(response: 0.42, dampingFraction: 0.86)) {
-                        reservesExploreSpace = true
-                    }
-                }
         } else {
             content
                 .padding(.top, layout.pinnedTitleTop)

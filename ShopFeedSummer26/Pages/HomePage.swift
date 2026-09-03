@@ -1278,6 +1278,13 @@ struct HomePage: View {
             if case .tryOn = entry { return true }
             return false
         }()
+        // The Watch Canvas cover is a poster-style sphere on white; it
+        // carries no card chrome beyond its centered title.
+        let hidesFeedbackActions: Bool = {
+            if case let .story(story) = entry,
+               story.id == WorldPrototypeCatalog.canvasID { return true }
+            return false
+        }()
         let includesVolumeControl: Bool = {
             if case .post = entry { return true }
             return false
@@ -1365,22 +1372,24 @@ struct HomePage: View {
             )
             }
 
-            PrototypeFeedbackActions(
-                layout: .vertical,
-                foregroundColor: feedbackForegroundColor,
-                appliesShadow: !usesDarkFeedbackIcons,
-                includesOverflow: true,
-                includesVolume: includesVolumeControl,
-                includesThread: !entry.usesBottomAnchoredWorldChrome,
-                onOverflowTap: { showsBuyerSwitcher = true }
-            )
-            .positionedFeedFeedback(
-                for: entry,
-                layout: layout,
-                showsAnchoredControls: hasEnteredFullBleedFeed && isSnappedEntry
-            )
-            .allowsHitTesting(hasEnteredFullBleedFeed)
-            .zIndex(4)
+            if !hidesFeedbackActions {
+                PrototypeFeedbackActions(
+                    layout: .vertical,
+                    foregroundColor: feedbackForegroundColor,
+                    appliesShadow: !usesDarkFeedbackIcons,
+                    includesOverflow: true,
+                    includesVolume: includesVolumeControl,
+                    includesThread: !entry.usesBottomAnchoredWorldChrome,
+                    onOverflowTap: { showsBuyerSwitcher = true }
+                )
+                .positionedFeedFeedback(
+                    for: entry,
+                    layout: layout,
+                    showsAnchoredControls: hasEnteredFullBleedFeed && isSnappedEntry
+                )
+                .allowsHitTesting(hasEnteredFullBleedFeed)
+                .zIndex(4)
+            }
         }
     }
 
@@ -1444,6 +1453,11 @@ struct HomePage: View {
                     titleTrailingPadding: 64,
                     scrollPinnedTitleTop: scrollPinnedTitleTop,
                     usesWorldCardComposition: story.format == .world,
+                    // Tuned so the resting composition sits just above the
+                    // floating pill without reading as detached from the card.
+                    worldChromeVisibleBottom: viewportHeight
+                        - FeedCardStyle.bottomNavigationClearance
+                        + 17,
                     // Resizing an active AV layer on every drag frame is the
                     // largest source of hitching. Hold its poster while the
                     // scroll is moving, then resume playback once locked.
