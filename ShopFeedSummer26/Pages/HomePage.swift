@@ -179,8 +179,18 @@ struct HomePage: View {
     }
 
     private var feedPlan: HomeFeedPlan {
-        let supportsWorlds = buyerPreview.selected.id == "luke" && selectedTopicID == "for-you"
-        let worldIDs = supportsWorlds ? WorldPrototypePreferences.shared.enabledWorldIDs : []
+        let worldIDs: Set<String> = {
+            guard selectedTopicID == "for-you" else { return [] }
+            let enabled = WorldPrototypePreferences.shared.enabledWorldIDs
+            // Try your faves is buyer-agnostic — it seeds from whichever
+            // buyer is active — so it travels to every buyer's feed. The
+            // other experimental Worlds remain Luke-only prototypes built
+            // on his authored stories.
+            guard buyerPreview.selected.id == "luke" else {
+                return enabled.intersection([WorldPrototypeCatalog.tryFavesID])
+            }
+            return enabled
+        }()
         return HomeFeedPlanner.plan(.init(
             buyer: buyerPreview.selected,
             topic: selectedTopic,

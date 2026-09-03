@@ -93,6 +93,10 @@ struct TryFavesWorldPage: View {
             .navigationTransition(.zoom(sourceID: TryFavesExperience.cardID, in: namespace))
             .onAppear {
                 coordinator.showNavBar = false
+                // Adopt the active preview buyer's seed and look library, and
+                // start their seed photograph if it hasn't been made yet.
+                service.syncBuyerIfNeeded()
+                service.ensureSeed()
                 if selectedPageID == nil { selectedPageID = pageIDs.first }
 #if DEBUG
                 // Dev/demo shortcut: `-openTryFavesComposer` lands directly in
@@ -463,12 +467,14 @@ struct TryFavesWorldPage: View {
     /// render lands.
     private func placeholderStage(for look: TryFavesLookService.Look) -> some View {
         ZStack {
-            Image(TryFavesLookService.seedAvatarAssetName)
-                .resizable()
-                .scaledToFill()
-                .blur(radius: 18)
-                .opacity(0.2)
-                .clipped()
+            if let seed = service.seedRenderImage() {
+                Image(uiImage: seed)
+                    .resizable()
+                    .scaledToFill()
+                    .blur(radius: 18)
+                    .opacity(0.2)
+                    .clipped()
+            }
             switch look.state {
             case .generating:
                 ComposingLookIndicator()

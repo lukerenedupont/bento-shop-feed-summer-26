@@ -21,6 +21,7 @@ struct TryFavesFeedCard: View {
 
     /// The home card presents the seed outfit as a pre-generated look.
     @State private var garments = TryFavesCatalog.seedLookGarments
+    @State private var service = TryFavesLookService.shared
 
     var body: some View {
         Button {
@@ -30,12 +31,15 @@ struct TryFavesFeedCard: View {
             ZStack {
                 TryFavesStyle.canvas
 
-                // The editorial seed photograph fills the card edge to edge.
-                Image(TryFavesLookService.seedAvatarAssetName)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: width, height: height)
-                    .clipped()
+                // The buyer's seed photograph fills the card edge to edge —
+                // the bundled photograph until their generated seed lands.
+                if let seed = service.seedRenderImage() {
+                    Image(uiImage: seed)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: width, height: height)
+                        .clipped()
+                }
 
                 VStack(alignment: .leading, spacing: 0) {
                     scrollAwareTitle
@@ -58,6 +62,14 @@ struct TryFavesFeedCard: View {
             .shadow(color: .black.opacity(0.07), radius: 16, y: 3)
         }
         .buttonStyle(.plain)
+        // Pre-generate the active buyer's seed first, then every other
+        // buyer's in the background, so switching profiles lands on a
+        // customized photograph instead of the bundled fallback.
+        .task(id: BuyerPreviewStore.shared.selected.id) {
+            service.syncBuyerIfNeeded()
+            service.ensureSeed()
+            service.ensureAllSeeds()
+        }
         .accessibilityLabel("Try on your favorites")
         .accessibilityHint("Opens your avatar to style saved products into looks")
     }
