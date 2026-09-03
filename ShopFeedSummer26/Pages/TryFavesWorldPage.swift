@@ -583,8 +583,14 @@ struct TryFavesWorldPage: View {
                         .scaledToFit()
                         .frame(width: 24, height: 24)
                         .foregroundStyle(TryFavesStyle.stageText)
-                        .frame(width: 32, height: 32)
-                        .contentShape(Circle())
+                        .frame(
+                            width: TryFavesStyle.overflowHitTarget,
+                            height: TryFavesStyle.overflowHitTarget
+                        )
+                        // A rectangle, not a circle: an inscribed circle threw
+                        // away the corners and left a target noticeably
+                        // smaller than the frame it sits in.
+                        .contentShape(Rectangle())
                 }
             }
         }

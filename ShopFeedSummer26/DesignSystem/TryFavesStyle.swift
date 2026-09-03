@@ -84,6 +84,9 @@ enum TryFavesStyle {
     /// from its parts so the total can't drift away from them.
     static let panelTopInset = GravitySpacing.space24
     static let panelTitleHeight: CGFloat = 32
+    /// The look's overflow menu. Matches the title row height, so the target
+    /// is as large as the row allows without pushing the panel taller.
+    static let overflowHitTarget: CGFloat = 32
     static let panelTitleGap = GravitySpacing.space12
     static let panelRailHeight = lookTileWidth + GravitySpacing.space8 + tileMetaHeight
     /// Clears the pagination dots and the home indicator below the panel.
