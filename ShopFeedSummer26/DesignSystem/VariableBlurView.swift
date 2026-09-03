@@ -176,6 +176,93 @@ final class VariableBlurUIView: UIVisualEffectView {
     }
 }
 
+// MARK: - Uniform Backdrop Blur
+
+/// A uniform blur of whatever sits *behind* the view, at an exact radius and
+/// with no tint.
+///
+/// SwiftUI's `.blur()` is simpler, but it blurs the view it is applied to, and
+/// rasterising a full screen that way collapses that subtree's safe area.
+/// Blurring the Try your faves stage that way shifted the whole look up by
+/// half the difference between the top and bottom insets — in a single frame,
+/// outside any animation transaction, so it could not be smoothed either.
+/// Blurring the backdrop leaves the content beneath completely untouched.
+///
+/// `.ultraThinMaterial` is the public-API alternative, but its radius is not
+/// adjustable and its tint lightens whatever is behind it.
+struct BackdropBlurView: UIViewRepresentable {
+    let radius: CGFloat
+
+    func makeUIView(context: Context) -> BackdropBlurUIView {
+        BackdropBlurUIView(radius: radius)
+    }
+
+    func updateUIView(_ blurView: BackdropBlurUIView, context: Context) {
+        guard blurView.radius != radius else { return }
+        blurView.radius = radius
+        blurView.updateFilter()
+    }
+}
+
+final class BackdropBlurUIView: UIVisualEffectView {
+    var radius: CGFloat
+
+    init(radius: CGFloat) {
+        self.radius = radius
+        super.init(effect: UIBlurEffect(style: .regular))
+
+        // Hide the system tint and vibrancy layers — blur only. Callers layer
+        // their own scrim on top.
+        for subview in subviews.dropFirst() {
+            subview.alpha = 0
+        }
+        updateFilter()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func updateFilter() {
+        guard let filter = GaussianBlurFilter() else { return }
+        filter.inputRadius = radius
+        subviews.first?.layer.filters = [filter.base]
+    }
+
+    override func didMoveToWindow() {
+        guard let window, let firstLayer = subviews.first?.layer else { return }
+        firstLayer.setValue(window.screen.scale, forKey: "scale")
+    }
+}
+
+private final class GaussianBlurFilter {
+    let base: NSObject
+
+    init?() {
+        guard let filterClass = NSClassFromString(
+            _decode("Q0FGaWx0ZXI=") // "CAFilter"
+        ) as? NSObject.Type else { return nil }
+        guard let gaussianBlur = filterClass
+            .perform(
+                NSSelectorFromString("filterWithType:"),
+                with: _decode("Z2F1c3NpYW5CbHVy") // "gaussianBlur"
+            )
+            .takeUnretainedValue() as? NSObject
+        else { return nil }
+
+        self.base = gaussianBlur
+        // "inputNormalizeEdges" — without it the blur samples past the edges
+        // and the frame darkens at its border.
+        self.base.setValue(true, forKey: _decode("aW5wdXROb3JtYWxpemVFZGdlcw=="))
+    }
+
+    var inputRadius: CGFloat {
+        // "inputRadius"
+        get { base.value(forKey: _decode("aW5wdXRSYWRpdXM=")) as? CGFloat ?? 0 }
+        set { base.setValue(newValue, forKey: _decode("aW5wdXRSYWRpdXM=")) }
+    }
+}
+
 // MARK: - Base64 Decode Helper
 
 private func _decode(_ base64: String) -> String {

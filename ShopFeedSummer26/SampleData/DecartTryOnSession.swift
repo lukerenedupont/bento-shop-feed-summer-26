@@ -592,7 +592,10 @@ extension DecartTryOnSession: LKRTCPeerConnectionDelegate {
     }
 }
 
-private struct FalTokenProvider {
+/// Mints short-lived fal JWTs from the server-side token endpoint. Shared by
+/// the live Decart studio and the Try your faves FASHN pipeline so the fal
+/// API key itself never ships in the app.
+struct FalTokenProvider {
     func token(for app: String) async throws -> String {
         let values = Self.configurationValues()
 
@@ -634,7 +637,10 @@ private struct FalTokenProvider {
         throw FalTryOnError.tokenRequestFailed
     }
 
-    private static func configurationValues() -> [String: String] {
+    /// Merged configuration: process environment, Info.plist, and (DEBUG) the
+    /// bundled ShopServer.env copied from `.env.local`. Shared with the
+    /// Try your faves FASHN client so both prototypes read the same keys.
+    static func configurationValues() -> [String: String] {
         var values = ProcessInfo.processInfo.environment
         if let endpoint = Bundle.main.object(forInfoDictionaryKey: "FalTokenEndpoint") as? String,
            !endpoint.isEmpty, !endpoint.contains("$(") {

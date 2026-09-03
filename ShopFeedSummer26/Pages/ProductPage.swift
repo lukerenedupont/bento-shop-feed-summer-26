@@ -32,13 +32,21 @@ struct ProductPage: View {
 
     // MARK: - Agent init (real product data)
 
-    init(agentProduct: AgentProduct, reason: String? = nil, namespace: Namespace.ID) {
+    /// - Parameter transitionID: The zoom source ID the caller marked its tile
+    ///   with. Callers that own a real product ID should pass it so the
+    ///   `.zoom` transition matches; otherwise a synthetic ID is derived.
+    init(
+        agentProduct: AgentProduct,
+        reason: String? = nil,
+        transitionID: Int? = nil,
+        namespace: Namespace.ID
+    ) {
         self.agentProduct = agentProduct
         self.agentReason = reason
         self.namespace = namespace
         // Create a synthetic merchant/product ID for compatibility
         self.merchantId = agentProduct.shopName ?? "agent"
-        self.productId = agentProduct.id.hashValue
+        self.productId = transitionID ?? agentProduct.id.hashValue
     }
 
     private var merchant: SampleMerchant? {
@@ -75,12 +83,28 @@ struct ProductPage: View {
         )
     }
 
+    /// Agent prices arrive display-formatted ("€430", "CA$1,299"). Split the
+    /// symbol back off so the PDP reformats in the product's own currency
+    /// instead of assuming USD and printing "$€430".
+    private static func splitPrice(_ value: String) -> (amount: String, currency: String) {
+        let trimmed = value.trimmingCharacters(in: .whitespaces)
+        // Longest symbols first, so "CA$" is not matched as "$".
+        let symbols = [("CA$", "CAD"), ("A$", "AUD"), ("$", "USD"), ("€", "EUR"), ("£", "GBP")]
+        for (symbol, code) in symbols where trimmed.hasPrefix(symbol) {
+            let amount = trimmed.dropFirst(symbol.count)
+                .replacingOccurrences(of: ",", with: "")
+            return (amount, code)
+        }
+        return (trimmed.replacingOccurrences(of: ",", with: ""), "USD")
+    }
+
     /// Convert AgentProduct to SampleMerchant.Product for view compatibility.
     private func agentToProduct(_ ap: AgentProduct) -> SampleMerchant.Product {
-        SampleMerchant.Product(
+        let price = Self.splitPrice(ap.price)
+        return SampleMerchant.Product(
             id: ap.id.hashValue,
             title: ap.title,
-            price: ap.price.replacingOccurrences(of: "$", with: "").replacingOccurrences(of: ",", with: ""),
+            price: price.amount,
             handle: "",
             productType: nil,
             vendor: ap.shopName ?? "",
@@ -88,7 +112,7 @@ struct ProductPage: View {
             shopURL: nil,
             tags: [],
             allImageURLs: ap.allImageURLs.map { $0.absoluteString },
-            currencyCode: "USD",
+            currencyCode: price.currency,
             productDescription: agentReason
         )
     }
@@ -177,10 +201,14 @@ struct ProductPage: View {
                                 .frame(width: 20, height: 20)
                                 .foregroundStyle(GravityColors.text)
                                 .frame(width: 44, height: 44)
+                                // Plain glass, and the hit shape declared
+                                // last. Interactive glass runs its own touch
+                                // handling and was swallowing the tap, so the
+                                // chip highlighted but never went back.
+                                .glassEffect(.regular, in: .circle)
                                 .contentShape(Circle())
-                                .glassEffect(.regular.interactive(), in: .circle)
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(PressScaleButtonStyle())
                         .accessibilityLabel("Back")
 
                         Spacer()

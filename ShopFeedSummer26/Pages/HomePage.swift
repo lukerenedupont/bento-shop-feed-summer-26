@@ -179,8 +179,18 @@ struct HomePage: View {
     }
 
     private var feedPlan: HomeFeedPlan {
-        let supportsWorlds = buyerPreview.selected.id == "luke" && selectedTopicID == "for-you"
-        let worldIDs = supportsWorlds ? WorldPrototypePreferences.shared.enabledWorldIDs : []
+        let worldIDs: Set<String> = {
+            guard selectedTopicID == "for-you" else { return [] }
+            let enabled = WorldPrototypePreferences.shared.enabledWorldIDs
+            // Try your faves is buyer-agnostic — it seeds from whichever
+            // buyer is active — so it travels to every buyer's feed. The
+            // other experimental Worlds remain Luke-only prototypes built
+            // on his authored stories.
+            guard buyerPreview.selected.id == "luke" else {
+                return enabled.intersection([WorldPrototypeCatalog.tryFavesID])
+            }
+            return enabled
+        }()
         return HomeFeedPlanner.plan(.init(
             buyer: buyerPreview.selected,
             topic: selectedTopic,
@@ -1316,6 +1326,28 @@ struct HomePage: View {
                     )
             }
 
+        case .tryFaves:
+            TryFavesFeedCard(
+                width: layout.cardWidth,
+                height: layout.cardHeight,
+                foregroundTopPadding: layout.foregroundTopPadding,
+                titleTrailingPadding: 64,
+                scrollPinnedTitleTop: layout.pinnedTitleTop
+            ) {
+                coordinator.resetScrollState()
+                coordinator.pushRoute(.tryFavesWorld)
+            }
+            .matchedTransitionSource(id: TryFavesExperience.cardID, in: namespace) { source in
+                source
+                    .background(.clear)
+                    .clipShape(
+                        RoundedRectangle(
+                            cornerRadius: feedCornerRadius,
+                            style: .continuous
+                        )
+                    )
+            }
+
         case .seasonalSavings:
             HolidayFeedCard(
                 width: layout.cardWidth,
@@ -1564,6 +1596,7 @@ struct HomePage: View {
             }?.brandColor ?? Color(hex: "#343038")
             case .seasonalSavings: Color(hex: "#49308F")
             case .tryOn: Color(hex: "#4A4745")
+            case .tryFaves: TryFavesStyle.canvas
             }
             return (entry.id, color)
         })

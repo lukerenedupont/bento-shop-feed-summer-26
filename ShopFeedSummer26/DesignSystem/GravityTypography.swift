@@ -141,6 +141,11 @@ enum GravityTypography {
     static let expressiveH7Heavy = GravityTextStyle(
         font: .expressiveBold, fontSize: 32, lineHeight: 36, letterSpacing: GravityLetterSpacing.tight
     )
+    /// Stage-header weight: the home card's expressive heavy face at the
+    /// shared 24pt header size.
+    static let expressiveH8Heavy = GravityTextStyle(
+        font: .expressiveBold, fontSize: 24, lineHeight: 26, letterSpacing: GravityLetterSpacing.tighter
+    )
     /// Compact utility-rail title from the top-of-feed card specification.
     static let utilityCardTitle = GravityTextStyle(
         font: .bold, fontSize: 18, lineHeight: 20, letterSpacing: GravityLetterSpacing.tighter

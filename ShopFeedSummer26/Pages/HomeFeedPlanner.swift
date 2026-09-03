@@ -58,6 +58,7 @@ enum HomeFeedPlanner {
         let posts = relevantPosts(input.posts, buyer: input.buyer, topic: input.topic, stories: stories, merchants: input.merchants)
         var entries = distribute(stories: stories, posts: posts, buyerID: input.buyer.id, topicID: input.topic.id)
         entries = WorldPrototypeFeedOrdering.prioritizeTryOn(in: entries, enabledWorldIDs: input.enabledWorldIDs)
+        entries = WorldPrototypeFeedOrdering.insertTryFaves(in: entries, enabledWorldIDs: input.enabledWorldIDs)
         let availableContentCounts = contentCounts(in: entries, enabledWorldIDs: input.enabledWorldIDs)
         entries = FeedCompositionFilter.apply(to: entries, enabledKinds: input.enabledContentKinds, enabledWorldIDs: input.enabledWorldIDs)
         if input.seasonalPlacement == .feedCard {
@@ -84,6 +85,7 @@ enum HomeFeedPlanner {
                 ? nil
                 : (story.rendersAsMerchantCard ? .merchantCards : .recommendations)
             case .tryOn: enabledWorldIDs.contains(WorldPrototypeCatalog.tryOnID) ? nil : .recommendations
+            case .tryFaves: nil
             case .seasonalSavings: nil
             }
             if let kind { counts[kind, default: 0] += 1 }
