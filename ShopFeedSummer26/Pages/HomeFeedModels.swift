@@ -138,11 +138,18 @@ private struct FeedFeedbackPositionModifier: ViewModifier {
                     }
                 }
         } else {
+            // The try-faves headline pins higher than the shared title line;
+            // its icons rise by the same amount so both stay top-aligned.
+            let pinnedTop = if case .tryFaves = entry {
+                layout.pinnedTitleTop - TryFavesFeedCard.pinnedTitleRaise
+            } else {
+                layout.pinnedTitleTop
+            }
             content
-                .padding(.top, layout.pinnedTitleTop)
+                .padding(.top, pinnedTop)
                 .padding(.trailing, GravitySpacing.space12)
                 .visualEffect { actions, geometry in
-                    let distance = max(geometry.frame(in: .scrollView).minY - layout.pinnedTitleTop, 0)
+                    let distance = max(geometry.frame(in: .scrollView).minY - pinnedTop, 0)
                     let progress = min(max(1 - distance / 100, 0), 1)
                     return actions.opacity(progress)
                 }

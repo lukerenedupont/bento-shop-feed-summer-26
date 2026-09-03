@@ -201,10 +201,14 @@ struct ProductPage: View {
                                 .frame(width: 20, height: 20)
                                 .foregroundStyle(GravityColors.text)
                                 .frame(width: 44, height: 44)
+                                // Plain glass, and the hit shape declared
+                                // last. Interactive glass runs its own touch
+                                // handling and was swallowing the tap, so the
+                                // chip highlighted but never went back.
+                                .glassEffect(.regular, in: .circle)
                                 .contentShape(Circle())
-                                .glassEffect(.regular.interactive(), in: .circle)
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(PressScaleButtonStyle())
                         .accessibilityLabel("Back")
 
                         Spacer()

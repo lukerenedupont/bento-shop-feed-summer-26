@@ -6,8 +6,11 @@ enum TryFavesExperience {
     static let cardID = "try-your-faves"
 }
 
-/// The Home feed entry for the Try your faves world: the seed avatar on the
-/// cream stage with a slice of the shopper's try-on-ready favorites.
+/// The Home feed entry for the Try your faves world: the seed avatar on its
+/// stage with a slice of the shopper's try-on-ready favorites.
+///
+/// The tiles, radii, and type here are the same ones the world uses, so the
+/// zoom into the world changes scale and nothing else.
 struct TryFavesFeedCard: View {
     let width: CGFloat
     let height: CGFloat
@@ -49,7 +52,7 @@ struct TryFavesFeedCard: View {
             .clipShape(RoundedRectangle(cornerRadius: FeedCardStyle.cornerRadius, style: .continuous))
             .overlay {
                 RoundedRectangle(cornerRadius: FeedCardStyle.cornerRadius, style: .continuous)
-                    .strokeBorder(.black.opacity(0.08), lineWidth: 0.5)
+                    .strokeBorder(TryFavesStyle.tileBorder, lineWidth: 0.5)
             }
             .compositingGroup()
             .shadow(color: .black.opacity(0.07), radius: 16, y: 3)
@@ -62,20 +65,26 @@ struct TryFavesFeedCard: View {
     private var title: some View {
         Text("Try on your favorites")
             .feedCardTitleStyle()
-            .foregroundStyle(.black)
+            .foregroundStyle(TryFavesStyle.stageText)
             .multilineTextAlignment(.leading)
             .lineLimit(3)
             .padding(.trailing, titleTrailingPadding)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
+    /// How much higher than the shared pinned-title line the headline rests
+    /// once the card is swiped into place. The feedback icons overlaid by
+    /// Home rise by the same amount so they stay top-aligned with the title.
+    static let pinnedTitleRaise: CGFloat = 24
+
     private var scrollAwareTitle: some View {
-        title
+        let pinnedTop = scrollPinnedTitleTop.map { $0 - Self.pinnedTitleRaise }
+        return title
             .visualEffect { title, proxy in
                 title.offset(
                     y: max(
                         0,
-                        (scrollPinnedTitleTop
+                        (pinnedTop
                             ?? proxy.frame(in: .scrollView(axis: .vertical)).minY)
                             - proxy.frame(in: .scrollView(axis: .vertical)).minY
                     )
@@ -91,54 +100,24 @@ struct TryFavesFeedCard: View {
         return VStack(alignment: .leading, spacing: GravitySpacing.space16) {
             HStack(alignment: .top, spacing: GravitySpacing.space8) {
                 ForEach(garments) { garment in
-                    gridTile(garment, side: tileSide)
+                    TryFavesProductTile(
+                        garment: garment,
+                        width: tileSide,
+                        accessory: .price
+                    )
                 }
             }
 
             HStack(spacing: GravitySpacing.space4) {
                 Text("Try more")
-                    .font(.system(size: 22, weight: .semibold))
-                    .tracking(-0.5)
-                    .foregroundStyle(.black)
+                    .gravityTextStyle(GravityTypography.sectionTitle)
+                    .foregroundStyle(TryFavesStyle.stageText)
                 Image(systemName: "chevron.right")
                     .font(.system(size: 15, weight: .bold))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(TryFavesStyle.stageText)
             }
             .padding(.leading, GravitySpacing.space4)
         }
-    }
-
-    private func gridTile(_ garment: TryOnGarment, side: CGFloat) -> some View {
-        ZStack {
-            Color.white
-            if let url = URL(string: garment.imageURL) {
-                CachedAsyncImage(url: url) { phase in
-                    if let image = phase.image {
-                        image.resizable().scaledToFill()
-                    } else {
-                        Color.white
-                    }
-                }
-            }
-        }
-        .frame(width: side, height: side)
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .strokeBorder(Color(hex: "#05294D").opacity(0.1), lineWidth: 0.5)
-        }
-        .overlay(alignment: .topLeading) {
-            Text(garment.displayPrice)
-                .font(.system(size: 10, weight: .semibold))
-                .tracking(-0.2)
-                .foregroundStyle(.white)
-                .padding(.horizontal, GravitySpacing.space6)
-                .padding(.vertical, GravitySpacing.space2)
-                .background(.black.opacity(0.3), in: Capsule())
-                .background(.ultraThinMaterial, in: Capsule())
-                .padding(GravitySpacing.space10)
-        }
-        .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
     }
 }
 

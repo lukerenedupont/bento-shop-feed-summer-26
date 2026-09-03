@@ -1276,7 +1276,6 @@ struct HomePage: View {
         let chromeOpacity = Double(1 - lockedTakeoverProgress)
         let usesDarkFeedbackIcons: Bool = {
             if case .tryOn = entry { return true }
-            if case .tryFaves = entry { return true }
             return false
         }()
         let includesVolumeControl: Bool = {

@@ -5,7 +5,12 @@ import UIKit
 
 /// Generates, caches, and persists "Try your faves" looks.
 ///
-/// Rendering runs through fal's queue API against `fal-ai/fashn/tryon/v1.6`.
+/// Rendering runs through fal's queue API. Every look is composed from the
+/// seed photograph in a single `openai/gpt-image-2/edit` pass — garments,
+/// pose, and the selected environment in one generation. Each look is one
+/// flat photograph, like a frame from an editorial photo shoot: posture and
+/// shot variations cycle per look so consecutive generations share the
+/// location but never feel identical.
 /// The fal API key never ships in the app: every HTTP call is authorized with
 /// a short-lived JWT minted by the same server-side token endpoint the live
 /// Decart studio uses (`FAL_TOKEN_ENDPOINT` / Shopify proxy fallback). fal's
@@ -16,19 +21,19 @@ import UIKit
 final class TryFavesLookService {
     static let shared = TryFavesLookService()
 
-    static let modelVersion = "fal-ai/fashn/tryon/v1.6"
-    /// Posture and footwear edits run through Nano Banana Pro — markedly
-    /// better photographic realism and product fidelity than the base model,
-    /// which was drifting renders toward a synthetic look.
-    static let editModel = "fal-ai/nano-banana-pro/edit"
-    /// Generation settings, frozen into the cache key: FASHN quality mode,
-    /// one sample, PNG output, the editorial seed framing, the posture pass,
-    /// and the pro edit passes.
-    static let generationSettings = "quality|samples=1|png|frame-v3|pose-v1|edits-nbp1"
+    static let modelVersion = "openai/gpt-image-2/edit"
+    /// Generation settings, frozen into the cache key. `shoot-v2` is the
+    /// flat-photograph pipeline: environment baked into the render (anchored
+    /// by the environment's seed photograph when it has one), no figure
+    /// lift, per-look shot variation.
+    static let generationSettings = "quality=high|samples=1|png|9x16|shoot-v3"
 
     /// Ten subtle stances, cycled per generation so consecutive looks don't
     /// share an identical pose. The index is stored on the look (stable
     /// through retries) and folded into the render cache key.
+    ///
+    /// `shotVariations` cycles independently — the array lengths are coprime
+    /// (10 and 7), so posture/shot pairings don't repeat for 70 looks.
     static let posturePrompts = [
         "weight shifted onto his left leg, right knee relaxed",
         "arms relaxed at his sides, shoulders loose",
@@ -40,6 +45,19 @@ final class TryFavesLookService {
         "gaze turned slightly off camera to his right",
         "weight on his right leg, left foot pointed slightly outward",
         "hands held behind his back, chest open",
+    ]
+
+    /// Seven subtle shot-to-shot variations — framing, camera angle, light —
+    /// so each look reads as a different frame from the same photo shoot
+    /// rather than a re-render of the previous one.
+    static let shotVariations = [
+        "framed slightly wider, with a little more of the space visible around him",
+        "framed slightly tighter on the figure, still full body head to toe",
+        "the camera shifted a touch to the left of centre",
+        "the camera shifted a touch to the right of centre",
+        "the light a little softer and more diffuse",
+        "the light slightly warmer, like late afternoon",
+        "the figure standing just off-centre in the frame",
     ]
 
     enum LookState: Codable, Hashable {
@@ -58,29 +76,28 @@ final class TryFavesLookService {
         var title: String
         /// Ordered variant IDs, generation order (bottoms before top).
         let variantIDs: [String]
-        let cacheKey: String
+        /// Rewritten on retry: the key derives from model, settings, posture,
+        /// shot, environment, and the appearance note, any of which may
+        /// change between attempts.
+        var cacheKey: String
         let createdAt: Date
         var state: LookState
         var attemptCount: Int
         /// Index into `posturePrompts`; 0 for looks predating posture cycling.
         var postureIndex: Int = 0
+        /// Index into `shotVariations` — the frame's own camera/light nuance.
+        var shotIndex: Int = 0
     }
 
     enum JobPhase: Equatable {
         case queued
-        case posing
-        case applyingBottoms
-        case applyingTop
-        case applyingShoes
+        case composing
         case validating
 
         var label: String {
             switch self {
             case .queued: "Queued"
-            case .posing: "Setting the pose"
-            case .applyingBottoms: "Styling bottoms"
-            case .applyingTop: "Styling the top"
-            case .applyingShoes: "Styling shoes"
+            case .composing: "Composing the look"
             case .validating: "Checking the result"
             }
         }
@@ -109,17 +126,59 @@ final class TryFavesLookService {
 
     private(set) var looks: [Look] = []
     private(set) var activeJob: Job?
+
+
+    /// The location the shoot happens in. It is baked into every generation's
+    /// prompt — and therefore into the render cache key — so changing it
+    /// affects new looks only; existing photographs keep their location.
+    var environment: TryFavesEnvironment = TryFavesLookService.loadEnvironment() {
+        didSet {
+            UserDefaults.standard.set(environment.rawValue, forKey: Self.environmentDefaultsKey)
+        }
+    }
+
+    private static let environmentDefaultsKey = "TryFavesEnvironment"
+
+    private static func loadEnvironment() -> TryFavesEnvironment {
+        let stored = TryFavesEnvironment(
+            rawValue: UserDefaults.standard.string(forKey: environmentDefaultsKey) ?? ""
+        )
+        guard let stored, stored.isAvailable else { return .seed }
+        return stored
+    }
+
+    /// A free-text appearance or pose note from Try on configuration. It rides
+    /// along with the posture pass, so it changes what is generated — and is
+    /// therefore part of the render cache key.
+    var appearanceNote: String = TryFavesLookService.loadAppearanceNote() {
+        didSet {
+            UserDefaults.standard.set(appearanceNote, forKey: Self.appearanceNoteDefaultsKey)
+        }
+    }
+
+    private static let appearanceNoteDefaultsKey = "TryFavesAppearanceNote"
+
+    private static func loadAppearanceNote() -> String {
+        UserDefaults.standard.string(forKey: appearanceNoteDefaultsKey) ?? ""
+    }
+
+    /// Whether Try on configuration has ever been opened. Drives the one-time
+    /// discovery dot on the settings button — not a notification.
+    var hasOpenedConfiguration: Bool = UserDefaults.standard.bool(
+        forKey: "TryFavesHasOpenedConfiguration"
+    ) {
+        didSet {
+            UserDefaults.standard.set(hasOpenedConfiguration, forKey: "TryFavesHasOpenedConfiguration")
+        }
+    }
     /// A finished look the shopper hasn't opened yet — drives the
     /// "View new look" chip and its badge.
     private(set) var unseenLookID: UUID?
 
-    /// Only `figureImages` is observed — pages re-render when a lifted figure
-    /// lands. The bookkeeping caches are observation-ignored so incidental
-    /// reads/mutations can never re-enter SwiftUI's update transaction.
-    private var figureImages: [String: UIImage] = [:]
+    /// Render restore is observation-ignored: pages re-render off `looks`
+    /// state changes, and the lazy disk restore inside `renderImage(for:)`
+    /// must never re-enter SwiftUI's update transaction.
     @ObservationIgnored private var renderImages: [String: UIImage] = [:]
-    @ObservationIgnored private var figureExtractionsInFlight: Set<String> = []
-    @ObservationIgnored private var figureExtractionFailures: Set<String> = []
     @ObservationIgnored private var generationTask: Task<Void, Never>?
 
     private init() {
@@ -146,9 +205,17 @@ final class TryFavesLookService {
     func generate(outfit: TryFavesOutfit) -> UUID? {
         guard activeJob == nil else { return nil }
 
-        // Cycle stances so consecutive generations aren't identical.
+        // Cycle stances and shot variations independently so consecutive
+        // generations read as different frames from the same shoot.
         let postureIndex = looks.count % Self.posturePrompts.count
-        let cacheKey = Self.cacheKey(for: outfit, postureIndex: postureIndex)
+        let shotIndex = looks.count % Self.shotVariations.count
+        let cacheKey = Self.cacheKey(
+            for: outfit,
+            postureIndex: postureIndex,
+            shotIndex: shotIndex,
+            environment: environment,
+            note: appearanceNote
+        )
         let look = Look(
             id: UUID(),
             // The seed photograph is Look 1, so generated looks start at 2.
@@ -158,7 +225,8 @@ final class TryFavesLookService {
             createdAt: Date(),
             state: .generating,
             attemptCount: 0,
-            postureIndex: postureIndex
+            postureIndex: postureIndex,
+            shotIndex: shotIndex
         )
         looks.append(look)
         persistLooks()
@@ -171,18 +239,63 @@ final class TryFavesLookService {
             return look.id
         }
 
-        startGeneration(lookID: look.id, outfit: outfit, postureIndex: postureIndex)
+        startGeneration(lookID: look.id, outfit: outfit, postureIndex: postureIndex, shotIndex: shotIndex)
         return look.id
     }
 
     func retry(_ lookID: UUID) {
-        guard activeJob == nil,
-              let look = looks.first(where: { $0.id == lookID }),
-              look.state.isFailed else { return }
+        guard let look = looks.first(where: { $0.id == lookID }), look.state.isFailed else {
+            return
+        }
+        regenerate(lookID)
+    }
+
+    /// Re-shoot a look under the current environment and appearance note.
+    ///
+    /// Both are prompt-only — they describe the photograph rather than edit
+    /// it — so changing them in Try on configuration has no effect until the
+    /// look is generated again. Returns the look that will carry the result.
+    ///
+    /// The seed look is a bundled photograph with no pipeline behind it, so it
+    /// cannot be re-shot in place; its outfit is generated as a new look
+    /// instead, which is also what makes the change visible without destroying
+    /// the one photograph every shopper starts from.
+    @discardableResult
+    func regenerate(_ lookID: UUID) -> UUID? {
+        guard activeJob == nil else { return nil }
+
+        guard lookID != Self.seedLookID else {
+            guard let outfit = Self.outfit(from: TryFavesCatalog.seedLookGarments) else {
+                return nil
+            }
+            return generate(outfit: outfit)
+        }
+
+        guard let look = looks.first(where: { $0.id == lookID }) else { return nil }
         let garments = look.variantIDs.compactMap(TryFavesCatalog.garment(for:))
-        guard let outfit = Self.outfit(from: garments) else { return }
-        update(lookID: lookID) { $0.state = .generating }
-        startGeneration(lookID: lookID, outfit: outfit, postureIndex: look.postureIndex)
+        guard let outfit = Self.outfit(from: garments) else { return nil }
+
+        // Re-key the look before rendering: the model, settings, environment,
+        // or appearance note may have changed since it was created, and the
+        // render lands under the freshly computed key.
+        let cacheKey = Self.cacheKey(
+            for: outfit,
+            postureIndex: look.postureIndex,
+            shotIndex: look.shotIndex,
+            environment: environment,
+            note: appearanceNote
+        )
+        update(lookID: lookID) {
+            $0.state = .generating
+            $0.cacheKey = cacheKey
+        }
+        startGeneration(
+            lookID: lookID,
+            outfit: outfit,
+            postureIndex: look.postureIndex,
+            shotIndex: look.shotIndex
+        )
+        return lookID
     }
 
     func delete(_ lookID: UUID) {
@@ -211,76 +324,14 @@ final class TryFavesLookService {
     // MARK: - Figure extraction
 
     /// The look's figure lifted off its photographed backdrop. Pure read —
-    /// safe to call from view bodies. Returns nil until `ensureFigure(for:)`
-    /// has produced one; callers fall back to the full render.
-    func figureImage(for look: Look) -> UIImage? {
-        figureImages[look.cacheKey]
-    }
-
-    /// Kick off (or restore) figure extraction for a look. Must be called
-    /// from an async context such as `.task` — never during a view body —
-    /// because it publishes observable state.
-    ///
-    /// On-device Vision segmentation is unavailable in the simulator ("could
-    /// not create inference context"), so lifting runs through BiRefNet on
-    /// fal via the same gateway, then persists beside the render cache. The
-    /// seed figure ships in the bundle and costs nothing.
-    func ensureFigure(for look: Look) {
-        let cacheKey = look.cacheKey
-        guard figureImages[cacheKey] == nil,
-              !figureExtractionsInFlight.contains(cacheKey),
-              !figureExtractionFailures.contains(cacheKey) else {
-            return
-        }
-        if look.id == Self.seedLookID {
-            if let bundled = UIImage(named: "try-faves-figure") {
-                figureImages[cacheKey] = bundled
-            }
-            return
-        }
-        if let disk = loadCachedFigure(for: cacheKey) {
-            figureImages[cacheKey] = disk
-            return
-        }
-        guard look.state == .ready,
-              let render = renderImage(for: look),
-              let jpeg = render.jpegData(compressionQuality: 0.85) else {
-            return
-        }
-        startFigureExtraction(
-            cacheKey: cacheKey,
-            imageReference: "data:image/jpeg;base64,\(jpeg.base64EncodedString())"
-        )
-    }
-
-    /// Background removal through the gateway. `imageReference` is either the
-    /// render's hosted URL (fresh generations) or a data URI (restored looks).
-    /// Failure is memoized — the look keeps showing its full render.
-    private func startFigureExtraction(cacheKey: String, imageReference: String) {
-        guard figureImages[cacheKey] == nil,
-              !figureExtractionsInFlight.contains(cacheKey),
-              !figureExtractionFailures.contains(cacheKey) else {
-            return
-        }
-        figureExtractionsInFlight.insert(cacheKey)
-        Task.detached(priority: .userInitiated) {
-            let data = try? await FashnQueueClient().removeBackground(imageURL: imageReference)
-            await MainActor.run {
-                let service = TryFavesLookService.shared
-                service.figureExtractionsInFlight.remove(cacheKey)
-                if let data, let figure = UIImage(data: data) {
-                    service.figureImages[cacheKey] = figure
-                    service.storeCachedFigure(figure, for: cacheKey)
-                } else {
-                    service.figureExtractionFailures.insert(cacheKey)
-                }
-            }
-        }
-    }
-
     // MARK: - Generation pipeline
 
-    private func startGeneration(lookID: UUID, outfit: TryFavesOutfit, postureIndex: Int) {
+    private func startGeneration(
+        lookID: UUID,
+        outfit: TryFavesOutfit,
+        postureIndex: Int,
+        shotIndex: Int
+    ) {
         let attempt = (looks.first { $0.id == lookID }?.attemptCount ?? 0) + 1
         update(lookID: lookID) { $0.attemptCount = attempt }
         activeJob = Job(lookID: lookID, phase: .queued, attempt: attempt)
@@ -288,14 +339,21 @@ final class TryFavesLookService {
         generationTask = Task { [weak self] in
             guard let self else { return }
             do {
-                let result = try await self.render(outfit: outfit, lookID: lookID, postureIndex: postureIndex)
-                let cacheKey = Self.cacheKey(for: outfit, postureIndex: postureIndex)
+                let result = try await self.render(
+                    outfit: outfit,
+                    postureIndex: postureIndex,
+                    shotIndex: shotIndex
+                )
+                let cacheKey = Self.cacheKey(
+                    for: outfit,
+                    postureIndex: postureIndex,
+                    shotIndex: shotIndex,
+                    environment: self.environment,
+                    note: self.appearanceNote
+                )
                 self.storeCachedRender(result.image, for: cacheKey)
                 self.renderImages[cacheKey] = result.image
                 self.finish(lookID: lookID, state: .ready)
-                // Lift the figure eagerly from the hosted render so the page
-                // composites over the fixed plate as soon as possible.
-                self.startFigureExtraction(cacheKey: cacheKey, imageReference: result.hostedURL)
             } catch is CancellationError {
                 self.finish(lookID: lookID, state: .failed("Generation was cancelled."))
             } catch let error as TryFavesRenderError {
@@ -306,71 +364,114 @@ final class TryFavesLookService {
         }
     }
 
+    /// One GPT Image 2 edit composes garments, pose, and the selected
+    /// environment directly from the seed photograph. One automatic retry
+    /// covers transient queue failures and bad frames; anything after that
+    /// is a user-visible retry.
     private func render(
         outfit: TryFavesOutfit,
-        lookID: UUID,
-        postureIndex: Int
+        postureIndex: Int,
+        shotIndex: Int
     ) async throws -> (image: UIImage, hostedURL: String) {
-        let client = FashnQueueClient()
+        let client = FalQueueClient()
         let avatar = try Self.seedAvatarDataURI()
-
-        func pass(
-            model: String,
-            garment: TryOnGarment,
-            phase: JobPhase
-        ) async throws -> (image: UIImage, hostedURL: String) {
-            activeJob?.phase = phase
-            // One automatic retry per pass covers transient queue failures and
-            // bad frames; anything after that becomes a user-visible retry.
-            var lastError: Error = TryFavesRenderError.generationFailed
-            for _ in 0..<2 {
-                do {
-                    let output = garment.category == .footwear
-                        ? try await client.editShoes(modelImage: model, garment: garment)
-                        : try await client.generate(modelImage: model, garment: garment)
-                    activeJob?.phase = .validating
-                    let image = try Self.validated(output.imageData)
-                    return (image, output.hostedURL)
-                } catch {
-                    lastError = error
-                    try Task.checkCancellation()
-                }
-            }
-            throw lastError
-        }
-
-        // Re-pose the seed first so each look carries its own stance; every
-        // garment pass then composites onto the posed base.
-        activeJob?.phase = .posing
         let posture = Self.posturePrompts[postureIndex % Self.posturePrompts.count]
-        let posedBase: String
-        do {
-            let posed = try await client.pose(modelImage: avatar, posture: posture)
-            _ = try Self.validated(posed.imageData)
-            posedBase = posed.hostedURL
-        } catch {
-            // A failed pose pass shouldn't sink the look — fall back to the
-            // seed's photographed stance.
-            posedBase = avatar
-        }
+        let shot = Self.shotVariations[shotIndex % Self.shotVariations.count]
 
-        switch outfit {
+        let garments: [TryOnGarment] = switch outfit {
         case let .shoesOnly(shoes):
-            // The seed avatar is already dressed, so shoes alone are a single
-            // edit pass.
-            let result = try await pass(model: posedBase, garment: shoes, phase: .applyingShoes)
-            return (result.image, result.hostedURL)
-
+            [shoes]
         case let .separates(top, bottom, shoes):
-            // Bottoms first, then the top applied to the intermediate result,
-            // then shoes edited onto the composed look. Intermediates stay on
-            // fal's CDN, so chained passes send URLs instead of pixels.
-            let bottomsPass = try await pass(model: posedBase, garment: bottom, phase: .applyingBottoms)
-            let topPass = try await pass(model: bottomsPass.hostedURL, garment: top, phase: .applyingTop)
-            guard let shoes else { return (topPass.image, topPass.hostedURL) }
-            let shoesPass = try await pass(model: topPass.hostedURL, garment: shoes, phase: .applyingShoes)
-            return (shoesPass.image, shoesPass.hostedURL)
+            [top, bottom] + (shoes.map { [$0] } ?? [])
         }
+
+        activeJob?.phase = .composing
+        let note = appearanceNote
+        let location = environment
+        // The environment's own seed photograph rides along as the last
+        // reference image, anchoring the location across the whole shoot.
+        let locationReference = location.plateAssetName
+            .flatMap { UIImage(named: $0) }
+            .flatMap { $0.jpegData(compressionQuality: 0.85) }
+            .map { "data:image/jpeg;base64,\($0.base64EncodedString())" }
+        var lastError: Error = TryFavesRenderError.generationFailed
+        for _ in 0..<2 {
+            do {
+                let output = try await client.composeLook(
+                    prompt: Self.lookPrompt(
+                        garments: garments,
+                        posture: posture,
+                        shot: shot,
+                        environment: location,
+                        hasLocationReference: locationReference != nil,
+                        note: note
+                    ),
+                    imageURLs: [avatar] + garments.map(\.imageURL)
+                        + (locationReference.map { [$0] } ?? [])
+                )
+                activeJob?.phase = .validating
+                let image = try Self.validated(output.imageData)
+                return (image, output.hostedURL)
+            } catch {
+                lastError = error
+                try Task.checkCancellation()
+            }
+        }
+        throw lastError
+    }
+
+    /// One instruction covering garments, environment, pose, and the frame's
+    /// own shot variation — each garment referenced by its position in
+    /// `image_urls` (the seed avatar is always first; the environment's seed
+    /// photograph, when present, is always last).
+    private static func lookPrompt(
+        garments: [TryOnGarment],
+        posture: String,
+        shot: String,
+        environment: TryFavesEnvironment,
+        hasLocationReference: Bool,
+        note: String
+    ) -> String {
+        let ordinals = ["second", "third", "fourth", "fifth"]
+        let references = zip(garments, ordinals)
+            .map { garment, ordinal in "the \(garment.category.promptNoun) from the \(ordinal) image" }
+            .joined(separator: ", then ")
+        let wardrobe = garments.contains { $0.category != .footwear }
+            ? "Replace the corresponding clothing they are wearing."
+            : "Keep the rest of their clothing exactly as photographed."
+        let location = hasLocationReference
+            ? "Photograph them standing in the location shown in the last "
+                + "image — \(environment.promptDescription) — matching its light "
+                + "and atmosphere."
+            : "Photograph them standing in \(environment.promptDescription)."
+        return "The first image is a photograph of a person. Dress them in "
+            + "\(references) — reproduce each garment's precise design, shape, "
+            + "colors, materials, sole, stitching, and details faithfully, "
+            + "adjusted to the person's body and viewing angle. \(wardrobe) "
+            + "\(location) "
+            + "Pose: \(posture).\(Self.noteClause(note)) "
+            + "This is one frame from an editorial photo shoot in that location, "
+            + "so vary it naturally from other frames: \(shot). "
+            + "Keep the exact same person, face, and hair. "
+            + "Framing rules for every frame of the shoot: full-length lookbook "
+            + "framing from a camera at chest height, the person standing "
+            + "centred, full body head to toe with feet grounded and a natural "
+            + "floor shadow. The figure spans roughly two thirds of the frame's "
+            + "height — head in the top quarter, feet in the bottom quarter — "
+            + "with clear space above the head and below the feet. Never crop "
+            + "the figure, never zoom closer than mid-shin, never pull back so "
+            + "far the figure drops below half the frame's height. The shot "
+            + "variation stays subtle and never overrides these framing rules. "
+            + "Vertical photorealistic editorial photograph, natural skin and "
+            + "fabric texture, no retouching."
+    }
+
+    /// The shopper's free-text appearance note, folded into a prompt as its own
+    /// sentence. Empty notes contribute nothing rather than an empty clause.
+    static func noteClause(_ note: String) -> String {
+        let trimmed = note.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return "" }
+        return " Also apply this change to the person: \(trimmed)."
     }
 
     private func finish(lookID: UUID, state: LookState) {
@@ -410,9 +511,8 @@ final class TryFavesLookService {
         guard size.width >= 256, size.height >= 256 else {
             throw TryFavesRenderError.invalidOutput
         }
-        // FASHN preserves the model image's aspect ratio, and the seed
-        // avatar is a tall trimmed cutout (~0.27), so accept anything from a
-        // slim full-body strip to a squarish studio frame. Only degenerate
+        // The edit output is pinned to a tall frame, but accept anything from
+        // a slim full-body strip to a squarish studio frame. Only degenerate
         // shapes indicate a badly framed subject.
         let aspect = size.width / size.height
         guard aspect > 0.15, aspect < 1.4 else {
@@ -470,14 +570,14 @@ final class TryFavesLookService {
         return image.pngData()
     }
 
-    /// The avatar as a compact JPEG data URI for the first FASHN pass. fal
-    /// accepts data URIs directly, which keeps the seed image out of any
-    /// third-party storage.
+    /// The avatar as a compact JPEG data URI — always the first reference
+    /// image in the edit. fal accepts data URIs directly, which keeps the
+    /// seed image out of any third-party storage.
     ///
     /// The seed is a full editorial studio photograph and is sent exactly as
-    /// bundled: FASHN mirrors the model image's framing, so every render
-    /// inherits the seed's zoom, backdrop, and light — which is what lets the
-    /// looks run full-bleed in the interface.
+    /// bundled: the prompt holds the edit to the seed's framing, so every
+    /// render inherits its zoom, backdrop, and light — which is what lets
+    /// the looks run full-bleed in the interface.
     private static func seedAvatarDataURI() throws -> String {
         guard let seed = UIImage(named: seedAvatarAssetName),
               let jpeg = seed.jpegData(compressionQuality: 0.85) else {
@@ -489,12 +589,21 @@ final class TryFavesLookService {
     // MARK: - Render cache
 
     /// Renders are keyed on avatar hash + ordered variant IDs + posture +
-    /// model version + generation settings.
-    static func cacheKey(for outfit: TryFavesOutfit, postureIndex: Int = 0) -> String {
+    /// shot variation + environment + appearance note + model + settings.
+    static func cacheKey(
+        for outfit: TryFavesOutfit,
+        postureIndex: Int = 0,
+        shotIndex: Int = 0,
+        environment: TryFavesEnvironment = .seed,
+        note: String = ""
+    ) -> String {
         let material = [
             seedAvatarHash,
             outfit.orderedVariantIDs.joined(separator: "+"),
             "pose-\(postureIndex)",
+            "shot-\(shotIndex)",
+            "env-\(environment.rawValue)",
+            "note-\(note.trimmingCharacters(in: .whitespacesAndNewlines))",
             modelVersion,
             generationSettings,
         ].joined(separator: "|")
@@ -520,22 +629,13 @@ final class TryFavesLookService {
         try? data.write(to: Self.cacheDirectory.appendingPathComponent("\(cacheKey).png"))
     }
 
-    private func loadCachedFigure(for cacheKey: String) -> UIImage? {
-        let url = Self.cacheDirectory.appendingPathComponent("\(cacheKey)-figure.png")
-        guard let data = try? Data(contentsOf: url) else { return nil }
-        return UIImage(data: data)
-    }
-
-    private func storeCachedFigure(_ image: UIImage, for cacheKey: String) {
-        guard let data = image.pngData() else { return }
-        try? FileManager.default.createDirectory(at: Self.cacheDirectory, withIntermediateDirectories: true)
-        try? data.write(to: Self.cacheDirectory.appendingPathComponent("\(cacheKey)-figure.png"))
-    }
-
     // MARK: - Look persistence
 
+    /// Versioned filename: `shoot-v1` retired the lifted-figure looks, and
+    /// everything regenerates from the seed photograph in the new style, so
+    /// looks persisted by earlier pipelines are deliberately left behind.
     private static var looksFileURL: URL {
-        cacheDirectory.appendingPathComponent("looks.json")
+        cacheDirectory.appendingPathComponent("looks-shoot-v1.json")
     }
 
     private func persistLooks() {
@@ -577,7 +677,7 @@ enum TryFavesRenderError: Error {
     }
 }
 
-/// Minimal client for fal's queue API. Submits a FASHN try-on job, polls its
+/// Minimal client for fal's queue API. Submits a generation job, polls its
 /// status, and downloads the finished PNG.
 ///
 /// Preferred route is the Shopify LLM gateway: set `SHOPIFY_PROXY_KEY` in
@@ -586,7 +686,7 @@ enum TryFavesRenderError: Error {
 /// Bearer key — no fal credential ever touches the app. Without a gateway
 /// key it falls back to fal's queue directly, minting a short-lived JWT per
 /// call from `FAL_TOKEN_ENDPOINT`.
-private struct FashnQueueClient {
+private struct FalQueueClient {
     struct Output {
         let imageData: Data
         /// The render hosted on fal's CDN — reused as the `model_image` for a
@@ -654,92 +754,39 @@ private struct FashnQueueClient {
         throw TryFavesRenderError.requestFailed
     }
 
-    /// A FASHN try-on pass: quality mode, explicit category and photo type,
-    /// one sample, PNG output. `webhookUrl` is intentionally absent: no
-    /// server to call back — completion is polled instead.
-    func generate(modelImage: String, garment: TryOnGarment) async throws -> Output {
+    /// The look pass: one GPT Image 2 edit that poses the seed and applies
+    /// every garment at once. References ride in `image_urls` — seed first,
+    /// then garments in prompt order.
+    func composeLook(prompt: String, imageURLs: [String]) async throws -> Output {
         try await run(
             modelPath: TryFavesLookService.modelVersion,
             payload: [
-                "model_image": modelImage,
-                "garment_image": garment.imageURL,
-                "category": garment.category.rawValue,
-                "garment_photo_type": garment.photoType.rawValue,
-                "mode": "quality",
-                "num_samples": 1,
-                "output_format": "png",
-            ]
-        )
-    }
-
-    /// A posture pass: re-stance the seed subtly before dressing, so every
-    /// generation carries its own pose.
-    func pose(modelImage: String, posture: String) async throws -> Output {
-        try await run(
-            modelPath: TryFavesLookService.editModel,
-            payload: [
-                "prompt": "Adjust the person's pose subtly: \(posture). Keep the "
-                    + "exact same person, face, hair, clothing, camera framing and "
-                    + "zoom, and the same warm plaster studio backdrop with its "
-                    + "soft natural light and floor shadow. Photorealistic "
-                    + "editorial photograph, natural skin texture, no retouching.",
-                "image_urls": [modelImage],
+                "prompt": prompt,
+                "image_urls": imageURLs,
+                // Pin the tall frame — on auto the edit infers size from its
+                // inputs, and square garment flats skew the output.
+                "image_size": "portrait_16_9",
+                "quality": "high",
                 "num_images": 1,
                 "output_format": "png",
-                "aspect_ratio": "9:16",
-            ]
-        )
-    }
-
-    /// Person cutout via BiRefNet — returns a full-frame PNG with alpha so
-    /// the figure keeps its photographed position over the fixed plate.
-    func removeBackground(imageURL: String) async throws -> Data {
-        let output = try await run(
-            modelPath: "fal-ai/birefnet/v2",
-            payload: [
-                "image_url": imageURL,
-                "operating_resolution": "2048x2048",
-            ]
-        )
-        return output.imageData
-    }
-
-    /// A footwear pass: FASHN has no shoe category, so shoes are swapped by
-    /// an instruction-driven edit over the composed look.
-    func editShoes(modelImage: String, garment: TryOnGarment) async throws -> Output {
-        try await run(
-            modelPath: TryFavesLookService.editModel,
-            payload: [
-                "prompt": "Replace only the footwear the person is wearing with the "
-                    + "exact shoes from the second image — reproduce their precise "
-                    + "design, shape, colors, materials, sole, stitching, and laces "
-                    + "faithfully, adjusted to the person's viewing angle. Keep the "
-                    + "person's pose, body, clothing, the camera framing and zoom, "
-                    + "and the warm plaster studio backdrop exactly the same. Show "
-                    + "the full body head to toe on the same floor with the same "
-                    + "soft shadow. Photorealistic, natural skin and fabric texture.",
-                "image_urls": [modelImage, garment.imageURL],
-                "num_images": 1,
-                "output_format": "png",
-                // Pin the output frame to the seed's tall aspect — left on
-                // auto, the edit re-crops and the lifted figure lands at a
-                // different scale than the fixed studio plate.
-                "aspect_ratio": "9:16",
             ]
         )
     }
 
     private func run(modelPath: String, payload: [String: Any]) async throws -> Output {
-        let job = try await submit(modelPath: modelPath, payload: payload)
-        let resultURL = try await waitForCompletion(job: job)
-        return try await fetchResult(from: resultURL)
+        // fal JWTs are scoped per app; derive it from the model path so the
+        // direct-fal fallback mints a token scoped to the model's app.
+        let app = modelPath.split(separator: "/").prefix(2).joined(separator: "/")
+        let job = try await submit(modelPath: modelPath, payload: payload, app: app)
+        let resultURL = try await waitForCompletion(job: job, app: app)
+        return try await fetchResult(from: resultURL, app: app)
     }
 
-    private func submit(modelPath: String, payload: [String: Any]) async throws -> SubmittedJob {
+    private func submit(modelPath: String, payload: [String: Any], app: String) async throws -> SubmittedJob {
         guard let submitURL = URL(string: "\(queueBase)/\(modelPath)") else {
             throw TryFavesRenderError.requestFailed
         }
-        var request = try await authorizedRequest(url: submitURL)
+        var request = try await authorizedRequest(url: submitURL, app: app)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try JSONSerialization.data(withJSONObject: payload)
@@ -758,12 +805,12 @@ private struct FashnQueueClient {
         return SubmittedJob(statusURL: statusURL, responseURL: responseURL)
     }
 
-    private func waitForCompletion(job: SubmittedJob) async throws -> URL {
+    private func waitForCompletion(job: SubmittedJob, app: String) async throws -> URL {
         let deadline = Date().addingTimeInterval(Self.pollBudget)
 
         while Date() < deadline {
             try Task.checkCancellation()
-            let request = try await authorizedRequest(url: job.statusURL)
+            let request = try await authorizedRequest(url: job.statusURL, app: app)
             let object = try await Self.json(for: request)
             switch object["status"] as? String {
             case "COMPLETED":
@@ -780,13 +827,11 @@ private struct FashnQueueClient {
         throw TryFavesRenderError.timedOut
     }
 
-    private func fetchResult(from url: URL) async throws -> Output {
-        let request = try await authorizedRequest(url: url)
+    private func fetchResult(from url: URL, app: String) async throws -> Output {
+        let request = try await authorizedRequest(url: url, app: app)
         let object = try await Self.json(for: request)
-        // FASHN and nano-banana answer with an `images` array; BiRefNet with a
-        // single `image` object.
+        // GPT Image 2 answers with an `images` array.
         let hosted = (object["images"] as? [[String: Any]])?.first?["url"] as? String
-            ?? (object["image"] as? [String: Any])?["url"] as? String
         guard let hostedURL = hosted, let imageURL = URL(string: hostedURL) else {
             throw TryFavesRenderError.generationFailed
         }
@@ -794,14 +839,14 @@ private struct FashnQueueClient {
         return Output(imageData: data, hostedURL: hostedURL)
     }
 
-    private func authorizedRequest(url: URL) async throws -> URLRequest {
+    private func authorizedRequest(url: URL, app: String) async throws -> URLRequest {
         let token: String
         switch route {
         case let .shopifyGateway(key):
             token = key
         case .falDirect:
             do {
-                token = try await FalTokenProvider().token(for: "fal-ai/fashn")
+                token = try await FalTokenProvider().token(for: app)
             } catch {
                 throw TryFavesRenderError.missingConfiguration
             }
@@ -825,5 +870,16 @@ private struct FashnQueueClient {
             throw TryFavesRenderError.requestFailed
         }
         return object
+    }
+}
+
+private extension TryOnGarmentCategory {
+    /// How the single-pass prompt names each garment reference.
+    var promptNoun: String {
+        switch self {
+        case .tops: "top"
+        case .bottoms: "bottoms"
+        case .footwear: "shoes"
+        }
     }
 }
