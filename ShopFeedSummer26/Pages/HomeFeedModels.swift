@@ -122,6 +122,11 @@ private struct FeedFeedbackPositionModifier: ViewModifier {
                 .padding(.trailing, GravitySpacing.space12)
                 .frame(maxHeight: .infinity, alignment: .bottomTrailing)
                 .opacity(showsAnchoredControls ? 1 : 0)
+                // Invisible chrome must not swallow touches: at opacity 0 the
+                // overlay otherwise intercepts taps meant for the card below
+                // it — tapping "Try more" on the try-faves card was opening
+                // the adjacent story's world through this hidden layer.
+                .allowsHitTesting(showsAnchoredControls)
                 .animation(.easeOut(duration: 0.2), value: showsAnchoredControls)
                 .task(id: "\(entry.id)-\(showsAnchoredControls)") {
                     reservesExploreSpace = false

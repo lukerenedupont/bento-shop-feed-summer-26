@@ -12,6 +12,10 @@ enum HomeRoute: Hashable {
     case topicExpanded(topicId: String, sourceStoryId: String)
     case tryOnStudio
     case tryFavesWorld
+    /// Opens a Try Faves garment's product page. Those garments are authored
+    /// outside `SampleMerchant`, so they resolve through `TryFavesCatalog`
+    /// and render the PDP's agent-product form.
+    case tryFavesProduct(variantID: String)
     case deliveries
     case deliveryDetail(deliveryId: String)
     case account

@@ -92,6 +92,14 @@ struct RootView: View {
             TryOnStudioPage(namespace: namespace)
         case .tryFavesWorld:
             TryFavesWorldPage(namespace: namespace)
+        case .tryFavesProduct(let variantID):
+            if let garment = TryFavesCatalog.garment(for: variantID) {
+                ProductPage(
+                    agentProduct: garment.agentProduct,
+                    transitionID: garment.productID,
+                    namespace: namespace
+                )
+            }
         case .deliveries:
             DeliveriesPage(namespace: namespace)
         case .deliveryDetail(let deliveryId):

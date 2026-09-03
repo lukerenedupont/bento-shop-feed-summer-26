@@ -300,7 +300,7 @@ enum WorldPrototypeCatalog {
         case runningID: "Shoes, recovery, and smaller running brands for finding a rhythm again."
         case canvasID: "A steerable canvas of distinctive vintage and contemporary watches from Very Special."
         case tryOnID: "Use the live camera to see products from your feed on you."
-        case tryFavesID: "Style saved tops, bottoms, and one-pieces on your avatar."
+        case tryFavesID: "Style saved tops, bottoms, and shoes on your avatar."
         case spatialID: "Use the camera to place and compare sculptural pieces in your living room."
         case giftingID: "A living gift guide shaped around Leon, not a generic age bracket."
         case missionID: "A working plan for equipment, mountain layers, travel, and recovery."
