@@ -97,46 +97,56 @@ struct BuyerFeedNavigationBar: View {
             && isSelected
             && ["for-you", "holiday-sale", "gift-guides"].contains(topic.id)
 
-        return Button {
-            onSelectTopic(topic)
-        } label: {
-            transitioningLabel(for: topic)
-                .shadow(
-                    color: isSelected
-                        ? .clear
-                        : .black.opacity(0.28 * chromeTransitionState.progress),
-                    radius: 7,
-                    y: 2
-                )
-                .padding(
-                    .horizontal,
-                    isSelected
-                        ? FeedNavigationStyle.selectedPillHorizontalPadding
-                        : FeedNavigationStyle.pillHorizontalPadding
-                )
-                .frame(height: FeedNavigationStyle.controlSize)
-                .contentShape(Capsule())
-                .background {
-                    if isSelected {
-                        SelectedTopicPill(
-                            showsHolidayLights: isIlluminatedHolidaySelection
-                        )
-                        .matchedGeometryEffect(
-                            id: "selected-topic",
-                            in: selectionNamespace
-                        )
-                    }
+        return transitioningLabel(for: topic)
+            .shadow(
+                color: isSelected
+                    ? .clear
+                    : .black.opacity(0.28 * chromeTransitionState.progress),
+                radius: 7,
+                y: 2
+            )
+            .padding(
+                .horizontal,
+                isSelected
+                    ? FeedNavigationStyle.selectedPillHorizontalPadding
+                    : FeedNavigationStyle.pillHorizontalPadding
+            )
+            .frame(height: FeedNavigationStyle.controlSize)
+            .contentShape(Capsule())
+            .background {
+                if isSelected {
+                    SelectedTopicPill(
+                        showsHolidayLights: isIlluminatedHolidaySelection
+                    )
+                    .matchedGeometryEffect(
+                        id: "selected-topic",
+                        in: selectionNamespace
+                    )
                 }
-        }
-        .buttonStyle(.plain)
-        .onLongPressGesture(minimumDuration: 0.45) {
-            HapticFeedback.medium.fire()
-            onManageFeeds()
-        }
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
-        .accessibilityAction(named: "Manage feeds") {
-            onManageFeeds()
-        }
+            }
+            .gesture(
+                LongPressGesture(minimumDuration: 0.45, maximumDistance: 20)
+                    .exclusively(before: TapGesture())
+                    .onEnded { result in
+                        switch result {
+                        case .first:
+                            HapticFeedback.medium.fire()
+                            onManageFeeds()
+                        case .second:
+                            onSelectTopic(topic)
+                        }
+                    }
+            )
+            .accessibilityLabel(topic.label)
+            .accessibilityAddTraits(.isButton)
+            .accessibilityAddTraits(isSelected ? .isSelected : [])
+            .accessibilityAction {
+                onSelectTopic(topic)
+            }
+            .accessibilityAction(named: "Manage feeds") {
+                HapticFeedback.medium.fire()
+                onManageFeeds()
+            }
     }
 
     private var addFeedButton: some View {

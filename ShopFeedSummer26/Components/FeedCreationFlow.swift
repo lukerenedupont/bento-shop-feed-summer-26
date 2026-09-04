@@ -409,7 +409,10 @@ struct FeedManagerSheet: View {
     }
 
     private var sheetHeight: CGFloat {
-        min(520, max(177, 125 + CGFloat(feeds.count) * 52))
+        // A fixed-height presentation detent adds the device's bottom safe area.
+        // Remove the iPhone home-indicator inset so the visible sheet preserves
+        // the Figma frame's 32-point bottom padding.
+        min(486, max(143, 91 + CGFloat(feeds.count) * 52))
     }
 
     var body: some View {
@@ -462,7 +465,7 @@ struct FeedManagerSheet: View {
                 .frame(maxWidth: .infinity, minHeight: GravitySpacing.space36, alignment: .leading)
             }
             .buttonStyle(.plain)
-            .listRowInsets(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+            .listRowInsets(EdgeInsets(top: 8, leading: 36, bottom: 8, trailing: 20))
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
         }
