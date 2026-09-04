@@ -113,6 +113,7 @@
 		A11444444444444444444444 /* kith-post-poster.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A21444444444444444444444 /* kith-post-poster.jpg */; };
 		A11555555555555555555555 /* worm.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A21555555555555555555555 /* worm.mp4 */; };
 		A11666666666666666666666 /* UtilityBeltCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21666666666666666666666 /* UtilityBeltCustomization.swift */; };
+		FC1000000000000000000001 /* FeedCreationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2000000000000000000001 /* FeedCreationFlow.swift */; };
 		A11777777777777777777777 /* utility-connect-email.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A21777777777777777777777 /* utility-connect-email.mp4 */; };
 		A11888888888888888888888 /* warm-designer-lighting.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A21888888888888888888888 /* warm-designer-lighting.mp4 */; };
 		A11999999999999999999999 /* streetwear-staples.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A21999999999999999999999 /* streetwear-staples.mp4 */; };
@@ -287,6 +288,7 @@
 		A21444444444444444444444 /* kith-post-poster.jpg */ = {isa = PBXFileReference; path = "kith-post-poster.jpg"; sourceTree = "<group>"; };
 		A21555555555555555555555 /* worm.mp4 */ = {isa = PBXFileReference; path = worm.mp4; sourceTree = "<group>"; };
 		A21666666666666666666666 /* UtilityBeltCustomization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityBeltCustomization.swift; sourceTree = "<group>"; };
+		FC2000000000000000000001 /* FeedCreationFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCreationFlow.swift; sourceTree = "<group>"; };
 		A21777777777777777777777 /* utility-connect-email.mp4 */ = {isa = PBXFileReference; path = "utility-connect-email.mp4"; sourceTree = "<group>"; };
 		A21888888888888888888888 /* warm-designer-lighting.mp4 */ = {isa = PBXFileReference; path = "warm-designer-lighting.mp4"; sourceTree = "<group>"; };
 		A21999999999999999999999 /* streetwear-staples.mp4 */ = {isa = PBXFileReference; path = "streetwear-staples.mp4"; sourceTree = "<group>"; };
@@ -584,6 +586,7 @@
 				2ACD1E2168C3779609CA48BE /* CachedAsyncImage.swift */,
 				5459CA6FC9ADF5F66FEA511C /* CategoryTile.swift */,
 				93D0AC7FA7992C3C84A593D9 /* DeliveryCard.swift */,
+				FC2000000000000000000001 /* FeedCreationFlow.swift */,
 				A21666666666666666666666 /* UtilityBeltCustomization.swift */,
 				B9D284B4531C1094FD7A9792 /* EvergreenDestinationFeeds.swift */,
 				7F39B6F46EBC3D657496BF6D /* FloatingBackButton.swift */,
@@ -915,6 +918,7 @@
 				C6990F004D62EC84E1CC3488 /* FeedBundleLoader.swift in Sources */,
 				94BE6F44ACFC1C02F23856CD /* FeedNavigationStyle.swift in Sources */,
 				0C08C13F26335177E2728B05 /* FeedScrollInfrastructure.swift in Sources */,
+				FC1000000000000000000001 /* FeedCreationFlow.swift in Sources */,
 				65CC87D24FABEF9A7510DAF1 /* FeedStory.swift in Sources */,
 				ED762ADBFFBE181954321CE9 /* FeedTopic.swift in Sources */,
 				DDC40523D5C34319AD0C88D6 /* FloatingBackButton.swift in Sources */,

@@ -15,6 +15,8 @@ struct BuyerFeedNavigationBar: View {
     let selectionNamespace: Namespace.ID
     var onSelectTopic: (BuyerFeedTopic) -> Void
     var onSelectBuyer: () -> Void
+    var onAddFeed: () -> Void = {}
+    var onManageFeeds: () -> Void = {}
 
     var body: some View {
         ZStack(alignment: .leading) {
@@ -36,6 +38,10 @@ struct BuyerFeedNavigationBar: View {
                 profile: profile,
                 size: FeedNavigationStyle.avatarSize
             )
+            .overlay {
+                Circle()
+                    .strokeBorder(GravityColors.borderImage, lineWidth: 0.5)
+            }
         }
         .buttonStyle(PressScaleButtonStyle())
         .accessibilityLabel("Switch preview buyer")
@@ -43,13 +49,15 @@ struct BuyerFeedNavigationBar: View {
 
     private var topicRail: some View {
         ScrollViewReader { proxy in
-            let leadingInset = FeedNavigationStyle.avatarSize + GravitySpacing.space8
+            let leadingInset = FeedNavigationStyle.avatarSize + GravitySpacing.space6
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: FeedNavigationStyle.itemSpacing) {
                     ForEach(topics) { topic in
                         topicButton(topic)
                             .id(topic.id)
                     }
+                    addFeedButton
+                        .id("add-feed")
                 }
                 .fixedSize(horizontal: true, vertical: false)
                 .scrollTargetLayout()
@@ -84,49 +92,92 @@ struct BuyerFeedNavigationBar: View {
     }
 
     private func topicButton(_ topic: BuyerFeedTopic) -> some View {
+        let isSelected = topic.id == selectedTopicID
         let isIlluminatedHolidaySelection = usesHolidayPillStyle
-            && topic.id == selectedTopicID
+            && isSelected
             && ["for-you", "holiday-sale", "gift-guides"].contains(topic.id)
 
-        return Button {
-            onSelectTopic(topic)
-        } label: {
-            transitioningLabel(for: topic)
-                .shadow(
-                    color: topic.id == selectedTopicID
-                        ? .clear
-                        : .black.opacity(0.28 * chromeTransitionState.progress),
-                    radius: 7,
-                    y: 2
-                )
-                .padding(
-                    .horizontal,
-                    topic.id == "gift-guides"
-                        ? FeedNavigationStyle.pillHorizontalPadding + 4
-                        : FeedNavigationStyle.pillHorizontalPadding
-                )
-                .frame(height: FeedNavigationStyle.controlSize)
-                .contentShape(Capsule())
-                .background {
-                    if topic.id == selectedTopicID {
-                        SelectedTopicPill(
-                            showsHolidayLights: isIlluminatedHolidaySelection
-                        )
-                        .matchedGeometryEffect(
-                            id: "selected-topic",
-                            in: selectionNamespace
-                        )
-                    }
+        return transitioningLabel(for: topic)
+            .shadow(
+                color: isSelected
+                    ? .clear
+                    : .black.opacity(0.28 * chromeTransitionState.progress),
+                radius: 7,
+                y: 2
+            )
+            .padding(
+                .horizontal,
+                isSelected
+                    ? FeedNavigationStyle.selectedPillHorizontalPadding
+                    : FeedNavigationStyle.pillHorizontalPadding
+            )
+            .frame(height: FeedNavigationStyle.controlSize)
+            .contentShape(Capsule())
+            .background {
+                if isSelected {
+                    SelectedTopicPill(
+                        showsHolidayLights: isIlluminatedHolidaySelection
+                    )
+                    .matchedGeometryEffect(
+                        id: "selected-topic",
+                        in: selectionNamespace
+                    )
                 }
+            }
+            .gesture(
+                LongPressGesture(minimumDuration: 0.45, maximumDistance: 20)
+                    .exclusively(before: TapGesture())
+                    .onEnded { result in
+                        switch result {
+                        case .first:
+                            HapticFeedback.medium.fire()
+                            onManageFeeds()
+                        case .second:
+                            onSelectTopic(topic)
+                        }
+                    }
+            )
+            .accessibilityLabel(topic.label)
+            .accessibilityAddTraits(.isButton)
+            .accessibilityAddTraits(isSelected ? .isSelected : [])
+            .accessibilityAction {
+                onSelectTopic(topic)
+            }
+            .accessibilityAction(named: "Manage feeds") {
+                HapticFeedback.medium.fire()
+                onManageFeeds()
+            }
+    }
+
+    private var addFeedButton: some View {
+        Button {
+            HapticFeedback.light.fire()
+            onAddFeed()
+        } label: {
+            Image("icon-plus-sign-small", bundle: .main)
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .frame(width: GravitySpacing.space16, height: GravitySpacing.space16)
+                .foregroundStyle(GravityColors.textFixedDark)
+                .frame(
+                    width: FeedNavigationStyle.controlSize,
+                    height: FeedNavigationStyle.controlSize
+                )
+                .background {
+                    SelectedTopicPill(showsHolidayLights: false)
+                }
+                .contentShape(Circle())
         }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(topic.id == selectedTopicID ? .isSelected : [])
+        .buttonStyle(PressScaleButtonStyle())
+        .accessibilityLabel("Add feed")
     }
 
     @ViewBuilder
     private func transitioningLabel(for topic: BuyerFeedTopic) -> some View {
         let label = Text(topic.label)
-            .font(FeedNavigationStyle.labelFont)
+            .gravityTextStyle(GravityTypography.buttonLarge)
+            .lineLimit(1)
 
         if topic.id == selectedTopicID {
             label.foregroundStyle(GravityColors.textFixedDark)
@@ -136,12 +187,12 @@ struct BuyerFeedNavigationBar: View {
             // Following, Deals, and the resting utility surface are authored
             // on white. Ignore stale feed-card transition progress when those
             // destinations replace the dark media backdrop.
-            label.foregroundStyle(GravityColors.textTertiary)
+            label.foregroundStyle(GravityColors.textSecondary)
         } else {
             let progress = chromeTransitionState.progress
             ZStack {
                 label
-                    .foregroundStyle(GravityColors.textTertiary)
+                    .foregroundStyle(GravityColors.textSecondary)
                     .opacity(1 - progress)
                 label
                     .foregroundStyle(.white.opacity(0.82))
@@ -161,10 +212,7 @@ private struct SelectedTopicPill: View {
     var body: some View {
         Capsule()
             .fill(FeedNavigationStyle.selectedFill)
-            .overlay {
-                Capsule()
-                    .strokeBorder(Color.black.opacity(0.06), lineWidth: 0.5)
-            }
+            .glassEffect(.regular, in: .capsule)
             .gravityShadow(GravityShadows.selectedTopic)
             .overlay {
                 if showsHolidayLights {

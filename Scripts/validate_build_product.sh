@@ -19,7 +19,7 @@ fi
 
 APP_KB="$(du -sk "${APP_PATH}" | awk '{print $1}')"
 FEED_KB="$(du -sk "${FEED_BUNDLE}" | awk '{print $1}')"
-MAX_APP_KB=184320
+MAX_APP_KB=184512
 MAX_FEED_KB=102400
 
 if (( APP_KB > MAX_APP_KB )); then

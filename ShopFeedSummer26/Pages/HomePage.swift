@@ -29,14 +29,14 @@ struct HomePage: View {
     @ObservedObject private var merchantService = RemoteMerchantService.shared
     @ObservedObject private var feedService = RemoteFeedService.shared
     @State private var postService = ShopPostService.shared
-    @State private var buyerPreview = BuyerPreviewStore.shared
+    @State var buyerPreview = BuyerPreviewStore.shared
     @Namespace private var heroNamespace
     @Namespace private var topicSelectionNamespace
     /// Keep the merged catalog stable across body evaluations. Rebuilding the
     /// full merchant/product graph during a swipe or tab animation creates a
     /// large amount of avoidable main-thread work.
     @State private var merchants: [SampleMerchant] = HomePage.initialMerchantSnapshot
-    @State private var selectedTopicID = "for-you"
+    @State var selectedTopicID = "for-you"
     /// A drilled-in subcategory story rendered inline so the top bar stays.
     @State private var focusedStoryID: String?
     @State private var visibleStoryID: String?
@@ -46,11 +46,14 @@ struct HomePage: View {
     @State private var utilityRailExpansion = UtilityRailExpansionState()
     @State private var utilityBelt = UtilityBeltPreferences.shared
     @State private var giftGuideBriefStore = GiftGuideBriefStore.shared
+    @State var customFeedStore = CustomFeedStore.shared
     @State private var feedChromeIsInverted = false
     @State private var expandingStoryID: String?
     @State private var categoryMoveDirection = 1
     @State private var showsBuyerSwitcher = false
     @State private var showsGiftGuideCreation = false
+    @State var showsFeedCreator = false
+    @State var showsFeedManager = false
     @State private var holidayFiltersPinned = false
     @State private var dealsFiltersPinned = false
     @State private var selectedDealFilterBand: DealFilterBand = .all
@@ -69,7 +72,10 @@ struct HomePage: View {
 
     private var topics: [FeedTopic] { PersonalizedFeedCatalog.current.topics }
     private var baseNavigationTopics: [BuyerFeedTopic] {
-        buyerPreview.navigationTopics
+        customFeedStore.navigationTopics(
+            for: buyerPreview.selected.id,
+            authoredTopics: buyerPreview.navigationTopics
+        )
     }
 
     /// Campaign navigation changes the utility destinations at the front of
@@ -401,6 +407,23 @@ struct HomePage: View {
         }
         .fullScreenCover(isPresented: $showsGiftGuideCreation) {
             GiftGuideCreationFlow(onComplete: completeGiftGuideCreation)
+        }
+        .fullScreenCover(isPresented: $showsFeedCreator) {
+            CreateFeedSheet(onCreate: createFeed)
+                .environment(\.colorScheme, .light)
+        }
+        .fullScreenCover(isPresented: $showsFeedManager) {
+            FeedManagerSheet(
+                store: customFeedStore,
+                buyerID: buyerPreview.selected.id,
+                authoredTopics: buyerPreview.navigationTopics,
+                selectedFeedID: selectedTopicID,
+                onCreateNew: openFeedCreatorFromManager,
+                onDeleteSelectedFeed: {
+                    selectedTopicID = "for-you"
+                }
+            )
+            .environment(\.colorScheme, .light)
         }
         .onAppear {
             if visibleStoryID == nil {
@@ -1660,6 +1683,12 @@ struct HomePage: View {
                 withAnimation(.easeOut(duration: 0.18)) {
                     showsBuyerSwitcher = true
                 }
+            },
+            onAddFeed: {
+                showsFeedCreator = true
+            },
+            onManageFeeds: {
+                showsFeedManager = true
             }
         )
         .background(alignment: .top) {
@@ -1741,7 +1770,7 @@ struct HomePage: View {
         }
     }
 
-    private func selectTopic(_ topic: BuyerFeedTopic) {
+    func selectTopic(_ topic: BuyerFeedTopic) {
         guard selectedTopicID != topic.id || focusedStoryID != nil else { return }
         HapticFeedback.light.fire()
         coordinator.resetScrollState()

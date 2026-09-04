@@ -50,13 +50,13 @@ enum GravityShadows {
         y: 4
     )
 
-    /// Selected top-level feed chip. Keep the falloff tight so the pill reads
-    /// as floating chrome without washing out the surrounding topic rail.
+    /// Selected top-level feed chip. A compact frost treatment keeps the
+    /// shadow soft without clipping against the navigation rail.
     static let selectedTopic = GravityShadow(
-        color: Color.black.opacity(0.10),
-        radius: 10,
+        color: Color.black.opacity(0.08),
+        radius: 12,
         x: 0,
-        y: 4
+        y: 3
     )
 
     /// Optical support for white labels over photographic feed media.
