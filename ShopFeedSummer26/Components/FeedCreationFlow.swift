@@ -104,17 +104,17 @@ final class CustomFeedStore {
 
     func moveFeed(
         _ feedID: String,
-        to targetID: String,
+        toIndex targetIndex: Int,
         for buyerID: String,
         authoredTopics: [BuyerFeedTopic]
     ) {
-        guard feedID != targetID else { return }
         var orderedIDs = managedTopics(
             for: buyerID,
             authoredTopics: authoredTopics
         ).map(\.id)
         guard let sourceIndex = orderedIDs.firstIndex(of: feedID),
-              let targetIndex = orderedIDs.firstIndex(of: targetID) else { return }
+              orderedIDs.indices.contains(targetIndex),
+              sourceIndex != targetIndex else { return }
 
         orderedIDs.remove(at: sourceIndex)
         orderedIDs.insert(feedID, at: targetIndex)
@@ -402,43 +402,103 @@ struct FeedManagerSheet: View {
     let onCreateNew: () -> Void
     let onDeleteSelectedFeed: () -> Void
 
+    @Environment(\.dismiss) private var dismiss
     @State private var pendingDeletion: BuyerFeedTopic?
+    @GestureState private var draggedFeedID: String?
+    @State private var dragOriginOrder: [String] = []
+    @State private var dragTargetIndex: Int?
+    @State private var dragTranslation: CGFloat = 0
+
+    private let rowStride: CGFloat = 52
 
     private var feeds: [BuyerFeedTopic] {
         store.managedTopics(for: buyerID, authoredTopics: authoredTopics)
     }
 
     private var sheetHeight: CGFloat {
-        // A fixed-height presentation detent adds the device's bottom safe area.
-        // Remove the iPhone home-indicator inset so the visible sheet preserves
-        // the Figma frame's 32-point bottom padding.
+        // Keep the 52-point row rhythm and the Figma frame's bottom breathing
+        // room without allowing long feed lists to overtake the viewport.
         min(486, max(143, 91 + CGFloat(feeds.count) * 52))
     }
 
+    private var sheetShape: UnevenRoundedRectangle {
+        UnevenRoundedRectangle(
+            topLeadingRadius: GravityRadius.r40,
+            bottomLeadingRadius: 52,
+            bottomTrailingRadius: 52,
+            topTrailingRadius: GravityRadius.r40,
+            style: .continuous
+        )
+    }
+
+    private var draggedRowOffset: CGFloat {
+        guard let draggedFeedID,
+              let sourceIndex = dragOriginOrder.firstIndex(of: draggedFeedID),
+              let targetIndex = dragTargetIndex else {
+            return dragTranslation
+        }
+        return dragTranslation - CGFloat(targetIndex - sourceIndex) * rowStride
+    }
+
     var body: some View {
+        managerSurface
+            .frame(height: sheetHeight)
+            .padding(.horizontal, GravitySpacing.space4)
+            .padding(.bottom, GravitySpacing.space4)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+            .background {
+                Color.black.opacity(0.18)
+                    .contentShape(Rectangle())
+                    .onTapGesture { dismiss() }
+            }
+            .ignoresSafeArea()
+            .presentationBackground(.clear)
+            .onChange(of: draggedFeedID) { oldValue, newValue in
+                if oldValue != nil && newValue == nil {
+                    resetDragState()
+                }
+            }
+            .alert(
+                "Delete feed?",
+                isPresented: Binding(
+                    get: { pendingDeletion != nil },
+                    set: { if !$0 { pendingDeletion = nil } }
+                ),
+                presenting: pendingDeletion
+            ) { feed in
+                Button("Cancel", role: .cancel) {
+                    pendingDeletion = nil
+                }
+                Button("Delete", role: .destructive) {
+                    store.deleteFeed(
+                        feed.id,
+                        for: buyerID,
+                        authoredTopics: authoredTopics
+                    )
+                    if feed.id == selectedFeedID {
+                        onDeleteSelectedFeed()
+                    }
+                    pendingDeletion = nil
+                }
+            } message: { feed in
+                Text("“\(feed.label)” will be removed from your feeds.")
+            }
+    }
+
+    private var managerSurface: some View {
         List {
             ForEach(feeds) { feed in
                 feedRow(feed)
                     .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 20))
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
+                    .highPriorityGesture(reorderGesture(for: feed))
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         Button(role: .destructive) {
                             pendingDeletion = feed
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
-                    }
-                    .dropDestination(for: String.self) { draggedIDs, _ in
-                        guard let draggedID = draggedIDs.first else { return false }
-                        store.moveFeed(
-                            draggedID,
-                            to: feed.id,
-                            for: buyerID,
-                            authoredTopics: authoredTopics
-                        )
-                        HapticFeedback.light.fire()
-                        return true
                     }
             }
 
@@ -471,48 +531,21 @@ struct FeedManagerSheet: View {
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
-        .contentMargins(.top, GravitySpacing.space44, for: .scrollContent)
+        .contentMargins(.top, GravitySpacing.space12, for: .scrollContent)
         .background(GravityColors.bgFill)
-        .alert(
-            "Delete feed?",
-            isPresented: Binding(
-                get: { pendingDeletion != nil },
-                set: { if !$0 { pendingDeletion = nil } }
-            ),
-            presenting: pendingDeletion
-        ) { feed in
-            Button("Cancel", role: .cancel) {
-                pendingDeletion = nil
-            }
-            Button("Delete", role: .destructive) {
-                store.deleteFeed(
-                    feed.id,
-                    for: buyerID,
-                    authoredTopics: authoredTopics
-                )
-                if feed.id == selectedFeedID {
-                    onDeleteSelectedFeed()
-                }
-                pendingDeletion = nil
-            }
-        } message: { feed in
-            Text("“\(feed.label)” will be removed from your feeds.")
-        }
-        .presentationDetents([.height(sheetHeight)])
-        .presentationCornerRadius(GravityRadius.r40)
-        .presentationDragIndicator(.visible)
-        .presentationBackground(GravityColors.bgFill)
+        .clipShape(sheetShape)
+        .shadow(color: GravityColors.shadow300, radius: GravitySpacing.space24, y: GravitySpacing.space4)
     }
 
     private func feedRow(_ feed: BuyerFeedTopic) -> some View {
-        HStack(spacing: GravitySpacing.space10) {
+        let isDragging = draggedFeedID == feed.id
+
+        return HStack(spacing: GravitySpacing.space10) {
             HStack(spacing: GravitySpacing.space4) {
-                Text("⠿")
-                    .font(.system(size: 10, weight: .regular, design: .rounded))
-                    .foregroundStyle(GravityColors.text.opacity(0.20))
+                Image("feed-manager-drag", bundle: .main)
+                    .resizable()
                     .frame(width: GravitySpacing.space16, height: GravitySpacing.space16)
-                    .contentShape(Rectangle().inset(by: -12))
-                    .draggable(feed.id)
+                    .accessibilityHidden(true)
 
                 Circle()
                     .fill(GravityColors.bgFillSecondary)
@@ -526,7 +559,82 @@ struct FeedManagerSheet: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(minHeight: GravitySpacing.space36)
+        .background {
+            RoundedRectangle(cornerRadius: GravityRadius.r16, style: .continuous)
+                .fill(isDragging ? GravityColors.bgFill : Color.clear)
+        }
+        .shadow(
+            color: isDragging ? GravityColors.shadow300 : .clear,
+            radius: isDragging ? GravitySpacing.space12 : 0,
+            y: isDragging ? GravitySpacing.space4 : 0
+        )
+        .scaleEffect(isDragging ? 1.025 : 1)
+        .offset(y: isDragging ? draggedRowOffset : 0)
+        .zIndex(isDragging ? 1 : 0)
+        .animation(SpringPreset.smooth, value: isDragging)
         .contentShape(Rectangle())
+    }
+
+    private func reorderGesture(for feed: BuyerFeedTopic) -> some Gesture {
+        LongPressGesture(minimumDuration: 0.18, maximumDistance: 20)
+            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .global))
+            .updating($draggedFeedID) { phase, draggedFeedID, _ in
+                switch phase {
+                case .first(true), .second(true, _):
+                    draggedFeedID = feed.id
+                default:
+                    break
+                }
+            }
+            .onChanged { phase in
+                switch phase {
+                case .second(true, let drag?):
+                    beginDragging(feed)
+                    updateDrag(feed, translation: drag.translation.height)
+                default:
+                    break
+                }
+            }
+            .onEnded { _ in
+                resetDragState()
+            }
+    }
+
+    private func beginDragging(_ feed: BuyerFeedTopic) {
+        guard dragOriginOrder.isEmpty else { return }
+        dragOriginOrder = feeds.map(\.id)
+        dragTargetIndex = dragOriginOrder.firstIndex(of: feed.id)
+        HapticFeedback.medium.fire()
+    }
+
+    private func updateDrag(_ feed: BuyerFeedTopic, translation: CGFloat) {
+        guard let sourceIndex = dragOriginOrder.firstIndex(of: feed.id),
+              !dragOriginOrder.isEmpty else { return }
+
+        dragTranslation = translation
+        let rowOffset = Int((translation / rowStride).rounded())
+        let targetIndex = min(
+            max(sourceIndex + rowOffset, dragOriginOrder.startIndex),
+            dragOriginOrder.index(before: dragOriginOrder.endIndex)
+        )
+        guard targetIndex != dragTargetIndex else { return }
+
+        withAnimation(SpringPreset.smooth) {
+            dragTargetIndex = targetIndex
+            store.moveFeed(
+                feed.id,
+                toIndex: targetIndex,
+                for: buyerID,
+                authoredTopics: authoredTopics
+            )
+        }
+        HapticFeedback.light.fire()
+    }
+
+    private func resetDragState() {
+        withAnimation(SpringPreset.smooth) { dragTranslation = 0 }
+        dragOriginOrder = []
+        dragTargetIndex = nil
     }
 
 }
