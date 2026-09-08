@@ -86,5 +86,61 @@
     "sourceURL": "https://cdn.shopify.com/s/files/1/0883/7252/products/standards_manual_parks_book3128.jpg?v=1569422490",
     "filename": "prototype-product-standards-manual-3933686169669.jpg",
     "sha256": "f66999d18848be8279b3cc67d39986b95b7612ca2ebceccd1528d0da3997da80"
+  },
+  {
+    "merchantID": "fellow",
+    "productID": 7507479003236,
+    "title": "Aiden Precision Coffee Maker",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0057/6235/1219/files/Web_PDP_Aiden_Black_1.png?v=1773352095",
+    "filename": "prototype-product-fellow-7507479003236.jpg",
+    "sha256": "81e445b1aae5b672251c4eb6cf9fdb1213d23d6efcb7935521e14bb3504d3895"
+  },
+  {
+    "merchantID": "fellow",
+    "productID": 2055410221171,
+    "title": "Stagg EKG Electric Kettle",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0057/6235/1219/files/Web_PDP_StaggEKGElectricKettle-Pro_Black_1.png?v=1773351258",
+    "filename": "prototype-product-fellow-2055410221171.jpg",
+    "sha256": "776d08bd65dc2db81ebc8d467f77ce42cd897e128e3b831499896287099e8aa3"
+  },
+  {
+    "merchantID": "fellow",
+    "productID": 4807420739684,
+    "title": "Carter Move Mug",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0057/6235/1219/files/Web_PDP_CarterMoveMug-16oz_Sienna_2.png?v=1774035954",
+    "filename": "prototype-product-fellow-4807420739684.jpg",
+    "sha256": "ecb6a31c0b5e5623fe7dd3213c56c6ff88395db17473d7a140ff123233040e9f"
+  },
+  {
+    "merchantID": "forom",
+    "productID": 9080102322307,
+    "title": "Elyse Wall Mirror - Mahogany",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0356/2795/8403/files/elyse_wall_mirror_mahogany.png?v=1782481684",
+    "filename": "prototype-product-forom-9080102322307.jpg",
+    "sha256": "c05a6742dc422fba5ce00ad57147be0418ffe2ad0d538f0702d1ce571f6ff898"
+  },
+  {
+    "merchantID": "forom",
+    "productID": 8817998889091,
+    "title": "Eliza Side Table - Deep Lichen Green",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0356/2795/8403/files/eliza_side_table_lichen_green.png?v=1770980592",
+    "filename": "prototype-product-forom-8817998889091.jpg",
+    "sha256": "b0facb9fc523700e81ae7ba5af37cde7e26c9b6f744b973da8ba383c309a852b"
+  },
+  {
+    "merchantID": "lichen",
+    "productID": 12518383059262,
+    "title": "Floyd Shelf",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0026/8907/3221/files/DSCF1596.jpg?v=1784402191",
+    "filename": "prototype-product-lichen-12518383059262.jpg",
+    "sha256": "46deb215424280531719e19f21cd67ed730438ea4db1b309783012d03c902f49"
+  },
+  {
+    "merchantID": "lichen",
+    "productID": 12462683128126,
+    "title": "Brutalist Wooden Chairs (Set of 4)",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0026/8907/3221/files/DSCF1050_cde05058-ce4f-4e2a-998a-7e6ef5f761c4.jpg?v=1781370106",
+    "filename": "prototype-product-lichen-12462683128126.jpg",
+    "sha256": "c27431dc15c57829b1eb1fabc60a05120ed989f2af1b72cd28a82d8ee6fb5994"
   }
 ]

@@ -1,83 +1,86 @@
-# Generative Shop Feed — first feel test
+# Generative Shop Feed — steerable feel test
 
 ## Question
 
-Does a signal-driven shopping job feel more useful than another product recommendation, within the existing Shop feed?
+Can a shopping job produce the right small experience—and can we change its inputs, composition and state at the pace of a design discussion?
 
-This is a four-experience **prototype**, not a live AI recommender. It replaces the earlier twenty-layout experiment on `feed-interactive-cards`. That earlier version remains in git at `f5cb6ab`; `main` is untouched.
+This is a **six-experience deterministic prototype**, not a live AI recommender. It evolves the four-card scaffold (`cd20f57`), replacing the earlier decorative layout gallery (`f5cb6ab`). Work stays on `feed-interactive-cards`; `main` is untouched.
 
 ## Run
 
 ```sh
-./Scripts/run_generative_feed.sh           # Real feed shell, first card
-./Scripts/run_generative_feed.sh gallery 0 # Direct four-card review
-./Scripts/run_generative_feed.sh feed 3    # Room continuation in the feed
+./Scripts/run_generative_feed.sh feed 4      # Request coffee card in the real Shop shell
+./Scripts/run_generative_feed.sh gallery 0   # Direct six-card review
+./Scripts/run_generative_feed.sh consumer 4  # Setup disclosure → clean consumer preview
 ```
 
-These build/install on the dedicated **Feed Interactive Cards** Simulator. No desktop mouse injection. The gallery uses the exact same specifications, catalog records and renderer as Home, without instantiating another feed behind it.
+All modes use the dedicated **Feed Interactive Cards** Simulator. No desktop mouse injection. Gallery and Home use the same specifications, frozen merchant snapshot and session implementation. Use gallery for exact-index review; inherited native feed deep-link snapping can initially land on the neighboring slot.
 
-Normal app launch still starts with the utility belt. Luke's For You contains the four demo experiences; other buyers, custom feeds and authored topics retain the existing planning path.
+Normal app launch starts with the utility belt. Only Luke's For You uses the demo plan. Other buyers, authored topics and custom feeds keep their previous planning path.
 
-## Try these
+## Six experiences
 
-1. **With the jacket you bought** — an authentic Nike × Stüssy jacket stays fixed; **Swap pants** cycles through two actual Feature products.
-2. **Still considering these chairs?** — three House of Leon chairs with equal image allocation, canonical names and prices. Remove candidates or reset the shortlist.
-3. **Standards Manual** — merchant-led book discovery. Select a book or use **Next book**. No unverified new-launch or purchase claims.
-4. **A chair for your living room** — the saved Sofita table anchors the next decision. Select a chair and **Review room plan**. Changing selection in that sheet updates the same feed card.
+| Index | Shopping job | Behavior |
+|---|---|---|
+| 0 | Complete a jacket purchase | Jacket stays fixed; swap between two real Feature pants |
+| 1 | Compare a chair shortlist | Focus a chair to see its photo, exact name, merchant, category and price; removal is secondary |
+| 2 | Explore Standards Manual | Merchant-led NYCTA, NASA and EPA manual grouping; browse the books |
+| 3 | Continue a living room | Saved Sofita table + chair choice; selection carries into and back from the room plan |
+| 4 | Narrow a coffee journey | Choose **At the counter** or **Out the door**; the card's copy and inventory change in place |
+| 5 | Discover furniture merchants | Forom, House of Leon and Lichen are the primary entities; choosing one retains its identity and exact inventory |
 
-The room plan is a **local continuity sketch**, not AR, a fit assessment, or an integration with the full persistent World engine.
+The coffee directions are hard content gates: commute shows the Carter Move Mug, not a coffee maker. Counter shows the Aiden and Stagg kettle, not the travel mug. Change direction to return to the two choices. There is no default-biased extra CTA beneath the two choices.
 
-## Direct the prototype
+The merchant card's **Graphic standards** grouping is editorial, not a claimed official collection or unverified new launch. The room plan is a local continuity sketch—not AR, spatial fit validation or integration with the full persistent World runtime.
 
-Tap the sliders beside **Demo context**, or long-press the heading:
+## Consumer and design modes
 
-- Inspect the signal, job, rationale, anchor, catalog candidates and World identifier.
-- Switch between the recommended composition and **Hero**, keeping data and selection unchanged.
-- Turn interactions off/on.
-- Hide/show the inspector buttons.
-- Inspect local state or reset one card.
+Before consumer preview, a setup sheet explains that the activity is simulated and nothing changes the real account. Consumer cards contain no demo band or inspector buttons. Long-press a heading to enter the inspector; this is a hidden prototype entry point.
 
-Gallery arrows move between the four jobs. Selections survive scrolling and gallery navigation for the current session; they do not persist across app restarts or mutate real buyer data.
+In design mode, heading sliders open the inspector:
 
-## Data and honesty
+- **Signal**: for the chair scenario, switch repeated views ↔ saved shortlist.
+- **Shopping job**: compare ↔ resume for supported shortlist signals.
+- **Why this card?**: inspect provenance and selection rationale.
+- **Composition**: default ↔ Hero where both retain the meaning of the job. Direction and merchant-group cards intentionally do not offer misleading product-only alternates.
+- Toggle local interactions, inspect state or reset one card.
+- **Regenerate this card** in the bottom toolbar repeats catalog retrieval with current inputs.
+- **Feed** in the top toolbar opens the stable feed-level editor.
 
-**Purchases, views, affinity and World activity are explicitly simulated.** They are not inferred from Luke's real account. Product and merchant records are authentic.
+The feed editor can enable/disable any of the six source signals, reorder them using drag handles, show all signals, regenerate the feed or switch to consumer preview. Removing the currently inspected card or disabling every signal does not destroy the editor; an empty feed retains an **Edit demo feed** recovery action.
 
-- `GenerativeFeedPrototypeFixtures.swift` declares four activity signals, not layouts.
-- `NextGenerationFeedCardCatalog.cards(signals:merchants:)` determines the shopping job, retrieves matching entities, then emits a semantic specification.
-- The specification contains the signal, job, anchor/candidates, copy, primary interaction, default/alternate compositions, context ID and rationale. It cannot supply arbitrary fonts, colors, coordinates, radii or animations.
-- `GenerativeFeedStyle` and the native renderer own the visual mappings.
-- `GenerativeFeedPrototypeSession` owns selection, removed candidates, composition overrides and interaction enablement above lazy feed cells.
+Regeneration is deterministic, not an AI request. It reruns retrieval and modestly rotates relevant candidate order without introducing unrelated products. Valid selected/dismissed products and chosen directions remain intact. A chosen product may therefore remain visually unchanged after regeneration. Composition-only changes never swap data.
 
-This is a small deterministic slice. General job ranking, adjacent-card art direction, arbitrary signal editing, regeneration with AI, profile switching inside the inspector and production World handoff are **not implemented**.
+## Implementation seams
 
-## Media
+- `Models/NextGenerationFeedCard.swift`: source signals, supported jobs, primary entity types, content groupings and semantic specifications. No arbitrary visual values.
+- `SampleData/GenerativeFeedPrototypeFixtures.swift`: explicitly simulated activity plus canonical reference groups.
+- `SampleData/NextGenerationFeedCardCatalog.swift`: signal → job → entity retrieval → validated composition spec.
+- `Models/GenerativeFeedPrototypeSession.swift`: signal/job overrides, revisions, state, direction/merchant filtering, feed visibility and order.
+- `Components/NextGenerationFeedCardView.swift`: native renderer, shared geometry and existing shopping compositions.
+- `Components/GenerativeDiscoveryComposition.swift`: direction and merchant-first compositions.
+- `Components/GenerativeFeedInspector.swift`: single-card inspection and editing.
+- `Components/GenerativePrototypeTools.swift`: stable setup/feed-editor presentation above lazy cells.
+- `Components/NextGenerationFeedGallery.swift`: direct review of the same plan.
 
-Eleven exact product images are bundled in `ShopFeedSummer26/PrototypeCardMedia/`, with catalog IDs, canonical URLs and SHA-256 hashes in `SOURCES.json`.
+State is in memory only. It survives scrolling, card regeneration and local room-plan presentation—not app restarts. No authenticated account mutations or purchases occur.
 
-Two dead Feature lead-image URLs were refreshed from these official product endpoints; product IDs, titles, prices and destinations were not changed:
+## Catalog media
 
-- https://feature.com/products/nike-nike-x-stussy-reversible-varsity-jacket-medium-olive-bright-mandarin.js
-- https://feature.com/products/nike-nike-x-stussy-stone-washed-fleece-pant-black.js
-
-Validate offline with:
+Eighteen exact product images are bundled in `ShopFeedSummer26/PrototypeCardMedia/`. `SOURCES.json` records merchant/product IDs, canonical image URLs and SHA-256 hashes. A failed image never substitutes another product or a merchant cover.
 
 ```sh
 python3 Scripts/prepare_generative_demo_media.py --check
 ```
 
-Preparing new images uses Pillow: `python3 Scripts/prepare_generative_demo_media.py`. Images fit their allocated region. A failed image never substitutes a different product or merchant cover.
+Preparing media requires Pillow. The previous scaffold refreshed two dead Feature URLs from the exact official product endpoints without changing prices, titles or destinations:
+
+- https://feature.com/products/nike-nike-x-stussy-reversible-varsity-jacket-medium-olive-bright-mandarin.js
+- https://feature.com/products/nike-nike-x-stussy-stone-washed-fleece-pant-black.js
 
 ## Verification
 
-`PrototypeUITests/GenerativeFeedPrototypeUITests.swift` covers:
-
-- Four bounded headings and reachable gallery actions.
-- Swapping and composition changes retaining selection.
-- Shortlist removal/reset.
-- Room-plan selection returning to the card.
-- Real feed-shell CTA reachability.
-- Scrolling away/back retaining state.
+Simulator acceptance coverage includes six card bounds/actions, focus/removal/reset, swap/composition state retention, room-plan continuity, direction relevance across regeneration, merchant/inventory coupling, supported signal/job changes, consumer disclosure, empty-feed recovery, reordering and real-shell scrolling/taps.
 
 ```sh
 xcodebuild -project ShopFeedSummer26.xcodeproj -scheme ShopFeedSummer26 \
@@ -86,10 +89,14 @@ xcodebuild -project ShopFeedSummer26.xcodeproj -scheme ShopFeedSummer26 \
   -parallel-testing-enabled NO test
 ```
 
-Feed controls reserve real layout space above floating navigation; visual-only offsets were not reliable hit targets. The bottom nav host is bounded to the pill region rather than a full-screen interaction shape.
+The original **184320 KB** app gate is unchanged. Legacy `Media/` films remain excluded from this branch's target, as before. Feed controls reserve actual layout space above floating navigation rather than moving only their drawn appearance.
 
-The original **184320 KB** app gate is unchanged. The existing branch exclusion of legacy `Media/` films remains; full destinations are not the acceptance surface for this slice.
+## Not built yet
 
-## Next discussion
+- General model-generated plans or automatic job/adjacency ranking.
+- Arbitrary signal/job combinations; the editor only offers supported scenarios.
+- Shopping Profile editing, replenishment, seasonal cases or a 10–12-case feed.
+- Full World runtime handoff, AR, real checkout or persisted account state.
+- Variable outer snap heights. Current variation is inside the proven full-height shell.
 
-Judge the relationship card, comparison density, merchant identity and room continuity before adding more scenarios. Choose the default versus Hero hierarchy using the inspector. The next implementation should respond to those observations rather than expand the number of decorative variants.
+Next decisions should come from comparing the six experiences together, particularly the focused chair comparison, the binary direction refinement and the merchant-led hierarchy.

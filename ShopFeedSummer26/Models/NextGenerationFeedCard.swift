@@ -1,38 +1,96 @@
 import Foundation
 
-// PROTOTYPE — can a signal → shopping job → composition feel more useful than
-// a ranked product rail? Specifications contain semantic choices, not UI values.
+// PROTOTYPE — semantic specifications, not model-authored visual values.
 enum NextGenerationCardLayout: String, CaseIterable, Identifiable {
     case relationship = "Relationship"
     case comparison = "Comparison"
     case merchant = "Merchant"
     case continuation = "Continuation"
     case hero = "Hero"
+    case directions = "Directions"
+    case multiMerchant = "Multi-merchant"
     var id: String { rawValue }
 }
 
-enum PrototypeShoppingJob: String {
+enum PrototypeShoppingJob: String, CaseIterable, Identifiable {
     case complete = "Complete a purchase"
     case compare = "Compare a shortlist"
+    case continueJourney = "Resume a shortlist"
     case merchantDiscovery = "Explore a familiar merchant"
     case continueWorld = "Continue a World"
+    case narrow = "Choose a direction"
+    case discoverMerchants = "Discover related merchants"
+    var id: String { rawValue }
 }
 
 enum PrototypeCardInteraction: String {
     case swap = "Swap the supporting product"
-    case shortlist = "Keep or remove a candidate"
+    case shortlist = "Focus and compare a candidate"
     case browse = "Browse the merchant assortment"
     case selectForWorld = "Choose an item for the room plan"
+    case steer = "Choose a direction and refine the card"
+    case selectMerchant = "Explore a merchant"
+
+    var level: String {
+        switch self {
+        case .selectForWorld, .steer: "Stateful (session only)"
+        default: "Interactive (local)"
+        }
+    }
+}
+
+/// A real merchant, or an explicitly editorial grouping—not a fabricated
+/// merchant collection. Product references stay coupled to their grouping.
+struct PrototypeContentGroup: Identifiable {
+    let id: String
+    let title: String
+    let context: String
+    let merchantID: String?
+    let products: [FeedStory.ProductReference]
 }
 
 struct PrototypeShoppingSignal: Identifiable {
-    enum Kind { case purchase, repeatedViews, merchantAffinity, activeWorld }
+    enum Kind: String, CaseIterable, Identifiable {
+        case purchase = "Purchased jacket"
+        case repeatedViews = "Repeated chair views"
+        case savedShortlist = "Saved chair shortlist"
+        case merchantAffinity = "Publishing affinity"
+        case activeWorld = "Active living room"
+        case broadJourney = "Broad coffee search"
+        case aestheticAffinity = "Furniture affinity"
+        var id: String { rawValue }
+    }
     let id: String
-    let kind: Kind
-    let summary: String
+    var kind: Kind
+    var summary: String
     let products: [FeedStory.ProductReference]
     let merchantID: String
     var worldID: String? = nil
+    var groups: [PrototypeContentGroup] = []
+
+    var supportedJobs: [PrototypeShoppingJob] {
+        switch kind {
+        case .purchase: [.complete]
+        case .repeatedViews, .savedShortlist: [.compare, .continueJourney]
+        case .merchantAffinity: [.merchantDiscovery]
+        case .activeWorld: [.continueWorld]
+        case .broadJourney: [.narrow]
+        case .aestheticAffinity: [.discoverMerchants]
+        }
+    }
+    var alternateSignals: [Kind] {
+        switch kind {
+        case .repeatedViews, .savedShortlist: [.repeatedViews, .savedShortlist]
+        default: [kind]
+        }
+    }
+}
+
+enum PrototypePrimaryEntity {
+    case product(FeedStory.ProductReference)
+    case merchant(String)
+    case merchantGroup([String])
+    case journey(String)
 }
 
 struct NextGenerationFeedCardSpec: Identifiable {
@@ -47,93 +105,25 @@ struct NextGenerationFeedCardSpec: Identifiable {
     let anchor: FeedStory.ProductReference?
     let productReferences: [FeedStory.ProductReference]
     let reasonForSelection: String
+    var groups: [PrototypeContentGroup] = []
+    var generation = 0
 
+    var primaryEntity: PrototypePrimaryEntity {
+        switch job {
+        case .merchantDiscovery: .merchant(signal.merchantID)
+        case .discoverMerchants: .merchantGroup(groups.compactMap(\.merchantID))
+        default: anchor.map(PrototypePrimaryEntity.product) ?? .journey(signal.worldID ?? signal.id)
+        }
+    }
     var prefersDarkNavigationText: Bool { job != .merchantDiscovery }
-    var accessibilityDescription: String { "\(title). \(subtitle). \(interaction.rawValue). Demo shopping context." }
+    var accessibilityDescription: String { "\(title). \(subtitle). \(interaction.rawValue)." }
 
     func resolvedProducts(from merchants: [SampleMerchant]) -> [ResolvedStoryProduct] {
         productReferences.compactMap { Self.resolve($0, in: merchants) }
     }
-
     static func resolve(_ ref: FeedStory.ProductReference, in merchants: [SampleMerchant]) -> ResolvedStoryProduct? {
         guard let merchant = merchants.first(where: { $0.id == ref.merchantID }),
               let product = merchant.products.first(where: { $0.id == ref.productID }) else { return nil }
         return ResolvedStoryProduct(merchant: merchant, product: product)
-    }
-}
-
-@MainActor
-enum NextGenerationFeedCardCatalog {
-    static let prototypeEnabled = true
-
-    /// The fixture declares activity, never a layout. The job determines which
-    /// entities are useful; only then do we choose a supported composition.
-    static func cards(
-        signals: [PrototypeShoppingSignal],
-        merchants: [SampleMerchant]
-    ) -> [NextGenerationFeedCardSpec] {
-        signals.compactMap { signal in
-            let observed = signal.products.compactMap { NextGenerationFeedCardSpec.resolve($0, in: merchants) }
-            guard observed.count == signal.products.count,
-                  let merchant = merchants.first(where: { $0.id == signal.merchantID }) else { return nil }
-            let job: PrototypeShoppingJob
-            let title: String
-            let subtitle: String
-            let layout: NextGenerationCardLayout
-            let interaction: PrototypeCardInteraction
-            let anchor: FeedStory.ProductReference?
-            let candidates: [ResolvedStoryProduct]
-            let reason: String
-            switch signal.kind {
-            case .purchase:
-                job = .complete
-                title = "With the jacket you bought"
-                subtitle = "Keep the jacket. Try a different pair of pants."
-                layout = .relationship
-                interaction = .swap
-                anchor = signal.products.first
-                candidates = merchant.products.filter {
-                    $0.title.localizedCaseInsensitiveContains("fleece pant")
-                }.map { ResolvedStoryProduct(merchant: merchant, product: $0) }
-                reason = "A demo jacket purchase creates a completion job. Pants from the same Nike × Stüssy assortment provide relevant options; the owned jacket stays fixed."
-            case .repeatedViews:
-                job = .compare
-                title = "Still considering these chairs?"
-                subtitle = "Your shortlist, together in one place."
-                layout = .comparison
-                interaction = .shortlist
-                anchor = nil
-                candidates = observed
-                reason = "Repeated demo views of three chairs suggest a decision, not more discovery. Equal image space and catalog prices support comparison. No dimensions or review claims are invented."
-            case .merchantAffinity:
-                job = .merchantDiscovery
-                title = merchant.displayName
-                subtitle = "Another chapter for your design shelf."
-                layout = .merchant
-                interaction = .browse
-                anchor = nil
-                candidates = Array(merchant.products.prefix(4)).map { ResolvedStoryProduct(merchant: merchant, product: $0) }
-                reason = "Demo affinity for Standards Manual makes the shop the primary entity. The assortment comes from its catalog; this is not labeled a new launch because release timing is unverified."
-            case .activeWorld:
-                job = .continueWorld
-                title = "A chair for your living room"
-                subtitle = "Try one beside the table you saved."
-                layout = .continuation
-                interaction = .selectForWorld
-                anchor = signal.products.first
-                candidates = merchant.products.filter {
-                    $0.title.hasPrefix("Chair #1") || $0.title.hasPrefix("Papa Teddy Chair")
-                }.map { ResolvedStoryProduct(merchant: merchant, product: $0) }
-                reason = "The demo Living Room World already holds a saved coffee table. Bring forward the next decision—a chair—and retain the selection in the local room plan. This is not a spatial compatibility assessment."
-            }
-            guard !candidates.isEmpty else { return nil }
-            return NextGenerationFeedCardSpec(
-                id: "next-gen-\(signal.id)", signal: signal, job: job,
-                title: title, subtitle: subtitle, layout: layout,
-                alternatives: [layout, .hero], interaction: interaction, anchor: anchor,
-                productReferences: candidates.map { .init(merchantID: $0.merchant.id, productID: $0.product.id) },
-                reasonForSelection: reason
-            )
-        }
     }
 }

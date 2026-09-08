@@ -236,7 +236,7 @@ struct HomePage: View {
     }
 
     private var focusedStories: [FeedStory] { feedPlan.stories }
-    private var feedEntries: [FeedEntry] { feedPlan.entries }
+    private var feedEntries: [FeedEntry] { generativeSession.arrange(feedPlan.entries) }
 
     private var tryOnProducts: [ResolvedStoryProduct] {
         TryOnExperience.products(stories: focusedStories, merchants: merchants)
@@ -471,6 +471,10 @@ struct HomePage: View {
             }
         }
         .purlInjectable()
+        .modifier(GenerativePrototypeTools(
+            session: generativeSession, merchants: NextGenerationFeedCardCatalog.prototypeMerchants,
+            active: buyerPreview.selected.id == "luke" && selectedTopicID == "for-you"
+        ))
     }
 
     @ViewBuilder
@@ -695,7 +699,10 @@ struct HomePage: View {
                 guard let visibleStoryID else { return }
                 guard visibleStoryID == utilityStoryID
                     || entryIDs.contains(visibleStoryID) else {
-                    self.visibleStoryID = nil
+                    let target = entryIDs.first ?? utilityStoryID
+                    self.visibleStoryID = target
+                    feedScrollState.positionID = target
+                    feedBackdropState.entryID = target
                     return
                 }
             }
@@ -1123,8 +1130,8 @@ struct HomePage: View {
             switch entry {
         case let .nextGeneration(spec):
             NextGenerationFeedCardView(
-                spec: spec,
-                merchants: merchants,
+                sourceSpec: spec,
+                merchants: NextGenerationFeedCardCatalog.prototypeMerchants,
                 width: layout.cardWidth,
                 height: layout.cardHeight,
                 foregroundTopPadding: max(

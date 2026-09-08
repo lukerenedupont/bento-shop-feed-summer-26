@@ -1,22 +1,25 @@
 import SwiftUI
 
-/// Direct review uses the same catalog, specification and renderer as Home.
-/// Launch: -nextGenerationGallery 0...3. Not overlaid on a running HomePage.
+/// PROTOTYPE direct review. Same data, state and rendering as Home.
 struct NextGenerationFeedGallery: View {
-    @State private var selectedIndex: Int
+    @State private var selectedCardID: String
     @State private var session = GenerativeFeedPrototypeSession()
-    private let merchants = LocalMerchantService.loadMerchants()
+    private let merchants = NextGenerationFeedCardCatalog.prototypeMerchants
 
     init() {
         let args = ProcessInfo.processInfo.arguments
         let flag = args.firstIndex(of: "-nextGenerationGallery")
         let requested = flag.flatMap { args.indices.contains($0 + 1) ? Int(args[$0 + 1]) : nil } ?? 0
-        _selectedIndex = State(initialValue: min(max(requested, 0), 3))
+        let signals = GenerativeFeedPrototypeFixtures.signals
+        _selectedCardID = State(initialValue: "next-gen-\(signals[min(max(requested, 0), signals.count - 1)].id)")
     }
-
     private var cards: [NextGenerationFeedCardSpec] {
-        NextGenerationFeedCardCatalog.cards(signals: GenerativeFeedPrototypeFixtures.signals, merchants: merchants)
+        let sources = NextGenerationFeedCardCatalog.cards(signals: GenerativeFeedPrototypeFixtures.signals, merchants: merchants)
+        return session.arrange(sources.map(FeedEntry.nextGeneration)).compactMap {
+            if case let .nextGeneration(spec) = $0 { return spec }; return nil
+        }
     }
+    private var selectedIndex: Int { cards.firstIndex { $0.id == selectedCardID } ?? 0 }
 
     var body: some View {
         GeometryReader { proxy in
@@ -26,20 +29,24 @@ struct NextGenerationFeedGallery: View {
             ZStack(alignment: .bottom) {
                 Color.white
                 if !cards.isEmpty {
-                    let card = cards[min(selectedIndex, cards.count - 1)]
+                    let card = cards[selectedIndex]
                     VStack(spacing: 0) {
                         NextGenerationFeedCardView(
-                            spec: card, merchants: merchants,
+                            sourceSpec: card, merchants: merchants,
                             width: proxy.size.width, height: totalHeight - bottomInset - 64,
                             foregroundTopPadding: topInset + 20, isActive: true, session: session
                         )
                         HStack {
                             Button { move(-1) } label: { Image(systemName: "chevron.left").frame(width: 48, height: 48) }
+                                .accessibilityLabel("Previous experience")
                             Spacer()
-                            Text("\(selectedIndex + 1) / \(cards.count) · \(session.composition(for: card).rawValue)")
+                            Text(session.designMode
+                                ? "\(selectedIndex + 1) / \(cards.count) · \(session.composition(for: session.resolve(card, merchants: merchants)).rawValue)"
+                                : "\(selectedIndex + 1) of \(cards.count)")
                                 .font(GravityFont.semiBold.fixedFont(size: 14))
                             Spacer()
                             Button { move(1) } label: { Image(systemName: "chevron.right").frame(width: 48, height: 48) }
+                                .accessibilityLabel("Next experience")
                         }
                         .foregroundStyle(.black)
                         .padding(.horizontal, 20)
@@ -51,11 +58,10 @@ struct NextGenerationFeedGallery: View {
             .frame(width: proxy.size.width, height: totalHeight)
             .offset(y: -topInset)
         }
-        .onAppear { session.designMode = true }
+        .modifier(GenerativePrototypeTools(session: session, merchants: merchants))
     }
-
     private func move(_ direction: Int) {
         guard !cards.isEmpty else { return }
-        selectedIndex = (selectedIndex + direction + cards.count) % cards.count
+        selectedCardID = cards[(selectedIndex + direction + cards.count) % cards.count].id
     }
 }

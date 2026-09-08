@@ -11,18 +11,19 @@ Updated: 2026-09-08
 
 ## Next Generation Feed branch
 
-- The current feel test replaces the twenty decorative layouts (`f5cb6ab`) with four signal-driven shopping jobs in Luke's For You only. Other buyers/topics/custom feeds use the pre-existing planner.
+- The current feel test has six signal-driven shopping experiences in Luke's For You. It evolves the four-card scaffold (`cd20f57`); the twenty decorative layouts remain archived at `f5cb6ab`. Other buyers/topics/custom feeds use the pre-existing planner.
 - `GenerativeFeedPrototypeFixtures.swift` declares explicitly simulated purchase, repeated-view, merchant-affinity and active-World signals. Do not present these as real account history.
-- `NextGenerationFeedCardCatalog.cards(signals:merchants:)` determines the job, selects real entities, then emits a semantic specification. The spec does not supply arbitrary visual values.
-- Four compositions: purchased jacket + swap pants; compare three chairs; Standards Manual assortment; saved coffee table + chair selection. Each has a Hero alternate using identical products.
-- `NextGenerationFeedCardView.swift` is the shared renderer. Bounded fitted images cannot expand the feed width. Eleven exact product images are bundled with provenance in `PrototypeCardMedia/`; two dead Feature URLs were refreshed from official product endpoints.
-- `GenerativeFeedPrototypeSession` retains selection, shortlist and composition changes above lazy feed cells. No real data mutations or persistence. Room-plan sheet and feed share this same state; full World integration and AR are not implemented.
-- Tap the sliders beside Demo context or long-press the heading for `GenerativeFeedInspector`: signal, job, rationale, entities, composition alternate, interaction toggle and reset.
-- Run `./Scripts/run_generative_feed.sh [feed|gallery] [0...3]`. Launch flags remain `-nextGenerationGallery`, `-openNextGenerationCard`; `-feedDesignMode` reveals inspector buttons. Gallery now replaces rather than overlays the Home root.
-- `NEXT_GENERATION_FEED.md` documents scope, provenance, operation and pending work. General AI generation/ranking, signal editing and feed-level art direction are not built.
-- `PrototypeUITests/GenerativeFeedPrototypeUITests.swift` covers gallery layout/actions, swap/alternate state retention, shortlist edits, room continuity, real-shell taps and scroll restoration. Latest run: all six tests pass; bundled-media provenance and personalized-feed validators also pass.
+- `SampleData/NextGenerationFeedCardCatalog.swift` owns signal → supported job → retrieval → semantic spec. Its `prototypeMerchants` snapshot is shared by Home, gallery and inspector, avoiding merged/live inventory changing the fixture. `Models/NextGenerationFeedCard.swift` defines primary entity types, groupings and supported inputs; it does not supply arbitrary visual values.
+- Six experiences: jacket + swap pants; focused chair comparison; Standards Manual's editorial Graphic standards grouping; saved table + chair; coffee counter/commute directions; Forom/House of Leon/Lichen discovery. The new group-led compositions intentionally do not offer misleading product-only Hero alternates.
+- `NextGenerationFeedCardView.swift` is the shared renderer; `GenerativeDiscoveryComposition.swift` owns direction and merchant-led compositions. Bounded fitted images cannot expand the feed. Eighteen exact images are bundled with provenance in `PrototypeCardMedia/`.
+- `GenerativeFeedPrototypeSession` owns selected/dismissed products, chosen direction/merchant, supported signal/job overrides, revisions, enabled signals and order. Group choice is a hard relevance gate. Regeneration repeats retrieval and deterministic reranking while retaining valid state; no model API is called.
+- Consumer preview starts with a disclosure of simulated activity, then hides demo/debug chrome. Sliders in design mode—or a long press on a consumer heading—open `GenerativeFeedInspector`. The chair scenario supports repeated-view/saved signals and compare/resume jobs. Other scenarios offer only valid inputs.
+- Inspector toolbars keep Regenerate this card and Feed always reachable. `GenerativePrototypeTools` hosts a stable feed editor with signal switches, drag-handle reordering, regenerate-all and consumer preview. Disabling every card retains an Edit demo feed recovery control.
+- Run `./Scripts/run_generative_feed.sh [feed|gallery|consumer] [0...5]`. Existing launch flags remain. The gallery uses stable card identity across reordering and the same session/renderer as Home. Use gallery for exact-index review: the inherited native feed deep-link can initially settle on a neighboring snap slot; ordinary swipe navigation is verified.
+- Room-plan sheet and feed still share session state. Full persistent World integration/AR, general AI generation, automatic adjacency ranking, arbitrary inputs, profile editing and the full 10–12-case feed remain unbuilt; see `NEXT_GENERATION_FEED.md`.
+- Latest Simulator acceptance: all twelve tests pass, including steering relevance across regeneration, merchant coupling, signal/job changes, consumer disclosure, empty-feed recovery, reorder/state retention and existing card/shell actions.
 - Bottom navigation has bounded hit geometry. Feed controls reserve actual bottom layout space; lifting buttons with visual offsets was not a reliable interactive surface.
-- Legacy `Media/` films remain excluded from this branch target, not deleted. The original `184320 KB` gate is unchanged; this scaffold is approximately `179548 KB`.
+- Legacy `Media/` films remain excluded from this branch target, not deleted. The original `184320 KB` gate is unchanged; this build is approximately `180592 KB`.
 - Dedicated Simulator: `Feed Interactive Cards` (`A2AA7E39-93E3-47FE-8599-B523E3358700`), derived data `/tmp/pi-feed-interactive-cards-derived`.
 
 ## Full prototype baseline

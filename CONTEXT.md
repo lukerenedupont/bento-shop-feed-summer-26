@@ -6,7 +6,7 @@ A catalog-backed commerce surface constructed around a shopping job, not selecte
 
 ## Shopping signal
 
-Activity or context that makes a shopping job relevant. Signals have provenance. The four-card feed prototype uses explicitly simulated activity; these fixtures are not facts about the real buyer.
+Activity or context that makes a shopping job relevant. Signals have provenance. The feed prototype uses explicitly simulated activity; these fixtures are not facts about the real buyer. A setup disclosure precedes consumer preview; diagnostic labels live in design mode, not the shopping presentation.
 
 ## Shopping job
 
@@ -19,6 +19,14 @@ The finite set of trusted presentation and interaction structures available to g
 ## Card specification
 
 The interface between generation and rendering: stable identity, source signal, shopping job, canonical anchor/candidate references, semantic composition, copy, local interaction, context and rationale. Alternate compositions retain the same entities and session state. Arbitrary fonts, color values, spacing and animation curves are not generated.
+
+## Content grouping
+
+A set of canonical references that belongs to one merchant or one shopping direction. Choosing a group gates the card's content; other groups cannot leak products into that result. An editorial grouping is not automatically an official merchant collection.
+
+## Card regeneration
+
+Re-evaluation of the current signal and supported shopping job against the catalog, producing a new specification revision. Valid selection, dismissal and steering state remain intact. Regeneration is separate from a composition override, which changes hierarchy without changing the source data.
 
 ## World
 
