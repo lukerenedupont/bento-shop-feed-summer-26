@@ -8,6 +8,8 @@ final class GenerativeFeedPrototypeSession {
         var selectedID: String?
         var selectedGroupID: String?
         var comparisonIDs: [String] = []
+        var canvasPosition: CGPoint = .zero
+        var canvasIsExploring = false
         // With an anchor, each ID saves that exact anchor + candidate pair.
         // Without an anchor, it saves the candidate alone. Session-only.
         var savedSelectionIDs: Set<String> = []
@@ -124,7 +126,21 @@ final class GenerativeFeedPrototypeSession {
     }
     func setComposition(_ composition: NextGenerationCardLayout, for spec: NextGenerationFeedCardSpec) {
         guard spec.alternatives.contains(composition) else { return }
-        update(spec) { $0.composition = composition; $0.lastAction = "Composition changed; products and selection retained" }
+        update(spec) {
+            $0.composition = composition; $0.canvasIsExploring = false
+            $0.lastAction = "Composition changed; products and selection retained"
+        }
+    }
+    func setCanvasPosition(_ position: CGPoint, for spec: NextGenerationFeedCardSpec) {
+        guard position.x.isFinite, position.y.isFinite, state(for: spec).canvasPosition != position else { return }
+        update(spec) {
+            $0.canvasPosition = position
+            $0.lastAction = "Panned the canvas; assortment and selection retained"
+        }
+    }
+    func setCanvasExploring(_ exploring: Bool, for spec: NextGenerationFeedCardSpec) {
+        guard state(for: spec).canvasIsExploring != exploring else { return }
+        update(spec) { $0.canvasIsExploring = exploring }
     }
     func setSignal(_ kind: PrototypeShoppingSignal.Kind, for spec: NextGenerationFeedCardSpec) {
         guard spec.signal.alternateSignals.contains(kind) else { return }
@@ -144,7 +160,10 @@ final class GenerativeFeedPrototypeSession {
         update(spec) { $0.generation += 1; $0.lastAction = "Rebuilt from current inputs; selected and dismissed items retained" }
     }
     func setInteractions(_ enabled: Bool, for spec: NextGenerationFeedCardSpec) {
-        update(spec) { $0.interactionsEnabled = enabled }
+        update(spec) {
+            $0.interactionsEnabled = enabled
+            if !enabled { $0.canvasIsExploring = false }
+        }
     }
     func restoreShortlist(_ spec: NextGenerationFeedCardSpec) {
         update(spec) { $0.removedIDs = []; $0.lastAction = "Shortlist restored" }
