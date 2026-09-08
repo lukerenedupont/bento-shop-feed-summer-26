@@ -59,6 +59,31 @@ enum HomeFeedPlanner {
         if let cached, cached.key == key { return cached.plan }
 
         let stories = stories(for: input)
+
+        if NextGenerationFeedCardCatalog.prototypeEnabled {
+            let generatedEntries = NextGenerationFeedCardCatalog.cards(
+                topic: input.topic,
+                sourceStories: stories,
+                merchants: input.merchants
+            ).map(FeedEntry.nextGeneration)
+            let availableContentCounts = contentCounts(
+                in: generatedEntries,
+                enabledWorldIDs: input.enabledWorldIDs
+            )
+            let visibleEntries = FeedCompositionFilter.apply(
+                to: generatedEntries,
+                enabledKinds: input.enabledContentKinds,
+                enabledWorldIDs: input.enabledWorldIDs
+            )
+            let plan = HomeFeedPlan(
+                stories: stories,
+                entries: visibleEntries,
+                availableContentCounts: availableContentCounts
+            )
+            cached = (key, plan)
+            return plan
+        }
+
         let posts = relevantPosts(input.posts, buyer: input.buyer, topic: input.topic, stories: stories, merchants: input.merchants)
         var entries = distribute(stories: stories, posts: posts, buyerID: input.buyer.id, topicID: input.topic.id)
         entries = WorldPrototypeFeedOrdering.prioritizeTryOn(in: entries, enabledWorldIDs: input.enabledWorldIDs)
@@ -90,6 +115,7 @@ enum HomeFeedPlanner {
     ) -> [FeedContentKind: Int] {
         entries.reduce(into: [:]) { counts, entry in
             let kind: FeedContentKind? = switch entry {
+            case .nextGeneration: .generatedCards
             case .suggestedCollections: .suggestedCollections
             case .post: .posts
             case .story(let story): enabledWorldIDs.contains(story.id)

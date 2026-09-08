@@ -1,15 +1,26 @@
 # Codex handoff
 
-Updated: 2026-09-04
+Updated: 2026-09-08
 
 ## Repository state
 
 - Repository: `/Users/lukedupont/bento-shop-feed-summer-26`
-- Branch: `main`
+- Branch: `feed-interactive-cards`
 - Handoff remote: `public` (`lukerenedupont/bento-shop-feed-summer-26`)
-- Use the latest commit on this branch as the handoff baseline.
+- The branch starts from `5936382`; do not merge it into or push it over `main` without explicit instruction.
 
-## Current prototype
+## Next Generation Feed branch
+
+- `NextGenerationFeedCardCatalog.prototypeEnabled` replaces every topic's rendered assortment with 20 deterministic, catalog-backed generated card specifications while retaining the Shop feed shell and utility belt.
+- The 20 reusable layouts and their interaction contracts live in `Models/NextGenerationFeedCard.swift`; `Components/NextGenerationFeedCardView.swift` is their shared renderer.
+- Cards use canonical `SampleMerchant` inventory and product media. Merchant-specific formats remain within one merchant; discovery formats may mix merchants. No product, merchant, price, image, or destination is fabricated.
+- Card interactions are local on this branch. Second-experience navigation remains in source for reference but is not part of the generated-card loop.
+- Launch `-nextGenerationGallery [0...19]` for direct isolated review or `-openNextGenerationCard [0...19]` inside the real feed.
+- `NEXT_GENERATION_FEED.md` documents the grammar and generation contract.
+- Legacy `Media/` films are excluded from this branch's target, but not deleted, to preserve the original `184320 KB` app gate. Latest successful Simulator build was approximately `180768 KB`.
+- Dedicated Simulator: `Feed Interactive Cards` (`A2AA7E39-93E3-47FE-8599-B523E3358700`), derived data `/tmp/pi-feed-interactive-cards-derived`.
+
+## Full prototype baseline
 
 The feed is personalized for Luke, Mikhail, Tobi, Katarina, Kenny, and Archie.
 Each buyer receives authored For You and topic feeds backed by the local buyer

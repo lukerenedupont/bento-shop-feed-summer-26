@@ -1,5 +1,17 @@
 # Domain context
 
+## Generated feed card
+
+A full-height, catalog-backed commerce surface produced from a constrained card specification. Generation may choose layout, hierarchy, palette, crop, ranking, and interaction, but merchant identity, product identity, imagery, price, and destination remain canonical source data.
+
+## Card grammar
+
+The finite set of trusted presentation and interaction structures available to generated feed cards. A grammar creates variety without allowing generation to invent commerce facts or arbitrary interface behavior.
+
+## Card specification
+
+The data boundary between generation and rendering: stable identity, canonical merchant/product references, presentation variant, copy, palette, contrast, and local interaction behavior. The feed shell consumes this metadata without special-casing the story that produced it.
+
 ## World
 
 A dynamic, personalized, stateful, steerable, and shoppable experience organized around something that matters to a shopper now. A World is the shopping journey and its remembered context, not a page template.

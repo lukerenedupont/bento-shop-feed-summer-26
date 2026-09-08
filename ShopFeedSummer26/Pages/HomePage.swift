@@ -1109,6 +1109,7 @@ struct HomePage: View {
         // The Watch Canvas cover is a poster-style sphere on white; it
         // carries no card chrome beyond its centered title.
         let hidesFeedbackActions: Bool = {
+            if case .nextGeneration = entry { return true }
             if case .suggestedCollections = entry { return true }
             if case .post = entry { return true }
             if case let .story(story) = entry,
@@ -1119,6 +1120,16 @@ struct HomePage: View {
 
         ZStack(alignment: .topTrailing) {
             switch entry {
+        case let .nextGeneration(spec):
+            NextGenerationFeedCardView(
+                spec: spec,
+                merchants: merchants,
+                width: layout.cardWidth,
+                height: layout.cardHeight,
+                foregroundTopPadding: layout.pinnedTitleTop - GravitySpacing.space16,
+                isActive: isSnappedEntry
+            )
+
         case let .suggestedCollections(presentation):
             SuggestedCollectionsFeedCard(
                 presentation: presentation,
@@ -1440,6 +1451,7 @@ struct HomePage: View {
     private var feedBackdropColors: [String: Color] {
         Dictionary(uniqueKeysWithValues: feedEntries.map { entry in
             let color: Color = switch entry {
+            case let .nextGeneration(spec): Color(hex: spec.accentHex)
             case let .suggestedCollections(presentation):
                 Color(hex: presentation.collections.first?.story.accentHex ?? "#557F93")
             case let .story(story): Color(hex: story.accentHex)
@@ -1708,9 +1720,15 @@ struct HomePage: View {
             utilityRailExpansion.reset()
             let targetID: String?
 #if DEBUG
-            if ProcessInfo.processInfo.arguments.contains("-openCanvas") {
+            let arguments = ProcessInfo.processInfo.arguments
+            if let flagIndex = arguments.firstIndex(of: "-openNextGenerationCard"),
+               arguments.indices.contains(flagIndex + 1),
+               let requestedIndex = Int(arguments[flagIndex + 1]),
+               NextGenerationCardLayout.allCases.indices.contains(requestedIndex) {
+                targetID = "next-gen-\(topicID)-\(NextGenerationCardLayout.allCases[requestedIndex].rawValue)"
+            } else if arguments.contains("-openCanvas") {
                 targetID = WorldPrototypeCatalog.canvasID
-            } else if ProcessInfo.processInfo.arguments.contains("-openSuggestedCollections") {
+            } else if arguments.contains("-openSuggestedCollections") {
                 targetID = "suggested-collections"
             } else {
                 targetID = buyerPreview.selected.showsUtilityShelf
@@ -1727,10 +1745,14 @@ struct HomePage: View {
             feedChromeTransition.progress = targetID == utilityStoryID ? 0 : 1
             visibleStoryID = targetID
         } else if let topic = navigationTopics.first(where: { $0.id == topicID }) {
-            let targetID = buyerPreview.stories(
-                for: topic,
-                in: PersonalizedFeedCatalog.current
-            ).first?.id
+            let targetID = if NextGenerationFeedCardCatalog.prototypeEnabled {
+                feedEntries.first?.id
+            } else {
+                buyerPreview.stories(
+                    for: topic,
+                    in: PersonalizedFeedCatalog.current
+                ).first?.id
+            }
             feedScrollState.positionID = targetID
             feedBackdropState.entryID = targetID
             feedChromeTransition.progress = 1

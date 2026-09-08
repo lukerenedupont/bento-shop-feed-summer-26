@@ -34,6 +34,10 @@ targets:
           - "**/.DS_Store"
           - "**/*.env"
           - "Dossiers"
+          # Next Generation Feed is a feed-card-only prototype. Legacy authored
+          # films remain in git for the main prototype but are not bundled into
+          # this branch's iteration target.
+          - "Media"
       # Dossier drop zone: bundled as a folder reference so newly dropped
       # dossier JSON + mp4 films ship without regenerating the project.
       - path: ShopFeedSummer26/Dossiers
@@ -54,7 +58,7 @@ targets:
         FAL_TOKEN_ENDPOINT: ""
         PRODUCT_BUNDLE_IDENTIFIER: com.shopify.purl.prototype.shop.feed.summer.26
         PRODUCT_NAME: ShopFeedSummer26
-        INFOPLIST_KEY_CFBundleDisplayName: "Shop Feed Summer 26"
+        INFOPLIST_KEY_CFBundleDisplayName: "Next Generation Feed"
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight

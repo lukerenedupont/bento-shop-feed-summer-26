@@ -14,6 +14,7 @@ struct SuggestedCollectionsPresentation: Identifiable {
 }
 
 enum FeedEntry: Identifiable {
+    case nextGeneration(NextGenerationFeedCardSpec)
     case suggestedCollections(SuggestedCollectionsPresentation)
     case tryOn
     case tryFaves
@@ -23,6 +24,7 @@ enum FeedEntry: Identifiable {
 
     var id: String {
         switch self {
+        case let .nextGeneration(spec): spec.id
         case let .suggestedCollections(presentation): presentation.id
         case .tryOn: TryOnExperience.cardID
         case .tryFaves: TryFavesExperience.cardID
@@ -83,6 +85,9 @@ extension FeedEntry {
     /// dark navigation labels while the card is snapped behind the topic rail.
     var prefersDarkNavigationText: Bool {
         if case .tryOn = self { return true }
+        if case let .nextGeneration(spec) = self {
+            return spec.prefersDarkNavigationText
+        }
         guard case let .story(story) = self else { return false }
         return story.id == WorldPrototypeCatalog.canvasID
     }
@@ -113,6 +118,8 @@ enum FeedCompositionFilter {
     ) -> [FeedEntry] {
         entries.filter { entry in
             switch entry {
+            case .nextGeneration:
+                enabledKinds.contains(.generatedCards)
             case .suggestedCollections:
                 enabledKinds.contains(.suggestedCollections)
             case .post:

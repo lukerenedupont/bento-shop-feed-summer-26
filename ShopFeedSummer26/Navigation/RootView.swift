@@ -51,6 +51,12 @@ struct RootView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
+#if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("-nextGenerationGallery") {
+                NextGenerationFeedGallery()
+                    .zIndex(100)
+            }
+#endif
         }
         .environment(coordinator)
 #if DEBUG
