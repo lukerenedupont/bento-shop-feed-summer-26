@@ -69,7 +69,8 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
 
     func testRoomPlanSelectionReturnsToFeedCard() {
         let app = launchCard(3)
-        app.buttons["Select Chair #1 - Black Leather"].tap()
+        app.scrollViews["generative.roomCarousel"].swipeLeft()
+        XCTAssertTrue(app.staticTexts["2 of 3"].waitForExistence(timeout: 5))
         app.buttons["generative.primaryAction"].tap()
         XCTAssertTrue(app.staticTexts["Your living room"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["Chair #1 - Black Leather"].exists)
@@ -80,6 +81,36 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
         app.buttons["Done"].tap()
         XCTAssertTrue(app.staticTexts["Papa Teddy Chair - White Boucle"].exists)
         XCTAssertTrue(app.staticTexts["3 of 3"].exists)
+    }
+
+    func testRoomHeroUsesTheFeedAndCarriesSwipedSelection() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-openNextGenerationCard", "0"]
+        app.launch()
+        XCTAssertTrue(app.buttons["generative.previewConsumer"].waitForExistence(timeout: 10))
+        app.buttons["generative.previewConsumer"].tap()
+        for _ in 0..<3 { app.swipeUp() }
+        let carousel = app.scrollViews["generative.roomCarousel"].firstMatch
+        XCTAssertTrue(carousel.waitForExistence(timeout: 5))
+        XCTAssertTrue(carousel.isHittable)
+        XCTAssertGreaterThanOrEqual(carousel.frame.height, 300)
+        let heading = app.staticTexts["For your living room"]
+        XCTAssertTrue(heading.isHittable)
+        XCTAssertGreaterThan(heading.frame.minY, 120)
+        let action = app.buttons.matching(identifier: "generative.primaryAction").allElementsBoundByIndex.first { $0.isHittable }
+        XCTAssertNotNil(action)
+        XCTAssertLessThan(action?.frame.maxY ?? 9999, app.frame.height - 100)
+        let capture = XCTAttachment(screenshot: app.screenshot())
+        capture.name = "Room hero in consumer feed"
+        capture.lifetime = .keepAlways
+        add(capture)
+        carousel.swipeLeft()
+        XCTAssertTrue(app.staticTexts["2 of 3"].waitForExistence(timeout: 5))
+        action?.tap()
+        XCTAssertTrue(app.staticTexts["Your living room"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Chair #1 - Black Leather"].exists)
+        app.buttons["Done"].tap()
+        XCTAssertTrue(app.staticTexts["2 of 3"].exists)
     }
 
     func testConsumerPreviewDisclosesFixturesThenHidesDesignChrome() {

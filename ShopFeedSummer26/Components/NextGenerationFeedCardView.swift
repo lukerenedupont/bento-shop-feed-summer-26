@@ -109,6 +109,19 @@ struct NextGenerationFeedCardView: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("generative.purchasedAnchor")
+            } else if spec.interaction == .selectForWorld, session.composition(for: spec) == .continuation, let anchor {
+                HStack(spacing: GravitySpacing.space12) {
+                    GenerativeProductMedia(item: anchor).frame(width: 56, height: 64)
+                    VStack(alignment: .leading, spacing: GravitySpacing.space4) {
+                        Text(spec.title)
+                            .font(GravityFont.expressiveSemiBold.fixedFont(size: 22))
+                            .accessibilityIdentifier("generative.heading")
+                        Text("With your saved \(anchor.product.title)")
+                            .font(GravityFont.regular.fixedFont(size: 13))
+                            .foregroundStyle(.secondary).lineLimit(2)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
             } else {
                 Text(spec.job == .narrow ? activeGroup?.title ?? spec.title : spec.title)
                     .font(GravityFont.expressiveSemiBold.fixedFont(size: 28))
@@ -209,12 +222,40 @@ struct NextGenerationFeedCardView: View {
     }
 
     private func continuation(size: CGSize) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
-            if let anchor { compactProduct(anchor, caption: "Saved in your living room") }
-            GenerativeProductMedia(item: selected)
-                .frame(height: max(size.height - 240, 100))
+        let mediaSide = min(size.width * 0.92, max(size.height - 80, 120))
+        return VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: GravitySpacing.space12) {
+                    ForEach(visibleProducts) { item in
+                        Button { session.select(item, for: spec) } label: {
+                            // A square allocation preserves the entire catalog
+                            // photograph, rather than letterboxing a wide strip.
+                            GenerativeProductMedia(item: item, presentation: "comparison")
+                                .frame(width: mediaSide, height: mediaSide)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Select \(item.product.title)")
+                        .accessibilityAddTraits(selected?.id == item.id ? .isSelected : [])
+                        .id(item.id)
+                    }
+                }
+                .scrollTargetLayout()
+            }
+            .contentMargins(.trailing, size.width - mediaSide, for: .scrollContent)
+            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+            .scrollPosition(id: Binding<String?>(
+                get: { selected?.id },
+                set: { id in
+                    if let item = visibleProducts.first(where: { $0.id == id }), item.id != selected?.id {
+                        session.select(item, for: spec)
+                    }
+                }
+            ), anchor: .leading)
+            .frame(height: mediaSide)
+            .scrollDisabled(!current.interactionsEnabled)
+            .disabled(!current.interactionsEnabled)
+            .accessibilityIdentifier("generative.roomCarousel")
             identity(selected)
-            thumbnailChoices
         }
     }
 

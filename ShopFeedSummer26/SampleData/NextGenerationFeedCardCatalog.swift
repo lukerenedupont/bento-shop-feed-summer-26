@@ -68,7 +68,7 @@ enum NextGenerationFeedCardCatalog {
             reason = "Demo publishing affinity yields a merchant-led editorial grouping of the NYCTA, NASA and EPA manuals. Graphic standards is our grouping, not a claimed merchant collection or a new launch."
         case .activeWorld:
             job = .continueWorld
-            title = "A chair for your living room"
+            title = "For your living room"
             subtitle = "Try one beside the table you saved."
             layout = .continuation
             interaction = .selectForWorld
