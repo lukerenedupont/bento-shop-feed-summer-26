@@ -28,6 +28,14 @@ A set of canonical references that belongs to one merchant or one shopping direc
 
 Re-evaluation of the current signal and supported shopping job against the catalog, producing a new specification revision. Valid selection, dismissal and steering state remain intact. Regeneration is separate from a composition override, which changes hierarchy without changing the source data.
 
+## Comparison focus
+
+The candidate currently being inspected within a comparison set. Focus determines which candidate to retain when bringing in another option; focusing is not saving or purchasing.
+
+## Saved look
+
+An explicitly kept combination of an anchor product and a companion product. Browsing a different companion does not replace an already saved combination.
+
 ## World
 
 A dynamic, personalized, stateful, steerable, and shoppable experience organized around something that matters to a shopper now. A World is the shopping journey and its remembered context, not a page template.

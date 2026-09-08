@@ -73,6 +73,10 @@ struct GenerativeFeedInspector: View {
                     LabeledContent("Direction / merchant", value: session.activeGroup(for: spec)?.title ?? "Not chosen")
                     LabeledContent("Selected product", value: session.selected(in: session.products(for: spec, merchants: merchants), for: spec)?.product.title ?? "None")
                     LabeledContent("Removed candidates", value: String(session.state(for: spec).removedIDs.count))
+                    LabeledContent("Saved selections", value: String(session.state(for: spec).savedSelectionIDs.count))
+                    if spec.interaction == .shortlist {
+                        Text("Comparing: " + session.comparisonPair(in: spec.resolvedProducts(from: merchants), for: spec).map { $0.product.title }.joined(separator: " / "))
+                    }
                     Text(session.state(for: spec).lastAction)
                         .accessibilityIdentifier("generative.lastAction")
                     Button("Reset this card", role: .destructive) { session.reset(spec) }

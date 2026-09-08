@@ -50,10 +50,11 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
 
     func testShortlistRemovalAndReset() {
         let app = launchCard(1)
+        app.buttons["Shortlist options"].tap()
         app.buttons["Remove Chair #1 - Camel Nubuck from shortlist"].tap()
-        XCTAssertTrue(app.staticTexts["2 on your shortlist"].exists)
+        XCTAssertEqual(app.buttons["Shortlist options"].value as? String, "2 on your shortlist")
         app.buttons["Reset shortlist"].tap()
-        XCTAssertTrue(app.staticTexts["3 on your shortlist"].exists)
+        XCTAssertEqual(app.buttons["Shortlist options"].value as? String, "3 on your shortlist")
     }
 
     func testRoomPlanSelectionReturnsToFeedCard() {
@@ -127,7 +128,88 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
         app.buttons["Compare a shortlist"].tap()
         app.buttons["Done"].tap()
         XCTAssertTrue(app.staticTexts["Still considering these chairs?"].exists)
-        XCTAssertTrue(app.staticTexts["Chair #1 - Black Leather"].exists)
+        XCTAssertTrue(app.buttons["Select Chair #1 - Black Leather"].exists)
+    }
+
+    func testSavedLookKeepsExactPairAfterSwapAndRegeneration() {
+        let app = launchCard(0)
+        app.buttons["generative.saveSelection"].tap()
+        XCTAssertTrue(app.buttons["Saved looks (1)"].exists)
+        app.buttons["generative.primaryAction"].tap()
+        XCTAssertEqual(app.buttons["generative.saveSelection"].label, "Save this look")
+        app.buttons["generative.inspector"].tap()
+        app.buttons["generative.regenerateCard"].tap()
+        app.buttons["Done"].tap()
+        app.buttons["generative.savedLooks"].tap()
+        XCTAssertTrue(app.navigationBars["Saved looks"].waitForExistence(timeout: 5))
+        let saved = app.buttons["View Nike x Stüssy Fleece Pant - Grey Heather"]
+        XCTAssertTrue(saved.isHittable)
+        XCTAssertFalse(app.buttons["View Nike x Stüssy Stone Washed Fleece Pant - Black"].isHittable)
+        saved.tap()
+        XCTAssertTrue(app.staticTexts["generative.productTitle"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["generative.productTitle"].label, "Nike x Stüssy Fleece Pant - Grey Heather")
+        XCTAssertEqual(app.descendants(matching: .any)["generative.merchantDestination"].firstMatch.value as? String,
+            "https://feature.com/products/nike-nike-x-stussy-fleece-pant-grey-heather")
+        app.navigationBars["Product details"].buttons["Done"].tap()
+        app.navigationBars["Saved looks"].buttons["Done"].tap()
+        XCTAssertTrue(app.buttons["Saved looks (1)"].exists)
+    }
+
+    func testComparisonKeepsFocusedChairAndUsesCanonicalPriceDifference() {
+        let app = launchCard(1)
+        XCTAssertTrue(app.buttons["Select Chair #1 - Camel Nubuck"].isHittable)
+        XCTAssertTrue(app.buttons["Select Chair #1 - Black Leather"].isHittable)
+        XCTAssertEqual(app.staticTexts["generative.priceComparison"].label, "Black Leather is $300.00 less.")
+        app.buttons["Select Chair #1 - Black Leather"].tap()
+        app.buttons["generative.compareAlternative"].tap()
+        XCTAssertTrue(app.buttons["Select Chair #1 - Black Leather"].isHittable)
+        XCTAssertTrue(app.buttons["Select Papa Teddy Chair - White Boucle"].isHittable)
+        XCTAssertFalse(app.buttons["Select Chair #1 - Camel Nubuck"].exists)
+        app.buttons["generative.saveSelection"].tap()
+        app.buttons["generative.inspector"].tap()
+        app.buttons["generative.regenerateCard"].tap()
+        app.buttons["Done"].tap()
+        XCTAssertEqual(app.buttons["generative.saveSelection"].label, "Unsave this chair")
+        app.buttons["generative.primaryAction"].tap()
+        XCTAssertTrue(app.staticTexts["generative.productTitle"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["generative.productTitle"].label, "Papa Teddy Chair - White Boucle")
+        XCTAssertEqual(app.descendants(matching: .any)["generative.merchantDestination"].firstMatch.value as? String,
+            "https://houseofleon.com/products/papa-teddy-chair-white-boucle")
+    }
+
+    func testFirstCardsInConsumerFeedHaveClearNavigationAndReachableDecisions() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-openNextGenerationCard", "0"]
+        app.launch()
+        XCTAssertTrue(app.buttons["generative.previewConsumer"].waitForExistence(timeout: 10))
+        app.buttons["generative.previewConsumer"].tap()
+        for index in 0..<2 {
+            let heading = app.staticTexts.matching(identifier: "generative.heading").allElementsBoundByIndex.first { $0.isHittable }
+            XCTAssertNotNil(heading)
+            XCTAssertGreaterThan(heading?.frame.minY ?? 0, 120)
+            let action = app.buttons.matching(identifier: "generative.primaryAction").allElementsBoundByIndex.first { $0.isHittable }
+            XCTAssertNotNil(action)
+            XCTAssertLessThan(action?.frame.maxY ?? 9999, app.frame.height - 100)
+            let capture = XCTAttachment(screenshot: app.screenshot())
+            capture.name = "Consumer feed decision \(index)"
+            capture.lifetime = .keepAlways
+            add(capture)
+            if index == 0 {
+                app.buttons["generative.saveSelection"].firstMatch.tap()
+                app.buttons["generative.primaryAction"].firstMatch.tap()
+                app.swipeUp()
+                XCTAssertTrue(app.buttons["Select Chair #1 - Black Leather"].waitForExistence(timeout: 5))
+            } else {
+                app.buttons.matching(identifier: "Select Chair #1 - Black Leather")
+                    .allElementsBoundByIndex.first { $0.isHittable }?.tap()
+                app.buttons.matching(identifier: "generative.primaryAction").allElementsBoundByIndex.first { $0.isHittable }?.tap()
+                XCTAssertTrue(app.staticTexts["generative.productTitle"].waitForExistence(timeout: 5))
+                XCTAssertEqual(app.staticTexts["generative.productTitle"].label, "Chair #1 - Black Leather")
+                app.buttons["Done"].tap()
+                app.swipeDown()
+                XCTAssertTrue(app.buttons["Saved looks (1)"].isHittable)
+            }
+        }
     }
 
     func testFeedControlsCanRemoveAllSignalsAndRecover() {

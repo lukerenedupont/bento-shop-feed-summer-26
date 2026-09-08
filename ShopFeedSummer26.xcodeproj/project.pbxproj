@@ -41,6 +41,7 @@
 		23E98555D3805A7A1243B2A3 /* TryOnStudioPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBC2461909BC7E1B376CB27 /* TryOnStudioPage.swift */; };
 		27C6901D16FDC1F6B50C61DC /* GTStandard-MBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 825938AC5196B6F59F942B37 /* GTStandard-MBold.otf */; };
 		2822CEDA04B25E4864E667D0 /* ConversationStartersClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A588205457B7125D9C517E /* ConversationStartersClient.swift */; };
+		28FF4876F03114826EDC50DE /* GenerativeShoppingReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228F0094F0DBEA5C16F0AF41 /* GenerativeShoppingReview.swift */; };
 		29199A2F65CBE81BB66F662A /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B1902261AD08A0770FD0F2 /* RootView.swift */; };
 		2921D4D05F20AE30E2EB8036 /* GoodSans-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 362AA9ECF0FBCBF6C312897A /* GoodSans-Medium.otf */; };
 		299A9737EF448D259314D36B /* ComparisonCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7196F22BB191093106BD6651 /* ComparisonCard.swift */; };
@@ -134,6 +135,7 @@
 		9C9C4E768F481DBBF61445E2 /* InjectableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96694C6EED1830A1ED8C4FF /* InjectableView.swift */; };
 		A041C240A789B223C9DAE295 /* AgentSuggestionChips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72ABAA98385BA17C78F00DC8 /* AgentSuggestionChips.swift */; };
 		A5A9C4A567FFE85BD6D90EEC /* WarmLightingBluDotBrandCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E1A573A940E934F04C9D35 /* WarmLightingBluDotBrandCard.swift */; };
+		A68615A36BAFB29CF5F532F5 /* prototype-product-house-of-leon-7873592721581-comparison.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6A51F45B1BC34358EAE84956 /* prototype-product-house-of-leon-7873592721581-comparison.jpg */; };
 		A7E88F039954B5B789BC28C5 /* HolidayFeedHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81893883E934BAC0B3B769E2 /* HolidayFeedHeader.swift */; };
 		A82E10EDFA71EA5612CAC292 /* PurlTuneRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206CA1295E8B6FC39644D1DE /* PurlTuneRuntime.swift */; };
 		A9281D381BB9DCCE93A992BA /* ShopSearchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFB55D997C32D0573A50172 /* ShopSearchClient.swift */; };
@@ -157,6 +159,7 @@
 		C221F3B4FF4C325D870BEAEE /* prototype-product-standards-manual-1424479363.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 186AEA4B3B705CBAE58FCD13 /* prototype-product-standards-manual-1424479363.jpg */; };
 		C2C1E1D14E11D3C0A8527653 /* RemoteMerchantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A91B29B5DF530EFF5D216F1 /* RemoteMerchantService.swift */; };
 		C2CCA16A0728B377D7E946A7 /* SuggestedCollectionsFeedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6BC0101378960416952901 /* SuggestedCollectionsFeedCard.swift */; };
+		C62A93CBF1BB01B93F969C95 /* GenerativeDecisionCompositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC52083BE330588D6516459B /* GenerativeDecisionCompositions.swift */; };
 		C6990F004D62EC84E1CC3488 /* FeedBundleLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E00A10734272579AE1E29B /* FeedBundleLoader.swift */; };
 		C9A6DC48035ED306A471F9CE /* MerchantCollectionFeedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E1ECE0C5E966F35189CB65 /* MerchantCollectionFeedCard.swift */; };
 		CD02265EA4C9E07E032CA2DA /* AnimatedMenuIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE8652F78AC9D1AA87E0174 /* AnimatedMenuIcon.swift */; };
@@ -250,6 +253,7 @@
 		2031C250C27B23086631BFD2 /* PurlTuneTokenOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurlTuneTokenOptions.swift; sourceTree = "<group>"; };
 		206CA1295E8B6FC39644D1DE /* PurlTuneRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurlTuneRuntime.swift; sourceTree = "<group>"; };
 		212C72618735964CE2EE2CA6 /* RemoteFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedService.swift; sourceTree = "<group>"; };
+		228F0094F0DBEA5C16F0AF41 /* GenerativeShoppingReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeShoppingReview.swift; sourceTree = "<group>"; };
 		2537D9E279EC49B168BFF767 /* LocalMerchantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMerchantService.swift; sourceTree = "<group>"; };
 		281FDFAC7B3A9E95703E93EE /* FeedTopic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTopic.swift; sourceTree = "<group>"; };
 		2A3821AE03CF82ED67CFAA6F /* KeyboardAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAnimation.swift; sourceTree = "<group>"; };
@@ -298,6 +302,7 @@
 		668E013563CF12F2BAD5D8C1 /* WorldDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldDomain.swift; sourceTree = "<group>"; };
 		68957DDA92869BB303188B83 /* LoopingVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoPlayer.swift; sourceTree = "<group>"; };
 		68C51EBDE4F5231C8FC1BDCD /* GravityTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityTheme.swift; sourceTree = "<group>"; };
+		6A51F45B1BC34358EAE84956 /* prototype-product-house-of-leon-7873592721581-comparison.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-house-of-leon-7873592721581-comparison.jpg"; sourceTree = "<group>"; };
 		6A8A4827DE4ECA8D96010781 /* SpatialARWorldDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialARWorldDestination.swift; sourceTree = "<group>"; };
 		6B0EA4316A506CA63514F1B9 /* SOURCES.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SOURCES.json; sourceTree = "<group>"; };
 		6B414620B3EDC53466841BC6 /* HolidayDestinationFeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayDestinationFeeds.swift; sourceTree = "<group>"; };
@@ -374,6 +379,7 @@
 		B9D284B4531C1094FD7A9792 /* EvergreenDestinationFeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvergreenDestinationFeeds.swift; sourceTree = "<group>"; };
 		B9F58EB0B320715CD835B076 /* MerchantAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantAvatarView.swift; sourceTree = "<group>"; };
 		BB7B5177A7500A2232144B64 /* GoodSansText-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GoodSansText-Bold.otf"; sourceTree = "<group>"; };
+		BC52083BE330588D6516459B /* GenerativeDecisionCompositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeDecisionCompositions.swift; sourceTree = "<group>"; };
 		BE0ED552AC81FCFE75A32C68 /* GoodSansText-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GoodSansText-Regular.otf"; sourceTree = "<group>"; };
 		C15E4F43A8568B6BFE596E7E /* Shopify Sans-Regular Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Regular Italic.otf"; sourceTree = "<group>"; };
 		C234820E2C6C5EE50006661C /* prototype-product-standards-manual-5842516163.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-5842516163.jpg"; sourceTree = "<group>"; };
@@ -626,6 +632,7 @@
 				AE70E60C8630F68AEBE41D3B /* prototype-product-forom-9080102322307.jpg */,
 				9474F96EB2EBCF7752FCCC8E /* prototype-product-house-of-leon-7014265454765.jpg */,
 				E0340E8B08C4ACA990499EDC /* prototype-product-house-of-leon-7873592688813.jpg */,
+				6A51F45B1BC34358EAE84956 /* prototype-product-house-of-leon-7873592721581-comparison.jpg */,
 				AE9489015A1EBB73FED6C444 /* prototype-product-house-of-leon-7873592721581.jpg */,
 				A823CA23C0788118EB3E2893 /* prototype-product-house-of-leon-8590788591789.jpg */,
 				2A8A6C01D1AE689BFA8DC211 /* prototype-product-lichen-12462683128126.jpg */,
@@ -684,9 +691,11 @@
 				0457AA3F2A1D05AFA3BDDC45 /* FeedCreationFlow.swift */,
 				7F39B6F46EBC3D657496BF6D /* FloatingBackButton.swift */,
 				16A32D3620048BECC91CDCAC /* FloatingPanelSheet.swift */,
+				BC52083BE330588D6516459B /* GenerativeDecisionCompositions.swift */,
 				43C9CC8574E3C0E8C22EAC5D /* GenerativeDiscoveryComposition.swift */,
 				1164B7CA48602B49F7D908FF /* GenerativeFeedInspector.swift */,
 				E25FDAAFB82E67A6B234DCA9 /* GenerativePrototypeTools.swift */,
+				228F0094F0DBEA5C16F0AF41 /* GenerativeShoppingReview.swift */,
 				6B414620B3EDC53466841BC6 /* HolidayDestinationFeeds.swift */,
 				81893883E934BAC0B3B769E2 /* HolidayFeedHeader.swift */,
 				1C19A304A47A9AE92E877FF8 /* HomeUtilityPrototypeCards.swift */,
@@ -890,6 +899,7 @@
 				01684785E148EF07EB062211 /* prototype-product-forom-9080102322307.jpg in Resources */,
 				41B00863BA727A355068DD71 /* prototype-product-house-of-leon-7014265454765.jpg in Resources */,
 				F194F76BE0EE74A304630BB2 /* prototype-product-house-of-leon-7873592688813.jpg in Resources */,
+				A68615A36BAFB29CF5F532F5 /* prototype-product-house-of-leon-7873592721581-comparison.jpg in Resources */,
 				EFFE68995A823A36B12858E9 /* prototype-product-house-of-leon-7873592721581.jpg in Resources */,
 				2BBA09260865DBAD6863F6B9 /* prototype-product-house-of-leon-8590788591789.jpg in Resources */,
 				3CFDAC07B41804103EAAE0A1 /* prototype-product-lichen-12462683128126.jpg in Resources */,
@@ -1036,11 +1046,13 @@
 				DDC40523D5C34319AD0C88D6 /* FloatingBackButton.swift in Sources */,
 				B7BC6E89DB3AE68F166CD965 /* FloatingPanelSheet.swift in Sources */,
 				B183161ACDCC96DFC24576FF /* FollowUpBar.swift in Sources */,
+				C62A93CBF1BB01B93F969C95 /* GenerativeDecisionCompositions.swift in Sources */,
 				7AB89D69D50A3A529AB897BD /* GenerativeDiscoveryComposition.swift in Sources */,
 				97E76E4E0480AA9785A6D61D /* GenerativeFeedInspector.swift in Sources */,
 				B68995C67E667E9BF2E10E4E /* GenerativeFeedPrototypeFixtures.swift in Sources */,
 				2B8A29EE7F0CC928CE5FA9F0 /* GenerativeFeedPrototypeSession.swift in Sources */,
 				8169DDD1B854A9A9645ECB4D /* GenerativePrototypeTools.swift in Sources */,
+				28FF4876F03114826EDC50DE /* GenerativeShoppingReview.swift in Sources */,
 				814F40BD9AF58FAAD1DED2D3 /* GiftGuideCreationFlow.swift in Sources */,
 				53FDF22272E43A439340BB32 /* GiftGuidePrototypeContent.swift in Sources */,
 				05D751E6996490FF59B3199C /* GravityBorderRadii.swift in Sources */,

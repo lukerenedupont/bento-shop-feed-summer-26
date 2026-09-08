@@ -15,6 +15,8 @@ struct NextGenerationFeedCardView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var showsInspector = false
     @State private var showsRoomPlan = false
+    @State private var showsSavedLooks = false
+    @State private var detailProduct: ResolvedStoryProduct?
 
     private var spec: NextGenerationFeedCardSpec { session.resolve(sourceSpec, merchants: merchants) }
     private var products: [ResolvedStoryProduct] { session.products(for: spec, merchants: merchants) }
@@ -60,6 +62,10 @@ struct NextGenerationFeedCardView: View {
             .sheet(isPresented: $showsRoomPlan) {
                 roomPlan
             }
+            .sheet(isPresented: $showsSavedLooks) {
+                GenerativeSavedLooksReview(spec: spec, merchants: merchants, session: session)
+            }
+            .sheet(item: $detailProduct) { GenerativeProductReview(item: $0) }
             .accessibilityElement(children: .contain)
             .accessibilityLabel(spec.accessibilityDescription)
     }
@@ -110,7 +116,18 @@ struct NextGenerationFeedCardView: View {
             VStack(alignment: .leading, spacing: GravitySpacing.space12) {
                 if let anchor { compactProduct(anchor, caption: "Your anchor") }
                 GenerativeProductMedia(item: selected)
-                identity(selected)
+                HStack(alignment: .top) {
+                    identity(selected)
+                    if spec.interaction == .swap, let selected {
+                        Button { perform { session.toggleSaved(selected, for: spec) } } label: {
+                            Image(systemName: current.savedSelectionIDs.contains(selected.id) ? "heart.fill" : "heart")
+                                .font(.system(size: 20)).frame(width: 44, height: 44)
+                        }
+                        .disabled(!current.interactionsEnabled)
+                        .accessibilityLabel(current.savedSelectionIDs.contains(selected.id) ? "Unsave this look" : "Save this look")
+                        .accessibilityIdentifier("generative.saveSelection")
+                    }
+                }
                 if spec.interaction == .shortlist { thumbnailChoices }
             }
         case .directions, .multiMerchant:
@@ -118,51 +135,31 @@ struct NextGenerationFeedCardView: View {
         }
     }
 
+    @ViewBuilder
     private func relationship(size: CGSize) -> some View {
-        let columnWidth = (size.width - GravitySpacing.space12) / 2
-        return VStack(alignment: .leading, spacing: GravitySpacing.space16) {
-            HStack(alignment: .top, spacing: GravitySpacing.space12) {
-                relationshipColumn(anchor, caption: "You bought", width: columnWidth, height: size.height - 42)
-                relationshipColumn(selected, caption: "Wear it with", width: columnWidth, height: size.height - 42)
-            }
-            Text("Nike × Stüssy, from Feature")
-                .font(GravityFont.medium.fixedFont(size: 13))
-                .foregroundStyle(ink.opacity(0.65))
+        if let anchor, let selected {
+            GenerativeOutfitComposition(
+                anchor: anchor, selected: selected, products: visibleProducts, size: size,
+                saved: current.savedSelectionIDs.contains(selected.id), enabled: current.interactionsEnabled,
+                onSelect: { item in perform { session.select(item, for: spec) } },
+                onSave: { perform { session.toggleSaved(selected, for: spec) } },
+                onOpen: { detailProduct = $0 }
+            )
         }
     }
 
-    private func relationshipColumn(_ item: ResolvedStoryProduct?, caption: String, width: CGFloat, height: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
-            Text(caption).font(GravityFont.semiBold.fixedFont(size: 13))
-            GenerativeProductMedia(item: item)
-                .frame(height: max(height - 150, 100))
-            identity(item, showsMerchant: false)
-        }
-        .frame(width: width, alignment: .topLeading)
-    }
-
+    @ViewBuilder
     private func comparison(size: CGSize) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
-            if let selected {
-                thumbnailChoices
-                GenerativeProductMedia(item: selected)
-                    .frame(height: max(size.height - 200, 100))
-                identity(selected)
-                HStack(alignment: .top) {
-                    Text(selected.product.productType ?? "Chair")
-                        .font(GravityFont.regular.fixedFont(size: 12))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
-                    Spacer()
-                    Button { perform { session.remove(selected, for: spec) } } label: {
-                        Text("Remove").font(GravityFont.medium.fixedFont(size: 12)).frame(minHeight: 44)
-                    }
-                    .disabled(!current.interactionsEnabled)
-                    .accessibilityLabel("Remove \(selected.product.title) from shortlist")
-                }
-            } else {
-                ContentUnavailableView("Shortlist cleared", systemImage: "checkmark", description: Text("Reset the shortlist to bring the chairs back."))
-            }
+        if selected != nil {
+            let pair = session.comparisonPair(in: products, for: spec)
+            GenerativeComparisonComposition(
+                pair: pair, remaining: visibleProducts.filter { item in !pair.contains { $0.id == item.id } },
+                selectedID: selected?.id, size: size, enabled: current.interactionsEnabled,
+                onSelect: { item in perform { session.select(item, for: spec) } },
+                onCompare: { item in perform { session.compare(item, in: products, for: spec) } }
+            )
+        } else {
+            ContentUnavailableView("Shortlist cleared", systemImage: "checkmark", description: Text("Reset the shortlist to bring the chairs back."))
         }
     }
 
@@ -245,7 +242,9 @@ struct NextGenerationFeedCardView: View {
 
     @ViewBuilder
     private var controls: some View {
-        if [.steer, .selectMerchant].contains(spec.interaction), activeGroup == nil {
+        if spec.interaction == .shortlist {
+            shortlistControls
+        } else if [.steer, .selectMerchant].contains(spec.interaction), activeGroup == nil {
             Text(spec.interaction == .steer ? "Choose how you’ll use it" : "Select a shop to see more")
                 .font(GravityFont.medium.fixedFont(size: 13))
                 .foregroundStyle(ink.opacity(0.65))
@@ -255,16 +254,65 @@ struct NextGenerationFeedCardView: View {
         }
     }
 
+    private var shortlistControls: some View {
+        HStack(spacing: GravitySpacing.space12) {
+            VStack(alignment: .leading, spacing: 0) {
+                Menu {
+                    if let selected {
+                        Button("Remove \(selected.product.title) from shortlist", role: .destructive) {
+                            perform { session.remove(selected, for: spec) }
+                        }
+                    }
+                    Button("Reset shortlist") { session.restoreShortlist(spec) }
+                } label: {
+                    HStack(spacing: GravitySpacing.space8) {
+                        Text(progressLabel).font(GravityFont.medium.fixedFont(size: 12))
+                        Image(systemName: "ellipsis").font(.system(size: 14))
+                    }
+                    .frame(minHeight: 44)
+                }
+                .accessibilityLabel("Shortlist options")
+                .accessibilityValue(progressLabel)
+                if !current.removedIDs.isEmpty {
+                    Button("Reset shortlist") { session.restoreShortlist(spec) }
+                        .font(GravityFont.medium.fixedFont(size: 12)).frame(minHeight: 32)
+                }
+            }
+            Spacer(minLength: 0)
+            if let selected {
+                let saved = current.savedSelectionIDs.contains(selected.id)
+                Button { perform { session.toggleSaved(selected, for: spec) } } label: {
+                    Image(systemName: saved ? "heart.fill" : "heart")
+                        .font(.system(size: 20)).frame(width: 44, height: 48)
+                }
+                .accessibilityLabel(saved ? "Unsave this chair" : "Save this chair")
+                .accessibilityIdentifier("generative.saveSelection")
+            }
+            Button {
+                if let selected { detailProduct = selected }
+                else { session.restoreShortlist(spec) }
+            } label: {
+                Text(selected == nil ? "Restore chairs" : "View chair")
+                    .font(GravityFont.semiBold.fixedFont(size: 14))
+                    .padding(.horizontal, GravitySpacing.space20).frame(minHeight: 48)
+                    .foregroundStyle(.white).background(.black, in: Capsule())
+            }
+            .accessibilityIdentifier("generative.primaryAction")
+        }
+        .buttonStyle(.plain)
+        .disabled(!current.interactionsEnabled)
+    }
+
     private var actionControls: some View {
         HStack(spacing: GravitySpacing.space12) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(progressLabel)
                     .font(GravityFont.medium.fixedFont(size: 13))
                     .foregroundStyle(ink.opacity(0.65))
-                if spec.interaction == .shortlist, !current.removedIDs.isEmpty {
-                    Button("Reset shortlist") { session.restoreShortlist(spec) }
-                        .font(GravityFont.medium.fixedFont(size: 12))
-                        .disabled(!current.interactionsEnabled)
+                if spec.interaction == .swap, !current.savedSelectionIDs.isEmpty {
+                    Button("Saved looks (\(current.savedSelectionIDs.count))") { showsSavedLooks = true }
+                        .font(GravityFont.medium.fixedFont(size: 12)).frame(minHeight: 32)
+                        .accessibilityIdentifier("generative.savedLooks")
                 }
             }
             Spacer(minLength: 0)
@@ -272,8 +320,7 @@ struct NextGenerationFeedCardView: View {
                 perform {
                     switch spec.interaction {
                     case .swap, .browse: advance()
-                    case .shortlist:
-                        if visibleProducts.isEmpty { session.restoreShortlist(spec) } else { advance() }
+                    case .shortlist: detailProduct = selected
                     case .selectForWorld: showsRoomPlan = true
                     case .steer, .selectMerchant:
                         if activeGroup != nil { session.clearGroup(spec) }
@@ -304,7 +351,7 @@ struct NextGenerationFeedCardView: View {
     private var actionLabel: String {
         switch spec.interaction {
         case .swap: "Swap pants"
-        case .shortlist: visibleProducts.isEmpty ? "Restore chairs" : "Next chair"
+        case .shortlist: visibleProducts.isEmpty ? "Restore chairs" : "View chair"
         case .browse: "Next book"
         case .selectForWorld: "Review room plan"
         case .steer: activeGroup == nil ? spec.groups.first?.title ?? "Choose" : "Change direction"
@@ -369,9 +416,13 @@ enum GenerativeFeedStyle {
 /// unrelated merchant media. Bundled copies are keyed to exact canonical IDs.
 struct GenerativeProductMedia: View {
     let item: ResolvedStoryProduct?
+    var presentation: String? = nil
+    var fillsFrame = false
     private var url: URL? {
         guard let item else { return nil }
-        let local = Bundle.main.url(forResource: "prototype-product-\(item.merchant.id)-\(item.product.id)", withExtension: "jpg")
+        let name = "prototype-product-\(item.merchant.id)-\(item.product.id)"
+        if let presentation, let local = Bundle.main.url(forResource: "\(name)-\(presentation)", withExtension: "jpg") { return local }
+        let local = Bundle.main.url(forResource: name, withExtension: "jpg")
         return local ?? item.product.imageURL.flatMap(URL.init(string:))
     }
     var body: some View {
@@ -381,7 +432,8 @@ struct GenerativeProductMedia: View {
                     CachedAsyncImage(url: url) { phase in
                         switch phase {
                         case .success(let image):
-                            image.resizable().scaledToFit()
+                            image.resizable()
+                                .aspectRatio(contentMode: fillsFrame ? .fill : .fit)
                                 .frame(width: proxy.size.width, height: proxy.size.height)
                         case .failure:
                             Image(systemName: "photo").foregroundStyle(.gray)

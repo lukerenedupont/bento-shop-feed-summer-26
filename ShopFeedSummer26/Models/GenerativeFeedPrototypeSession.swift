@@ -7,6 +7,10 @@ final class GenerativeFeedPrototypeSession {
     struct CardState {
         var selectedID: String?
         var selectedGroupID: String?
+        var comparisonIDs: [String] = []
+        // With an anchor, each ID saves that exact anchor + candidate pair.
+        // Without an anchor, it saves the candidate alone. Session-only.
+        var savedSelectionIDs: Set<String> = []
         var removedIDs: Set<String> = []
         var composition: NextGenerationCardLayout?
         var interactionsEnabled = true
@@ -61,6 +65,48 @@ final class GenerativeFeedPrototypeSession {
     func select(_ item: ResolvedStoryProduct, for spec: NextGenerationFeedCardSpec) {
         guard state(for: spec).interactionsEnabled else { return }
         update(spec) { $0.selectedID = item.id; $0.lastAction = "Selected \(item.product.title)" }
+    }
+    func comparisonPair(in items: [ResolvedStoryProduct], for spec: NextGenerationFeedCardSpec) -> [ResolvedStoryProduct] {
+        let current = state(for: spec)
+        let available = items.filter { !current.removedIDs.contains($0.id) }
+        let retained = current.comparisonIDs.compactMap { id in available.first { $0.id == id } }
+        var pair = Array((retained + available.filter { item in !retained.contains { $0.id == item.id } }).prefix(2))
+        // Returning from Hero must retain the focused product as well.
+        if let focused = available.first(where: { $0.id == current.selectedID }), !pair.contains(where: { $0.id == focused.id }), !pair.isEmpty {
+            pair[pair.count - 1] = focused
+        }
+        return pair
+    }
+    func compare(_ item: ResolvedStoryProduct, in items: [ResolvedStoryProduct], for spec: NextGenerationFeedCardSpec) {
+        guard state(for: spec).interactionsEnabled, items.contains(where: { $0.id == item.id }),
+              !state(for: spec).removedIDs.contains(item.id) else { return }
+        var pair = comparisonPair(in: items, for: spec).map(\.id)
+        if !pair.contains(item.id) {
+            if pair.count < 2 { pair.append(item.id) }
+            else {
+                // Keep the focused chair in its slot; replace the other one.
+                let focused = selected(in: items, for: spec)?.id
+                let replacement = pair.firstIndex { $0 != focused } ?? 1
+                pair[replacement] = item.id
+            }
+        }
+        update(spec) {
+            $0.comparisonIDs = pair; $0.selectedID = item.id
+            $0.lastAction = "Comparing \(item.product.title); retained the other focused candidate"
+        }
+    }
+    func toggleSaved(_ item: ResolvedStoryProduct, for spec: NextGenerationFeedCardSpec) {
+        guard state(for: spec).interactionsEnabled,
+              spec.productReferences.contains(where: { $0.merchantID == item.merchant.id && $0.productID == item.product.id }) else { return }
+        update(spec) {
+            if $0.savedSelectionIDs.contains(item.id) {
+                $0.savedSelectionIDs.remove(item.id)
+                $0.lastAction = "Removed saved selection for \(item.product.title)"
+            } else {
+                $0.savedSelectionIDs.insert(item.id)
+                $0.lastAction = "Saved \(spec.anchor == nil ? "chair" : "look") with \(item.product.title) for this session"
+            }
+        }
     }
     func choose(_ group: PrototypeContentGroup, for spec: NextGenerationFeedCardSpec) {
         guard state(for: spec).interactionsEnabled, spec.groups.contains(where: { $0.id == group.id }) else { return }

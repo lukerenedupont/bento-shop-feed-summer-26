@@ -38,7 +38,7 @@ enum NextGenerationFeedCardCatalog {
         case .purchase:
             job = .complete
             title = "With the jacket you bought"
-            subtitle = "Keep the jacket. Try a different pair of pants."
+            subtitle = "Grey or black fleece, from the same collaboration."
             layout = .relationship
             interaction = .swap
             anchor = signal.products.first
@@ -50,12 +50,12 @@ enum NextGenerationFeedCardCatalog {
             let defaultJob: PrototypeShoppingJob = signal.kind == .savedShortlist ? .continueJourney : .compare
             job = jobOverride.flatMap { signal.supportedJobs.contains($0) ? $0 : nil } ?? defaultJob
             title = job == .compare ? "Still considering these chairs?" : "Back to your chair shortlist"
-            subtitle = job == .compare ? "Choose a chair to take a closer look." : "Pick up with the chairs you saved."
+            subtitle = job == .compare ? "\(merchant.displayName) · Your chair shortlist" : "Pick up with the chairs you saved."
             layout = job == .compare ? .comparison : .hero
             interaction = .shortlist
             anchor = nil
             candidates = observed
-            reason = "The current demo signal supports comparison or continuation. Focus reveals the exact catalog name, merchant, category and price; no dimensions, stock or review claims are inferred."
+            reason = "The demo shortlist supports comparison or continuation. Two chairs remain visible with canonical finishes and a calculated same-currency price difference. Bringing in another candidate keeps the focused chair. Save a preference or inspect the exact product; dimensions, stock and reviews are not inferred."
         case .merchantAffinity:
             job = .merchantDiscovery
             title = merchant.displayName

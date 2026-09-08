@@ -22,8 +22,8 @@ Normal app launch starts with the utility belt. Only Luke's For You uses the dem
 
 | Index | Shopping job | Behavior |
 |---|---|---|
-| 0 | Complete a jacket purchase | Jacket stays fixed; swap between two real Feature pants |
-| 1 | Compare a chair shortlist | Focus a chair to see its photo, exact name, merchant, category and price; removal is secondary |
+| 0 | Complete a jacket purchase | Fixed jacket + swappable pants in one relationship composition; save exact combinations and review them later in the session |
+| 1 | Compare a chair shortlist | Two candidates remain visible, with canonical finishes and a calculated price difference; bring in the third while retaining the focused chair |
 | 2 | Explore Standards Manual | Merchant-led NYCTA, NASA and EPA manual grouping; browse the books |
 | 3 | Continue a living room | Saved Sofita table + chair choice; selection carries into and back from the room plan |
 | 4 | Narrow a coffee journey | Choose **At the counter** or **Out the door**; the card's copy and inventory change in place |
@@ -32,6 +32,16 @@ Normal app launch starts with the utility belt. Only Luke's For You uses the dem
 The coffee directions are hard content gates: commute shows the Carter Move Mug, not a coffee maker. Counter shows the Aiden and Stagg kettle, not the travel mug. Change direction to return to the two choices. There is no default-biased extra CTA beneath the two choices.
 
 The merchant card's **Graphic standards** grouping is editorial, not a claimed official collection or unverified new launch. The room plan is a local continuity sketch—not AR, spatial fit validation or integration with the full persistent World runtime.
+
+## First-card design pass
+
+The jacket has a stronger visual anchor and no duplicate purchase-price block. Pants have explicit grey/black choices, exact product identity, a save heart and the existing swap action. **Saved looks** retains the actual jacket/pants pair even after swapping or regenerating. Tap either garment in the saved review to inspect that product.
+
+Comparison now shows two chairs together rather than one hero image at a time. Tap to focus one, then **Also on your shortlist** to replace the other candidate. Same-currency price differences are calculated from the catalog with decimal arithmetic; names and finishes are split only at the canonical title separator. Saving is distinct from focus and shortlist removal. Removal lives in the shortlist overflow menu.
+
+**View chair**, garment taps and the saved-look review open an exact catalog detail sheet with an actual merchant PDP link. No dimensions, stock, reviews, sizes or checkout are invented. The first cards reserve real bottom layout space—including extra clearance for the utility-to-first-card takeover—rather than visually offsetting their buttons.
+
+These are local session saves and a small product handoff, **not** account mutations, a full Wardrobe World or persistent favorites. The other four experiences are unchanged in this pass. The authenticated Quick site remains unavailable to this environment; this is a design interpretation of the supplied written brief, not a claimed reference match.
 
 ## Consumer and design modes
 
@@ -58,6 +68,8 @@ Regeneration is deterministic, not an AI request. It reruns retrieval and modest
 - `SampleData/NextGenerationFeedCardCatalog.swift`: signal → job → entity retrieval → validated composition spec.
 - `Models/GenerativeFeedPrototypeSession.swift`: signal/job overrides, revisions, state, direction/merchant filtering, feed visibility and order.
 - `Components/NextGenerationFeedCardView.swift`: native renderer, shared geometry and existing shopping compositions.
+- `Components/GenerativeDecisionCompositions.swift`: anchored outfit and simultaneous chair comparison.
+- `Components/GenerativeShoppingReview.swift`: exact saved pairs and catalog-backed product/merchant handoff.
 - `Components/GenerativeDiscoveryComposition.swift`: direction and merchant-first compositions.
 - `Components/GenerativeFeedInspector.swift`: single-card inspection and editing.
 - `Components/GenerativePrototypeTools.swift`: stable setup/feed-editor presentation above lazy cells.
@@ -67,7 +79,7 @@ State is in memory only. It survives scrolling, card regeneration and local room
 
 ## Catalog media
 
-Eighteen exact product images are bundled in `ShopFeedSummer26/PrototypeCardMedia/`. `SOURCES.json` records merchant/product IDs, canonical image URLs and SHA-256 hashes. A failed image never substitutes another product or a merchant cover.
+Nineteen exact product images are bundled in `ShopFeedSummer26/PrototypeCardMedia/`. `SOURCES.json` records merchant/product IDs, canonical image URLs and SHA-256 hashes. A failed image never substitutes another product or a merchant cover. One additional House of Leon image is the same black chair's official studio photograph, selected from its canonical gallery for comparison. Its original lifestyle lead remains unchanged elsewhere.
 
 ```sh
 python3 Scripts/prepare_generative_demo_media.py --check
@@ -80,7 +92,7 @@ Preparing media requires Pillow. The previous scaffold refreshed two dead Featur
 
 ## Verification
 
-Simulator acceptance coverage includes six card bounds/actions, focus/removal/reset, swap/composition state retention, room-plan continuity, direction relevance across regeneration, merchant/inventory coupling, supported signal/job changes, consumer disclosure, empty-feed recovery, reordering and real-shell scrolling/taps.
+All fifteen Simulator acceptance tests pass. Coverage includes saved-pair identity after swapping/regeneration, comparison focus/price calculation, canonical destination URLs, consumer-mode feed geometry and actions, six-card bounds, shortlist reset, same-data alternatives, room continuity, direction relevance, merchant coupling, signal/job changes, empty-feed recovery and reordering.
 
 ```sh
 xcodebuild -project ShopFeedSummer26.xcodeproj -scheme ShopFeedSummer26 \

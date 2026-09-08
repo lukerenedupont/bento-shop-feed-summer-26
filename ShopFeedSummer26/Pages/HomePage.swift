@@ -1134,13 +1134,18 @@ struct HomePage: View {
                 merchants: NextGenerationFeedCardCatalog.prototypeMerchants,
                 width: layout.cardWidth,
                 height: layout.cardHeight,
-                foregroundTopPadding: max(
+                foregroundTopPadding: [.swap, .shortlist].contains(spec.interaction)
+                    ? max(layout.pinnedTitleTop, FeedNavigationStyle.controlSize + GravitySpacing.space64 + GravitySpacing.space32)
+                    : max(
                     layout.pinnedTitleTop,
                     windowSafeAreaTopInset + FeedNavigationStyle.controlSize + GravitySpacing.space24
                 ) + GravitySpacing.space32,
                 isActive: isSnappedEntry,
                 session: generativeSession,
-                bottomContentPadding: FeedCardStyle.bottomNavigationClearance + GravitySpacing.space24
+                bottomContentPadding: [.swap, .shortlist].contains(spec.interaction)
+                    ? FeedCardStyle.foregroundBottomPadding + GravitySpacing.space16
+                        + (entry.id == feedEntries.first?.id ? max(windowSafeAreaTopInset, GravitySpacing.space64) : 0)
+                    : FeedCardStyle.bottomNavigationClearance + GravitySpacing.space24
             )
 
         case let .suggestedCollections(presentation):
