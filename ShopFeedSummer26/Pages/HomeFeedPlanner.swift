@@ -17,6 +17,7 @@ enum HomeFeedPlanner {
         let merchants: [SampleMerchant]
         let followedMerchants: [SampleMerchant]
         let posts: [ShopPost]
+        let promotedStories: [FeedStory]
         let enabledWorldIDs: Set<String>
         let enabledContentKinds: Set<FeedContentKind>
         let seasonalPlacement: SeasonalPlacement
@@ -33,6 +34,7 @@ enum HomeFeedPlanner {
         let merchantInventory: [String]
         let followedMerchantIDs: [String]
         let postIDs: [String]
+        let promotedStoryIDs: [String]
         let worldIDs: [String]
         let contentKinds: [String]
         let seasonalPlacement: String
@@ -52,6 +54,7 @@ enum HomeFeedPlanner {
             merchantInventory: input.merchants.map { "\($0.id):\($0.products.count)" },
             followedMerchantIDs: input.followedMerchants.map(\.id),
             postIDs: input.posts.map(\.id),
+            promotedStoryIDs: input.promotedStories.map(\.id),
             worldIDs: input.enabledWorldIDs.sorted(),
             contentKinds: input.enabledContentKinds.map(\.rawValue).sorted(),
             seasonalPlacement: input.seasonalPlacement.rawValue
@@ -73,6 +76,13 @@ enum HomeFeedPlanner {
         entries = FeedCompositionFilter.apply(to: entries, enabledKinds: input.enabledContentKinds, enabledWorldIDs: input.enabledWorldIDs)
         if input.seasonalPlacement == .feedCard {
             entries.insert(.seasonalSavings, at: min(1, entries.count))
+        }
+        // Explicit occasion promotions own rank 2 even when optional cards or
+        // composition filters are active. This keeps the authored demo order
+        // stable instead of letting a utility campaign silently displace it.
+        if let promotedStory = input.promotedStories.first {
+            entries.removeAll { $0.id == promotedStory.id }
+            entries.insert(.story(promotedStory), at: min(1, entries.count))
         }
 
         let plan = HomeFeedPlan(
@@ -179,7 +189,12 @@ enum HomeFeedPlanner {
             )
         }
 
-        let baseAuthored = authoredStories(topic: input.topic, catalog: input.catalog)
+        var baseAuthored = authoredStories(topic: input.topic, catalog: input.catalog)
+        let promotedIDs = Set(input.promotedStories.map(\.id))
+        baseAuthored.removeAll { promotedIDs.contains($0.id) }
+        for story in input.promotedStories.reversed() {
+            baseAuthored.insert(story, at: min(1, baseAuthored.count))
+        }
         let authored = WorldPrototypeCatalog.feedStories(
             from: baseAuthored,
             available: input.catalog.stories,

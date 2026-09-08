@@ -6,6 +6,7 @@ struct HomePage: View {
     private static let bundledMerchantSnapshot = LocalMerchantService.loadMerchants()
     private static let personalizedMerchantSnapshot = BuyerPersonalizationCatalog.merchants.filter {
         [
+            "bkr",
             "city-lights-sf",
             "kith",
             "pollen-robotics",
@@ -36,7 +37,17 @@ struct HomePage: View {
     /// full merchant/product graph during a swipe or tab animation creates a
     /// large amount of avoidable main-thread work.
     @State private var merchants: [SampleMerchant] = HomePage.initialMerchantSnapshot
+#if DEBUG
+    @State var selectedTopicID = ProcessInfo.processInfo.arguments.contains("-openNariFeed")
+        || ProcessInfo.processInfo.arguments.contains("-openNariGiftGuide")
+        || ProcessInfo.processInfo.arguments.contains("-openNariProfile")
+        || ProcessInfo.processInfo.arguments.contains("-openNariDetails")
+        ? "nari"
+        : "for-you"
+    @State private var didOpenNariGiftGuideForQA = false
+#else
     @State var selectedTopicID = "for-you"
+#endif
     /// A drilled-in subcategory story rendered inline so the top bar stays.
     @State private var focusedStoryID: String?
     @State private var visibleStoryID: String?
@@ -113,7 +124,9 @@ struct HomePage: View {
     }
 
     private var isEvergreenUtilityDestination: Bool {
-        selectedTopicID == "following" || selectedTopicID == "deals"
+        selectedTopicID == "following"
+            || selectedTopicID == "deals"
+            || selectedTopicID == "nari"
     }
 
     private var isStaticUtilityDestination: Bool {
@@ -142,7 +155,12 @@ struct HomePage: View {
         from forYou: BuyerFeedTopic
     ) -> [BuyerFeedTopic] {
         let preferences = FeedDestinationPreferences.shared
-        let labels = OptionalFeedDestination.allCases.filter(preferences.isEnabled).map { (id: $0.id, label: $0.title) }
+        let labels = OptionalFeedDestination.allCases
+            .filter { destination in
+                preferences.isEnabled(destination)
+                    && (destination != .nari || buyerPreview.selected.id == "ashten")
+            }
+            .map { (id: $0.id, label: $0 == .nari ? "For Nari" : $0.title) }
         return utilityNavigationTopics(labels: labels, from: forYou)
     }
 
@@ -175,13 +193,18 @@ struct HomePage: View {
     /// can draw behind system chrome. In that configuration GeometryProxy can
     /// report zero; the active window remains the authoritative device inset.
     private var windowSafeAreaTopInset: CGFloat {
-        guard let windowScene = UIApplication.shared.connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .first(where: { $0.activationState == .foregroundActive }),
-              let keyWindow = windowScene.windows.first(where: \.isKeyWindow) else {
+        let windowScenes = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+        guard let windowScene = windowScenes.first(where: {
+            $0.activationState == .foregroundActive
+        }) ?? windowScenes.first else {
             return 0
         }
-        return keyWindow.safeAreaInsets.top
+        let windowInset = windowScene.windows.first(where: \.isKeyWindow)?.safeAreaInsets.top
+            ?? windowScene.windows.map(\.safeAreaInsets.top).max()
+            ?? 0
+        let statusBarHeight = windowScene.statusBarManager?.statusBarFrame.height ?? 0
+        return max(windowInset, statusBarHeight)
     }
 
     private var feedPlan: HomeFeedPlan {
@@ -204,10 +227,20 @@ struct HomePage: View {
             merchants: merchants,
             followedMerchants: activeRelationshipMerchants,
             posts: postService.posts(for: buyerPreview.selected),
+            promotedStories: promotedForYouStories,
             enabledWorldIDs: worldIDs,
             enabledContentKinds: FeedCompositionPreferences.shared.enabledKinds(in: selectedTopicID),
             seasonalPlacement: seasonalPlacement
         ))
+    }
+
+    private var promotedForYouStories: [FeedStory] {
+        guard selectedTopicID == "for-you",
+              buyerPreview.selected.id == "ashten" else { return [] }
+        // Keep this stable at authored rank 2 for the prototype demo. The
+        // destination can still collect the real birthday without making the
+        // card disappear between walkthroughs.
+        return [NariDestinationCatalog.birthdayGiftStory]
     }
 
     private var focusedStories: [FeedStory] { feedPlan.stories }
@@ -444,6 +477,31 @@ struct HomePage: View {
                 }
                 return true
             }
+#if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("-openNariGiftGuide"),
+               !didOpenNariGiftGuideForQA {
+                didOpenNariGiftGuideForQA = true
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(350))
+                    coordinator.pushRoute(
+                        .story(
+                            storyId: HypothesisShelfCatalog.giftGuideStoryID,
+                            sourceId: "nari-gift-guide",
+                            giftRecipientName: "Nari"
+                        )
+                    )
+                }
+            }
+            if ProcessInfo.processInfo.arguments.contains("-openNariHomeCard") {
+                let targetID = NariDestinationCatalog.birthdayGiftStoryID
+                withTransaction(Transaction(animation: nil)) {
+                    feedScrollState.positionID = targetID
+                    feedBackdropState.entryID = targetID
+                    feedChromeTransition.progress = 1
+                    visibleStoryID = targetID
+                }
+            }
+#endif
         }
         .purlInjectable()
     }
@@ -480,6 +538,13 @@ struct HomePage: View {
                 onFilterPinned: { isPinned in
                     dealsFiltersPinned = isPinned
                 }
+            )
+        } else if selectedTopicID == "nari" {
+            NariDestinationFeed(
+                giftProducts: nariGiftProducts,
+                archiveProducts: nariArchiveProducts,
+                topInset: destinationTopInset,
+                namespace: namespace
             )
         } else {
             storyFeed
@@ -777,6 +842,18 @@ struct HomePage: View {
             }
             .flatMap { $0.resolvedProducts(from: merchants) }
             .filter { seenProducts.insert($0.id).inserted }
+    }
+
+    /// Nari's authored edit combines her stated BKR interest with the public
+    /// archive-fashion assortment. It stays separate from buyer history.
+    private var nariGiftProducts: [ResolvedStoryProduct] {
+        NariDestinationCatalog.giftProducts(from: merchants)
+    }
+
+    /// Public catalog fixtures only: no account, relationship, or warehouse
+    /// lookup is involved in the archive-fashion destination.
+    private var nariArchiveProducts: [ResolvedStoryProduct] {
+        NariDestinationCatalog.archiveProducts(from: merchants)
     }
 
     /// Luke's authenticated Shop relationship graph is the source of truth
@@ -1320,7 +1397,8 @@ struct HomePage: View {
                     borderOpacity: borderOpacity,
                     shadowOpacity: shadowOpacity,
                     freezesParallax: expandingStoryID == story.id,
-                    // The takeover already supplies the spatial motion for
+                    surfaceTransitionSourceID: story.id == NariDestinationCatalog.birthdayGiftStoryID ? NariDestinationCatalog.homeGiftTransitionSourceID : nil,
+                    surfaceTransitionNamespace: story.id == NariDestinationCatalog.birthdayGiftStoryID ? namespace : nil,
                     // The full-bleed takeover already supplies the spatial
                     // motion. Avoid stacking film parallax on top of it.
                     scrollViewportHeight: scrollMotionEnabled ? viewportHeight : nil,
@@ -1349,14 +1427,13 @@ struct HomePage: View {
             appliesScrollMotion ? SpringPreset.responsive : nil,
             value: activeFeedStory?.id
         )
-        .matchedTransitionSource(id: story.id, in: namespace) { source in
-            source
-                .shadow(
-                    color: .black.opacity(0.10 * shadowOpacity),
-                    radius: 12,
-                    y: 5
-                )
-        }
+        .modifier(
+            HomeStoryTransitionSource(
+                storyID: story.id,
+                namespace: namespace,
+                shadowOpacity: shadowOpacity
+            )
+        )
     }
 
     private func paginatedPostCard(
@@ -1459,6 +1536,19 @@ struct HomePage: View {
     /// match wins over secondary membership so cards such as New York graphics
     /// can own a destination even when they also appear in Type & transit.
     private func openTopic(for story: FeedStory) {
+        if story.id == NariDestinationCatalog.birthdayGiftStoryID {
+            coordinator.resetScrollState()
+            expandingStoryID = story.id
+            coordinator.pushRoute(
+                .story(
+                    storyId: HypothesisShelfCatalog.giftGuideStoryID,
+                    sourceId: NariDestinationCatalog.homeGiftTransitionSourceID,
+                    giftRecipientName: "Nari"
+                )
+            )
+            return
+        }
+
         if story.id.hasPrefix("custom-feed-") {
             coordinator.resetScrollState()
             expandingStoryID = story.id
@@ -1658,12 +1748,13 @@ struct HomePage: View {
             stories.firstIndex(where: { $0.id == id })
         } ?? 0
         let urls = stories[currentIndex..<min(currentIndex + 3, stories.endIndex)]
-            .compactMap {
-                $0.lifestyleImageURL(
-                    from: merchants,
-                    format: .portrait,
-                    role: "feed-hero"
-                )
+            .compactMap { story in
+                FeedCoverCatalog.presentation(for: story)?.coverURL(from: merchants)
+                    ?? story.lifestyleImageURL(
+                        from: merchants,
+                        format: .portrait,
+                        role: "feed-hero"
+                    )
             }
 
         Task(priority: .utility) {
@@ -1714,7 +1805,6 @@ struct HomePage: View {
             feedChromeTransition.progress = 0
             visibleStoryID = nil
         }
-
     }
 
     private func commitVisibleStoryID(_ newValue: String?) {

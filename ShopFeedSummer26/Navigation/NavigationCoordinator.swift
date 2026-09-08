@@ -112,7 +112,7 @@ final class NavigationCoordinator {
 
     /// Push a route onto the current page's navigation stack.
     func pushRoute(_ route: HomeRoute) {
-        if case .story(let storyID, let sourceID) = route,
+        if case .story(let storyID, let sourceID, _) = route,
            sourceID == nil,
            selectedPage == 0,
            homePath.isEmpty,
@@ -166,7 +166,7 @@ final class NavigationCoordinator {
     /// Switches between sibling destinations without adding another level to
     /// the back stack (for example, adjacent subtopics in the same topic).
     func replaceCurrentRoute(_ route: HomeRoute) {
-        if case .story(let storyID, let sourceID) = route,
+        if case .story(let storyID, let sourceID, _) = route,
            sourceID == nil,
            selectedPage == 0,
            homePath.isEmpty,

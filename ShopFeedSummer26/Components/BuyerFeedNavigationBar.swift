@@ -84,6 +84,11 @@ struct BuyerFeedNavigationBar: View {
                     proxy.scrollTo(selectedTopicID, anchor: .center)
                 }
             }
+            .onAppear {
+                guard let selectedIndex = topics.firstIndex(where: { $0.id == selectedTopicID }),
+                      selectedIndex > 2 else { return }
+                proxy.scrollTo(selectedTopicID, anchor: .center)
+            }
             .onChange(of: profile.id) { _, _ in
                 proxy.scrollTo(selectedTopicID, anchor: .leading)
             }

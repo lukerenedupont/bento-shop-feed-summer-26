@@ -46,6 +46,7 @@ COHORT = [
     ("Katrina", "Katarina"),
     ("Kenny", "Kenny"),
     ("Archie", "Archie"),
+    ("Ashten", "Ashten"),
 ]
 
 

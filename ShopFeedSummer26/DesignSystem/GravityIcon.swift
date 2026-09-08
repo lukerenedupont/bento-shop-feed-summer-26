@@ -241,6 +241,30 @@ enum GravityIcon: String, CaseIterable, Identifiable {
     }
 }
 
+/// Shared forward disclosure for editorial and media-led cards. It follows
+/// the Hyperfeed treatment: one quiet, translucent circle with a direct arrow
+/// rather than mixing bare arrows and list chevrons across destinations.
+struct FeedForwardDisclosure: View {
+    var size: CGFloat = 40
+    var surface: Color = .black.opacity(0.16)
+    var glassTint: Color = .black.opacity(0.12)
+    var foreground: Color = .white
+
+    var body: some View {
+        GravityIcon.arrowRight.image
+            .resizable()
+            .scaledToFit()
+            .frame(width: 16, height: 16)
+            .foregroundStyle(foreground)
+            .frame(width: size, height: size)
+            .background(surface, in: Circle())
+            .glassEffect(.regular.tint(glassTint), in: .circle)
+            .overlay {
+                Circle().strokeBorder(.white.opacity(0.14), lineWidth: 0.5)
+            }
+    }
+}
+
 #Preview("Icon grid") {
     let columns = [GridItem(.adaptive(minimum: 72), spacing: GravitySpacing.space12)]
     return ScrollView {

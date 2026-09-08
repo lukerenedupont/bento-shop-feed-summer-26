@@ -345,12 +345,16 @@ enum HypothesisShelfCatalog {
             forYouStoryIDs.insert(performanceSneakerStoryID, at: min(3, forYouStoryIDs.count))
         }
 
+        // Synthetic preview buyers remain explicitly discovery-led. This
+        // keeps fictional fixtures from presenting borrowed public products
+        // as observed account activity.
+        let evidence: BuyerShelfEvidence = user.id == "ashten" ? .discovery : .observed
         let forYou = BuyerFeedTopic(
             id: "for-you",
             label: "For you",
             sourceCategoryID: "for-you",
             storyIDs: forYouStoryIDs,
-            evidence: .observed
+            evidence: evidence
         )
         let topics = topicPresentation.compactMap { presentation -> BuyerFeedTopic? in
             var storyIDs = user.shelves
@@ -371,7 +375,7 @@ enum HypothesisShelfCatalog {
                 label: presentation.label,
                 sourceCategoryID: presentation.id,
                 storyIDs: storyIDs,
-                evidence: .observed
+                evidence: evidence
             )
         }
         let items = user.shelves.flatMap(\.items)
@@ -382,13 +386,15 @@ enum HypothesisShelfCatalog {
             accentHex: user.accent,
             avatarAssetName: avatarAssetName(for: user.id),
             topics: [forYou] + topics,
-            utility: BuyerUtilityConfiguration(
-                buyAgainStoryID: items.contains(where: \.buyAgain) ? "" : nil,
-                recentlyViewedStoryID: items.contains(where: \.saved) ? "" : nil,
-                ownedAdjacencyStoryID: items.contains(where: \.openLoop) ? "" : nil,
-                showsCart: false,
-                showsOrders: user.id == "luke"
-            )
+            utility: user.id == "ashten"
+                ? .fullPrototype
+                : BuyerUtilityConfiguration(
+                    buyAgainStoryID: items.contains(where: \.buyAgain) ? "" : nil,
+                    recentlyViewedStoryID: items.contains(where: \.saved) ? "" : nil,
+                    ownedAdjacencyStoryID: items.contains(where: \.openLoop) ? "" : nil,
+                    showsCart: false,
+                    showsOrders: user.id == "luke"
+                )
         )
     }
 

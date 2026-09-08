@@ -12,6 +12,7 @@ struct StoryTopicPage: View {
     var merchantOverride: [SampleMerchant]? = nil
     var enrichmentProducts: [ResolvedStoryProduct] = []
     var closeOnlyNavigation = false
+    var giftRecipientName: String? = nil
 
     @Environment(NavigationCoordinator.self) private var coordinator
     @State private var previousNavBarTint: Color?
@@ -20,9 +21,15 @@ struct StoryTopicPage: View {
     private var isLegacyStory: Bool {
         PersonalizedFeedCatalog.current.stories.contains { $0.id == storyID } == false
     }
+    private var isNariGiftGuide: Bool {
+        giftRecipientName?.caseInsensitiveCompare("Nari") == .orderedSame
+    }
     private var merchants: [SampleMerchant] {
         if let merchantOverride { return merchantOverride }
-        return isLegacyStory ? LegacyFeedArchive.merchants : SampleMerchant.all
+        let source = isLegacyStory ? LegacyFeedArchive.merchants : SampleMerchant.all
+        return isNariGiftGuide
+            ? NariDestinationCatalog.destinationMerchants(from: source)
+            : source
     }
     private var story: FeedStory? {
         if let storyOverride { return storyOverride }
@@ -110,10 +117,14 @@ struct StoryTopicPage: View {
 
     var body: some View {
         if let story {
+            let resolvedMerchants = merchants
             TopicDetailPage(
                 story: story,
-                merchants: merchants,
-                enrichmentProducts: enrichmentProducts
+                merchants: resolvedMerchants,
+                enrichmentProducts: isNariGiftGuide
+                    ? NariDestinationCatalog.giftProducts(from: resolvedMerchants) + enrichmentProducts
+                    : enrichmentProducts,
+                giftRecipientName: giftRecipientName
             )
             .navigationTransition(
                 .zoom(

@@ -192,6 +192,11 @@ struct StoryFeedCard: View {
     var borderOpacity: Double = 0.12
     var shadowOpacity: Double = 1
     var freezesParallax = false
+    /// A shared-view source scoped to the media surface rather than the live
+    /// commerce foreground. This keeps product rails out of the synchronous
+    /// navigation snapshot for heavier destination cards.
+    var surfaceTransitionSourceID: String? = nil
+    var surfaceTransitionNamespace: Namespace.ID? = nil
     /// Enables scroll-relative movement for the ambient film without moving
     /// any foreground commerce content. Nil outside a paginated feed.
     var scrollViewportHeight: CGFloat? = nil
@@ -220,10 +225,17 @@ struct StoryFeedCard: View {
         }
 
         var seen = Set<String>()
+        var seenImageURLs = Set<String>()
         var assortment: [ResolvedStoryProduct] = []
 
         func append(_ item: ResolvedStoryProduct) {
             guard seen.insert(item.id).inserted else { return }
+            let imageURL = item.product.imageURL ?? ""
+            let imageKey = imageURL
+                .split(separator: "?", maxSplits: 1)
+                .first
+                .map(String.init) ?? imageURL
+            guard imageKey.isEmpty || seenImageURLs.insert(imageKey).inserted else { return }
             assortment.append(item)
         }
 
@@ -314,14 +326,7 @@ struct StoryFeedCard: View {
         } label: {
             ZStack {
                 if showsBackground {
-                    atmosphericBackground
-                        .frame(width: width, height: height)
-                        .scaleEffect(backgroundBlurRadius > 0 ? 1.12 : 1)
-                        .blur(radius: backgroundBlurRadius, opaque: true)
-                    if !usesLightSphereCover {
-                        backgroundScrim
-                            .frame(width: width, height: height)
-                    }
+                    transitionReadyBackground
                 }
 
                 if showsForegroundContent {
@@ -382,6 +387,9 @@ struct StoryFeedCard: View {
             if productLayout == .compactGrid {
                 compactGridComposition
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+            } else if productLayout == .bottomCarousel {
+                bottomCarouselComposition
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             } else {
                 scrollAwareStoryHeader
                     .frame(
@@ -396,10 +404,6 @@ struct StoryFeedCard: View {
             }
             if productLayout == .stackedDeck {
                 productCarousel
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-            }
-            if productLayout == .bottomCarousel {
-                bottomProductCarousel
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             }
         }
@@ -453,6 +457,31 @@ struct StoryFeedCard: View {
     }
 
     // MARK: - Atmosphere
+
+    @ViewBuilder
+    private var transitionReadyBackground: some View {
+        let surface = ZStack {
+            atmosphericBackground
+                .frame(width: width, height: height)
+                .scaleEffect(backgroundBlurRadius > 0 ? 1.12 : 1)
+                .blur(radius: backgroundBlurRadius, opaque: true)
+            if !usesLightSphereCover {
+                backgroundScrim
+                    .frame(width: width, height: height)
+            }
+        }
+        .frame(width: width, height: height)
+        .clipShape(cardShape)
+
+        if let surfaceTransitionSourceID, let surfaceTransitionNamespace {
+            surface.matchedTransitionSource(
+                id: surfaceTransitionSourceID,
+                in: surfaceTransitionNamespace
+            )
+        } else {
+            surface
+        }
+    }
 
     private var atmosphericBackground: some View {
         ZStack {
@@ -595,19 +624,34 @@ struct StoryFeedCard: View {
     private var backgroundScrim: some View {
         let bottomOpacity = max(authoredCover?.textScrimOpacity ?? 0.34, 0.46)
 
-        return LinearGradient(
-            stops: [
-                .init(color: .black.opacity(topScrimOpacity), location: 0),
-                .init(color: .black.opacity(topScrimOpacity * 0.62), location: 0.14),
-                .init(color: .black.opacity(topScrimOpacity * 0.18), location: 0.30),
-                .init(color: .clear, location: 0.42),
-                .init(color: .clear, location: 0.62),
-                .init(color: .black.opacity(bottomOpacity * 0.22), location: 0.78),
-                .init(color: .black.opacity(bottomOpacity), location: 1),
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
+        return ZStack {
+            LinearGradient(
+                stops: [
+                    .init(color: .black.opacity(topScrimOpacity), location: 0),
+                    .init(color: .black.opacity(topScrimOpacity * 0.62), location: 0.14),
+                    .init(color: .black.opacity(topScrimOpacity * 0.18), location: 0.30),
+                    .init(color: .clear, location: 0.42),
+                    .init(color: .clear, location: 0.62),
+                    .init(color: .black.opacity(bottomOpacity * 0.22), location: 0.78),
+                    .init(color: .black.opacity(bottomOpacity), location: 1),
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+
+            if productLayout == .bottomCarousel {
+                LinearGradient(
+                    stops: [
+                        .init(color: .clear, location: 0.52),
+                        .init(color: Color(hex: story.accentHex).opacity(0.18), location: 0.62),
+                        .init(color: Color(hex: story.accentHex).opacity(0.72), location: 0.77),
+                        .init(color: Color(hex: story.accentHex).opacity(0.96), location: 1),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            }
+        }
     }
 
     // MARK: - Header
@@ -661,11 +705,7 @@ struct StoryFeedCard: View {
     // MARK: - Footer
 
     private var footerArrow: some View {
-        Image(systemName: "arrow.right")
-            .font(.system(size: 15, weight: .semibold))
-            .foregroundStyle(.white)
-            .frame(width: 40, height: 40)
-            .background(.white.opacity(0.12), in: Circle())
+        FeedForwardDisclosure()
     }
 
     /// Large native square cards keep the assortment useful over the media.
@@ -687,6 +727,16 @@ struct StoryFeedCard: View {
         .padding(.horizontal, -GravitySpacing.space20)
         .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
         .frame(height: tileWidth)
+    }
+
+    /// Bottom-carousel cards use one commerce block so the title cannot float
+    /// independently over the hero. This is shared by Leon, Nari, and every
+    /// story using the format; the story accent supplies the colored floor.
+    private var bottomCarouselComposition: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
+            storyHeader
+            bottomProductCarousel
+        }
     }
 
     /// Dense assortment treatment: the title stays fixed at the top while the
@@ -871,6 +921,30 @@ struct StoryFeedCard: View {
             }
     }
 
+}
+
+/// Most feed cards use their complete view as the shared-view source. Nari's
+/// Home card registers its media surface inside `StoryFeedCard` instead, so
+/// its live product carousel is never flattened on the tap frame.
+struct HomeStoryTransitionSource: ViewModifier {
+    let storyID: String
+    let namespace: Namespace.ID
+    let shadowOpacity: Double
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if storyID == NariDestinationCatalog.birthdayGiftStoryID {
+            content
+        } else {
+            content.matchedTransitionSource(id: storyID, in: namespace) { source in
+                source.shadow(
+                    color: .black.opacity(0.10 * shadowOpacity),
+                    radius: 12,
+                    y: 5
+                )
+            }
+        }
+    }
 }
 
 #Preview("World story") {

@@ -1,6 +1,15 @@
 import Observation
 import SwiftUI
 
+struct GiftGuidePersonalizationContext {
+    let age: Double?
+    let personaID: String?
+    let personaTitle: String?
+    let interests: [String]
+    let priorities: [String]
+    let discoveryStyleID: String?
+}
+
 /// PROTOTYPE — Session-only state shared by the gift content and its pinned
 /// steering dock so every control visibly transforms one coherent page.
 @Observable
@@ -20,19 +29,62 @@ final class GiftGuidePrototypeState {
     var intentIsConfirmed = false
     var note = ""
     var appliedNote = ""
+    var profilePersonaID: String?
+    var profilePersonaTitle: String?
+    var profileKeywords: [String] = []
+    var profilePriorities: [String] = []
+    var profileDiscoveryStyleID: String?
     var updateToken = 0
     var deckIndex = 0
 
-    init(brief: GiftGuideBrief? = nil) {
-        guard let brief else { return }
-        recipientName = brief.recipientName
-        occasion = brief.occasion
-        interests = brief.interests
-        setting = brief.interests.contains(.outdoors) ? .outdoors : .both
-        intent = brief.interests.contains(.surprises) ? .surprise : .fun
-        settingIsConfirmed = true
-        intentIsConfirmed = true
-        appliedNote = "\(brief.occasion) · \(brief.interests.prefix(3).map(\.title).joined(separator: ", "))"
+    init(
+        brief: GiftGuideBrief? = nil,
+        personalization: GiftGuidePersonalizationContext? = nil,
+        adultRecipient: Bool = false
+    ) {
+        if let brief {
+            recipientName = brief.recipientName
+            occasion = brief.occasion
+            interests = brief.interests
+            setting = brief.interests.contains(.outdoors) ? .outdoors : .both
+            intent = brief.interests.contains(.surprises) ? .surprise : .fun
+            settingIsConfirmed = true
+            intentIsConfirmed = true
+            appliedNote = "\(brief.occasion) · \(brief.interests.prefix(3).map(\.title).joined(separator: ", "))"
+        }
+
+        if adultRecipient {
+            recipientName = "Nari"
+            interests = []
+            setting = .indoors
+            settingIsConfirmed = false
+        }
+        guard let personalization else { return }
+
+        if let age = personalization.age {
+            self.age = age
+            ageIsConfirmed = true
+        }
+        profilePersonaID = personalization.personaID
+        profilePersonaTitle = personalization.personaTitle
+        profileKeywords = personalization.interests
+        profilePriorities = personalization.priorities
+        profileDiscoveryStyleID = personalization.discoveryStyleID
+
+        if personalization.personaID == "individualist" {
+            setting = .both
+        } else if personalization.personaID != nil {
+            setting = .indoors
+        }
+        if personalization.priorities.contains("Price") {
+            budget = 100
+            budgetIsConfirmed = true
+        }
+        if personalization.discoveryStyleID == "familiar" {
+            intent = .useful
+        } else if personalization.discoveryStyleID == "surprising" {
+            intent = .surprise
+        }
     }
 
     func registerUpdate(_: String) {
@@ -41,14 +93,84 @@ final class GiftGuidePrototypeState {
     }
 }
 
+/// Copy and controls shared by every recipient-specific version of the same
+/// gift-guide destination. Leon keeps the child age control; adult recipients
+/// use the rest of the tuning model without pretending age is useful context.
+struct GiftGuideRecipient {
+    let name: String
+
+    static let leon = GiftGuideRecipient(name: "Leon")
+
+    var isNari: Bool { name.caseInsensitiveCompare("Nari") == .orderedSame }
+    var usesAge: Bool { !isNari }
+    var notePlaceholder: String {
+        usesAge
+            ? "Dinosaurs, making things, camping…"
+            : "Archive fashion, jewelry, interiors…"
+    }
+    var voiceExample: String {
+        usesAge
+            ? "more things he can build himself"
+            : "more archive fashion and design objects"
+    }
+    var noteQuestion: String {
+        usesAge ? "What is \(name) into lately?" : "Anything specific for this gift?"
+    }
+    var occasionPlaceholder: String {
+        usesAge
+            ? notePlaceholder
+            : "An anniversary, an exact piece, a favorite color…"
+    }
+}
+
 /// PROTOTYPE — A steerable topic that tests whether recipient controls can
 /// make a gift guide feel alive. State is intentionally session-only.
 struct GiftGuidePrototypeContent: View {
     let products: [ResolvedStoryProduct]
     @Bindable var state: GiftGuidePrototypeState
+    let recipient: GiftGuideRecipient
+    private let initialProducts: [ResolvedStoryProduct]
 
     @Environment(NavigationCoordinator.self) private var coordinator
     @State private var deckDragOffset: CGFloat = 0
+    @State private var deckIsTransitioning = false
+    @State private var rankedProductCache: [ResolvedStoryProduct] = []
+
+    init(
+        products: [ResolvedStoryProduct],
+        state: GiftGuidePrototypeState,
+        recipient: GiftGuideRecipient
+    ) {
+        self.products = products
+        self.state = state
+        self.recipient = recipient
+
+        var seenImageURLs = Set<String>()
+        initialProducts = products.filter { item in
+            let imageURL = item.product.imageURL ?? ""
+            let imageKey = imageURL
+                .split(separator: "?", maxSplits: 1)
+                .first
+                .map(String.init) ?? imageURL
+            return imageKey.isEmpty || seenImageURLs.insert(imageKey).inserted
+        }
+    }
+
+    private enum NariProductFamily: CaseIterable {
+        case tops
+        case bottoms
+        case jewelry
+        case footwear
+        case objects
+        case other
+    }
+
+    private struct DeckEntry: Identifiable {
+        let depth: Int
+        let product: ResolvedStoryProduct
+
+        var id: String { product.id }
+    }
 
     private var showsTuning: Bool {
         get { state.showsTuning }
@@ -93,10 +215,24 @@ struct GiftGuidePrototypeContent: View {
     private var updateToken: Int { state.updateToken }
 
     private var rankedProducts: [ResolvedStoryProduct] {
-        products.sorted { score($0) > score($1) }
+        rankedProductCache.isEmpty ? initialProducts : rankedProductCache
+    }
+
+    private func makeRankedProducts() -> [ResolvedStoryProduct] {
+        let ranked = initialProducts.sorted { score($0) > score($1) }
+        return recipient.isNari ? diversifiedNariProducts(ranked) : ranked
     }
 
     private var leadProducts: [ResolvedStoryProduct] {
+        if recipient.isNari {
+            let candidates = Array(nariFashionProducts.prefix(2))
+                + Array(nariJewelryProducts.prefix(1))
+            var seen = Set<String>()
+            return Array(candidates.filter { seen.insert($0.id).inserted }.prefix(3))
+        }
+        if !recipient.usesAge {
+            return Array(rankedProducts.prefix(3))
+        }
         let anchorMerchantIDs = ["tin-can-kids", "pollen-robotics"]
         let anchors = anchorMerchantIDs.compactMap { merchantID in
             products.first { $0.merchant.id == merchantID }
@@ -124,40 +260,181 @@ struct GiftGuidePrototypeContent: View {
         }
     }
 
+    private var nariBKRProducts: [ResolvedStoryProduct] {
+        rankedProducts.filter { $0.merchant.id == "bkr" }
+    }
+
+    private var nariArchiveProducts: [ResolvedStoryProduct] {
+        rankedProducts.filter { $0.merchant.id != "bkr" }
+    }
+
+    private var nariJewelryProducts: [ResolvedStoryProduct] {
+        let jewelryTerms = ["jewel", "ring", "necklace", "bracelet", "earring", "brooch", "silver", "gold"]
+        let matches = nariArchiveProducts.filter { item in
+            let text = searchableText(for: item)
+            return jewelryTerms.contains(where: text.contains)
+                || item.merchant.id == "shelf-shop-mano-vintage-jewellery-2b7e972"
+        }
+        return matches.isEmpty ? nariArchiveProducts : matches
+    }
+
+    private var nariFashionProducts: [ResolvedStoryProduct] {
+        let jewelryIDs = Set(nariJewelryProducts.map(\.id))
+        let fashion = nariArchiveProducts.filter { !jewelryIDs.contains($0.id) }
+        return fashion.isEmpty ? nariArchiveProducts : fashion
+    }
+
+    private var deckProducts: [ResolvedStoryProduct] {
+        guard recipient.isNari else { return rankedProducts }
+        let featuredIDs = Set((leadProducts + routeProducts).map(\.id))
+        return rankedProducts.filter { !featuredIDs.contains($0.id) }
+            + rankedProducts.filter { featuredIDs.contains($0.id) }
+    }
+
+    private var deckEntries: [DeckEntry] {
+        guard !deckProducts.isEmpty else { return [] }
+        return (0..<min(3, deckProducts.count)).map { depth in
+            let itemIndex = (state.deckIndex + depth) % deckProducts.count
+            return DeckEntry(depth: depth, product: deckProducts[itemIndex])
+        }
+    }
+
+    private var nariFashionRailProducts: [ResolvedStoryProduct] {
+        let featuredIDs = Set((leadProducts + routeProducts).map(\.id))
+        return nariFashionProducts.filter { !featuredIDs.contains($0.id) }
+            + nariFashionProducts.filter { featuredIDs.contains($0.id) }
+    }
+
+    private var nariDiscoveryProducts: [ResolvedStoryProduct] {
+        Array(rankedProducts.prefix(60))
+    }
+
+    private func diversifiedNariProducts(
+        _ ranked: [ResolvedStoryProduct]
+    ) -> [ResolvedStoryProduct] {
+        var buckets = Dictionary(
+            grouping: ranked,
+            by: nariProductFamily(for:)
+        )
+        var diversified: [ResolvedStoryProduct] = []
+        var lastMerchantID: String?
+
+        while diversified.count < ranked.count {
+            var addedProduct = false
+            for family in NariProductFamily.allCases {
+                guard var bucket = buckets[family], !bucket.isEmpty else { continue }
+                let nextIndex = bucket.firstIndex {
+                    $0.merchant.id != lastMerchantID
+                } ?? bucket.startIndex
+                let next = bucket.remove(at: nextIndex)
+                buckets[family] = bucket
+                diversified.append(next)
+                lastMerchantID = next.merchant.id
+                addedProduct = true
+            }
+            if !addedProduct { break }
+        }
+        return diversified
+    }
+
+    private func nariProductFamily(
+        for item: ResolvedStoryProduct
+    ) -> NariProductFamily {
+        if item.merchant.id == "bkr" { return .objects }
+        let text = searchableText(for: item)
+        if ["jewel", "ring", "necklace", "bracelet", "earring", "brooch", "silver", "gold"]
+            .contains(where: text.contains) {
+            return .jewelry
+        }
+        if ["pants", "trouser", "bottom", "skirt", "shorts"]
+            .contains(where: text.contains) {
+            return .bottoms
+        }
+        if ["sneaker", "shoe", "boot", "loafer", "sandal"]
+            .contains(where: text.contains) {
+            return .footwear
+        }
+        if ["shirt", "t-shirt", "tee", "tank", "top", "blouse", "sweater", "jacket", "coat"]
+            .contains(where: text.contains) {
+            return .tops
+        }
+        return .other
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 30) {
+        LazyVStack(alignment: .leading, spacing: 30) {
             leadSection
 
             giftRoutes
 
-            productDeck
+            if recipient.isNari {
+                productRail(
+                    title: "Archive pieces",
+                    subtitle: "Westwood and independent designers, picked for Nari",
+                    products: nariFashionRailProducts,
+                    usesImageShadow: false
+                )
 
-            productRail(
-                title: settingSectionTitle,
-                subtitle: setting.sectionSubtitle,
-                products: rankedProducts
-            )
+                productDeck
 
-            productRail(
-                title: budgetTitle,
-                subtitle: "Easy yeses that stay inside the brief",
-                products: withinBudget
-            )
+                productRail(
+                    title: "Vintage jewelry",
+                    subtitle: "Sculptural pieces with character",
+                    products: nariJewelryProducts,
+                    usesImageShadow: false
+                )
 
-            productRail(
-                title: intent == .together ? "Things you can do together" : "A gift with a story",
-                subtitle: intent == .together
-                    ? "Projects and adventures that become shared time"
-                    : "Distinctive finds from independent shops",
-                products: sharedActivityProducts
-            )
+                productRail(
+                    title: "Everyday design",
+                    subtitle: "BKR bottles in colors she might love",
+                    products: nariBKRProducts,
+                    usesImageShadow: false
+                )
+
+                nariDiscoveryGrid
+            } else {
+                productDeck
+
+                productRail(
+                    title: settingSectionTitle,
+                    subtitle: setting.sectionSubtitle,
+                    products: rankedProducts
+                )
+
+                productRail(
+                    title: budgetTitle,
+                    subtitle: "Easy yeses that stay inside the brief",
+                    products: withinBudget
+                )
+
+                productRail(
+                    title: intent == .together ? "Things you can do together" : "A gift with a story",
+                    subtitle: intent == .together
+                        ? "Projects and adventures that become shared time"
+                        : "Distinctive finds from independent shops",
+                    products: sharedActivityProducts
+                )
+            }
 
             conversationalRefinement
                 .padding(.horizontal, GravitySpacing.space12)
         }
         .padding(.top, GravitySpacing.space8)
         .padding(.bottom, 140)
-        .animation(.spring(response: 0.38, dampingFraction: 0.88), value: updateToken)
+        .onAppear {
+            if rankedProductCache.isEmpty {
+                Task { @MainActor in
+                    // Let the hero and shared-view transition commit first.
+                    // Ranking is below the fold and only needs one pass.
+                    await Task.yield()
+                    guard rankedProductCache.isEmpty else { return }
+                    rankedProductCache = makeRankedProducts()
+                }
+            }
+        }
+        .onChange(of: updateToken) {
+            rankedProductCache = makeRankedProducts()
+        }
         .sheet(isPresented: Binding(
             get: { showsTuning },
             set: { showsTuning = $0 }
@@ -169,8 +446,9 @@ struct GiftGuidePrototypeContent: View {
                 budget: Binding(get: { budget }, set: { budget = $0 }),
                 intent: Binding(get: { intent }, set: { intent = $0 }),
                 note: Binding(get: { note }, set: { note = $0 }),
+                recipient: recipient,
                 apply: {
-                    ageIsConfirmed = true
+                    if recipient.usesAge { ageIsConfirmed = true }
                     settingIsConfirmed = true
                     state.budgetIsConfirmed = true
                     intentIsConfirmed = true
@@ -185,7 +463,7 @@ struct GiftGuidePrototypeContent: View {
 
     private var leadSection: some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space12) {
-            sectionHeading("Shop’s take", subtitle: "Start with connection, then leave room for wonder")
+            sectionHeading(recipient.isNari ? "Top picks for Nari" : "Shop’s take", subtitle: shopTakeSubtitle)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: GravitySpacing.space10) {
                     ForEach(Array(leadProducts.enumerated()), id: \.element.id) { index, item in
@@ -247,7 +525,12 @@ struct GiftGuidePrototypeContent: View {
 
     private var giftRoutes: some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space12) {
-            sectionHeading("Ways into the gift", subtitle: "Start with the kind of moment you want to create")
+            sectionHeading(
+                recipient.isNari ? "Shop by instinct" : "Ways into the gift",
+                subtitle: recipient.isNari
+                    ? "Start with a direction"
+                    : "Start with the kind of moment you want to create"
+            )
             LazyVGrid(
                 columns: Array(repeating: GridItem(.flexible(), spacing: GravitySpacing.space8), count: 2),
                 spacing: GravitySpacing.space8
@@ -261,6 +544,22 @@ struct GiftGuidePrototypeContent: View {
     }
 
     private var routeProducts: [ResolvedStoryProduct] {
+        if recipient.isNari {
+            let leadIDs = Set(leadProducts.map(\.id))
+            let remainingFashion = nariFashionProducts.filter { !leadIDs.contains($0.id) }
+            let remainingJewelry = nariJewelryProducts.filter { !leadIDs.contains($0.id) }
+            let candidates = [
+                remainingFashion.first,
+                remainingFashion.dropFirst().first,
+                remainingJewelry.first,
+                nariBKRProducts.first,
+            ].compactMap { $0 }
+            var seen = Set<String>()
+            return Array(candidates.filter { seen.insert($0.id).inserted }.prefix(4))
+        }
+        if !recipient.usesAge {
+            return Array(rankedProducts.prefix(4))
+        }
         let preferredMerchantIDs = ["tin-can-kids", "pollen-robotics", "nocs", "moma"]
         return preferredMerchantIDs.compactMap { merchantID in
             rankedProducts.first { $0.merchant.id == merchantID }
@@ -302,7 +601,21 @@ struct GiftGuidePrototypeContent: View {
     }
 
     private func routeTitle(for item: ResolvedStoryProduct) -> String {
-        switch item.merchant.id {
+        if recipient.isNari {
+            let text = searchableText(for: item)
+            if item.merchant.id == "bkr" { return "Color for every day" }
+            if item.merchant.id == "shelf-shop-mano-vintage-jewellery-2b7e972"
+                || ["jewel", "ring", "necklace", "bracelet", "earring", "brooch"]
+                    .contains(where: text.contains) {
+                return "Sculptural jewelry"
+            }
+            if item.merchant.id == "shelf-shop-good-s-vintage-0aae91a"
+                || item.merchant.id == "shelf-shop-the-list-af09863" {
+                return "One-of-a-kind finds"
+            }
+            return "Archive fashion"
+        }
+        return switch item.merchant.id {
         case "tin-can-kids": "Keep \(state.recipientName) connected"
         case "pollen-robotics": "Build and code"
         case "nocs": "Explore outside"
@@ -313,17 +626,32 @@ struct GiftGuidePrototypeContent: View {
     private var productDeck: some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space16) {
             sectionHeading(
-                "Swipe through ideas",
-                subtitle: "A quick stack of gifts picked for \(state.recipientName)"
+                recipient.isNari ? "Tune these picks" : "Swipe through ideas",
+                subtitle: recipient.isNari
+                    ? "Swipe left to pass · right to see more like it"
+                    : "A quick stack of gifts picked for \(state.recipientName)"
             )
 
             ZStack {
-                ForEach(Array((0..<min(3, rankedProducts.count)).reversed()), id: \.self) { depth in
-                    let itemIndex = (state.deckIndex + depth) % rankedProducts.count
-                    deckCard(rankedProducts[itemIndex], depth: depth)
+                ForEach(Array(deckEntries.reversed())) { entry in
+                    deckCard(entry.product, depth: entry.depth)
                 }
             }
             .frame(height: 394)
+            .padding(.horizontal, GravitySpacing.space20)
+
+            HStack(spacing: GravitySpacing.space8) {
+                deckFeedbackButton(
+                    title: "Not for her",
+                    systemImage: "xmark",
+                    isPositive: false
+                )
+                deckFeedbackButton(
+                    title: "More like this",
+                    systemImage: "checkmark",
+                    isPositive: true
+                )
+            }
             .padding(.horizontal, GravitySpacing.space20)
         }
     }
@@ -343,6 +671,32 @@ struct GiftGuidePrototypeContent: View {
                     startPoint: .top,
                     endPoint: .bottom
                 )
+            }
+            .overlay(alignment: .topLeading) {
+                if depth == 0 {
+                    Label("MORE LIKE THIS", systemImage: "checkmark")
+                    .font(GravityFont.semiBold.fixedFont(size: 12))
+                    .tracking(0.3)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, GravitySpacing.space12)
+                    .frame(height: 36)
+                    .background(.black.opacity(0.72), in: Capsule())
+                    .padding(GravitySpacing.space16)
+                    .opacity(deckFeedbackProgress(isPositive: true))
+                }
+            }
+            .overlay(alignment: .topTrailing) {
+                if depth == 0 {
+                    Label("NOT FOR HER", systemImage: "xmark")
+                        .font(GravityFont.semiBold.fixedFont(size: 12))
+                        .tracking(0.3)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, GravitySpacing.space12)
+                        .frame(height: 36)
+                        .background(.black.opacity(0.72), in: Capsule())
+                        .padding(GravitySpacing.space16)
+                        .opacity(deckFeedbackProgress(isPositive: false))
+                }
             }
             .overlay(alignment: .bottomLeading) {
                 VStack(alignment: .leading, spacing: GravitySpacing.space6) {
@@ -366,55 +720,119 @@ struct GiftGuidePrototypeContent: View {
             .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous))
             .scaleEffect(1 - CGFloat(depth) * 0.025, anchor: .bottom)
             .offset(
-                x: depth == 0 ? deckDragOffset : (depth == 1 ? -10 : 10),
+                x: depth == 0 ? deckDragOffset : 0,
                 y: CGFloat(depth) * -14
             )
             .rotationEffect(.degrees(
-                depth == 0 ? Double(deckDragOffset / 28) : (depth == 1 ? -2 : 2)
+                depth == 0 ? Double(deckDragOffset / 28) : 0
             ))
             .shadow(color: .black.opacity(depth == 0 ? 0.22 : 0.10), radius: 18, y: 10)
             .zIndex(Double(3 - depth))
-            .allowsHitTesting(depth == 0)
+            .allowsHitTesting(depth == 0 && !deckIsTransitioning)
             .contentShape(RoundedRectangle(cornerRadius: GravityRadius.r28, style: .continuous))
             .onTapGesture { open(item) }
-            .gesture(
+            .simultaneousGesture(
                 DragGesture(minimumDistance: 12)
                     .onChanged { value in
+                        guard !deckIsTransitioning else { return }
+                        guard abs(value.translation.width) > abs(value.translation.height) else {
+                            return
+                        }
                         deckDragOffset = value.translation.width
                     }
                     .onEnded { value in
-                        finishDeckSwipe(value.translation.width)
+                        guard !deckIsTransitioning else { return }
+                        guard abs(value.translation.width) > abs(value.translation.height) else {
+                            deckDragOffset = 0
+                            return
+                        }
+                        finishDeckSwipe(
+                            value.translation.width,
+                            projectedTranslation: value.predictedEndTranslation.width
+                        )
                     }
             )
     }
 
-    private func finishDeckSwipe(_ translation: CGFloat) {
-        guard abs(translation) > 56 else {
+    private func finishDeckSwipe(
+        _ translation: CGFloat,
+        projectedTranslation: CGFloat
+    ) {
+        guard !deckIsTransitioning else { return }
+        let completesSwipe = abs(translation) > 56 || abs(projectedTranslation) > 96
+        guard completesSwipe else {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.82)) {
                 deckDragOffset = 0
             }
             return
         }
 
-        let direction = translation < 0 ? 1 : -1
+        let resolvedTranslation = abs(projectedTranslation) > abs(translation)
+            ? projectedTranslation
+            : translation
+        sendDeckFeedback(isPositive: resolvedTranslation > 0)
+    }
+
+    private func sendDeckFeedback(isPositive: Bool) {
+        guard !deckIsTransitioning, !deckProducts.isEmpty else { return }
+        deckIsTransitioning = true
         withAnimation(.easeOut(duration: 0.18)) {
-            deckDragOffset = translation < 0 ? -480 : 480
+            deckDragOffset = isPositive ? 480 : -480
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.18) {
-            var transaction = Transaction()
-            transaction.disablesAnimations = true
-            withTransaction(transaction) {
-                state.deckIndex = (state.deckIndex + direction + rankedProducts.count) % rankedProducts.count
+            withAnimation(.easeOut(duration: 0.16)) {
+                state.deckIndex = (state.deckIndex + 1) % deckProducts.count
                 deckDragOffset = 0
             }
-            HapticFeedback.light.fire()
+            HapticFeedback.selection.fire()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.16) {
+                deckIsTransitioning = false
+            }
         }
+    }
+
+    private func deckFeedbackButton(
+        title: String,
+        systemImage: String,
+        isPositive: Bool
+    ) -> some View {
+        let directionProgress = deckFeedbackProgress(isPositive: isPositive)
+
+        return Button {
+            sendDeckFeedback(isPositive: isPositive)
+        } label: {
+            Label(title, systemImage: systemImage)
+                .font(GravityFont.semiBold.fixedFont(size: 13))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .background(
+                    .white.opacity(0.10 + (0.20 * directionProgress)),
+                    in: Capsule()
+                )
+                .overlay {
+                    Capsule().strokeBorder(
+                        .white.opacity(0.18 + (0.38 * directionProgress)),
+                        lineWidth: 0.5 + (0.5 * directionProgress)
+                    )
+                }
+        }
+        .buttonStyle(PressScaleButtonStyle(scale: 0.97))
+        .disabled(deckIsTransitioning)
+    }
+
+    private func deckFeedbackProgress(isPositive: Bool) -> CGFloat {
+        let directionalOffset = isPositive ? deckDragOffset : -deckDragOffset
+        let deadZone: CGFloat = 12
+        guard directionalOffset > deadZone else { return 0 }
+        return min((directionalOffset - deadZone) / 60, 1)
     }
 
     private func productRail(
         title: String,
         subtitle: String,
-        products: [ResolvedStoryProduct]
+        products: [ResolvedStoryProduct],
+        usesImageShadow: Bool = true
     ) -> some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space12) {
             sectionHeading(title, subtitle: subtitle)
@@ -429,7 +847,8 @@ struct GiftGuidePrototypeContent: View {
                                 productName: item.product.title,
                                 price: formatPrice(item.product.price),
                                 showFavoriteButton: true,
-                                favoriteIconHasContrastShadow: true
+                                favoriteIconHasContrastShadow: true,
+                                usesImageShadow: usesImageShadow
                             )
                             .frame(width: 132)
                         }
@@ -438,6 +857,41 @@ struct GiftGuidePrototypeContent: View {
                 }
                 .padding(.horizontal, GravitySpacing.space12)
             }
+        }
+    }
+
+    private var nariDiscoveryGrid: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
+            sectionHeading(
+                "More for Nari",
+                subtitle: "Archive fashion, accessories, and useful objects"
+            )
+
+            LazyVGrid(
+                columns: [
+                    GridItem(.flexible(), spacing: GravitySpacing.space8, alignment: .top),
+                    GridItem(.flexible(), spacing: GravitySpacing.space8, alignment: .top),
+                ],
+                alignment: .leading,
+                spacing: GravitySpacing.space24
+            ) {
+                ForEach(nariDiscoveryProducts) { item in
+                    Button { open(item) } label: {
+                        ProductCard(
+                            image: nil,
+                            imageURL: item.product.imageURL,
+                            merchantName: item.merchant.displayName,
+                            productName: item.product.title,
+                            price: formatPrice(item.product.price),
+                            showFavoriteButton: true,
+                            favoriteIconHasContrastShadow: true,
+                            usesImageShadow: false
+                        )
+                    }
+                    .buttonStyle(PressScaleButtonStyle())
+                }
+            }
+            .padding(.horizontal, GravitySpacing.space12)
         }
     }
 
@@ -463,9 +917,12 @@ struct GiftGuidePrototypeContent: View {
                 Image(systemName: "text.bubble")
                     .font(.system(size: 18, weight: .semibold))
                 VStack(alignment: .leading, spacing: GravitySpacing.space2) {
-                    Text("Tell Shop more about \(state.recipientName)")
+                    Text(recipient.usesAge ? "Tell Shop more about \(state.recipientName)" : "Fine-tune these picks")
                         .font(GravityFont.bold.fixedFont(size: 16))
-                    Text(appliedNote.isEmpty ? "What is \(state.recipientName) into lately?" : "“\(appliedNote)”")
+                    Text(recipient.usesAge
+                        ? (appliedNote.isEmpty ? "What is \(state.recipientName) into lately?" : "“\(appliedNote)”")
+                        : refinementSubtitle
+                    )
                         .font(GravityFont.regular.fixedFont(size: 13))
                         .foregroundStyle(.white.opacity(0.62))
                         .lineLimit(1)
@@ -482,7 +939,14 @@ struct GiftGuidePrototypeContent: View {
     }
 
     private func leadLabel(for item: ResolvedStoryProduct, index: Int) -> String {
-        switch item.merchant.id {
+        if recipient.isNari {
+            switch index {
+            case 0: return "Archive standout"
+            case 1: return "Independent designer"
+            default: return "Vintage jewelry"
+            }
+        }
+        return switch item.merchant.id {
         case "tin-can-kids": "Our starting point"
         case "pollen-robotics": "The delight pick"
         default: index == 2 ? "One to do together" : "A strong match"
@@ -490,7 +954,35 @@ struct GiftGuidePrototypeContent: View {
     }
 
     private var leadSubtitle: String {
-        "For an \(Int(age))-year-old who is \(setting.description.lowercased())"
+        if recipient.usesAge {
+            return "For an \(Int(age))-year-old who is \(setting.description.lowercased())"
+        }
+        if let profilePersonaTitle = state.profilePersonaTitle {
+            return "For \(recipient.name) · \(profilePersonaTitle)"
+        }
+        return "For \(recipient.name), who is \(setting.description.lowercased())"
+    }
+
+    private var shopTakeSubtitle: String {
+        if recipient.isNari, state.profilePersonaTitle == nil {
+            return "Archive pieces and sculptural details, picked for her"
+        }
+        guard !recipient.usesAge,
+              let persona = state.profilePersonaTitle else {
+            return "Start with connection, then leave room for wonder"
+        }
+        if let interest = state.profileKeywords.first {
+            let personaLabel = persona.replacingOccurrences(of: "The ", with: "")
+            return "Guided by her \(personaLabel.lowercased()) style and \(interest)"
+        }
+        return "Shaped by what you’ve told us about \(recipient.name)"
+    }
+
+    private var refinementSubtitle: String {
+        if recipient.usesAge {
+            return appliedNote.isEmpty ? "What is \(recipient.name) into lately?" : "“\(appliedNote)”"
+        }
+        return "Adjust the budget and direction"
     }
 
     private var budgetTitle: String {
@@ -500,13 +992,43 @@ struct GiftGuidePrototypeContent: View {
     private func score(_ item: ResolvedStoryProduct) -> Int {
         let text = "\(item.product.title) \(item.merchant.displayName) \(item.product.tags.joined(separator: " "))".lowercased()
         var value = price(of: item) <= budget ? 24 : -12
+        if recipient.isNari {
+            if item.merchant.id == "bkr" {
+                value -= 56
+            } else {
+                value += 42
+            }
+            if ["rick owens", "issey miyake", "comme des garçons", "comme des garcons", "ann demeulemeester", "diesel"]
+                .contains(where: text.contains) {
+                value += 64
+            }
+            if ["jewel", "ring", "sterling", "sculptural"]
+                .contains(where: text.contains) {
+                value += 34
+            }
+        }
         if setting == .outdoors && ["nocs", "outdoor", "binocular", "field"].contains(where: text.contains) { value += 70 }
         if setting == .indoors && ["design", "comic", "craft", "watch", "puzzle"].contains(where: text.contains) { value += 70 }
         if setting == .both && ["nocs", "craft", "comic", "watch", "robot", "screen-free"].contains(where: text.contains) { value += 34 }
-        if age <= 8 && ["puzzle", "craft"].contains(where: text.contains) { value += 45 }
-        if age >= 12 && ["watch", "comic", "design"].contains(where: text.contains) { value += 42 }
-        for interest in state.interests where interestKeywords(interest).contains(where: text.contains) {
-            value += 28
+        if recipient.usesAge,
+           age <= 8,
+           ["puzzle", "craft"].contains(where: text.contains) { value += 45 }
+        if recipient.usesAge,
+           age >= 12,
+           ["watch", "comic", "design"].contains(where: text.contains) { value += 42 }
+        if !recipient.usesAge, ageIsConfirmed {
+            if ["kids", "child", "toy", "dinosaur"].contains(where: text.contains) {
+                value -= 60
+            }
+            if ["watch", "jewelry", "design", "interior", "leather", "accessory"]
+                .contains(where: text.contains) {
+                value += 36
+            }
+        }
+        if recipient.usesAge {
+            for interest in state.interests where interestKeywords(interest).contains(where: text.contains) {
+                value += 28
+            }
         }
         switch intent {
         case .fun where ["puzzle", "neon", "comic", "robot"].contains(where: text.contains): value += 34
@@ -515,7 +1037,53 @@ struct GiftGuidePrototypeContent: View {
         case .surprise where ["ring", "neon", "comic", "robot"].contains(where: text.contains): value += 34
         default: break
         }
+        value += profileScore(for: text)
         return value
+    }
+
+    private func profileScore(for text: String) -> Int {
+        var value = 0
+        let ignoredTerms: Set<String> = ["and", "for", "from", "into", "the", "with"]
+        let terms = state.profileKeywords
+            .flatMap { $0.lowercased().split { !$0.isLetter && !$0.isNumber } }
+            .map(String.init)
+            .filter { $0.count > 3 && !ignoredTerms.contains($0) }
+        value += min(terms.reduce(0) { $0 + (text.contains($1) ? 28 : 0) }, 112)
+
+        let preferredTerms: [String]
+        switch state.profilePersonaID {
+        case "archivist":
+            preferredTerms = ["archive", "vintage", "watch", "jewelry", "leather", "design"]
+        case "collector":
+            preferredTerms = ["ring", "jewelry", "watch", "object", "edition", "design"]
+        case "individualist":
+            preferredTerms = ["neon", "comic", "robot", "sculptural", "color", "statement"]
+        case "minimalist":
+            preferredTerms = ["minimal", "classic", "stainless", "black", "design", "useful"]
+        default:
+            preferredTerms = []
+        }
+        value += preferredTerms.reduce(0) { $0 + (text.contains($1) ? 24 : 0) }
+
+        if state.profilePriorities.contains("Independent sellers"),
+           !["moma", "pollen-robotics", "tin-can-kids"].contains(itemMerchantID(in: text)) {
+            value += 12
+        }
+        if state.profileDiscoveryStyleID == "surprising",
+           ["neon", "robot", "ring", "comic", "sculptural"].contains(where: text.contains) {
+            value += 18
+        }
+        return value
+    }
+
+    /// The score already receives flattened searchable text; this keeps the
+    /// independent-seller nudge conservative when a known large prototype
+    /// merchant is present without introducing another catalog dependency.
+    private func itemMerchantID(in text: String) -> String {
+        if text.contains("moma") { return "moma" }
+        if text.contains("pollen") { return "pollen-robotics" }
+        if text.contains("tin can") { return "tin-can-kids" }
+        return "independent"
     }
 
     private func interestKeywords(_ interest: GiftGuideInterest) -> [String] {
@@ -541,6 +1109,17 @@ struct GiftGuidePrototypeContent: View {
             .reduce(0) { $0 + (text.contains($1) ? 20 : 0) }
     }
 
+    private func searchableText(for item: ResolvedStoryProduct) -> String {
+        ([
+            item.product.title,
+            item.product.productType ?? "",
+            item.product.productDescription ?? "",
+            item.merchant.displayName,
+        ] + item.product.tags)
+            .joined(separator: " ")
+            .lowercased()
+    }
+
     private func price(of item: ResolvedStoryProduct) -> Double {
         Double(item.product.price.filter { $0.isNumber || $0 == "." }) ?? .greatestFiniteMagnitude
     }
@@ -563,21 +1142,24 @@ struct GiftGuidePrototypeContent: View {
 
 struct GiftGuideTopicFilterBar: View {
     @Bindable var state: GiftGuidePrototypeState
+    let recipient: GiftGuideRecipient
 
     var body: some View {
         HStack(spacing: GravitySpacing.space4) {
-            Menu {
-                ForEach([7, 10, 13, 16], id: \.self) { age in
-                    Button("Age \(age)") {
-                        state.age = Double(age)
-                        state.ageIsConfirmed = true
-                        state.registerUpdate("Updated for \(state.recipientName) at age \(age)")
+            if recipient.usesAge {
+                Menu {
+                    ForEach([7, 10, 13, 16], id: \.self) { age in
+                        Button("Age \(age)") {
+                            state.age = Double(age)
+                            state.ageIsConfirmed = true
+                            state.registerUpdate("Updated for \(state.recipientName) at age \(age)")
+                        }
                     }
+                } label: {
+                    filterPill("Age \(Int(state.age))", width: 58)
                 }
-            } label: {
-                filterPill("Age \(Int(state.age))", width: 58)
+                .accessibilityLabel("\(state.recipientName)’s age")
             }
-            .accessibilityLabel("\(state.recipientName)’s age")
 
             Menu {
                 ForEach([50, 100, 150, 400], id: \.self) { budget in
@@ -588,22 +1170,24 @@ struct GiftGuideTopicFilterBar: View {
                     }
                 }
             } label: {
-                filterPill("$\(Int(state.budget))", width: 52)
+                filterPill("Budget $\(Int(state.budget))", width: 82)
             }
             .accessibilityLabel("Gift budget")
 
-            Menu {
-                ForEach(GiftSetting.allCases) { setting in
-                    Button(setting.label) {
-                        state.setting = setting
-                        state.settingIsConfirmed = true
-                        state.registerUpdate("Shifted the guide toward \(setting.label.lowercased())")
+            if !recipient.isNari {
+                Menu {
+                    ForEach(GiftSetting.allCases) { setting in
+                        Button(setting.label) {
+                            state.setting = setting
+                            state.settingIsConfirmed = true
+                            state.registerUpdate("Shifted the guide toward \(setting.label.lowercased())")
+                        }
                     }
+                } label: {
+                    filterPill(state.setting.label, width: 82)
                 }
-            } label: {
-                filterPill(settingLabel, width: 70)
+                .accessibilityLabel("Gift setting")
             }
-            .accessibilityLabel("Gift category")
 
             Menu {
                 ForEach(GiftIntent.allCases) { intent in
@@ -614,34 +1198,19 @@ struct GiftGuideTopicFilterBar: View {
                     }
                 }
             } label: {
-                filterPill(intentLabel, width: 68)
+                filterPill(state.intent.label, width: 92)
             }
             .accessibilityLabel("Gift intent")
         }
         .frame(height: FeedNavigationStyle.controlSize)
     }
 
-    private var settingLabel: String {
-        switch state.setting {
-        case .indoors: "Inside"
-        case .both: "Both"
-        case .outdoors: "Outdoors"
-        }
-    }
-
-    private var intentLabel: String {
-        switch state.intent {
-        case .surprise: "Surprise"
-        case .fun: "Fun"
-        case .useful: "Useful"
-        case .together: "Together"
-        }
-    }
-
     private func filterPill(_ title: String, width: CGFloat) -> some View {
         Text(title)
             .font(GravityFont.semiBold.fixedFont(size: 11))
             .foregroundStyle(.black.opacity(0.82))
+            .lineLimit(1)
+            .minimumScaleFactor(0.82)
             .frame(width: width, height: FeedNavigationStyle.controlSize)
             .background { Capsule().fill(.white.opacity(0.48)) }
             .clipShape(Capsule())
@@ -654,6 +1223,7 @@ struct GiftGuideTopicFilterBar: View {
 
 struct GiftGuideSteeringDock: View {
     @Bindable var state: GiftGuidePrototypeState
+    let recipient: GiftGuideRecipient
 
     var body: some View {
         Menu {
@@ -661,7 +1231,7 @@ struct GiftGuideSteeringDock: View {
                 HapticFeedback.light.fire()
                 state.showsVoiceMode = true
             } label: {
-                Label("Voice mode", systemImage: "waveform")
+                Label("Speak with Shop", systemImage: "waveform")
             }
             Button {
                 HapticFeedback.light.fire()
@@ -685,7 +1255,7 @@ struct GiftGuideSteeringDock: View {
         .accessibilityLabel("Voice or chat with Shop")
         .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56)
         .sheet(isPresented: $state.showsVoiceMode) {
-            GiftGuideVoiceMode(recipientName: state.recipientName)
+            GiftGuideVoiceMode(recipientName: state.recipientName, recipient: recipient)
                 .presentationDetents([.height(300)])
                 .presentationDragIndicator(.visible)
         }
@@ -694,6 +1264,7 @@ struct GiftGuideSteeringDock: View {
 
 private struct GiftGuideVoiceMode: View {
     let recipientName: String
+    let recipient: GiftGuideRecipient
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -710,7 +1281,7 @@ private struct GiftGuideVoiceMode: View {
             VStack(spacing: GravitySpacing.space4) {
                 Text("Tell Shop about \(recipientName)")
                     .font(GravityFont.expressiveBold.fixedFont(size: 22))
-                Text("Try “more things he can build himself”")
+                Text("Try “\(recipient.voiceExample)”")
                     .font(GravityFont.regular.fixedFont(size: 14))
                     .foregroundStyle(.secondary)
             }
@@ -747,11 +1318,11 @@ enum GiftSetting: String, CaseIterable, Identifiable {
         case .outdoors: "mostly outdoors"
         }
     }
-    var sectionTitle: String {
+    func sectionTitle(for recipientName: String) -> String {
         switch self {
-        case .indoors: "For Leon’s world indoors"
+        case .indoors: "For \(recipientName)’s world indoors"
         case .both: "For wherever the day goes"
-        case .outdoors: "For Leon’s next adventure"
+        case .outdoors: "For \(recipientName)’s next adventure"
         }
     }
     var sectionSubtitle: String {
@@ -787,15 +1358,18 @@ private struct GiftGuideTuningSheet: View {
     @Binding var budget: Double
     @Binding var intent: GiftIntent
     @Binding var note: String
+    let recipient: GiftGuideRecipient
     let apply: () -> Void
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 28) {
-                    dial(title: "How old is \(recipientName)?", value: "\(Int(age))") {
-                        Slider(value: $age, in: 5...17, step: 1)
-                            .tint(Color(hex: "#7455A2"))
+                    if recipient.usesAge {
+                        dial(title: "How old is \(recipientName)?", value: "\(Int(age))") {
+                            Slider(value: $age, in: 5...17, step: 1)
+                                .tint(Color(hex: "#7455A2"))
+                        }
                     }
 
                     VStack(alignment: .leading, spacing: GravitySpacing.space10) {
@@ -823,9 +1397,9 @@ private struct GiftGuideTuningSheet: View {
                     }
 
                     VStack(alignment: .leading, spacing: GravitySpacing.space10) {
-                        Text("What is \(recipientName) into lately?")
+                        Text(recipient.noteQuestion)
                             .font(GravityFont.bold.fixedFont(size: 17))
-                        TextField("Dinosaurs, making things, camping…", text: $note, axis: .vertical)
+                        TextField(recipient.occasionPlaceholder, text: $note, axis: .vertical)
                             .lineLimit(2...4)
                             .padding(GravitySpacing.space12)
                             .background(Color.black.opacity(0.05), in: RoundedRectangle(cornerRadius: GravityRadius.r16))

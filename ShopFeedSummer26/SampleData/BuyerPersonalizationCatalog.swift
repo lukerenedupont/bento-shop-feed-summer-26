@@ -307,6 +307,79 @@ enum BuyerPersonalizationCatalog {
     ]
 
     static let merchants: [SampleMerchant] = [
+        merchant(id: "bkr", name: "bkr", domain: "mybkr.com", color: "#E9D7D7", products: [
+            product(
+                7_826_387_435_691,
+                "Tutu Gilded Garden Little Bottle 500mL",
+                "26.00",
+                "tutu-gilded-garden-little-bottle-500ml-16-oz",
+                "bkr",
+                [
+                    "https://cdn.shopify.com/s/files/1/2416/3069/files/bkr-glass-water-bottle-16oz-tutu-gilded-garden-little-bottle-500ml-16-oz-pkggtpb-s16ht-35160445190315.jpg?v=1747690114",
+                    "https://cdn.shopify.com/s/files/1/2416/3069/files/bkr-glass-water-bottle-16oz-tutu-gilded-garden-little-bottle-500ml-16-oz-pkggtpb-s16ht-35160445223083.jpg?v=1747690114",
+                ],
+                tags: ["bkr", "gift", "glass", "water bottle", "everyday", "floral"]
+            ),
+            product(
+                7_463_118_766_251,
+                "Olive Spiked Little Bottle 500mL",
+                "34.00",
+                "spiked-olive-500-ml",
+                "bkr",
+                [
+                    "https://cdn.shopify.com/s/files/1/2416/3069/files/bkr-glass-water-bottle-16oz-olive-spiked-little-bottle-500ml-16oz-grolvpk-s16ht-810095830822-35566587445419.jpg?v=1748971769",
+                    "https://cdn.shopify.com/s/files/1/2416/3069/files/bkr-glass-water-bottle-16oz-olive-spiked-little-bottle-500ml-16oz-grolvpk-s16ht-810095830822-35566587412651.jpg?v=1748971769",
+                ],
+                tags: ["bkr", "gift", "glass", "water bottle", "everyday", "spiked"]
+            ),
+            product(
+                7_567_169_519_787,
+                "Honey Big Bottle 1L",
+                "42.00",
+                "honey-1l",
+                "bkr",
+                [
+                    "https://cdn.shopify.com/s/files/1/2416/3069/files/bkr-glass-water-bottle-32oz-honey-big-bottle-1l-32-oz-tnhnypb-s32ht-812746029838-35553124253867.jpg?v=1747690312",
+                    "https://cdn.shopify.com/s/files/1/2416/3069/files/bkr-glass-water-bottle-32oz-honey-big-bottle-1l-32-oz-tnhnypb-s32ht-812746029838-35553124221099.jpg?v=1747690312",
+                ],
+                tags: ["bkr", "gift", "glass", "water bottle", "everyday"]
+            ),
+            product(
+                8_170_323_673_259,
+                "Dream Blueberry Little Bottle 500mL",
+                "32.00",
+                "dream-blueberry-bottle-500ml-16-oz",
+                "bkr",
+                [
+                    "https://cdn.shopify.com/s/files/1/2416/3069/files/bkr-glass-water-bottle-16oz-dream-blueberry-little-bottle-500ml-16oz-bldbbtg-s16ht-0-36929727004843.jpg?v=1747690001",
+                ],
+                tags: ["bkr", "gift", "glass", "water bottle", "everyday"]
+            ),
+            product(
+                15_083_186_717_042,
+                "June Mini Strawberries Little Bottle 500mL",
+                "44.00",
+                "june-strawberry-little-bottle-500ml-16oz",
+                "bkr",
+                [
+                    "https://cdn.shopify.com/s/files/1/2416/3069/files/bkr-glass-water-bottle-16oz-june-strawberry-little-bottle-500ml-16oz-tnjswtg-s16ht-0-1245934798.jpg?v=1782332768",
+                    "https://cdn.shopify.com/s/files/1/2416/3069/files/bkr-glass-water-bottle-16oz-june-strawberry-little-bottle-500ml-16oz-tnjswtg-s16ht-0-1245934800.jpg?v=1782332710",
+                ],
+                tags: ["bkr", "gift", "glass", "water bottle", "everyday", "strawberry"]
+            ),
+            product(
+                15_083_186_782_578,
+                "Fern Mini Daisies Little Bottle 500mL",
+                "44.00",
+                "fern-daisy-little-bottle-500ml-16oz",
+                "bkr",
+                [
+                    "https://cdn.shopify.com/s/files/1/2416/3069/files/bkr-glass-water-bottle-16oz-fern-daisy-little-bottle-500ml-16oz-grfdytg-s16ht-0-1245934793.jpg?v=1782332529",
+                    "https://cdn.shopify.com/s/files/1/2416/3069/files/bkr-glass-water-bottle-16oz-fern-daisy-little-bottle-500ml-16oz-grfdytg-s16ht-0-1245934799.jpg?v=1782332469",
+                ],
+                tags: ["bkr", "gift", "glass", "water bottle", "everyday", "daisy"]
+            ),
+        ]),
         merchant(id: "tin-can-kids", name: "Tin Can", domain: "tincan.kids", color: "#20A7A5", products: [
             product(
                 14660544102765,

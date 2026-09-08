@@ -1,20 +1,164 @@
 # Codex handoff
 
-Updated: 2026-09-04
+Updated: 2026-09-08
 
 ## Repository state
 
-- Repository: `/Users/lukedupont/bento-shop-feed-summer-26`
-- Branch: `main`
-- Handoff remote: `public` (`lukerenedupont/bento-shop-feed-summer-26`)
+- Repository: `/Users/ashtenalexander/work/bento-shop-feed-summer-26`
+- Branch: `luke/feed-topic-polish`
+- Upstream remote: `origin` (`lukerenedupont/bento-shop-feed-summer-26`)
+- Push remote: `ashten` (`ashtenalexanderr/bento-shop-feed-summer-26`)
 - Use the latest commit on this branch as the handoff baseline.
 
 ## Current prototype
 
-The feed is personalized for Luke, Mikhail, Tobi, Katarina, Kenny, and Archie.
+The feed is personalized for Luke, Mikhail, Tobi, Katarina, Kenny, Archie, and
+Ashten.
 Each buyer receives authored For You and topic feeds backed by the local buyer
 profile/catalog data. Feed presentation is shared across buyers rather than
 forked into per-profile views.
+
+Ashten is an explicitly fictional, discovery-led fixture built only from
+public products already present in the sanitized shelf dataset. It includes no
+Shop Account UUID, warehouse activity, saved-item claim, or purchase-history
+claim. Its profile avatar uses the user-supplied `IMG_4929.jpg`, center-cropped
+to square 1x/2x/3x local assets for the circular UI.
+
+Ashten also has an opt-out `Nari` destination after Following and Deals. It
+uses the user-supplied Nari photo, optional locally persisted clothing size,
+shoe size, and fit notes; official public BKR products; and archive-fashion and
+secondhand rails assembled only from sanitized bundled products. The old
+Partner relationship pill has been replaced by a flat Add details/Edit details
+action. The shopping-details sheet supports locally editable relationship,
+tops, pants, dresses, shoes, and fit notes. The Vivienne Westwood language is
+explicitly a watch interest; adjacent products are not mislabeled as Westwood.
+No protected Shop account or warehouse data was queried or bundled.
+
+Ashten's For You feed now uses the same utility-shelf grammar as Luke for
+prototype realism, including the local `Your orders` and cart examples plus
+the shared promotion modules. These are explicitly local demo surfaces backed
+by Ashten's bundled public-product fixture, not account or warehouse claims.
+
+When Nari has a valid locally saved birthday within the next 45 days, including
+year wrap, Ashten's For You feed inserts `Gifts for Nari` as story rank 2. It
+uses Leon's exact full-height feed-card recipe and product-rail geometry, but
+with Nari's archive-fashion assortment and Westwood womenswear cover. Tapping
+the card uses the same shared-view zoom and opens the Nari gift guide. The card
+is absent when the birthday is unknown or outside the occasion window.
+Bottom-carousel stories now compose their title and product rail as one
+bottom-anchored block rather than independently pinning the title near the top.
+Leon and Nari therefore share identical title geometry, while the story accent
+builds into a stronger colored floor beneath the title and white product cards.
+
+The `Gift ideas for her` landing card is one full press target with native
+press feedback, an amber gradient sampled from Nari's profile image, plain
+disclosure chevron, birthday context, and a shared-view
+zoom into the full gift-guide prototype. Its preview and the destination are
+archive-first rather than BKR-first. The destination keeps Leon's steering,
+budget, setting, intent, voice/chat, and swipe-deck interactions while replacing
+his child products and copy with an official Vivienne Westwood AW26/27 womenswear
+hero, expanded Rick Owens/Issey Miyake/Comme des Garçons/Ann Demeulemeester
+products, secondhand jewelry, and a long lazy two-column discovery grid. BKR is
+a supporting rail labeled as a callback to the user-provided prior-browsing
+context. Shared product-card favorite hearts default to white; Nari rails remove
+the diffuse image shadow and use a crisp hairline edge instead.
+
+When Nari's gift guide does not yet have a saved birthday, its bottom glass
+prompt asks `When is Nari’s birthday?` and opens the focused birthday-entry
+sheet only after an explicit tap; entering the gift guide never presents the
+sheet automatically. This skips the broader profile questionnaire. After a valid
+birthday is stored, the prompt yields back to the guide's normal voice/chat
+steering dock. The compact 160pt sheet uses a lifecycle-aware native
+first-responder month field so both entry paths raise the number keyboard with
+the sheet without leaving a large blank band above it.
+
+On Nari's landing page, the gift entry is followed by the Archive fashion
+product rail rather than a second consecutive promo card. A taller, near-full-
+width Vivienne Westwood editorial entry follows the products and zooms into the
+archive-led guide, bringing the page closer to the media-led For You rhythm.
+The landing-page gift entry uses the shared 12pt page margin, while the Westwood
+editorial card uses a true 16pt margin on every side instead of running edge to
+edge. The gift entry and destination now share a pink-plum palette sampled from
+Nari's campaign image, and
+the gift entry uses the same two-card-plus-peek rail rhythm as the home feed.
+Its 22pt title and 16pt supporting copy reuse the Archive fashion hierarchy;
+the profile header uses 32pt for Nari and a compact 14pt Edit details action.
+The Archive rail starts with jewelry and then apparel so it does not repeat the
+gift preview's first products. The top navigation now says `For Nari` without a
+second avatar; Nari's photo remains only in the profile block.
+
+Nari's landing page also carries a persistent `Tell us more about Nari` agent
+composer immediately above bottom navigation. It reuses the app's glass input
+treatment while retaining the requested chat icon. It opens an 87%-height profile sheet
+matched to Figma frames `1289-16981` and `1289-18130`. The sheet is locked to
+that single detent so content scrolling cannot expand and collapse the Figma
+composition. Its header clears the drag indicator with a measured sheet-relative
+inset, and its copy uses the named Gravity type hierarchy rather than local font
+values. It also uses the measured vertical spacing, tall
+two-column media cards, black selection states, and a thumb-free segmented age
+slider. The birthday question branches dynamically: Yes quickly morphs into
+inline MM/DD/YYYY fields, focuses Month, and keeps the rest of the questionnaire
+in place; No reveals the approximate-age slider inline. The single black Save
+action at the end validates and persists the inline birthday along with the
+quiz. Selected interests render as solid-black pills
+without checkmarks, while unselected suggestions retain the quiet white-pill
+treatment. The sheet also persists a taste lens, editable interests,
+recommendation priorities, and the desired discovery range. These local-only
+answers update the landing-card preview order and seed the Nari gift guide's
+ranking, setting, copy, and adult product bias. Gift-occasion budget/mood
+controls remain separate inside the guide, where Speak with Shop and Chat with
+Shop are both retained. Debug-only `-openNariProfile`,
+`-openNariBirthdayQuestion`, and `-openNariAgeSlider` provide repeatable
+profile-sheet QA states.
+The gift guide has no launch-time birthday-sheet hook, so entering Gifts for
+Nari cannot accidentally jump into birthday entry.
+
+For the scripted demo, every fresh profile-sheet presentation starts the
+birthday question at Yes/No even when a birthday was saved previously. Yes
+reveals blank inline MM/DD/YYYY fields and focuses Month. The compact standalone
+birthday sheet remains only on the gift-guide entry path, with its own back arrow
+and Save action. Recommendation priorities
+now use restrained Gravity-icon cards rather than flat text blocks.
+
+New profiles begin with birthday knowledge, persona, interests, priorities,
+and discovery range entirely unanswered. Existing answers remain persisted,
+and a selected persona can be tapped again to clear it. Interests retain a
+stable visual order when selected, with Add interest after the recommendations.
+Recommendation priorities use a separate two-column card pattern rather than a
+second pill cloud. Inline `Nari` mentions use the quieter gray treatment.
+The Add interest action uses the same quiet gray filled-pill treatment as the
+unselected suggestions instead of a dashed special state.
+Debug-only
+`-openNariDetails` opens the shopping-details sheet and `-resetNariProfile`
+clears Nari's local answers for repeatable fresh-state QA.
+
+Prominent media-card disclosures now share the Hyperfeed-style white forward
+arrow in a quiet translucent circular control. The Nari gift entry and tall
+Vivienne Westwood entry both use that component instead of mixing a list
+chevron with a bare arrow. The amber gift entry uses a lower-opacity white
+surface and tint so the white arrow remains legible against the card color.
+
+Gift-guide header controls use self-describing labels (`Budget $100`,
+`Indoors`, and `Surprise me`) instead of the ambiguous `$100`, `Inside`, and
+`Surprise` shorthand.
+
+The shopping-details editor now uses a compact 78% detent, a larger black Nari
+name, and a seeded Tops size of S to represent a recipient the shopper has
+bought for before. Its entry action is a white text-only secondary pill with no
+redundant plus or pencil icon. Opening the sheet
+keeps the keyboard dismissed; tapping Fit notes raises it. Nari profile sheets share one collision-safe
+header geometry; the birthday editor raises the numeric keyboard on its first
+field after presentation finishes. Size and relationship menu
+chevrons align with each field title and suppress the system-added indicator so
+their placement cannot drift.
+
+The approximate-age control now starts at age 1 so younger gift recipients are
+representable. The taste-stretch preference reuses that same black fill-track
+component while retaining its Familiar, A mix, and Surprising ranking states.
+Interest and recommendation-priority pills communicate selection through their
+black fill alone, with no redundant checkmark. Birthday fields use the same
+native number-pad controller in both entry paths; tapping anywhere outside the
+fields dismisses the keyboard without adding a keyboard toolbar.
 
 ### Feed and topic behavior
 
@@ -240,8 +384,7 @@ tiles above the bottom navigation in both compact and snapped states.
 
 Simulator:
 
-- Device ID: `9FBE811F-24D3-4F33-B361-96B027B108D1` (iPhone 17 Pro; the older
-  `286EAAB0-C6BC-41CB-A40C-B84318D400D8` is no longer available locally)
+- Device ID: `A70613C5-07F2-46D2-8310-7211EC8B7F6B` (`Shop Native [main]`)
 - Bundle ID: `com.shopify.purl.prototype.shop.feed.summer.26`
 
 Build:
@@ -250,7 +393,7 @@ Build:
 xcodebuild -project ShopFeedSummer26.xcodeproj \
   -scheme ShopFeedSummer26 \
   -sdk iphonesimulator \
-  -destination 'platform=iOS Simulator,id=9FBE811F-24D3-4F33-B361-96B027B108D1' \
+  -destination 'platform=iOS Simulator,id=A70613C5-07F2-46D2-8310-7211EC8B7F6B' \
   -derivedDataPath /tmp/shop-feed-derived build
 ```
 
@@ -265,6 +408,144 @@ Driving the simulator for visual checks: the device screen is the first
 `group` of the Simulator window, so its on-screen rect comes from
 `System Events`, not from the window frame (the window includes chrome and
 bezel, and guessing the inset misses 36pt controls by ~30pt).
+
+Current local validation on 2026-09-06: personalized-feed validation and
+`git diff --check` pass, and the Ashten fixture compiles and runs in the
+simulator. This machine currently lacks `pngquant`, so the first local media
+optimization produces a `356644 KB` app and trips the existing product-size
+gate before Xcode signs the debug product; this is an environment/tooling issue
+rather than an Ashten fixture validation failure.
+
+The ranked Nari birthday card and Ashten utility shelf also compile and were
+ad-hoc signed, installed, and visually verified on `Shop Native [main]`. A
+local QA birthday 20 days out confirms the occasion branch. The current
+unoptimized app is approximately `359112 KB`; the only build failure remains
+the documented media-size gate.
+
+The Nari destination was also compiled, ad-hoc signed, installed, launched,
+and visually verified on `Shop Native [main]`. The profile header, white
+Edit details action, centered shopping-details sheet, BKR rail, Vivienne
+Westwood archive watch, and archive-fashion products render without overlap.
+The avatar-free `For Nari` navigation chip, consolidated 22/16pt landing-card
+type, smaller Edit details type, and jewelry-first Archive rail were verified.
+The clickable `Gift ideas for her` card and its full `Gifts for Nari`
+destination were also visually verified with the Westwood womenswear hero,
+archive-first products, and the persistent direct `When is Nari’s birthday?`
+glass prompt. Nari’s top gift-guide filters omit the irrelevant Indoors/Outdoors
+control. Nari’s profile prompt now slides behind the bottom navigation while
+scrolling down and returns on the first upward scroll. The shopping-details
+sheet was verified both at rest with no keyboard
+and with Fit notes explicitly focused; its Nari title is black in both states.
+The 128pt direct birthday sheet uses a leading back arrow and trailing text-only
+Save action, does not persist until a valid date is explicitly saved, and requests numeric Month
+focus from a child view controller's presentation lifecycle. The main simulator's
+software keyboard is enabled so the focused number pad is visible.
+Save dismisses the birthday sheet back to whichever page presented it. The profile’s saved state shows the full
+ordinal date (for example, `July 10th 2000`) with no age or Change action.
+The birthday-question, No/age-slider, and birthday-entry states were checked
+against direct 3x exports of the three Figma frames above; the question and age
+layouts now align within roughly one text line's antialiasing variance and the
+user-requested black selectors supersede the purple Figma accent. The birthday
+prompt now places equal-width Yes/No controls beneath the question, and both
+the initial prompt and expanded age prompt share the same 18pt question style
+as the rest of the profile editor. Yes morphs that question into inline
+MM/DD/YYYY fields without presenting another sheet. The birthday question
+starts at Yes/No on each presentation for the demo, while saved persona,
+interest, priority, and discovery answers remain intact. Nari’s swipe deck now labels left as `Not for her` and right as
+`More like this`, includes matching drag feedback and direct buttons, and
+advances in one direction after either signal. Ranking is cached during a drag,
+vertical scrolling no longer competes with the horizontal gesture, and a 12pt
+dead zone keeps both the card label and directional button highlight stable at
+center. The gift and inset Westwood editorial cards align their disclosure
+arrows with the title; the Westwood card remains 620pt tall for a more immersive treatment. The
+editorial section now has no width-forcing container frame and uses a true 16pt
+outer inset on every side, with roomier 24pt horizontal/28pt bottom copy padding.
+The pink-plum gift card uses a 10% black glass tint with a white arrow, matching the
+photo card. Nari’s birthday story is always promoted at exact feed rank 2 for
+Ashten’s For You demo, independent of stored birthday state and optional feed
+cards. Product assortments de-duplicate canonical image URLs so adjacent tiles
+cannot repeat the same media. The de-duplication path safely preserves products
+without image URLs instead of attempting to normalize a missing URL. Debug-only
+`-openNariFeed` and `-openNariGiftGuide` launch arguments open those states
+directly for repeatable visual QA; normal builds still launch on For You. The
+current unoptimized app is approximately `359536 KB` and reaches only the same
+documented size gate. The latest app was ad-hoc signed, installed, and launched
+with `-openNariProfile`; its first profile-sheet frame was visually verified
+with birthday, persona, interests, priorities, and discovery all unselected.
+The birthday entry focuses Month as the inline fields appear, and the main
+Simulator's software number keyboard is enabled. Tapping outside the fields
+dismisses it; the questionnaire persists the valid date through its final Save.
+Year is optional: month and day alone save and display as, for example,
+`July 10th`; a supplied year displays as `July 10th 2000` and is the only case
+that contributes a derived age.
+
+The Nari destination and gift-guide copy now use shorter, direct language and no
+longer describe BKR recommendations as inferred browsing behavior. Saving the
+profile commits a recommendation revision and re-ranks the gift preview plus
+archive and secondhand rails. The profile header no longer shows a redundant
+personalization-summary line, and its final action is an always-active `Save`.
+Gift-preview ranking now reserves at least four unique products for each
+downstream recommendation rail, so personalization cannot collapse a row to a
+single item. The jewelry-and-vintage pool now includes enough distinct public
+products for collector and jewelry preferences to visibly change the leading
+gift preview while still leaving four unique products in that downstream rail.
+The landing card also changes its supporting line to name the saved taste, so
+the result of Save is immediately legible instead of looking unchanged.
+The live Simulator's **Connect Hardware Keyboard** option was also disabled;
+the number pad now appears as soon as the birthday fields receive focus. A
+normal `For Nari` launch was rechecked without the profile sheet—the sheet opens
+only from the persistent personalization input (the explicit
+`-openNariProfile` launch argument remains a debug-only QA shortcut).
+The installed
+simulator build was visually checked with an `Individualist · Westwood +1`
+profile; jewelry and archive-fashion products lead the refreshed page.
+
+The profile questionnaire now edits a private draft rather than re-ranking the
+feed live behind the sheet. Every presentation deliberately starts with
+birthday, persona, interests, priorities, and discovery unselected. Save commits
+the new draft once, temporarily replaces the persistent `Personalize Nari’s
+picks` composer above bottom navigation with `Refreshing Nari’s picks…`, and
+shows four-tile shimmer skeletons in each recommendation rail plus three in the
+gift preview. After 850ms the newly ranked products fade in and the same bottom
+bar briefly confirms `Nari’s picks are updated` before restoring the composer.
+The skeleton geometry keeps each row full and honors Reduce Motion by disabling
+the traveling shimmer. Personalized gift-preview copy is now the quieter,
+generic `Tuned to her taste` instead of exposing a selected interest by name.
+The clean questionnaire state and updated generic landing-card copy were
+visually verified in the live simulator. Swift compilation and personalized-feed
+validation pass; the current unoptimized app is approximately `359992 KB` and
+still reaches only the documented media-size gate.
+
+Opening Nari’s gift guide no longer performs the full destination build on the
+tap frame. The landing card’s shared-view zoom snapshots only its lightweight
+pink-plum surface instead of flattening the live product carousel, the Westwood
+hero image prefetches while the Nari feed is visible, and StoryTopicPage reuses
+one merged merchant snapshot per render. The Nari destination bounds adjacent
+catalog expansion to 96 products, which retains the 60-item discovery grid with
+headroom. Gift-guide content now uses a lazy vertical stack, starts from its
+already de-duplicated authored order, and performs one deferred personalization
+ranking pass after the hero and navigation transition commit. The optimized tap
+and loaded destination were verified in the live simulator; Swift compilation,
+personalized-feed validation, and `git diff --check` pass. The current
+unoptimized app is approximately `360004 KB` and still reaches only the known
+media-size gate.
+
+The separate Home/For You `Holiday gifts for Nari` entry now uses the same
+lightweight-source principle without sharing an ID with the For Nari landing
+card. Its `home-nari-gift-guide` source is attached only to the full-height
+media and scrim, so the live title and product carousel are excluded from the
+synchronous navigation snapshot. Home feed prefetching now resolves the exact
+authored feed cover before falling back to generated lifestyle media, which
+warms the Westwood destination hero while the card is approaching. The latest
+app was ad-hoc signed, installed, launched with `-openNariHomeCard`, and the
+Home-card tap was verified through the shared-view zoom into the loaded gift
+guide. Swift compilation and personalized-feed validation pass; the current
+unoptimized app is approximately `360060 KB` and still reaches only the known
+media-size gate.
+
+The branch was merged with upstream `main` on 2026-09-08. The merged tree passes
+personalized-feed validation and Swift compilation; the full build stops only
+at the same known media-size gate (`359964 KB` versus `184320 KB`).
 
 ## Design intent
 

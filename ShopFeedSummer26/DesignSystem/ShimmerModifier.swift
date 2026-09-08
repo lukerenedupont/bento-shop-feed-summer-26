@@ -43,8 +43,13 @@ struct PulseModifier: ViewModifier {
 
 extension View {
     /// Adds a shimmer glint animation across the view.
-    func shimmer() -> some View {
-        modifier(ShimmerModifier())
+    @ViewBuilder
+    func shimmer(active: Bool = true) -> some View {
+        if active {
+            modifier(ShimmerModifier())
+        } else {
+            self
+        }
     }
 
     /// Adds a pulse opacity animation (1.0 ↔ 0.4).

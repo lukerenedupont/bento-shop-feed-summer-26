@@ -336,6 +336,13 @@ enum FeedCoverCatalog {
             textScrimOpacity: 0.36
         ),
         .init(
+            storyID: NariDestinationCatalog.birthdayGiftStoryID,
+            source: .remoteImage(url: NariDestinationCatalog.heroImageURL),
+            mediaRole: .editorial,
+            alignment: .center,
+            textScrimOpacity: 0.44
+        ),
+        .init(
             storyID: "shelf-luke-9-streetwear-caps-and-tees",
             source: .bundledVideo(resource: "streetwear-staples", fileExtension: "mp4"),
             mediaRole: .editorial,

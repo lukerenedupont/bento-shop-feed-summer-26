@@ -90,6 +90,7 @@
 		5B6C1D92E94EBDCF2D8530DC /* ShopperSignals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079951B34CE474B3E080B64F /* ShopperSignals.swift */; };
 		5DE188C12F42823E6802F132 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CA586789D21890B00848028 /* Assets.xcassets */; };
 		649FD509AC0F44D3BEB36470 /* stadium-sneakers.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = BFC5DD822918A12A22B6FFA3 /* stadium-sneakers.mp4 */; };
+		64B03122244D477E47B0BF1A /* TopicCompactHeaderBackdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F8D2818ADB18FAEAAF410F /* TopicCompactHeaderBackdrop.swift */; };
 		64DABDEDA80A62E19DCFD97F /* GTStandard-LHeavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6E49E5F0F2C5F4E1E2613DF4 /* GTStandard-LHeavy.otf */; };
 		652CB476ECB71B1AA3838BC2 /* GravityColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9012D58DAABA6EE0D2AC1F73 /* GravityColors.swift */; };
 		65CC87D24FABEF9A7510DAF1 /* FeedStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10B16167B932BDE28BA2B48 /* FeedStory.swift */; };
@@ -331,6 +332,7 @@
 		B688BEC7F76E8968601FF28E /* StorePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorePage.swift; sourceTree = "<group>"; };
 		B6E07104E33E24EFFA26DDEE /* AmbientProductVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientProductVideo.swift; sourceTree = "<group>"; };
 		B8390B3AB280B4DA9E1B9867 /* Shopify Sans-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Black.otf"; sourceTree = "<group>"; };
+		B8F8D2818ADB18FAEAAF410F /* TopicCompactHeaderBackdrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicCompactHeaderBackdrop.swift; sourceTree = "<group>"; };
 		B96694C6EED1830A1ED8C4FF /* InjectableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectableView.swift; sourceTree = "<group>"; };
 		B983AC901056B787D37F13CA /* AgentConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentConversationView.swift; sourceTree = "<group>"; };
 		B9D284B4531C1094FD7A9792 /* EvergreenDestinationFeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvergreenDestinationFeeds.swift; sourceTree = "<group>"; };
@@ -461,6 +463,7 @@
 				B688BEC7F76E8968601FF28E /* StorePage.swift */,
 				31BC531098602EBF12CF58A9 /* StoryDetailPage.swift */,
 				6D860120DF5795DCF4608E92 /* StoryTopicPage.swift */,
+				B8F8D2818ADB18FAEAAF410F /* TopicCompactHeaderBackdrop.swift */,
 				6CEF99F49C84054848107162 /* TopicDetailPage.swift */,
 				79B5EE001CCDA550692C9022 /* TopicPageBlocks.swift */,
 				7163BC021837A3CE4059EA3A /* TopicPageRecipe.swift */,
@@ -1028,6 +1031,7 @@
 				EAEE9AD32F574178273E511B /* StoryFeedCard.swift in Sources */,
 				B9941023B1530544D245555F /* StoryTopicPage.swift in Sources */,
 				C2CCA16A0728B377D7E946A7 /* SuggestedCollectionsFeedCard.swift in Sources */,
+				64B03122244D477E47B0BF1A /* TopicCompactHeaderBackdrop.swift in Sources */,
 				1B22F19322E62C2BD328E135 /* TopicDetailPage.swift in Sources */,
 				F8959E4172C75BEC9A15B753 /* TopicPageBlocks.swift in Sources */,
 				5214052977BAFDB80B763160 /* TopicPageRecipe.swift in Sources */,

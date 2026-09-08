@@ -92,6 +92,7 @@ struct SampleMerchant: Identifiable {
             : live
         let baseIDs = Set(base.map(\.id))
         let supplementalMerchantIDs = Set([
+            "bkr",
             "city-lights-sf",
             "kith",
             "pollen-robotics",

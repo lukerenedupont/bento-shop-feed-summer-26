@@ -4,8 +4,8 @@ import SwiftUI
 /// the outline-only heart used by the feed's product pile and has no visible
 /// control background; the larger frame remains as an invisible tap target.
 struct ProductFavoriteIcon: View {
-    var color: Color = GravityColors.text
-    var addsContrastShadow = false
+    var color: Color = .white
+    var addsContrastShadow = true
 
     var body: some View {
         Image(systemName: "heart")
@@ -21,8 +21,8 @@ struct ProductFavoriteIcon: View {
 }
 
 struct ProductFavoriteButton: View {
-    var color: Color = GravityColors.text
-    var addsContrastShadow = false
+    var color: Color = .white
+    var addsContrastShadow = true
     var onTap: (() -> Void)? = nil
 
     var body: some View {
@@ -81,7 +81,8 @@ struct ProductCard: View {
     var originalPrice: String? = nil
     var priceBadge: String? = nil
     var showFavoriteButton: Bool = true
-    var favoriteIconHasContrastShadow = false
+    var favoriteIconHasContrastShadow = true
+    var usesImageShadow = true
     var isFavorite: Bool = false
     var onFavoriteTap: (() -> Void)? = nil
     var style: Style = .grid
@@ -227,9 +228,20 @@ struct ProductCard: View {
             .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r20))
             .overlay(
                 RoundedRectangle(cornerRadius: GravityRadius.r20)
-                    .strokeBorder(Color.white.opacity(PurlTune.value("Components/ProductCard.swift:opacity:_:186:55", default: 0.08)), lineWidth: 0.5)
+                    .strokeBorder(
+                        usesImageShadow
+                            ? Color.white.opacity(PurlTune.value("Components/ProductCard.swift:opacity:_:186:55", default: 0.08))
+                            : Color.black.opacity(0.08),
+                        lineWidth: 0.5
+                    )
             )
-            .gravityShadow(GravityShadows.small)
+            .compositingGroup()
+            .shadow(
+                color: usesImageShadow ? GravityShadows.small.color : .clear,
+                radius: usesImageShadow ? GravityShadows.small.radius : 0,
+                x: GravityShadows.small.x,
+                y: usesImageShadow ? GravityShadows.small.y : 0
+            )
     }
 
     /// White background + product image + 4% darken overlay.

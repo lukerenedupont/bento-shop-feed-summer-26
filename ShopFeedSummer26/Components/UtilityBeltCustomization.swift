@@ -3,6 +3,7 @@ import SwiftUI
 enum OptionalFeedDestination: String, CaseIterable, Identifiable {
     case following
     case deals
+    case nari
 
     var id: String { rawValue }
     var title: String { rawValue.capitalized }
@@ -10,12 +11,14 @@ enum OptionalFeedDestination: String, CaseIterable, Identifiable {
         switch self {
         case .following: "Updates from shops you follow"
         case .deals: "Personalized offers and price drops"
+        case .nari: "Gift ideas and finds for your partner"
         }
     }
     var symbol: String {
         switch self {
         case .following: "person.2"
         case .deals: "tag"
+        case .nari: "heart"
         }
     }
 }
@@ -25,13 +28,27 @@ enum OptionalFeedDestination: String, CaseIterable, Identifiable {
 final class FeedDestinationPreferences {
     static let shared = FeedDestinationPreferences()
     private static let defaultsKey = "enabledOptionalFeedDestinations"
+    private static let seededNariKey = "didSeedNariDestinationV1"
     private(set) var enabledDestinations: Set<OptionalFeedDestination>
 
     private init() {
         if let stored = UserDefaults.standard.stringArray(forKey: Self.defaultsKey) {
-            enabledDestinations = Set(stored.compactMap(OptionalFeedDestination.init(rawValue:)))
+            var restored = Set(stored.compactMap(OptionalFeedDestination.init(rawValue:)))
+            // Existing installs already persisted Following and Deals before
+            // Nari existed. Seed the new destination once, then respect any
+            // later choice to hide it from Feed controls.
+            if !UserDefaults.standard.bool(forKey: Self.seededNariKey) {
+                restored.insert(.nari)
+                UserDefaults.standard.set(
+                    restored.map(\.rawValue).sorted(),
+                    forKey: Self.defaultsKey
+                )
+                UserDefaults.standard.set(true, forKey: Self.seededNariKey)
+            }
+            enabledDestinations = restored
         } else {
             enabledDestinations = Set(OptionalFeedDestination.allCases)
+            UserDefaults.standard.set(true, forKey: Self.seededNariKey)
         }
     }
 
