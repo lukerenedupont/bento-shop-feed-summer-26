@@ -59,13 +59,13 @@ enum NextGenerationFeedCardCatalog {
         case .merchantAffinity:
             job = .merchantDiscovery
             title = merchant.displayName
-            subtitle = "The visual systems behind everyday places."
+            subtitle = "Graphic design, archives and visual culture."
             layout = .merchant
             interaction = .browse
             anchor = nil
-            candidates = Array(merchant.products.prefix(3)).map { ResolvedStoryProduct(merchant: merchant, product: $0) }
-            groups = [.init(id: "graphic-standards", title: "Graphic standards", context: "Transit. Space. The environment.", merchantID: merchant.id, products: candidates.map(reference))]
-            reason = "Demo publishing affinity yields a merchant-led editorial grouping of the NYCTA, NASA and EPA manuals. Graphic standards is our grouping, not a claimed merchant collection or a new launch."
+            candidates = merchant.products.map { ResolvedStoryProduct(merchant: merchant, product: $0) }
+            groups = [.init(id: "design-library", title: "From the bookshelf", context: "Books and printed matter.", merchantID: merchant.id, products: candidates.map(reference))]
+            reason = "Demo publishing affinity yields the merchant's real catalog assortment. The shelf and optional fisheye canvas share the same entities and selection. This is an editorial grouping, not a claimed new launch; repeating grid cells do not represent additional inventory."
         case .activeWorld:
             job = .continueWorld
             title = "For your living room"
@@ -108,6 +108,7 @@ enum NextGenerationFeedCardCatalog {
         let alternatives: [NextGenerationCardLayout] = switch layout {
         case .directions, .multiMerchant: [layout] // no misleading product-only alternate
         case .hero: [.hero, .comparison]
+        case .merchant: [.merchant, .hero, .fisheye]
         default: [layout, .hero]
         }
         return NextGenerationFeedCardSpec(

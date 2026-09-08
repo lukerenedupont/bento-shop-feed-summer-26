@@ -24,6 +24,10 @@ The interface between generation and rendering: stable identity, source signal, 
 
 A set of canonical references that belongs to one merchant or one shopping direction. Choosing a group gates the card's content; other groups cannot leak products into that result. An editorial grouping is not automatically an official merchant collection.
 
+## Canvas composition
+
+A spatial arrangement for exploring a canonical assortment inside a card. A repeating canvas does not imply infinite inventory, and choosing this composition does not create a World. Panning changes the viewing position; focusing a product remains distinct from saving or purchasing it.
+
 ## Card regeneration
 
 Re-evaluation of the current signal and supported shopping job against the catalog, producing a new specification revision. Valid selection, dismissal and steering state remain intact. Regeneration is separate from a composition override, which changes hierarchy without changing the source data.

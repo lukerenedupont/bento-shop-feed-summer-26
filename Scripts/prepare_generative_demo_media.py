@@ -37,7 +37,7 @@ def main():
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
     merchants = {m['id']: m for m in json.loads(CATALOG.read_text())['merchants']}
-    PRODUCTS['standards-manual'] = [int(p['id']) for p in merchants['standards-manual']['products'][:4]]
+    PRODUCTS['standards-manual'] = [int(p['id']) for p in merchants['standards-manual']['products']]
     if not args.check:
         from PIL import Image, ImageOps
         DEST.mkdir(exist_ok=True)
@@ -75,7 +75,10 @@ def main():
                         raise
             assert raw is not None, f'No verified catalog image remains for {product_id}'
             image = ImageOps.exif_transpose(Image.open(io.BytesIO(raw))).convert('RGBA')
-            image.thumbnail((840, 840))
+            # Additional library tiles need 2x/3x tile resolution, not full
+            # originals. Existing frozen review images retain their bytes.
+            side = 600 if merchant_id == 'standards-manual' else 840
+            image.thumbnail((side, side))
             canvas = Image.new('RGB', image.size, 'white')
             canvas.paste(image, mask=image.getchannel('A'))
             canvas.save(target, quality=84, optimize=True)

@@ -9,6 +9,7 @@ enum NextGenerationCardLayout: String, CaseIterable, Identifiable {
     case hero = "Hero"
     case directions = "Directions"
     case multiMerchant = "Multi-merchant"
+    case fisheye = "Fisheye canvas"
     var id: String { rawValue }
 }
 
