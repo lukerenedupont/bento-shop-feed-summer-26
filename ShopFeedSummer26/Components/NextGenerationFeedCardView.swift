@@ -13,6 +13,7 @@ struct NextGenerationFeedCardView: View {
     var bottomContentPadding: CGFloat = GravitySpacing.space24
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.openURL) private var openURL
     @State private var showsInspector = false
     @State private var showsRoomPlan = false
     @State private var showsSavedLooks = false
@@ -26,6 +27,11 @@ struct NextGenerationFeedCardView: View {
     }
     private var selected: ResolvedStoryProduct? { session.selected(in: products, for: spec) }
     private var current: GenerativeFeedPrototypeSession.CardState { session.state(for: spec) }
+    private var purchaseURL: URL? {
+        guard let url = selected?.product.shopURL.flatMap(URL.init(string:)),
+              ["https", "http"].contains(url.scheme ?? ""), url.host != nil else { return nil }
+        return url
+    }
     private var ink: Color { spec.prefersDarkNavigationText ? .black : .white }
     private var visibleProducts: [ResolvedStoryProduct] { products.filter { !current.removedIDs.contains($0.id) } }
 
@@ -85,19 +91,39 @@ struct NextGenerationFeedCardView: View {
                     .accessibilityIdentifier("generative.inspector")
                 }
             }
-            Text(spec.job == .narrow ? activeGroup?.title ?? spec.title : spec.title)
-                .font(GravityFont.expressiveSemiBold.fixedFont(size: 28))
-                .tracking(-0.5)
-                .fixedSize(horizontal: false, vertical: true)
-                .accessibilityIdentifier("generative.heading")
-            Text(spec.job == .narrow ? activeGroup?.context ?? spec.subtitle : spec.subtitle)
-                .font(GravityFont.regular.fixedFont(size: 15))
-                .foregroundStyle(ink.opacity(0.7))
-                .fixedSize(horizontal: false, vertical: true)
+            if spec.interaction == .swap, session.composition(for: spec) == .relationship, let anchor {
+                Button { detailProduct = anchor } label: {
+                    HStack(spacing: GravitySpacing.space16) {
+                        GenerativeProductMedia(item: anchor).frame(width: 88, height: 88)
+                        VStack(alignment: .leading, spacing: GravitySpacing.space4) {
+                            Text("You bought")
+                                .font(GravityFont.medium.fixedFont(size: 12)).foregroundStyle(.secondary)
+                            Text(anchor.product.title)
+                                .font(GravityFont.semiBold.fixedFont(size: 15)).lineLimit(3)
+                                .accessibilityIdentifier("generative.heading")
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .multilineTextAlignment(.leading)
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("generative.purchasedAnchor")
+            } else {
+                Text(spec.job == .narrow ? activeGroup?.title ?? spec.title : spec.title)
+                    .font(GravityFont.expressiveSemiBold.fixedFont(size: 28))
+                    .tracking(-0.5)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("generative.heading")
+                Text(spec.job == .narrow ? activeGroup?.context ?? spec.subtitle : spec.subtitle)
+                    .font(GravityFont.regular.fixedFont(size: 15))
+                    .foregroundStyle(ink.opacity(0.7))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
-        .onLongPressGesture { showsInspector = true }
+        .highPriorityGesture(LongPressGesture().onEnded { _ in showsInspector = true })
         .accessibilityAction(named: "Inspect demo context") { showsInspector = true }
     }
 
@@ -128,7 +154,7 @@ struct NextGenerationFeedCardView: View {
                         .accessibilityIdentifier("generative.saveSelection")
                     }
                 }
-                if spec.interaction == .shortlist { thumbnailChoices }
+                if [.shortlist, .swap].contains(spec.interaction) { thumbnailChoices }
             }
         case .directions, .multiMerchant:
             GenerativeDiscoveryComposition(spec: spec, merchants: merchants, session: session, size: size)
@@ -137,11 +163,11 @@ struct NextGenerationFeedCardView: View {
 
     @ViewBuilder
     private func relationship(size: CGSize) -> some View {
-        if let anchor, let selected {
+        if anchor != nil, let selected {
             GenerativeOutfitComposition(
-                anchor: anchor, selected: selected, products: visibleProducts, size: size,
+                selected: selected, products: visibleProducts, size: size,
                 saved: current.savedSelectionIDs.contains(selected.id), enabled: current.interactionsEnabled,
-                onSelect: { item in perform { session.select(item, for: spec) } },
+                onSelect: { item in session.select(item, for: spec) },
                 onSave: { perform { session.toggleSaved(selected, for: spec) } },
                 onOpen: { detailProduct = $0 }
             )
@@ -319,7 +345,8 @@ struct NextGenerationFeedCardView: View {
             Button {
                 perform {
                     switch spec.interaction {
-                    case .swap, .browse: advance()
+                    case .swap: if let purchaseURL { openURL(purchaseURL) }
+                    case .browse: advance()
                     case .shortlist: detailProduct = selected
                     case .selectForWorld: showsRoomPlan = true
                     case .steer, .selectMerchant:
@@ -335,9 +362,10 @@ struct NextGenerationFeedCardView: View {
                     .foregroundStyle(spec.prefersDarkNavigationText ? Color.white : .black)
                     .background(ink, in: Capsule())
             }
-            .disabled(!current.interactionsEnabled)
+            .disabled(!current.interactionsEnabled || (spec.interaction == .swap && purchaseURL == nil))
             .opacity(current.interactionsEnabled ? 1 : 0.45)
             .accessibilityIdentifier("generative.primaryAction")
+            .accessibilityValue(spec.interaction == .swap ? purchaseURL?.absoluteString ?? "Purchase link unavailable" : "")
         }
     }
 
@@ -350,7 +378,7 @@ struct NextGenerationFeedCardView: View {
     }
     private var actionLabel: String {
         switch spec.interaction {
-        case .swap: "Swap pants"
+        case .swap: "Buy pants"
         case .shortlist: visibleProducts.isEmpty ? "Restore chairs" : "View chair"
         case .browse: "Next book"
         case .selectForWorld: "Review room plan"

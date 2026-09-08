@@ -45,7 +45,7 @@ enum NextGenerationFeedCardCatalog {
             candidates = merchant.products.filter {
                 $0.title.localizedCaseInsensitiveContains("fleece pant")
             }.map { ResolvedStoryProduct(merchant: merchant, product: $0) }
-            reason = "A demo jacket purchase creates a completion job. Pants from the same Nike × Stüssy assortment provide relevant options; the owned jacket stays fixed."
+            reason = "A demo jacket purchase creates a completion job. The purchased jacket stays at the top; a horizontal carousel presents pants from the same Nike × Stüssy assortment. Selection keeps imagery, identity, price and the canonical purchase URL together. Buy pants opens that SKU's merchant page, not a simulated checkout."
         case .repeatedViews, .savedShortlist:
             let defaultJob: PrototypeShoppingJob = signal.kind == .savedShortlist ? .continueJourney : .compare
             job = jobOverride.flatMap { signal.supportedJobs.contains($0) ? $0 : nil } ?? defaultJob

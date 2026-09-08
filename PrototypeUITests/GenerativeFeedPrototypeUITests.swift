@@ -34,9 +34,19 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
         }
     }
 
+    private func swipePants(in app: XCUIApplication) {
+        let carousel = app.scrollViews["generative.pantsCarousel"].firstMatch
+        XCTAssertTrue(carousel.isHittable)
+        carousel.swipeLeft()
+        XCTAssertTrue(app.staticTexts["2 of 2"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.buttons["generative.primaryAction"].firstMatch.label, "Buy pants")
+        XCTAssertEqual(app.buttons["generative.primaryAction"].firstMatch.value as? String,
+            "https://feature.com/products/nike-nike-x-stussy-stone-washed-fleece-pant-black")
+    }
+
     func testSwapAndAlternateCompositionRetainSelection() {
         let app = launchCard(0)
-        app.buttons["generative.primaryAction"].tap()
+        swipePants(in: app)
         XCTAssertTrue(app.staticTexts["2 of 2"].exists)
         app.buttons["generative.inspector"].tap()
         XCTAssertTrue(app.navigationBars["Design inspector"].waitForExistence(timeout: 5))
@@ -135,7 +145,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
         let app = launchCard(0)
         app.buttons["generative.saveSelection"].tap()
         XCTAssertTrue(app.buttons["Saved looks (1)"].exists)
-        app.buttons["generative.primaryAction"].tap()
+        swipePants(in: app)
         XCTAssertEqual(app.buttons["generative.saveSelection"].label, "Save this look")
         app.buttons["generative.inspector"].tap()
         app.buttons["generative.regenerateCard"].tap()
@@ -196,7 +206,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
             add(capture)
             if index == 0 {
                 app.buttons["generative.saveSelection"].firstMatch.tap()
-                app.buttons["generative.primaryAction"].firstMatch.tap()
+                swipePants(in: app)
                 app.swipeUp()
                 XCTAssertTrue(app.buttons["Select Chair #1 - Black Leather"].waitForExistence(timeout: 5))
             } else {
@@ -236,7 +246,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
 
     func testFeedOrderChangesWithoutLosingCurrentCard() {
         let app = launchCard(0)
-        app.buttons["generative.primaryAction"].tap()
+        swipePants(in: app)
         app.buttons["generative.inspector"].tap()
         app.buttons["generative.editFeed"].tap()
         XCTAssertTrue(app.navigationBars["Direct the feed"].waitForExistence(timeout: 5))
@@ -257,7 +267,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
         app.launch()
         let action = app.buttons["generative.primaryAction"].firstMatch
         XCTAssertTrue(action.waitForExistence(timeout: 10))
-        action.tap()
+        swipePants(in: app)
         app.swipeUp()
         XCTAssertTrue(app.staticTexts["Still considering these chairs?"].isHittable)
         app.swipeDown()
@@ -274,7 +284,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
         let inspector = app.buttons["generative.inspector"].firstMatch
         XCTAssertGreaterThan(inspector.frame.minY, 120)
         XCTAssertTrue(inspector.isHittable)
-        action.tap()
+        swipePants(in: app)
         XCTAssertTrue(app.staticTexts["2 of 2"].exists)
     }
 }

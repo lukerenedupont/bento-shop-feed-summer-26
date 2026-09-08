@@ -3,7 +3,6 @@ import SwiftUI
 /// PROTOTYPE design pass: a fixed purchase with changeable companions, and
 /// simultaneous comparison. Both live inside the existing feed/card grammar.
 struct GenerativeOutfitComposition: View {
-    let anchor: ResolvedStoryProduct
     let selected: ResolvedStoryProduct
     let products: [ResolvedStoryProduct]
     let size: CGSize
@@ -15,13 +14,32 @@ struct GenerativeOutfitComposition: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space16) {
-            HStack(alignment: .center, spacing: GravitySpacing.space8) {
-                garment(anchor, caption: "You bought", width: (size.width - 40) * 0.6)
-                garment(selected, caption: "Wear it with", width: (size.width - 40) * 0.4)
+            Text("Wear it with")
+                .font(GravityFont.expressiveSemiBold.fixedFont(size: 24))
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: GravitySpacing.space12) {
+                    ForEach(products) { item in
+                        Button { onSelect(item) } label: {
+                            GenerativeProductMedia(item: item)
+                                .frame(width: size.width * 0.78, height: max(120, size.height - 128))
+                        }
+                        .accessibilityLabel("Select \(item.product.title)")
+                        .accessibilityAddTraits(selected.id == item.id ? .isSelected : [])
+                        .id(item.id)
+                    }
+                }
+                .scrollTargetLayout()
             }
-            .padding(GravitySpacing.space16)
-            .frame(maxWidth: .infinity)
-            .background(.white, in: RoundedRectangle(cornerRadius: GravityRadius.r24))
+            .contentMargins(.trailing, size.width * 0.22, for: .scrollContent)
+            .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+            .scrollPosition(id: Binding<String?>(
+                get: { selected.id },
+                set: { id in
+                    if let item = products.first(where: { $0.id == id }), item.id != selected.id { onSelect(item) }
+                }
+            ), anchor: .leading)
+            .scrollDisabled(!enabled)
+            .accessibilityIdentifier("generative.pantsCarousel")
 
             HStack(alignment: .top, spacing: GravitySpacing.space8) {
                 Button { onOpen(selected) } label: {
@@ -43,42 +61,9 @@ struct GenerativeOutfitComposition: View {
                 .accessibilityLabel(saved ? "Unsave this look" : "Save this look")
                 .accessibilityIdentifier("generative.saveSelection")
             }
-            HStack(spacing: GravitySpacing.space8) {
-                ForEach(products) { item in
-                    Button { onSelect(item) } label: {
-                        HStack(spacing: GravitySpacing.space8) {
-                            GenerativeProductMedia(item: item).frame(width: 28, height: 36)
-                            Text(GenerativeDecisionContent.variant(item))
-                                .font(GravityFont.medium.fixedFont(size: 13)).lineLimit(1)
-                            Spacer(minLength: 0)
-                        }
-                        .padding(.horizontal, GravitySpacing.space12)
-                        .frame(minHeight: 48)
-                        .background(selected.id == item.id ? Color.white : .clear, in: RoundedRectangle(cornerRadius: GravityRadius.r16))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: GravityRadius.r16)
-                                .strokeBorder(selected.id == item.id ? Color.black : .black.opacity(0.12), lineWidth: 1)
-                        }
-                    }
-                    .accessibilityLabel("Select \(item.product.title)")
-                    .accessibilityAddTraits(selected.id == item.id ? .isSelected : [])
-                }
-            }
         }
         .buttonStyle(.plain)
         .disabled(!enabled)
-    }
-
-    private func garment(_ item: ResolvedStoryProduct, caption: String, width: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space8) {
-            Text(caption).font(GravityFont.medium.fixedFont(size: 12)).foregroundStyle(.secondary)
-            Button { onOpen(item) } label: {
-                GenerativeProductMedia(item: item, fillsFrame: item.id != anchor.id)
-                    .frame(width: width, height: min(max(110, size.height - 228), width * 1.6))
-            }
-            .accessibilityLabel("View \(item.product.title)")
-        }
-        .frame(width: width)
     }
 }
 

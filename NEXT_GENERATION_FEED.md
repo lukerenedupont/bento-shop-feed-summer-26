@@ -22,7 +22,7 @@ Normal app launch starts with the utility belt. Only Luke's For You uses the dem
 
 | Index | Shopping job | Behavior |
 |---|---|---|
-| 0 | Complete a jacket purchase | Fixed jacket + swappable pants in one relationship composition; save exact combinations and review them later in the session |
+| 0 | Complete a jacket purchase | Purchased jacket at the top; swipeable pants carousel underneath; Buy pants opens the selected SKU's actual merchant page |
 | 1 | Compare a chair shortlist | Two candidates remain visible, with canonical finishes and a calculated price difference; bring in the third while retaining the focused chair |
 | 2 | Explore Standards Manual | Merchant-led NYCTA, NASA and EPA manual grouping; browse the books |
 | 3 | Continue a living room | Saved Sofita table + chair choice; selection carries into and back from the room plan |
@@ -35,7 +35,7 @@ The merchant card's **Graphic standards** grouping is editorial, not a claimed o
 
 ## First-card design pass
 
-The jacket has a stronger visual anchor and no duplicate purchase-price block. Pants have explicit grey/black choices, exact product identity, a save heart and the existing swap action. **Saved looks** retains the actual jacket/pants pair even after swapping or regenerating. Tap either garment in the saved review to inspect that product.
+Following the screenshot review, the jacket now leads as compact purchased-item context, above **Wear it with** and a horizontally snapping pants carousel with a next-item peek. The selected pants' name, price, save state and **Buy pants** destination stay coupled during paging. Buy pants opens the actual merchant SKU page; it does not place an order or simulate checkout. **Saved looks** remains secondary and retains the exact pair after swiping/regenerating. The Hero alternate retains the same products and selection through thumbnail choices.
 
 Comparison now shows two chairs together rather than one hero image at a time. Tap to focus one, then **Also on your shortlist** to replace the other candidate. Same-currency price differences are calculated from the catalog with decimal arithmetic; names and finishes are split only at the canonical title separator. Saving is distinct from focus and shortlist removal. Removal lives in the shortlist overflow menu.
 
@@ -92,7 +92,7 @@ Preparing media requires Pillow. The previous scaffold refreshed two dead Featur
 
 ## Verification
 
-All fifteen Simulator acceptance tests pass. Coverage includes saved-pair identity after swapping/regeneration, comparison focus/price calculation, canonical destination URLs, consumer-mode feed geometry and actions, six-card bounds, shortlist reset, same-data alternatives, room continuity, direction relevance, merchant coupling, signal/job changes, empty-feed recovery and reordering.
+The preceding first-card pass passed all fifteen Simulator tests. The carousel revision updates the affected checks to swipe rather than tap a swap CTA and checks that the purchase URL follows the selected pants. Coverage includes saved-pair identity after swapping/regeneration, comparison focus/price calculation, canonical destination URLs, consumer-mode feed geometry and actions, six-card bounds, shortlist reset, same-data alternatives, room continuity, direction relevance, merchant coupling, signal/job changes, empty-feed recovery and reordering.
 
 ```sh
 xcodebuild -project ShopFeedSummer26.xcodeproj -scheme ShopFeedSummer26 \
