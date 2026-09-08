@@ -1,0 +1,208 @@
+[
+  {
+    "merchantID": "bode",
+    "productID": 8229947965634,
+    "filename": "quiet-product-bode-8229947965634.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/1218/8970/files/COMPANIONTEE-01.jpg?v=1764948025",
+    "generated": false,
+    "sha256": "4d0e7211710d2498bcc88801e91e3498f28db779938b1ee5764eef606eb49234"
+  },
+  {
+    "merchantID": "sneaker-politics",
+    "productID": 8925922951356,
+    "filename": "quiet-product-sneaker-politics-8925922951356.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0214/7974/files/CARHARTT-WIP-APRIL26-I034798.jpg?v=1776118195",
+    "generated": false,
+    "sha256": "c6e5e2c3ee2a07447f35142d465296a593be7f69adae1eaaeca3b6bcd0189df8",
+    "transformation": "Vision foreground mask; tight crop; white backing. Original product pixels."
+  },
+  {
+    "merchantID": "sneaker-politics",
+    "productID": 9459028754620,
+    "filename": "quiet-product-sneaker-politics-9459028754620.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0214/7974/files/LEVIS-AUG26-55849-0079.jpg?v=1788211054",
+    "generated": false,
+    "sha256": "30bc71db3bb944dbaea69da4c870397f043a9cfdbdea84c6f92a60a1f84b347d",
+    "transformation": "Vision foreground mask; tight crop; white backing. Original product pixels."
+  },
+  {
+    "merchantID": "sneaker-politics",
+    "productID": 9007369158844,
+    "filename": "quiet-product-sneaker-politics-9007369158844.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0214/7974/files/GIRBAUD-JAN26-MFG-DE-BRDX25-PTS-DBL.jpg?v=1767966313",
+    "generated": false,
+    "sha256": "df1df7a096bacc977f514685aa93c4c4742cef1eb2ae6b64dae01a735ffee763",
+    "transformation": "Vision foreground mask; tight crop; white backing. Original product pixels."
+  },
+  {
+    "merchantID": "house-of-leon",
+    "productID": 8505646055597,
+    "filename": "quiet-product-house-of-leon-8505646055597.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0593/2217/1565/files/Antwerp-Sofa-96-Front-Linen-Cocoa_d5b7a6f2-1ccd-49dd-ba8e-08aaa86a21c1.jpg?v=1784830512",
+    "generated": false,
+    "sha256": "8cc2f3640b7e6d1efab883d1c9578a2a9be1019116b27d351b09c1bffb8dc9f2",
+    "transformation": "Vision foreground mask; tight crop; white backing. Original product pixels."
+  },
+  {
+    "merchantID": "house-of-leon",
+    "productID": 8505645662381,
+    "filename": "quiet-product-house-of-leon-8505645662381.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0593/2217/1565/files/Antwerp-Sofa-96-Front-Linen-Bone.jpg?v=1772500702",
+    "generated": false,
+    "sha256": "e12b1030d9e69b53e005e78458768514436e40a384ae172362ad65ceff7f6fe1",
+    "transformation": "Vision foreground mask; tight crop; white backing. Original product pixels."
+  },
+  {
+    "merchantID": "house-of-leon",
+    "productID": 8214794371245,
+    "filename": "quiet-product-house-of-leon-8214794371245.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0593/2217/1565/files/Palazzo-Mohair-Wood-Base-Sofa-Nude-1.jpg?v=1752684637",
+    "generated": false,
+    "sha256": "b4c70ab589d6874923638014429d25ac4f2046c99cbc12db81b6fb8ab3208c1c",
+    "transformation": "Vision foreground mask; tight crop; white backing. Original product pixels."
+  },
+  {
+    "merchantID": "house-of-leon",
+    "productID": 7873592688813,
+    "filename": "quiet-product-house-of-leon-7873592688813.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0593/2217/1565/files/chair-1-camel-nubuck.jpg?v=1742496762",
+    "generated": false,
+    "sha256": "b8bab4a22a1390cd80f19cf41efb58cf4a46b7327df48667652943d90af1150c",
+    "transformation": "Vision foreground mask; tight crop; white backing. Original product pixels."
+  },
+  {
+    "merchantID": "house-of-leon",
+    "productID": 7873592721581,
+    "filename": "quiet-product-house-of-leon-7873592721581.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0593/2217/1565/files/metal-black-leather-chair-house-of-leon-lifestyle.jpg?v=1775260744",
+    "generated": false,
+    "sha256": "70d847c5d11d6bf9e73a071c3781d30af661a572cff6f3a8aa395b7efe1105bd",
+    "transformation": "Vision foreground mask; tight crop; white backing. Original product pixels."
+  },
+  {
+    "merchantID": "house-of-leon",
+    "productID": 7014265454765,
+    "filename": "quiet-product-house-of-leon-7014265454765.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0593/2217/1565/products/sofita-marble-coffee-table-coffee-tables-house-of-leon-799110.jpg?v=1738263127",
+    "generated": false,
+    "sha256": "ae824727bc78d6f276bb256949287b4f2dce0defeb50259187a2b11513aeed11"
+  },
+  {
+    "merchantID": "goodr",
+    "productID": 7446592192570,
+    "filename": "quiet-product-goodr-7446592192570.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0084/1616/5946/files/1_BlackTieFabulous_SideTransparent.png?v=1761093643",
+    "generated": false,
+    "sha256": "d20c762e9925a666294cf44c11b4e72a75b18ccfb0bad048716e36e43e5f6add"
+  },
+  {
+    "merchantID": "goodr",
+    "productID": 7557722865722,
+    "filename": "quiet-product-goodr-7557722865722.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0084/1616/5946/files/1_DapperintheDark_SideTransparent.png?v=1784239324",
+    "generated": false,
+    "sha256": "7e87e1dc3bafb300ef2a25ae63f37b1fcb6993da3412a0471e54f263f4b15652"
+  },
+  {
+    "merchantID": "goodr",
+    "productID": 7557722210362,
+    "filename": "quiet-product-goodr-7557722210362.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0084/1616/5946/files/1_MahoganyMartiniHour_SideTransparent.png?v=1784239382",
+    "generated": false,
+    "sha256": "00c557cb412fd2ba8bb6cdafe20a17e413f205651e496e6f605e277e8b929402"
+  },
+  {
+    "merchantID": "goodr",
+    "productID": 7389500047418,
+    "filename": "quiet-product-goodr-7389500047418.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0084/1616/5946/files/1_UnderwhelmingAlienAbduction_SideTransparent.png?v=1745346441",
+    "generated": false,
+    "sha256": "729e13c93faf9c63c74701588b0285e9504cc56089cbea23b9c5f79fcebca416"
+  },
+  {
+    "merchantID": "goodr",
+    "productID": 7385047629882,
+    "filename": "quiet-product-goodr-7385047629882.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0084/1616/5946/files/1_SKUName_SideTransparent_4e111b45-7045-46dc-aee0-33fadf79acb6.png?v=1743812632",
+    "generated": false,
+    "sha256": "74cf1b64bb32002ebae486dc952be1a0448f12bdbb482b166030f30ce8288f3d"
+  },
+  {
+    "merchantID": "goodr",
+    "productID": 7569018617914,
+    "filename": "quiet-product-goodr-7569018617914.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0084/1616/5946/files/1_PrairieMystique_FuschiaFieldsForever_SideTransparent.png?v=1783448593",
+    "generated": false,
+    "sha256": "b1b99420774c7fd1f2229f45224f8ed79ee1721a5127f08ae60fd2529ebbaf8d"
+  },
+  {
+    "merchantID": "forom",
+    "productID": 8817998889091,
+    "filename": "quiet-product-forom-8817998889091.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0356/2795/8403/files/eliza_side_table_lichen_green.png?v=1770980592",
+    "generated": false,
+    "sha256": "0b64d5ece803e04a4b8aa82dd37368b36ac6153457bdce785e2eb1947048253c",
+    "transformation": "Vision foreground mask; tight crop; white backing. Original product pixels."
+  },
+  {
+    "merchantID": "forom",
+    "productID": 8774121619587,
+    "filename": "quiet-product-forom-8774121619587.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0356/2795/8403/files/10.jpg?v=1770909086",
+    "generated": false,
+    "sha256": "d269bdc24356b618328d3e6fe8d906270726381de631a2ec522140fa94add6e6",
+    "transformation": "Vision foreground mask; tight crop; white backing. Original product pixels."
+  },
+  {
+    "merchantID": "forom",
+    "productID": 9082606649475,
+    "filename": "quiet-product-forom-9082606649475.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0356/2795/8403/files/Ammonit-Vase-White-Frosted.jpg?v=1779270816",
+    "generated": false,
+    "sha256": "81a04b93d7ebe5d8a285831f6808c4729fc49c37d4123276850e0de2385a3aa2"
+  },
+  {
+    "merchantID": "extra-butter-salomon",
+    "productID": 7919493251255,
+    "filename": "quiet-product-extra-butter-salomon-7919493251255.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0236/4333/files/L47762000-1_9f2dfe77-2d5f-4efe-8d80-759c45f3cb77.jpg?v=1738004890",
+    "generated": false,
+    "sha256": "e490f6aea6000e3a69bea55f61df604b24e6de41eb7341a767ddeb9fe9f599dc"
+  },
+  {
+    "merchantID": "extra-butter-salomon",
+    "productID": 8151144530103,
+    "filename": "quiet-product-extra-butter-salomon-8151144530103.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0236/4333/files/L49125800-1.jpg?v=1753481777",
+    "generated": false,
+    "sha256": "7f6a6e54a3f582bb71109a3bf31a7426d5e2a15f5987342e113ca708c6a78e82"
+  },
+  {
+    "merchantID": "extra-butter-salomon",
+    "productID": 4643336060976,
+    "filename": "quiet-product-extra-butter-salomon-4643336060976.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0236/4333/products/410866-1.jpg?v=1597852425",
+    "generated": false,
+    "sha256": "31909e33cbb45b9d005939fabe852460454c536afc4aebb52a618fa50d1842de"
+  },
+  {
+    "filename": "quiet-dossier-look0.jpg",
+    "exportKey": "8ccc0ca672d0d77f",
+    "sourcePath": "media/images/look0.png",
+    "generated": true,
+    "sha256": "c7eacbdb8e5224619e83064390dac8fbabfad0ad3a64c3049f91ec10adc011aa"
+  },
+  {
+    "filename": "quiet-dossier-tee.jpg",
+    "exportKey": "8ccc0ca672d0d77f",
+    "sourcePath": "media/images/object0.png",
+    "generated": true,
+    "sha256": "2327a065472ceb78ba85d840ec57a14a49c346c5f711a8cc2d640ff3a7a2bd92"
+  },
+  {
+    "filename": "quiet-salomon-campaign.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0236/4333/files/Salomon_EB_Look3-3.jpg?v=1605817987",
+    "generated": false,
+    "sha256": "f3b983779becfb8da39fe3e2d2f398892f77002ce71d8ef1b7f334b08b5515cd"
+  }
+]

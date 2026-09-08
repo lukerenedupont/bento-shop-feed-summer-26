@@ -20,6 +20,12 @@ struct GenerativeFeedInspector: View {
                 }
                 Section("Signal → shopping job") {
                     Text(spec.signal.summary)
+                    if spec.isQuietReview {
+                        LabeledContent("Scenario", value: spec.title)
+                        LabeledContent("Shopping job", value: spec.job.rawValue)
+                        Text("Fixed review fixture. Inputs and recommendation sets are authored; regeneration retains this scenario.")
+                            .font(.footnote).foregroundStyle(.secondary)
+                    } else {
                     Picker("Signal", selection: Binding(
                         get: { spec.signal.kind }, set: { session.setSignal($0, for: spec) }
                     )) {
@@ -34,6 +40,7 @@ struct GenerativeFeedInspector: View {
                     }
                     .pickerStyle(.menu)
                     .accessibilityIdentifier("generative.job")
+                    }
                     if let world = spec.signal.worldID { LabeledContent("World", value: world) }
                     DisclosureGroup("Why this card?") {
                         Text(spec.reasonForSelection)
@@ -77,7 +84,19 @@ struct GenerativeFeedInspector: View {
                     LabeledContent("Removed candidates", value: String(session.state(for: spec).removedIDs.count))
                     LabeledContent("Saved selections", value: String(session.state(for: spec).savedSelectionIDs.count))
                     if spec.interaction == .shortlist {
-                        Text("Comparing: " + session.comparisonPair(in: spec.resolvedProducts(from: merchants), for: spec).map { $0.product.title }.joined(separator: " / "))
+                        let pair = spec.isQuietReview
+                            ? spec.resolvedProducts(from: merchants).filter { session.state(for: spec).comparisonIDs.contains($0.id) }
+                            : session.comparisonPair(in: spec.resolvedProducts(from: merchants), for: spec)
+                        Text("Comparing: " + pair.map { $0.product.title }.joined(separator: " / "))
+                    }
+                    if spec.isQuietReview, spec.interaction == .selectForWorld {
+                        ForEach(spec.groups) { slot in
+                            LabeledContent(slot.title, value: session.roomProduct(slot: slot, for: spec, merchants: merchants)?.product.title ?? "None")
+                        }
+                    }
+                    if spec.isQuietReview, spec.interaction == .swap {
+                        Text("The flat tee is a generated Dossier styling illustration. Product details use the original merchant photograph. The Dossier look is inspiration, not a render of the current selection.")
+                            .font(.footnote).foregroundStyle(.secondary)
                     }
                     Text(session.state(for: spec).lastAction)
                         .accessibilityIdentifier("generative.lastAction")

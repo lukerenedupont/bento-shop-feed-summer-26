@@ -8,6 +8,10 @@ final class GenerativeFeedPrototypeSession {
         var selectedID: String?
         var selectedGroupID: String?
         var comparisonIDs: [String] = []
+        var hasInteracted = false
+        var comparisonRevealed = false
+        var roomSlotID: String?
+        var roomSelections: [String: String] = [:]
         var canvasPosition: CGPoint = .zero
         var canvasIsExploring = false
         // With an anchor, each ID saves that exact anchor + candidate pair.
@@ -66,7 +70,7 @@ final class GenerativeFeedPrototypeSession {
     }
     func select(_ item: ResolvedStoryProduct, for spec: NextGenerationFeedCardSpec) {
         guard state(for: spec).interactionsEnabled else { return }
-        update(spec) { $0.selectedID = item.id; $0.lastAction = "Selected \(item.product.title)" }
+        update(spec) { $0.selectedID = item.id; $0.hasInteracted = true; $0.lastAction = "Selected \(item.product.title)" }
     }
     func comparisonPair(in items: [ResolvedStoryProduct], for spec: NextGenerationFeedCardSpec) -> [ResolvedStoryProduct] {
         let current = state(for: spec)
@@ -95,6 +99,32 @@ final class GenerativeFeedPrototypeSession {
         update(spec) {
             $0.comparisonIDs = pair; $0.selectedID = item.id
             $0.lastAction = "Comparing \(item.product.title); retained the other focused candidate"
+        }
+    }
+    func toggleReviewComparison(_ item: ResolvedStoryProduct, for spec: NextGenerationFeedCardSpec) {
+        guard state(for: spec).interactionsEnabled else { return }
+        update(spec) {
+            if $0.comparisonIDs.contains(item.id) { $0.comparisonIDs.removeAll { $0 == item.id } }
+            else if $0.comparisonIDs.count < 2 { $0.comparisonIDs.append(item.id) }
+            else { $0.comparisonIDs = [$0.comparisonIDs[0], item.id] }
+            $0.hasInteracted = true; $0.comparisonRevealed = false
+            $0.lastAction = "Selected \($0.comparisonIDs.count) products for comparison"
+        }
+    }
+    func revealReviewComparison(_ reveal: Bool, for spec: NextGenerationFeedCardSpec) {
+        guard state(for: spec).interactionsEnabled else { return }
+        update(spec) { $0.comparisonRevealed = reveal && $0.comparisonIDs.count == 2 }
+    }
+    func focusRoomSlot(_ slot: String?, for spec: NextGenerationFeedCardSpec) {
+        guard state(for: spec).interactionsEnabled else { return }
+        update(spec) { $0.roomSlotID = slot; $0.hasInteracted = true }
+    }
+    func selectRoomProduct(_ item: ResolvedStoryProduct, slot: PrototypeContentGroup, for spec: NextGenerationFeedCardSpec) {
+        guard state(for: spec).interactionsEnabled,
+              slot.products.contains(where: { $0.merchantID == item.merchant.id && $0.productID == item.product.id }) else { return }
+        update(spec) {
+            $0.roomSelections[slot.id] = item.id; $0.selectedID = item.id; $0.hasInteracted = true
+            $0.lastAction = "Swapped \(slot.title): \(item.product.title). Other room objects retained."
         }
     }
     func toggleSaved(_ item: ResolvedStoryProduct, for spec: NextGenerationFeedCardSpec) {

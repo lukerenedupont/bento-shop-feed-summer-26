@@ -7,7 +7,9 @@ enum NextGenerationFeedCardCatalog {
     static let prototypeEnabled = true
     /// Keep the discussion fixture identical in Home, gallery and inspector.
     /// The full app's merged/live inventory remains separate and untouched.
-    static let prototypeMerchants = LocalMerchantService.loadMerchants()
+    static let prototypeMerchants = QuietFeedReviewCatalog.enabled
+        ? LocalMerchantService.mergeMerchants([QuietFeedReviewCatalog.merchants, LocalMerchantService.loadMerchants()])
+        : LocalMerchantService.loadMerchants()
 
     static func cards(signals: [PrototypeShoppingSignal], merchants: [SampleMerchant]) -> [NextGenerationFeedCardSpec] {
         signals.compactMap { card(signal: $0, merchants: merchants) }
@@ -17,6 +19,9 @@ enum NextGenerationFeedCardCatalog {
         signal: PrototypeShoppingSignal, merchants: [SampleMerchant],
         jobOverride: PrototypeShoppingJob? = nil, generation: Int = 0
     ) -> NextGenerationFeedCardSpec? {
+        if signal.id.hasPrefix("quiet-") {
+            return QuietFeedReviewCatalog.card(signal: signal, merchants: merchants, generation: generation)
+        }
         let observed = signal.products.compactMap { NextGenerationFeedCardSpec.resolve($0, in: merchants) }
         guard observed.count == signal.products.count,
               let merchant = merchants.first(where: { $0.id == signal.merchantID }) else { return nil }

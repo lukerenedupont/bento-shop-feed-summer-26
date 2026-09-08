@@ -1,0 +1,108 @@
+{
+  "schema": "dossier-export-manifest/1",
+  "exportedAt": "2026-09-08T20:03:16.367Z",
+  "key": "8ccc0ca672d0d77f",
+  "title": "Companion Tee",
+  "documents": {
+    "portable": "dossier.json",
+    "canonical": "source.json",
+    "imageColors": "image-colors.json"
+  },
+  "counts": {
+    "images": 9,
+    "videos": 2,
+    "assets": 11
+  },
+  "bytes": 18441055,
+  "assets": [
+    {
+      "path": "media/images/look0.png",
+      "kind": "image",
+      "variant": "look0",
+      "bytes": 2211961,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=8c9f33cc364d9087"
+    },
+    {
+      "path": "media/images/look1.png",
+      "kind": "image",
+      "variant": "look1",
+      "bytes": 2357764,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=0e3dde110e238749"
+    },
+    {
+      "path": "media/images/lookbook.png",
+      "kind": "image",
+      "variant": "lookbook",
+      "bytes": 2446409,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=9fd86871c1e65cc9"
+    },
+    {
+      "path": "media/images/object0.png",
+      "kind": "image",
+      "variant": "object0",
+      "bytes": 806527,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=e3b0978caf5542b0"
+    },
+    {
+      "path": "media/images/object2.png",
+      "kind": "image",
+      "variant": "object2",
+      "bytes": 769138,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=41f17156a2392e09"
+    },
+    {
+      "path": "media/images/object3.png",
+      "kind": "image",
+      "variant": "object3",
+      "bytes": 1020847,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=9869a8c8614c54fc"
+    },
+    {
+      "path": "media/images/pair.png",
+      "kind": "image",
+      "variant": "pair",
+      "bytes": 1797384,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=6ceaca3c2b6e8e41"
+    },
+    {
+      "path": "media/images/pair-square.png",
+      "kind": "image",
+      "variant": "pairSquare",
+      "bytes": 1144297,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=992c9f7139909f29"
+    },
+    {
+      "path": "media/videos/look0.mp4",
+      "kind": "video",
+      "variant": "look0",
+      "bytes": 2755444,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=3367ded54dc6a4f3"
+    },
+    {
+      "path": "media/videos/look1.mp4",
+      "kind": "video",
+      "variant": "look1",
+      "bytes": 2729037,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=b9b4e7e81c7686b2"
+    },
+    {
+      "path": "media/product.jpg",
+      "kind": "image",
+      "variant": "product",
+      "bytes": 402247,
+      "contentType": "image/jpeg",
+      "source": "https://cdn.shopify.com/s/files/1/1218/8970/files/COMPANIONTEE-01.jpg"
+    }
+  ],
+  "missing": []
+}

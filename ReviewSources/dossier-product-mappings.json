@@ -1,0 +1,17 @@
+{
+  "mappings": {
+    "gid://shopify/p/3sUIyHlRJfeoPF730g0u29": {
+      "merchantID": "bode",
+      "productID": 8229947965634
+    },
+    "gid://shopify/p/1j20fMjJ9FfQC6NSwcZscU": {
+      "merchantID": "sneaker-politics",
+      "productID": 8925922951356
+    }
+  },
+  "unresolved": [
+    "gid://shopify/p/4LdjDGBy2UQS59QRm2luGP",
+    "gid://shopify/p/3JZoFuN0IcA8YaZKVepdtq"
+  ],
+  "note": "Only tee and pants mapped for this interaction. No guessed mappings for generated objects."
+}

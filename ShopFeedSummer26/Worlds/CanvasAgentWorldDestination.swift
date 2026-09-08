@@ -5,6 +5,7 @@ struct CanvasAgentWorldDestination: View {
     @Bindable var session: WorldSession
     let products: [ResolvedStoryProduct]
     let onClose: () -> Void
+    var onOpenProduct: ((ResolvedStoryProduct) -> Void)?
 
     @Environment(NavigationCoordinator.self) private var coordinator
     @State private var canvasProducts: [CatalogProduct]
@@ -27,11 +28,13 @@ struct CanvasAgentWorldDestination: View {
     init(
         session: WorldSession,
         products: [ResolvedStoryProduct],
-        onClose: @escaping () -> Void
+        onClose: @escaping () -> Void,
+        onOpenProduct: ((ResolvedStoryProduct) -> Void)? = nil
     ) {
         self.session = session
         self.products = products
         self.onClose = onClose
+        self.onOpenProduct = onOpenProduct
         _canvasProducts = State(initialValue: CanvasAgentProductAdapter.products(from: products))
     }
 
@@ -165,7 +168,8 @@ struct CanvasAgentWorldDestination: View {
         source?.revealTile()
         guard let resolved = products.first(where: { $0.id == product.id }) else { return }
         session.send(.selectProduct(resolved.id))
-        coordinator.pushRoute(.product(merchantId: resolved.merchant.id, productId: resolved.product.id))
+        if let onOpenProduct { onOpenProduct(resolved) }
+        else { coordinator.pushRoute(.product(merchantId: resolved.merchant.id, productId: resolved.product.id)) }
     }
 
     private func showMoreLike(_ product: CatalogProduct) {

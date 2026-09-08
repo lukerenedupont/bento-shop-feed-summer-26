@@ -66,7 +66,7 @@ struct GenerativeFeedDesignPanel: View {
                 Section("Signals in the feed") {
                     ForEach(session.orderedSignalIDs, id: \.self) { id in
                         if let signal = GenerativeFeedPrototypeFixtures.signals.first(where: { $0.id == id }) {
-                            Toggle(signal.kind.rawValue, isOn: Binding(
+                            Toggle(sources.first(where: { $0.signal.id == signal.id && $0.isQuietReview })?.title ?? signal.kind.rawValue, isOn: Binding(
                                 get: { !session.disabledSignalIDs.contains(id) },
                                 set: { session.setSignalEnabled($0, id: id) }
                             ))

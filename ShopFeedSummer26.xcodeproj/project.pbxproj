@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		00367ACD7CE8582CA111781C /* CategoryTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5459CA6FC9ADF5F66FEA511C /* CategoryTile.swift */; };
 		00B55F96C56C3B59F4061731 /* TryFavesProductTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9940B7F73D46B538377EC0B6 /* TryFavesProductTile.swift */; };
+		0150828269398A2FB55E8202 /* quiet-product-goodr-7557722210362.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 85183AAD863F58C1731F764F /* quiet-product-goodr-7557722210362.jpg */; };
 		01684785E148EF07EB062211 /* prototype-product-forom-9080102322307.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AE70E60C8630F68AEBE41D3B /* prototype-product-forom-9080102322307.jpg */; };
 		01947892E1C20D9EB54E901A /* prototype-product-standards-manual-9250935800024.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5CFFD2D6C93FF335FCBFF92A /* prototype-product-standards-manual-9250935800024.jpg */; };
 		01C5D6B8DAC61C865FBB857B /* ProductPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF15B9E17E009E05951942F7 /* ProductPage.swift */; };
@@ -17,11 +18,14 @@
 		054735FF9345DF7AAF3DE7B8 /* TryFavesLookService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B484A6F4AA747AE39ACEE4 /* TryFavesLookService.swift */; };
 		05D751E6996490FF59B3199C /* GravityBorderRadii.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA40258C915F1A57D84E196 /* GravityBorderRadii.swift */; };
 		08CF9DE31D0D6890CB15C684 /* VerySpecialWatchCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9B7BEA5251EDBCB9A73B8A /* VerySpecialWatchCatalog.swift */; };
+		08F42A0367F22F1B56D991AD /* quiet-product-extra-butter-salomon-7919493251255.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D801A50F68EECC5C16D3DCF3 /* quiet-product-extra-butter-salomon-7919493251255.jpg */; };
+		0A6F6A775113178BD68531CB /* quiet-product-house-of-leon-8505645662381.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 899D0C9ADC9606B594F6A09F /* quiet-product-house-of-leon-8505645662381.jpg */; };
 		0C08C13F26335177E2728B05 /* FeedScrollInfrastructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7FE9B3DC8AB77C41671E1D /* FeedScrollInfrastructure.swift */; };
 		0D8258FE18916ACCB3BD85BD /* SearchResultsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D5503247C437CAFB0CE7681 /* SearchResultsPage.swift */; };
 		0E4E3D2D57C24C839C25E870 /* TopicPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985A864019C3ED3E09A2E4B1 /* TopicPresentation.swift */; };
 		0EC6F69EB7B7D14036157A35 /* DeepDivePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E341D075DF8D562DB32C3EB /* DeepDivePage.swift */; };
 		0FFC56081675CC2D30E54780 /* StoryCardLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0E1B41F7855616362EB10F /* StoryCardLayouts.swift */; };
+		104128724E38EA9E44AA0950 /* QuietShoppingJourneyPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F67C3945F3CB8F218BBE5D6 /* QuietShoppingJourneyPrototype.swift */; };
 		1174093C09CBAD32B3D087EF /* TryFavesConfigurationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E6AE3B696D0E384D631284 /* TryFavesConfigurationSheet.swift */; };
 		11FC0467DDD38B21A4FE32AA /* AgentConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B983AC901056B787D37F13CA /* AgentConversationView.swift */; };
 		12E86BB3DC5018B03CF40896 /* TryFavesEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AA14B88E7EFA9A153D8F19 /* TryFavesEnvironment.swift */; };
@@ -31,12 +35,16 @@
 		16BC6F274BF3266109322406 /* SearchHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D64725EFF88C7418AC33BE /* SearchHeader.swift */; };
 		1706C499ECEA1A44425C37D0 /* prototype-product-standards-manual-5842516163.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C234820E2C6C5EE50006661C /* prototype-product-standards-manual-5842516163.jpg */; };
 		172E3A3EFAFFB158EFC5CDDC /* MerchantCollectionCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 102ABF0057094F3527D573FB /* MerchantCollectionCatalog.swift */; };
+		18B2F10FC1376AB5C8C70A6D /* quiet-product-house-of-leon-7873592721581.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 581B71AA9314B7EDE5CBFE84 /* quiet-product-house-of-leon-7873592721581.jpg */; };
 		195BC163E678170C55BDEA3E /* TryFavesStageColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965B56D2AD1C84866FFA8DAA /* TryFavesStageColors.swift */; };
 		19702C926FC3B3CB49F84140 /* AgentProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8078D239E65B41D28D2935B /* AgentProduct.swift */; };
 		19C28AA39C211E9117577D9B /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = AD09AE660CD45976C4B68F4C /* FloatingPanel */; };
 		1A3E9B20593B0BE7E22C48C4 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2C1A0A84FDDE28DC408251 /* HomePage.swift */; };
+		1A4CB694C0C4ABA87AB25BB9 /* quiet-product-sneaker-politics-9459028754620.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2954FFC00530FE280A0EE4A2 /* quiet-product-sneaker-politics-9459028754620.jpg */; };
 		1B22F19322E62C2BD328E135 /* TopicDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEF99F49C84054848107162 /* TopicDetailPage.swift */; };
 		1B521503DB15E7B3A3A1C5DC /* prototype-product-standards-manual-9250932523224.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 450B7C12EE2131CDDF5DD5AB /* prototype-product-standards-manual-9250932523224.jpg */; };
+		1C538A7A278A51E3A6E0BA96 /* quiet-product-house-of-leon-8214794371245.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F61E0634CDC589C020911504 /* quiet-product-house-of-leon-8214794371245.jpg */; };
+		1CF17ED316E44EE4E433D7BA /* quiet-product-house-of-leon-8505646055597.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7EDFC8443A325D0CC5EB1042 /* quiet-product-house-of-leon-8505646055597.jpg */; };
 		204193C47C04797D57AFB531 /* HomeUtilityPrototypeCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C19A304A47A9AE92E877FF8 /* HomeUtilityPrototypeCards.swift */; };
 		21BBAA5757C674E86E2A3F6F /* prototype-product-standards-manual-190760222744.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C26FE8356AE0FFF56BBD7092 /* prototype-product-standards-manual-190760222744.jpg */; };
 		2291C957EA6631EFEB937359 /* Shopify Sans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 602EC1E5E7BEEEE5ED403D0E /* Shopify Sans-Light.otf */; };
@@ -46,6 +54,7 @@
 		27C6901D16FDC1F6B50C61DC /* GTStandard-MBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 825938AC5196B6F59F942B37 /* GTStandard-MBold.otf */; };
 		2822CEDA04B25E4864E667D0 /* ConversationStartersClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A588205457B7125D9C517E /* ConversationStartersClient.swift */; };
 		28343663962EFF21D05EAB40 /* prototype-product-standards-manual-4098803531845.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5509ABABB9138D467B42B2B /* prototype-product-standards-manual-4098803531845.jpg */; };
+		28F8A4325235D5EA5EDE4C94 /* quiet-product-bode-8229947965634.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 77366B8AC737C326C21C5C4A /* quiet-product-bode-8229947965634.jpg */; };
 		28FF4876F03114826EDC50DE /* GenerativeShoppingReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228F0094F0DBEA5C16F0AF41 /* GenerativeShoppingReview.swift */; };
 		29107517327623CE0FC59D19 /* prototype-product-standards-manual-235360452632.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8AE454E70ED3685D7966F9D1 /* prototype-product-standards-manual-235360452632.jpg */; };
 		29199A2F65CBE81BB66F662A /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B1902261AD08A0770FD0F2 /* RootView.swift */; };
@@ -54,12 +63,14 @@
 		2A6BA0C7069F457B3960CFDE /* RecentsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD2F47D24C455081A6C9B863 /* RecentsPanel.swift */; };
 		2B8A29EE7F0CC928CE5FA9F0 /* GenerativeFeedPrototypeSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390025A24F5078EAE73F1F0B /* GenerativeFeedPrototypeSession.swift */; };
 		2BBA09260865DBAD6863F6B9 /* prototype-product-house-of-leon-8590788591789.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A823CA23C0788118EB3E2893 /* prototype-product-house-of-leon-8590788591789.jpg */; };
+		2BCD6B88D8B9E28A2BD1CF51 /* quiet-product-house-of-leon-7014265454765.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 350870FE10D5D234909E3D90 /* quiet-product-house-of-leon-7014265454765.jpg */; };
 		2C28BDB175D4B02A4B98BACF /* prototype-product-standards-manual-3933686169669.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0CED2F1A122B58230E2EC0E7 /* prototype-product-standards-manual-3933686169669.jpg */; };
 		2C33A7C1BC355A8863BE586D /* prototype-product-standards-manual-92039479320.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 75C7A24CFE3E043EF20E7604 /* prototype-product-standards-manual-92039479320.jpg */; };
 		2D4492FC2EC48CF776C60D92 /* GravityTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7413074EEDFA3679D8B3E3A /* GravityTypography.swift */; };
 		2DD7F0D8C4D5CC4F3C3101A1 /* NavigationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BF042243E1DA796AB16D5F /* NavigationCoordinator.swift */; };
 		30A0E4B480D73F90CA66BC00 /* ProductCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CE0AD84A963D9B87DAC7A6 /* ProductCard.swift */; };
 		31581256A7AF99EE629D3251 /* RemoteFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212C72618735964CE2EE2CA6 /* RemoteFeedService.swift */; };
+		3251BB58A9B6A9086BACD632 /* quiet-product-extra-butter-salomon-8151144530103.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AE6DD9015370A28F87F1136B /* quiet-product-extra-butter-salomon-8151144530103.jpg */; };
 		33BFB88AF5BD6C33BE8D431E /* ShimmerModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CF65F7DCD67A43CB42DA84 /* ShimmerModifier.swift */; };
 		33C817F2A5BBE1BEB8766021 /* ShopFisheyeCanvas in Frameworks */ = {isa = PBXBuildFile; productRef = 7C3818C650EB8251694181DA /* ShopFisheyeCanvas */; };
 		350F39E52F99123BC6BAC887 /* BuyerPersonalizationCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CCB4CFDC34CC4E6C357680 /* BuyerPersonalizationCatalog.swift */; };
@@ -78,10 +89,13 @@
 		43AD4F8053063C6C1AB43014 /* TryFavesCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B1DC46049A51AE25C39D0F /* TryFavesCatalog.swift */; };
 		43D9369272ED075B55217438 /* HomeFeedPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD44BA187481F6D3D383F71 /* HomeFeedPlanner.swift */; };
 		440A5DC5D4911D355D9C1C3D /* Shopify Sans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = FA35C76B80BB93C38B16B89C /* Shopify Sans-Bold.otf */; };
+		446C117DC89403D8E3A3F464 /* QuietFeedReviewCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A87FFDF5EE16CA4DA466F5 /* QuietFeedReviewCatalog.swift */; };
 		44DB602849F1E1D411180881 /* HomeFeedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DBF299D0C3E6ED78EA6267 /* HomeFeedModels.swift */; };
 		4550C93A643C184FC2322CF2 /* AccountPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B07962DE499FB69044CA209 /* AccountPage.swift */; };
 		46E095D8E009042B0652F392 /* DebugInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2CE543A596530FA1FB54679 /* DebugInjection.swift */; };
+		46FA2494EAF5AB7E5EBE5FD8 /* quiet-product-extra-butter-salomon-4643336060976.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C414FDD411943CDC112B5543 /* quiet-product-extra-butter-salomon-4643336060976.jpg */; };
 		477D09CD55C612D590A21422 /* PurlInjectionDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA03D4C904C81520ECE119F /* PurlInjectionDiagnostics.swift */; };
+		47F83CC38FFFB573C237FEEE /* quiet-product-forom-8774121619587.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FE3872EEDFF6C929FF630B71 /* quiet-product-forom-8774121619587.jpg */; };
 		4A38B94BF99CE88B738987C1 /* SearchPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AD617847452AF8F79A0062 /* SearchPage.swift */; };
 		4BA9EB7B90A32AF27868B97C /* CanvasAgentInfiniteProductCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C0258B1B9C947F82D08B9 /* CanvasAgentInfiniteProductCanvas.swift */; };
 		4BF83845076FE56AEF1A3CA3 /* ConversationHistoryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F3FDD0745D3BA8C4C8F491 /* ConversationHistoryClient.swift */; };
@@ -97,8 +111,11 @@
 		55D42390378CA31716B68CE8 /* ShimmerText.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E4DAD75BA5C3CD796D78A1 /* ShimmerText.swift */; };
 		55E5061355B8685D36001D9F /* GTStandard-MMedium.otf in Resources */ = {isa = PBXBuildFile; fileRef = A287E60C566EBF6A7F6CC6B3 /* GTStandard-MMedium.otf */; };
 		56630523C4F642C774872B2A /* TypeaheadResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5A98DA569DCD4B253C47B /* TypeaheadResultsView.swift */; };
+		5743428756296473DFD4D37E /* quiet-product-sneaker-politics-9007369158844.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B6BD610FBD36DF00814FBA17 /* quiet-product-sneaker-politics-9007369158844.jpg */; };
+		58F918A3D419B161F5EEB5DA /* quiet-product-goodr-7557722865722.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DD7D31A543C94E0DBB3433E1 /* quiet-product-goodr-7557722865722.jpg */; };
 		5A3B8922B520F928F71CF5A3 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0431B7327888F447B9C4106E /* SettingsPage.swift */; };
 		5A9D30DE59F5FC2A9E73AE44 /* UserProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43FBABAF01048CCC0C88C54 /* UserProfileService.swift */; };
+		5B45E1F344D8E9A6ABA01616 /* quiet-dossier-tee.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3B70FF58D4BFA0744693182C /* quiet-dossier-tee.jpg */; };
 		5B6C1D92E94EBDCF2D8530DC /* ShopperSignals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079951B34CE474B3E080B64F /* ShopperSignals.swift */; };
 		5D784A4398CBE219D5FA81CB /* NextGenerationFeedCardCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE0E20DB143F7806E6F308E /* NextGenerationFeedCardCatalog.swift */; };
 		5DE188C12F42823E6802F132 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CA586789D21890B00848028 /* Assets.xcassets */; };
@@ -114,18 +131,21 @@
 		701D9E180841F535074E77E3 /* GTStandard-LSemibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 70B6EA62F63A7A6F39EC015E /* GTStandard-LSemibold.otf */; };
 		73A8C5E857F8C8D23B0AB657 /* CartPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3502071F386F04F63B93A6 /* CartPage.swift */; };
 		742ADA927F28DE885852A247 /* Shopify Sans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EAC89D255BADA19142CCCFBF /* Shopify Sans-Regular.otf */; };
+		74E6A8C039328D5987937076 /* quiet-product-sneaker-politics-8925922951356.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 01F914A6CE9E4A18C23B6ECA /* quiet-product-sneaker-politics-8925922951356.jpg */; };
 		7532BD57E517EAEC6DE07D36 /* prototype-product-standards-manual-8062714904792.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FFBD210836172335D0C9DF57 /* prototype-product-standards-manual-8062714904792.jpg */; };
 		79107058DF87EE30F6B96998 /* AgentWorkPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8AC86AF8135B7D410FFAA7 /* AgentWorkPreview.swift */; };
 		7AB89D69D50A3A529AB897BD /* GenerativeDiscoveryComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C9CC8574E3C0E8C22EAC5D /* GenerativeDiscoveryComposition.swift */; };
 		7ADB6AAFBD9415AF2F28D71F /* SOURCES.json in Resources */ = {isa = PBXBuildFile; fileRef = 6B0EA4316A506CA63514F1B9 /* SOURCES.json */; };
 		7C9AFF21445AD004D9ADEE83 /* TryFavesFeedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE3E0126D374E4E5073F57A /* TryFavesFeedCard.swift */; };
 		7F24A3D355452FBD58EBFCF6 /* PersonalizedFeedCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7378974583A27B80E0EFB3 /* PersonalizedFeedCatalog.swift */; };
+		7F9A134B2BCEA9BC7FD28A88 /* quiet-product-house-of-leon-7873592688813.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E8E677D9D376373855CF68D3 /* quiet-product-house-of-leon-7873592688813.jpg */; };
 		80113771A59A338E75B6F4D0 /* Shopify Sans-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = B8390B3AB280B4DA9E1B9867 /* Shopify Sans-Black.otf */; };
 		80240471BC5516F34CFFCA23 /* MerchantImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB209BF03135794AA09F836 /* MerchantImage.swift */; };
 		814F40BD9AF58FAAD1DED2D3 /* GiftGuideCreationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A610F9F42A69B09535D4BE1E /* GiftGuideCreationFlow.swift */; };
 		8169DDD1B854A9A9645ECB4D /* GenerativePrototypeTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25FDAAFB82E67A6B234DCA9 /* GenerativePrototypeTools.swift */; };
 		824ADF93916375DD59209CE0 /* KeyboardAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3821AE03CF82ED67CFAA6F /* KeyboardAnimation.swift */; };
 		82A64C1E9CB2163418EF552E /* TryFavesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1900539FD305AC1A165342BB /* TryFavesSheet.swift */; };
+		832A53067535F613130D673E /* quiet-product-goodr-7389500047418.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 72676A7A98541F5C694F70A7 /* quiet-product-goodr-7389500047418.jpg */; };
 		84A29C5D606D9D86E95B5F87 /* prototype-product-standards-manual-9250964537560.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C333F16A31B111AA00594 /* prototype-product-standards-manual-9250964537560.jpg */; };
 		85C669EB15EF49C2F43B2618 /* Dossiers in Resources */ = {isa = PBXBuildFile; fileRef = F65CA5F68FD9BBBA9174AB03 /* Dossiers */; };
 		8677AB2D41845564E2CDA068 /* prototype-product-lichen-12518383059262.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 37F30F295103DACCFE9D78BD /* prototype-product-lichen-12518383059262.jpg */; };
@@ -150,6 +170,7 @@
 		A041C240A789B223C9DAE295 /* AgentSuggestionChips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72ABAA98385BA17C78F00DC8 /* AgentSuggestionChips.swift */; };
 		A51EDCA68CCAA8534201812D /* prototype-product-standards-manual-8107495588056.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 575AB8600E0DEFF7D77FBC8C /* prototype-product-standards-manual-8107495588056.jpg */; };
 		A5A9C4A567FFE85BD6D90EEC /* WarmLightingBluDotBrandCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E1A573A940E934F04C9D35 /* WarmLightingBluDotBrandCard.swift */; };
+		A63F3373B41C32B6944AB389 /* QuietShoppingCardPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21664BB05187A559CF97F60C /* QuietShoppingCardPrototype.swift */; };
 		A68615A36BAFB29CF5F532F5 /* prototype-product-house-of-leon-7873592721581-comparison.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6A51F45B1BC34358EAE84956 /* prototype-product-house-of-leon-7873592721581-comparison.jpg */; };
 		A7E88F039954B5B789BC28C5 /* HolidayFeedHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81893883E934BAC0B3B769E2 /* HolidayFeedHeader.swift */; };
 		A82E10EDFA71EA5612CAC292 /* PurlTuneRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206CA1295E8B6FC39644D1DE /* PurlTuneRuntime.swift */; };
@@ -157,13 +178,16 @@
 		A9281D381BB9DCCE93A992BA /* ShopSearchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFB55D997C32D0573A50172 /* ShopSearchClient.swift */; };
 		AA736CD4B55C152019B5E173 /* ShopPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA5F85C077AA997213249D2 /* ShopPost.swift */; };
 		AD150EFC21B725F27F3546F5 /* DossierStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902A5F8C87482DAA5084A6B9 /* DossierStore.swift */; };
+		AECDD48C629A0631C23F8903 /* quiet-salomon-campaign.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4DF9BA8812420F506726222A /* quiet-salomon-campaign.jpg */; };
 		AF5C03E50063298EF1FE95DF /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C336C536108F2F50823197 /* HapticFeedback.swift */; };
 		AFBB4BEFC4B934212FBF5232 /* StorePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B688BEC7F76E8968601FF28E /* StorePage.swift */; };
 		B12D5D9F637DD46567D2CFD8 /* prototype-product-fellow-4807420739684.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A3FEC3575FD56A8BABDE7FBE /* prototype-product-fellow-4807420739684.jpg */; };
 		B183161ACDCC96DFC24576FF /* FollowUpBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC3E1EA342E896457F7A44E /* FollowUpBar.swift */; };
 		B1F85E63519B3AB3B81FC83A /* GTStandard-MRegular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4AEA08A7A0F99602B0464C7B /* GTStandard-MRegular.otf */; };
+		B4C1BA534C6C2A84C93C2A15 /* quiet-product-goodr-7385047629882.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3CC46C2DE3F760BAE2C9C284 /* quiet-product-goodr-7385047629882.jpg */; };
 		B68995C67E667E9BF2E10E4E /* GenerativeFeedPrototypeFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAD078B4815E78E63DBC18E /* GenerativeFeedPrototypeFixtures.swift */; };
 		B7BC6E89DB3AE68F166CD965 /* FloatingPanelSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A32D3620048BECC91CDCAC /* FloatingPanelSheet.swift */; };
+		B95F412E64CEECF28400AEE1 /* quiet-dossier-look0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 264ABA09DB2DF8EE5A39EFEC /* quiet-dossier-look0.jpg */; };
 		B9941023B1530544D245555F /* StoryTopicPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D860120DF5795DCF4608E92 /* StoryTopicPage.swift */; };
 		B9F8E91B113B4C17FF218973 /* AgentStreamClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6B78800FEDE269650DB81 /* AgentStreamClient.swift */; };
 		BAB57F30ED52BC33EBE5D21F /* ProductImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD31991D306CEA29F0583C1 /* ProductImageView.swift */; };
@@ -176,15 +200,19 @@
 		C24CA620603F2FE43B5B0673 /* prototype-product-standards-manual-7835076985048.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E94C324D717E607494A8347E /* prototype-product-standards-manual-7835076985048.jpg */; };
 		C2C1E1D14E11D3C0A8527653 /* RemoteMerchantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A91B29B5DF530EFF5D216F1 /* RemoteMerchantService.swift */; };
 		C2CCA16A0728B377D7E946A7 /* SuggestedCollectionsFeedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6BC0101378960416952901 /* SuggestedCollectionsFeedCard.swift */; };
+		C5F7450BB5C7734E50671BE3 /* quiet-product-forom-9082606649475.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1B5506333944A2A1C4E101A0 /* quiet-product-forom-9082606649475.jpg */; };
 		C62A93CBF1BB01B93F969C95 /* GenerativeDecisionCompositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC52083BE330588D6516459B /* GenerativeDecisionCompositions.swift */; };
+		C65C81E9473A46BF7F07AD6F /* quiet-review-catalog.json in Resources */ = {isa = PBXBuildFile; fileRef = 39C63EFEF36E160B799F7A91 /* quiet-review-catalog.json */; };
 		C6990F004D62EC84E1CC3488 /* FeedBundleLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E00A10734272579AE1E29B /* FeedBundleLoader.swift */; };
 		C9A6DC48035ED306A471F9CE /* MerchantCollectionFeedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54E1ECE0C5E966F35189CB65 /* MerchantCollectionFeedCard.swift */; };
+		CA65B01D256A055FC07A03E9 /* quiet-product-forom-8817998889091.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A9857C8DF20363E55E27C5F2 /* quiet-product-forom-8817998889091.jpg */; };
 		CD02265EA4C9E07E032CA2DA /* AnimatedMenuIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE8652F78AC9D1AA87E0174 /* AnimatedMenuIcon.swift */; };
 		CD26FCC9C9C080FC2F20DE2C /* DecartTryOnSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC062D214843DE30A2AA75A /* DecartTryOnSession.swift */; };
 		CD57B8EA0EECF704917FD500 /* DeliveriesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AB5D34A35EC699D8171D31 /* DeliveriesPage.swift */; };
 		D037EE96317684455BFB1576 /* OrdersWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9814ED8FB1597FE8380CFA /* OrdersWidget.swift */; };
 		D0BA7B0AE2FD5B79CE755497 /* Shopify Sans-Black Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = B332EE65073C4B19C9DD3957 /* Shopify Sans-Black Italic.otf */; };
 		D1111CE9CEEC25BC0A816AE1 /* GenerativeFeedPrototypeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EE806882C427056496C963 /* GenerativeFeedPrototypeUITests.swift */; };
+		D1DBA3A4D1DA123E1ED20122 /* quiet-product-goodr-7569018617914.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B8BECD2CB14AB899537C8EF9 /* quiet-product-goodr-7569018617914.jpg */; };
 		D335D92A9124DE5D27AAE6A1 /* Shopify Sans-Light Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3C23C2E41BB47CB79D885200 /* Shopify Sans-Light Italic.otf */; };
 		D810490AFF0EF5D302F762DB /* GoodSans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3279B82B1E80A5AE1150FD8D /* GoodSans-Regular.otf */; };
 		D97D7EE57AAC0B35095594E8 /* SpatialARWorldDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8A4827DE4ECA8D96010781 /* SpatialARWorldDestination.swift */; };
@@ -198,6 +226,7 @@
 		E231D47C9DC5088B813021BB /* QuickSearchCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A8B6A48F59AE65A5A915C9 /* QuickSearchCard.swift */; };
 		E26E101FAB34700D33AA8995 /* ComparisonShelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5307D982E8802D5BA2FABA39 /* ComparisonShelf.swift */; };
 		E30DA8088645106108A6FEA4 /* HomeRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F86BE7F786EB1CCFC0C29 /* HomeRoute.swift */; };
+		E31FBB2EC1736CBB967B25AA /* quiet-product-goodr-7446592192570.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 158601C513A1F370E41C9E4F /* quiet-product-goodr-7446592192570.jpg */; };
 		E5208F7A51253D5DC3A67B78 /* prototype-product-forom-8817998889091.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F4D0E2FEE272F2F38A000DD1 /* prototype-product-forom-8817998889091.jpg */; };
 		E57A40AA084F7234D6FFCD9A /* TypewriterText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EB1852CA445A1A84EA1B4F /* TypewriterText.swift */; };
 		E7BFF15A41410E55EF2F4162 /* AgentProductShelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F73DE9617D361AC48520EA8 /* AgentProductShelf.swift */; };
@@ -240,6 +269,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		01F914A6CE9E4A18C23B6ECA /* quiet-product-sneaker-politics-8925922951356.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-sneaker-politics-8925922951356.jpg"; sourceTree = "<group>"; };
 		026F95AEE45A53AF8C50203B /* Shopify Sans-Bold Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Bold Italic.otf"; sourceTree = "<group>"; };
 		0431B7327888F447B9C4106E /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 		0457AA3F2A1D05AFA3BDDC45 /* FeedCreationFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCreationFlow.swift; sourceTree = "<group>"; };
@@ -260,12 +290,14 @@
 		11AA14B88E7EFA9A153D8F19 /* TryFavesEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryFavesEnvironment.swift; sourceTree = "<group>"; };
 		11CCB4CFDC34CC4E6C357680 /* BuyerPersonalizationCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerPersonalizationCatalog.swift; sourceTree = "<group>"; };
 		11E66AF39E36586723035423 /* SearchResultCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCount.swift; sourceTree = "<group>"; };
+		158601C513A1F370E41C9E4F /* quiet-product-goodr-7446592192570.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-goodr-7446592192570.jpg"; sourceTree = "<group>"; };
 		158ABF7CF9F4752B30DDEBC3 /* TryFavesWorldPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryFavesWorldPage.swift; sourceTree = "<group>"; };
 		15B484A6F4AA747AE39ACEE4 /* TryFavesLookService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryFavesLookService.swift; sourceTree = "<group>"; };
 		16A32D3620048BECC91CDCAC /* FloatingPanelSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPanelSheet.swift; sourceTree = "<group>"; };
 		17A588205457B7125D9C517E /* ConversationStartersClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationStartersClient.swift; sourceTree = "<group>"; };
 		186AEA4B3B705CBAE58FCD13 /* prototype-product-standards-manual-1424479363.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-1424479363.jpg"; sourceTree = "<group>"; };
 		1900539FD305AC1A165342BB /* TryFavesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryFavesSheet.swift; sourceTree = "<group>"; };
+		1B5506333944A2A1C4E101A0 /* quiet-product-forom-9082606649475.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-forom-9082606649475.jpg"; sourceTree = "<group>"; };
 		1BE0E20DB143F7806E6F308E /* NextGenerationFeedCardCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextGenerationFeedCardCatalog.swift; sourceTree = "<group>"; };
 		1C19A304A47A9AE92E877FF8 /* HomeUtilityPrototypeCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUtilityPrototypeCards.swift; sourceTree = "<group>"; };
 		1D89BFFAA56AD3F6CD49A24D /* BottomNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNavBar.swift; sourceTree = "<group>"; };
@@ -273,24 +305,32 @@
 		2031C250C27B23086631BFD2 /* PurlTuneTokenOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurlTuneTokenOptions.swift; sourceTree = "<group>"; };
 		206CA1295E8B6FC39644D1DE /* PurlTuneRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurlTuneRuntime.swift; sourceTree = "<group>"; };
 		212C72618735964CE2EE2CA6 /* RemoteFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedService.swift; sourceTree = "<group>"; };
+		21664BB05187A559CF97F60C /* QuietShoppingCardPrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuietShoppingCardPrototype.swift; sourceTree = "<group>"; };
 		228F0094F0DBEA5C16F0AF41 /* GenerativeShoppingReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeShoppingReview.swift; sourceTree = "<group>"; };
 		2537D9E279EC49B168BFF767 /* LocalMerchantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMerchantService.swift; sourceTree = "<group>"; };
+		264ABA09DB2DF8EE5A39EFEC /* quiet-dossier-look0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-dossier-look0.jpg"; sourceTree = "<group>"; };
 		281FDFAC7B3A9E95703E93EE /* FeedTopic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTopic.swift; sourceTree = "<group>"; };
+		2954FFC00530FE280A0EE4A2 /* quiet-product-sneaker-politics-9459028754620.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-sneaker-politics-9459028754620.jpg"; sourceTree = "<group>"; };
 		2A3821AE03CF82ED67CFAA6F /* KeyboardAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAnimation.swift; sourceTree = "<group>"; };
 		2A8A6C01D1AE689BFA8DC211 /* prototype-product-lichen-12462683128126.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-lichen-12462683128126.jpg"; sourceTree = "<group>"; };
 		2ACD1E2168C3779609CA48BE /* CachedAsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedAsyncImage.swift; sourceTree = "<group>"; };
 		2C93D6F49CBDE99B04DB5FEC /* AgentProductShelfSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentProductShelfSkeleton.swift; sourceTree = "<group>"; };
 		2D3502071F386F04F63B93A6 /* CartPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartPage.swift; sourceTree = "<group>"; };
+		2F67C3945F3CB8F218BBE5D6 /* QuietShoppingJourneyPrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuietShoppingJourneyPrototype.swift; sourceTree = "<group>"; };
 		31BC531098602EBF12CF58A9 /* StoryDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryDetailPage.swift; sourceTree = "<group>"; };
 		31DD6A54D1D610CEC56F6499 /* GoodSansText-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GoodSansText-Medium.otf"; sourceTree = "<group>"; };
 		3279B82B1E80A5AE1150FD8D /* GoodSans-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GoodSans-Regular.otf"; sourceTree = "<group>"; };
+		350870FE10D5D234909E3D90 /* quiet-product-house-of-leon-7014265454765.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-house-of-leon-7014265454765.jpg"; sourceTree = "<group>"; };
 		35C36C9F6B86634756B52BF8 /* prototype-product-standards-manual-2107020836933.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-2107020836933.jpg"; sourceTree = "<group>"; };
 		362AA9ECF0FBCBF6C312897A /* GoodSans-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GoodSans-Medium.otf"; sourceTree = "<group>"; };
 		37F30F295103DACCFE9D78BD /* prototype-product-lichen-12518383059262.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-lichen-12518383059262.jpg"; sourceTree = "<group>"; };
 		38E8DE96062F5624D3957EF7 /* ShopFeedSummer26.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ShopFeedSummer26.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		390025A24F5078EAE73F1F0B /* GenerativeFeedPrototypeSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeFeedPrototypeSession.swift; sourceTree = "<group>"; };
+		39C63EFEF36E160B799F7A91 /* quiet-review-catalog.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "quiet-review-catalog.json"; sourceTree = "<group>"; };
+		3B70FF58D4BFA0744693182C /* quiet-dossier-tee.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-dossier-tee.jpg"; sourceTree = "<group>"; };
 		3C16419B525AF6EF1235C9C9 /* GTStandard-MSemibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTStandard-MSemibold.otf"; sourceTree = "<group>"; };
 		3C23C2E41BB47CB79D885200 /* Shopify Sans-Light Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Light Italic.otf"; sourceTree = "<group>"; };
+		3CC46C2DE3F760BAE2C9C284 /* quiet-product-goodr-7385047629882.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-goodr-7385047629882.jpg"; sourceTree = "<group>"; };
 		3DF452154EC67EBCC6E2B03A /* prototype-product-feature-salomon-6882430025799.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-feature-salomon-6882430025799.jpg"; sourceTree = "<group>"; };
 		403C39FA95A4BA399B3DEAB9 /* GenerativeFeedPrototypeUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GenerativeFeedPrototypeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		43C9CC8574E3C0E8C22EAC5D /* GenerativeDiscoveryComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeDiscoveryComposition.swift; sourceTree = "<group>"; };
@@ -305,6 +345,7 @@
 		4C6C333F16A31B111AA00594 /* prototype-product-standards-manual-9250964537560.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-9250964537560.jpg"; sourceTree = "<group>"; };
 		4CA86AF2A33B20F0C6C103A6 /* PriceFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceFormatting.swift; sourceTree = "<group>"; };
 		4CC6B78800FEDE269650DB81 /* AgentStreamClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentStreamClient.swift; sourceTree = "<group>"; };
+		4DF9BA8812420F506726222A /* quiet-salomon-campaign.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-salomon-campaign.jpg"; sourceTree = "<group>"; };
 		4E393AFDDFE0DD655628838F /* VariableBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableBlurView.swift; sourceTree = "<group>"; };
 		4EB209BF03135794AA09F836 /* MerchantImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantImage.swift; sourceTree = "<group>"; };
 		4F73DE9617D361AC48520EA8 /* AgentProductShelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentProductShelf.swift; sourceTree = "<group>"; };
@@ -314,6 +355,7 @@
 		5459CA6FC9ADF5F66FEA511C /* CategoryTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTile.swift; sourceTree = "<group>"; };
 		54E1ECE0C5E966F35189CB65 /* MerchantCollectionFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantCollectionFeedCard.swift; sourceTree = "<group>"; };
 		575AB8600E0DEFF7D77FBC8C /* prototype-product-standards-manual-8107495588056.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-8107495588056.jpg"; sourceTree = "<group>"; };
+		581B71AA9314B7EDE5CBFE84 /* quiet-product-house-of-leon-7873592721581.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-house-of-leon-7873592721581.jpg"; sourceTree = "<group>"; };
 		59CA9E773CC1BF1555842863 /* LegacyFeedArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyFeedArchive.swift; sourceTree = "<group>"; };
 		5A91B29B5DF530EFF5D216F1 /* RemoteMerchantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMerchantService.swift; sourceTree = "<group>"; };
 		5B50C22FBFD24E7FCECE5B5D /* prototype-product-fellow-2055410221171.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-fellow-2055410221171.jpg"; sourceTree = "<group>"; };
@@ -345,19 +387,24 @@
 		70DBDE861035F847C407021F /* CanvasAgentSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasAgentSupport.swift; sourceTree = "<group>"; };
 		7163BC021837A3CE4059EA3A /* TopicPageRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicPageRecipe.swift; sourceTree = "<group>"; };
 		7196F22BB191093106BD6651 /* ComparisonCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonCard.swift; sourceTree = "<group>"; };
+		72676A7A98541F5C694F70A7 /* quiet-product-goodr-7389500047418.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-goodr-7389500047418.jpg"; sourceTree = "<group>"; };
 		72ABAA98385BA17C78F00DC8 /* AgentSuggestionChips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentSuggestionChips.swift; sourceTree = "<group>"; };
 		7441F231E112580CF7D84C6D /* ShopPostFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPostFeedCard.swift; sourceTree = "<group>"; };
 		75C7A24CFE3E043EF20E7604 /* prototype-product-standards-manual-92039479320.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-92039479320.jpg"; sourceTree = "<group>"; };
 		76EE806882C427056496C963 /* GenerativeFeedPrototypeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeFeedPrototypeUITests.swift; sourceTree = "<group>"; };
+		77366B8AC737C326C21C5C4A /* quiet-product-bode-8229947965634.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-bode-8229947965634.jpg"; sourceTree = "<group>"; };
 		79B5EE001CCDA550692C9022 /* TopicPageBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicPageBlocks.swift; sourceTree = "<group>"; };
 		7ACA72BD0A8A01D2AAAD7A96 /* prototype-product-standards-manual-9036702908632.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-9036702908632.jpg"; sourceTree = "<group>"; };
 		7E3506BBA3CAF16F94A6C934 /* BuyerFeedNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerFeedNavigationBar.swift; sourceTree = "<group>"; };
 		7E3F31ABD00A86DFF0320BE3 /* BentoGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BentoGrid.swift; sourceTree = "<group>"; };
+		7EDFC8443A325D0CC5EB1042 /* quiet-product-house-of-leon-8505646055597.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-house-of-leon-8505646055597.jpg"; sourceTree = "<group>"; };
 		7F2C1A0A84FDDE28DC408251 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
 		7F39B6F46EBC3D657496BF6D /* FloatingBackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingBackButton.swift; sourceTree = "<group>"; };
 		7F7FE9B3DC8AB77C41671E1D /* FeedScrollInfrastructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedScrollInfrastructure.swift; sourceTree = "<group>"; };
 		81893883E934BAC0B3B769E2 /* HolidayFeedHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayFeedHeader.swift; sourceTree = "<group>"; };
 		825938AC5196B6F59F942B37 /* GTStandard-MBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTStandard-MBold.otf"; sourceTree = "<group>"; };
+		85183AAD863F58C1731F764F /* quiet-product-goodr-7557722210362.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-goodr-7557722210362.jpg"; sourceTree = "<group>"; };
+		899D0C9ADC9606B594F6A09F /* quiet-product-house-of-leon-8505645662381.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-house-of-leon-8505645662381.jpg"; sourceTree = "<group>"; };
 		8AE454E70ED3685D7966F9D1 /* prototype-product-standards-manual-235360452632.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-235360452632.jpg"; sourceTree = "<group>"; };
 		8B07962DE499FB69044CA209 /* AccountPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountPage.swift; sourceTree = "<group>"; };
 		8CA586789D21890B00848028 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -388,12 +435,15 @@
 		A610F9F42A69B09535D4BE1E /* GiftGuideCreationFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftGuideCreationFlow.swift; sourceTree = "<group>"; };
 		A7413074EEDFA3679D8B3E3A /* GravityTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityTypography.swift; sourceTree = "<group>"; };
 		A823CA23C0788118EB3E2893 /* prototype-product-house-of-leon-8590788591789.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-house-of-leon-8590788591789.jpg"; sourceTree = "<group>"; };
+		A9857C8DF20363E55E27C5F2 /* quiet-product-forom-8817998889091.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-forom-8817998889091.jpg"; sourceTree = "<group>"; };
+		A9A87FFDF5EE16CA4DA466F5 /* QuietFeedReviewCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuietFeedReviewCatalog.swift; sourceTree = "<group>"; };
 		A9FED336AD0819C098677649 /* prototype-product-standards-manual-8342043590872.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-8342043590872.jpg"; sourceTree = "<group>"; };
 		AA430267E6AF9B64D5983EBF /* NextGenerationFeedCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextGenerationFeedCardView.swift; sourceTree = "<group>"; };
 		AA9D5906A69998EDBB387925 /* NextGenerationFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextGenerationFeedCard.swift; sourceTree = "<group>"; };
 		AB7E22A8C16DB6B0755FE858 /* DeliveryDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryDetailPage.swift; sourceTree = "<group>"; };
 		AB9814ED8FB1597FE8380CFA /* OrdersWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersWidget.swift; sourceTree = "<group>"; };
 		AD7C5AECC27CBFF98B8E1E8D /* GravityShadows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityShadows.swift; sourceTree = "<group>"; };
+		AE6DD9015370A28F87F1136B /* quiet-product-extra-butter-salomon-8151144530103.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-extra-butter-salomon-8151144530103.jpg"; sourceTree = "<group>"; };
 		AE70E60C8630F68AEBE41D3B /* prototype-product-forom-9080102322307.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-forom-9080102322307.jpg"; sourceTree = "<group>"; };
 		AE9489015A1EBB73FED6C444 /* prototype-product-house-of-leon-7873592721581.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-house-of-leon-7873592721581.jpg"; sourceTree = "<group>"; };
 		AF15B9E17E009E05951942F7 /* ProductPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPage.swift; sourceTree = "<group>"; };
@@ -405,8 +455,10 @@
 		B49BBF6216CEAF899FCF335C /* SpringPresets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpringPresets.swift; sourceTree = "<group>"; };
 		B5509ABABB9138D467B42B2B /* prototype-product-standards-manual-4098803531845.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-4098803531845.jpg"; sourceTree = "<group>"; };
 		B688BEC7F76E8968601FF28E /* StorePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorePage.swift; sourceTree = "<group>"; };
+		B6BD610FBD36DF00814FBA17 /* quiet-product-sneaker-politics-9007369158844.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-sneaker-politics-9007369158844.jpg"; sourceTree = "<group>"; };
 		B6E07104E33E24EFFA26DDEE /* AmbientProductVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientProductVideo.swift; sourceTree = "<group>"; };
 		B8390B3AB280B4DA9E1B9867 /* Shopify Sans-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Black.otf"; sourceTree = "<group>"; };
+		B8BECD2CB14AB899537C8EF9 /* quiet-product-goodr-7569018617914.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-goodr-7569018617914.jpg"; sourceTree = "<group>"; };
 		B9314499830A55A10B4A3054 /* FisheyeCanvasUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FisheyeCanvasUITests.swift; sourceTree = "<group>"; };
 		B96694C6EED1830A1ED8C4FF /* InjectableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectableView.swift; sourceTree = "<group>"; };
 		B983AC901056B787D37F13CA /* AgentConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentConversationView.swift; sourceTree = "<group>"; };
@@ -420,6 +472,7 @@
 		C26FE8356AE0FFF56BBD7092 /* prototype-product-standards-manual-190760222744.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-190760222744.jpg"; sourceTree = "<group>"; };
 		C2E733B02FA0A2456A50F957 /* TopicPresentationBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicPresentationBlockView.swift; sourceTree = "<group>"; };
 		C3AC86BC4EA8BB2C4C9FCDC4 /* AgentMetaRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentMetaRow.swift; sourceTree = "<group>"; };
+		C414FDD411943CDC112B5543 /* quiet-product-extra-butter-salomon-4643336060976.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-extra-butter-salomon-4643336060976.jpg"; sourceTree = "<group>"; };
 		C7DBF299D0C3E6ED78EA6267 /* HomeFeedModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeedModels.swift; sourceTree = "<group>"; };
 		CC1132BFE84890181F234405 /* ShopServerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopServerClient.swift; sourceTree = "<group>"; };
 		CC719A5F782082D53B9247E3 /* AgentProductCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentProductCard.swift; sourceTree = "<group>"; };
@@ -430,9 +483,11 @@
 		D295B4AB8C545AB13095CD54 /* ShopFeedSummer26App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopFeedSummer26App.swift; sourceTree = "<group>"; };
 		D43FBABAF01048CCC0C88C54 /* UserProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileService.swift; sourceTree = "<group>"; };
 		D63224A20DCCA6A2867E3E63 /* TryOnFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryOnFeedCard.swift; sourceTree = "<group>"; };
+		D801A50F68EECC5C16D3DCF3 /* quiet-product-extra-butter-salomon-7919493251255.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-extra-butter-salomon-7919493251255.jpg"; sourceTree = "<group>"; };
 		D980F4F049B8BD00365E5845 /* GravityIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityIcon.swift; sourceTree = "<group>"; };
 		DAA03D4C904C81520ECE119F /* PurlInjectionDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurlInjectionDiagnostics.swift; sourceTree = "<group>"; };
 		DB02EED712F616C19BAB6144 /* Shopify Sans-Medium Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Medium Italic.otf"; sourceTree = "<group>"; };
+		DD7D31A543C94E0DBB3433E1 /* quiet-product-goodr-7557722865722.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-goodr-7557722865722.jpg"; sourceTree = "<group>"; };
 		E0340E8B08C4ACA990499EDC /* prototype-product-house-of-leon-7873592688813.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-house-of-leon-7873592688813.jpg"; sourceTree = "<group>"; };
 		E25FDAAFB82E67A6B234DCA9 /* GenerativePrototypeTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativePrototypeTools.swift; sourceTree = "<group>"; };
 		E50FED85087F954198F8D79A /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -440,6 +495,7 @@
 		E670AA572DCA2DB88EE8D9C6 /* StoryFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryFeedCard.swift; sourceTree = "<group>"; };
 		E8A21C6D06C8893714676D02 /* ShopFisheyeCanvas */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ShopFisheyeCanvas; path = Packages/ShopFisheyeCanvas; sourceTree = SOURCE_ROOT; };
 		E8E1A573A940E934F04C9D35 /* WarmLightingBluDotBrandCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarmLightingBluDotBrandCard.swift; sourceTree = "<group>"; };
+		E8E677D9D376373855CF68D3 /* quiet-product-house-of-leon-7873592688813.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-house-of-leon-7873592688813.jpg"; sourceTree = "<group>"; };
 		E94C324D717E607494A8347E /* prototype-product-standards-manual-7835076985048.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-7835076985048.jpg"; sourceTree = "<group>"; };
 		EA9B7BEA5251EDBCB9A73B8A /* VerySpecialWatchCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerySpecialWatchCatalog.swift; sourceTree = "<group>"; };
 		EAC89D255BADA19142CCCFBF /* Shopify Sans-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Regular.otf"; sourceTree = "<group>"; };
@@ -450,6 +506,7 @@
 		F2CE543A596530FA1FB54679 /* DebugInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugInjection.swift; sourceTree = "<group>"; };
 		F4A8B6A48F59AE65A5A915C9 /* QuickSearchCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSearchCard.swift; sourceTree = "<group>"; };
 		F4D0E2FEE272F2F38A000DD1 /* prototype-product-forom-8817998889091.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-forom-8817998889091.jpg"; sourceTree = "<group>"; };
+		F61E0634CDC589C020911504 /* quiet-product-house-of-leon-8214794371245.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-house-of-leon-8214794371245.jpg"; sourceTree = "<group>"; };
 		F65CA5F68FD9BBBA9174AB03 /* Dossiers */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Dossiers; path = ShopFeedSummer26/Dossiers; sourceTree = SOURCE_ROOT; };
 		F6915A5ED111B873EFB9D852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F6B5F9A0D28975561CB034B5 /* WorldExperienceViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldExperienceViews.swift; sourceTree = "<group>"; };
@@ -459,6 +516,7 @@
 		F9E4DAD75BA5C3CD796D78A1 /* ShimmerText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerText.swift; sourceTree = "<group>"; };
 		FA35C76B80BB93C38B16B89C /* Shopify Sans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Bold.otf"; sourceTree = "<group>"; };
 		FD2F47D24C455081A6C9B863 /* RecentsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentsPanel.swift; sourceTree = "<group>"; };
+		FE3872EEDFF6C929FF630B71 /* quiet-product-forom-8774121619587.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-forom-8774121619587.jpg"; sourceTree = "<group>"; };
 		FFBD210836172335D0C9DF57 /* prototype-product-standards-manual-8062714904792.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-8062714904792.jpg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -667,6 +725,39 @@
 			path = Agent;
 			sourceTree = "<group>";
 		};
+		90BA268E99CC2830076EF0D9 /* QuietReviewMedia */ = {
+			isa = PBXGroup;
+			children = (
+				264ABA09DB2DF8EE5A39EFEC /* quiet-dossier-look0.jpg */,
+				3B70FF58D4BFA0744693182C /* quiet-dossier-tee.jpg */,
+				77366B8AC737C326C21C5C4A /* quiet-product-bode-8229947965634.jpg */,
+				C414FDD411943CDC112B5543 /* quiet-product-extra-butter-salomon-4643336060976.jpg */,
+				D801A50F68EECC5C16D3DCF3 /* quiet-product-extra-butter-salomon-7919493251255.jpg */,
+				AE6DD9015370A28F87F1136B /* quiet-product-extra-butter-salomon-8151144530103.jpg */,
+				FE3872EEDFF6C929FF630B71 /* quiet-product-forom-8774121619587.jpg */,
+				A9857C8DF20363E55E27C5F2 /* quiet-product-forom-8817998889091.jpg */,
+				1B5506333944A2A1C4E101A0 /* quiet-product-forom-9082606649475.jpg */,
+				3CC46C2DE3F760BAE2C9C284 /* quiet-product-goodr-7385047629882.jpg */,
+				72676A7A98541F5C694F70A7 /* quiet-product-goodr-7389500047418.jpg */,
+				158601C513A1F370E41C9E4F /* quiet-product-goodr-7446592192570.jpg */,
+				85183AAD863F58C1731F764F /* quiet-product-goodr-7557722210362.jpg */,
+				DD7D31A543C94E0DBB3433E1 /* quiet-product-goodr-7557722865722.jpg */,
+				B8BECD2CB14AB899537C8EF9 /* quiet-product-goodr-7569018617914.jpg */,
+				350870FE10D5D234909E3D90 /* quiet-product-house-of-leon-7014265454765.jpg */,
+				E8E677D9D376373855CF68D3 /* quiet-product-house-of-leon-7873592688813.jpg */,
+				581B71AA9314B7EDE5CBFE84 /* quiet-product-house-of-leon-7873592721581.jpg */,
+				F61E0634CDC589C020911504 /* quiet-product-house-of-leon-8214794371245.jpg */,
+				899D0C9ADC9606B594F6A09F /* quiet-product-house-of-leon-8505645662381.jpg */,
+				7EDFC8443A325D0CC5EB1042 /* quiet-product-house-of-leon-8505646055597.jpg */,
+				01F914A6CE9E4A18C23B6ECA /* quiet-product-sneaker-politics-8925922951356.jpg */,
+				B6BD610FBD36DF00814FBA17 /* quiet-product-sneaker-politics-9007369158844.jpg */,
+				2954FFC00530FE280A0EE4A2 /* quiet-product-sneaker-politics-9459028754620.jpg */,
+				39C63EFEF36E160B799F7A91 /* quiet-review-catalog.json */,
+				4DF9BA8812420F506726222A /* quiet-salomon-campaign.jpg */,
+			);
+			path = QuietReviewMedia;
+			sourceTree = "<group>";
+		};
 		A0A6C032341F791DDF785F08 /* PrototypeCardMedia */ = {
 			isa = PBXGroup;
 			children = (
@@ -726,6 +817,7 @@
 				1BE0E20DB143F7806E6F308E /* NextGenerationFeedCardCatalog.swift */,
 				9E7378974583A27B80E0EFB3 /* PersonalizedFeedCatalog.swift */,
 				613E1770898F8B692C9D11FE /* PreviewData.swift */,
+				A9A87FFDF5EE16CA4DA466F5 /* QuietFeedReviewCatalog.swift */,
 				212C72618735964CE2EE2CA6 /* RemoteFeedService.swift */,
 				5A91B29B5DF530EFF5D216F1 /* RemoteMerchantService.swift */,
 				93C7B3807AD8D7156AF55F78 /* SampleMerchant.swift */,
@@ -773,6 +865,8 @@
 				AB9814ED8FB1597FE8380CFA /* OrdersWidget.swift */,
 				04CE0AD84A963D9B87DAC7A6 /* ProductCard.swift */,
 				8FD31991D306CEA29F0583C1 /* ProductImageView.swift */,
+				21664BB05187A559CF97F60C /* QuietShoppingCardPrototype.swift */,
+				2F67C3945F3CB8F218BBE5D6 /* QuietShoppingJourneyPrototype.swift */,
 				7441F231E112580CF7D84C6D /* ShopPostFeedCard.swift */,
 				0F0E1B41F7855616362EB10F /* StoryCardLayouts.swift */,
 				E670AA572DCA2DB88EE8D9C6 /* StoryFeedCard.swift */,
@@ -815,6 +909,7 @@
 				34D33C611A9EF92EC02165CD /* Navigation */,
 				0F0CADD9C321AA4BA8C22B4E /* Pages */,
 				A0A6C032341F791DDF785F08 /* PrototypeCardMedia */,
+				90BA268E99CC2830076EF0D9 /* QuietReviewMedia */,
 				ACBB2AF8AB88EF30F85AA4F3 /* SampleData */,
 				2F4DA453E295EE4E4AE398C8 /* Worlds */,
 			);
@@ -992,6 +1087,32 @@
 				84A29C5D606D9D86E95B5F87 /* prototype-product-standards-manual-9250964537560.jpg in Resources */,
 				53709D75134440FC5609BA18 /* prototype-product-standards-manual-9250965487832.jpg in Resources */,
 				8B7501D2913B009339FD7F14 /* prototype-product-standards-manual-9250967847128.jpg in Resources */,
+				B95F412E64CEECF28400AEE1 /* quiet-dossier-look0.jpg in Resources */,
+				5B45E1F344D8E9A6ABA01616 /* quiet-dossier-tee.jpg in Resources */,
+				28F8A4325235D5EA5EDE4C94 /* quiet-product-bode-8229947965634.jpg in Resources */,
+				46FA2494EAF5AB7E5EBE5FD8 /* quiet-product-extra-butter-salomon-4643336060976.jpg in Resources */,
+				08F42A0367F22F1B56D991AD /* quiet-product-extra-butter-salomon-7919493251255.jpg in Resources */,
+				3251BB58A9B6A9086BACD632 /* quiet-product-extra-butter-salomon-8151144530103.jpg in Resources */,
+				47F83CC38FFFB573C237FEEE /* quiet-product-forom-8774121619587.jpg in Resources */,
+				CA65B01D256A055FC07A03E9 /* quiet-product-forom-8817998889091.jpg in Resources */,
+				C5F7450BB5C7734E50671BE3 /* quiet-product-forom-9082606649475.jpg in Resources */,
+				B4C1BA534C6C2A84C93C2A15 /* quiet-product-goodr-7385047629882.jpg in Resources */,
+				832A53067535F613130D673E /* quiet-product-goodr-7389500047418.jpg in Resources */,
+				E31FBB2EC1736CBB967B25AA /* quiet-product-goodr-7446592192570.jpg in Resources */,
+				0150828269398A2FB55E8202 /* quiet-product-goodr-7557722210362.jpg in Resources */,
+				58F918A3D419B161F5EEB5DA /* quiet-product-goodr-7557722865722.jpg in Resources */,
+				D1DBA3A4D1DA123E1ED20122 /* quiet-product-goodr-7569018617914.jpg in Resources */,
+				2BCD6B88D8B9E28A2BD1CF51 /* quiet-product-house-of-leon-7014265454765.jpg in Resources */,
+				7F9A134B2BCEA9BC7FD28A88 /* quiet-product-house-of-leon-7873592688813.jpg in Resources */,
+				18B2F10FC1376AB5C8C70A6D /* quiet-product-house-of-leon-7873592721581.jpg in Resources */,
+				1C538A7A278A51E3A6E0BA96 /* quiet-product-house-of-leon-8214794371245.jpg in Resources */,
+				0A6F6A775113178BD68531CB /* quiet-product-house-of-leon-8505645662381.jpg in Resources */,
+				1CF17ED316E44EE4E433D7BA /* quiet-product-house-of-leon-8505646055597.jpg in Resources */,
+				74E6A8C039328D5987937076 /* quiet-product-sneaker-politics-8925922951356.jpg in Resources */,
+				5743428756296473DFD4D37E /* quiet-product-sneaker-politics-9007369158844.jpg in Resources */,
+				1A4CB694C0C4ABA87AB25BB9 /* quiet-product-sneaker-politics-9459028754620.jpg in Resources */,
+				C65C81E9473A46BF7F07AD6F /* quiet-review-catalog.json in Resources */,
+				AECDD48C629A0631C23F8903 /* quiet-salomon-campaign.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1183,6 +1304,9 @@
 				A82E10EDFA71EA5612CAC292 /* PurlTuneRuntime.swift in Sources */,
 				BB89D0D2AA32282A22C6F72F /* PurlTuneTokenOptions.swift in Sources */,
 				E231D47C9DC5088B813021BB /* QuickSearchCard.swift in Sources */,
+				446C117DC89403D8E3A3F464 /* QuietFeedReviewCatalog.swift in Sources */,
+				A63F3373B41C32B6944AB389 /* QuietShoppingCardPrototype.swift in Sources */,
+				104128724E38EA9E44AA0950 /* QuietShoppingJourneyPrototype.swift in Sources */,
 				2A6BA0C7069F457B3960CFDE /* RecentsPanel.swift in Sources */,
 				31581256A7AF99EE629D3251 /* RemoteFeedService.swift in Sources */,
 				C2C1E1D14E11D3C0A8527653 /* RemoteMerchantService.swift in Sources */,

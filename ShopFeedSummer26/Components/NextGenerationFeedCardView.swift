@@ -41,6 +41,12 @@ struct NextGenerationFeedCardView: View {
         GenerativeFeedStyle.surface(for: spec)
             .frame(width: width, height: height)
             .overlay(alignment: .topLeading) {
+                if spec.isQuietReview {
+                    QuietShoppingCardPrototype(spec: spec, merchants: merchants, session: session,
+                        width: width, height: height, topPadding: foregroundTopPadding,
+                        bottomPadding: bottomContentPadding, isActive: isActive,
+                        onInspect: { showsInspector = true })
+                } else {
                 VStack(alignment: .leading, spacing: GravitySpacing.space20) {
                     heading
                     GeometryReader { proxy in
@@ -54,6 +60,7 @@ struct NextGenerationFeedCardView: View {
                 .padding(.bottom, bottomContentPadding)
                 .frame(width: width, height: height)
                 .foregroundStyle(ink)
+                }
             }
             .clipShape(RoundedRectangle(cornerRadius: FeedCardStyle.cornerRadius, style: .continuous))
             .environment(\.colorScheme, spec.prefersDarkNavigationText ? .light : .dark)
@@ -494,7 +501,8 @@ struct NextGenerationFeedCardView: View {
 /// arbitrary colors, fonts, spacing, or animation curves.
 enum GenerativeFeedStyle {
     static func surface(for spec: NextGenerationFeedCardSpec) -> Color {
-        switch spec.job {
+        if spec.isQuietReview { return Color(hex: spec.job == .complete ? "#F5E9DA" : "#F7F6F2") }
+        return switch spec.job {
         case .complete: Color(hex: "#F2F1ED")
         case .compare, .continueJourney: Color.white
         case .merchantDiscovery: Color(hex: "#20201E")
@@ -516,6 +524,7 @@ struct GenerativeProductMedia: View {
     var fillsFrame = false
     private var url: URL? {
         guard let item else { return nil }
+        if let local = Bundle.main.url(forResource: "quiet-product-\(item.merchant.id)-\(item.product.id)", withExtension: "jpg") { return local }
         let name = "prototype-product-\(item.merchant.id)-\(item.product.id)"
         if let presentation, let local = Bundle.main.url(forResource: "\(name)-\(presentation)", withExtension: "jpg") { return local }
         let local = Bundle.main.url(forResource: name, withExtension: "jpg")

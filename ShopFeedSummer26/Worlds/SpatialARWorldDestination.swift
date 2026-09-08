@@ -7,6 +7,7 @@ struct SpatialARWorldDestination: View {
     @Bindable var session: WorldSession
     let products: [ResolvedStoryProduct]
     let onClose: () -> Void
+    var onOpenProduct: ((ResolvedStoryProduct) -> Void)? = nil
 
     @Environment(NavigationCoordinator.self) private var coordinator
     @State private var selectedProductID: String?
@@ -237,7 +238,8 @@ struct SpatialARWorldDestination: View {
 
     private func open(_ item: ResolvedStoryProduct) {
         session.send(.selectProduct(item.id))
-        coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id))
+        if let onOpenProduct { onOpenProduct(item) }
+        else { coordinator.pushRoute(.product(merchantId: item.merchant.id, productId: item.product.id)) }
     }
 }
 

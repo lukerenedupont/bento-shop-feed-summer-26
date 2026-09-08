@@ -8,7 +8,19 @@ struct RootView: View {
     var body: some View {
 #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("-nextGenerationGallery") {
-            NextGenerationFeedGallery()
+            NavigationStack(path: $coordinator.homePath) {
+                NextGenerationFeedGallery()
+                    .toolbar(.hidden, for: .navigationBar)
+                    .navigationDestination(for: HomeRoute.self) { route in
+                        destinations(for: route)
+                            .safeAreaInset(edge: .bottom) {
+                                Button("Back") { coordinator.popCurrentPage() }
+                                    .buttonStyle(.borderedProminent).tint(.black)
+                                    .padding(12)
+                            }
+                    }
+            }
+            .environment(coordinator)
         } else {
             feedShell
         }

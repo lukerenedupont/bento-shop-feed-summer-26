@@ -1,0 +1,371 @@
+{
+  "token": "gid://shopify/p/3sUIyHlRJfeoPF730g0u29",
+  "buildRequestId": "c8bbd0a2-6339-45b3-8981-f0e7aaf2f4ef",
+  "product": {
+    "id": "gid://shopify/p/3sUIyHlRJfeoPF730g0u29",
+    "title": "Companion Tee",
+    "brand": "BODE",
+    "description": "A premium 100% cotton t-shirt embroidered with the wedding date and vintage motif of Moose Charlap and Sandy Stewart, made in Portugal.",
+    "price": 330,
+    "image": "https://cdn.shopify.com/s/files/1/1218/8970/files/COMPANIONTEE-01.jpg"
+  },
+  "dossier": {
+    "eyebrow": "BODE · MENSWEAR T-SHIRT",
+    "headline": "The Companion Tee In Cream",
+    "summary": "The Companion Tee is a 100% cotton T-shirt made in Portugal by the American luxury brand BODE, founded by Emily Adams Bode Aujla in 2016. It is embroidered with the December 30th, 1962 wedding date and a vintage motif of Moose Charlap and Sandy Stewart, reflecting the brand's focus on storytelling and memory in clothing.",
+    "medium": "apparel",
+    "creator": {
+      "role": "brand",
+      "name": "BODE"
+    },
+    "facts": [
+      {
+        "label": "Maison",
+        "value": "BODE"
+      },
+      {
+        "label": "Designer",
+        "value": "Emily Adams Bode Aujla"
+      },
+      {
+        "label": "Founded",
+        "value": "2016, New York"
+      },
+      {
+        "label": "Material",
+        "value": "100% cotton"
+      },
+      {
+        "label": "Made in",
+        "value": "Portugal"
+      },
+      {
+        "label": "Color",
+        "value": "Cream"
+      },
+      {
+        "label": "Detail",
+        "value": "Embroidered wedding date and vintage couple motif"
+      }
+    ],
+    "story": [
+      {
+        "title": "A Marriage Remembered in Thread",
+        "detail": "The tee is embroidered with the wedding date and a vintage motif of a couple: Moose Charlap and Sandy Stewart, married December 30th, 1962 in the penthouse of the St. Moritz Hotel overlooking Central Park.",
+        "sources": [
+          4,
+          13
+        ]
+      },
+      {
+        "title": "Storytelling as a Design Language",
+        "detail": "BODE is defined by its focus on storytelling, craft, and American history, often building garments from antique and traditional textiles as one-of-a-kind pieces.",
+        "sources": [
+          7,
+          3
+        ]
+      },
+      {
+        "title": "A Menswear Milestone",
+        "detail": "In February 2017 Emily Adams Bode Aujla became the first female designer to show at New York Fashion Week's dedicated menswear shows.",
+        "sources": [
+          5,
+          6
+        ]
+      }
+    ],
+    "references": [
+      {
+        "title": "Emily Adams Bode Aujla",
+        "detail": "American fashion designer and founder of BODE, who studied menswear design at Parsons and previously worked at Marc Jacobs and Ralph Lauren.",
+        "sources": [
+          1,
+          5
+        ]
+      },
+      {
+        "title": "Antique Textile Practice",
+        "detail": "BODE became known for garments made from antique and newly made traditional textiles, treating clothing as heirlooms.",
+        "sources": [
+          3,
+          10
+        ]
+      },
+      {
+        "title": "CFDA Recognition",
+        "detail": "BODE and Emily Bode have received industry awards, including CFDA laureate status noted in brand profiles.",
+        "sources": [
+          2
+        ]
+      }
+    ],
+    "styling": [
+      "Wear untucked with relaxed tailored trousers for a soft, considered daytime look",
+      "Layer under an unstructured jacket to let the embroidery peek through",
+      "Pair with vintage-wash denim for an easy, craft-forward outfit"
+    ],
+    "palette": [
+      {
+        "hex": "#EFE7D6",
+        "name": "Cream"
+      },
+      {
+        "hex": "#C9B79C",
+        "name": "Antique Tan"
+      },
+      {
+        "hex": "#7A6A55",
+        "name": "Faded Walnut"
+      },
+      {
+        "hex": "#4A4038",
+        "name": "Sepia Brown"
+      },
+      {
+        "hex": "#2B2B2B",
+        "name": "Ink"
+      }
+    ],
+    "pairWith": [
+      {
+        "label": "Relaxed trouser",
+        "category": "trouser",
+        "examples": [
+          "Levi's 501 Original",
+          "Carhartt WIP Single Knee Pant",
+          "Dickies 874 Work Pant"
+        ],
+        "queries": [
+          "pleated cotton trouser",
+          "relaxed chino",
+          "wide leg trouser"
+        ],
+        "attributes": [
+          "ecru",
+          "cotton",
+          "relaxed",
+          "casual",
+          "vintage"
+        ],
+        "reason": "A soft, roomy trouser balances the tee's easy cut and heritage feel"
+      },
+      {
+        "label": "Sneaker",
+        "category": "sneaker",
+        "examples": [
+          "Adidas Samba",
+          "Converse Chuck 70",
+          "Vans Authentic"
+        ],
+        "queries": [
+          "low top sneaker",
+          "canvas sneaker",
+          "retro trainer"
+        ],
+        "attributes": [
+          "off-white",
+          "canvas",
+          "low-top",
+          "minimal",
+          "casual"
+        ],
+        "reason": "A clean low-top keeps the look grounded and unfussy"
+      },
+      {
+        "label": "Overshirt",
+        "category": "overshirt",
+        "examples": [
+          "Levi's Trucker Jacket",
+          "Carhartt WIP Michigan Coat",
+          "Barbour Chore Jacket"
+        ],
+        "queries": [
+          "cotton chore jacket",
+          "workwear overshirt",
+          "denim jacket"
+        ],
+        "attributes": [
+          "indigo",
+          "cotton",
+          "boxy",
+          "workwear",
+          "layering"
+        ],
+        "reason": "A workwear layer echoes BODE's craft and heritage sensibility"
+      }
+    ],
+    "pairingImagePrompt": "An editorial flat-lay knolling arrangement on a seamless warm-neutral background, shot straight top-down: a cream BODE Companion Tee with embroidered couple motif laid flat beside Levi's 501 Original jeans, Adidas Samba sneakers, and a Levi's Trucker Jacket. All items whole and intact, parts connected, in correct relative scale, evenly spaced on a clean grid with no overlaps, soft even editorial lighting.",
+    "pairLooks": [
+      {
+        "caption": "Soft Heritage Daytime",
+        "prompt": "Editorial photograph of a man wearing the cream BODE Companion Tee tucked loosely into Levi's 501 Original jeans with Adidas Samba sneakers, standing in warm natural window light against a plaster wall, relaxed daytime mood, film-like grain."
+      },
+      {
+        "caption": "Workwear Layered Look",
+        "prompt": "Editorial photograph of a man wearing the cream BODE Companion Tee layered under an open Levi's Trucker Jacket with Carhartt WIP Single Knee Pants and Converse Chuck 70 sneakers, standing in a sunlit studio courtyard, cool muted palette, documentary feel."
+      }
+    ],
+    "selfProfile": {
+      "category": "t-shirt",
+      "gender": "men",
+      "attributes": [
+        "cream",
+        "100% cotton",
+        "embroidered couple motif",
+        "short sleeve",
+        "heritage",
+        "relaxed"
+      ]
+    },
+    "similar": [
+      {
+        "category": "t-shirt",
+        "queries": [
+          "embroidered cotton tee",
+          "cream graphic tee"
+        ],
+        "attributes": [
+          "cream",
+          "cotton",
+          "embroidered",
+          "vintage motif",
+          "short sleeve"
+        ]
+      },
+      {
+        "category": "t-shirt",
+        "queries": [
+          "heritage cotton tshirt",
+          "artisanal menswear tee"
+        ],
+        "attributes": [
+          "off-white",
+          "premium cotton",
+          "relaxed fit",
+          "craft detail"
+        ]
+      }
+    ],
+    "lookbookStyle": "Warm natural daylight, soft film grain, muted heritage palette, calm domestic and studio settings evoking memory and craft.",
+    "lookbookPrompt": "A single editorial lookbook sheet in one 3:2 landscape image, arranged as a strict 2x2 grid (2 rows x 2 columns) of four landscape photographs, identical cell sizes, uniform hairline gutters, grid flush to all four edges with no outer margin. Cell 1 (top-left): a close crop of the cream BODE Companion Tee's embroidered couple motif and wedding date. Cell 2 (top-right): a man wearing the tee untucked with relaxed cream trousers in warm window light. Cell 3 (bottom-left): the tee layered under an open workwear jacket, three-quarter angle in a sunlit courtyard. Cell 4 (bottom-right): a seated figure in the tee and vintage denim against a plaster wall. In each cell the product fills about two thirds of the frame. All frames share warm natural daylight, soft film grain, and a muted heritage palette. No text, captions, numbers, watermarks, rounded corners or drop shadows."
+  },
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Emily_Adams_Bode_Aujla",
+      "title": "en.wikipedia.org"
+    },
+    {
+      "url": "https://mcmag.ru/bode-istoriya-brenda/",
+      "title": "mcmag.ru"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Bode_(fashion_brand)",
+      "title": "en.wikipedia.org"
+    },
+    {
+      "url": "https://editorialist.com/shop/bode/men/t-shirts/",
+      "title": "editorialist.com"
+    },
+    {
+      "url": "https://growyourclothingbrand.com/blog/case-studies/bode/",
+      "title": "growyourclothingbrand.com"
+    },
+    {
+      "url": "https://www.linkedin.com/posts/marcelo-henrique-rubio_a-brief-history-of-bode-bode-was-founded-activity-7399451899315240960-Cvbv",
+      "title": "linkedin.com"
+    },
+    {
+      "url": "https://bode.com/pages/about",
+      "title": "bode.com"
+    },
+    {
+      "url": "https://www.bode.bio/en/history/",
+      "title": "bode.bio"
+    },
+    {
+      "url": "https://www.vogue.it/en/vogue-talents/news/2017/02/28/emily-adams-bode-new-york-new-talents/",
+      "title": "vogue.it"
+    },
+    {
+      "url": "https://www.businessoffashion.com/articles/entrepreneurship/can-bode-build-a-family-business-that-lasts/",
+      "title": "businessoffashion.com"
+    },
+    {
+      "url": "https://www.mheda.org/industry-news/bode-equipment-celebrates-50-years/",
+      "title": "mheda.org"
+    },
+    {
+      "url": "https://www.bode-chemie.com/en/company/history",
+      "title": "bode-chemie.com"
+    },
+    {
+      "url": "https://editorialist.com/shop/bode/men/shirts/",
+      "title": "editorialist.com"
+    },
+    {
+      "url": "https://www.businessoffashion.com/people/emily-adams-bode/",
+      "title": "businessoffashion.com"
+    }
+  ],
+  "createdAt": 1788896849696,
+  "pairingCatalog": {
+    "version": "catalog-pairings-v1",
+    "status": "verified",
+    "slotsTotal": 3,
+    "slotsResolved": 3,
+    "resolvedAt": "2026-09-08T19:47:47.411Z",
+    "products": [
+      {
+        "slotIndex": 0,
+        "matchedName": "Carhartt WIP Single Knee Pant",
+        "via": "named",
+        "category": "trouser",
+        "label": "Relaxed trouser",
+        "product": {
+          "id": "gid://shopify/p/1j20fMjJ9FfQC6NSwcZscU",
+          "title": "Carhartt WIP Single Knee Pant - Shale",
+          "brand": "SNEAKER POLITICS",
+          "price": 103.4,
+          "image": "https://cdn.shopify.com/s/files/1/0214/7974/files/CARHARTT-WIP-APRIL26-I034798.jpg",
+          "description": "Classic Carhartt WIP single knee pants made from durable cotton in relaxed fit for everyday comfort and style.",
+          "color": "hsl(233, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 1,
+        "matchedName": "Converse Chuck 70",
+        "via": "named",
+        "category": "sneaker",
+        "label": "Sneaker",
+        "product": {
+          "id": "gid://shopify/p/4LdjDGBy2UQS59QRm2luGP",
+          "title": "Converse Chuck 70 Low 'Black'",
+          "brand": "SOLE CLASSICS",
+          "price": 75,
+          "image": "https://cdn.shopify.com/s/files/1/0409/9765/products/converse-1.jpg",
+          "description": "Classic Converse Chuck 70 Low sneakers in premium canvas deliver vintage style and modern comfort for everyday wear.",
+          "color": "hsl(163, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 2,
+        "matchedName": "",
+        "via": "category",
+        "category": "overshirt",
+        "label": "Overshirt",
+        "product": {
+          "id": "gid://shopify/p/3JZoFuN0IcA8YaZKVepdtq",
+          "title": "Kith Stitched Patchwork Boxy Collared Overshirt - Mid Indigo",
+          "brand": "KITH",
+          "price": 220,
+          "image": "https://cdn.shopify.com/s/files/1/0094/2252/files/KHM034812-452-Front.jpg",
+          "description": "A premium cotton overshirt featuring all-over embroidery, patch pockets, and a boxy silhouette for versatile urban style.",
+          "color": "hsl(211, 50%, 50%)"
+        }
+      }
+    ]
+  },
+  "key": "8ccc0ca672d0d77f",
+  "recoveredFromCache": true,
+  "savedAt": 1788896849696
+}

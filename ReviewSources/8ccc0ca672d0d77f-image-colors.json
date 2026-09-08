@@ -1,0 +1,82 @@
+{
+  "lookbook": {
+    "hex": "#a89381",
+    "uniform": false,
+    "edges": {
+      "top": "#b6a595",
+      "bottom": "#5e5251",
+      "left": "#997c66",
+      "right": "#b5a698"
+    }
+  },
+  "pair": {
+    "hex": "#ece2d4",
+    "uniform": true,
+    "edges": {
+      "top": "#ece2d4",
+      "bottom": "#ece2d4",
+      "left": "#ece2d4",
+      "right": "#ece2d4"
+    }
+  },
+  "pairSquare": {
+    "hex": "#f5e9da",
+    "uniform": true,
+    "edges": {
+      "top": "#f5e9da",
+      "bottom": "#f5e9da",
+      "left": "#f5e9da",
+      "right": "#f5e9da"
+    }
+  },
+  "look0": {
+    "hex": "#cbb7a3",
+    "uniform": false,
+    "edges": {
+      "top": "#d0bea7",
+      "bottom": "#cfbaaa",
+      "left": "#c7b59d",
+      "right": "#c4b3a1"
+    }
+  },
+  "look1": {
+    "hex": "#bfa58c",
+    "uniform": false,
+    "edges": {
+      "top": "#ccbca8",
+      "bottom": "#b89a84",
+      "left": "#65584b",
+      "right": "#f2ede4"
+    }
+  },
+  "object0": {
+    "hex": "#f5e9da",
+    "uniform": true,
+    "edges": {
+      "top": "#f5e9da",
+      "bottom": "#f5e9da",
+      "left": "#f5e9da",
+      "right": "#f5e9da"
+    }
+  },
+  "object2": {
+    "hex": "#f5e9da",
+    "uniform": true,
+    "edges": {
+      "top": "#f5e9da",
+      "bottom": "#f5e9da",
+      "left": "#f5e9da",
+      "right": "#f5e9da"
+    }
+  },
+  "object3": {
+    "hex": "#f5e9da",
+    "uniform": true,
+    "edges": {
+      "top": "#f5e9da",
+      "bottom": "#f5e9da",
+      "left": "#f5e9da",
+      "right": "#f5e9da"
+    }
+  }
+}

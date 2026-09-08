@@ -3,7 +3,8 @@ import Foundation
 /// PROTOTYPE: invented activity for design discussion, NOT Luke's observed
 /// purchase/view history. All merchant and product references are real records.
 enum GenerativeFeedPrototypeFixtures {
-    static let signals: [PrototypeShoppingSignal] = [
+    static var signals: [PrototypeShoppingSignal] { QuietFeedReviewCatalog.enabled ? QuietFeedReviewCatalog.signals : legacySignals }
+    static let legacySignals: [PrototypeShoppingSignal] = [
         .init(
             id: "complete-jacket", kind: .purchase,
             summary: "Demo purchase: Nike × Stüssy Reversible Varsity Jacket from Feature.",
