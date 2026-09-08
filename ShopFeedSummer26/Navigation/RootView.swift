@@ -6,6 +6,18 @@ struct RootView: View {
     @Namespace private var namespace
 
     var body: some View {
+#if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-nextGenerationGallery") {
+            NextGenerationFeedGallery()
+        } else {
+            feedShell
+        }
+#else
+        feedShell
+#endif
+    }
+
+    private var feedShell: some View {
         ZStack {
             // Content for the selected tab
             switch coordinator.selectedPage {
@@ -51,12 +63,6 @@ struct RootView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
-#if DEBUG
-            if ProcessInfo.processInfo.arguments.contains("-nextGenerationGallery") {
-                NextGenerationFeedGallery()
-                    .zIndex(100)
-            }
-#endif
         }
         .environment(coordinator)
 #if DEBUG

@@ -40,6 +40,7 @@ struct HomePage: View {
     /// A drilled-in subcategory story rendered inline so the top bar stays.
     @State private var focusedStoryID: String?
     @State private var visibleStoryID: String?
+    @State private var generativeSession = GenerativeFeedPrototypeSession()
     @State private var feedScrollState = FeedScrollState()
     @State private var feedBackdropState = FeedBackdropState()
     @State private var feedChromeTransition = FeedChromeTransitionState()
@@ -1126,8 +1127,13 @@ struct HomePage: View {
                 merchants: merchants,
                 width: layout.cardWidth,
                 height: layout.cardHeight,
-                foregroundTopPadding: layout.pinnedTitleTop - GravitySpacing.space16,
-                isActive: isSnappedEntry
+                foregroundTopPadding: max(
+                    layout.pinnedTitleTop,
+                    windowSafeAreaTopInset + FeedNavigationStyle.controlSize + GravitySpacing.space24
+                ) + GravitySpacing.space32,
+                isActive: isSnappedEntry,
+                session: generativeSession,
+                bottomContentPadding: FeedCardStyle.bottomNavigationClearance + GravitySpacing.space24
             )
 
         case let .suggestedCollections(presentation):
@@ -1451,7 +1457,7 @@ struct HomePage: View {
     private var feedBackdropColors: [String: Color] {
         Dictionary(uniqueKeysWithValues: feedEntries.map { entry in
             let color: Color = switch entry {
-            case let .nextGeneration(spec): Color(hex: spec.accentHex)
+            case let .nextGeneration(spec): GenerativeFeedStyle.surface(for: spec)
             case let .suggestedCollections(presentation):
                 Color(hex: presentation.collections.first?.story.accentHex ?? "#557F93")
             case let .story(story): Color(hex: story.accentHex)
@@ -1724,8 +1730,8 @@ struct HomePage: View {
             if let flagIndex = arguments.firstIndex(of: "-openNextGenerationCard"),
                arguments.indices.contains(flagIndex + 1),
                let requestedIndex = Int(arguments[flagIndex + 1]),
-               NextGenerationCardLayout.allCases.indices.contains(requestedIndex) {
-                targetID = "next-gen-\(topicID)-\(NextGenerationCardLayout.allCases[requestedIndex].rawValue)"
+               feedEntries.indices.contains(requestedIndex) {
+                targetID = feedEntries[requestedIndex].id
             } else if arguments.contains("-openCanvas") {
                 targetID = WorldPrototypeCatalog.canvasID
             } else if arguments.contains("-openSuggestedCollections") {
@@ -1745,14 +1751,9 @@ struct HomePage: View {
             feedChromeTransition.progress = targetID == utilityStoryID ? 0 : 1
             visibleStoryID = targetID
         } else if let topic = navigationTopics.first(where: { $0.id == topicID }) {
-            let targetID = if NextGenerationFeedCardCatalog.prototypeEnabled {
-                feedEntries.first?.id
-            } else {
-                buyerPreview.stories(
-                    for: topic,
-                    in: PersonalizedFeedCatalog.current
-                ).first?.id
-            }
+            let targetID = feedEntries.first?.id ?? buyerPreview.stories(
+                for: topic, in: PersonalizedFeedCatalog.current
+            ).first?.id
             feedScrollState.positionID = targetID
             feedBackdropState.entryID = targetID
             feedChromeTransition.progress = 1

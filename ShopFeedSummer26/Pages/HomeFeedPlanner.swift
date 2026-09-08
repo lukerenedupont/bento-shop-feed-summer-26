@@ -60,10 +60,10 @@ enum HomeFeedPlanner {
 
         let stories = stories(for: input)
 
-        if NextGenerationFeedCardCatalog.prototypeEnabled {
+        if NextGenerationFeedCardCatalog.prototypeEnabled,
+           input.buyer.id == "luke", input.topic.id == "for-you" {
             let generatedEntries = NextGenerationFeedCardCatalog.cards(
-                topic: input.topic,
-                sourceStories: stories,
+                signals: GenerativeFeedPrototypeFixtures.signals,
                 merchants: input.merchants
             ).map(FeedEntry.nextGeneration)
             let availableContentCounts = contentCounts(

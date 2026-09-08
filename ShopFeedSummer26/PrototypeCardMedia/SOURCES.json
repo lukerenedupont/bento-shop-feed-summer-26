@@ -1,0 +1,90 @@
+[
+  {
+    "merchantID": "feature-salomon",
+    "productID": 6882429993031,
+    "title": "Nike x St\u00fcssy Reversible Varsity Jacket - Medium Olive/Bright Mandarin",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0408/9909/files/Nike-x-Stussy-Reversible-Varsity-Jacket-Medium-Olive-Bright-Mandarin-FJ9153-222---12-18-23---Feature--RV-53-GRAYBGNIKE_280be45e-af42-4df1-9cdf-579e41c238a5.jpg?v=1788240839",
+    "filename": "prototype-product-feature-salomon-6882429993031.jpg",
+    "sha256": "3de00ae9893fdb3aeecc9552550b63d3765a5958a771605b1d0da8188d7e3d9e"
+  },
+  {
+    "merchantID": "feature-salomon",
+    "productID": 6882430025799,
+    "title": "Nike x St\u00fcssy Fleece Pant - Grey Heather",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0408/9909/files/Nike-x-Stussy-Fleece-Pant-Grey-Heather-FN5231-050---12-18-23---Feature--RV-41.jpg?v=1703208700",
+    "filename": "prototype-product-feature-salomon-6882430025799.jpg",
+    "sha256": "3bf4c98a1a283d40c2ad8c281c4b68325c797489b692615df84e1315bcd3a06f"
+  },
+  {
+    "merchantID": "feature-salomon",
+    "productID": 6882429796423,
+    "title": "Nike x St\u00fcssy Stone Washed Fleece Pant - Black",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0408/9909/files/Nike-x-Stussy-Stone-Washed-Fleece-Pant-Black-FN5235-010---12-18-23---Feature--RV-35-GRAYBGNIKE_f977d229-8013-4d2c-bb4f-6944a7c5e26a.jpg?v=1788240836",
+    "filename": "prototype-product-feature-salomon-6882429796423.jpg",
+    "sha256": "4a75de5cde6ca1e839dfa55f110e00a1e95797aa3e441dabd642ca1b8adc8180"
+  },
+  {
+    "merchantID": "house-of-leon",
+    "productID": 7873592688813,
+    "title": "Chair #1 - Camel Nubuck",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0593/2217/1565/files/chair-1-camel-nubuck.jpg?v=1742496762",
+    "filename": "prototype-product-house-of-leon-7873592688813.jpg",
+    "sha256": "cfae5b986f8b088154e6ed43079b40c1d45485dcf7c7db505ba5511a57fa68f3"
+  },
+  {
+    "merchantID": "house-of-leon",
+    "productID": 7873592721581,
+    "title": "Chair #1 - Black Leather",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0593/2217/1565/files/metal-black-leather-chair-house-of-leon-lifestyle.jpg?v=1775260744",
+    "filename": "prototype-product-house-of-leon-7873592721581.jpg",
+    "sha256": "022f0d54408cf4c0d985891867319a0904d15bf97b5bc8aa726a87a86f6f0f57"
+  },
+  {
+    "merchantID": "house-of-leon",
+    "productID": 8590788591789,
+    "title": "Papa Teddy Chair - White Boucle",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0593/2217/1565/files/papa-teddy-lounge-chair-white-boucle.jpg?v=1740443574",
+    "filename": "prototype-product-house-of-leon-8590788591789.jpg",
+    "sha256": "9f6c7ab788413be94203e563ddce1ba72d532b3365540b0cff10f58729517ecf"
+  },
+  {
+    "merchantID": "house-of-leon",
+    "productID": 7014265454765,
+    "title": "Sofita Marble Coffee Table",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0593/2217/1565/products/sofita-marble-coffee-table-coffee-tables-house-of-leon-799110.jpg?v=1738263127",
+    "filename": "prototype-product-house-of-leon-7014265454765.jpg",
+    "sha256": "4de85dbae0990d78b73b7c2b72d0b5207cf14b8942187323bc9b4623fe9486e4"
+  },
+  {
+    "merchantID": "standards-manual",
+    "productID": 1424479363,
+    "title": "NYCTA Graphics Standards Manual Compact Edition",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0883/7252/products/payment_01-2500.jpg?v=1476792940",
+    "filename": "prototype-product-standards-manual-1424479363.jpg",
+    "sha256": "d7a486ba4e7b226f06ed882f99d8709c59837280667156a3ddbdfc3fa89715d3"
+  },
+  {
+    "merchantID": "standards-manual",
+    "productID": 5842516163,
+    "title": "NASA Graphics Standards Manual",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0883/7252/products/SHOP_NASA.jpg?v=1476802297",
+    "filename": "prototype-product-standards-manual-5842516163.jpg",
+    "sha256": "62def7382e2b298e35fc5f61ddb4688cda289db85742051bc7d908c25c3b4804"
+  },
+  {
+    "merchantID": "standards-manual",
+    "productID": 92039479320,
+    "title": "EPA Graphic Standards System",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0883/7252/products/SHOP_EPA.jpg?v=1509903774",
+    "filename": "prototype-product-standards-manual-92039479320.jpg",
+    "sha256": "ea8046ad0a4bf73ed4af299ab09e56c4676733603640e1d386de9cff2ceb52e7"
+  },
+  {
+    "merchantID": "standards-manual",
+    "productID": 3933686169669,
+    "title": "Parks",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0883/7252/products/standards_manual_parks_book3128.jpg?v=1569422490",
+    "filename": "prototype-product-standards-manual-3933686169669.jpg",
+    "sha256": "f66999d18848be8279b3cc67d39986b95b7612ca2ebceccd1528d0da3997da80"
+  }
+]

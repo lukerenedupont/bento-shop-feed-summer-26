@@ -1,55 +1,64 @@
 import Foundation
 
-/// PROTOTYPE — a finite grammar for evaluating whether generative feed cards
-/// can feel highly varied while remaining legible, shoppable, and Shop-native.
-/// The grammar is intentionally data-only: rendering and interaction live in
-/// `NextGenerationFeedCardView`, while catalog truth stays in SampleMerchant.
+// PROTOTYPE — can a signal → shopping job → composition feel more useful than
+// a ranked product rail? Specifications contain semantic choices, not UI values.
 enum NextGenerationCardLayout: String, CaseIterable, Identifiable {
-    case focusFrame
-    case orbit
-    case splitDecision
-    case swipeStack
-    case mosaicSpotlight
-    case merchantWindow
-    case colorWash
-    case productTimeline
-    case comparisonScrub
-    case kitBuilder
-    case constellation
-    case catalogTicker
-    case detailLens
-    case priceLadder
-    case dropReveal
-    case editorialFold
-    case bundleBuilder
-    case textureRail
-    case productStage
-    case rapidPoll
-
+    case relationship = "Relationship"
+    case comparison = "Comparison"
+    case merchant = "Merchant"
+    case continuation = "Continuation"
+    case hero = "Hero"
     var id: String { rawValue }
+}
+
+enum PrototypeShoppingJob: String {
+    case complete = "Complete a purchase"
+    case compare = "Compare a shortlist"
+    case merchantDiscovery = "Explore a familiar merchant"
+    case continueWorld = "Continue a World"
+}
+
+enum PrototypeCardInteraction: String {
+    case swap = "Swap the supporting product"
+    case shortlist = "Keep or remove a candidate"
+    case browse = "Browse the merchant assortment"
+    case selectForWorld = "Choose an item for the room plan"
+}
+
+struct PrototypeShoppingSignal: Identifiable {
+    enum Kind { case purchase, repeatedViews, merchantAffinity, activeWorld }
+    let id: String
+    let kind: Kind
+    let summary: String
+    let products: [FeedStory.ProductReference]
+    let merchantID: String
+    var worldID: String? = nil
 }
 
 struct NextGenerationFeedCardSpec: Identifiable {
     let id: String
-    let layout: NextGenerationCardLayout
-    let eyebrow: String
+    let signal: PrototypeShoppingSignal
+    let job: PrototypeShoppingJob
     let title: String
     let subtitle: String
-    let accentHex: String
+    let layout: NextGenerationCardLayout
+    let alternatives: [NextGenerationCardLayout]
+    let interaction: PrototypeCardInteraction
+    let anchor: FeedStory.ProductReference?
     let productReferences: [FeedStory.ProductReference]
+    let reasonForSelection: String
 
-    var prefersDarkNavigationText: Bool {
-        [.colorWash, .comparisonScrub, .priceLadder].contains(layout)
-    }
+    var prefersDarkNavigationText: Bool { job != .merchantDiscovery }
+    var accessibilityDescription: String { "\(title). \(subtitle). \(interaction.rawValue). Demo shopping context." }
 
     func resolvedProducts(from merchants: [SampleMerchant]) -> [ResolvedStoryProduct] {
-        productReferences.compactMap { reference in
-            guard let merchant = merchants.first(where: { $0.id == reference.merchantID }),
-                  let product = merchant.products.first(where: { $0.id == reference.productID }) else {
-                return nil
-            }
-            return ResolvedStoryProduct(merchant: merchant, product: product)
-        }
+        productReferences.compactMap { Self.resolve($0, in: merchants) }
+    }
+
+    static func resolve(_ ref: FeedStory.ProductReference, in merchants: [SampleMerchant]) -> ResolvedStoryProduct? {
+        guard let merchant = merchants.first(where: { $0.id == ref.merchantID }),
+              let product = merchant.products.first(where: { $0.id == ref.productID }) else { return nil }
+        return ResolvedStoryProduct(merchant: merchant, product: product)
     }
 }
 
@@ -57,157 +66,74 @@ struct NextGenerationFeedCardSpec: Identifiable {
 enum NextGenerationFeedCardCatalog {
     static let prototypeEnabled = true
 
-    private static let palette = [
-        "#263B35", "#6E5AE6", "#E8653D", "#3D6C8A", "#EEE8DB",
-        "#171717", "#C7E66A", "#8A4D68", "#F1B84B", "#47605C",
-        "#3159A5", "#A8C8BD", "#E8D7CE", "#5A4637", "#D75555",
-        "#6D78A8", "#C4A46A", "#2F7772", "#E8A6B8", "#45434F",
-    ]
-
+    /// The fixture declares activity, never a layout. The job determines which
+    /// entities are useful; only then do we choose a supported composition.
     static func cards(
-        topic: BuyerFeedTopic,
-        sourceStories: [FeedStory],
+        signals: [PrototypeShoppingSignal],
         merchants: [SampleMerchant]
     ) -> [NextGenerationFeedCardSpec] {
-        guard prototypeEnabled else { return [] }
-
-        let prioritizedMerchantIDs = sourceStories.flatMap { story in
-            story.productReferencesMerchantIDs
-        }
-        var seenMerchantIDs = Set<String>()
-        let orderedMerchants = (
-            prioritizedMerchantIDs.compactMap { id in merchants.first { $0.id == id } }
-            + merchants
-        ).filter { merchant in
-            !merchant.products.isEmpty && seenMerchantIDs.insert(merchant.id).inserted
-        }
-        guard !orderedMerchants.isEmpty else { return [] }
-
-        return NextGenerationCardLayout.allCases.enumerated().map { index, layout in
-            let merchant = orderedMerchants[index % orderedMerchants.count]
-            let secondary = orderedMerchants[(index + 5) % orderedMerchants.count]
-            let tertiary = orderedMerchants[(index + 11) % orderedMerchants.count]
-            let products = products(
-                for: layout,
-                primary: merchant,
-                secondary: secondary,
-                tertiary: tertiary,
-                offset: index
-            )
-            let lead = products[0]
-            let copy = copy(
-                for: layout,
-                topic: topic,
-                merchant: merchant,
-                leadProduct: lead.product
-            )
-
-            return NextGenerationFeedCardSpec(
-                id: "next-gen-\(topic.id)-\(layout.rawValue)",
-                layout: layout,
-                eyebrow: copy.eyebrow,
-                title: copy.title,
-                subtitle: copy.subtitle,
-                accentHex: palette[index % palette.count],
-                productReferences: products.prefix(8).map {
-                    FeedStory.ProductReference(
-                        merchantID: $0.merchant.id,
-                        productID: $0.product.id
-                    )
-                }
-            )
-        }
-    }
-
-    private static func products(
-        for layout: NextGenerationCardLayout,
-        primary: SampleMerchant,
-        secondary: SampleMerchant,
-        tertiary: SampleMerchant,
-        offset: Int
-    ) -> [ResolvedStoryProduct] {
-        let isMultiMerchant = [
-            NextGenerationCardLayout.orbit,
-            .splitDecision,
-            .mosaicSpotlight,
-            .constellation,
-            .rapidPoll,
-        ].contains(layout)
-        let sources = isMultiMerchant ? [primary, secondary, tertiary] : [primary]
-
-        var result: [ResolvedStoryProduct] = []
-        var seen = Set<String>()
-        for pass in 0..<8 {
-            let merchant = sources[pass % sources.count]
-            let product = merchant.products[(pass + offset) % merchant.products.count]
-            let resolved = ResolvedStoryProduct(merchant: merchant, product: product)
-            if seen.insert(resolved.id).inserted {
-                result.append(resolved)
+        signals.compactMap { signal in
+            let observed = signal.products.compactMap { NextGenerationFeedCardSpec.resolve($0, in: merchants) }
+            guard observed.count == signal.products.count,
+                  let merchant = merchants.first(where: { $0.id == signal.merchantID }) else { return nil }
+            let job: PrototypeShoppingJob
+            let title: String
+            let subtitle: String
+            let layout: NextGenerationCardLayout
+            let interaction: PrototypeCardInteraction
+            let anchor: FeedStory.ProductReference?
+            let candidates: [ResolvedStoryProduct]
+            let reason: String
+            switch signal.kind {
+            case .purchase:
+                job = .complete
+                title = "With the jacket you bought"
+                subtitle = "Keep the jacket. Try a different pair of pants."
+                layout = .relationship
+                interaction = .swap
+                anchor = signal.products.first
+                candidates = merchant.products.filter {
+                    $0.title.localizedCaseInsensitiveContains("fleece pant")
+                }.map { ResolvedStoryProduct(merchant: merchant, product: $0) }
+                reason = "A demo jacket purchase creates a completion job. Pants from the same Nike × Stüssy assortment provide relevant options; the owned jacket stays fixed."
+            case .repeatedViews:
+                job = .compare
+                title = "Still considering these chairs?"
+                subtitle = "Your shortlist, together in one place."
+                layout = .comparison
+                interaction = .shortlist
+                anchor = nil
+                candidates = observed
+                reason = "Repeated demo views of three chairs suggest a decision, not more discovery. Equal image space and catalog prices support comparison. No dimensions or review claims are invented."
+            case .merchantAffinity:
+                job = .merchantDiscovery
+                title = merchant.displayName
+                subtitle = "Another chapter for your design shelf."
+                layout = .merchant
+                interaction = .browse
+                anchor = nil
+                candidates = Array(merchant.products.prefix(4)).map { ResolvedStoryProduct(merchant: merchant, product: $0) }
+                reason = "Demo affinity for Standards Manual makes the shop the primary entity. The assortment comes from its catalog; this is not labeled a new launch because release timing is unverified."
+            case .activeWorld:
+                job = .continueWorld
+                title = "A chair for your living room"
+                subtitle = "Try one beside the table you saved."
+                layout = .continuation
+                interaction = .selectForWorld
+                anchor = signal.products.first
+                candidates = merchant.products.filter {
+                    $0.title.hasPrefix("Chair #1") || $0.title.hasPrefix("Papa Teddy Chair")
+                }.map { ResolvedStoryProduct(merchant: merchant, product: $0) }
+                reason = "The demo Living Room World already holds a saved coffee table. Bring forward the next decision—a chair—and retain the selection in the local room plan. This is not a spatial compatibility assessment."
             }
+            guard !candidates.isEmpty else { return nil }
+            return NextGenerationFeedCardSpec(
+                id: "next-gen-\(signal.id)", signal: signal, job: job,
+                title: title, subtitle: subtitle, layout: layout,
+                alternatives: [layout, .hero], interaction: interaction, anchor: anchor,
+                productReferences: candidates.map { .init(merchantID: $0.merchant.id, productID: $0.product.id) },
+                reasonForSelection: reason
+            )
         }
-        if result.isEmpty {
-            result.append(ResolvedStoryProduct(merchant: primary, product: primary.products[0]))
-        }
-        return result
-    }
-
-    private static func copy(
-        for layout: NextGenerationCardLayout,
-        topic: BuyerFeedTopic,
-        merchant: SampleMerchant,
-        leadProduct: SampleMerchant.Product
-    ) -> (eyebrow: String, title: String, subtitle: String) {
-        let merchantName = merchant.displayName
-        let productKind = leadProduct.productType?.trimmingCharacters(in: .whitespacesAndNewlines)
-        let kind = productKind?.isEmpty == false ? productKind! : "finds"
-
-        return switch layout {
-        case .focusFrame:
-            (merchantName, leadProduct.title, "Tap through the details")
-        case .orbit:
-            ("In your orbit", "Connected finds", "Drag to explore the assortment")
-        case .splitDecision:
-            ("A quick decision", "Which direction?", "Two real picks from \(merchantName)")
-        case .swipeStack:
-            ("Keep or skip", "A stack from \(merchantName)", "Swipe the lead card to keep moving")
-        case .mosaicSpotlight:
-            ("Shop the mosaic", "The \(kind) edit", "Tap any tile to bring it forward")
-        case .merchantWindow:
-            ("Merchant window", merchantName, merchant.description)
-        case .colorWash:
-            ("Color story", leadProduct.title, "Shift the mood, keep the product")
-        case .productTimeline:
-            (topic.label, "A path through \(merchantName)", "Move through the edit one step at a time")
-        case .comparisonScrub:
-            ("Side by side", "Compare the details", "Drag across two products")
-        case .kitBuilder:
-            ("Build your kit", merchantName, "Tap products to add or remove them")
-        case .constellation:
-            ("Connected finds", "A \(topic.label.lowercased()) constellation", "Tap a node to focus")
-        case .catalogTicker:
-            ("Live catalog", merchantName, "A fast-moving strip of real inventory")
-        case .detailLens:
-            ("Look closer", leadProduct.title, "Drag the lens across the product")
-        case .priceLadder:
-            ("Shop by price", "A range from \(merchantName)", "Tap a rung to inspect it")
-        case .dropReveal:
-            ("One-product drop", merchantName, "Press to reveal today’s pick")
-        case .editorialFold:
-            ("Shop editorial", leadProduct.title, "Open the fold for the full story")
-        case .bundleBuilder:
-            ("Make it yours", "Build a \(merchantName) bundle", "Select the combination that fits")
-        case .textureRail:
-            ("Material study", "Details from \(merchantName)", "Swipe through close product crops")
-        case .productStage:
-            ("On the stage", leadProduct.title, "Drag to turn the presentation")
-        case .rapidPoll:
-            ("Tune your feed", "More like this?", "Your answer reshapes the next recommendation")
-        }
-    }
-}
-
-private extension FeedStory {
-    var productReferencesMerchantIDs: [String] {
-        products.map(\.merchantID)
     }
 }

@@ -2,7 +2,15 @@
 
 ## Generated feed card
 
-A full-height, catalog-backed commerce surface produced from a constrained card specification. Generation may choose layout, hierarchy, palette, crop, ranking, and interaction, but merchant identity, product identity, imagery, price, and destination remain canonical source data.
+A catalog-backed commerce surface constructed around a shopping job, not selected by visual novelty. The sequence is Signal → Shopping job → Content → Composition → Interaction. Generation chooses semantic hierarchy and supported interactions; Shop's renderer owns visual values. Merchant identity, product identity, imagery, price, and destination remain canonical source data.
+
+## Shopping signal
+
+Activity or context that makes a shopping job relevant. Signals have provenance. The four-card feed prototype uses explicitly simulated activity; these fixtures are not facts about the real buyer.
+
+## Shopping job
+
+The useful progress an experience supports now, such as completing a purchase, comparing candidates, exploring a merchant, or continuing a World. Determine the job before selecting products and composition.
 
 ## Card grammar
 
@@ -10,7 +18,7 @@ The finite set of trusted presentation and interaction structures available to g
 
 ## Card specification
 
-The data boundary between generation and rendering: stable identity, canonical merchant/product references, presentation variant, copy, palette, contrast, and local interaction behavior. The feed shell consumes this metadata without special-casing the story that produced it.
+The interface between generation and rendering: stable identity, source signal, shopping job, canonical anchor/candidate references, semantic composition, copy, local interaction, context and rationale. Alternate compositions retain the same entities and session state. Arbitrary fonts, color values, spacing and animation curves are not generated.
 
 ## World
 

@@ -24,7 +24,26 @@ packages:
   FloatingPanel:
     url: https://github.com/scenee/FloatingPanel
     from: "3.0.0"
+schemes:
+  ShopFeedSummer26:
+    build:
+      targets:
+        ShopFeedSummer26: all
+        GenerativeFeedPrototypeUITests: [test]
+    test:
+      targets:
+        - GenerativeFeedPrototypeUITests
 targets:
+  GenerativeFeedPrototypeUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [PrototypeUITests]
+    dependencies:
+      - target: ShopFeedSummer26
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.shopify.purl.prototype.generative-feed-uitests
+        TEST_TARGET_NAME: ShopFeedSummer26
   ShopFeedSummer26:
     type: application
     platform: iOS

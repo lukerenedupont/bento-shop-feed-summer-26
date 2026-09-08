@@ -99,7 +99,7 @@ struct BuyerFeedNavigationBar: View {
 
         return transitioningLabel(for: topic)
             .shadow(
-                color: isSelected
+                color: isSelected || !usesFeedBackdropStyle
                     ? .clear
                     : .black.opacity(0.28 * chromeTransitionState.progress),
                 radius: 7,
@@ -187,7 +187,9 @@ struct BuyerFeedNavigationBar: View {
             // Following, Deals, and the resting utility surface are authored
             // on white. Ignore stale feed-card transition progress when those
             // destinations replace the dark media backdrop.
-            label.foregroundStyle(GravityColors.textSecondary)
+            // A light card may sit inside Home's dark environment. Resolve
+            // this light-surface label explicitly rather than inheriting white.
+            label.foregroundStyle(GravityColors.textFixedDark.opacity(0.65))
         } else {
             let progress = chromeTransitionState.progress
             ZStack {

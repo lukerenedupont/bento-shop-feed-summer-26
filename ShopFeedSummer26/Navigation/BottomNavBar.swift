@@ -51,9 +51,11 @@ struct BottomNavBar: View {
             }
             .padding(.bottom, PurlTune.value("Navigation/BottomNavBar.swift:padding:_:97:31", default: 28))
         }
-        .contentShape(Rectangle())
+        // The full-screen navigation host must not intercept card gestures
+        // above the actual tab pill. Its buttons own their own hit shapes.
         .ignoresSafeArea(edges: .bottom)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .frame(maxWidth: .infinity, alignment: .bottom)
+        .frame(height: tabPillHeight + 28, alignment: .bottom)
         .animation(.spring(response: PurlTune.value("Navigation/BottomNavBar.swift:spring:response:102:38", default: 0.35), dampingFraction: PurlTune.value("Navigation/BottomNavBar.swift:spring:dampingFraction:102:142", default: 0.8)), value: coordinator.isNavigatedDeep)
         .animation(.spring(response: PurlTune.value("Navigation/BottomNavBar.swift:spring:response:103:38", default: 0.35), dampingFraction: PurlTune.value("Navigation/BottomNavBar.swift:spring:dampingFraction:103:142", default: 0.8)), value: showCart)
     }
