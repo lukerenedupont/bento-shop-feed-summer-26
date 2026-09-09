@@ -41,6 +41,14 @@ struct NextGenerationFeedCardView: View {
         GenerativeFeedStyle.surface(for: spec)
             .frame(width: width, height: height)
             .overlay(alignment: .topLeading) {
+                if session.composition(for: spec) == .merchant {
+                    GenerativeEditorialMerchantCard(
+                        spec: spec, products: products, session: session,
+                        width: width, height: height,
+                        topPadding: foregroundTopPadding, bottomPadding: bottomContentPadding,
+                        onInspect: { showsInspector = true }, onOpen: { detailProduct = $0 }
+                    )
+                } else {
                 VStack(alignment: .leading, spacing: GravitySpacing.space20) {
                     heading
                     GeometryReader { proxy in
@@ -54,6 +62,7 @@ struct NextGenerationFeedCardView: View {
                 .padding(.bottom, bottomContentPadding)
                 .frame(width: width, height: height)
                 .foregroundStyle(ink)
+                }
             }
             .clipShape(RoundedRectangle(cornerRadius: FeedCardStyle.cornerRadius, style: .continuous))
             .environment(\.colorScheme, spec.prefersDarkNavigationText ? .light : .dark)
@@ -80,9 +89,11 @@ struct NextGenerationFeedCardView: View {
         VStack(alignment: .leading, spacing: GravitySpacing.space8) {
             if session.designMode {
                 HStack {
-                    Text("Design mode · \(spec.job.rawValue)")
-                        .font(GravityFont.medium.fixedFont(size: 12))
-                        .foregroundStyle(ink.opacity(0.65))
+                    if ![.swap, .shortlist].contains(spec.interaction) {
+                        Text("Design mode · \(spec.job.rawValue)")
+                            .font(GravityFont.medium.fixedFont(size: 12))
+                            .foregroundStyle(ink.opacity(0.65))
+                    }
                     Spacer()
                     Button { showsInspector = true } label: {
                         Image(systemName: "slider.horizontal.3").frame(width: 44, height: 28)
@@ -94,7 +105,7 @@ struct NextGenerationFeedCardView: View {
             if spec.interaction == .swap, session.composition(for: spec) == .relationship, let anchor {
                 Button { detailProduct = anchor } label: {
                     HStack(spacing: GravitySpacing.space16) {
-                        GenerativeProductMedia(item: anchor).frame(width: 88, height: 88)
+                        GenerativeProductMedia(item: anchor).frame(width: 64, height: 64)
                         VStack(alignment: .leading, spacing: GravitySpacing.space4) {
                             Text("You bought")
                                 .font(GravityFont.medium.fixedFont(size: 12)).foregroundStyle(.secondary)
@@ -122,6 +133,14 @@ struct NextGenerationFeedCardView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
+            } else if spec.interaction == .shortlist, session.composition(for: spec) == .comparison {
+                Text(visibleProducts.count >= 2 ? "Down to these two" : "Your chair shortlist")
+                    .feedCardTitleStyle()
+                    .frame(maxWidth: width * 0.75, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("generative.heading")
+                Text(products.first?.merchant.displayName ?? "")
+                    .font(GravityFont.semiBold.fixedFont(size: 14))
             } else {
                 Text(spec.job == .narrow ? activeGroup?.title ?? spec.title : spec.title)
                     .font(GravityFont.expressiveSemiBold.fixedFont(size: 28))
@@ -148,7 +167,7 @@ struct NextGenerationFeedCardView: View {
         case .comparison:
             comparison(size: size)
         case .merchant:
-            merchant(size: size)
+            EmptyView() // The editorial composition owns the complete foreground.
         case .continuation:
             continuation(size: size)
         case .hero:
@@ -192,32 +211,11 @@ struct NextGenerationFeedCardView: View {
         if selected != nil {
             let pair = session.comparisonPair(in: products, for: spec)
             GenerativeComparisonComposition(
-                pair: pair, remaining: visibleProducts.filter { item in !pair.contains { $0.id == item.id } },
-                selectedID: selected?.id, size: size, enabled: current.interactionsEnabled,
-                onSelect: { item in perform { session.select(item, for: spec) } },
-                onCompare: { item in perform { session.compare(item, in: products, for: spec) } }
+                pair: pair, selectedID: selected?.id, size: size, enabled: current.interactionsEnabled,
+                onSelect: { item in perform { session.select(item, for: spec) } }
             )
         } else {
             ContentUnavailableView("Shortlist cleared", systemImage: "checkmark", description: Text("Reset the shortlist to bring the chairs back."))
-        }
-    }
-
-    private func merchant(size: CGSize) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
-            HStack(spacing: GravitySpacing.space12) {
-                if let merchant = products.first?.merchant {
-                    MerchantAvatarView(merchant: merchant, size: 40)
-                }
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(spec.groups.first?.title ?? "Selected books").font(GravityFont.semiBold.fixedFont(size: 17))
-                    Text(spec.groups.first?.context ?? "Independent publishing.")
-                        .font(GravityFont.regular.fixedFont(size: 13)).foregroundStyle(.secondary)
-                }
-            }
-            GenerativeProductMedia(item: selected)
-                .frame(height: max(size.height - 178, 100))
-            identity(selected, showsMerchant: false)
-            thumbnailChoices
         }
     }
 
@@ -325,6 +323,13 @@ struct NextGenerationFeedCardView: View {
         HStack(spacing: GravitySpacing.space12) {
             VStack(alignment: .leading, spacing: 0) {
                 Menu {
+                    let pair = session.comparisonPair(in: products, for: spec)
+                    ForEach(visibleProducts.filter { item in !pair.contains { $0.id == item.id } }) { item in
+                        Button("Compare with \(item.product.title)") {
+                            perform { session.compare(item, in: products, for: spec) }
+                        }
+                        .accessibilityIdentifier("generative.compareAlternative")
+                    }
                     if let selected {
                         Button("Remove \(selected.product.title) from shortlist", role: .destructive) {
                             perform { session.remove(selected, for: spec) }
@@ -333,7 +338,7 @@ struct NextGenerationFeedCardView: View {
                     Button("Reset shortlist") { session.restoreShortlist(spec) }
                 } label: {
                     HStack(spacing: GravitySpacing.space8) {
-                        Text(progressLabel).font(GravityFont.medium.fixedFont(size: 12))
+                        Text("More").font(GravityFont.medium.fixedFont(size: 14))
                         Image(systemName: "ellipsis").font(.system(size: 14))
                     }
                     .frame(minHeight: 44)
@@ -359,10 +364,15 @@ struct NextGenerationFeedCardView: View {
                 if let selected { detailProduct = selected }
                 else { session.restoreShortlist(spec) }
             } label: {
-                Text(selected == nil ? "Restore chairs" : "View chair")
-                    .font(GravityFont.semiBold.fixedFont(size: 14))
-                    .padding(.horizontal, GravitySpacing.space20).frame(minHeight: 48)
-                    .foregroundStyle(.white).background(.black, in: Capsule())
+                HStack(spacing: GravitySpacing.space8) {
+                    Text(selected == nil ? "Restore chairs" : "View chair")
+                        .font(GravityFont.semiBold.fixedFont(size: 16))
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 15, weight: .semibold))
+                        .frame(width: 40, height: 40)
+                        .background(.black.opacity(0.07), in: Circle())
+                }
+                .frame(minHeight: 48)
             }
             .accessibilityIdentifier("generative.primaryAction")
         }
@@ -373,9 +383,11 @@ struct NextGenerationFeedCardView: View {
     private var actionControls: some View {
         HStack(spacing: GravitySpacing.space12) {
             VStack(alignment: .leading, spacing: 4) {
-                Text(progressLabel)
-                    .font(GravityFont.medium.fixedFont(size: 13))
-                    .foregroundStyle(ink.opacity(0.65))
+                if spec.interaction != .swap {
+                    Text(progressLabel)
+                        .font(GravityFont.medium.fixedFont(size: 13))
+                        .foregroundStyle(ink.opacity(0.65))
+                }
                 if spec.interaction == .swap, !current.savedSelectionIDs.isEmpty {
                     Button("Saved looks (\(current.savedSelectionIDs.count))") { showsSavedLooks = true }
                         .font(GravityFont.medium.fixedFont(size: 12)).frame(minHeight: 32)
@@ -468,9 +480,10 @@ struct NextGenerationFeedCardView: View {
 enum GenerativeFeedStyle {
     static func surface(for spec: NextGenerationFeedCardSpec) -> Color {
         switch spec.job {
-        case .complete: Color(hex: "#F2F1ED")
-        case .compare, .continueJourney: Color.white
-        case .merchantDiscovery: Color(hex: "#20201E")
+        case .complete: Color.white
+        case .compare: Color(hex: "#E9E6DD")
+        case .continueJourney: Color.white
+        case .merchantDiscovery: Color(hex: "#E9E6DD")
         case .continueWorld, .discoverMerchants: Color(hex: "#EFECE6")
         case .narrow: Color(hex: "#F2F1ED")
         }

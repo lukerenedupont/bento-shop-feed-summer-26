@@ -168,7 +168,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
         app.buttons["generative.job"].tap()
         app.buttons["Compare a shortlist"].tap()
         app.buttons["Done"].tap()
-        XCTAssertTrue(app.staticTexts["Still considering these chairs?"].exists)
+        XCTAssertTrue(app.staticTexts["Down to these two"].exists)
         XCTAssertTrue(app.buttons["Select Chair #1 - Black Leather"].exists)
     }
 
@@ -202,6 +202,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Select Chair #1 - Black Leather"].isHittable)
         XCTAssertEqual(app.staticTexts["generative.priceComparison"].label, "Black Leather is $300.00 less.")
         app.buttons["Select Chair #1 - Black Leather"].tap()
+        app.buttons["Shortlist options"].tap()
         app.buttons["generative.compareAlternative"].tap()
         XCTAssertTrue(app.buttons["Select Chair #1 - Black Leather"].isHittable)
         XCTAssertTrue(app.buttons["Select Papa Teddy Chair - White Boucle"].isHittable)
@@ -300,7 +301,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
         XCTAssertTrue(action.waitForExistence(timeout: 10))
         swipePants(in: app)
         app.swipeUp()
-        XCTAssertTrue(app.staticTexts["Still considering these chairs?"].isHittable)
+        XCTAssertTrue(app.staticTexts["Down to these two"].isHittable)
         app.swipeDown()
         XCTAssertTrue(app.staticTexts["2 of 2"].isHittable)
     }

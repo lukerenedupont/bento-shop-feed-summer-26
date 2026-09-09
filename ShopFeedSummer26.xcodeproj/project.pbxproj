@@ -28,6 +28,7 @@
 		13397C055EE0093E3A5E9D24 /* TryOnFeedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63224A20DCCA6A2867E3E63 /* TryOnFeedCard.swift */; };
 		13D4F8E2F7F72D421D0DFF83 /* LocalMerchantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2537D9E279EC49B168BFF767 /* LocalMerchantService.swift */; };
 		16BC6F274BF3266109322406 /* SearchHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D64725EFF88C7418AC33BE /* SearchHeader.swift */; };
+		16F710149FE9C4DBF532DE60 /* GenerativeEditorialMerchantCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29FA85B0BA2C65C517A6CD0D /* GenerativeEditorialMerchantCard.swift */; };
 		1706C499ECEA1A44425C37D0 /* prototype-product-standards-manual-5842516163.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C234820E2C6C5EE50006661C /* prototype-product-standards-manual-5842516163.jpg */; };
 		172E3A3EFAFFB158EFC5CDDC /* MerchantCollectionCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 102ABF0057094F3527D573FB /* MerchantCollectionCatalog.swift */; };
 		195BC163E678170C55BDEA3E /* TryFavesStageColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965B56D2AD1C84866FFA8DAA /* TryFavesStageColors.swift */; };
@@ -177,6 +178,7 @@
 		DE0C69F070ED3D74D862BD8E /* AmbientProductVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E07104E33E24EFFA26DDEE /* AmbientProductVideo.swift */; };
 		DE22D19C893994594B61124A /* Shopify Sans-Medium Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DB02EED712F616C19BAB6144 /* Shopify Sans-Medium Italic.otf */; };
 		DF2A664E61B4341B235D1085 /* GoodSansText-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = BE0ED552AC81FCFE75A32C68 /* GoodSansText-Regular.otf */; };
+		E0907BCC6BEAEA5E3E0752BC /* GenerativeEditorialProductPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F85434DB9141EF808F977B /* GenerativeEditorialProductPhoto.swift */; };
 		E11A9247F1749EC35F25E92A /* LoopingVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68957DDA92869BB303188B83 /* LoopingVideoPlayer.swift */; };
 		E231D47C9DC5088B813021BB /* QuickSearchCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A8B6A48F59AE65A5A915C9 /* QuickSearchCard.swift */; };
 		E26E101FAB34700D33AA8995 /* ComparisonShelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5307D982E8802D5BA2FABA39 /* ComparisonShelf.swift */; };
@@ -256,6 +258,7 @@
 		228F0094F0DBEA5C16F0AF41 /* GenerativeShoppingReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeShoppingReview.swift; sourceTree = "<group>"; };
 		2537D9E279EC49B168BFF767 /* LocalMerchantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMerchantService.swift; sourceTree = "<group>"; };
 		281FDFAC7B3A9E95703E93EE /* FeedTopic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTopic.swift; sourceTree = "<group>"; };
+		29FA85B0BA2C65C517A6CD0D /* GenerativeEditorialMerchantCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeEditorialMerchantCard.swift; sourceTree = "<group>"; };
 		2A3821AE03CF82ED67CFAA6F /* KeyboardAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAnimation.swift; sourceTree = "<group>"; };
 		2A8A6C01D1AE689BFA8DC211 /* prototype-product-lichen-12462683128126.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-lichen-12462683128126.jpg"; sourceTree = "<group>"; };
 		2ACD1E2168C3779609CA48BE /* CachedAsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedAsyncImage.swift; sourceTree = "<group>"; };
@@ -290,6 +293,7 @@
 		54499965144553181DE87600 /* GravitySpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravitySpacing.swift; sourceTree = "<group>"; };
 		5459CA6FC9ADF5F66FEA511C /* CategoryTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTile.swift; sourceTree = "<group>"; };
 		54E1ECE0C5E966F35189CB65 /* MerchantCollectionFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantCollectionFeedCard.swift; sourceTree = "<group>"; };
+		55F85434DB9141EF808F977B /* GenerativeEditorialProductPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeEditorialProductPhoto.swift; sourceTree = "<group>"; };
 		59CA9E773CC1BF1555842863 /* LegacyFeedArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyFeedArchive.swift; sourceTree = "<group>"; };
 		5A91B29B5DF530EFF5D216F1 /* RemoteMerchantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMerchantService.swift; sourceTree = "<group>"; };
 		5B50C22FBFD24E7FCECE5B5D /* prototype-product-fellow-2055410221171.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-fellow-2055410221171.jpg"; sourceTree = "<group>"; };
@@ -693,6 +697,8 @@
 				16A32D3620048BECC91CDCAC /* FloatingPanelSheet.swift */,
 				BC52083BE330588D6516459B /* GenerativeDecisionCompositions.swift */,
 				43C9CC8574E3C0E8C22EAC5D /* GenerativeDiscoveryComposition.swift */,
+				29FA85B0BA2C65C517A6CD0D /* GenerativeEditorialMerchantCard.swift */,
+				55F85434DB9141EF808F977B /* GenerativeEditorialProductPhoto.swift */,
 				1164B7CA48602B49F7D908FF /* GenerativeFeedInspector.swift */,
 				E25FDAAFB82E67A6B234DCA9 /* GenerativePrototypeTools.swift */,
 				228F0094F0DBEA5C16F0AF41 /* GenerativeShoppingReview.swift */,
@@ -1048,6 +1054,8 @@
 				B183161ACDCC96DFC24576FF /* FollowUpBar.swift in Sources */,
 				C62A93CBF1BB01B93F969C95 /* GenerativeDecisionCompositions.swift in Sources */,
 				7AB89D69D50A3A529AB897BD /* GenerativeDiscoveryComposition.swift in Sources */,
+				16F710149FE9C4DBF532DE60 /* GenerativeEditorialMerchantCard.swift in Sources */,
+				E0907BCC6BEAEA5E3E0752BC /* GenerativeEditorialProductPhoto.swift in Sources */,
 				97E76E4E0480AA9785A6D61D /* GenerativeFeedInspector.swift in Sources */,
 				B68995C67E667E9BF2E10E4E /* GenerativeFeedPrototypeFixtures.swift in Sources */,
 				2B8A29EE7F0CC928CE5FA9F0 /* GenerativeFeedPrototypeSession.swift in Sources */,

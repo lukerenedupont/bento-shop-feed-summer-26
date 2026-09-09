@@ -115,7 +115,7 @@ struct NextGenerationFeedCardSpec: Identifiable {
         default: anchor.map(PrototypePrimaryEntity.product) ?? .journey(signal.worldID ?? signal.id)
         }
     }
-    var prefersDarkNavigationText: Bool { job != .merchantDiscovery }
+    var prefersDarkNavigationText: Bool { true }
     var accessibilityDescription: String { "\(title). \(subtitle). \(interaction.rawValue)." }
 
     func resolvedProducts(from merchants: [SampleMerchant]) -> [ResolvedStoryProduct] {

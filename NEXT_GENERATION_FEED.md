@@ -33,6 +33,12 @@ The coffee directions are hard content gates: commute shows the Carter Move Mug,
 
 The merchant card's **Graphic standards** grouping is editorial, not a claimed official collection or unverified new launch. The room plan is a local continuity sketch—not AR, spatial fit validation or integration with the full persistent World runtime.
 
+## Editorial visual direction
+
+The user approved the Standards Manual treatment: existing heavy topic typography, a paper-toned surface, and large overlapping crops of the real book covers. `GenerativeEditorialMerchantCard.swift` replaces its thumbnail picker and Next book CTA with cover selection and a canonical product-detail handoff.
+
+The next fast pass applies that language to the outfit and chair comparison, not yet the remaining three jobs. Outfit retains the purchased jacket at the top, swipeable pants and actual Buy pants destination, with a heavy Wear it with heading and tighter studio-margin crops. Comparison uses a heavy Down to these two heading, staggered photography with inline finishes/prices, and a quiet focus check. Additional candidates now live in More/Shortlist options rather than a third product row. Source photography and shopping state remain canonical; no product parts are intentionally cropped. Build/media checks pass. Full UI regression and feed-geometry checks are deferred until visual review, per the user's request for speed.
+
 ## First-card design pass
 
 Following the screenshot review, the jacket now leads as compact purchased-item context, above **Wear it with** and a horizontally snapping pants carousel with a next-item peek. The selected pants' name, price, save state and **Buy pants** destination stay coupled during paging. Buy pants opens the actual merchant SKU page; it does not place an order or simulate checkout. **Saved looks** remains secondary and retains the exact pair after swiping/regenerating. The Hero alternate retains the same products and selection through thumbnail choices.

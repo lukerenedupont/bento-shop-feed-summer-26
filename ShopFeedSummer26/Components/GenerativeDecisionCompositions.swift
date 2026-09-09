@@ -15,13 +15,13 @@ struct GenerativeOutfitComposition: View {
     var body: some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space16) {
             Text("Wear it with")
-                .font(GravityFont.expressiveSemiBold.fixedFont(size: 24))
+                .feedCardTitleStyle()
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: GravitySpacing.space12) {
                     ForEach(products) { item in
                         Button { onSelect(item) } label: {
-                            GenerativeProductMedia(item: item)
-                                .frame(width: size.width * 0.78, height: max(120, size.height - 128))
+                            GenerativeEditorialProductPhoto(item: item)
+                                .frame(width: size.width * 0.78, height: max(120, size.height - 144))
                         }
                         .accessibilityLabel("Select \(item.product.title)")
                         .accessibilityAddTraits(selected.id == item.id ? .isSelected : [])
@@ -44,10 +44,10 @@ struct GenerativeOutfitComposition: View {
             HStack(alignment: .top, spacing: GravitySpacing.space8) {
                 Button { onOpen(selected) } label: {
                     VStack(alignment: .leading, spacing: GravitySpacing.space4) {
-                        Text(selected.product.title)
+                        Text(GenerativeDecisionContent.name(selected))
                             .font(GravityFont.semiBold.fixedFont(size: 16))
                             .lineLimit(3).multilineTextAlignment(.leading)
-                        Text("\(selected.merchant.displayName) · \(GenerativeFeedStyle.price(selected.product))")
+                        Text("\(GenerativeDecisionContent.variant(selected)) · \(GenerativeFeedStyle.price(selected.product))")
                             .font(GravityFont.regular.fixedFont(size: 13)).foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -69,18 +69,17 @@ struct GenerativeOutfitComposition: View {
 
 struct GenerativeComparisonComposition: View {
     let pair: [ResolvedStoryProduct]
-    let remaining: [ResolvedStoryProduct]
     let selectedID: String?
     let size: CGSize
     let enabled: Bool
     let onSelect: (ResolvedStoryProduct) -> Void
-    let onCompare: (ResolvedStoryProduct) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space12) {
             HStack(alignment: .top, spacing: GravitySpacing.space12) {
                 ForEach(pair) { item in
                     candidate(item, width: (size.width - 12) / 2)
+                        .padding(.top, pair.count > 1 && item.id == pair.last?.id ? GravitySpacing.space32 : 0)
                 }
                 if pair.count == 1 { Spacer(minLength: 0) }
             }
@@ -88,30 +87,6 @@ struct GenerativeComparisonComposition: View {
                 Text(insight)
                     .font(GravityFont.medium.fixedFont(size: 15))
                     .accessibilityIdentifier("generative.priceComparison")
-            }
-            ForEach(remaining) { item in
-                Button { onCompare(item) } label: {
-                    HStack(spacing: GravitySpacing.space12) {
-                        GenerativeProductMedia(item: item, presentation: "comparison")
-                            .frame(width: 64, height: 68)
-                        VStack(alignment: .leading, spacing: GravitySpacing.space4) {
-                            Text("Also on your shortlist")
-                                .font(GravityFont.regular.fixedFont(size: 12)).foregroundStyle(.secondary)
-                            Text(item.product.title)
-                                .font(GravityFont.semiBold.fixedFont(size: 14)).lineLimit(2)
-                            Text(GenerativeFeedStyle.price(item.product))
-                                .font(GravityFont.regular.fixedFont(size: 13))
-                        }
-                        Spacer(minLength: 0)
-                        Image(systemName: "arrow.left.arrow.right").font(.system(size: 16))
-                    }
-                    .multilineTextAlignment(.leading)
-                    .padding(.top, GravitySpacing.space12)
-                    .overlay(alignment: .top) { Rectangle().fill(.black.opacity(0.1)).frame(height: 1) }
-                    .contentShape(Rectangle())
-                }
-                .accessibilityLabel("Compare with \(item.product.title)")
-                .accessibilityIdentifier("generative.compareAlternative")
             }
             Spacer(minLength: 0)
         }
@@ -122,23 +97,20 @@ struct GenerativeComparisonComposition: View {
     private func candidate(_ item: ResolvedStoryProduct, width: CGFloat) -> some View {
         Button { onSelect(item) } label: {
             VStack(alignment: .leading, spacing: GravitySpacing.space8) {
-                GenerativeProductMedia(item: item, presentation: "comparison")
-                    .frame(height: min(width * 1.18, max(96, size.height - 248)))
+                GenerativeEditorialProductPhoto(item: item, comparison: true)
+                    .frame(height: max(150, size.height - 152))
                 VStack(alignment: .leading, spacing: GravitySpacing.space4) {
-                    Text(GenerativeDecisionContent.name(item))
-                        .font(GravityFont.semiBold.fixedFont(size: 16)).lineLimit(2)
-                    Text(GenerativeDecisionContent.variant(item))
-                        .font(GravityFont.regular.fixedFont(size: 13)).foregroundStyle(.secondary).lineLimit(2)
+                    HStack(alignment: .top, spacing: GravitySpacing.space4) {
+                        Text(GenerativeDecisionContent.variant(item))
+                            .font(GravityFont.semiBold.fixedFont(size: 16)).lineLimit(2)
+                        if selectedID == item.id {
+                            Image(systemName: "checkmark").font(.system(size: 12, weight: .semibold))
+                        }
+                    }
                     Text(GenerativeFeedStyle.price(item.product))
                         .font(GravityFont.medium.fixedFont(size: 15))
                 }
                 .frame(height: 68, alignment: .topLeading)
-                HStack(spacing: GravitySpacing.space4) {
-                    Image(systemName: selectedID == item.id ? "checkmark.circle.fill" : "circle")
-                    Text(selectedID == item.id ? "In focus" : "Take a look")
-                }
-                .font(GravityFont.medium.fixedFont(size: 12))
-                .frame(minHeight: 28)
             }
             .frame(width: width, alignment: .topLeading)
             .contentShape(Rectangle())
