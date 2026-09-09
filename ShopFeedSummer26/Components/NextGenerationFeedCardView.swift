@@ -171,9 +171,6 @@ struct NextGenerationFeedCardView: View {
             }
         case .directions, .multiMerchant:
             GenerativeDiscoveryComposition(spec: spec, merchants: merchants, session: session, size: size)
-        case .fisheye:
-            GenerativeFisheyeComposition(spec: spec, products: products, session: session,
-                size: size, isActive: isActive, onOpen: { detailProduct = $0 })
         }
     }
 
@@ -263,31 +260,22 @@ struct NextGenerationFeedCardView: View {
     }
 
     private var thumbnailChoices: some View {
-        ScrollViewReader { proxy in
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: GravitySpacing.space8) {
-                    ForEach(visibleProducts) { item in
-                        Button { perform { session.select(item, for: spec) } } label: {
-                            GenerativeProductMedia(item: item)
-                                .frame(width: 52, height: 58)
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: GravityRadius.r16)
-                                        .strokeBorder(selected?.id == item.id ? ink : .clear, lineWidth: 2)
-                                }
+        HStack(spacing: GravitySpacing.space8) {
+            ForEach(visibleProducts) { item in
+                Button { perform { session.select(item, for: spec) } } label: {
+                    GenerativeProductMedia(item: item)
+                        .frame(width: 52, height: 58)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: GravityRadius.r16)
+                                .strokeBorder(selected?.id == item.id ? ink : .clear, lineWidth: 2)
                         }
-                        .buttonStyle(.plain)
-                        .disabled(!current.interactionsEnabled)
-                        .accessibilityLabel("Select \(item.product.title)")
-                        .accessibilityAddTraits(selected?.id == item.id ? .isSelected : [])
-                        .id(item.id)
-                    }
                 }
-            }
-            .onChange(of: selected?.id) { _, id in
-                if let id { proxy.scrollTo(id, anchor: .center) }
+                .buttonStyle(.plain)
+                .disabled(!current.interactionsEnabled)
+                .accessibilityLabel("Select \(item.product.title)")
+                .accessibilityAddTraits(selected?.id == item.id ? .isSelected : [])
             }
         }
-        .frame(height: 58)
     }
 
     private func compactProduct(_ item: ResolvedStoryProduct, caption: String) -> some View {
@@ -321,22 +309,7 @@ struct NextGenerationFeedCardView: View {
 
     @ViewBuilder
     private var controls: some View {
-        if session.composition(for: spec) == .fisheye {
-            HStack {
-                Text("\(products.count) items").font(GravityFont.medium.fixedFont(size: 13)).foregroundStyle(.secondary)
-                Spacer()
-                Button {
-                    session.setCanvasExploring(!current.canvasIsExploring, for: spec)
-                } label: {
-                    Text(current.canvasIsExploring ? "Done exploring" : "Explore library")
-                        .font(GravityFont.semiBold.fixedFont(size: 14))
-                        .padding(.horizontal, GravitySpacing.space20).frame(minHeight: 48)
-                        .foregroundStyle(.black).background(.white, in: Capsule())
-                }
-                .disabled(!current.interactionsEnabled || !isActive)
-                .accessibilityIdentifier("generative.primaryAction")
-            }
-        } else if spec.interaction == .shortlist {
+        if spec.interaction == .shortlist {
             shortlistControls
         } else if [.steer, .selectMerchant].contains(spec.interaction), activeGroup == nil {
             Text(spec.interaction == .steer ? "Choose how you’ll use it" : "Select a shop to see more")
@@ -448,7 +421,7 @@ struct NextGenerationFeedCardView: View {
         switch spec.interaction {
         case .swap: "Buy pants"
         case .shortlist: visibleProducts.isEmpty ? "Restore chairs" : "View chair"
-        case .browse: "Next item"
+        case .browse: "Next book"
         case .selectForWorld: "Review room plan"
         case .steer: activeGroup == nil ? spec.groups.first?.title ?? "Choose" : "Change direction"
         case .selectMerchant: activeGroup == nil ? "Explore \(spec.groups.first?.title ?? "shops")" : "All shops"

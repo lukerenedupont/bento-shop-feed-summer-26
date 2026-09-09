@@ -1134,8 +1134,7 @@ struct HomePage: View {
                 merchants: NextGenerationFeedCardCatalog.prototypeMerchants,
                 width: layout.cardWidth,
                 height: layout.cardHeight,
-                foregroundTopPadding: ([.swap, .shortlist, .selectForWorld].contains(spec.interaction)
-                    || generativeSession.composition(for: spec) == .fisheye)
+                foregroundTopPadding: [.swap, .shortlist, .selectForWorld].contains(spec.interaction)
                     ? max(layout.pinnedTitleTop, FeedNavigationStyle.controlSize + GravitySpacing.space64 + GravitySpacing.space32)
                     : max(
                     layout.pinnedTitleTop,
@@ -1143,8 +1142,7 @@ struct HomePage: View {
                 ) + GravitySpacing.space32,
                 isActive: isSnappedEntry,
                 session: generativeSession,
-                bottomContentPadding: ([.swap, .shortlist, .selectForWorld].contains(spec.interaction)
-                    || generativeSession.composition(for: spec) == .fisheye)
+                bottomContentPadding: [.swap, .shortlist, .selectForWorld].contains(spec.interaction)
                     ? FeedCardStyle.foregroundBottomPadding + GravitySpacing.space16
                         + (entry.id == feedEntries.first?.id ? max(windowSafeAreaTopInset, GravitySpacing.space64) : 0)
                     : FeedCardStyle.bottomNavigationClearance + GravitySpacing.space24

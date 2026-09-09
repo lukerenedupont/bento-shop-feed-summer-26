@@ -7,7 +7,7 @@ DERIVED="/tmp/pi-feed-interactive-cards-derived"
 BUNDLE="com.shopify.purl.prototype.shop.feed.summer.26"
 MODE="${1:-feed}"
 INDEX="${2:-0}"
-case "$MODE" in feed|gallery|consumer|canvas) ;; *) echo "Usage: $0 [feed|gallery|consumer|canvas] [0...5]"; exit 2 ;; esac
+case "$MODE" in feed|gallery|consumer) ;; *) echo "Usage: $0 [feed|gallery|consumer] [0...5]"; exit 2 ;; esac
 case "$INDEX" in 0|1|2|3|4|5) ;; *) echo "Card index must be 0...5"; exit 2 ;; esac
 mkdir -p .build/generative-review
 xcrun simctl boot "$SIM" 2>/dev/null || true
@@ -22,9 +22,7 @@ if ! xcodebuild -project ShopFeedSummer26.xcodeproj -scheme ShopFeedSummer26 \
 fi
 xcrun simctl terminate "$SIM" "$BUNDLE" 2>/dev/null || true
 xcrun simctl install "$SIM" "$DERIVED/Build/Products/Debug-iphonesimulator/ShopFeedSummer26.app"
-if [ "$MODE" = canvas ]; then
-    xcrun simctl launch "$SIM" "$BUNDLE" -nextGenerationGallery 2 -feedDesignMode -fisheyeCanvas
-elif [ "$MODE" = gallery ]; then
+if [ "$MODE" = gallery ]; then
     xcrun simctl launch "$SIM" "$BUNDLE" -nextGenerationGallery "$INDEX" -feedDesignMode
 elif [ "$MODE" = consumer ]; then
     xcrun simctl launch "$SIM" "$BUNDLE" -openNextGenerationCard "$INDEX"

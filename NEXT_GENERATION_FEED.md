@@ -12,7 +12,6 @@ This is a **six-experience deterministic prototype**, not a live AI recommender.
 ./Scripts/run_generative_feed.sh feed 4      # Request coffee card in the real Shop shell
 ./Scripts/run_generative_feed.sh gallery 0   # Direct six-card review
 ./Scripts/run_generative_feed.sh consumer 4  # Setup disclosure → clean consumer preview
-./Scripts/run_generative_feed.sh canvas      # Standards Manual's optional fisheye composition
 ```
 
 All modes use the dedicated **Feed Interactive Cards** Simulator. No desktop mouse injection. Gallery and Home use the same specifications, frozen merchant snapshot and session implementation. Use gallery for exact-index review; inherited native feed deep-link snapping can initially land on the neighboring slot.
@@ -25,14 +24,14 @@ Normal app launch starts with the utility belt. Only Luke's For You uses the dem
 |---|---|---|
 | 0 | Complete a jacket purchase | Purchased jacket at the top; swipeable pants carousel underneath; Buy pants opens the selected SKU's actual merchant page |
 | 1 | Compare a chair shortlist | Two candidates remain visible, with canonical finishes and a calculated price difference; bring in the third while retaining the focused chair |
-| 2 | Explore Standards Manual | Twenty canonical catalog items, browsable as a merchant shelf, Hero or an optional two-dimensional fisheye canvas |
+| 2 | Explore Standards Manual | Merchant-led NYCTA, NASA and EPA manual grouping; browse the books |
 | 3 | Continue a living room | Compact saved-table context + large square chair carousel; swiped selection carries into and back from the room plan |
 | 4 | Narrow a coffee journey | Choose **At the counter** or **Out the door**; the card's copy and inventory change in place |
 | 5 | Discover furniture merchants | Forom, House of Leon and Lichen are the primary entities; choosing one retains its identity and exact inventory |
 
 The coffee directions are hard content gates: commute shows the Carter Move Mug, not a coffee maker. Counter shows the Aiden and Stagg kettle, not the travel mug. Change direction to return to the two choices. There is no default-biased extra CTA beneath the two choices.
 
-The merchant card's **From the bookshelf** grouping is editorial, not a claimed official collection or unverified new launch. The room plan is a local continuity sketch—not AR, spatial fit validation or integration with the full persistent World runtime.
+The merchant card's **Graphic standards** grouping is editorial, not a claimed official collection or unverified new launch. The room plan is a local continuity sketch—not AR, spatial fit validation or integration with the full persistent World runtime.
 
 ## First-card design pass
 
@@ -44,17 +43,7 @@ Comparison now shows two chairs together rather than one hero image at a time. T
 
 A subsequent room-card pass replaces the short, letterboxed image strip and separate thumbnail row with a nearly full-width square carousel. A single compact saved-table header replaces the stacked heading/subtitle/context blocks. The entire source photograph is fitted into a square allocation (about 333pt on the review phone), so the chair is much larger without cropping it. Name, price and Review room plan remain below the hero, and both card and sheet share selection.
 
-These are local session saves and a small product handoff, **not** account mutations, a full Wardrobe World or persistent favorites. Coffee directions and multi-merchant discovery are unchanged. The authenticated Quick site remains unavailable to this environment; this is a design interpretation of the supplied written brief, not a claimed reference match.
-
-## Extracted fisheye canvas
-
-`Packages/ShopFisheyeCanvas` is a standalone, dependency-free SwiftUI library extracted from `shopify-playground/shop-week-baskets` at `16f2078037ee6325bb5dc2a5246919a09c7aee8e`. It retains the procedural grid, radial scaling/3D tilt and velocity-driven release spring from `AddProductsView.swift`. Basket generation, product models, loading, selection UI and the unused drawing Canvas/timer are not imported. The package README records provenance, API and differences.
-
-Standards Manual is the first adapter: a familiar merchant's visual assortment suits exploration better than a focused chair comparison. All three compositions share its twenty real catalog items and selected product. The infinite grid repeats this finite assortment; it does not invent products. Thirty-five exact images now cover all six experiences, including the full library.
-
-Tap **Explore library** for two-dimensional pan. While exploring, pan takes priority over tile buttons so dragging never selects a product. **Done exploring** returns vertical swipes to the feed; the outer gutter can scroll the feed even while exploring. Leaving a card exits exploration but retains pan position and selection. Tapping a product focuses it, and its name/price row opens the existing canonical product review and merchant destination. Reduced Motion uses a flat grid and direct pan without the spring.
-
-The package owns geometry and gesture mechanics; `GenerativeFisheyeComposition.swift` owns Shop media, selection and product review. Session state above lazy cells retains position across regeneration and composition changes. The existing full Canvas World engine is untouched.
+These are local session saves and a small product handoff, **not** account mutations, a full Wardrobe World or persistent favorites. Merchant/discovery experiences are unchanged. The authenticated Quick site remains unavailable to this environment; this is a design interpretation of the supplied written brief, not a claimed reference match.
 
 ## Consumer and design modes
 
@@ -84,8 +73,6 @@ Regeneration is deterministic, not an AI request. It reruns retrieval and modest
 - `Components/GenerativeDecisionCompositions.swift`: anchored outfit and simultaneous chair comparison.
 - `Components/GenerativeShoppingReview.swift`: exact saved pairs and catalog-backed product/merchant handoff.
 - `Components/GenerativeDiscoveryComposition.swift`: direction and merchant-first compositions.
-- `Packages/ShopFisheyeCanvas`: reusable SwiftUI grid/projection/pan engine.
-- `Components/GenerativeFisheyeComposition.swift`: catalog-backed feed adapter for that engine.
 - `Components/GenerativeFeedInspector.swift`: single-card inspection and editing.
 - `Components/GenerativePrototypeTools.swift`: stable setup/feed-editor presentation above lazy cells.
 - `Components/NextGenerationFeedGallery.swift`: direct review of the same plan.
@@ -94,7 +81,7 @@ State is in memory only. It survives scrolling, card regeneration and local room
 
 ## Catalog media
 
-Thirty-five exact product images are bundled in `ShopFeedSummer26/PrototypeCardMedia/`. `SOURCES.json` records merchant/product IDs, canonical image URLs and SHA-256 hashes. A failed image never substitutes another product or a merchant cover. One additional House of Leon image is the same black chair's official studio photograph, selected from its canonical gallery for comparison. Its original lifestyle lead remains unchanged elsewhere.
+Nineteen exact product images are bundled in `ShopFeedSummer26/PrototypeCardMedia/`. `SOURCES.json` records merchant/product IDs, canonical image URLs and SHA-256 hashes. A failed image never substitutes another product or a merchant cover. One additional House of Leon image is the same black chair's official studio photograph, selected from its canonical gallery for comparison. Its original lifestyle lead remains unchanged elsewhere.
 
 ```sh
 python3 Scripts/prepare_generative_demo_media.py --check
@@ -107,7 +94,7 @@ Preparing media requires Pillow. The previous scaffold refreshed two dead Featur
 
 ## Verification
 
-The full eighteen-test Simulator suite covers both canvas behaviors and all sixteen existing card checks. Canvas checks verify real tile movement without accidental selection, canonical product selection/review, retained geometry across regeneration and composition changes, passive feed scrolling, active exploration, outside-gutter escape and exploration reset when leaving the card. Existing coverage includes room hero size, swiped pants purchase-URL coupling, saved-pair identity, comparison focus/prices, consumer navigation clearance, six-card bounds, shortlist reset, room continuity, direction relevance, merchant coupling, signal/job changes, empty-feed recovery and reordering. This validation used a temporary QA Simulator. The command below targets the persistent review Simulator.
+The room revision passes three focused checks: at least 300pt of hero image in the real consumer feed, reachable navigation/actions and swiped-selection continuity; room-sheet changes returning to the carousel; all six card bounds/actions. The preceding first-card pass passed all fifteen Simulator tests. The carousel revision updates the affected checks to swipe rather than tap a swap CTA and checks that the purchase URL follows the selected pants. Coverage includes saved-pair identity after swapping/regeneration, comparison focus/price calculation, canonical destination URLs, consumer-mode feed geometry and actions, six-card bounds, shortlist reset, same-data alternatives, room continuity, direction relevance, merchant coupling, signal/job changes, empty-feed recovery and reordering.
 
 ```sh
 xcodebuild -project ShopFeedSummer26.xcodeproj -scheme ShopFeedSummer26 \

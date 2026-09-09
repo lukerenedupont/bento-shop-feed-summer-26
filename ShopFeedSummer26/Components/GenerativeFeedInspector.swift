@@ -60,14 +60,12 @@ struct GenerativeFeedInspector: View {
                     Text("Changing composition keeps the same data and selection. Regeneration repeats catalog retrieval with current signal/job inputs, retaining valid state.")
                         .font(.footnote).foregroundStyle(.secondary)
                 }
-                Section {
-                    DisclosureGroup("Canonical entities (\(spec.productReferences.count))") {
-                        if let ref = spec.anchor,
-                           let item = NextGenerationFeedCardSpec.resolve(ref, in: merchants) {
-                            entity(item, role: "Anchor")
-                        }
-                        ForEach(spec.resolvedProducts(from: merchants)) { item in entity(item, role: "Candidate") }
+                Section("Canonical entities") {
+                    if let ref = spec.anchor,
+                       let item = NextGenerationFeedCardSpec.resolve(ref, in: merchants) {
+                        entity(item, role: "Anchor")
                     }
+                    ForEach(spec.resolvedProducts(from: merchants)) { item in entity(item, role: "Candidate") }
                 }
                 Section("Session state") {
                     LabeledContent("Interaction", value: spec.interaction.rawValue)

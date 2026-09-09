@@ -12,14 +12,6 @@ struct NextGenerationFeedGallery: View {
         let requested = flag.flatMap { args.indices.contains($0 + 1) ? Int(args[$0 + 1]) : nil } ?? 0
         let signals = GenerativeFeedPrototypeFixtures.signals
         _selectedCardID = State(initialValue: "next-gen-\(signals[min(max(requested, 0), signals.count - 1)].id)")
-        if args.contains("-fisheyeCanvas"),
-           let card = NextGenerationFeedCardCatalog.cards(signals: signals, merchants: NextGenerationFeedCardCatalog.prototypeMerchants)
-            .first(where: { $0.alternatives.contains(.fisheye) }) {
-            let demo = GenerativeFeedPrototypeSession()
-            demo.setComposition(.fisheye, for: card)
-            _session = State(initialValue: demo)
-            _selectedCardID = State(initialValue: card.id)
-        }
     }
     private var cards: [NextGenerationFeedCardSpec] {
         let sources = NextGenerationFeedCardCatalog.cards(signals: GenerativeFeedPrototypeFixtures.signals, merchants: merchants)
