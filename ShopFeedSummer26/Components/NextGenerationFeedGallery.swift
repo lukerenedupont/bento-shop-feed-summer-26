@@ -11,6 +11,10 @@ struct NextGenerationFeedGallery: View {
         let flag = args.firstIndex(of: "-nextGenerationGallery")
         let requested = flag.flatMap { args.indices.contains($0 + 1) ? Int(args[$0 + 1]) : nil } ?? 0
         let signals = GenerativeFeedPrototypeFixtures.signals
+        guard !signals.isEmpty else {
+            _selectedCardID = State(initialValue: "empty-feed")
+            return
+        }
         let requestedSignal = signals[min(max(requested, 0), signals.count - 1)]
         _selectedCardID = State(initialValue: "next-gen-\(requestedSignal.id)")
         if QuietFeedReviewCatalog.enabled, DossierReviewLibrary.enabled {

@@ -11,6 +11,7 @@ final class GenerativeFeedPrototypeSession {
         var dossierObjectsVisible = false
         var dossierSceneIndex = 0
         var savedDossierPlans: [[String]] = []
+        var compositionPages: [String: Int] = [:]
         var hasInteracted = false
         var comparisonRevealed = false
         var roomSlotID: String?
@@ -29,7 +30,7 @@ final class GenerativeFeedPrototypeSession {
         var lastAction = "No interaction yet"
     }
     private var states: [String: CardState] = [:]
-    private(set) var disabledSignalIDs: Set<String> = DossierReviewLibrary.enabled
+    private(set) var disabledSignalIDs: Set<String> = NextGeneration20Catalog.enabled ? [] : DossierReviewLibrary.enabled
         ? Set(DossierReviewLibrary.records.filter { !$0.defaultVisible }.map { "dossier-\($0.key)" }) : []
     private(set) var orderedSignalIDs = GenerativeFeedPrototypeFixtures.signals.map(\.id)
     var designMode = ProcessInfo.processInfo.arguments.contains("-feedDesignMode")
@@ -37,6 +38,10 @@ final class GenerativeFeedPrototypeSession {
     var showsFeedControls = false
     var requestedFeedControls = false
 
+    func setCompositionPage(_ index: Int, nodeID: String, for spec: NextGenerationFeedCardSpec) {
+        guard state(for: spec).interactionsEnabled, index >= 0 else { return }
+        update(spec) { $0.compositionPages[nodeID] = index; $0.lastAction = "Browsed panel \(index + 1)" }
+    }
     func saveDossierPlan(_ items: [ResolvedStoryProduct], for spec: NextGenerationFeedCardSpec) {
         guard state(for: spec).interactionsEnabled, !items.isEmpty,
               items.allSatisfy({ item in spec.productReferences.contains { $0.merchantID == item.merchant.id && $0.productID == item.product.id } }) else { return }

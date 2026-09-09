@@ -42,23 +42,16 @@ struct NextGenerationFeedCardView: View {
         GenerativeFeedStyle.surface(for: spec)
             .frame(width: width, height: height)
             .overlay(alignment: .topLeading) {
-                if let record = DossierReviewLibrary.record(for: spec) {
-                    if record.key == "4b42878d497ca473" {
-                        VomeroBentoPrototype(record: record, spec: spec, merchants: merchants, session: session,
-                            width: width, height: height, topPadding: foregroundTopPadding,
-                            bottomPadding: bottomContentPadding, onInspect: { showsInspector = true })
-                    } else if record.key == "6d91ee4227655be2" {
-                        JacketLookCardPrototype(record: record, spec: spec, merchants: merchants, session: session,
-                            width: width, height: height, topPadding: foregroundTopPadding,
-                            bottomPadding: bottomContentPadding, isActive: isActive,
-                            visibleContentBottom: visibleContentBottom,
-                            onInspect: { showsInspector = true })
-                    } else {
-                        DossierShoppingCardPrototype(record: record, spec: spec, merchants: merchants, session: session,
-                            width: width, height: height, topPadding: foregroundTopPadding,
-                            bottomPadding: bottomContentPadding, isActive: isActive,
-                            onInspect: { showsInspector = true })
-                    }
+                if let composition = NextGeneration20Catalog.definition(for: spec) {
+                    GeneratedCompositionCard(definition: composition, spec: spec, merchants: merchants, session: session,
+                        width: width, height: height, topPadding: foregroundTopPadding, isActive: isActive,
+                        visibleContentBottom: visibleContentBottom, onInspect: { showsInspector = true })
+                } else if let record = DossierReviewLibrary.record(for: spec) {
+                    DossierMediaFeedCard(record: record, spec: spec, merchants: merchants, session: session,
+                        width: width, height: height, topPadding: foregroundTopPadding,
+                        bottomPadding: bottomContentPadding, isActive: isActive,
+                        visibleContentBottom: visibleContentBottom,
+                        onInspect: { showsInspector = true })
                 } else if spec.isQuietReview {
                     QuietShoppingCardPrototype(spec: spec, merchants: merchants, session: session,
                         width: width, height: height, topPadding: foregroundTopPadding,
@@ -519,6 +512,7 @@ struct NextGenerationFeedCardView: View {
 /// arbitrary colors, fonts, spacing, or animation curves.
 enum GenerativeFeedStyle {
     static func surface(for spec: NextGenerationFeedCardSpec) -> Color {
+        if let composition = NextGeneration20Catalog.definition(for: spec) { return composition.theme.surface }
         if let record = DossierReviewLibrary.record(for: spec) { return Color(hex: record.surface) }
         if spec.isQuietReview { return Color(hex: spec.job == .complete ? "#F5E9DA" : "#F7F6F2") }
         return switch spec.job {
@@ -545,6 +539,7 @@ struct GenerativeProductMedia: View {
         guard let item else { return nil }
         if let local = DossierReviewLibrary.url("dossier-product-\(item.product.id).jpg") { return local }
         if let local = Bundle.main.url(forResource: "quiet-product-\(item.merchant.id)-\(item.product.id)", withExtension: "jpg") { return local }
+        if let local = NextGeneration20Catalog.asset("\(item.merchant.id)-\(item.product.id)-product")?.imageURL { return local }
         let name = "prototype-product-\(item.merchant.id)-\(item.product.id)"
         if let presentation, let local = Bundle.main.url(forResource: "\(name)-\(presentation)", withExtension: "jpg") { return local }
         let local = Bundle.main.url(forResource: name, withExtension: "jpg")

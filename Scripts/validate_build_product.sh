@@ -18,6 +18,22 @@ if [[ "${FONT_COUNT}" != "${EXPECTED_FONT_COUNT}" ]]; then
 fi
 
 APP_KB="$(du -sk "${APP_PATH}" | awk '{print $1}')"
+# Xcode injects Apple test runtimes into a hosted unit-test app. Exclude only
+# those known runtimes when explicitly building the test host; normal review
+# builds retain the unchanged total-app gate below.
+if [[ "${COMPOSITION_TEST_HOST:-NO}" == YES ]]; then
+  TEST_SUPPORT_KB=0
+  for name in Testing.framework XCTestCore.framework XCUIAutomation.framework \
+      XCTAutomationSupport.framework XCTestSupport.framework XCTest.framework \
+      XCUnit.framework libXCTestSwiftSupport.dylib libXCTestBundleInject.dylib; do
+    if [[ -e "${APP_PATH}/Frameworks/${name}" ]]; then
+      SIZE="$(du -sk "${APP_PATH}/Frameworks/${name}" | awk '{print $1}')"
+      TEST_SUPPORT_KB=$((TEST_SUPPORT_KB + SIZE))
+    fi
+  done
+  APP_KB=$((APP_KB - TEST_SUPPORT_KB))
+  echo "Hosted tests: ${TEST_SUPPORT_KB} KB of injected Apple XCTest runtimes excluded from app-only budget"
+fi
 FEED_KB="$(du -sk "${FEED_BUNDLE}" | awk '{print $1}')"
 MAX_APP_KB=184320
 MAX_FEED_KB=102400

@@ -15,6 +15,20 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "37F4E3631927D8430D956FA2"
+               BuildableName = "CompositionEngineTests.xctest"
+               BlueprintName = "CompositionEngineTests"
+               ReferencedContainer = "container:ShopFeedSummer26.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "DDF156B06DA50731341D7024"
                BuildableName = "GenerativeFeedPrototypeUITests.xctest"
                BlueprintName = "GenerativeFeedPrototypeUITests"
@@ -61,6 +75,17 @@
                BlueprintIdentifier = "DDF156B06DA50731341D7024"
                BuildableName = "GenerativeFeedPrototypeUITests.xctest"
                BlueprintName = "GenerativeFeedPrototypeUITests"
+               ReferencedContainer = "container:ShopFeedSummer26.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "37F4E3631927D8430D956FA2"
+               BuildableName = "CompositionEngineTests.xctest"
+               BlueprintName = "CompositionEngineTests"
                ReferencedContainer = "container:ShopFeedSummer26.xcodeproj">
             </BuildableReference>
          </TestableReference>

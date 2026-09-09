@@ -1,0 +1,198 @@
+[
+  {
+    "file": "ng20-art-house-of-leon-7873592688813.png",
+    "sourceFile": "quiet-product-house-of-leon-7873592688813.jpg",
+    "sourceSHA256": "b8bab4a22a1390cd80f19cf41efb58cf4a46b7327df48667652943d90af1150c",
+    "sha256": "d140bcea1b47f85895de56ad890ba1e8cb568eacc7881b4abba34ce6a0ce8759",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-house-of-leon-7873592721581.png",
+    "sourceFile": "quiet-product-house-of-leon-7873592721581.jpg",
+    "sourceSHA256": "70d847c5d11d6bf9e73a071c3781d30af661a572cff6f3a8aa395b7efe1105bd",
+    "sha256": "cf60e3fe17d0a248e6d7649fc9bf0abe9def4c5cfb7d0bb9c29135ff4aedb300",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-extra-butter-salomon-8349773922487.png",
+    "sourceFile": "ng20-product-extra-butter-salomon-8349773922487.jpg",
+    "sourceSHA256": "31cc10556b4c391ccd99d2ceebb0e72393247382f2a7679ae54fab59f12f31bd",
+    "sha256": "c0f0537cd9799cd9402ed6c605045a6ac82068ed5e4ed6d6dac8f3bcb40ff697",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-feature-salomon-6753846919239.png",
+    "sourceFile": "ng20-product-feature-salomon-6753846919239.jpg",
+    "sourceSHA256": "ea017258260111d5806e0afe7a1451f967c8c209a2f8e657db8fbd0876b46080",
+    "sha256": "dd0dcdb2063a1c22effb6566fbc414c24f90757e7b1d4ab281f09af3e117d3da",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-extra-butter-salomon-8151144530103.png",
+    "sourceFile": "quiet-product-extra-butter-salomon-8151144530103.jpg",
+    "sourceSHA256": "7f6a6e54a3f582bb71109a3bf31a7426d5e2a15f5987342e113ca708c6a78e82",
+    "sha256": "65c62caa95844f63a94786262f79095ed43c4f70a9da0e0061d57e844dd367e5",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-feature-salomon-7029064368199.png",
+    "sourceFile": "ng20-product-feature-salomon-7029064368199.jpg",
+    "sourceSHA256": "240b238a1ad8b3b2b01ea51a72c44750feb56b20c34af4d24fd7616b3b85d236",
+    "sha256": "6b705c3f117d793b43630d3e3b8fea338a6390434dcc51bf4394ab80bf40a453",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-house-of-leon-8590788591789.png",
+    "sourceFile": "prototype-product-house-of-leon-8590788591789.jpg",
+    "sourceSHA256": "c14fd6a96e96a9351ee391fdc17e48057c3fd11777746bc75d16680bed663c9f",
+    "sha256": "dbaed2ced1c443ca0ef915430d5b16566f5ed1ff7f199e81a24dda6ffaa968d9",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-fellow-7507479003236.png",
+    "sourceFile": "prototype-product-fellow-7507479003236.jpg",
+    "sourceSHA256": "962eb365a10590d1ed6be621f63ea1e517977d5d8d44c6b43723015fb7f0277c",
+    "sha256": "cdf07510b91376d5e1bd6852494559e409bb3eea28f394a61d57de6f3cfd3d65",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-fellow-2055410221171.png",
+    "sourceFile": "prototype-product-fellow-2055410221171.jpg",
+    "sourceSHA256": "cceb174fba9b475128a7991ea4fdb3a8ea6cb40b946d9f9ff36d2e49d7248f8e",
+    "sha256": "a085e00ed7fc789a38cb274089935f7e52f6b83c842a55ee2899d1ee59e311d5",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-fellow-2055409762419.png",
+    "sourceFile": "ng20-product-fellow-2055409762419.jpg",
+    "sourceSHA256": "605c973be6fe33533e89612237277c211d04e4523307ad6fa79ecc0f9bc69a11",
+    "sha256": "9c9da14d0ca793083c37ccae14f174a4e830264c0cc9e4c957166d1f5f60722e",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-kinto-2214011961392.png",
+    "sourceFile": "ng20-product-kinto-2214011961392.jpg",
+    "sourceSHA256": "c2f40599527b8eb12c94f94f871259b89b7f804dc5d640592bd0da63765f6c19",
+    "sha256": "cd3db8fb7b6d72daffa8ee0bee6bc8a7c4884dafdfcee086601efa6de7768a75",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-kinto-2214023331888.png",
+    "sourceFile": "ng20-product-kinto-2214023331888.jpg",
+    "sourceSHA256": "4d425861e8ade4d6d30544c7f220b3922902078db7b1854dbf1b749484558abd",
+    "sha256": "f200eb88aa2cf5cf41d31de60c0727fd78e973194eda1806c0e78a2725e4c879",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-kinto-2214022053936.png",
+    "sourceFile": "ng20-product-kinto-2214022053936.jpg",
+    "sourceSHA256": "3c1c6e9f69c301615203636044491ee2ba324db3b52fd3ffbc0a17b282e0bee3",
+    "sha256": "1b41a99c21052324100b2a6fbad8106caee2f247b325a6ffaf36f54db258ab01",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-ceremonia-7219216580772.png",
+    "sourceFile": "ng20-product-ceremonia-7219216580772.jpg",
+    "sourceSHA256": "49b36b48f13bf24df2bf8aa078c9eba9e2c9d10e0538d748511066db23b187f4",
+    "sha256": "4ef0f29e5a2eb803c70a6087fe8025057516b0746758bdc86dded07e4f3b5a26",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-ceremonia-8178693210276.png",
+    "sourceFile": "ng20-product-ceremonia-8178693210276.jpg",
+    "sourceSHA256": "825c9e4a3edbcfa43bac1aac8f0d58bc9aef89e2433e22fc06be56f0868abccc",
+    "sha256": "13020467cfa83a6fbb79d8d87c1112e9c46d6b4e8262791fdffb216232847f76",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-ceremonia-6060165300388.png",
+    "sourceFile": "ng20-product-ceremonia-6060165300388.jpg",
+    "sourceSHA256": "3863020ab3313d138d2d6880539d700e18a7516a4cdb5774f3ea9cd2f0ced63a",
+    "sha256": "4ab17805b5a62ec3f6d3ea45c09c2fc24253a5f52a9736d91993b9fd5173bc3c",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-ceremonia-15369056321905.png",
+    "sourceFile": "ng20-product-ceremonia-15369056321905.jpg",
+    "sourceSHA256": "650d33038a8b7f381a2604335da21a0650f8bbbddde5756ddcef3f712e905600",
+    "sha256": "83117e057e7952b9a8dcebc3e0c30b85bdf378b7d939b373a13f9f370ad3f070",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-forom-9080102322307.png",
+    "sourceFile": "prototype-product-forom-9080102322307.jpg",
+    "sourceSHA256": "8f99518503b146fac4cc400ae0d907b38c300b839a25aa748bf51457278731e6",
+    "sha256": "75cb0f83e4bd8023386f9f0defe2d7b8bb31c65e68f67c30327b60a3542c4b9f",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-forom-8817998889091.png",
+    "sourceFile": "quiet-product-forom-8817998889091.jpg",
+    "sourceSHA256": "0b64d5ece803e04a4b8aa82dd37368b36ac6153457bdce785e2eb1947048253c",
+    "sha256": "d6ae7962ca51f367895635f1bfe2167ad805fe810972dd115059410b63e89559",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-forom-8774121619587.png",
+    "sourceFile": "quiet-product-forom-8774121619587.jpg",
+    "sourceSHA256": "d269bdc24356b618328d3e6fe8d906270726381de631a2ec522140fa94add6e6",
+    "sha256": "3a86f641dadabdf6ad7324ed41f37d4320bcfafc860358e92c788949f65991fc",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-forom-9082606649475.png",
+    "sourceFile": "quiet-product-forom-9082606649475.jpg",
+    "sourceSHA256": "81a04b93d7ebe5d8a285831f6808c4729fc49c37d4123276850e0de2385a3aa2",
+    "sha256": "5629fbd1ed62ae51a6e2875e811805cefa3f483e7df3c9bf1cf596c0e00ca1b9",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-moma-9787655160038.png",
+    "sourceFile": "ng20-product-moma-9787655160038.jpg",
+    "sourceSHA256": "d25a8a361c18aabfec0f21c7063fcdf7f62f84efa9d5ff55ca04557f14ca91bf",
+    "sha256": "bf458c987a50678417c3b0429bf5d44033ce2dee48ae00f12a34960dd933b8e8",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-moma-9604489248998.png",
+    "sourceFile": "ng20-product-moma-9604489248998.jpg",
+    "sourceSHA256": "05f4276b9465aa6a7bd111ffaf0ccd3635f486cf1de1c509e67faa4df1ac0978",
+    "sha256": "6cb6f5d764634c3b4fd49e06ae6a4ebd3070688913a373e50b712ec2c520ca97",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-moma-8909829603558.png",
+    "sourceFile": "ng20-product-moma-8909829603558.jpg",
+    "sourceSHA256": "cc24f7a76504ea803386994f1816888628754aefc7a7cf1bd605f88b521f8e13",
+    "sha256": "84e2471627631a7c955a3fd26e072cbc14f513aa10c5a0aa94713439a5784b35",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-nocs-10432692846871.png",
+    "sourceFile": "ng20-product-nocs-10432692846871.jpg",
+    "sourceSHA256": "ea7c92cd0aacd6c007dd3c7867de4011d9f9034f0c023fc2df25a2490e8f6feb",
+    "sha256": "4edcfc9737f2f39c536b64056603f16b651cfd6ff0fb6b11b120e5a65b7e9b10",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-nocs-6591770722382.png",
+    "sourceFile": "ng20-product-nocs-6591770722382.jpg",
+    "sourceSHA256": "f51b70960931b8ed36baf6b1264bce0fd037cf709e2e6edbb9b07d89b6e1f756",
+    "sha256": "af2ec578876d6a76d69dc15b4f1be5b8a3319c3ccfc5ed8df2fa31a4b7a1f6f2",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-nocs-10139738243351.png",
+    "sourceFile": "ng20-product-nocs-10139738243351.jpg",
+    "sourceSHA256": "d93f2d251a8dba8818710d1351d7a21e7456dbe08c5a3eed1b97fd4958cd2a07",
+    "sha256": "7b5ff5bcb0d78a6f6eb3ff7c743cd0cad1646737ad18b377aee74602f3c7c9a7",
+    "transform": "Foreground mask/crop; original product pixels"
+  },
+  {
+    "file": "ng20-art-nocs-10186761011479.png",
+    "sourceFile": "ng20-product-nocs-10186761011479.jpg",
+    "sourceSHA256": "14c3342ce4aeb0d63cd8b1c6147f6ececb07b48b981ad670ba3f67a31f6c3585",
+    "sha256": "31926b41142d4939fa628300e810643751a95fbce74f908afe4dcd0188c98ff1",
+    "transform": "Foreground mask/crop; original product pixels"
+  }
+]

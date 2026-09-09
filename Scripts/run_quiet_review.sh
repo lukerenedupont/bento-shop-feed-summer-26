@@ -29,11 +29,11 @@ xcrun simctl install "$SIM" "$DERIVED/Build/Products/Debug-iphonesimulator/ShopF
 if [ "$MODE" = structural ]; then
     xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -quietStructuralReview -nextGenerationGallery "$INDEX" -feedDesignMode
 elif [ "$MODE" = gallery ]; then
-    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -bentoMediaReview -nextGenerationGallery "$INDEX"
+    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -dossierOnly -bentoMediaReview -nextGenerationGallery "$INDEX"
 elif [ "$MODE" = design ]; then
-    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -bentoMediaReview -nextGenerationGallery "$INDEX" -feedDesignMode
+    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -dossierOnly -bentoMediaReview -nextGenerationGallery "$INDEX" -feedDesignMode
 else
-    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -bentoMediaReview -openNextGenerationCard "$INDEX"
+    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -dossierOnly -bentoMediaReview -openNextGenerationCard "$INDEX"
 fi
 open -a Simulator --args -CurrentDeviceUDID "$SIM"
 echo "Ready: Shop Quiet Feed Review. Activity and recommendations are authored. State is session-only."

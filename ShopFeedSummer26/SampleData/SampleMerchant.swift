@@ -101,8 +101,8 @@ struct SampleMerchant: Identifiable {
         let supplementalMerchants = BuyerPersonalizationCatalog.merchants.filter {
             supplementalMerchantIDs.contains($0.id) && !baseIDs.contains($0.id)
         }
-        if QuietFeedReviewCatalog.enabled {
-            return LocalMerchantService.mergeMerchants([DossierReviewLibrary.enabled ? DossierReviewLibrary.merchants : [], QuietFeedReviewCatalog.merchants, base + supplementalMerchants])
+        if QuietFeedReviewCatalog.enabled || NextGeneration20Catalog.enabled {
+            return LocalMerchantService.mergeMerchants([(DossierReviewLibrary.enabled || NextGeneration20Catalog.enabled) ? DossierReviewLibrary.merchants : [], QuietFeedReviewCatalog.merchants, base + supplementalMerchants])
         }
         return base + supplementalMerchants
     }

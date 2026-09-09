@@ -1,0 +1,4037 @@
+{
+  "schema": "shop-composition/1",
+  "generationMode": "agent-authored fixtures; no live model service",
+  "cards": [
+    {
+      "id": "ng20-jacket",
+      "title": "Style this jacket",
+      "job": "complete",
+      "theme": "ink",
+      "entities": {
+        "anchor": {
+          "merchantID": "dossier-ea4b35e8f8",
+          "productID": 371017720884,
+          "art": "6d91ee4227655be2-art0",
+          "label": "REVERSIBLE VALLEY OF FLOWERS WORK JACKET"
+        },
+        "one": {
+          "merchantID": "dossier-b70402af01",
+          "productID": 224918922749071,
+          "art": "6d91ee4227655be2-art1",
+          "label": "Relaxed Denim"
+        },
+        "two": {
+          "merchantID": "dossier-9b0c495192",
+          "productID": 64174777239616,
+          "art": "6d91ee4227655be2-art2",
+          "label": "Chunky Sneaker"
+        },
+        "three": {
+          "merchantID": "dossier-161bbaf248",
+          "productID": 195240428604874,
+          "art": "6d91ee4227655be2-art3",
+          "label": "Cotton Tee"
+        },
+        "shale": {
+          "merchantID": "sneaker-politics",
+          "productID": 8925922951356,
+          "art": "sneaker-politics-8925922951356-product",
+          "label": "Carhartt WIP Single Knee Pant - Shale"
+        },
+        "cord": {
+          "merchantID": "sneaker-politics",
+          "productID": 9459028754620,
+          "art": "sneaker-politics-9459028754620-product",
+          "label": "Levi's 568 Loose Straight Corduroy Carpenter Pants - Perfect Storm"
+        }
+      },
+      "order": [
+        "anchor",
+        "one",
+        "two",
+        "three",
+        "shale",
+        "cord"
+      ],
+      "root": {
+        "kind": "spacer",
+        "id": "ng20-jacket.root"
+      },
+      "action": "review",
+      "cta": "View the look",
+      "background": "6d91ee4227655be2-calm",
+      "footer": [
+        "anchor",
+        "one",
+        "two",
+        "three"
+      ],
+      "reason": "The anchor jacket and supporting garments remain individually shoppable over the supplied styling film.",
+      "alternates": [],
+      "destination": null,
+      "slots": [
+        {
+          "role": "one",
+          "alternatives": [
+            "one",
+            "shale",
+            "cord"
+          ]
+        }
+      ],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-woven-room",
+      "title": "Around this lamp",
+      "job": "complete",
+      "theme": "sand",
+      "entities": {
+        "anchor": {
+          "merchantID": "dossier-8a685ce757",
+          "productID": 26033555029992,
+          "art": "9d5f7d2f25a037ac-art0",
+          "label": "Woven Floor Lamp Artefacto LS 16  by L\u00f8rdag & S\u00f8ndag"
+        },
+        "one": {
+          "merchantID": "dossier-77e821400e",
+          "productID": 90759102791067,
+          "art": "9d5f7d2f25a037ac-art1",
+          "label": "Lounge chair"
+        },
+        "two": {
+          "merchantID": "dossier-be62540615",
+          "productID": 34175992341668,
+          "art": "9d5f7d2f25a037ac-art2",
+          "label": "Area rug"
+        },
+        "three": {
+          "merchantID": "dossier-3eb3103a83",
+          "productID": 155515157787452,
+          "art": "9d5f7d2f25a037ac-art3",
+          "label": "Side table"
+        },
+        "camel": {
+          "merchantID": "house-of-leon",
+          "productID": 7873592688813,
+          "art": "house-of-leon-7873592688813-art",
+          "label": "Chair #1 - Camel Nubuck"
+        },
+        "black": {
+          "merchantID": "house-of-leon",
+          "productID": 7873592721581,
+          "art": "house-of-leon-7873592721581-art",
+          "label": "Chair #1 - Black Leather",
+          "contact": "house-of-leon-7873592721581-contact",
+          "pair": "house-of-leon-7873592721581-pair",
+          "scene": "house-of-leon-7873592721581-scene"
+        }
+      },
+      "order": [
+        "anchor",
+        "one",
+        "two",
+        "three",
+        "camel",
+        "black"
+      ],
+      "root": {
+        "kind": "column",
+        "children": [
+          {
+            "kind": "media",
+            "asset": "9d5f7d2f25a037ac-look1",
+            "role": "anchor",
+            "fit": false,
+            "id": "ng20-woven-room.root.0"
+          },
+          {
+            "kind": "row",
+            "children": [
+              {
+                "kind": "product",
+                "role": "one",
+                "mode": "object",
+                "alternatives": [
+                  "one",
+                  "camel",
+                  "black"
+                ],
+                "id": "ng20-woven-room.root.1.0"
+              },
+              {
+                "kind": "product",
+                "role": "two",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-woven-room.root.1.1"
+              },
+              {
+                "kind": "product",
+                "role": "three",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-woven-room.root.1.2"
+              }
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ],
+            "id": "ng20-woven-room.root.1"
+          }
+        ],
+        "weights": [
+          4,
+          1
+        ],
+        "mode": "editorial",
+        "id": "ng20-woven-room.root"
+      },
+      "action": "review",
+      "cta": "Review the room",
+      "background": null,
+      "footer": [],
+      "reason": "Natural fibers anchor a room study. A chair changes in its own compartment; the scene stays labelled as inspiration.",
+      "alternates": [],
+      "destination": "spatial",
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-vomero-kit",
+      "title": "With these Vomeros",
+      "job": "complete",
+      "theme": "ink",
+      "entities": {
+        "anchor": {
+          "merchantID": "dossier-3b23833ffd",
+          "productID": 183248787651281,
+          "art": "4b42878d497ca473-art0",
+          "label": "Nike Vomero Plus SP - Desert Camo/Yukon Brown"
+        },
+        "one": {
+          "merchantID": "dossier-3b23833ffd",
+          "productID": 84546926989533,
+          "art": "4b42878d497ca473-art1",
+          "label": "Tapered trousers"
+        },
+        "two": {
+          "merchantID": "dossier-006d8e819f",
+          "productID": 96107359307689,
+          "art": "4b42878d497ca473-art2",
+          "label": "Crew socks"
+        },
+        "three": {
+          "merchantID": "dossier-3b23833ffd",
+          "productID": 42472222141064,
+          "art": "4b42878d497ca473-art3",
+          "label": "Windbreaker jacket"
+        },
+        "denim": {
+          "merchantID": "sneaker-politics",
+          "productID": 9007369158844,
+          "art": "sneaker-politics-9007369158844-product",
+          "label": "Marithe Francois Girbaud Brand X Denim Pants - Desert Blue"
+        },
+        "cord": {
+          "merchantID": "sneaker-politics",
+          "productID": 9459028754620,
+          "art": "sneaker-politics-9459028754620-product",
+          "label": "Levi's 568 Loose Straight Corduroy Carpenter Pants - Perfect Storm"
+        }
+      },
+      "order": [
+        "anchor",
+        "one",
+        "two",
+        "three",
+        "denim",
+        "cord"
+      ],
+      "root": {
+        "kind": "column",
+        "children": [
+          {
+            "kind": "spacer",
+            "id": "ng20-vomero-kit.root.0"
+          },
+          {
+            "kind": "row",
+            "children": [
+              {
+                "kind": "product",
+                "role": "anchor",
+                "mode": "tile",
+                "alternatives": [],
+                "id": "ng20-vomero-kit.root.1.0"
+              },
+              {
+                "kind": "product",
+                "role": "one",
+                "mode": "tile",
+                "alternatives": [
+                  "one",
+                  "denim",
+                  "cord"
+                ],
+                "id": "ng20-vomero-kit.root.1.1"
+              },
+              {
+                "kind": "product",
+                "role": "three",
+                "mode": "tile",
+                "alternatives": [],
+                "id": "ng20-vomero-kit.root.1.2"
+              },
+              {
+                "kind": "product",
+                "role": "two",
+                "mode": "tile",
+                "alternatives": [],
+                "id": "ng20-vomero-kit.root.1.3"
+              }
+            ],
+            "weights": [
+              1,
+              1,
+              1,
+              1
+            ],
+            "id": "ng20-vomero-kit.root.1"
+          }
+        ],
+        "weights": [
+          4,
+          1
+        ],
+        "mode": "study",
+        "id": "ng20-vomero-kit.root"
+      },
+      "action": "review",
+      "cta": "View the look",
+      "background": "4b42878d497ca473-look1",
+      "footer": [],
+      "reason": "The outdoor image is a fixed styling study, not a render of current selections. The shoe, swappable pants, jacket and socks remain individually grounded in the review.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-bode-pair",
+      "title": "Start with this tee",
+      "job": "complete",
+      "theme": "sand",
+      "entities": {
+        "anchor": {
+          "merchantID": "dossier-04545216b2",
+          "productID": 101025785603648,
+          "art": "8ccc0ca672d0d77f-art0",
+          "label": "Companion Tee"
+        },
+        "one": {
+          "merchantID": "dossier-3b23833ffd",
+          "productID": 84546926989533,
+          "art": "8ccc0ca672d0d77f-art1",
+          "label": "Relaxed trouser"
+        },
+        "two": {
+          "merchantID": "dossier-ec5a7980c7",
+          "productID": 99204711726004,
+          "art": "8ccc0ca672d0d77f-art2",
+          "label": "Sneaker"
+        },
+        "three": {
+          "merchantID": "dossier-5a09c9bca1",
+          "productID": 118893742484765,
+          "art": "8ccc0ca672d0d77f-art3",
+          "label": "Overshirt"
+        },
+        "cord": {
+          "merchantID": "sneaker-politics",
+          "productID": 9459028754620,
+          "art": "sneaker-politics-9459028754620-product",
+          "label": "Levi's 568 Loose Straight Corduroy Carpenter Pants - Perfect Storm"
+        }
+      },
+      "order": [
+        "anchor",
+        "one",
+        "two",
+        "three",
+        "cord"
+      ],
+      "root": {
+        "kind": "row",
+        "children": [
+          {
+            "kind": "column",
+            "children": [
+              {
+                "kind": "product",
+                "role": "anchor",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-bode-pair.root.0.0"
+              },
+              {
+                "kind": "media",
+                "asset": "8ccc0ca672d0d77f-look0",
+                "role": null,
+                "fit": false,
+                "id": "ng20-bode-pair.root.0.1"
+              }
+            ],
+            "weights": [
+              3,
+              2
+            ],
+            "id": "ng20-bode-pair.root.0"
+          },
+          {
+            "kind": "column",
+            "children": [
+              {
+                "kind": "product",
+                "role": "one",
+                "mode": "object",
+                "alternatives": [
+                  "one",
+                  "cord"
+                ],
+                "id": "ng20-bode-pair.root.1.0"
+              },
+              {
+                "kind": "product",
+                "role": "two",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-bode-pair.root.1.1"
+              }
+            ],
+            "weights": [
+              4,
+              1
+            ],
+            "id": "ng20-bode-pair.root.1"
+          }
+        ],
+        "weights": [
+          3,
+          2
+        ],
+        "id": "ng20-bode-pair.root"
+      },
+      "action": "save",
+      "cta": "Keep the combination",
+      "background": null,
+      "footer": [],
+      "reason": "The tee stays fixed while a companion changes; saving records the exact pair, not a render.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-watch-close",
+      "title": "A closer look",
+      "job": "inspect",
+      "theme": "ink",
+      "entities": {
+        "anchor": {
+          "merchantID": "dossier-0325dead2f",
+          "productID": 6196533399287,
+          "art": "98979f976a7a42f3-art0",
+          "label": "1975 Rolex Oyster Perpetual Date Green Khanjar for Sultanate of Oman 34mm Stainless Steel 1500"
+        }
+      },
+      "order": [
+        "anchor"
+      ],
+      "root": {
+        "kind": "column",
+        "children": [
+          {
+            "kind": "pager",
+            "children": [
+              {
+                "kind": "media",
+                "asset": "98979f976a7a42f3-lookbook",
+                "role": null,
+                "fit": false,
+                "id": "ng20-watch-close.root.0.0"
+              },
+              {
+                "kind": "product",
+                "role": "anchor",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-watch-close.root.0.1"
+              },
+              {
+                "kind": "media",
+                "asset": "98979f976a7a42f3-look1",
+                "role": null,
+                "fit": false,
+                "id": "ng20-watch-close.root.0.2"
+              }
+            ],
+            "id": "ng20-watch-close.root.0"
+          },
+          {
+            "kind": "merchant",
+            "role": "anchor",
+            "id": "ng20-watch-close.root.1"
+          }
+        ],
+        "weights": [
+          6,
+          1
+        ],
+        "id": "ng20-watch-close.root"
+      },
+      "action": "detail",
+      "cta": "View watch",
+      "background": null,
+      "footer": [],
+      "reason": "Inspect the source watch and its styling details. No unsupported strap compatibility or authenticity claims.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-leon",
+      "title": "For Leon",
+      "job": "gift",
+      "theme": "paper",
+      "entities": {
+        "anchor": {
+          "merchantID": "dossier-b110d5e494",
+          "productID": 237637580875453,
+          "art": "7263898de0dd5a28-art0",
+          "label": "Tin Can"
+        },
+        "one": {
+          "merchantID": "dossier-fc8ce16883",
+          "productID": 60896730911313,
+          "art": "7263898de0dd5a28-art1",
+          "label": "Kids desk organizer"
+        }
+      },
+      "order": [
+        "anchor",
+        "one"
+      ],
+      "root": {
+        "kind": "column",
+        "children": [
+          {
+            "kind": "media",
+            "asset": "7263898de0dd5a28-gift",
+            "role": null,
+            "fit": false,
+            "id": "ng20-leon.root.0"
+          },
+          {
+            "kind": "row",
+            "children": [
+              {
+                "kind": "product",
+                "role": "anchor",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-leon.root.1.0"
+              },
+              {
+                "kind": "product",
+                "role": "one",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-leon.root.1.1"
+              }
+            ],
+            "weights": [
+              1,
+              1
+            ],
+            "id": "ng20-leon.root.1"
+          }
+        ],
+        "weights": [
+          3,
+          2
+        ],
+        "id": "ng20-leon.root"
+      },
+      "action": "save",
+      "cta": "Keep for Leon",
+      "background": null,
+      "footer": [],
+      "reason": "A recipient-scoped gift idea. Only the phone and desk organizer are retained, not the alternative smartphone/router.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-hat-trick",
+      "title": "From Hat Trick NYC",
+      "job": "discover",
+      "theme": "ink",
+      "entities": {
+        "anchor": {
+          "merchantID": "dossier-35e5a61958",
+          "productID": 111632731070535,
+          "art": "5527c8904c1155d7-art0",
+          "label": "Yankee Sitcom Hat (Pinstripe)"
+        }
+      },
+      "order": [
+        "anchor"
+      ],
+      "root": {
+        "kind": "column",
+        "children": [
+          {
+            "kind": "merchant",
+            "role": "anchor",
+            "id": "ng20-hat-trick.root.0"
+          },
+          {
+            "kind": "spacer",
+            "id": "ng20-hat-trick.root.1"
+          },
+          {
+            "kind": "grid",
+            "roles": [
+              "anchor"
+            ],
+            "columns": 1,
+            "id": "ng20-hat-trick.root.2"
+          }
+        ],
+        "weights": [
+          1,
+          3,
+          2
+        ],
+        "id": "ng20-hat-trick.root"
+      },
+      "action": "merchant",
+      "cta": "Visit Hat Trick NYC",
+      "background": "5527c8904c1155d7-look0",
+      "footer": [],
+      "reason": "The hat merchant stays primary. Related styling objects are not presented as that merchant\u2019s inventory.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-little-adventures",
+      "title": "For little adventures",
+      "job": "complete",
+      "theme": "rose",
+      "entities": {
+        "anchor": {
+          "merchantID": "dossier-e858e014f8",
+          "productID": 217973244996373,
+          "art": "601abf8c7dca97ce-art0",
+          "label": "Toddler's Nike Air Max 95 S Phantom/Silt Red-Tattoo (905462 012)"
+        },
+        "one": {
+          "merchantID": "dossier-3be046a5b1",
+          "productID": 101220377897604,
+          "art": "601abf8c7dca97ce-art1",
+          "label": "Toddler joggers"
+        },
+        "two": {
+          "merchantID": "dossier-fedf4898cb",
+          "productID": 231659304370034,
+          "art": "601abf8c7dca97ce-art2",
+          "label": "Toddler tee"
+        },
+        "three": {
+          "merchantID": "dossier-0a86ec610f",
+          "productID": 64479672140763,
+          "art": "601abf8c7dca97ce-art3",
+          "label": "Toddler puffer jacket"
+        }
+      },
+      "order": [
+        "anchor",
+        "one",
+        "two",
+        "three"
+      ],
+      "root": {
+        "kind": "row",
+        "children": [
+          {
+            "kind": "media",
+            "asset": "601abf8c7dca97ce-look1",
+            "role": null,
+            "fit": false,
+            "id": "ng20-little-adventures.root.0"
+          },
+          {
+            "kind": "column",
+            "children": [
+              {
+                "kind": "product",
+                "role": "anchor",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-little-adventures.root.1.0"
+              },
+              {
+                "kind": "product",
+                "role": "one",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-little-adventures.root.1.1"
+              },
+              {
+                "kind": "product",
+                "role": "two",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-little-adventures.root.1.2"
+              }
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ],
+            "id": "ng20-little-adventures.root.1"
+          }
+        ],
+        "weights": [
+          3,
+          2
+        ],
+        "id": "ng20-little-adventures.root"
+      },
+      "action": "review",
+      "cta": "Review the outfit",
+      "background": null,
+      "footer": [],
+      "reason": "A child-focused outfit study. No adult alternatives or unverified fit/age claims.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-studio",
+      "title": "Your portable studio",
+      "job": "complete",
+      "theme": "paper",
+      "entities": {
+        "anchor": {
+          "merchantID": "dossier-330f94e21c",
+          "productID": 131556024222768,
+          "art": "519234f72b73ffaa-art0",
+          "label": "Teenage Engineering EP-133 K.O. II Extended Player - EP\u201340 riddim"
+        },
+        "one": {
+          "merchantID": "dossier-89ea7bdcf2",
+          "productID": 21825262943732,
+          "art": "519234f72b73ffaa-art1",
+          "label": "Studio headphones"
+        },
+        "two": {
+          "merchantID": "dossier-ec7b288173",
+          "productID": 118440413640738,
+          "art": "519234f72b73ffaa-art2",
+          "label": "Synthesizer"
+        },
+        "three": {
+          "merchantID": "dossier-b874a268a4",
+          "productID": 92779219028222,
+          "art": "519234f72b73ffaa-art3",
+          "label": "Audio cable"
+        }
+      },
+      "order": [
+        "anchor",
+        "one",
+        "two",
+        "three"
+      ],
+      "root": {
+        "kind": "column",
+        "children": [
+          {
+            "kind": "row",
+            "children": [
+              {
+                "kind": "product",
+                "role": "anchor",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-studio.root.0.0"
+              },
+              {
+                "kind": "product",
+                "role": "one",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-studio.root.0.1"
+              }
+            ],
+            "weights": [
+              3,
+              2
+            ],
+            "id": "ng20-studio.root.0"
+          },
+          {
+            "kind": "row",
+            "children": [
+              {
+                "kind": "product",
+                "role": "two",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-studio.root.1.0"
+              },
+              {
+                "kind": "product",
+                "role": "three",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-studio.root.1.1"
+              }
+            ],
+            "weights": [
+              4,
+              1
+            ],
+            "id": "ng20-studio.root.1"
+          }
+        ],
+        "weights": [
+          3,
+          2
+        ],
+        "id": "ng20-studio.root"
+      },
+      "action": "save",
+      "cta": "Keep this setup",
+      "background": null,
+      "footer": [],
+      "reason": "A sampler, headphones, keyboard and cable are separate choices. The original green device replaces the erroneous generated K.O. II image.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-salomon-directions",
+      "title": "City or trail?",
+      "job": "narrow",
+      "theme": "ink",
+      "entities": {
+        "trail": {
+          "merchantID": "extra-butter-salomon",
+          "productID": 8349773922487,
+          "art": "extra-butter-salomon-8349773922487-art",
+          "label": "Salomon Mens XA Pro 3D GTX Shoes",
+          "contact": "extra-butter-salomon-8349773922487-contact",
+          "pair": "extra-butter-salomon-8349773922487-pair",
+          "scene": "extra-butter-salomon-8349773922487-scene"
+        },
+        "city": {
+          "merchantID": "feature-salomon",
+          "productID": 6753846919239,
+          "art": "feature-salomon-6753846919239-art",
+          "label": "XT-4 OG - Black/Ebony/Silver Metallic",
+          "contact": "feature-salomon-6753846919239-contact",
+          "pair": "feature-salomon-6753846919239-pair",
+          "scene": "feature-salomon-6753846919239-scene"
+        },
+        "quest": {
+          "merchantID": "extra-butter-salomon",
+          "productID": 8151144530103,
+          "art": "extra-butter-salomon-8151144530103-art",
+          "label": "Salomon Mens XT-Quest Shoes",
+          "contact": "extra-butter-salomon-8151144530103-contact",
+          "pair": "extra-butter-salomon-8151144530103-pair",
+          "scene": "extra-butter-salomon-8151144530103-scene"
+        },
+        "white": {
+          "merchantID": "feature-salomon",
+          "productID": 7029064368199,
+          "art": "feature-salomon-7029064368199-art",
+          "label": "XT-6 GTX - White/White/Footwear Silver",
+          "contact": "feature-salomon-7029064368199-contact",
+          "pair": "feature-salomon-7029064368199-pair",
+          "scene": "feature-salomon-7029064368199-scene"
+        }
+      },
+      "order": [
+        "trail",
+        "city",
+        "quest",
+        "white"
+      ],
+      "root": {
+        "kind": "choice",
+        "options": [
+          {
+            "id": "trail",
+            "title": "On the trail",
+            "roles": [
+              "trail",
+              "quest"
+            ],
+            "preview": {
+              "kind": "media",
+              "asset": "extra-butter-salomon-8349773922487-scene",
+              "role": null,
+              "fit": false,
+              "id": "ng20-salomon-directions.root.option0"
+            }
+          },
+          {
+            "id": "city",
+            "title": "In the city",
+            "roles": [
+              "city",
+              "white"
+            ],
+            "preview": {
+              "kind": "media",
+              "asset": "feature-salomon-6753846919239-scene",
+              "role": null,
+              "fit": false,
+              "id": "ng20-salomon-directions.root.option1"
+            }
+          }
+        ],
+        "response": {
+          "kind": "column",
+          "children": [
+            {
+              "kind": "media",
+              "asset": null,
+              "role": "$selected",
+              "fit": false,
+              "id": "ng20-salomon-directions.root.response.0"
+            },
+            {
+              "kind": "grid",
+              "roles": [
+                "$group"
+              ],
+              "columns": 2,
+              "id": "ng20-salomon-directions.root.response.1"
+            }
+          ],
+          "weights": [
+            3,
+            2
+          ],
+          "id": "ng20-salomon-directions.root.response"
+        },
+        "axis": "row",
+        "id": "ng20-salomon-directions.root"
+      },
+      "action": "review",
+      "cta": "Explore your direction",
+      "background": null,
+      "footer": [],
+      "reason": "Two real Salomon assortments. Choosing a direction excludes the other group from the response.",
+      "alternates": [
+        {
+          "kind": "choice",
+          "options": [
+            {
+              "id": "trail",
+              "title": "On the trail",
+              "roles": [
+                "trail",
+                "quest"
+              ],
+              "preview": {
+                "kind": "media",
+                "asset": "extra-butter-salomon-8349773922487-scene",
+                "role": null,
+                "fit": false,
+                "id": "ng20-salomon-directions.alt0.option0"
+              }
+            },
+            {
+              "id": "city",
+              "title": "In the city",
+              "roles": [
+                "city",
+                "white"
+              ],
+              "preview": {
+                "kind": "media",
+                "asset": "feature-salomon-6753846919239-scene",
+                "role": null,
+                "fit": false,
+                "id": "ng20-salomon-directions.alt0.option1"
+              }
+            }
+          ],
+          "response": {
+            "kind": "column",
+            "children": [
+              {
+                "kind": "media",
+                "asset": null,
+                "role": "$selected",
+                "fit": false,
+                "id": "ng20-salomon-directions.alt0.response.0"
+              },
+              {
+                "kind": "grid",
+                "roles": [
+                  "$group"
+                ],
+                "columns": 2,
+                "id": "ng20-salomon-directions.alt0.response.1"
+              }
+            ],
+            "weights": [
+              3,
+              2
+            ],
+            "id": "ng20-salomon-directions.alt0.response"
+          },
+          "axis": "column",
+          "id": "ng20-salomon-directions.alt0"
+        }
+      ],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-chairs",
+      "title": "Still considering these?",
+      "job": "compare",
+      "theme": "paper",
+      "entities": {
+        "camel": {
+          "merchantID": "house-of-leon",
+          "productID": 7873592688813,
+          "art": "house-of-leon-7873592688813-art",
+          "label": "Chair #1 - Camel Nubuck"
+        },
+        "black": {
+          "merchantID": "house-of-leon",
+          "productID": 7873592721581,
+          "art": "house-of-leon-7873592721581-art",
+          "label": "Chair #1 - Black Leather",
+          "contact": "house-of-leon-7873592721581-contact",
+          "pair": "house-of-leon-7873592721581-pair",
+          "scene": "house-of-leon-7873592721581-scene"
+        },
+        "boucle": {
+          "merchantID": "house-of-leon",
+          "productID": 8590788591789,
+          "art": "house-of-leon-8590788591789-art",
+          "label": "Papa Teddy Chair - White Boucle"
+        }
+      },
+      "order": [
+        "camel",
+        "black",
+        "boucle"
+      ],
+      "root": {
+        "kind": "compare",
+        "roles": [
+          "camel",
+          "black",
+          "boucle"
+        ],
+        "id": "ng20-chairs.root"
+      },
+      "action": "compare",
+      "cta": "Compare chairs",
+      "background": null,
+      "footer": [],
+      "reason": "Two selected chairs reveal canonical titles, merchants and prices. No dimensions or reviews are invented.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-fellow-routine",
+      "title": "Your Fellow setup",
+      "job": "complete",
+      "theme": "sage",
+      "entities": {
+        "brew": {
+          "merchantID": "fellow",
+          "productID": 7507479003236,
+          "art": "fellow-7507479003236-art",
+          "label": "Aiden Precision Coffee Maker",
+          "contact": "fellow-7507479003236-contact",
+          "pair": "fellow-7507479003236-pair",
+          "scene": "fellow-7507479003236-scene"
+        },
+        "pour": {
+          "merchantID": "fellow",
+          "productID": 2055410221171,
+          "art": "fellow-2055410221171-art",
+          "label": "Stagg EKG Electric Kettle",
+          "contact": "fellow-2055410221171-contact",
+          "pair": "fellow-2055410221171-pair",
+          "scene": "fellow-2055410221171-scene"
+        },
+        "serve": {
+          "merchantID": "fellow",
+          "productID": 2055409762419,
+          "art": "fellow-2055409762419-art",
+          "label": "Stagg Tasting Glasses"
+        }
+      },
+      "order": [
+        "brew",
+        "pour",
+        "serve"
+      ],
+      "root": {
+        "kind": "column",
+        "children": [
+          {
+            "kind": "media",
+            "asset": null,
+            "role": "$selected",
+            "fit": false,
+            "id": "ng20-fellow-routine.root.0"
+          },
+          {
+            "kind": "steps",
+            "roles": [
+              "brew",
+              "pour",
+              "serve"
+            ],
+            "labels": [
+              "Brew",
+              "Pour",
+              "Serve"
+            ],
+            "id": "ng20-fellow-routine.root.1"
+          }
+        ],
+        "weights": [
+          4,
+          2
+        ],
+        "id": "ng20-fellow-routine.root"
+      },
+      "action": "save",
+      "cta": "Keep the setup",
+      "background": null,
+      "footer": [],
+      "reason": "The selected workflow step changes the stage; a separate explicit save keeps the kit.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-kinto",
+      "title": "Pour with KINTO",
+      "job": "inspect",
+      "theme": "paper",
+      "entities": {
+        "server": {
+          "merchantID": "kinto",
+          "productID": 2214011961392,
+          "art": "kinto-2214011961392-art",
+          "label": "SCS-S02 coffee server 2cups",
+          "contact": "kinto-2214011961392-contact",
+          "pair": "kinto-2214011961392-pair",
+          "scene": "kinto-2214011961392-scene"
+        },
+        "cup": {
+          "merchantID": "kinto",
+          "productID": 2214023331888,
+          "art": "kinto-2214023331888-art",
+          "label": "KRONOS double wall coffee cup 250ml / 8oz",
+          "contact": "kinto-2214023331888-contact",
+          "pair": "kinto-2214023331888-pair",
+          "scene": "kinto-2214023331888-scene"
+        },
+        "cast": {
+          "merchantID": "kinto",
+          "productID": 2214022053936,
+          "art": "kinto-2214022053936-art",
+          "label": "CAST coffee cup 220ml / 7oz"
+        }
+      },
+      "order": [
+        "server",
+        "cup",
+        "cast"
+      ],
+      "root": {
+        "kind": "row",
+        "children": [
+          {
+            "kind": "pager",
+            "children": [
+              {
+                "kind": "media",
+                "asset": "kinto-2214023331888-scene",
+                "role": null,
+                "fit": false,
+                "id": "ng20-kinto.root.0.0"
+              },
+              {
+                "kind": "media",
+                "asset": "kinto-2214023331888-contact",
+                "role": null,
+                "fit": false,
+                "id": "ng20-kinto.root.0.1"
+              }
+            ],
+            "id": "ng20-kinto.root.0"
+          },
+          {
+            "kind": "column",
+            "children": [
+              {
+                "kind": "product",
+                "role": "server",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-kinto.root.1.0"
+              },
+              {
+                "kind": "product",
+                "role": "cup",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-kinto.root.1.1"
+              },
+              {
+                "kind": "product",
+                "role": "cast",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-kinto.root.1.2"
+              }
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ],
+            "id": "ng20-kinto.root.1"
+          }
+        ],
+        "weights": [
+          3,
+          2
+        ],
+        "id": "ng20-kinto.root"
+      },
+      "action": "detail",
+      "cta": "View the selected piece",
+      "background": null,
+      "footer": [],
+      "reason": "A material study anchored in actual KINTO products and supplied scenes.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-ceremonia",
+      "title": "Your Ceremonia routine",
+      "job": "complete",
+      "theme": "rose",
+      "entities": {
+        "scalp": {
+          "merchantID": "ceremonia",
+          "productID": 7219216580772,
+          "art": "ceremonia-7219216580772-art",
+          "label": "Papaya Scalp Scrub",
+          "contact": "ceremonia-7219216580772-contact",
+          "pair": "ceremonia-7219216580772-pair",
+          "scene": "ceremonia-7219216580772-scene"
+        },
+        "cleanse": {
+          "merchantID": "ceremonia",
+          "productID": 8178693210276,
+          "art": "ceremonia-8178693210276-art",
+          "label": "Guava Protect & Repair Shampoo"
+        },
+        "finish": {
+          "merchantID": "ceremonia",
+          "productID": 6060165300388,
+          "art": "ceremonia-6060165300388-art",
+          "label": "Guava Leave-In Conditioner",
+          "contact": "ceremonia-6060165300388-contact",
+          "pair": "ceremonia-6060165300388-pair",
+          "scene": "ceremonia-6060165300388-scene"
+        },
+        "dry": {
+          "merchantID": "ceremonia",
+          "productID": 15369056321905,
+          "art": "ceremonia-15369056321905-art",
+          "label": "Hair Towel",
+          "contact": "ceremonia-15369056321905-contact",
+          "pair": "ceremonia-15369056321905-pair",
+          "scene": "ceremonia-15369056321905-scene"
+        }
+      },
+      "order": [
+        "scalp",
+        "cleanse",
+        "finish",
+        "dry"
+      ],
+      "root": {
+        "kind": "row",
+        "children": [
+          {
+            "kind": "column",
+            "children": [
+              {
+                "kind": "media",
+                "asset": "ceremonia-6060165300388-scene",
+                "role": null,
+                "fit": false,
+                "id": "ng20-ceremonia.root.0.0"
+              },
+              {
+                "kind": "product",
+                "role": "$selected",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-ceremonia.root.0.1"
+              }
+            ],
+            "weights": [
+              3,
+              2
+            ],
+            "id": "ng20-ceremonia.root.0"
+          },
+          {
+            "kind": "steps",
+            "roles": [
+              "scalp",
+              "cleanse",
+              "finish",
+              "dry"
+            ],
+            "labels": [
+              "Scalp",
+              "Cleanse",
+              "Finish",
+              "Dry"
+            ],
+            "axis": "column",
+            "id": "ng20-ceremonia.root.1"
+          }
+        ],
+        "weights": [
+          3,
+          2
+        ],
+        "id": "ng20-ceremonia.root"
+      },
+      "action": "save",
+      "cta": "Keep the routine",
+      "background": null,
+      "footer": [],
+      "reason": "Product roles come from the catalog. This is not a claim about the shopper\u2019s hair or treatment outcomes.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-standards-library",
+      "title": "From the bookshelf",
+      "job": "discover",
+      "theme": "paper",
+      "entities": {
+        "book0": {
+          "merchantID": "standards-manual",
+          "productID": 1424479363,
+          "art": "standards-manual-1424479363-product",
+          "label": "NYCTA Graphics Standards Manual Compact Edition",
+          "contact": "standards-manual-1424479363-contact",
+          "pair": "standards-manual-1424479363-pair",
+          "scene": "standards-manual-1424479363-scene"
+        },
+        "book1": {
+          "merchantID": "standards-manual",
+          "productID": 5842516163,
+          "art": "standards-manual-5842516163-product",
+          "label": "NASA Graphics Standards Manual",
+          "contact": "standards-manual-5842516163-contact",
+          "pair": "standards-manual-5842516163-pair",
+          "scene": "standards-manual-5842516163-scene"
+        },
+        "book2": {
+          "merchantID": "standards-manual",
+          "productID": 92039479320,
+          "art": "standards-manual-92039479320-product",
+          "label": "EPA Graphic Standards System"
+        },
+        "book3": {
+          "merchantID": "standards-manual",
+          "productID": 3933686169669,
+          "art": "standards-manual-3933686169669-product",
+          "label": "Parks"
+        },
+        "book4": {
+          "merchantID": "standards-manual",
+          "productID": 9250932523224,
+          "art": "standards-manual-9250932523224-product",
+          "label": "Impact 1.0: Design magazines, journals and periodicals, 1922\u201373 [Unit 27]"
+        },
+        "book5": {
+          "merchantID": "standards-manual",
+          "productID": 9250934980824,
+          "art": "standards-manual-9250934980824-product",
+          "label": "Impact 2.0: Design magazines, journals and periodicals, 1974\u20132016 [Unit 28]"
+        },
+        "book6": {
+          "merchantID": "standards-manual",
+          "productID": 9250935800024,
+          "art": "standards-manual-9250935800024-product",
+          "label": "Studio Culture Now: Advice and guidance for designers in a changing world\u2028 [Unit 45]"
+        },
+        "book7": {
+          "merchantID": "standards-manual",
+          "productID": 9250964537560,
+          "art": "standards-manual-9250964537560-product",
+          "label": "VNIITE: Discovering Utopia\u2014Lost Archives of Soviet Design [Unit 40]"
+        },
+        "book8": {
+          "merchantID": "standards-manual",
+          "productID": 9250965487832,
+          "art": "standards-manual-9250965487832-product",
+          "label": "Letraset: The DIY Typography Revolution [Unit 34]"
+        },
+        "book9": {
+          "merchantID": "standards-manual",
+          "productID": 9250967847128,
+          "art": "standards-manual-9250967847128-product",
+          "label": "Fred Troller Design [Unit 55]"
+        },
+        "book10": {
+          "merchantID": "standards-manual",
+          "productID": 9036702908632,
+          "art": "standards-manual-9036702908632-product",
+          "label": "Identity: Chermayeff & Geismar & Haviv Compact Edition"
+        },
+        "book11": {
+          "merchantID": "standards-manual",
+          "productID": 8740245078232,
+          "art": "standards-manual-8740245078232-product",
+          "label": "Parks 2"
+        },
+        "book12": {
+          "merchantID": "standards-manual",
+          "productID": 8342043590872,
+          "art": "standards-manual-8342043590872-product",
+          "label": "1982 DC Comics Style Guide"
+        },
+        "book13": {
+          "merchantID": "standards-manual",
+          "productID": 8107495588056,
+          "art": "standards-manual-8107495588056-product",
+          "label": "Classified: Local Ads From America\u2019s Small Towns"
+        },
+        "book14": {
+          "merchantID": "standards-manual",
+          "productID": 8062714904792,
+          "art": "standards-manual-8062714904792-product",
+          "label": "100 Poster Battle 2 \u2014 Sharing Cultural Identities"
+        },
+        "book15": {
+          "merchantID": "standards-manual",
+          "productID": 190760222744,
+          "art": "standards-manual-190760222744-product",
+          "label": "Chip Slip (10 pack)"
+        },
+        "book16": {
+          "merchantID": "standards-manual",
+          "productID": 7835076985048,
+          "art": "standards-manual-7835076985048-product",
+          "label": "QSL? (Do You Confirm Receipt of My Transmission?)"
+        },
+        "book17": {
+          "merchantID": "standards-manual",
+          "productID": 4098803531845,
+          "art": "standards-manual-4098803531845-product",
+          "label": "A Gallery in Type Cases: The Arno Stolz Collection"
+        },
+        "book18": {
+          "merchantID": "standards-manual",
+          "productID": 2107020836933,
+          "art": "standards-manual-2107020836933-product",
+          "label": "Graphic #42"
+        },
+        "book19": {
+          "merchantID": "standards-manual",
+          "productID": 235360452632,
+          "art": "standards-manual-235360452632-product",
+          "label": "Vignelli and the Standards Manual (Print)"
+        }
+      },
+      "order": [
+        "book0",
+        "book1",
+        "book2",
+        "book3",
+        "book4",
+        "book5",
+        "book6",
+        "book7",
+        "book8",
+        "book9",
+        "book10",
+        "book11",
+        "book12",
+        "book13",
+        "book14",
+        "book15",
+        "book16",
+        "book17",
+        "book18",
+        "book19"
+      ],
+      "root": {
+        "kind": "canvas",
+        "id": "ng20-standards-library.root"
+      },
+      "action": "canvas",
+      "cta": "Explore the library",
+      "background": null,
+      "footer": [],
+      "reason": "Twenty real Standards Manual items in the existing native fisheye canvas. The finite assortment is not represented as infinite stock.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-mirror-directions",
+      "title": "Pick a direction",
+      "job": "narrow",
+      "theme": "sand",
+      "entities": {
+        "jelly": {
+          "merchantID": "coming-soon",
+          "productID": 9908030275890,
+          "art": "coming-soon-9908030275890-product",
+          "label": "Jelly Mirror",
+          "contact": "coming-soon-9908030275890-contact",
+          "pair": "coming-soon-9908030275890-pair",
+          "scene": "coming-soon-9908030275890-scene"
+        },
+        "gemini": {
+          "merchantID": "coming-soon",
+          "productID": 9603148841266,
+          "art": "coming-soon-9603148841266-product",
+          "label": "Gemini Mirror",
+          "contact": "coming-soon-9603148841266-contact",
+          "pair": "coming-soon-9603148841266-pair",
+          "scene": "coming-soon-9603148841266-scene"
+        }
+      },
+      "order": [
+        "jelly",
+        "gemini"
+      ],
+      "root": {
+        "kind": "choice",
+        "options": [
+          {
+            "id": "playful",
+            "title": "Playful",
+            "roles": [
+              "jelly"
+            ],
+            "preview": {
+              "kind": "media",
+              "asset": "coming-soon-9908030275890-scene",
+              "role": null,
+              "fit": false,
+              "id": "ng20-mirror-directions.root.option0"
+            }
+          },
+          {
+            "id": "sculptural",
+            "title": "Sculptural",
+            "roles": [
+              "gemini"
+            ],
+            "preview": {
+              "kind": "media",
+              "asset": "coming-soon-9603148841266-scene",
+              "role": null,
+              "fit": false,
+              "id": "ng20-mirror-directions.root.option1"
+            }
+          }
+        ],
+        "response": {
+          "kind": "row",
+          "children": [
+            {
+              "kind": "media",
+              "asset": null,
+              "role": "$selected",
+              "fit": false,
+              "id": "ng20-mirror-directions.root.response.0"
+            },
+            {
+              "kind": "product",
+              "role": "$selected",
+              "mode": "object",
+              "alternatives": [],
+              "id": "ng20-mirror-directions.root.response.1"
+            }
+          ],
+          "weights": [
+            3,
+            2
+          ],
+          "id": "ng20-mirror-directions.root.response"
+        },
+        "axis": "column",
+        "id": "ng20-mirror-directions.root"
+      },
+      "action": "review",
+      "cta": "View your choice",
+      "background": null,
+      "footer": [],
+      "reason": "Direction is communicated by the mirrors and rooms, not by large text buttons.",
+      "alternates": [
+        {
+          "kind": "choice",
+          "options": [
+            {
+              "id": "playful",
+              "title": "Playful",
+              "roles": [
+                "jelly"
+              ],
+              "preview": {
+                "kind": "media",
+                "asset": "coming-soon-9908030275890-scene",
+                "role": null,
+                "fit": false,
+                "id": "ng20-mirror-directions.alt0.option0"
+              }
+            },
+            {
+              "id": "sculptural",
+              "title": "Sculptural",
+              "roles": [
+                "gemini"
+              ],
+              "preview": {
+                "kind": "media",
+                "asset": "coming-soon-9603148841266-scene",
+                "role": null,
+                "fit": false,
+                "id": "ng20-mirror-directions.alt0.option1"
+              }
+            }
+          ],
+          "response": {
+            "kind": "row",
+            "children": [
+              {
+                "kind": "media",
+                "asset": null,
+                "role": "$selected",
+                "fit": false,
+                "id": "ng20-mirror-directions.alt0.response.0"
+              },
+              {
+                "kind": "product",
+                "role": "$selected",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-mirror-directions.alt0.response.1"
+              }
+            ],
+            "weights": [
+              3,
+              2
+            ],
+            "id": "ng20-mirror-directions.alt0.response"
+          },
+          "axis": "row",
+          "id": "ng20-mirror-directions.alt0"
+        }
+      ],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-forom",
+      "title": "A FOROM corner",
+      "job": "complete",
+      "theme": "sand",
+      "entities": {
+        "mirror": {
+          "merchantID": "forom",
+          "productID": 9080102322307,
+          "art": "forom-9080102322307-art",
+          "label": "Elyse Wall Mirror - Mahogany",
+          "contact": "forom-9080102322307-contact",
+          "pair": "forom-9080102322307-pair",
+          "scene": "forom-9080102322307-scene"
+        },
+        "table": {
+          "merchantID": "forom",
+          "productID": 8817998889091,
+          "art": "forom-8817998889091-art",
+          "label": "Eliza Side Table - Deep Lichen Green"
+        },
+        "ecru": {
+          "merchantID": "forom",
+          "productID": 8774121619587,
+          "art": "forom-8774121619587-art",
+          "label": "Eliza Side Table - Ecru White"
+        },
+        "vase": {
+          "merchantID": "forom",
+          "productID": 9082606649475,
+          "art": "forom-9082606649475-art",
+          "label": "Ammonit Vase - White Frosted"
+        }
+      },
+      "order": [
+        "mirror",
+        "table",
+        "ecru",
+        "vase"
+      ],
+      "root": {
+        "kind": "column",
+        "children": [
+          {
+            "kind": "media",
+            "asset": "forom-9080102322307-scene",
+            "role": null,
+            "fit": false,
+            "id": "ng20-forom.root.0"
+          },
+          {
+            "kind": "row",
+            "children": [
+              {
+                "kind": "product",
+                "role": "mirror",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-forom.root.1.0"
+              },
+              {
+                "kind": "product",
+                "role": "table",
+                "mode": "object",
+                "alternatives": [
+                  "table",
+                  "ecru"
+                ],
+                "id": "ng20-forom.root.1.1"
+              },
+              {
+                "kind": "product",
+                "role": "vase",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-forom.root.1.2"
+              }
+            ],
+            "weights": [
+              2,
+              2,
+              1
+            ],
+            "id": "ng20-forom.root.1"
+          }
+        ],
+        "weights": [
+          3,
+          2
+        ],
+        "id": "ng20-forom.root"
+      },
+      "action": "review",
+      "cta": "Review the corner",
+      "background": null,
+      "footer": [],
+      "reason": "A material-led FOROM composition with an independently swappable table.",
+      "alternates": [],
+      "destination": "spatial",
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-moma",
+      "title": "From MoMA",
+      "job": "discover",
+      "theme": "blue",
+      "entities": {
+        "espresso": {
+          "merchantID": "moma",
+          "productID": 9787655160038,
+          "art": "moma-9787655160038-art",
+          "label": "Alessi Vite 3-Cup Stovetop Espresso Maker - Red",
+          "contact": "moma-9787655160038-contact",
+          "pair": "moma-9787655160038-pair",
+          "scene": "moma-9787655160038-scene"
+        },
+        "watch": {
+          "merchantID": "moma",
+          "productID": 9604489248998,
+          "art": "moma-9604489248998-art",
+          "label": "Swatch Neon Flumotions Watch",
+          "contact": "moma-9604489248998-contact",
+          "pair": "moma-9604489248998-pair",
+          "scene": "moma-9604489248998-scene"
+        },
+        "flatware": {
+          "merchantID": "moma",
+          "productID": 8909829603558,
+          "art": "moma-8909829603558-art",
+          "label": "Virgil Abloh Conversational Objects Flatware from Alessi - Set of 4",
+          "contact": "moma-8909829603558-contact",
+          "pair": "moma-8909829603558-pair",
+          "scene": "moma-8909829603558-scene"
+        }
+      },
+      "order": [
+        "espresso",
+        "watch",
+        "flatware"
+      ],
+      "root": {
+        "kind": "row",
+        "children": [
+          {
+            "kind": "column",
+            "children": [
+              {
+                "kind": "media",
+                "asset": "moma-9787655160038-scene",
+                "role": null,
+                "fit": false,
+                "id": "ng20-moma.root.0.0"
+              },
+              {
+                "kind": "product",
+                "role": "flatware",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-moma.root.0.1"
+              }
+            ],
+            "weights": [
+              4,
+              1
+            ],
+            "id": "ng20-moma.root.0"
+          },
+          {
+            "kind": "column",
+            "children": [
+              {
+                "kind": "product",
+                "role": "watch",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-moma.root.1.0"
+              },
+              {
+                "kind": "media",
+                "asset": "moma-9604489248998-contact",
+                "role": null,
+                "fit": false,
+                "id": "ng20-moma.root.1.1"
+              }
+            ],
+            "weights": [
+              2,
+              3
+            ],
+            "id": "ng20-moma.root.1"
+          }
+        ],
+        "weights": [
+          3,
+          2
+        ],
+        "id": "ng20-moma.root"
+      },
+      "action": "merchant",
+      "cta": "Visit MoMA",
+      "background": null,
+      "footer": [],
+      "reason": "Color comes from the merchant\u2019s actual design objects; controls and typography stay native.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-nocs",
+      "title": "Nocs field kit",
+      "job": "complete",
+      "theme": "ink",
+      "entities": {
+        "pro": {
+          "merchantID": "nocs",
+          "productID": 10432692846871,
+          "art": "nocs-10432692846871-art",
+          "label": "Pro Issue 8x42 Waterproof Binoculars",
+          "contact": "nocs-10432692846871-contact",
+          "pair": "nocs-10432692846871-pair",
+          "scene": "nocs-10432692846871-scene"
+        },
+        "tube": {
+          "merchantID": "nocs",
+          "productID": 6591770722382,
+          "art": "nocs-6591770722382-art",
+          "label": "Zoom Tube 8x32",
+          "contact": "nocs-6591770722382-contact",
+          "pair": "nocs-6591770722382-pair",
+          "scene": "nocs-6591770722382-scene"
+        },
+        "strap": {
+          "merchantID": "nocs",
+          "productID": 10139738243351,
+          "art": "nocs-10139738243351-art",
+          "label": "NocLoc Approach Strap"
+        },
+        "pouch": {
+          "merchantID": "nocs",
+          "productID": 10186761011479,
+          "art": "nocs-10186761011479-art",
+          "label": "42mm Binocular Pouch"
+        }
+      },
+      "order": [
+        "pro",
+        "tube",
+        "strap",
+        "pouch"
+      ],
+      "root": {
+        "kind": "column",
+        "children": [
+          {
+            "kind": "row",
+            "children": [
+              {
+                "kind": "product",
+                "role": "pro",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-nocs.root.0.0"
+              },
+              {
+                "kind": "product",
+                "role": "tube",
+                "mode": "object",
+                "alternatives": [],
+                "id": "ng20-nocs.root.0.1"
+              }
+            ],
+            "weights": [
+              3,
+              2
+            ],
+            "id": "ng20-nocs.root.0"
+          },
+          {
+            "kind": "grid",
+            "roles": [
+              "strap",
+              "pouch"
+            ],
+            "columns": 2,
+            "id": "ng20-nocs.root.1"
+          }
+        ],
+        "weights": [
+          3,
+          1
+        ],
+        "id": "ng20-nocs.root"
+      },
+      "action": "save",
+      "cta": "Keep the field kit",
+      "background": "nocs-10432692846871-scene-still",
+      "footer": [],
+      "reason": "Optics and accessories from Nocs. Selecting equipment changes the stage; saves remain explicit.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    },
+    {
+      "id": "ng20-lichen",
+      "title": "Found at Lichen",
+      "job": "discover",
+      "theme": "paper",
+      "entities": {
+        "chair": {
+          "merchantID": "lichen",
+          "productID": 12462683128126,
+          "art": "lichen-12462683128126-product",
+          "label": "Brutalist Wooden Chairs (Set of 4)"
+        },
+        "wassily": {
+          "merchantID": "lichen",
+          "productID": 12567030169918,
+          "art": "lichen-12567030169918-product",
+          "label": "Wassily Chair by Marcel Breuer for Gavina"
+        },
+        "shelf": {
+          "merchantID": "lichen",
+          "productID": 12518383059262,
+          "art": "lichen-12518383059262-product",
+          "label": "Floyd Shelf"
+        },
+        "rack": {
+          "merchantID": "lichen",
+          "productID": 12374848700734,
+          "art": "lichen-12374848700734-product",
+          "label": "Magnetic Rack System Container or Shelf by Veark"
+        },
+        "book": {
+          "merchantID": "lichen",
+          "productID": 11009838154046,
+          "art": "lichen-11009838154046-product",
+          "label": "OUR FLOORS ARE UNEVEN",
+          "contact": "lichen-11009838154046-contact",
+          "pair": "lichen-11009838154046-pair",
+          "scene": "lichen-11009838154046-scene"
+        },
+        "table": {
+          "merchantID": "lichen",
+          "productID": 12567031087422,
+          "art": "lichen-12567031087422-product",
+          "label": "Laccio Coffee Table by Marcel Breuer for Knoll"
+        }
+      },
+      "order": [
+        "chair",
+        "wassily",
+        "shelf",
+        "rack",
+        "book",
+        "table"
+      ],
+      "root": {
+        "kind": "column",
+        "children": [
+          {
+            "kind": "merchant",
+            "role": "book",
+            "id": "ng20-lichen.root.0"
+          },
+          {
+            "kind": "choice",
+            "options": [
+              {
+                "id": "storage",
+                "title": "Storage",
+                "roles": [
+                  "shelf",
+                  "rack"
+                ],
+                "preview": {
+                  "kind": "media",
+                  "asset": "lichen-12518383059262-product",
+                  "role": null,
+                  "fit": false,
+                  "id": "ng20-lichen.root.1.option0"
+                }
+              },
+              {
+                "id": "seating",
+                "title": "Seating",
+                "roles": [
+                  "chair",
+                  "wassily"
+                ],
+                "preview": {
+                  "kind": "media",
+                  "asset": "lichen-12462683128126-product",
+                  "role": null,
+                  "fit": false,
+                  "id": "ng20-lichen.root.1.option1"
+                }
+              },
+              {
+                "id": "objects",
+                "title": "Objects",
+                "roles": [
+                  "book",
+                  "table"
+                ],
+                "preview": {
+                  "kind": "media",
+                  "asset": "lichen-11009838154046-product",
+                  "role": null,
+                  "fit": false,
+                  "id": "ng20-lichen.root.1.option2"
+                }
+              }
+            ],
+            "response": {
+              "kind": "column",
+              "children": [
+                {
+                  "kind": "product",
+                  "role": "$selected",
+                  "mode": "object",
+                  "alternatives": [],
+                  "id": "ng20-lichen.root.1.response.0"
+                },
+                {
+                  "kind": "grid",
+                  "roles": [
+                    "$group"
+                  ],
+                  "columns": 2,
+                  "id": "ng20-lichen.root.1.response.1"
+                }
+              ],
+              "weights": [
+                3,
+                2
+              ],
+              "id": "ng20-lichen.root.1.response"
+            },
+            "axis": "featured",
+            "id": "ng20-lichen.root.1"
+          }
+        ],
+        "weights": [
+          1,
+          8
+        ],
+        "id": "ng20-lichen.root",
+        "mode": "editorial"
+      },
+      "action": "merchant",
+      "cta": "Visit Lichen",
+      "background": null,
+      "footer": [],
+      "reason": "The merchant remains the primary entity; category selection gates actual inventory rather than inventing a collection.",
+      "alternates": [],
+      "destination": null,
+      "slots": [],
+      "generation": "agent-authored composition fixture; no live model call"
+    }
+  ],
+  "assets": {
+    "dossier-ea4b35e8f8-371017720884-product": {
+      "image": "dossier-product-371017720884.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-ea4b35e8f8",
+      "productID": 371017720884
+    },
+    "6d91ee4227655be2-art0": {
+      "image": "dossier-6d91ee4227655be2-object0.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-ea4b35e8f8",
+      "productID": 371017720884
+    },
+    "dossier-b70402af01-224918922749071-product": {
+      "image": "dossier-product-224918922749071.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-b70402af01",
+      "productID": 224918922749071
+    },
+    "6d91ee4227655be2-art1": {
+      "image": "dossier-6d91ee4227655be2-object1.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-b70402af01",
+      "productID": 224918922749071
+    },
+    "dossier-9b0c495192-64174777239616-product": {
+      "image": "dossier-product-64174777239616.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-9b0c495192",
+      "productID": 64174777239616
+    },
+    "6d91ee4227655be2-art2": {
+      "image": "dossier-6d91ee4227655be2-object2.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-9b0c495192",
+      "productID": 64174777239616
+    },
+    "dossier-161bbaf248-195240428604874-product": {
+      "image": "dossier-product-195240428604874.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-161bbaf248",
+      "productID": 195240428604874
+    },
+    "6d91ee4227655be2-art3": {
+      "image": "dossier-6d91ee4227655be2-object3.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-161bbaf248",
+      "productID": 195240428604874
+    },
+    "6d91ee4227655be2-look0": {
+      "image": "dossier-6d91ee4227655be2-look0.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-ea4b35e8f8",
+      "productID": 371017720884
+    },
+    "6d91ee4227655be2-look1": {
+      "image": "dossier-6d91ee4227655be2-look1.jpg",
+      "video": "dossier-6d91ee4227655be2-look1.mp4",
+      "generated": true,
+      "merchantID": "dossier-ea4b35e8f8",
+      "productID": 371017720884
+    },
+    "6d91ee4227655be2-lookbook": {
+      "image": "dossier-6d91ee4227655be2-lookbook.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-ea4b35e8f8",
+      "productID": 371017720884
+    },
+    "6d91ee4227655be2-pair": {
+      "image": "dossier-6d91ee4227655be2-pair.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-ea4b35e8f8",
+      "productID": 371017720884
+    },
+    "6d91ee4227655be2-pairSquare": {
+      "image": "dossier-6d91ee4227655be2-pairSquare.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-ea4b35e8f8",
+      "productID": 371017720884
+    },
+    "6d91ee4227655be2-calm": {
+      "image": "dossier-6d91ee4227655be2-calm.jpg",
+      "video": "dossier-6d91ee4227655be2-calm.mp4",
+      "generated": true,
+      "merchantID": "dossier-ea4b35e8f8",
+      "productID": 371017720884
+    },
+    "sneaker-politics-8925922951356-product": {
+      "image": "quiet-product-sneaker-politics-8925922951356.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "sneaker-politics",
+      "productID": 8925922951356
+    },
+    "sneaker-politics-9459028754620-product": {
+      "image": "quiet-product-sneaker-politics-9459028754620.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "sneaker-politics",
+      "productID": 9459028754620
+    },
+    "dossier-8a685ce757-26033555029992-product": {
+      "image": "dossier-product-26033555029992.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-8a685ce757",
+      "productID": 26033555029992
+    },
+    "9d5f7d2f25a037ac-art0": {
+      "image": "dossier-9d5f7d2f25a037ac-object0.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-8a685ce757",
+      "productID": 26033555029992
+    },
+    "dossier-77e821400e-90759102791067-product": {
+      "image": "dossier-product-90759102791067.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-77e821400e",
+      "productID": 90759102791067
+    },
+    "9d5f7d2f25a037ac-art1": {
+      "image": "dossier-9d5f7d2f25a037ac-object1.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-77e821400e",
+      "productID": 90759102791067
+    },
+    "dossier-be62540615-34175992341668-product": {
+      "image": "dossier-product-34175992341668.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-be62540615",
+      "productID": 34175992341668
+    },
+    "9d5f7d2f25a037ac-art2": {
+      "image": "dossier-9d5f7d2f25a037ac-object2.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-be62540615",
+      "productID": 34175992341668
+    },
+    "dossier-3eb3103a83-155515157787452-product": {
+      "image": "dossier-product-155515157787452.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-3eb3103a83",
+      "productID": 155515157787452
+    },
+    "9d5f7d2f25a037ac-art3": {
+      "image": "dossier-9d5f7d2f25a037ac-object3.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-3eb3103a83",
+      "productID": 155515157787452
+    },
+    "9d5f7d2f25a037ac-look0": {
+      "image": "dossier-9d5f7d2f25a037ac-look0.jpg",
+      "video": "dossier-9d5f7d2f25a037ac-look0.mp4",
+      "generated": true,
+      "merchantID": "dossier-8a685ce757",
+      "productID": 26033555029992
+    },
+    "9d5f7d2f25a037ac-look1": {
+      "image": "dossier-9d5f7d2f25a037ac-look1.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-8a685ce757",
+      "productID": 26033555029992
+    },
+    "9d5f7d2f25a037ac-lookbook": {
+      "image": "dossier-9d5f7d2f25a037ac-lookbook.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-8a685ce757",
+      "productID": 26033555029992
+    },
+    "9d5f7d2f25a037ac-pair": {
+      "image": "dossier-9d5f7d2f25a037ac-pair.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-8a685ce757",
+      "productID": 26033555029992
+    },
+    "9d5f7d2f25a037ac-pairSquare": {
+      "image": "dossier-9d5f7d2f25a037ac-pairSquare.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-8a685ce757",
+      "productID": 26033555029992
+    },
+    "house-of-leon-7873592688813-product": {
+      "image": "quiet-product-house-of-leon-7873592688813.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "house-of-leon",
+      "productID": 7873592688813
+    },
+    "house-of-leon-7873592688813-art": {
+      "image": "ng20-art-house-of-leon-7873592688813.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "house-of-leon",
+      "productID": 7873592688813
+    },
+    "house-of-leon-7873592721581-product": {
+      "image": "quiet-product-house-of-leon-7873592721581.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "house-of-leon",
+      "productID": 7873592721581
+    },
+    "house-of-leon-7873592721581-art": {
+      "image": "ng20-art-house-of-leon-7873592721581.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "house-of-leon",
+      "productID": 7873592721581
+    },
+    "house-of-leon-7873592721581-contact": {
+      "image": "bundle/media/9b6db90687e8d40b.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "house-of-leon",
+      "productID": 7873592721581
+    },
+    "house-of-leon-7873592721581-pair": {
+      "image": "bundle/media/7694e841f2304bff.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "house-of-leon",
+      "productID": 7873592721581
+    },
+    "house-of-leon-7873592721581-scene": {
+      "image": "bundle/media/698009c0c37d56d4.png",
+      "video": "bundle/media/e0313e8d5bc96194.mp4",
+      "generated": true,
+      "merchantID": "house-of-leon",
+      "productID": 7873592721581
+    },
+    "dossier-3b23833ffd-183248787651281-product": {
+      "image": "dossier-product-183248787651281.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-3b23833ffd",
+      "productID": 183248787651281
+    },
+    "4b42878d497ca473-art0": {
+      "image": "dossier-4b42878d497ca473-object0.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-3b23833ffd",
+      "productID": 183248787651281
+    },
+    "dossier-3b23833ffd-84546926989533-product": {
+      "image": "dossier-product-84546926989533.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-3b23833ffd",
+      "productID": 84546926989533
+    },
+    "4b42878d497ca473-art1": {
+      "image": "dossier-4b42878d497ca473-object1.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-3b23833ffd",
+      "productID": 84546926989533
+    },
+    "dossier-006d8e819f-96107359307689-product": {
+      "image": "dossier-product-96107359307689.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-006d8e819f",
+      "productID": 96107359307689
+    },
+    "4b42878d497ca473-art2": {
+      "image": "dossier-4b42878d497ca473-object2.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-006d8e819f",
+      "productID": 96107359307689
+    },
+    "dossier-3b23833ffd-42472222141064-product": {
+      "image": "dossier-product-42472222141064.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-3b23833ffd",
+      "productID": 42472222141064
+    },
+    "4b42878d497ca473-art3": {
+      "image": "dossier-4b42878d497ca473-object3.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-3b23833ffd",
+      "productID": 42472222141064
+    },
+    "4b42878d497ca473-look0": {
+      "image": "dossier-4b42878d497ca473-look0.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-3b23833ffd",
+      "productID": 183248787651281
+    },
+    "4b42878d497ca473-look1": {
+      "image": "dossier-4b42878d497ca473-look1.jpg",
+      "video": "dossier-4b42878d497ca473-look1.mp4",
+      "generated": true,
+      "merchantID": "dossier-3b23833ffd",
+      "productID": 183248787651281
+    },
+    "4b42878d497ca473-lookbook": {
+      "image": "dossier-4b42878d497ca473-lookbook.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-3b23833ffd",
+      "productID": 183248787651281
+    },
+    "4b42878d497ca473-pair": {
+      "image": "dossier-4b42878d497ca473-pair.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-3b23833ffd",
+      "productID": 183248787651281
+    },
+    "4b42878d497ca473-pairSquare": {
+      "image": "dossier-4b42878d497ca473-pairSquare.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-3b23833ffd",
+      "productID": 183248787651281
+    },
+    "sneaker-politics-9007369158844-product": {
+      "image": "quiet-product-sneaker-politics-9007369158844.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "sneaker-politics",
+      "productID": 9007369158844
+    },
+    "dossier-04545216b2-101025785603648-product": {
+      "image": "dossier-product-101025785603648.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-04545216b2",
+      "productID": 101025785603648
+    },
+    "8ccc0ca672d0d77f-art0": {
+      "image": "dossier-8ccc0ca672d0d77f-object0.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-04545216b2",
+      "productID": 101025785603648
+    },
+    "8ccc0ca672d0d77f-art1": {
+      "image": "dossier-8ccc0ca672d0d77f-object1.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-3b23833ffd",
+      "productID": 84546926989533
+    },
+    "dossier-ec5a7980c7-99204711726004-product": {
+      "image": "dossier-product-99204711726004.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-ec5a7980c7",
+      "productID": 99204711726004
+    },
+    "8ccc0ca672d0d77f-art2": {
+      "image": "dossier-8ccc0ca672d0d77f-object2.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-ec5a7980c7",
+      "productID": 99204711726004
+    },
+    "dossier-5a09c9bca1-118893742484765-product": {
+      "image": "dossier-product-118893742484765.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-5a09c9bca1",
+      "productID": 118893742484765
+    },
+    "8ccc0ca672d0d77f-art3": {
+      "image": "dossier-8ccc0ca672d0d77f-object3.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-5a09c9bca1",
+      "productID": 118893742484765
+    },
+    "8ccc0ca672d0d77f-look0": {
+      "image": "dossier-8ccc0ca672d0d77f-look0.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-04545216b2",
+      "productID": 101025785603648
+    },
+    "8ccc0ca672d0d77f-look1": {
+      "image": "dossier-8ccc0ca672d0d77f-look1.jpg",
+      "video": "dossier-8ccc0ca672d0d77f-look1.mp4",
+      "generated": true,
+      "merchantID": "dossier-04545216b2",
+      "productID": 101025785603648
+    },
+    "8ccc0ca672d0d77f-lookbook": {
+      "image": "dossier-8ccc0ca672d0d77f-lookbook.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-04545216b2",
+      "productID": 101025785603648
+    },
+    "8ccc0ca672d0d77f-pair": {
+      "image": "dossier-8ccc0ca672d0d77f-pair.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-04545216b2",
+      "productID": 101025785603648
+    },
+    "8ccc0ca672d0d77f-pairSquare": {
+      "image": "dossier-8ccc0ca672d0d77f-pairSquare.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-04545216b2",
+      "productID": 101025785603648
+    },
+    "dossier-0325dead2f-6196533399287-product": {
+      "image": "dossier-product-6196533399287.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-0325dead2f",
+      "productID": 6196533399287
+    },
+    "98979f976a7a42f3-art0": {
+      "image": "dossier-98979f976a7a42f3-object0.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-0325dead2f",
+      "productID": 6196533399287
+    },
+    "dossier-4b7f349a75-270602034639478-product": {
+      "image": "dossier-product-270602034639478.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-4b7f349a75",
+      "productID": 270602034639478
+    },
+    "98979f976a7a42f3-art1": {
+      "image": "dossier-98979f976a7a42f3-object1.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-4b7f349a75",
+      "productID": 270602034639478
+    },
+    "dossier-0f6c365e09-26446991587231-product": {
+      "image": "dossier-product-26446991587231.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-0f6c365e09",
+      "productID": 26446991587231
+    },
+    "98979f976a7a42f3-art2": {
+      "image": "dossier-98979f976a7a42f3-object2.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-0f6c365e09",
+      "productID": 26446991587231
+    },
+    "dossier-5cac4442ea-59982934889035-product": {
+      "image": "dossier-product-59982934889035.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-5cac4442ea",
+      "productID": 59982934889035
+    },
+    "98979f976a7a42f3-art3": {
+      "image": "dossier-98979f976a7a42f3-object3.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-5cac4442ea",
+      "productID": 59982934889035
+    },
+    "98979f976a7a42f3-look0": {
+      "image": "dossier-98979f976a7a42f3-look0.jpg",
+      "video": "dossier-98979f976a7a42f3-look0.mp4",
+      "generated": true,
+      "merchantID": "dossier-0325dead2f",
+      "productID": 6196533399287
+    },
+    "98979f976a7a42f3-look1": {
+      "image": "dossier-98979f976a7a42f3-look1.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-0325dead2f",
+      "productID": 6196533399287
+    },
+    "98979f976a7a42f3-lookbook": {
+      "image": "dossier-98979f976a7a42f3-lookbook.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-0325dead2f",
+      "productID": 6196533399287
+    },
+    "98979f976a7a42f3-pair": {
+      "image": "dossier-98979f976a7a42f3-pair.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-0325dead2f",
+      "productID": 6196533399287
+    },
+    "98979f976a7a42f3-pairSquare": {
+      "image": "dossier-98979f976a7a42f3-pairSquare.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-0325dead2f",
+      "productID": 6196533399287
+    },
+    "dossier-b110d5e494-237637580875453-product": {
+      "image": "dossier-product-237637580875453.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-b110d5e494",
+      "productID": 237637580875453
+    },
+    "7263898de0dd5a28-art0": {
+      "image": "dossier-7263898de0dd5a28-object0.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-b110d5e494",
+      "productID": 237637580875453
+    },
+    "dossier-fc8ce16883-60896730911313-product": {
+      "image": "dossier-product-60896730911313.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-fc8ce16883",
+      "productID": 60896730911313
+    },
+    "7263898de0dd5a28-art1": {
+      "image": "dossier-7263898de0dd5a28-object3.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-fc8ce16883",
+      "productID": 60896730911313
+    },
+    "7263898de0dd5a28-look0": {
+      "image": "dossier-7263898de0dd5a28-look0.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-b110d5e494",
+      "productID": 237637580875453
+    },
+    "7263898de0dd5a28-look1": {
+      "image": "dossier-7263898de0dd5a28-look1.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-b110d5e494",
+      "productID": 237637580875453
+    },
+    "7263898de0dd5a28-lookbook": {
+      "image": "dossier-7263898de0dd5a28-lookbook.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-b110d5e494",
+      "productID": 237637580875453
+    },
+    "7263898de0dd5a28-pair": {
+      "image": "dossier-7263898de0dd5a28-pair.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-b110d5e494",
+      "productID": 237637580875453
+    },
+    "7263898de0dd5a28-pairSquare": {
+      "image": "dossier-7263898de0dd5a28-pairSquare.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-b110d5e494",
+      "productID": 237637580875453
+    },
+    "7263898de0dd5a28-gift": {
+      "image": "dossier-7263898de0dd5a28-gift.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-b110d5e494",
+      "productID": 237637580875453
+    },
+    "dossier-35e5a61958-111632731070535-product": {
+      "image": "dossier-product-111632731070535.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-35e5a61958",
+      "productID": 111632731070535
+    },
+    "5527c8904c1155d7-art0": {
+      "image": "dossier-5527c8904c1155d7-object0.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-35e5a61958",
+      "productID": 111632731070535
+    },
+    "dossier-dab99b58d5-268153265533079-product": {
+      "image": "dossier-product-268153265533079.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-dab99b58d5",
+      "productID": 268153265533079
+    },
+    "5527c8904c1155d7-art1": {
+      "image": "dossier-5527c8904c1155d7-object1.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-dab99b58d5",
+      "productID": 268153265533079
+    },
+    "5527c8904c1155d7-art2": {
+      "image": "dossier-5527c8904c1155d7-object2.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-9b0c495192",
+      "productID": 64174777239616
+    },
+    "5527c8904c1155d7-art3": {
+      "image": "dossier-5527c8904c1155d7-object3.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-161bbaf248",
+      "productID": 195240428604874
+    },
+    "5527c8904c1155d7-look0": {
+      "image": "dossier-5527c8904c1155d7-look0.jpg",
+      "video": "dossier-5527c8904c1155d7-look0.mp4",
+      "generated": true,
+      "merchantID": "dossier-35e5a61958",
+      "productID": 111632731070535
+    },
+    "5527c8904c1155d7-look1": {
+      "image": "dossier-5527c8904c1155d7-look1.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-35e5a61958",
+      "productID": 111632731070535
+    },
+    "5527c8904c1155d7-lookbook": {
+      "image": "dossier-5527c8904c1155d7-lookbook.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-35e5a61958",
+      "productID": 111632731070535
+    },
+    "5527c8904c1155d7-pair": {
+      "image": "dossier-5527c8904c1155d7-pair.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-35e5a61958",
+      "productID": 111632731070535
+    },
+    "5527c8904c1155d7-pairSquare": {
+      "image": "dossier-5527c8904c1155d7-pairSquare.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-35e5a61958",
+      "productID": 111632731070535
+    },
+    "dossier-e858e014f8-217973244996373-product": {
+      "image": "dossier-product-217973244996373.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-e858e014f8",
+      "productID": 217973244996373
+    },
+    "601abf8c7dca97ce-art0": {
+      "image": "dossier-601abf8c7dca97ce-object0.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-e858e014f8",
+      "productID": 217973244996373
+    },
+    "dossier-3be046a5b1-101220377897604-product": {
+      "image": "dossier-product-101220377897604.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-3be046a5b1",
+      "productID": 101220377897604
+    },
+    "601abf8c7dca97ce-art1": {
+      "image": "dossier-601abf8c7dca97ce-object1.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-3be046a5b1",
+      "productID": 101220377897604
+    },
+    "dossier-fedf4898cb-231659304370034-product": {
+      "image": "dossier-product-231659304370034.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-fedf4898cb",
+      "productID": 231659304370034
+    },
+    "601abf8c7dca97ce-art2": {
+      "image": "dossier-601abf8c7dca97ce-object2.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-fedf4898cb",
+      "productID": 231659304370034
+    },
+    "dossier-0a86ec610f-64479672140763-product": {
+      "image": "dossier-product-64479672140763.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-0a86ec610f",
+      "productID": 64479672140763
+    },
+    "601abf8c7dca97ce-art3": {
+      "image": "dossier-601abf8c7dca97ce-object3.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-0a86ec610f",
+      "productID": 64479672140763
+    },
+    "601abf8c7dca97ce-look0": {
+      "image": "dossier-601abf8c7dca97ce-look0.jpg",
+      "video": "dossier-601abf8c7dca97ce-look0.mp4",
+      "generated": true,
+      "merchantID": "dossier-e858e014f8",
+      "productID": 217973244996373
+    },
+    "601abf8c7dca97ce-look1": {
+      "image": "dossier-601abf8c7dca97ce-look1.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-e858e014f8",
+      "productID": 217973244996373
+    },
+    "601abf8c7dca97ce-lookbook": {
+      "image": "dossier-601abf8c7dca97ce-lookbook.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-e858e014f8",
+      "productID": 217973244996373
+    },
+    "601abf8c7dca97ce-pair": {
+      "image": "dossier-601abf8c7dca97ce-pair.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-e858e014f8",
+      "productID": 217973244996373
+    },
+    "601abf8c7dca97ce-pairSquare": {
+      "image": "dossier-601abf8c7dca97ce-pairSquare.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-e858e014f8",
+      "productID": 217973244996373
+    },
+    "dossier-330f94e21c-131556024222768-product": {
+      "image": "dossier-product-131556024222768.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-330f94e21c",
+      "productID": 131556024222768
+    },
+    "519234f72b73ffaa-art0": {
+      "image": "dossier-519234f72b73ffaa-object0.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-330f94e21c",
+      "productID": 131556024222768
+    },
+    "dossier-89ea7bdcf2-21825262943732-product": {
+      "image": "dossier-product-21825262943732.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-89ea7bdcf2",
+      "productID": 21825262943732
+    },
+    "519234f72b73ffaa-art1": {
+      "image": "dossier-519234f72b73ffaa-object1.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-89ea7bdcf2",
+      "productID": 21825262943732
+    },
+    "dossier-ec7b288173-118440413640738-product": {
+      "image": "dossier-product-118440413640738.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-ec7b288173",
+      "productID": 118440413640738
+    },
+    "519234f72b73ffaa-art2": {
+      "image": "dossier-519234f72b73ffaa-object2.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-ec7b288173",
+      "productID": 118440413640738
+    },
+    "dossier-b874a268a4-92779219028222-product": {
+      "image": "dossier-product-92779219028222.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "dossier-b874a268a4",
+      "productID": 92779219028222
+    },
+    "519234f72b73ffaa-art3": {
+      "image": "dossier-519234f72b73ffaa-object3.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-b874a268a4",
+      "productID": 92779219028222
+    },
+    "519234f72b73ffaa-look0": {
+      "image": "dossier-519234f72b73ffaa-look0.jpg",
+      "video": "dossier-519234f72b73ffaa-look0.mp4",
+      "generated": true,
+      "merchantID": "dossier-330f94e21c",
+      "productID": 131556024222768
+    },
+    "519234f72b73ffaa-look1": {
+      "image": "dossier-519234f72b73ffaa-look1.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-330f94e21c",
+      "productID": 131556024222768
+    },
+    "519234f72b73ffaa-lookbook": {
+      "image": "dossier-519234f72b73ffaa-lookbook.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-330f94e21c",
+      "productID": 131556024222768
+    },
+    "519234f72b73ffaa-pair": {
+      "image": "dossier-519234f72b73ffaa-pair.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-330f94e21c",
+      "productID": 131556024222768
+    },
+    "519234f72b73ffaa-pairSquare": {
+      "image": "dossier-519234f72b73ffaa-pairSquare.jpg",
+      "video": null,
+      "generated": true,
+      "merchantID": "dossier-330f94e21c",
+      "productID": 131556024222768
+    },
+    "extra-butter-salomon-8349773922487-product": {
+      "image": "ng20-product-extra-butter-salomon-8349773922487.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "extra-butter-salomon",
+      "productID": 8349773922487
+    },
+    "extra-butter-salomon-8349773922487-art": {
+      "image": "ng20-art-extra-butter-salomon-8349773922487.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "extra-butter-salomon",
+      "productID": 8349773922487
+    },
+    "extra-butter-salomon-8349773922487-contact": {
+      "image": "bundle/media/74a08d236efb0caf.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "extra-butter-salomon",
+      "productID": 8349773922487
+    },
+    "extra-butter-salomon-8349773922487-pair": {
+      "image": "bundle/media/c84902e1ba933d7d.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "extra-butter-salomon",
+      "productID": 8349773922487
+    },
+    "extra-butter-salomon-8349773922487-scene": {
+      "image": "bundle/media/71b8b1bf796f3572.png",
+      "video": "bundle/media/f579d6dc7d100966.mp4",
+      "generated": true,
+      "merchantID": "extra-butter-salomon",
+      "productID": 8349773922487
+    },
+    "feature-salomon-6753846919239-product": {
+      "image": "ng20-product-feature-salomon-6753846919239.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "feature-salomon",
+      "productID": 6753846919239
+    },
+    "feature-salomon-6753846919239-art": {
+      "image": "ng20-art-feature-salomon-6753846919239.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "feature-salomon",
+      "productID": 6753846919239
+    },
+    "feature-salomon-6753846919239-contact": {
+      "image": "bundle/media/85c5d49ef35b1312.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "feature-salomon",
+      "productID": 6753846919239
+    },
+    "feature-salomon-6753846919239-pair": {
+      "image": "bundle/media/1b57ac047c320c87.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "feature-salomon",
+      "productID": 6753846919239
+    },
+    "feature-salomon-6753846919239-scene": {
+      "image": "bundle/media/eb23f5217ad84a17.png",
+      "video": "bundle/media/6e956f9f5a69d71a.mp4",
+      "generated": true,
+      "merchantID": "feature-salomon",
+      "productID": 6753846919239
+    },
+    "extra-butter-salomon-8151144530103-product": {
+      "image": "quiet-product-extra-butter-salomon-8151144530103.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "extra-butter-salomon",
+      "productID": 8151144530103
+    },
+    "extra-butter-salomon-8151144530103-art": {
+      "image": "ng20-art-extra-butter-salomon-8151144530103.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "extra-butter-salomon",
+      "productID": 8151144530103
+    },
+    "extra-butter-salomon-8151144530103-contact": {
+      "image": "bundle/media/47e9b497f6f672cb.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "extra-butter-salomon",
+      "productID": 8151144530103
+    },
+    "extra-butter-salomon-8151144530103-pair": {
+      "image": "bundle/media/c86383784531791b.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "extra-butter-salomon",
+      "productID": 8151144530103
+    },
+    "extra-butter-salomon-8151144530103-scene": {
+      "image": "bundle/media/e10207869176593e.png",
+      "video": "bundle/media/10daf13e5e85234e.mp4",
+      "generated": true,
+      "merchantID": "extra-butter-salomon",
+      "productID": 8151144530103
+    },
+    "feature-salomon-7029064368199-product": {
+      "image": "ng20-product-feature-salomon-7029064368199.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "feature-salomon",
+      "productID": 7029064368199
+    },
+    "feature-salomon-7029064368199-art": {
+      "image": "ng20-art-feature-salomon-7029064368199.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "feature-salomon",
+      "productID": 7029064368199
+    },
+    "feature-salomon-7029064368199-contact": {
+      "image": "bundle/media/f630c480355e30e3.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "feature-salomon",
+      "productID": 7029064368199
+    },
+    "feature-salomon-7029064368199-pair": {
+      "image": "bundle/media/fa827306108b073f.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "feature-salomon",
+      "productID": 7029064368199
+    },
+    "feature-salomon-7029064368199-scene": {
+      "image": "bundle/media/69c33b7643e4e1ff.png",
+      "video": "bundle/media/bc0b8bad55ab8a57.mp4",
+      "generated": true,
+      "merchantID": "feature-salomon",
+      "productID": 7029064368199
+    },
+    "house-of-leon-8590788591789-product": {
+      "image": "prototype-product-house-of-leon-8590788591789.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "house-of-leon",
+      "productID": 8590788591789
+    },
+    "house-of-leon-8590788591789-art": {
+      "image": "ng20-art-house-of-leon-8590788591789.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "house-of-leon",
+      "productID": 8590788591789
+    },
+    "fellow-7507479003236-product": {
+      "image": "prototype-product-fellow-7507479003236.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "fellow",
+      "productID": 7507479003236
+    },
+    "fellow-7507479003236-art": {
+      "image": "ng20-art-fellow-7507479003236.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "fellow",
+      "productID": 7507479003236
+    },
+    "fellow-7507479003236-contact": {
+      "image": "bundle/media/aae56a97beb39ad8.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "fellow",
+      "productID": 7507479003236
+    },
+    "fellow-7507479003236-pair": {
+      "image": "bundle/media/9ae8b9b54471fa58.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "fellow",
+      "productID": 7507479003236
+    },
+    "fellow-7507479003236-scene": {
+      "image": "bundle/media/7b6809c2d4f611b5.png",
+      "video": "bundle/media/b82054b1b9bcb4ce.mp4",
+      "generated": true,
+      "merchantID": "fellow",
+      "productID": 7507479003236
+    },
+    "fellow-2055410221171-product": {
+      "image": "prototype-product-fellow-2055410221171.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "fellow",
+      "productID": 2055410221171
+    },
+    "fellow-2055410221171-art": {
+      "image": "ng20-art-fellow-2055410221171.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "fellow",
+      "productID": 2055410221171
+    },
+    "fellow-2055410221171-contact": {
+      "image": "bundle/media/47d86cd1cd40a7a4.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "fellow",
+      "productID": 2055410221171
+    },
+    "fellow-2055410221171-pair": {
+      "image": "bundle/media/96dd45aa5c95d181.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "fellow",
+      "productID": 2055410221171
+    },
+    "fellow-2055410221171-scene": {
+      "image": "bundle/media/b604aa085e74a132.png",
+      "video": "bundle/media/9e05e7970d8c471d.mp4",
+      "generated": true,
+      "merchantID": "fellow",
+      "productID": 2055410221171
+    },
+    "fellow-2055409762419-product": {
+      "image": "ng20-product-fellow-2055409762419.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "fellow",
+      "productID": 2055409762419
+    },
+    "fellow-2055409762419-art": {
+      "image": "ng20-art-fellow-2055409762419.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "fellow",
+      "productID": 2055409762419
+    },
+    "kinto-2214011961392-product": {
+      "image": "ng20-product-kinto-2214011961392.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "kinto",
+      "productID": 2214011961392
+    },
+    "kinto-2214011961392-art": {
+      "image": "ng20-art-kinto-2214011961392.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "kinto",
+      "productID": 2214011961392
+    },
+    "kinto-2214011961392-contact": {
+      "image": "bundle/media/f234fcba99ea6afd.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "kinto",
+      "productID": 2214011961392
+    },
+    "kinto-2214011961392-pair": {
+      "image": "bundle/media/396886c7b93a419c.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "kinto",
+      "productID": 2214011961392
+    },
+    "kinto-2214011961392-scene": {
+      "image": "bundle/media/a0100864e18137b5.png",
+      "video": "bundle/media/a5281ebabfed1156.mp4",
+      "generated": true,
+      "merchantID": "kinto",
+      "productID": 2214011961392
+    },
+    "kinto-2214023331888-product": {
+      "image": "ng20-product-kinto-2214023331888.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "kinto",
+      "productID": 2214023331888
+    },
+    "kinto-2214023331888-art": {
+      "image": "ng20-art-kinto-2214023331888.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "kinto",
+      "productID": 2214023331888
+    },
+    "kinto-2214023331888-contact": {
+      "image": "bundle/media/bbde8ebeaa7c4f9f.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "kinto",
+      "productID": 2214023331888
+    },
+    "kinto-2214023331888-pair": {
+      "image": "bundle/media/a988fb8ac1fd24fc.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "kinto",
+      "productID": 2214023331888
+    },
+    "kinto-2214023331888-scene": {
+      "image": "bundle/media/eaa92c583a69fe1c.png",
+      "video": "bundle/media/db98c494bb00dd26.mp4",
+      "generated": true,
+      "merchantID": "kinto",
+      "productID": 2214023331888
+    },
+    "kinto-2214022053936-product": {
+      "image": "ng20-product-kinto-2214022053936.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "kinto",
+      "productID": 2214022053936
+    },
+    "kinto-2214022053936-art": {
+      "image": "ng20-art-kinto-2214022053936.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "kinto",
+      "productID": 2214022053936
+    },
+    "ceremonia-7219216580772-product": {
+      "image": "ng20-product-ceremonia-7219216580772.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "ceremonia",
+      "productID": 7219216580772
+    },
+    "ceremonia-7219216580772-art": {
+      "image": "ng20-art-ceremonia-7219216580772.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "ceremonia",
+      "productID": 7219216580772
+    },
+    "ceremonia-7219216580772-contact": {
+      "image": "bundle/media/e5c703426452971c.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "ceremonia",
+      "productID": 7219216580772
+    },
+    "ceremonia-7219216580772-pair": {
+      "image": "bundle/media/d60c577ade764b0d.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "ceremonia",
+      "productID": 7219216580772
+    },
+    "ceremonia-7219216580772-scene": {
+      "image": "bundle/media/55c8ced4c65edab3.png",
+      "video": "bundle/media/6db537420f520647.mp4",
+      "generated": true,
+      "merchantID": "ceremonia",
+      "productID": 7219216580772
+    },
+    "ceremonia-8178693210276-product": {
+      "image": "ng20-product-ceremonia-8178693210276.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "ceremonia",
+      "productID": 8178693210276
+    },
+    "ceremonia-8178693210276-art": {
+      "image": "ng20-art-ceremonia-8178693210276.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "ceremonia",
+      "productID": 8178693210276
+    },
+    "ceremonia-6060165300388-product": {
+      "image": "ng20-product-ceremonia-6060165300388.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "ceremonia",
+      "productID": 6060165300388
+    },
+    "ceremonia-6060165300388-art": {
+      "image": "ng20-art-ceremonia-6060165300388.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "ceremonia",
+      "productID": 6060165300388
+    },
+    "ceremonia-6060165300388-contact": {
+      "image": "bundle/media/ff46eb64f262310a.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "ceremonia",
+      "productID": 6060165300388
+    },
+    "ceremonia-6060165300388-pair": {
+      "image": "bundle/media/081bf92f21ff2f07.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "ceremonia",
+      "productID": 6060165300388
+    },
+    "ceremonia-6060165300388-scene": {
+      "image": "bundle/media/7a768b7594852bf7.png",
+      "video": "bundle/media/d0b98bbf8cfee0e1.mp4",
+      "generated": true,
+      "merchantID": "ceremonia",
+      "productID": 6060165300388
+    },
+    "ceremonia-15369056321905-product": {
+      "image": "ng20-product-ceremonia-15369056321905.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "ceremonia",
+      "productID": 15369056321905
+    },
+    "ceremonia-15369056321905-art": {
+      "image": "ng20-art-ceremonia-15369056321905.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "ceremonia",
+      "productID": 15369056321905
+    },
+    "ceremonia-15369056321905-contact": {
+      "image": "bundle/media/ebef36c984d8bf27.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "ceremonia",
+      "productID": 15369056321905
+    },
+    "ceremonia-15369056321905-pair": {
+      "image": "bundle/media/e79462711fac5fbd.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "ceremonia",
+      "productID": 15369056321905
+    },
+    "ceremonia-15369056321905-scene": {
+      "image": "bundle/media/9f8692ed982cf7e2.png",
+      "video": "bundle/media/ef0d29e5695a1833.mp4",
+      "generated": true,
+      "merchantID": "ceremonia",
+      "productID": 15369056321905
+    },
+    "standards-manual-1424479363-product": {
+      "image": "prototype-product-standards-manual-1424479363.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 1424479363
+    },
+    "standards-manual-1424479363-contact": {
+      "image": "bundle/media/235ef93109af4a99.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "standards-manual",
+      "productID": 1424479363
+    },
+    "standards-manual-1424479363-pair": {
+      "image": "bundle/media/ec73eb7049225c4d.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "standards-manual",
+      "productID": 1424479363
+    },
+    "standards-manual-1424479363-scene": {
+      "image": "bundle/media/fdb1f8628866d5fd.png",
+      "video": "bundle/media/63b7393f5eba2863.mp4",
+      "generated": true,
+      "merchantID": "standards-manual",
+      "productID": 1424479363
+    },
+    "standards-manual-5842516163-product": {
+      "image": "prototype-product-standards-manual-5842516163.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 5842516163
+    },
+    "standards-manual-5842516163-contact": {
+      "image": "bundle/media/f7d7a6d469147877.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "standards-manual",
+      "productID": 5842516163
+    },
+    "standards-manual-5842516163-pair": {
+      "image": "bundle/media/d712bd0533f871e9.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "standards-manual",
+      "productID": 5842516163
+    },
+    "standards-manual-5842516163-scene": {
+      "image": "bundle/media/8a04b16a3e7d855b.png",
+      "video": "bundle/media/388a4448f2cb077d.mp4",
+      "generated": true,
+      "merchantID": "standards-manual",
+      "productID": 5842516163
+    },
+    "standards-manual-92039479320-product": {
+      "image": "prototype-product-standards-manual-92039479320.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 92039479320
+    },
+    "standards-manual-3933686169669-product": {
+      "image": "prototype-product-standards-manual-3933686169669.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 3933686169669
+    },
+    "standards-manual-9250932523224-product": {
+      "image": "prototype-product-standards-manual-9250932523224.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 9250932523224
+    },
+    "standards-manual-9250934980824-product": {
+      "image": "prototype-product-standards-manual-9250934980824.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 9250934980824
+    },
+    "standards-manual-9250935800024-product": {
+      "image": "prototype-product-standards-manual-9250935800024.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 9250935800024
+    },
+    "standards-manual-9250964537560-product": {
+      "image": "prototype-product-standards-manual-9250964537560.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 9250964537560
+    },
+    "standards-manual-9250965487832-product": {
+      "image": "prototype-product-standards-manual-9250965487832.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 9250965487832
+    },
+    "standards-manual-9250967847128-product": {
+      "image": "prototype-product-standards-manual-9250967847128.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 9250967847128
+    },
+    "standards-manual-9036702908632-product": {
+      "image": "prototype-product-standards-manual-9036702908632.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 9036702908632
+    },
+    "standards-manual-8740245078232-product": {
+      "image": "prototype-product-standards-manual-8740245078232.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 8740245078232
+    },
+    "standards-manual-8342043590872-product": {
+      "image": "prototype-product-standards-manual-8342043590872.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 8342043590872
+    },
+    "standards-manual-8107495588056-product": {
+      "image": "prototype-product-standards-manual-8107495588056.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 8107495588056
+    },
+    "standards-manual-8062714904792-product": {
+      "image": "prototype-product-standards-manual-8062714904792.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 8062714904792
+    },
+    "standards-manual-190760222744-product": {
+      "image": "prototype-product-standards-manual-190760222744.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 190760222744
+    },
+    "standards-manual-7835076985048-product": {
+      "image": "prototype-product-standards-manual-7835076985048.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 7835076985048
+    },
+    "standards-manual-4098803531845-product": {
+      "image": "prototype-product-standards-manual-4098803531845.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 4098803531845
+    },
+    "standards-manual-2107020836933-product": {
+      "image": "prototype-product-standards-manual-2107020836933.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 2107020836933
+    },
+    "standards-manual-235360452632-product": {
+      "image": "prototype-product-standards-manual-235360452632.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "standards-manual",
+      "productID": 235360452632
+    },
+    "coming-soon-9908030275890-product": {
+      "image": "ng20-product-coming-soon-9908030275890.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "coming-soon",
+      "productID": 9908030275890
+    },
+    "coming-soon-9908030275890-contact": {
+      "image": "bundle/media/bb7694840d680023.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "coming-soon",
+      "productID": 9908030275890
+    },
+    "coming-soon-9908030275890-pair": {
+      "image": "bundle/media/582e554b550dd90a.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "coming-soon",
+      "productID": 9908030275890
+    },
+    "coming-soon-9908030275890-scene": {
+      "image": "bundle/media/bd7894418d388460.png",
+      "video": "bundle/media/1390248a95d09832.mp4",
+      "generated": true,
+      "merchantID": "coming-soon",
+      "productID": 9908030275890
+    },
+    "coming-soon-9603148841266-product": {
+      "image": "ng20-product-coming-soon-9603148841266.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "coming-soon",
+      "productID": 9603148841266
+    },
+    "coming-soon-9603148841266-contact": {
+      "image": "bundle/media/e0a901b003743fed.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "coming-soon",
+      "productID": 9603148841266
+    },
+    "coming-soon-9603148841266-pair": {
+      "image": "bundle/media/b97111a5825095d5.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "coming-soon",
+      "productID": 9603148841266
+    },
+    "coming-soon-9603148841266-scene": {
+      "image": "bundle/media/e3b7b136b67fc24d.png",
+      "video": "bundle/media/da1665e4c35314d6.mp4",
+      "generated": true,
+      "merchantID": "coming-soon",
+      "productID": 9603148841266
+    },
+    "forom-9080102322307-product": {
+      "image": "prototype-product-forom-9080102322307.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "forom",
+      "productID": 9080102322307
+    },
+    "forom-9080102322307-art": {
+      "image": "ng20-art-forom-9080102322307.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "forom",
+      "productID": 9080102322307
+    },
+    "forom-9080102322307-contact": {
+      "image": "bundle/media/da771b2c41b38159.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "forom",
+      "productID": 9080102322307
+    },
+    "forom-9080102322307-pair": {
+      "image": "bundle/media/0af582d7bbf7fbc5.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "forom",
+      "productID": 9080102322307
+    },
+    "forom-9080102322307-scene": {
+      "image": "bundle/media/287c69768c5698b2.png",
+      "video": "bundle/media/1a331db346f842fe.mp4",
+      "generated": true,
+      "merchantID": "forom",
+      "productID": 9080102322307
+    },
+    "forom-8817998889091-product": {
+      "image": "quiet-product-forom-8817998889091.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "forom",
+      "productID": 8817998889091
+    },
+    "forom-8817998889091-art": {
+      "image": "ng20-art-forom-8817998889091.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "forom",
+      "productID": 8817998889091
+    },
+    "forom-8774121619587-product": {
+      "image": "quiet-product-forom-8774121619587.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "forom",
+      "productID": 8774121619587
+    },
+    "forom-8774121619587-art": {
+      "image": "ng20-art-forom-8774121619587.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "forom",
+      "productID": 8774121619587
+    },
+    "forom-9082606649475-product": {
+      "image": "quiet-product-forom-9082606649475.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "forom",
+      "productID": 9082606649475
+    },
+    "forom-9082606649475-art": {
+      "image": "ng20-art-forom-9082606649475.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "forom",
+      "productID": 9082606649475
+    },
+    "moma-9787655160038-product": {
+      "image": "ng20-product-moma-9787655160038.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "moma",
+      "productID": 9787655160038
+    },
+    "moma-9787655160038-art": {
+      "image": "ng20-art-moma-9787655160038.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "moma",
+      "productID": 9787655160038
+    },
+    "moma-9787655160038-contact": {
+      "image": "bundle/media/4ac0b623f530aa23.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "moma",
+      "productID": 9787655160038
+    },
+    "moma-9787655160038-pair": {
+      "image": "bundle/media/efd787c6ff1d08e8.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "moma",
+      "productID": 9787655160038
+    },
+    "moma-9787655160038-scene": {
+      "image": "bundle/media/617647f89a83bd7a.png",
+      "video": "bundle/media/4f05fc1a544c3e58.mp4",
+      "generated": true,
+      "merchantID": "moma",
+      "productID": 9787655160038
+    },
+    "moma-9604489248998-product": {
+      "image": "ng20-product-moma-9604489248998.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "moma",
+      "productID": 9604489248998
+    },
+    "moma-9604489248998-art": {
+      "image": "ng20-art-moma-9604489248998.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "moma",
+      "productID": 9604489248998
+    },
+    "moma-9604489248998-contact": {
+      "image": "bundle/media/2c861936cd7e1a1b.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "moma",
+      "productID": 9604489248998
+    },
+    "moma-9604489248998-pair": {
+      "image": "bundle/media/53c62d42e345ea06.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "moma",
+      "productID": 9604489248998
+    },
+    "moma-9604489248998-scene": {
+      "image": "bundle/media/eb5f0d6840d5223f.png",
+      "video": "bundle/media/be80ef1c13f07d4e.mp4",
+      "generated": true,
+      "merchantID": "moma",
+      "productID": 9604489248998
+    },
+    "moma-8909829603558-product": {
+      "image": "ng20-product-moma-8909829603558.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "moma",
+      "productID": 8909829603558
+    },
+    "moma-8909829603558-art": {
+      "image": "ng20-art-moma-8909829603558.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "moma",
+      "productID": 8909829603558
+    },
+    "moma-8909829603558-contact": {
+      "image": "bundle/media/17870e5c4390132d.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "moma",
+      "productID": 8909829603558
+    },
+    "moma-8909829603558-pair": {
+      "image": "bundle/media/fed7527193be995c.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "moma",
+      "productID": 8909829603558
+    },
+    "moma-8909829603558-scene": {
+      "image": "bundle/media/00113069846b9909.png",
+      "video": "bundle/media/f474dddbce63f8ed.mp4",
+      "generated": true,
+      "merchantID": "moma",
+      "productID": 8909829603558
+    },
+    "nocs-10432692846871-product": {
+      "image": "ng20-product-nocs-10432692846871.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "nocs",
+      "productID": 10432692846871
+    },
+    "nocs-10432692846871-art": {
+      "image": "ng20-art-nocs-10432692846871.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "nocs",
+      "productID": 10432692846871
+    },
+    "nocs-10432692846871-contact": {
+      "image": "bundle/media/96fd60a921a39ee3.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "nocs",
+      "productID": 10432692846871
+    },
+    "nocs-10432692846871-pair": {
+      "image": "bundle/media/e2917568f5c4ce9e.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "nocs",
+      "productID": 10432692846871
+    },
+    "nocs-10432692846871-scene": {
+      "image": "bundle/media/c32eeef9c8360028.png",
+      "video": "bundle/media/0010a924323cfe68.mp4",
+      "generated": true,
+      "merchantID": "nocs",
+      "productID": 10432692846871
+    },
+    "nocs-6591770722382-product": {
+      "image": "ng20-product-nocs-6591770722382.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "nocs",
+      "productID": 6591770722382
+    },
+    "nocs-6591770722382-art": {
+      "image": "ng20-art-nocs-6591770722382.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "nocs",
+      "productID": 6591770722382
+    },
+    "nocs-6591770722382-contact": {
+      "image": "bundle/media/4ab13ff9e21cf1db.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "nocs",
+      "productID": 6591770722382
+    },
+    "nocs-6591770722382-pair": {
+      "image": "bundle/media/f161bf19e224e49a.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "nocs",
+      "productID": 6591770722382
+    },
+    "nocs-6591770722382-scene": {
+      "image": "bundle/media/c9201e459ba6ac26.png",
+      "video": "bundle/media/9bd93c40543620be.mp4",
+      "generated": true,
+      "merchantID": "nocs",
+      "productID": 6591770722382
+    },
+    "nocs-10139738243351-product": {
+      "image": "ng20-product-nocs-10139738243351.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "nocs",
+      "productID": 10139738243351
+    },
+    "nocs-10139738243351-art": {
+      "image": "ng20-art-nocs-10139738243351.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "nocs",
+      "productID": 10139738243351
+    },
+    "nocs-10186761011479-product": {
+      "image": "ng20-product-nocs-10186761011479.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "nocs",
+      "productID": 10186761011479
+    },
+    "nocs-10186761011479-art": {
+      "image": "ng20-art-nocs-10186761011479.png",
+      "video": null,
+      "generated": false,
+      "merchantID": "nocs",
+      "productID": 10186761011479
+    },
+    "nocs-10432692846871-scene-still": {
+      "image": "bundle/media/c32eeef9c8360028.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "nocs",
+      "productID": 10432692846871
+    },
+    "lichen-12462683128126-product": {
+      "image": "prototype-product-lichen-12462683128126.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "lichen",
+      "productID": 12462683128126
+    },
+    "lichen-12567030169918-product": {
+      "image": "ng20-product-lichen-12567030169918.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "lichen",
+      "productID": 12567030169918
+    },
+    "lichen-12518383059262-product": {
+      "image": "prototype-product-lichen-12518383059262.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "lichen",
+      "productID": 12518383059262
+    },
+    "lichen-12374848700734-product": {
+      "image": "ng20-product-lichen-12374848700734.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "lichen",
+      "productID": 12374848700734
+    },
+    "lichen-11009838154046-product": {
+      "image": "ng20-product-lichen-11009838154046.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "lichen",
+      "productID": 11009838154046
+    },
+    "lichen-11009838154046-contact": {
+      "image": "bundle/media/4e7e47e5962a0b06.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "lichen",
+      "productID": 11009838154046
+    },
+    "lichen-11009838154046-pair": {
+      "image": "bundle/media/8618c16fe7c6ee32.png",
+      "video": null,
+      "generated": true,
+      "merchantID": "lichen",
+      "productID": 11009838154046
+    },
+    "lichen-11009838154046-scene": {
+      "image": "bundle/media/8232981a01d7b7ec.png",
+      "video": "bundle/media/e54474bd6f13157a.mp4",
+      "generated": true,
+      "merchantID": "lichen",
+      "productID": 11009838154046
+    },
+    "lichen-12567031087422-product": {
+      "image": "ng20-product-lichen-12567031087422.jpg",
+      "video": null,
+      "generated": false,
+      "merchantID": "lichen",
+      "productID": 12567031087422
+    }
+  }
+}

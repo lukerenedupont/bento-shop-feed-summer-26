@@ -1,5 +1,17 @@
 # Codex handoff
 
+## Targeted review-checkout fix — 2026-09-08
+
+The user explicitly authorized fixing the Lichen screenshot in `/Users/lukedupont/bento-shop-feed-review` on `review/quiet-shopping-grammar`. This checkout has substantial unrelated uncommitted work; preserve it. The upstream branch notes below are historical, not this checkout's current branch identity.
+
+- Vomero follow-up: `ng20-vomero-kit` now uses its existing outdoor styling study as a full-card backdrop, with four equally sized shoe/pants/jacket/socks tiles. Root `mode: study` provides a quiet action and a persistent styling-study label (image unchanged after interaction). Original pants alternatives and all four review roles remain intact. Generator and bundled composition updated; no new imagery. Build/schema checks pass at 172364 KB; logs `/tmp/vomero-layout-final-build.log`, screenshot `/tmp/vomero-layout-after.png` (before shortening the study label). Gallery index 2 is open on Next Generation QA. No new interaction-test run.
+- Follow-up: `ng20-woven-room` / Around this lamp now has a full-width room scene above three equal companion slots (chair/rug/table), with a quiet room-review action. The scene retains `role: anchor`, so the lamp stays in the review without a redundant cutout. Chair alternatives are unchanged; swapping still does not regenerate the styling image. Generator and bundled composition both updated. Build/provenance validation passed at 172496 KB; screenshot `/tmp/woven-room-layout-after.png`. Inspected gallery index 1 on Next Generation QA; no fresh interaction-test run.
+- Lichen now uses a `featured` choice axis: large Storage photograph, two stacked Seating/Objects photographs, and the existing category gates. Its root opts into `mode: editorial` for a quiet merchant-link CTA. Other cards retain their existing layout/action styles.
+- Both `Scripts/build_next_generation_20.py` and the Lichen entry in `NextGeneration20/ng20-compositions.json` reflect the change. No new imagery or inventory was added.
+- Normal Simulator build and composition validation passed; app 172344 / 184320 KB. Inspected the actual rendered gallery at index 19 on Next Generation QA (`3F187DB4-1903-4F9D-A567-9779113B8229`); screenshot `/tmp/lichen-layout-after.png`.
+- Added a focused category-gating regression in `CompositionTests/CompositionEngineTests.swift`. Its test build was blocked by the original app-size gate (190980 KB test host), so it has NOT executed. The normal build was rerun successfully afterward. Logs: `/tmp/lichen-layout-test.log`, `/tmp/lichen-layout-final-build.log`.
+- Changes remain uncommitted in this review checkout; no branch switch, merge or push was performed.
+
 Updated: 2026-09-08
 
 ## Repository state

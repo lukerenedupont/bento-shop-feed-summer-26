@@ -32,10 +32,23 @@ schemes:
       targets:
         ShopFeedSummer26: all
         GenerativeFeedPrototypeUITests: [test]
+        CompositionEngineTests: [test]
     test:
       targets:
         - GenerativeFeedPrototypeUITests
+        - CompositionEngineTests
 targets:
+  CompositionEngineTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [CompositionTests]
+    dependencies:
+      - target: ShopFeedSummer26
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.shopify.purl.prototype.composition-tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/ShopFeedSummer26.app/ShopFeedSummer26"
+        BUNDLE_LOADER: "$(TEST_HOST)"
   GenerativeFeedPrototypeUITests:
     type: bundle.ui-testing
     platform: iOS

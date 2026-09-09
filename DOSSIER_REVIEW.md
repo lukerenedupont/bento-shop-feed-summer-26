@@ -1,5 +1,7 @@
 # Dossier-led feed review
 
+> The new twenty-card composition-tree prototype is documented in [NEXT_GENERATION_20.md](NEXT_GENERATION_20.md). This page describes the earlier Dossier treatment, which remains available through `run_quiet_review.sh`.
+
 ## Latest screenshot-directed changes
 
 - **Jacket (index 0):** full-card image/video background, the existing Shop `ProductCard` list treatment in a horizontally snapping carousel, and a centered **View the look** CTA. The carousel and CTA stay together 24pt from the card base, lifting only when navigation would cover them; card geometry already reserves navigation space, so that clearance is not subtracted twice. No beige footer panel, loose object strip, helper text, or CTA arrow. Tapping a product opens its exact details; the CTA retains the shared look review.

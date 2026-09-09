@@ -4,6 +4,7 @@ import Foundation
 /// purchase/view history. All merchant and product references are real records.
 enum GenerativeFeedPrototypeFixtures {
     static var signals: [PrototypeShoppingSignal] {
+        if NextGeneration20Catalog.enabled { return NextGeneration20Catalog.signals }
         if QuietFeedReviewCatalog.enabled, DossierReviewLibrary.enabled { return DossierReviewLibrary.signals }
         return QuietFeedReviewCatalog.enabled ? QuietFeedReviewCatalog.signals : legacySignals
     }

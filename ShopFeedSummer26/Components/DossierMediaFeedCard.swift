@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// Screenshot-directed jacket treatment: full-bleed media, a native product-card
-/// carousel over the lower image, and one bottom-anchored CTA. No solid footer panel.
-struct JacketLookCardPrototype: View {
+/// Shared Dossier treatment: full-bleed media, square Shop product cards,
+/// white editorial type, and one bottom-anchored action. Content determines the job.
+struct DossierMediaFeedCard: View {
     let record: DossierReviewRecord
     let spec: NextGenerationFeedCardSpec
     let merchants: [SampleMerchant]
@@ -18,8 +18,21 @@ struct JacketLookCardPrototype: View {
     @State private var detail: ResolvedStoryProduct?
     @State private var showsLook = false
     private var state: GenerativeFeedPrototypeSession.CardState { session.state(for: spec) }
-    private var variant: String { record.videos["calm"] != nil ? "calm" : "look0" }
-    private var productCardWidth: CGFloat { min(280, width * 0.72) }
+    private var variant: String {
+        if record.videos["calm"] != nil { return "calm" }
+        return record.videos.keys.sorted().first ?? record.sceneVariants.first ?? "look0"
+    }
+    private var actionTitle: String {
+        switch record.family {
+        case "room": "View the room"
+        case "gift": "Keep for Leon"
+        case "watch": "View watch"
+        case "merchant": "View hat"
+        case "setup": "View the setup"
+        default: "View the look"
+        }
+    }
+    private var productCardWidth: CGFloat { min(144, (width - 52) / 2.4) }
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -30,36 +43,50 @@ struct JacketLookCardPrototype: View {
             LinearGradient(colors: [.black.opacity(0.42), .black.opacity(0.16), .clear], startPoint: .top, endPoint: .bottom)
                 .frame(height: topPadding + 110).allowsHitTesting(false)
             LinearGradient(colors: [.clear, .black.opacity(0.24)], startPoint: .top, endPoint: .bottom)
-                .frame(height: 310 + bottomPadding)
+                .frame(height: 430 + bottomPadding)
                 .frame(maxHeight: .infinity, alignment: .bottom)
                 .allowsHitTesting(false)
 
-            HStack(alignment: .center) {
-                Text(record.title)
-                    .font(GravityFont.expressiveSemiBold.fixedFont(size: 25))
-                    .tracking(-0.4)
-                    .onLongPressGesture(perform: onInspect)
-                    .accessibilityIdentifier("jacket.heading")
-                    .accessibilityAction(named: "Inspect prototype", onInspect)
-                Spacer(minLength: 0)
-                if session.designMode {
-                    Button(action: onInspect) { Image(systemName: "slider.horizontal.3").frame(width: 44, height: 36) }
-                        .accessibilityLabel("Inspect this shopping experience")
-                }
-            }
-            .foregroundStyle(.white)
-            .gravityShadow(GravityShadows.feedText)
-            .padding(.horizontal, 20).padding(.top, topPadding)
-
             VStack(spacing: 16) {
+                HStack(alignment: .top) {
+                    Text(record.title)
+                        .feedCardTitleStyle()
+                        .onLongPressGesture(perform: onInspect)
+                        .accessibilityIdentifier("dossier.media.heading")
+                        .accessibilityAction(named: "Inspect prototype", onInspect)
+                    Spacer(minLength: 0)
+                    Menu {
+                        Button("Inspect card", action: onInspect)
+                    } label: {
+                        Image(systemName: "ellipsis")
+                            .font(.system(size: 22, weight: .medium))
+                            .frame(width: 44, height: 44)
+                    }
+                    .accessibilityLabel("More options")
+                    .accessibilityIdentifier("dossier.media.overflow")
+                }
+                .foregroundStyle(.white)
+                .gravityShadow(GravityShadows.feedText)
+                .padding(.horizontal, 20)
+
                 if !state.roomSelections.isEmpty {
                     Text("Original styling study")
                         .font(GravityFont.medium.fixedFont(size: 12)).foregroundStyle(.white)
                         .frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 20)
                 }
                 productCarousel
-                Button { showsLook = true } label: {
-                    Text("View the look")
+                Button {
+                    if ["watch", "merchant"].contains(record.family) {
+                        detail = resolved(record.anchor)
+                    } else {
+                        if record.family == "gift", let anchor = resolved(record.anchor),
+                           !state.savedSelectionIDs.contains(anchor.id) {
+                            session.toggleSaved(anchor, for: spec)
+                        }
+                        showsLook = true
+                    }
+                } label: {
+                    Text(actionTitle)
                         .font(GravityFont.semiBold.fixedFont(size: 16))
                         .frame(maxWidth: .infinity).frame(height: 50)
                         .foregroundStyle(.white)
@@ -68,7 +95,7 @@ struct JacketLookCardPrototype: View {
                 .buttonStyle(.plain)
                 .disabled(!state.interactionsEnabled)
                 .padding(.horizontal, 20)
-                .accessibilityIdentifier("jacket.viewLook")
+                .accessibilityIdentifier("dossier.media.primary")
             }
             .visualEffect { content, proxy in
                 // Keep the rail + CTA together at the card's base. Only lift
@@ -92,7 +119,7 @@ struct JacketLookCardPrototype: View {
     private var productCarousel: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 12) {
-                ForEach(record.objects) { object in
+                ForEach(record.visibleObjects) { object in
                     if let item = resolved(object) {
                         Button {
                             session.select(item, for: spec)
@@ -101,26 +128,24 @@ struct JacketLookCardPrototype: View {
                             ProductCard(
                                 image: nil,
                                 imageURL: productImage(object: object, item: item)?.absoluteString,
-                                merchantName: item.merchant.displayName.localizedCapitalized,
-                                productName: item.product.title.localizedCapitalized,
-                                price: Double(item.product.price) == nil ? nil : GenerativeFeedStyle.price(item.product),
+                                priceBadge: Double(item.product.price) == nil ? nil : GenerativeFeedStyle.price(item.product),
                                 showFavoriteButton: false,
-                                style: .list
+                                style: .grid
                             )
                             .frame(width: productCardWidth)
                         }
                         .buttonStyle(.plain)
                         .id(object.id)
                         .accessibilityLabel("View \(item.product.title)")
-                        .accessibilityIdentifier("jacket.product.\(object.reference.productID)")
+                        .accessibilityIdentifier("dossier.media.product.\(object.reference.productID)")
                     }
                 }
             }.scrollTargetLayout()
         }
         .contentMargins(.horizontal, 20, for: .scrollContent)
         .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-        .frame(width: width, height: 132)
-        .accessibilityIdentifier("jacket.productCarousel")
+        .frame(width: width, height: productCardWidth)
+        .accessibilityIdentifier("dossier.media.carousel")
     }
 
     private func resolved(_ object: DossierReviewObject) -> ResolvedStoryProduct? {

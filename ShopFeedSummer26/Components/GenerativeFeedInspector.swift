@@ -49,6 +49,15 @@ struct GenerativeFeedInspector: View {
                     }
                 }
                 Section("Direct this card") {
+                    if let composition = NextGeneration20Catalog.definition(for: spec) {
+                        LabeledContent("Renderer", value: "Native composition tree")
+                        Text("Agent-authored model-output fixtures. No live model service is connected.")
+                            .font(.footnote).foregroundStyle(.secondary)
+                        DisclosureGroup("Structured specification") {
+                            Text(NextGeneration20Catalog.specificationJSON(for: composition.id))
+                                .font(.system(size: 10, design: .monospaced)).textSelection(.enabled)
+                        }
+                    } else {
                     Picker("Composition", selection: Binding(
                         get: { session.composition(for: spec) },
                         set: { session.setComposition($0, for: spec) }
@@ -57,6 +66,7 @@ struct GenerativeFeedInspector: View {
                     }
                     .pickerStyle(.menu)
                     .accessibilityIdentifier("generative.composition")
+                    }
                     Toggle("Enable card interactions", isOn: Binding(
                         get: { session.state(for: spec).interactionsEnabled },
                         set: { session.setInteractions($0, for: spec) }
@@ -117,8 +127,12 @@ struct GenerativeFeedInspector: View {
                 }
                 ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } }
                 ToolbarItemGroup(placement: .bottomBar) {
-                    Button("Regenerate this card") { session.regenerate(spec) }
-                        .accessibilityIdentifier("generative.regenerateCard")
+                    if let composition = NextGeneration20Catalog.definition(for: spec), composition.alternates.isEmpty {
+                        Text("Reviewed fixture · no live generator").font(.footnote).foregroundStyle(.secondary)
+                    } else {
+                        Button("Regenerate this card") { session.regenerate(spec) }
+                            .accessibilityIdentifier("generative.regenerateCard")
+                    }
                     Spacer()
                     Text("Revision \(spec.generation)").accessibilityIdentifier("generative.revision")
                 }

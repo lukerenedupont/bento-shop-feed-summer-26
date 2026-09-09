@@ -116,10 +116,11 @@ struct NextGenerationFeedCardSpec: Identifiable {
         default: anchor.map(PrototypePrimaryEntity.product) ?? .journey(signal.worldID ?? signal.id)
         }
     }
-    var isQuietReview: Bool { signal.id.hasPrefix("quiet-") || signal.id.hasPrefix("dossier-") }
+    var isQuietReview: Bool { signal.id.hasPrefix("quiet-") || signal.id.hasPrefix("dossier-") || signal.id.hasPrefix("ng20-") }
     var prefersDarkNavigationText: Bool {
-        // This card's entire surface is film, including the area behind the header.
-        if signal.id == "dossier-6d91ee4227655be2" { return false }
+        if let composition = NextGeneration20Catalog.definition(for: self) { return composition.usesDarkInk }
+        // Dossier cards share full-background media beneath the header.
+        if signal.id.hasPrefix("dossier-") { return false }
         return isQuietReview || job != .merchantDiscovery
     }
     var accessibilityDescription: String { "\(title). \(subtitle). \(interaction.rawValue)." }
