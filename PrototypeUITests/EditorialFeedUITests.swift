@@ -28,6 +28,11 @@ final class EditorialFeedUITests: XCTestCase {
             XCTAssertTrue(heading.isHittable, "Unreachable heading: \(title)")
             XCTAssertGreaterThan(heading.frame.minY, 120, title)
             XCTAssertLessThan(heading.frame.maxX, app.frame.width, title)
+            if ![2, 12].contains(index) { // Books retained; Babyletto uses plain attribution.
+                let mark = app.descendants(matching: .any).matching(identifier: "editorial.wordmark")
+                    .allElementsBoundByIndex.first { $0.isHittable }
+                XCTAssertNotNil(mark, "Missing official wordmark: \(title)")
+            }
             let action = app.buttons.matching(identifier: "generative.primaryAction")
                 .allElementsBoundByIndex.first { $0.isHittable }
             XCTAssertNotNil(action, "Missing action: \(title)")

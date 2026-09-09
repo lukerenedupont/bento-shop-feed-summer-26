@@ -63,7 +63,7 @@ struct EditorialCommerceFeedCard: View {
 
     private var byline: some View {
         HStack {
-            Text(plan.kicker).font(GravityFont.semiBold.fixedFont(size: 13))
+            merchantIdentity
             Spacer()
             if plan.interaction == "reveal" {
                 Button(showsInside ? "See the cover" : "See inside") { showsInside.toggle() }
@@ -80,6 +80,29 @@ struct EditorialCommerceFeedCard: View {
             }
         }
         .frame(minHeight: 32)
+    }
+
+    @ViewBuilder private var merchantIdentity: some View {
+        // Use the audited storefront marks already bundled for native merchant
+        // cards. Retailer identity stays separate from the product brand.
+        let aliases = ["extra-butter-salomon": "extra-butter", "feature-salomon": "feature",
+                       "nocs": "nocs-provisions", "moma": "moma-design-store"]
+        let asset = "merchant-wordmark-\(aliases[plan.merchant] ?? plan.merchant)"
+        if let merchant = products.first?.merchant, UIImage(named: asset) != nil {
+            HStack(spacing: GravitySpacing.space8) {
+                MerchantWordmarkImage(merchant: merchant, maxHeight: 26, maxWidth: 144,
+                    tint: ink, bundledAssetName: asset, rendersAsTemplate: true)
+                if plan.merchant.hasSuffix("-salomon") {
+                    Text("· Salomon").font(GravityFont.medium.fixedFont(size: 13))
+                }
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(plan.kicker)
+            .accessibilityIdentifier("editorial.wordmark")
+        } else {
+            // Plain attribution, not a typographic imitation of an absent logo.
+            Text(plan.kicker).font(GravityFont.semiBold.fixedFont(size: 13))
+        }
     }
 
     private var heading: some View {
@@ -107,6 +130,7 @@ struct EditorialCommerceFeedCard: View {
                     } label: {
                         VStack(spacing: GravitySpacing.space4) {
                             EditorialCatalogPhoto(item: item, index: imageIndex(placement, item: item))
+                                .frame(height: photoHeight(placement, item: item, size: size))
                                 .clipShape(RoundedRectangle(cornerRadius: placement.shape == "circle" ? 1000 : 0))
                             if placement.product >= 0, plan.scene.count > 1 {
                                 Text(plan.labels[placement.product])
@@ -212,6 +236,18 @@ struct EditorialCommerceFeedCard: View {
             .accessibilityLabel("View \(selected.product.title)")
             .accessibilityIdentifier("generative.primaryAction")
         }
+    }
+
+    private func photoHeight(_ placement: EditorialFeedPlan.Placement,
+                             item: ResolvedStoryProduct, size: CGSize) -> CGFloat? {
+        guard placement.product >= 0, plan.scene.count > 1 else { return nil }
+        let index = imageIndex(placement, item: item)
+        let url = Bundle.main.url(forResource: "editorial-\(item.merchant.id)-\(item.product.id)-\(index)", withExtension: "jpg")
+        guard let url, let image = UIImage(contentsOfFile: url.path), image.size.width > 0 else { return nil }
+        // Fit the complete photograph, then keep its caption against the image
+        // rather than at the bottom of an oversized GeometryReader.
+        return max(1, min(size.height * placement.height - 20,
+                          size.width * placement.width * image.size.height / image.size.width))
     }
 
     private func item(for index: Int) -> ResolvedStoryProduct? {

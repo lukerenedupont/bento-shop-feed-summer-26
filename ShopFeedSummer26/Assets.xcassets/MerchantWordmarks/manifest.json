@@ -238,5 +238,17 @@
     "asset": "merchant-wordmark-the-oblist",
     "source": "https://oblist.com/cdn/shop/files/THE_OBLIST_LOGO_WEBSITE_OFFICIAL.png?v=1680512369&width=1200",
     "error": null
+  },
+  "ceremonia": {
+    "name": "Ceremonia",
+    "asset": "merchant-wordmark-ceremonia",
+    "source": "https://ceremonia.com/cdn/shop/files/Logo_BLK.png?height=110&v=1680018310",
+    "error": null
+  },
+  "lalo": {
+    "name": "Lalo",
+    "asset": "merchant-wordmark-lalo",
+    "source": "https://www.meetlalo.com/cdn/shop/files/Wordmark_a8b842f3-649f-4aa6-b1d1-2ed9f0c1291b.png?v=1653396416&width=500",
+    "error": null
   }
 }

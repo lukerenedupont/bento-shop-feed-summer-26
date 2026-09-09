@@ -4,6 +4,8 @@
 
 Twenty authored commerce scenes demonstrate possible generative output using 52 canonical products from 17 merchants. This is **not a live AI generator**. `main` is the confirmed native visual and flick-and-stick reference; all work stays on `feed-interactive-cards`.
 
+Eighteen cards use official storefront wordmarks, reusing `MerchantWordmarkImage` and the audited `MerchantWordmarks/manifest.json` assets. Ceremonia and Lalo were added through the existing sync script. Standards Manual remains unchanged and Babyletto uses plain attribution. Product-led scenes prioritize a larger lead image; Feature now shows one large selectable shoe rather than three tiny rows. Fitted photographs preserve complete products, with captions positioned against their actual image height.
+
 The approved Graphic standards card is preserved. The rejected outfit/chair treatments are outside the default sequence. The new cards still require human visual approval; twenty is a coverage target, not a quality certificate.
 
 ```sh

@@ -39,6 +39,8 @@ class Merchant:
 
 
 MERCHANTS = [
+    Merchant("ceremonia", "Ceremonia", "https://ceremonia.com"),
+    Merchant("lalo", "Lalo", "https://www.meetlalo.com"),
     Merchant("standards-manual", "Standards Manual", "https://standardsmanual.com"),
     Merchant("draw-down", "Draw Down", "https://draw-down.com"),
     Merchant("moma-design-store", "MoMA Design Store", "https://store.moma.org"),
@@ -85,6 +87,8 @@ MERCHANTS = [
 # Explicit merchant-owned assets win over scraping. Keep this small: it is an
 # audit trail for storefronts whose themes hide the header mark in JavaScript.
 OVERRIDES: dict[str, str] = {
+    "ceremonia": "https://ceremonia.com/cdn/shop/files/Logo_BLK.png?height=110&v=1680018310",
+    "lalo": "https://www.meetlalo.com/cdn/shop/files/Wordmark_a8b842f3-649f-4aa6-b1d1-2ed9f0c1291b.png?v=1653396416&width=500",
     "moma-design-store": "https://store.moma.org/cdn/shop/t/1359/assets/sprite-icon-767e27ca.svg?v=76814305896351509361786638334",
     "nocs-provisions": "https://www.nocsprovisions.com/cdn/shop/t/33/assets/nocs-logo-white.svg?v=157140221280410772331688765178",
     "kinto": "https://kinto-usa.com/cdn/shop/t/129/assets/sprite.svg?v=67551792836678614101758819346",
