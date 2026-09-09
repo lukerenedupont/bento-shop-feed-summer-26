@@ -1,35 +1,13 @@
 import Foundation
 import SwiftUI
+import ShopCompositionCore
 
-/// Model-output grammar. No fonts, pixel coordinates, arbitrary colors, or code.
-/// The same tree can be returned by a model or loaded from the reviewed fixtures.
-enum CompositionKind: String, Decodable {
-    case spacer, row, column, media, product, grid, choice, compare, steps, pager, merchant, canvas
-}
-final class CompositionNode: Decodable, Identifiable {
-    let id: String
-    let kind: CompositionKind
-    let children: [CompositionNode]?
-    let weights: [Int]?
-    let asset: String?
-    let role: String?
-    let mode: String?
-    let alternatives: [String]?
-    let roles: [String]?
-    let columns: Int?
-    let options: [CompositionChoice]?
-    let response: CompositionNode?
-    let axis: String?
-    let labels: [String]?
-    let fit: Bool?
-}
-struct CompositionChoice: Decodable, Identifiable {
-    let id: String
-    let title: String
-    let roles: [String]
-    let preview: CompositionNode
-}
-struct CompositionEntity: Decodable {
+// The app adapts a UI-independent, typed composition contract.
+typealias CompositionKind = ShopCompositionCore.CompositionKind
+typealias CompositionNode = ShopCompositionCore.CompositionNode
+typealias CompositionChoice = ShopCompositionCore.CompositionChoice
+typealias CompositionPresentation = ShopCompositionCore.CompositionPresentation
+struct CompositionEntity: Codable {
     let merchantID: String
     let productID: Int
     let art: String
@@ -55,7 +33,7 @@ struct CompositionAsset: Decodable {
         return DossierReviewLibrary.url(path)
     }
 }
-enum CompositionTheme: String, Decodable {
+enum CompositionTheme: String, Codable {
     case paper, ink, sand, sage, blue, rose
     var surface: Color {
         switch self {
@@ -69,12 +47,12 @@ enum CompositionTheme: String, Decodable {
     }
     var usesDarkInk: Bool { self != .ink && self != .blue }
 }
-struct CompositionSlot: Decodable {
+struct CompositionSlot: Codable {
     let role: String
     let alternatives: [String]
 }
-struct GeneratedComposition: Decodable, Identifiable {
-    enum Action: String, Decodable { case review, detail, save, compare, canvas, merchant }
+struct GeneratedComposition: Codable, Identifiable {
+    enum Action: String, Codable { case review, detail, save, compare, canvas, merchant }
     let id: String
     let title: String
     let job: String
@@ -82,6 +60,7 @@ struct GeneratedComposition: Decodable, Identifiable {
     let entities: [String: CompositionEntity]
     let order: [String]
     let root: CompositionNode
+    let presentation: CompositionPresentation
     let action: Action
     let cta: String
     let background: String?
@@ -136,6 +115,7 @@ enum NextGeneration20Catalog {
         let schema: String
         let cards: [GeneratedComposition]
         let assets: [String: CompositionAsset]
+        var journeyTemplates: [String: CompositionJourneyTemplate]? = nil
     }
     static let enabled: Bool = {
         let args = ProcessInfo.processInfo.arguments
@@ -144,13 +124,31 @@ enum NextGeneration20Catalog {
         return UserDefaults.standard.bool(forKey: "nextGeneration20Enabled")
     }()
     private static let payload: Payload? = {
-        guard let url = Bundle.main.url(forResource: "ng20-compositions", withExtension: "json"),
-              let data = try? Data(contentsOf: url), data.count <= 2_000_000,
-              let decoded = try? JSONDecoder().decode(Payload.self, from: data),
-              decoded.schema == "shop-composition/1", CompositionValidation.accepts(decoded) else { return nil }
-        return decoded
+        do {
+            guard let url = Bundle.main.url(forResource: "ng20-compositions", withExtension: "json") else { return nil }
+            let data = try Data(contentsOf: url)
+            guard data.count <= 2_000_000 else { print("Composition payload exceeds 2 MB"); return nil }
+            let decoded = try JSONDecoder().decode(Payload.self, from: data)
+            guard decoded.schema == "shop-composition/2" else { print("Unsupported composition schema: \(decoded.schema)"); return nil }
+            let issues = CompositionValidation.issues(in: decoded)
+            guard issues.isEmpty else {
+                print(issues.prefix(20).map(\.description).joined(separator: "\n"))
+                return nil
+            }
+            return decoded
+        } catch {
+            print("Composition decoding failed: \(error)")
+            return nil
+        }
     }()
     static var definitions: [GeneratedComposition] { payload?.cards ?? [] }
+    static func journeyTemplate(_ id: String) -> CompositionJourneyTemplate? { payload?.journeyTemplates?[id] }
+    static func specificationJSON(for definition: GeneratedComposition) -> String {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        guard let data = try? encoder.encode(definition) else { return "Unavailable" }
+        return String(decoding: data, as: UTF8.self)
+    }
     static func specificationJSON(for id: String) -> String {
         guard let url = Bundle.main.url(forResource: "ng20-compositions", withExtension: "json"),
               let data = try? Data(contentsOf: url),

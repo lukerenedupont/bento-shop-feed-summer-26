@@ -1,5 +1,21 @@
 # Shop Feed Summer 26
 
+## This branch: unified shopping demo
+
+**Twenty native cards, three connected shopping journeys, and device-local kept selections.** Compare a chair and return it to a room; build around a selected Salomon; inspect and keep a book. These are authored scenarios and transitions, not live AI or actual account history.
+
+Start with **[the demo walkthrough](UNIFIED_DEMO.md)**. This is a native iOS project, not a hosted web demo. You need Xcode with an iOS 26+ Simulator, XcodeGen, and the sibling `dossier-feed-bundle` checkout described below. The build's media optimizer uses Homebrew `ffmpeg`, `pngquant`, and `webp`.
+
+```sh
+xcrun simctl list devices available
+NEXT_GENERATION_SIMULATOR=<your-simulator-UDID> ./Scripts/run_unified_demo.sh room
+# Other entry points: footwear, books
+```
+
+The default Simulator ID in the launcher belongs to the author's machine; override it on another Mac. No account credentials or AI API key are required for the authored demo. Access to the separate media repository is required to build the complete experience.
+
+---
+
 **A personalized, editorial home feed for the Shop app** — opening Shop feels
 like opening a magazine written about your own taste, that you can buy from.
 
@@ -33,7 +49,7 @@ Source: Swift / shop-prototype-kit
 ## Getting Started
 
 ```bash
-git clone https://github.com/apx303/bento-shop-feed-summer-26.git
+git clone --branch next-generation-feed-20-cards https://github.com/lukerenedupont/bento-shop-feed-summer-26.git
 git clone https://github.com/apx303/dossier-feed-bundle.git
 cd bento-shop-feed-summer-26
 open ShopFeedSummer26.xcodeproj   # committed — no generation step needed

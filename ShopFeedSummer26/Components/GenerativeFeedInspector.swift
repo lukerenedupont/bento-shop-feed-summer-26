@@ -49,12 +49,12 @@ struct GenerativeFeedInspector: View {
                     }
                 }
                 Section("Direct this card") {
-                    if let composition = NextGeneration20Catalog.definition(for: spec) {
+                    if let composition = session.compositionDefinition(for: spec) {
                         LabeledContent("Renderer", value: "Native composition tree")
                         Text("Agent-authored model-output fixtures. No live model service is connected.")
                             .font(.footnote).foregroundStyle(.secondary)
                         DisclosureGroup("Structured specification") {
-                            Text(NextGeneration20Catalog.specificationJSON(for: composition.id))
+                            Text(NextGeneration20Catalog.specificationJSON(for: composition))
                                 .font(.system(size: 10, design: .monospaced)).textSelection(.enabled)
                         }
                     } else {
@@ -93,6 +93,9 @@ struct GenerativeFeedInspector: View {
                     LabeledContent("Selected product", value: session.selected(in: session.products(for: spec, merchants: merchants), for: spec)?.product.title ?? "None")
                     LabeledContent("Removed candidates", value: String(session.state(for: spec).removedIDs.count))
                     LabeledContent("Saved selections", value: String(session.state(for: spec).savedSelectionIDs.count))
+                    if spec.signal.id.hasPrefix("ng20-") {
+                        LabeledContent("Kept on this device", value: String(session.journeyMemory.kept.count))
+                    }
                     if spec.interaction == .shortlist {
                         let pair = spec.isQuietReview
                             ? spec.resolvedProducts(from: merchants).filter { session.state(for: spec).comparisonIDs.contains($0.id) }

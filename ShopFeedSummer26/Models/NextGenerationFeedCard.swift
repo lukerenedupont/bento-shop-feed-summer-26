@@ -1,7 +1,7 @@
 import Foundation
 
 // PROTOTYPE — semantic specifications, not model-authored visual values.
-enum NextGenerationCardLayout: String, CaseIterable, Identifiable {
+enum NextGenerationCardLayout: String, Codable, CaseIterable, Identifiable {
     case relationship = "Relationship"
     case comparison = "Comparison"
     case merchant = "Merchant"
@@ -13,7 +13,7 @@ enum NextGenerationCardLayout: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-enum PrototypeShoppingJob: String, CaseIterable, Identifiable {
+enum PrototypeShoppingJob: String, Codable, CaseIterable, Identifiable {
     case complete = "Complete a purchase"
     case compare = "Compare a shortlist"
     case continueJourney = "Resume a shortlist"
@@ -51,7 +51,7 @@ struct PrototypeContentGroup: Identifiable {
 }
 
 struct PrototypeShoppingSignal: Identifiable {
-    enum Kind: String, CaseIterable, Identifiable {
+    enum Kind: String, Codable, CaseIterable, Identifiable {
         case purchase = "Purchased jacket"
         case repeatedViews = "Repeated chair views"
         case savedShortlist = "Saved chair shortlist"

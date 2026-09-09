@@ -12,7 +12,8 @@ import json
 import subprocess
 import shutil
 import urllib.request
-from PIL import Image, ImageOps
+import argparse
+import difflib
 
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'ShopFeedSummer26/NextGeneration20'
@@ -83,18 +84,18 @@ def dossier(key):
 def n(kind,**kw):return dict(kind=kind,**kw)
 def col(*children,weights=None):return n('column',children=list(children),weights=weights or [1]*len(children))
 def row(*children,weights=None):return n('row',children=list(children),weights=weights or [1]*len(children))
-def media(asset=None,role=None,fit=False):return n('media',asset=asset,role=role,fit=fit)
-def obj(role,mode='object',options=None):return n('product',role=role,mode=mode,alternatives=options or [])
+def media(asset=None,role=None,fit=False):return n('media',asset=asset,role=role,mediaFit='contain' if fit else 'cover')
+def obj(role,mode='object',options=None):return n('product',role=role,productPresentation=mode,alternatives=options or [])
 def grid(roles,columns=2):return n('grid',roles=roles,columns=columns)
-def choices(options,response,axis='row'):return n('choice',options=options,response=response,axis=axis)
+def choices(options,response,axis='row'):return n('choice',options=options,response=response,layout=axis)
 def option(id,title,roles,preview):return dict(id=id,title=title,roles=roles,preview=preview)
 def steps(roles,labels):return n('steps',roles=roles,labels=labels)
 
 
-def card(id,title,job,theme,entities,root,action='review',cta='View the selection',background=None,footer=None,reason='',alternates=None,destination=None,slots=None):
+def card(id,title,job,theme,entities,root,action='review',cta='View the selection',background=None,footer=None,reason='',alternates=None,destination=None,slots=None,presentation=None):
  c=dict(id='ng20-'+id,title=title,job=job,theme=theme,entities=entities,order=list(entities),root=root,action=action,cta=cta,
         background=background,footer=footer or [],reason=reason,
-        alternates=alternates or [],destination=destination,slots=slots or [],generation='agent-authored composition fixture; no live model call')
+        alternates=alternates or [],destination=destination,slots=slots or [],presentation=presentation or dict(actionStyle='prominent',disclosure='none'),generation='agent-authored composition fixture; no live model call')
  CARDS.append(c)
  return c
 
@@ -109,16 +110,14 @@ def build():
  # The hero retains the lamp role in the review; chair swaps do not alter the scene.
  e=dossier('9d5f7d2f25a037ac');e['camel']=product('house-of-leon',7873592688813);e['black']=product('house-of-leon',7873592721581)
  room=col(media('9d5f7d2f25a037ac-look1',role='anchor'),row(obj('one',options=['one','camel','black']),obj('two'),obj('three')),weights=[4,1])
- room['mode']='editorial'
  card('woven-room','Around this lamp','complete','sand',e,
-      room,
+      room,presentation=dict(actionStyle='link',disclosure='none'),
       cta='Review the room',destination='spatial',reason='Natural fibers anchor a room study. A chair changes in its own compartment; the scene stays labelled as inspiration.')
  # 03 — immersive styling study with a consistent, shoppable outfit strip.
  e=dossier('4b42878d497ca473');e['denim']=product('sneaker-politics',9007369158844);e['cord']=product('sneaker-politics',9459028754620)
  outfit=col(n('spacer'),row(obj('anchor',mode='tile'),obj('one',mode='tile',options=['one','denim','cord']),obj('three',mode='tile'),obj('two',mode='tile')),weights=[4,1])
- outfit['mode']='study'
  card('vomero-kit','With these Vomeros','complete','ink',e,
-      outfit,background='4b42878d497ca473-look1',
+      outfit,background='4b42878d497ca473-look1',presentation=dict(actionStyle='link',disclosure='stylingStudy'),
       cta='View the look',reason='The outdoor image is a fixed styling study, not a render of current selections. The shoe, swappable pants, jacket and socks remain individually grounded in the review.')
  # 04 — asymmetric outfit assembly, with styling as a supporting insert.
  e=dossier('8ccc0ca672d0d77f');e['cord']=product('sneaker-politics',9459028754620)
@@ -173,7 +172,7 @@ def build():
  # 14 — a four-step ritual with vertical rhythm, not another carousel.
  e={'scalp':product('ceremonia',7219216580772),'cleanse':product('ceremonia',8178693210276),'finish':product('ceremonia',6060165300388),'dry':product('ceremonia',15369056321905)}
  card('ceremonia','Your Ceremonia routine','complete','rose',e,
-      row(col(media(e['finish']['scene']),obj('$selected'),weights=[3,2]),n('steps',roles=list(e),labels=['Scalp','Cleanse','Finish','Dry'],axis='column'),weights=[3,2]),
+      row(col(media(e['finish']['scene']),obj('$selected'),weights=[3,2]),n('steps',roles=list(e),labels=['Scalp','Cleanse','Finish','Dry'],layout='column'),weights=[3,2]),
       action='save',cta='Keep the routine',reason='Product roles come from the catalog. This is not a claim about the shopper’s hair or treatment outcomes.')
  # 15 — reuse the actual extracted canvas engine for a real finite library.
  m=next(m for m in BASE['merchants'] if m['id']=='standards-manual');e={f'book{i}':product(m['id'],p['id']) for i,p in enumerate(m['products'])}
@@ -204,9 +203,8 @@ def build():
  e={'chair':product('lichen',12462683128126),'wassily':product('lichen',12567030169918),'shelf':product('lichen',12518383059262),'rack':product('lichen',12374848700734),'book':product('lichen',11009838154046),'table':product('lichen',12567031087422)}
  opts=[option('storage','Storage',['shelf','rack'],media(e['shelf']['art'])),option('seating','Seating',['chair','wassily'],media(e['chair']['art'])),option('objects','Objects',['book','table'],media(e['book']['art']))]
  storefront=col(n('merchant',role='book'),choices(opts,col(obj('$selected'),grid(['$group'],2),weights=[3,2]),axis='featured'),weights=[1,8])
- storefront['mode']='editorial'
  card('lichen','Found at Lichen','discover','paper',e,
-      storefront,
+      storefront,presentation=dict(actionStyle='link',disclosure='none'),
       action='merchant',cta='Visit Lichen',reason='The merchant remains the primary entity; category selection gates actual inventory rather than inventing a collection.')
 
 
@@ -219,6 +217,7 @@ def stamp(node,path):
 
 
 def download(entry):
+ from PIL import Image, ImageOps
  filename,urls=entry;target=OUT/filename
  cache=ROOT/'.build/ng20-download-sources';cache.mkdir(exist_ok=True)
  proof=cache/(filename+'.json')
@@ -249,6 +248,7 @@ def download(entry):
 
 
 def prepare_cutouts():
+ from PIL import Image, ImageOps
  cache=ROOT/'.build/ng20-cutouts';cache.mkdir(parents=True,exist_ok=True)
  binary=cache/'cutout-tool'
  subprocess.run(['swiftc',str(ROOT/'Scripts/prepare_review_cutouts.swift'),'-o',str(binary)],check=True)
@@ -275,21 +275,48 @@ def prepare_cutouts():
  (ROOT/'ReviewSources/ng20-cutouts.json').write_text(json.dumps(records,indent=2)+'\n')
 
 
-def main():
- OUT.mkdir(exist_ok=True);build();assert len(CARDS)==20
+def specification():
+ ASSETS.clear();DOWNLOADS.clear();CARDS.clear();CUTOUTS.clear();DOWNLOAD_PRODUCTS.clear()
+ build();assert len(CARDS)==20
  for c in CARDS:
   # Only expose alternates whose visual form is intentional. Blindly
   # transposing every row/column creates narrow labels and tiny products.
   if not c['alternates'] and c['root']['kind']=='choice':
    alternative=copy.deepcopy(c['root'])
-   alternative['axis']='column' if alternative.get('axis')!='column' else 'row'
+   alternative['layout']='column' if alternative.get('layout')!='column' else 'row'
    c['alternates']=[alternative]
   stamp(c['root'],c['id']+'.root')
   for i,root in enumerate(c['alternates']):stamp(root,c['id']+f'.alt{i}')
+ templates={
+  'roomComparison':dict(roles=['current','alternative1','alternative2'],root=n('compare',roles=['current','alternative1','alternative2'])),
+  'footwearLook':dict(roles=['anchor','one','two','three','denim','cord'],root=col(
+   obj('anchor'),row(obj('one',options=['one','denim','cord']),obj('three'),obj('two')),weights=[3,1]))
+ }
+ for key,template in templates.items():stamp(template['root'],'journey.'+key)
+ return dict(schema='shop-composition/2',generationMode='agent-authored fixtures; no live model service',cards=CARDS,assets=ASSETS,journeyTemplates=templates)
+
+
+def main():
+ parser=argparse.ArgumentParser(description=__doc__)
+ mode=parser.add_mutually_exclusive_group()
+ mode.add_argument('--check-spec',action='store_true',help='Check deterministic fixture drift; no downloads, cutouts or writes')
+ mode.add_argument('--write-spec',action='store_true',help='Write composition JSON only, retaining existing media')
+ args=parser.parse_args()
+ payload=specification();target=OUT/'ng20-compositions.json'
+ if args.check_spec:
+  existing=json.loads(target.read_text())
+  if existing!=payload:
+   before=json.dumps(existing,indent=2,sort_keys=True).splitlines()
+   after=json.dumps(payload,indent=2,sort_keys=True).splitlines()
+   print('\n'.join(list(difflib.unified_diff(before,after,fromfile='bundled',tofile='authored'))[:100]))
+   raise SystemExit('Composition drift: edit the authoring source, then run --write-spec')
+  print('Authored and bundled specifications match');return
+ OUT.mkdir(exist_ok=True)
+ if args.write_spec:
+  target.write_text(json.dumps(payload,indent=2)+'\n');print('Wrote specification only; media untouched');return
  with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:list(pool.map(download,DOWNLOADS.items()))
  prepare_cutouts()
- payload=dict(schema='shop-composition/1',generationMode='agent-authored fixtures; no live model service',cards=CARDS,assets=ASSETS)
- (OUT/'ng20-compositions.json').write_text(json.dumps(payload,indent=2)+'\n')
+ target.write_text(json.dumps(payload,indent=2)+'\n')
  provenance=ROOT/'ReviewSources/ng20-media.json'
  provenance.write_text(json.dumps([dict(file=f,sourceCandidates=urls,sha256=hashlib.sha256((OUT/f).read_bytes()).hexdigest()) for f,urls in DOWNLOADS.items()],indent=2)+'\n')
  print(f'Generated {len(CARDS)} scene specs, {len(ASSETS)} asset bindings, {len(DOWNLOADS)} additional canonical images')

@@ -3,7 +3,7 @@ import SwiftUI
 /// PROTOTYPE direct review. Same data, state and rendering as Home.
 struct NextGenerationFeedGallery: View {
     @State private var selectedCardID: String
-    @State private var session = GenerativeFeedPrototypeSession()
+    @State private var session = GenerativeFeedPrototypeSession(persistence: GenerativeFeedPrototypeSession.demoPersistence)
     private let merchants = NextGenerationFeedCardCatalog.prototypeMerchants
 
     init() {
@@ -18,7 +18,7 @@ struct NextGenerationFeedGallery: View {
         let requestedSignal = signals[min(max(requested, 0), signals.count - 1)]
         _selectedCardID = State(initialValue: "next-gen-\(requestedSignal.id)")
         if QuietFeedReviewCatalog.enabled, DossierReviewLibrary.enabled {
-            let demo = GenerativeFeedPrototypeSession()
+            let demo = GenerativeFeedPrototypeSession(persistence: GenerativeFeedPrototypeSession.demoPersistence)
             demo.setSignalEnabled(true, id: requestedSignal.id)
             _session = State(initialValue: demo)
         }
@@ -75,6 +75,11 @@ struct NextGenerationFeedGallery: View {
             }
             .frame(width: proxy.size.width, height: totalHeight)
             .offset(y: -topInset)
+        }
+        .onChange(of: session.requestedJourneySignalID) { _, signalID in
+            guard let signalID, let card = cards.first(where: { $0.signal.id == signalID }) else { return }
+            selectedCardID = card.id
+            session.requestedJourneySignalID = nil
         }
         .modifier(GenerativePrototypeTools(session: session, merchants: merchants))
     }

@@ -40,6 +40,18 @@ The candidate currently being inspected within a comparison set. Focus determine
 
 An explicitly kept combination of an anchor product and a companion product. Browsing a different companion does not replace an already saved combination.
 
+## Kept selection
+
+An explicitly saved product or exact combination, together with the shopping decisions needed to return to it. Later browsing does not rewrite it; a kept demo selection is not an authenticated account favorite or a purchase.
+
+## Journey continuation
+
+A move to another shopping experience that carries the relevant decisions forward, such as taking a chosen shoe into a composition or returning a compared chair to a room. Continuing one journey does not reset unrelated journeys and does not necessarily create a child World.
+
+## Demo journey
+
+An authored path demonstrating progress on a shopping intention using catalog-backed products and explicit shopper choices. Its simulated starting signals and predetermined transitions are not evidence of live AI generation or observed account history.
+
 ## World
 
 A dynamic, personalized, stateful, steerable, and shoppable experience organized around something that matters to a shopper now. A World is the shopping journey and its remembered context, not a page template.

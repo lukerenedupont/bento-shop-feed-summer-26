@@ -7,7 +7,7 @@ import json
 ROOT=Path(__file__).resolve().parents[1]
 APP=ROOT/'ShopFeedSummer26'
 payload=json.loads((APP/'NextGeneration20/ng20-compositions.json').read_text())
-assert payload['schema']=='shop-composition/1'
+assert payload['schema']=='shop-composition/2'
 cards=payload['cards'];assets=payload['assets']
 assert len(cards)==20 and len({c['id'] for c in cards})==20
 products=set()
@@ -26,7 +26,18 @@ for key,a in assets.items():
 KINDS={'spacer','row','column','media','product','grid','choice','compare','steps','pager','merchant','canvas'}
 used=set()
 def validate(n,c,ids,depth=0):
- assert depth<9 and len(ids)<80
+ try:
+  validate_node(n,c,ids,depth)
+ except AssertionError as error:
+  raise ValueError(f"{c['id']} / {n.get('id', '<missing id>')}: {error or 'invalid node structure'}") from error
+
+def validate_node(n,c,ids,depth=0):
+ assert depth<9 and len(ids)<80, 'Tree depth/node budget exceeded'
+ assert not {'mode','axis','fit'} & n.keys(), 'Legacy options are not allowed in schema 2'
+ assert n.get('layout') in [None,'row','column','featured'], 'Unsupported layout'
+ assert n.get('productPresentation') in [None,'object','tile'], 'Unsupported product presentation'
+ assert n.get('mediaFit') in [None,'contain','cover'], 'Unsupported media fit'
+ assert n.get('playback') in [None,'still','video'], 'Unsupported playback'
  assert n['id'] not in ids,n['id'];ids.add(n['id'])
  k=n['kind'];assert k in KINDS;used.add(k)
  roles=set(c['entities'])
@@ -50,11 +61,13 @@ def validate(n,c,ids,depth=0):
  for child in n.get('children',[]):validate(child,c,ids,depth+1)
  if n.get('response'):validate(n['response'],c,ids,depth+1)
 def shape(n):
- return (n['kind'],n.get('axis'),tuple(n.get('weights',[])),n.get('columns'),len(n.get('roles',[])),
+ return (n['kind'],n.get('layout'),tuple(n.get('weights',[])),n.get('columns'),len(n.get('roles',[])),
          bool(n.get('alternatives')),tuple(shape(c) for c in n.get('children',[])),
          tuple(shape(o['preview']) for o in n.get('options',[])),shape(n['response']) if n.get('response') else None)
 shapes=set();merchants=set();references=set()
 for c in cards:
+ assert c['presentation']['actionStyle'] in ['prominent','link'], (c['id'],'Invalid action style')
+ assert c['presentation']['disclosure'] in ['none','stylingStudy'], (c['id'],'Invalid disclosure')
  assert set(c['order'])==set(c['entities']) and len(c['order'])==len(c['entities'])
  assert len(c['title'])<=70 and len(c['cta'])<=32
  for e in c['entities'].values():

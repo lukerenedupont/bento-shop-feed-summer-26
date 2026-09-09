@@ -42,10 +42,11 @@ struct NextGenerationFeedCardView: View {
         GenerativeFeedStyle.surface(for: spec)
             .frame(width: width, height: height)
             .overlay(alignment: .topLeading) {
-                if let composition = NextGeneration20Catalog.definition(for: spec) {
+                if let composition = session.compositionDefinition(for: spec) {
                     GeneratedCompositionCard(definition: composition, spec: spec, merchants: merchants, session: session,
                         width: width, height: height, topPadding: foregroundTopPadding, isActive: isActive,
-                        visibleContentBottom: visibleContentBottom, onInspect: { showsInspector = true })
+                        onInspect: { showsInspector = true })
+                        .id(composition.id)
                 } else if let record = DossierReviewLibrary.record(for: spec) {
                     DossierMediaFeedCard(record: record, spec: spec, merchants: merchants, session: session,
                         width: width, height: height, topPadding: foregroundTopPadding,

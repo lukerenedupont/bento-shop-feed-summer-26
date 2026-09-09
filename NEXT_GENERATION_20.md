@@ -1,5 +1,28 @@
 # Next Generation Feed — 20 composition-tree cards
 
+## Current connected demo
+
+The same twenty cards now support a connected room comparison/return path, a Salomon-to-outfit continuation with actual selected-product imagery, and book inspect/keep/resume. Kept selections and relevant choices persist on this device, with a demo-scoped reset. See [UNIFIED_DEMO.md](UNIFIED_DEMO.md) for the walkthrough, implementation seams and verification.
+
+Run `./Scripts/run_unified_demo.sh room` (or `footwear`, `books`) to open the native feed. No parallel feed or second twenty-card catalog was added. Two continuation recipes live beside the cards in the existing authoring source.
+
+## Schema-2 cleanup (preceding pass)
+
+`Packages/ShopCompositionCore` now owns the UI-independent, typed tree contract and field-specific validation. Layout, product presentation, media fit/playback, and card action/disclosure are separate choices; overloaded node `mode` strings are removed. The app and command-line checker use the same core. See the package README for its interface and checks.
+
+`CompositionContext` resolves canonical product bindings into lookup tables when constructed, shared by its descendants. Swaps use those bindings rather than repeating catalog searches for each product node. Session mutation and hosted state tests remain in the app; they have not been moved into the core.
+
+Authoring is one-way: edit `Scripts/build_next_generation_20.py`, run `--write-spec`, then `--check-spec`. Both flags avoid media generation/downloads; checks also avoid writes. They use the existing frozen catalog inputs, including the sibling dossier bundle. `run_next_generation_20.sh` rejects source/bundle drift before building.
+
+```sh
+python3 Scripts/build_next_generation_20.py --write-spec
+./Scripts/check_composition_contract.sh [--simulator <booted UDID>]
+```
+
+At the end of the initial cleanup, ten CLI contract regressions passed against the actual Swift core via the Simulator runtime. Native macOS CLI execution was blocked by machine security policy; no policy was weakened. The first hosted attempt timed out after package resolution. The later unified-demo pass successfully ran twelve hosted model tests and five UI tests; see `UNIFIED_DEMO.md`. Full twenty-card visual approval remains separate.
+
+This establishes a scalable contract, not a production feed of thousands: backend-backed state, paged payload delivery, async generation, measured media-cache limits and broad device coverage remain follow-up work.
+
 ## The design direction
 
 **AI generates a shopping composition, not executable UI.** The output is a tree of native capabilities: product stages, media, weighted rows/columns, choices, comparisons, steps, grids, paging, merchant identity, and a product canvas. Twenty cards do not require twenty renderer cases.
@@ -26,8 +49,8 @@ The native Home deep-link can initially settle on a neighboring snap slot; ordin
 | Index | Experience | Layout / useful interaction |
 |---|---|---|
 | 0 | Valley of Flowers jacket | Cinematic control case, native product cards; long-press pants for real swap options |
-| 1 | MESO woven room | Room scene beside independently editable material compartments |
-| 2 | Nike Vomero kit | Full-width shoe anchor with a pants slot and supporting garments |
+| 1 | MESO woven room | Full-width room study with three companion slots and retained lamp anchor |
+| 2 | Nike Vomero kit | Immersive styling study and four product tiles; independent pants swap |
 | 3 | BODE combination | Asymmetric outfit assembly with a supporting styling photograph |
 | 4 | Vintage Rolex | Paged detail study and exact source-product inspection |
 | 5 | For Leon | Recipient-scoped gift composition and explicit keep action |
@@ -44,7 +67,7 @@ The native Home deep-link can initially settle on a neighboring snap slot; ordin
 | 16 | FOROM corner | Room vignette and an independently changeable table |
 | 17 | MoMA objects | Strong color, asymmetric media/product placement, merchant handoff |
 | 18 | Nocs field kit | Field context, two optics, and supporting equipment |
-| 19 | Lichen discovery | Category-led merchant discovery that reconstructs the assortment |
+| 19 | Lichen discovery | Large Storage photograph and stacked Seating/Objects choices with hard assortment gates |
 
 ## What is actually generated
 
@@ -117,7 +140,7 @@ Use separate DerivedData for hosted tests: Xcode injects Apple XCTest frameworks
 ## Limits to be clear about
 
 - No live model endpoint, live inventory refresh, account mutation, or production checkout was added.
-- State is session-local; full durable cross-World learning is not implemented.
+- NG20 choices and exact kept selections are device-local demo state. Other prototype sessions can remain ephemeral; backend persistence and durable cross-World learning are not implemented.
 - Export prices without currency metadata remain withheld rather than silently treated as USD. Merchant/source URLs are not guessed.
 - Spatial remains a one-object visual prototype, not multi-object placement or fit validation. Physical-device AR was not tested.
 - Generated scenes are not exact renders of changed selections or photographs of the buyer. Product details preserve source photography.

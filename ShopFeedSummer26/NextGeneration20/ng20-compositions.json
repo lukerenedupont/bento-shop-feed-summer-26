@@ -1,5 +1,5 @@
 {
-  "schema": "shop-composition/1",
+  "schema": "shop-composition/2",
   "generationMode": "agent-authored fixtures; no live model service",
   "cards": [
     {
@@ -79,6 +79,10 @@
           ]
         }
       ],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -142,7 +146,7 @@
             "kind": "media",
             "asset": "9d5f7d2f25a037ac-look1",
             "role": "anchor",
-            "fit": false,
+            "mediaFit": "cover",
             "id": "ng20-woven-room.root.0"
           },
           {
@@ -151,7 +155,7 @@
               {
                 "kind": "product",
                 "role": "one",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [
                   "one",
                   "camel",
@@ -162,14 +166,14 @@
               {
                 "kind": "product",
                 "role": "two",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-woven-room.root.1.1"
               },
               {
                 "kind": "product",
                 "role": "three",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-woven-room.root.1.2"
               }
@@ -186,7 +190,6 @@
           4,
           1
         ],
-        "mode": "editorial",
         "id": "ng20-woven-room.root"
       },
       "action": "review",
@@ -197,6 +200,10 @@
       "alternates": [],
       "destination": "spatial",
       "slots": [],
+      "presentation": {
+        "actionStyle": "link",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -263,14 +270,14 @@
               {
                 "kind": "product",
                 "role": "anchor",
-                "mode": "tile",
+                "productPresentation": "tile",
                 "alternatives": [],
                 "id": "ng20-vomero-kit.root.1.0"
               },
               {
                 "kind": "product",
                 "role": "one",
-                "mode": "tile",
+                "productPresentation": "tile",
                 "alternatives": [
                   "one",
                   "denim",
@@ -281,14 +288,14 @@
               {
                 "kind": "product",
                 "role": "three",
-                "mode": "tile",
+                "productPresentation": "tile",
                 "alternatives": [],
                 "id": "ng20-vomero-kit.root.1.2"
               },
               {
                 "kind": "product",
                 "role": "two",
-                "mode": "tile",
+                "productPresentation": "tile",
                 "alternatives": [],
                 "id": "ng20-vomero-kit.root.1.3"
               }
@@ -306,7 +313,6 @@
           4,
           1
         ],
-        "mode": "study",
         "id": "ng20-vomero-kit.root"
       },
       "action": "review",
@@ -317,6 +323,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "link",
+        "disclosure": "stylingStudy"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -372,7 +382,7 @@
               {
                 "kind": "product",
                 "role": "anchor",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-bode-pair.root.0.0"
               },
@@ -380,7 +390,7 @@
                 "kind": "media",
                 "asset": "8ccc0ca672d0d77f-look0",
                 "role": null,
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-bode-pair.root.0.1"
               }
             ],
@@ -396,7 +406,7 @@
               {
                 "kind": "product",
                 "role": "one",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [
                   "one",
                   "cord"
@@ -406,7 +416,7 @@
               {
                 "kind": "product",
                 "role": "two",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-bode-pair.root.1.1"
               }
@@ -432,6 +442,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -460,13 +474,13 @@
                 "kind": "media",
                 "asset": "98979f976a7a42f3-lookbook",
                 "role": null,
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-watch-close.root.0.0"
               },
               {
                 "kind": "product",
                 "role": "anchor",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-watch-close.root.0.1"
               },
@@ -474,7 +488,7 @@
                 "kind": "media",
                 "asset": "98979f976a7a42f3-look1",
                 "role": null,
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-watch-close.root.0.2"
               }
             ],
@@ -500,6 +514,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -532,7 +550,7 @@
             "kind": "media",
             "asset": "7263898de0dd5a28-gift",
             "role": null,
-            "fit": false,
+            "mediaFit": "cover",
             "id": "ng20-leon.root.0"
           },
           {
@@ -541,14 +559,14 @@
               {
                 "kind": "product",
                 "role": "anchor",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-leon.root.1.0"
               },
               {
                 "kind": "product",
                 "role": "one",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-leon.root.1.1"
               }
@@ -574,6 +592,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -628,6 +650,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -674,7 +700,7 @@
             "kind": "media",
             "asset": "601abf8c7dca97ce-look1",
             "role": null,
-            "fit": false,
+            "mediaFit": "cover",
             "id": "ng20-little-adventures.root.0"
           },
           {
@@ -683,21 +709,21 @@
               {
                 "kind": "product",
                 "role": "anchor",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-little-adventures.root.1.0"
               },
               {
                 "kind": "product",
                 "role": "one",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-little-adventures.root.1.1"
               },
               {
                 "kind": "product",
                 "role": "two",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-little-adventures.root.1.2"
               }
@@ -724,6 +750,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -772,14 +802,14 @@
               {
                 "kind": "product",
                 "role": "anchor",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-studio.root.0.0"
               },
               {
                 "kind": "product",
                 "role": "one",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-studio.root.0.1"
               }
@@ -796,14 +826,14 @@
               {
                 "kind": "product",
                 "role": "two",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-studio.root.1.0"
               },
               {
                 "kind": "product",
                 "role": "three",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-studio.root.1.1"
               }
@@ -829,6 +859,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -894,7 +928,7 @@
               "kind": "media",
               "asset": "extra-butter-salomon-8349773922487-scene",
               "role": null,
-              "fit": false,
+              "mediaFit": "cover",
               "id": "ng20-salomon-directions.root.option0"
             }
           },
@@ -909,7 +943,7 @@
               "kind": "media",
               "asset": "feature-salomon-6753846919239-scene",
               "role": null,
-              "fit": false,
+              "mediaFit": "cover",
               "id": "ng20-salomon-directions.root.option1"
             }
           }
@@ -921,7 +955,7 @@
               "kind": "media",
               "asset": null,
               "role": "$selected",
-              "fit": false,
+              "mediaFit": "cover",
               "id": "ng20-salomon-directions.root.response.0"
             },
             {
@@ -939,7 +973,7 @@
           ],
           "id": "ng20-salomon-directions.root.response"
         },
-        "axis": "row",
+        "layout": "row",
         "id": "ng20-salomon-directions.root"
       },
       "action": "review",
@@ -962,7 +996,7 @@
                 "kind": "media",
                 "asset": "extra-butter-salomon-8349773922487-scene",
                 "role": null,
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-salomon-directions.alt0.option0"
               }
             },
@@ -977,7 +1011,7 @@
                 "kind": "media",
                 "asset": "feature-salomon-6753846919239-scene",
                 "role": null,
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-salomon-directions.alt0.option1"
               }
             }
@@ -989,7 +1023,7 @@
                 "kind": "media",
                 "asset": null,
                 "role": "$selected",
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-salomon-directions.alt0.response.0"
               },
               {
@@ -1007,12 +1041,16 @@
             ],
             "id": "ng20-salomon-directions.alt0.response"
           },
-          "axis": "column",
+          "layout": "column",
           "id": "ng20-salomon-directions.alt0"
         }
       ],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -1065,6 +1103,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -1110,7 +1152,7 @@
             "kind": "media",
             "asset": null,
             "role": "$selected",
-            "fit": false,
+            "mediaFit": "cover",
             "id": "ng20-fellow-routine.root.0"
           },
           {
@@ -1142,6 +1184,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -1190,14 +1236,14 @@
                 "kind": "media",
                 "asset": "kinto-2214023331888-scene",
                 "role": null,
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-kinto.root.0.0"
               },
               {
                 "kind": "media",
                 "asset": "kinto-2214023331888-contact",
                 "role": null,
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-kinto.root.0.1"
               }
             ],
@@ -1209,21 +1255,21 @@
               {
                 "kind": "product",
                 "role": "server",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-kinto.root.1.0"
               },
               {
                 "kind": "product",
                 "role": "cup",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-kinto.root.1.1"
               },
               {
                 "kind": "product",
                 "role": "cast",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-kinto.root.1.2"
               }
@@ -1250,6 +1296,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -1308,13 +1358,13 @@
                 "kind": "media",
                 "asset": "ceremonia-6060165300388-scene",
                 "role": null,
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-ceremonia.root.0.0"
               },
               {
                 "kind": "product",
                 "role": "$selected",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-ceremonia.root.0.1"
               }
@@ -1339,7 +1389,7 @@
               "Finish",
               "Dry"
             ],
-            "axis": "column",
+            "layout": "column",
             "id": "ng20-ceremonia.root.1"
           }
         ],
@@ -1357,6 +1407,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -1526,6 +1580,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -1570,7 +1628,7 @@
               "kind": "media",
               "asset": "coming-soon-9908030275890-scene",
               "role": null,
-              "fit": false,
+              "mediaFit": "cover",
               "id": "ng20-mirror-directions.root.option0"
             }
           },
@@ -1584,7 +1642,7 @@
               "kind": "media",
               "asset": "coming-soon-9603148841266-scene",
               "role": null,
-              "fit": false,
+              "mediaFit": "cover",
               "id": "ng20-mirror-directions.root.option1"
             }
           }
@@ -1596,13 +1654,13 @@
               "kind": "media",
               "asset": null,
               "role": "$selected",
-              "fit": false,
+              "mediaFit": "cover",
               "id": "ng20-mirror-directions.root.response.0"
             },
             {
               "kind": "product",
               "role": "$selected",
-              "mode": "object",
+              "productPresentation": "object",
               "alternatives": [],
               "id": "ng20-mirror-directions.root.response.1"
             }
@@ -1613,7 +1671,7 @@
           ],
           "id": "ng20-mirror-directions.root.response"
         },
-        "axis": "column",
+        "layout": "column",
         "id": "ng20-mirror-directions.root"
       },
       "action": "review",
@@ -1635,7 +1693,7 @@
                 "kind": "media",
                 "asset": "coming-soon-9908030275890-scene",
                 "role": null,
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-mirror-directions.alt0.option0"
               }
             },
@@ -1649,7 +1707,7 @@
                 "kind": "media",
                 "asset": "coming-soon-9603148841266-scene",
                 "role": null,
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-mirror-directions.alt0.option1"
               }
             }
@@ -1661,13 +1719,13 @@
                 "kind": "media",
                 "asset": null,
                 "role": "$selected",
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-mirror-directions.alt0.response.0"
               },
               {
                 "kind": "product",
                 "role": "$selected",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-mirror-directions.alt0.response.1"
               }
@@ -1678,12 +1736,16 @@
             ],
             "id": "ng20-mirror-directions.alt0.response"
           },
-          "axis": "row",
+          "layout": "row",
           "id": "ng20-mirror-directions.alt0"
         }
       ],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -1733,7 +1795,7 @@
             "kind": "media",
             "asset": "forom-9080102322307-scene",
             "role": null,
-            "fit": false,
+            "mediaFit": "cover",
             "id": "ng20-forom.root.0"
           },
           {
@@ -1742,14 +1804,14 @@
               {
                 "kind": "product",
                 "role": "mirror",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-forom.root.1.0"
               },
               {
                 "kind": "product",
                 "role": "table",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [
                   "table",
                   "ecru"
@@ -1759,7 +1821,7 @@
               {
                 "kind": "product",
                 "role": "vase",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-forom.root.1.2"
               }
@@ -1786,6 +1848,10 @@
       "alternates": [],
       "destination": "spatial",
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -1837,13 +1903,13 @@
                 "kind": "media",
                 "asset": "moma-9787655160038-scene",
                 "role": null,
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-moma.root.0.0"
               },
               {
                 "kind": "product",
                 "role": "flatware",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-moma.root.0.1"
               }
@@ -1860,7 +1926,7 @@
               {
                 "kind": "product",
                 "role": "watch",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-moma.root.1.0"
               },
@@ -1868,7 +1934,7 @@
                 "kind": "media",
                 "asset": "moma-9604489248998-contact",
                 "role": null,
-                "fit": false,
+                "mediaFit": "cover",
                 "id": "ng20-moma.root.1.1"
               }
             ],
@@ -1893,6 +1959,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -1947,14 +2017,14 @@
               {
                 "kind": "product",
                 "role": "pro",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-nocs.root.0.0"
               },
               {
                 "kind": "product",
                 "role": "tube",
-                "mode": "object",
+                "productPresentation": "object",
                 "alternatives": [],
                 "id": "ng20-nocs.root.0.1"
               }
@@ -1989,6 +2059,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "prominent",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     },
     {
@@ -2067,7 +2141,7 @@
                   "kind": "media",
                   "asset": "lichen-12518383059262-product",
                   "role": null,
-                  "fit": false,
+                  "mediaFit": "cover",
                   "id": "ng20-lichen.root.1.option0"
                 }
               },
@@ -2082,7 +2156,7 @@
                   "kind": "media",
                   "asset": "lichen-12462683128126-product",
                   "role": null,
-                  "fit": false,
+                  "mediaFit": "cover",
                   "id": "ng20-lichen.root.1.option1"
                 }
               },
@@ -2097,7 +2171,7 @@
                   "kind": "media",
                   "asset": "lichen-11009838154046-product",
                   "role": null,
-                  "fit": false,
+                  "mediaFit": "cover",
                   "id": "ng20-lichen.root.1.option2"
                 }
               }
@@ -2108,7 +2182,7 @@
                 {
                   "kind": "product",
                   "role": "$selected",
-                  "mode": "object",
+                  "productPresentation": "object",
                   "alternatives": [],
                   "id": "ng20-lichen.root.1.response.0"
                 },
@@ -2127,7 +2201,7 @@
               ],
               "id": "ng20-lichen.root.1.response"
             },
-            "axis": "featured",
+            "layout": "featured",
             "id": "ng20-lichen.root.1"
           }
         ],
@@ -2135,8 +2209,7 @@
           1,
           8
         ],
-        "id": "ng20-lichen.root",
-        "mode": "editorial"
+        "id": "ng20-lichen.root"
       },
       "action": "merchant",
       "cta": "Visit Lichen",
@@ -2146,6 +2219,10 @@
       "alternates": [],
       "destination": null,
       "slots": [],
+      "presentation": {
+        "actionStyle": "link",
+        "disclosure": "none"
+      },
       "generation": "agent-authored composition fixture; no live model call"
     }
   ],
@@ -4032,6 +4109,87 @@
       "generated": false,
       "merchantID": "lichen",
       "productID": 12567031087422
+    }
+  },
+  "journeyTemplates": {
+    "roomComparison": {
+      "roles": [
+        "current",
+        "alternative1",
+        "alternative2"
+      ],
+      "root": {
+        "kind": "compare",
+        "roles": [
+          "current",
+          "alternative1",
+          "alternative2"
+        ],
+        "id": "journey.roomComparison"
+      }
+    },
+    "footwearLook": {
+      "roles": [
+        "anchor",
+        "one",
+        "two",
+        "three",
+        "denim",
+        "cord"
+      ],
+      "root": {
+        "kind": "column",
+        "children": [
+          {
+            "kind": "product",
+            "role": "anchor",
+            "productPresentation": "object",
+            "alternatives": [],
+            "id": "journey.footwearLook.0"
+          },
+          {
+            "kind": "row",
+            "children": [
+              {
+                "kind": "product",
+                "role": "one",
+                "productPresentation": "object",
+                "alternatives": [
+                  "one",
+                  "denim",
+                  "cord"
+                ],
+                "id": "journey.footwearLook.1.0"
+              },
+              {
+                "kind": "product",
+                "role": "three",
+                "productPresentation": "object",
+                "alternatives": [],
+                "id": "journey.footwearLook.1.1"
+              },
+              {
+                "kind": "product",
+                "role": "two",
+                "productPresentation": "object",
+                "alternatives": [],
+                "id": "journey.footwearLook.1.2"
+              }
+            ],
+            "weights": [
+              1,
+              1,
+              1
+            ],
+            "id": "journey.footwearLook.1"
+          }
+        ],
+        "weights": [
+          3,
+          1
+        ],
+        "id": "journey.footwearLook"
+      }
     }
   }
 }

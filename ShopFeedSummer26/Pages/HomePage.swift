@@ -40,7 +40,9 @@ struct HomePage: View {
     /// A drilled-in subcategory story rendered inline so the top bar stays.
     @State private var focusedStoryID: String?
     @State private var visibleStoryID: String?
-    @State private var generativeSession = GenerativeFeedPrototypeSession()
+    @State private var generativeSession = GenerativeFeedPrototypeSession(persistence: GenerativeFeedPrototypeSession.demoPersistence)
+    @State private var journeyNavigationTarget: String?
+    @State private var journeyTargetOffset: CGFloat = 0
     @State private var feedScrollState = FeedScrollState()
     @State private var feedBackdropState = FeedBackdropState()
     @State private var feedChromeTransition = FeedChromeTransitionState()
@@ -202,11 +204,14 @@ struct HomePage: View {
     private var windowSafeAreaTopInset: CGFloat {
         guard let windowScene = UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene })
-            .first(where: { $0.activationState == .foregroundActive }),
+            .first(where: { $0.windows.contains(where: \.isKeyWindow) }),
               let keyWindow = windowScene.windows.first(where: \.isKeyWindow) else {
             return 0
         }
-        return keyWindow.safeAreaInsets.top
+        // The key window can exist before its scene becomes foregroundActive.
+        // A zero startup inset otherwise inflates every card by the status-bar
+        // height and places consumer actions beneath the bottom navigation.
+        return max(keyWindow.safeAreaInsets.top, windowScene.statusBarManager?.statusBarFrame.height ?? 0)
     }
 
     private var feedPlan: HomeFeedPlan {
@@ -553,6 +558,7 @@ struct HomePage: View {
                 )
                 .allowsHitTesting(false)
 
+                ScrollViewReader { reader in
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(spacing: FeedCardStyle.cardSpacing) {
                         if selectedTopicID == "for-you", buyerPreview.selected.showsUtilityShelf {
@@ -623,6 +629,7 @@ struct HomePage: View {
                                 .onGeometryChange(for: CGFloat.self) { proxy in
                                     proxy.frame(in: .global).minY
                                 } action: { _, minY in
+                                    if entry.id == journeyNavigationTarget { journeyTargetOffset = minY }
                                     guard entry.id == firstEntryID else { return }
                                     let progress = min(max(1 - max(minY, 0) / 240, 0), 1)
                                     feedChromeTransition.progress = progress
@@ -687,10 +694,33 @@ struct HomePage: View {
                 )
                 .onScrollPhaseChange { _, phase in
                     guard selectedTopicID == renderedTopicID else { return }
+                    if phase == .tracking || phase == .interacting { journeyNavigationTarget = nil }
                     feedScrollState.isScrolling = phase.isScrolling
                     if phase == .idle {
                         commitVisibleStoryID(feedScrollState.positionID)
                     }
+                }
+                .onChange(of: generativeSession.requestedJourneySignalID) { _, signalID in
+                    guard selectedTopicID == renderedTopicID, let signalID,
+                          let entry = feedEntries.first(where: { $0.id == "next-gen-\(signalID)" }) else { return }
+                    // Keep the native row and the reference-backed position
+                    // cache in sync; a proxy scroll alone leaves stale utility
+                    // state that resets the viewport on the next interaction.
+                    journeyNavigationTarget = entry.id
+                    feedScrollState.positionID = entry.id
+                    feedBackdropState.entryID = entry.id
+                    commitVisibleStoryID(entry.id)
+                    reader.scrollTo(entry.id, anchor: .top)
+                    generativeSession.requestedJourneySignalID = nil
+                }
+                .onChange(of: journeyTargetOffset) { _, offset in
+                    // Lazy row estimates can shift as startup media resolves.
+                    // Hold an explicit destination until the shopper touches
+                    // the feed, then return control entirely to native paging.
+                    guard let target = journeyNavigationTarget, abs(offset) > 1,
+                          !feedScrollState.isScrolling, feedEntries.contains(where: { $0.id == target }) else { return }
+                    reader.scrollTo(target, anchor: .top)
+                }
                 }
             }
             .onChange(of: feedEntries.map(\.id)) { _, entryIDs in
@@ -1738,6 +1768,7 @@ struct HomePage: View {
     /// first authored story. No caller should use `nil` as a reset signal,
     /// because SwiftUI interprets that as permission to restore an old offset.
     private func resetFeedPosition(for topicID: String) {
+        journeyNavigationTarget = nil
         expandingStoryID = nil
 
         if topicID == "for-you" {
@@ -1746,7 +1777,10 @@ struct HomePage: View {
             let targetID: String?
 #if DEBUG
             let arguments = ProcessInfo.processInfo.arguments
-            if let flagIndex = arguments.firstIndex(of: "-openNextGenerationCard"),
+            if let source = DemoJourneyCatalog.launchSignalID,
+               feedEntries.contains(where: { $0.id == "next-gen-\(source)" }) {
+                targetID = "next-gen-\(source)"
+            } else if let flagIndex = arguments.firstIndex(of: "-openNextGenerationCard"),
                arguments.indices.contains(flagIndex + 1),
                let requestedIndex = Int(arguments[flagIndex + 1]),
                feedEntries.indices.contains(requestedIndex) {

@@ -25,8 +25,8 @@ struct CompositionNodeView: View {
             let entity = node.role.flatMap(context.entity)
             if let asset = NextGeneration20Catalog.asset(node.asset ?? entity?.scene ?? entity?.art) {
                 CompositionMedia(asset: asset,
-                    active: active && node.mode == "video",
-                    fills: !(node.fit ?? false))
+                    active: active && node.playback == .video,
+                    fills: node.mediaFit != .contain)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .accessibilityLabel("Styling image")
             }
@@ -111,7 +111,7 @@ struct CompositionNodeView: View {
                         context.session.select(item, for: context.spec)
                     }
                 } label: {
-                    CompositionProductImage(role: role, context: context, mode: node.mode ?? "object")
+                    CompositionProductImage(role: role, context: context, mode: node.productPresentation ?? .object)
                         .overlay(alignment: .bottomTrailing) {
                             if slot != nil {
                                 Image(systemName: "arrow.left.arrow.right").font(.system(size: 12, weight: .medium))
@@ -141,7 +141,7 @@ struct CompositionNodeView: View {
                         if state.selectedID == item.id { onDetail(item) }
                         else { context.session.select(item, for: context.spec) }
                     } label: {
-                        CompositionProductImage(role: role, context: context, mode: "tile")
+                        CompositionProductImage(role: role, context: context, mode: .tile)
                             .frame(width: side, height: side)
                             .overlay {
                                 RoundedRectangle(cornerRadius: 18).strokeBorder(state.selectedID == item.id ? context.ink : .clear, lineWidth: 2)
@@ -163,10 +163,10 @@ struct CompositionNodeView: View {
             }
         } else {
             let options = node.options ?? []
-            let isColumn = node.axis == "column"
+            let isColumn = node.layout == .column
             let w = isColumn ? size.width : (size.width - gap * CGFloat(max(0, options.count - 1))) / CGFloat(max(1, options.count))
             let h = isColumn ? (size.height - gap * CGFloat(max(0, options.count - 1))) / CGFloat(max(1, options.count)) : size.height
-            if node.axis == "featured", options.count == 3 {
+            if node.layout == .featured, options.count == 3 {
                 // One contextual photograph leads; companions remain usable
                 // destinations rather than three equally narrow poster strips.
                 let leadWidth = (size.width - gap) * 0.64
@@ -252,7 +252,7 @@ struct CompositionNodeView: View {
 
     @ViewBuilder private var stepSelector: some View {
         let roles = node.roles ?? []
-        if node.axis == "column" {
+        if node.layout == .column {
             VStack(spacing: 8) {
                 ForEach(Array(roles.enumerated()), id: \.element) { i, role in step(role, index: i) }
             }

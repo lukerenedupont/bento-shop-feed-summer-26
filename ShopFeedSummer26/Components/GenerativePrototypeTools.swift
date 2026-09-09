@@ -6,9 +6,24 @@ struct GenerativePrototypeTools: ViewModifier {
     @Bindable var session: GenerativeFeedPrototypeSession
     let merchants: [SampleMerchant]
     var active = true
+    @Environment(\.scenePhase) private var scenePhase
 
     func body(content: Content) -> some View {
         content
+            .task(id: active) {
+                guard active, NextGeneration20Catalog.enabled else { return }
+                // Let Home's initial utility positioning finish before an
+                // explicit demo journey requests the native scroll target.
+                await Task.yield()
+                guard !Task.isCancelled else { return }
+                session.openLaunchJourneyIfRequested()
+            }
+            .sheet(isPresented: $session.showsKeptSelections) {
+                JourneyKeptSelections(session: session, merchants: merchants)
+            }
+            .onChange(of: scenePhase) { _, phase in
+                if phase != .active { session.persistJourneyMemory() }
+            }
             .sheet(isPresented: $session.showsFeedControls) {
                 GenerativeFeedDesignPanel(session: session, merchants: merchants)
             }
@@ -26,9 +41,11 @@ struct GenerativePrototypeTools: ViewModifier {
                                 .font(.footnote).foregroundStyle(.secondary)
                         }
                         Text(NextGeneration20Catalog.enabled
-                            ? "This review uses twenty agent-authored composition specs—not live model calls or actual account history. Selections stay in this session. No purchases or account changes are made."
+                            ? "This demo uses twenty authored compositions and explicit journey transitions—not live model calls or actual account history. Choices and kept selections stay on this device until you reset the demo. No purchases or account changes are made."
                             : "This prototype uses an authored Luke scenario—not your actual purchases, saves or searches. Selections stay on this device for this session. No purchases or account changes are made.")
-                        Text("After this setup, the feed is shown without debug labels. Long-press any card heading to inspect or direct it.")
+                        Text(NextGeneration20Catalog.enabled
+                            ? "Use a card's options to return to Kept selections or inspect its authored specification. The feed itself stays free of debug labels."
+                            : "After this setup, the feed is shown without debug labels. Long-press any card heading to inspect or direct it.")
                             .foregroundStyle(.secondary)
                         Button("Preview feed") { session.enterConsumerPreview() }
                             .buttonStyle(.borderedProminent)
@@ -68,6 +85,15 @@ struct GenerativeFeedDesignPanel: View {
                     Text("Luke · authored demo activity")
                     Text("Real catalog; simulated purchases, saves, searches and Worlds. Signal switches below add or remove jobs from the feed. Drag handles change their order.")
                         .font(.footnote).foregroundStyle(.secondary)
+                }
+                if NextGeneration20Catalog.enabled {
+                    Section("Demo journeys") {
+                        Button("Finish a room") { dismiss(); session.requestJourney(DemoJourneyCatalog.room) }
+                        Button("Choose a shoe and build a look") { dismiss(); session.requestJourney(DemoJourneyCatalog.footwear) }
+                        Button("Discover and keep a book") { dismiss(); session.requestJourney(DemoJourneyCatalog.books) }
+                        Text("The same feed, with remembered decisions. Kept selections are available from every card's options menu.")
+                            .font(.footnote).foregroundStyle(.secondary)
+                    }
                 }
                 Section("Signals in the feed") {
                     ForEach(session.orderedSignalIDs, id: \.self) { id in

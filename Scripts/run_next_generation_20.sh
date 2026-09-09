@@ -6,11 +6,13 @@ SIM="${NEXT_GENERATION_SIMULATOR:-9D696736-11E8-447A-A09D-8F63738786C5}"
 DERIVED="${NEXT_GENERATION_DERIVED:-/tmp/shop-quiet-review-derived}"
 BUNDLE=com.shopify.purl.prototype.shop.feed.summer.26
 BASE_ARGS=(-quietFeedReview -bentoMediaReview -nextGeneration20 -buyerPreviewProfileID luke)
+if [[ -n "${NEXT_GENERATION_JOURNEY:-}" ]]; then BASE_ARGS+=(-startDemoJourney "$NEXT_GENERATION_JOURNEY"); fi
 MODE="${1:-feed}"
 INDEX="${2:-0}"
 case "$MODE" in feed|gallery|design) ;; *) echo "Usage: $0 [feed|gallery|design] [0...19]"; exit 2 ;; esac
 if ! [[ "$INDEX" =~ ^[0-9]+$ ]] || (( INDEX > 19 )); then echo "Index must be 0...19"; exit 2; fi
 mkdir -p .build/ng20-review
+python3 Scripts/build_next_generation_20.py --check-spec
 python3 Scripts/validate_next_generation_20.py
 xcrun simctl boot "$SIM" 2>/dev/null || true
 xcrun simctl bootstatus "$SIM" -b
@@ -22,7 +24,11 @@ fi
 xcrun simctl terminate "$SIM" "$BUNDLE" 2>/dev/null || true
 xcrun simctl install "$SIM" "$DERIVED/Build/Products/Debug-iphonesimulator/ShopFeedSummer26.app"
 if [ "$MODE" = feed ]; then
-    xcrun simctl launch "$SIM" "$BUNDLE" "${BASE_ARGS[@]}" -openNextGenerationCard "$INDEX"
+    if [[ -n "${NEXT_GENERATION_JOURNEY:-}" ]]; then
+        xcrun simctl launch "$SIM" "$BUNDLE" "${BASE_ARGS[@]}"
+    else
+        xcrun simctl launch "$SIM" "$BUNDLE" "${BASE_ARGS[@]}" -openNextGenerationCard "$INDEX"
+    fi
 elif [ "$MODE" = design ]; then
     xcrun simctl launch "$SIM" "$BUNDLE" "${BASE_ARGS[@]}" -nextGenerationGallery "$INDEX" -feedDesignMode
 else

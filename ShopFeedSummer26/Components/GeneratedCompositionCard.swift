@@ -1,4 +1,5 @@
 import SwiftUI
+import ShopCompositionCore
 
 /// A single native host for arbitrary validated composition trees. The model
 /// specifies relationships and structure; this host owns Shop chrome and actions.
@@ -11,7 +12,6 @@ struct GeneratedCompositionCard: View {
     let height: CGFloat
     let topPadding: CGFloat
     let isActive: Bool
-    var visibleContentBottom: CGFloat? = nil
     let onInspect: () -> Void
     @Environment(NavigationCoordinator.self) private var coordinator
     @State private var detail: ResolvedStoryProduct?
@@ -19,15 +19,15 @@ struct GeneratedCompositionCard: View {
 
     private var context: CompositionContext { .init(definition: definition, spec: spec, merchants: merchants, session: session) }
     private var ink: Color { definition.usesDarkInk ? .black : .white }
-    private var usesEditorialAction: Bool { ["editorial", "study"].contains(definition.root.mode ?? "") }
+    private var usesEditorialAction: Bool { definition.presentation.actionStyle == .link }
     private var title: String { session.activeGroup(for: spec)?.title ?? definition.title }
     private var state: GenerativeFeedPrototypeSession.CardState { session.state(for: spec) }
     private var footerCardSide: CGFloat { min(144, (width - 52) / 2.4) }
-    private var hasSavedPlan: Bool { state.savedDossierPlans.contains(context.reviewItems.map(\.id)) }
+    private var hasSavedPlan: Bool { session.hasKept(context.reviewItems, for: spec) }
     private var actionTitle: String {
         if definition.action == .canvas { return state.canvasIsExploring ? "Done exploring" : definition.cta }
         if definition.action == .compare { return state.comparisonRevealed ? "Review the pair" : state.comparisonIDs.count == 2 ? definition.cta : "Select two to compare" }
-        if definition.action == .save && hasSavedPlan { return "Saved" }
+        if definition.action == .save && hasSavedPlan { return "View kept selections" }
         return definition.cta
     }
 
@@ -47,7 +47,7 @@ struct GeneratedCompositionCard: View {
                 VStack(alignment: .leading, spacing: 12) {
                     if definition.action != .compare {
                         Group {
-                            if definition.root.mode == "study" {
+                            if definition.presentation.disclosure == .stylingStudy {
                                 Text(state.hasInteracted ? "Styling study · image unchanged" : "Styling study")
                                     .font(GravityFont.medium.fixedFont(size: 12))
                                     .foregroundStyle(ink.opacity(0.85))
@@ -73,6 +73,7 @@ struct GeneratedCompositionCard: View {
                             .accessibilityIdentifier("ng20.heading")
                         Spacer(minLength: 0)
                         Menu {
+                            JourneyCardMenu(context: context)
                             Button("Inspect specification", action: onInspect)
                             if !definition.alternates.isEmpty {
                                 Button("Try another composition") { session.regenerate(spec) }
@@ -107,21 +108,21 @@ struct GeneratedCompositionCard: View {
                     .disabled(!state.interactionsEnabled || (definition.action == .compare && state.comparisonIDs.count != 2))
                     .accessibilityIdentifier("ng20.primary")
                 }
-                .visualEffect { content, proxy in
-                    content.offset(y: visibleContentBottom.map { -max(0, proxy.frame(in: .scrollView(axis: .vertical)).maxY - $0) } ?? 0)
-                }
             }
             .padding(.horizontal, 20)
             .padding(.top, topPadding)
             .padding(.bottom, 24)
         }
-        .frame(width: width, height: height).clipped()
+        // The host already reserves navigation space. Bound hit testing too:
+        // clipped offscreen imagery must not intercept the visible card's taps.
+        .frame(width: width, height: height).clipped().contentShape(Rectangle())
         .environment(\.colorScheme, definition.usesDarkInk ? .light : .dark)
-        .sheet(item: $detail) { GenerativeProductReview(item: $0) }
+        .sheet(item: $detail) { JourneyProductReview(item: $0, context: context) }
         .sheet(isPresented: $showsReview) { CompositionSelectionReview(context: context) }
         .onChange(of: isActive) { _, active in if !active { session.setCanvasExploring(false, for: spec) } }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("ng20.card.\(definition.id)")
+        .accessibilityValue(isActive ? "Current experience" : "")
     }
 
     private func primaryAction() {
@@ -129,7 +130,9 @@ struct GeneratedCompositionCard: View {
         case .detail: detail = context.selected
         case .merchant:
             if let item = context.selected { coordinator.pushRoute(.store(merchantId: item.merchant.id)) }
-        case .save: session.saveDossierPlan(context.reviewItems, for: spec)
+        case .save:
+            if hasSavedPlan { session.showsKeptSelections = true }
+            else { session.saveDossierPlan(context.reviewItems, for: spec) }
         case .canvas: session.setCanvasExploring(!state.canvasIsExploring, for: spec)
         case .compare:
             if state.comparisonRevealed { showsReview = true }
@@ -145,6 +148,24 @@ struct CompositionContext {
     let spec: NextGenerationFeedCardSpec
     let merchants: [SampleMerchant]
     let session: GenerativeFeedPrototypeSession
+    private let productsByRole: [String: ResolvedStoryProduct]
+    private let productsByReference: [FeedStory.ProductReference: ResolvedStoryProduct]
+
+    init(definition: GeneratedComposition, spec: NextGenerationFeedCardSpec,
+         merchants: [SampleMerchant], session: GenerativeFeedPrototypeSession) {
+        self.definition = definition; self.spec = spec
+        self.merchants = merchants; self.session = session
+        var byRole: [String: ResolvedStoryProduct] = [:]
+        var byReference: [FeedStory.ProductReference: ResolvedStoryProduct] = [:]
+        for role in definition.order {
+            guard let reference = definition.entities[role]?.reference else { continue }
+            if let product = byReference[reference] ?? NextGenerationFeedCardSpec.resolve(reference, in: merchants) {
+                byRole[role] = product; byReference[reference] = product
+            }
+        }
+        productsByRole = byRole; productsByReference = byReference
+    }
+
     var state: GenerativeFeedPrototypeSession.CardState { session.state(for: spec) }
     var ink: Color { definition.usesDarkInk ? .black : .white }
     var visibleRoles: [String] {
@@ -155,12 +176,13 @@ struct CompositionContext {
         session.selected(in: visibleRoles.compactMap { directProduct($0) }, for: spec)
     }
     func directProduct(_ role: String) -> ResolvedStoryProduct? {
-        definition.entities[role].flatMap { NextGenerationFeedCardSpec.resolve($0.reference, in: merchants) }
+        productsByRole[role]
     }
     func product(_ role: String) -> ResolvedStoryProduct? {
         if role == "$selected" { return selected }
         if let group = spec.groups.first(where: { $0.id == "slot.\(role)" }) {
-            return session.roomProduct(slot: group, for: spec, merchants: merchants)
+            let choices = group.products.compactMap { productsByReference[$0] }
+            return choices.first { $0.id == state.roomSelections[group.id] } ?? choices.first
         }
         return directProduct(role)
     }
@@ -220,7 +242,7 @@ struct CompositionProductRail: View {
                 ForEach(context.expandedRoles(roles), id: \.self) { role in
                     if let item = context.product(role) {
                         Button { onDetail(item) } label: {
-                            CompositionProductImage(role: role, context: context, mode: "tile")
+                            CompositionProductImage(role: role, context: context, mode: .tile)
                                 .frame(width: height, height: height)
                         }.buttonStyle(.plain).accessibilityLabel("View \(item.product.title)")
                         .contextMenu {
@@ -249,12 +271,12 @@ struct CompositionProductRail: View {
 struct CompositionProductImage: View {
     let role: String
     let context: CompositionContext
-    var mode = "object"
+    var mode: CompositionProductPresentation = .object
     var body: some View {
         GeometryReader { proxy in
             if let item = context.product(role), let entity = context.entity(role),
                let asset = NextGeneration20Catalog.asset(entity.art) {
-                if mode == "tile" {
+                if mode == .tile {
                     CompositionSquareProductCard(url: asset.imageURL,
                         price: Double(item.product.price) == nil ? nil : GenerativeFeedStyle.price(item.product))
                         .frame(width: proxy.size.width, height: proxy.size.height).clipped()
@@ -318,16 +340,24 @@ struct CompositionSelectionReview: View {
                             }.multilineTextAlignment(.leading)
                         }.buttonStyle(.plain)
                     }
-                    Button("Save this selection") { context.session.saveDossierPlan(context.reviewItems, for: context.spec) }
-                        .buttonStyle(.borderedProminent).tint(.black)
-                    if !context.state.savedDossierPlans.isEmpty { Text("Saved for this session").font(.footnote).foregroundStyle(.secondary) }
+                    JourneyContinuationActions(context: context, onLeave: { dismiss() })
+                    Button(context.session.hasKept(context.reviewItems, for: context.spec) ? "Kept on this device" : "Keep this selection") {
+                        context.session.saveDossierPlan(context.reviewItems, for: context.spec)
+                    }
+                    .buttonStyle(.borderedProminent).tint(.black)
+                    .accessibilityIdentifier("journey.keepSelection")
+                    Text("Demo selections are saved only on this device. No account changes or purchases.")
+                        .font(.footnote).foregroundStyle(.secondary)
                     if context.definition.destination == "spatial" {
                         Button("See a piece in your room") {
                             let definition = WorldDefinition(id: context.definition.id, title: context.definition.title,
                                 purpose: .intent, subject: "Review room", primaryExperience: .spatial,
                                 availableExperiences: [.spatial], lifetime: .session, paths: [])
                             let world = WorldSession(definition: definition)
-                            if let item = context.reviewItems.first { world.send(.selectProduct(item.id)) }
+                            let selected = context.selected.flatMap { item in
+                                context.reviewItems.contains(where: { $0.id == item.id }) ? item : nil
+                            } ?? context.reviewItems.first
+                            if let selected { world.send(.selectProduct(selected.id)) }
                             for (index, item) in context.reviewItems.enumerated() {
                                 world.send(.setFact(.init(key: "room-piece-\(index)", value: item.id, source: .stated, scope: .local)))
                             }
@@ -342,7 +372,7 @@ struct CompositionSelectionReview: View {
             }
             .navigationTitle(context.definition.title).navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
-            .sheet(item: $detail) { GenerativeProductReview(item: $0) }
+            .sheet(item: $detail) { JourneyProductReview(item: $0, context: context) }
             .fullScreenCover(isPresented: $showsSpatial) {
                 if let spatialSession {
                     SpatialARWorldDestination(session: spatialSession, products: context.reviewItems,

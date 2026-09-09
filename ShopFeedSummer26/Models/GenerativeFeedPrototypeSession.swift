@@ -1,10 +1,10 @@
 import SwiftUI
 
 /// PROTOTYPE session: all consumers share selection, steering and design input.
-/// Nothing here mutates the authenticated buyer or persists across launches.
+/// Authenticated accounts are untouched. NG20 may opt into device-local demo memory.
 @MainActor @Observable
 final class GenerativeFeedPrototypeSession {
-    struct CardState {
+    struct CardState: Codable {
         var selectedID: String?
         var selectedGroupID: String?
         var comparisonIDs: [String] = []
@@ -30,6 +30,50 @@ final class GenerativeFeedPrototypeSession {
         var lastAction = "No interaction yet"
     }
     private var states: [String: CardState] = [:]
+    private let persistence: UserDefaults?
+    private let memoryKey = "unifiedFeedDemo.luke.v1"
+    var journeyMemory: FeedJourneyMemory
+    var showsKeptSelections = false
+    var requestedJourneySignalID: String?
+    var didOpenLaunchJourney = false
+
+    static let demoPersistence: UserDefaults? = {
+        guard NextGeneration20Catalog.enabled else { return nil }
+        let args = ProcessInfo.processInfo.arguments
+        if args.contains("-journeyUITestStorage") {
+            let defaults = UserDefaults(suiteName: "com.shopify.purl.journey-ui-tests")
+            if args.contains("-resetJourneyUITestStorage") { defaults?.removeObject(forKey: "unifiedFeedDemo.luke.v1") }
+            return defaults
+        }
+        return .standard
+    }()
+
+    init(persistence: UserDefaults? = nil) {
+        self.persistence = persistence
+        journeyMemory = .restore(persistence?.data(forKey: memoryKey))
+        acknowledgedDemo = journeyMemory.hasSeenDisclosure
+        for (id, data) in journeyMemory.checkpoints where id.hasPrefix("next-gen-ng20-") {
+            guard var state = try? JSONDecoder().decode(CardState.self, from: data) else { continue }
+            state.canvasIsExploring = false; state.roomSlotID = nil
+            states[id] = state
+        }
+    }
+    func persistJourneyMemory() {
+        guard let data = try? JSONEncoder().encode(journeyMemory), data.count <= 2_000_000 else { return }
+        persistence?.set(data, forKey: memoryKey)
+    }
+    func restoreJourneyState(_ data: Data, id: String) {
+        guard id.hasPrefix("next-gen-ng20-"), var state = try? JSONDecoder().decode(CardState.self, from: data) else { return }
+        state.canvasIsExploring = false; state.roomSlotID = nil
+        states[id] = state
+        journeyMemory.checkpoints[id] = data
+    }
+    func resetJourneyDemo() {
+        states = states.filter { !$0.key.hasPrefix("next-gen-ng20-") }
+        journeyMemory = .init()
+        persistence?.removeObject(forKey: memoryKey)
+        requestJourney("ng20-woven-room")
+    }
     private(set) var disabledSignalIDs: Set<String> = NextGeneration20Catalog.enabled ? [] : DossierReviewLibrary.enabled
         ? Set(DossierReviewLibrary.records.filter { !$0.defaultVisible }.map { "dossier-\($0.key)" }) : []
     private(set) var orderedSignalIDs = GenerativeFeedPrototypeFixtures.signals.map(\.id)
@@ -48,8 +92,10 @@ final class GenerativeFeedPrototypeSession {
         let ids = items.map(\.id)
         update(spec) {
             if !$0.savedDossierPlans.contains(ids) { $0.savedDossierPlans.append(ids) }
-            $0.lastAction = "Saved the exact \(ids.count)-object composition for this session"
+            if spec.signal.id.hasPrefix("ng20-"), $0.savedDossierPlans.count > 50 { $0.savedDossierPlans.removeFirst() }
+            $0.lastAction = "Kept the exact \(ids.count)-object composition"
         }
+        keepJourneySelection(items, for: spec)
     }
     func setDossierScene(_ index: Int, for spec: NextGenerationFeedCardSpec) {
         guard state(for: spec).interactionsEnabled else { return }
@@ -59,10 +105,16 @@ final class GenerativeFeedPrototypeSession {
         guard state(for: spec).interactionsEnabled else { return }
         update(spec) { $0.dossierObjectsVisible = visible }
     }
-    func enterConsumerPreview() { acknowledgedDemo = true; designMode = false }
+    func enterConsumerPreview() {
+        acknowledgedDemo = true; designMode = false
+        journeyMemory.hasSeenDisclosure = true
+        persistJourneyMemory()
+    }
     func state(for spec: NextGenerationFeedCardSpec) -> CardState { states[spec.id] ?? CardState() }
 
     func resolve(_ source: NextGenerationFeedCardSpec, merchants: [SampleMerchant]) -> NextGenerationFeedCardSpec {
+        if let definition = DemoJourneyCatalog.continuation(for: source.signal.id, memory: journeyMemory),
+           let resolved = DemoJourneyCatalog.specification(definition, source: source, merchants: merchants) { return resolved }
         let state = state(for: source)
         guard state.generation > 0 || state.signalKind != nil || state.jobOverride != nil else { return source }
         var signal = source.signal
@@ -165,6 +217,15 @@ final class GenerativeFeedPrototypeSession {
                 $0.lastAction = "Saved \(spec.anchor == nil ? "chair" : "look") with \(item.product.title) for this session"
             }
         }
+        if spec.signal.id.hasPrefix("ng20-") {
+            if state(for: spec).savedSelectionIDs.contains(item.id) { keepJourneySelection([item], for: spec) }
+            else {
+                let matches = journeyMemory.kept.filter {
+                    $0.sourceSignalID == DemoJourneyCatalog.sourceID(spec.signal.id) && $0.products.map(\.id) == [item.id]
+                }
+                matches.forEach(removeJourneySelection)
+            }
+        }
     }
     func choose(_ group: PrototypeContentGroup, for spec: NextGenerationFeedCardSpec) {
         guard state(for: spec).interactionsEnabled, spec.groups.contains(where: { $0.id == group.id }) else { return }
@@ -224,7 +285,11 @@ final class GenerativeFeedPrototypeSession {
     func restoreShortlist(_ spec: NextGenerationFeedCardSpec) {
         update(spec) { $0.removedIDs = []; $0.lastAction = "Shortlist restored" }
     }
-    func reset(_ spec: NextGenerationFeedCardSpec) { states.removeValue(forKey: spec.id) }
+    func reset(_ spec: NextGenerationFeedCardSpec) {
+        states.removeValue(forKey: spec.id)
+        journeyMemory.checkpoints.removeValue(forKey: spec.id)
+        persistJourneyMemory()
+    }
 
     func setSignalEnabled(_ enabled: Bool, id: String) {
         if enabled { disabledSignalIDs.remove(id) } else { disabledSignalIDs.insert(id) }
@@ -250,5 +315,10 @@ final class GenerativeFeedPrototypeSession {
         var current = state(for: spec)
         change(&current)
         states[spec.id] = current
+        if spec.signal.id.hasPrefix("ng20-"), let data = try? JSONEncoder().encode(current) {
+            journeyMemory.checkpoints[spec.id] = data
+            // Do not write to disk on every canvas drag frame.
+            if !current.canvasIsExploring { persistJourneyMemory() }
+        }
     }
 }
