@@ -16,6 +16,7 @@ xcrun simctl boot "$SIM" 2>/dev/null || true
 xcrun simctl bootstatus "$SIM" -b
 python3 Scripts/validate_quiet_review.py
 python3 Scripts/validate_dossier_library.py
+python3 Scripts/validate_calm_jacket.py
 xcodegen generate
 if ! xcodebuild -project ShopFeedSummer26.xcodeproj -scheme ShopFeedSummer26 \
     -configuration Debug -destination "platform=iOS Simulator,id=$SIM" \

@@ -11,6 +11,7 @@ struct NextGenerationFeedCardView: View {
     let isActive: Bool
     let session: GenerativeFeedPrototypeSession
     var bottomContentPadding: CGFloat = GravitySpacing.space24
+    var visibleContentBottom: CGFloat? = nil
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.openURL) private var openURL
@@ -50,6 +51,7 @@ struct NextGenerationFeedCardView: View {
                         JacketLookCardPrototype(record: record, spec: spec, merchants: merchants, session: session,
                             width: width, height: height, topPadding: foregroundTopPadding,
                             bottomPadding: bottomContentPadding, isActive: isActive,
+                            visibleContentBottom: visibleContentBottom,
                             onInspect: { showsInspector = true })
                     } else {
                         DossierShoppingCardPrototype(record: record, spec: spec, merchants: merchants, session: session,

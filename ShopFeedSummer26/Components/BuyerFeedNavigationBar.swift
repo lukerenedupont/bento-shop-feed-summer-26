@@ -18,6 +18,9 @@ struct BuyerFeedNavigationBar: View {
     var onAddFeed: () -> Void = {}
     var onManageFeeds: () -> Void = {}
 
+    // Real raster space for the glass/pill shadow. The outer rail remains 40pt.
+    private let shadowBleed = GravitySpacing.space32
+
     var body: some View {
         ZStack(alignment: .leading) {
             topicRail
@@ -60,22 +63,23 @@ struct BuyerFeedNavigationBar: View {
                         .id("add-feed")
                 }
                 .fixedSize(horizontal: true, vertical: false)
+                .padding(.vertical, shadowBleed)
                 .scrollTargetLayout()
             }
             .contentMargins(.leading, leadingInset, for: .scrollContent)
             .contentMargins(.trailing, GravitySpacing.space16, for: .scrollContent)
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
             .scrollClipDisabled()
+            .frame(height: FeedNavigationStyle.controlSize + shadowBleed * 2)
             .mask {
                 HStack(spacing: 0) {
-                    // Let labels travel beneath the avatar, then remove them
-                    // before they can emerge from its opposite edge. The
-                    // vertical expansion preserves the selected-pill shadow.
-                    Color.clear
-                        .frame(width: FeedNavigationStyle.avatarSize / 2)
+                    // Fade underneath the avatar rather than hard-cutting the
+                    // leading edge of the selected pill's shadow.
+                    Color.clear.frame(width: GravitySpacing.space8)
+                    LinearGradient(colors: [.clear, .black], startPoint: .leading, endPoint: .trailing)
+                        .frame(width: FeedNavigationStyle.avatarSize / 2 - GravitySpacing.space8)
                     Color.black
                 }
-                .padding(.vertical, -GravitySpacing.space16)
             }
             .onChange(of: selectedTopicID) { _, _ in
                 guard let selectedIndex = topics.firstIndex(where: { $0.id == selectedTopicID }),
@@ -197,7 +201,7 @@ struct BuyerFeedNavigationBar: View {
                     .foregroundStyle(GravityColors.textSecondary)
                     .opacity(1 - progress)
                 label
-                    .foregroundStyle(.white.opacity(0.82))
+                    .foregroundStyle(.white)
                     .opacity(progress)
             }
         }

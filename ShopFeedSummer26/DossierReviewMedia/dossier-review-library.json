@@ -51,10 +51,12 @@
       "object2": "dossier-6d91ee4227655be2-object2.jpg",
       "object3": "dossier-6d91ee4227655be2-object3.jpg",
       "pair": "dossier-6d91ee4227655be2-pair.jpg",
-      "pairSquare": "dossier-6d91ee4227655be2-pairSquare.jpg"
+      "pairSquare": "dossier-6d91ee4227655be2-pairSquare.jpg",
+      "calm": "dossier-6d91ee4227655be2-calm.jpg"
     },
     "videos": {
-      "look1": "dossier-6d91ee4227655be2-look1.mp4"
+      "look1": "dossier-6d91ee4227655be2-look1.mp4",
+      "calm": "dossier-6d91ee4227655be2-calm.mp4"
     },
     "defaultVisible": true,
     "surface": "#f9edda",

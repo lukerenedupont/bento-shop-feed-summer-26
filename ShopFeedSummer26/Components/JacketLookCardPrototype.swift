@@ -12,12 +12,13 @@ struct JacketLookCardPrototype: View {
     let topPadding: CGFloat
     let bottomPadding: CGFloat
     let isActive: Bool
+    var visibleContentBottom: CGFloat? = nil
     let onInspect: () -> Void
 
     @State private var detail: ResolvedStoryProduct?
     @State private var showsLook = false
     private var state: GenerativeFeedPrototypeSession.CardState { session.state(for: spec) }
-    private var variant: String { record.videos.keys.sorted().first ?? "look0" }
+    private var variant: String { record.videos["calm"] != nil ? "calm" : "look0" }
     private var productCardWidth: CGFloat { min(280, width * 0.72) }
 
     var body: some View {
@@ -26,7 +27,7 @@ struct JacketLookCardPrototype: View {
                 .frame(width: width, height: height)
 
             // Contrast only: the source image remains visible behind all chrome.
-            LinearGradient(colors: [.white.opacity(0.75), .white.opacity(0.15), .clear], startPoint: .top, endPoint: .bottom)
+            LinearGradient(colors: [.black.opacity(0.42), .black.opacity(0.16), .clear], startPoint: .top, endPoint: .bottom)
                 .frame(height: topPadding + 110).allowsHitTesting(false)
             LinearGradient(colors: [.clear, .black.opacity(0.24)], startPoint: .top, endPoint: .bottom)
                 .frame(height: 310 + bottomPadding)
@@ -46,7 +47,8 @@ struct JacketLookCardPrototype: View {
                         .accessibilityLabel("Inspect this shopping experience")
                 }
             }
-            .foregroundStyle(.black)
+            .foregroundStyle(.white)
+            .gravityShadow(GravityShadows.feedText)
             .padding(.horizontal, 20).padding(.top, topPadding)
 
             VStack(spacing: 16) {
@@ -68,7 +70,14 @@ struct JacketLookCardPrototype: View {
                 .padding(.horizontal, 20)
                 .accessibilityIdentifier("jacket.viewLook")
             }
-            .padding(.bottom, bottomPadding)
+            .visualEffect { content, proxy in
+                // Keep the rail + CTA together at the card's base. Only lift
+                // them when the floating app navigation would actually cover them.
+                content.offset(y: visibleContentBottom.map { limit in
+                    -max(0, proxy.frame(in: .scrollView(axis: .vertical)).maxY - limit)
+                } ?? 0)
+            }
+            .padding(.bottom, GravitySpacing.space24)
             .frame(maxHeight: .infinity, alignment: .bottom)
         }
         .frame(width: width, height: height)

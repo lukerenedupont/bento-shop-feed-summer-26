@@ -1,0 +1,13 @@
+{
+  "sourceExport": "6d91ee4227655be2",
+  "sourcePath": "media/videos/look1.mp4",
+  "sourceSHA256": "75752dce60358bfe582b3067259c8463d4c063e0f2fef39df77e85e0e335f096",
+  "sourceRangeSeconds": [
+    3.55,
+    4.25
+  ],
+  "timeScale": 3,
+  "edit": "Forward/reverse loop of stable full-body ending; frame blending to 24 fps; no audio",
+  "video": "dossier-6d91ee4227655be2-calm.mp4",
+  "poster": "dossier-6d91ee4227655be2-calm.jpg"
+}

@@ -280,6 +280,16 @@
     "sha256": "53bf1a47db5646366fa575b03265388223e6f265eddd45b0b1ccd7352f990ece"
   },
   {
+    "file": "dossier-6d91ee4227655be2-calm.jpg",
+    "bytes": 90887,
+    "sha256": "053df6e6e7a3bd60ddbcd1701c414e928f52ffe24eb9e0eb482a271399980a39"
+  },
+  {
+    "file": "dossier-6d91ee4227655be2-calm.mp4",
+    "bytes": 239385,
+    "sha256": "c437ac76cb0608a8d2ea01a8562810c7ebbcae231258030976c8c03f9a9e4d0f"
+  },
+  {
     "file": "dossier-6d91ee4227655be2-look0.jpg",
     "bytes": 81938,
     "sha256": "eee4a195ea2cae2ce68d3e2ce2e372ea58fc05930208459d4266dc7f6feed410"
@@ -786,8 +796,8 @@
   },
   {
     "file": "dossier-review-library.json",
-    "bytes": 18232,
-    "sha256": "946f335bf8038e345da79436b041d6aad909a43d2acad7208f13e198526d81ca"
+    "bytes": 18334,
+    "sha256": "5e20db2664d1b30fffd4b51be94e537513245e3995bf36799c50d95651d55a9d"
   },
   {
     "file": "dossier-review-merchants.json",

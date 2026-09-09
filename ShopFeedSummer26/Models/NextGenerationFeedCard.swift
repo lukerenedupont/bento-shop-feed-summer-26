@@ -117,7 +117,11 @@ struct NextGenerationFeedCardSpec: Identifiable {
         }
     }
     var isQuietReview: Bool { signal.id.hasPrefix("quiet-") || signal.id.hasPrefix("dossier-") }
-    var prefersDarkNavigationText: Bool { isQuietReview || job != .merchantDiscovery }
+    var prefersDarkNavigationText: Bool {
+        // This card's entire surface is film, including the area behind the header.
+        if signal.id == "dossier-6d91ee4227655be2" { return false }
+        return isQuietReview || job != .merchantDiscovery
+    }
     var accessibilityDescription: String { "\(title). \(subtitle). \(interaction.rawValue)." }
 
     func resolvedProducts(from merchants: [SampleMerchant]) -> [ResolvedStoryProduct] {

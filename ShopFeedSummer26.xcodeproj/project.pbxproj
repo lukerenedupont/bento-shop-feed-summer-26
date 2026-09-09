@@ -133,6 +133,7 @@
 		4A38B94BF99CE88B738987C1 /* SearchPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AD617847452AF8F79A0062 /* SearchPage.swift */; };
 		4BA9EB7B90A32AF27868B97C /* CanvasAgentInfiniteProductCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C0258B1B9C947F82D08B9 /* CanvasAgentInfiniteProductCanvas.swift */; };
 		4BF83845076FE56AEF1A3CA3 /* ConversationHistoryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F3FDD0745D3BA8C4C8F491 /* ConversationHistoryClient.swift */; };
+		4C3A2BB41D6BCA9BC724D6CA /* dossier-6d91ee4227655be2-calm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B172850BABDE5BE267680340 /* dossier-6d91ee4227655be2-calm.jpg */; };
 		4C976E6AA419D71D8E3A1784 /* CanvasAgentWorldDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9385ED9BCD58A62201ADCC23 /* CanvasAgentWorldDestination.swift */; };
 		4D36D0CF4168CF3DB9656DF3 /* dossier-4b42878d497ca473-object1.png in Resources */ = {isa = PBXBuildFile; fileRef = C3147A5589CDED72551BC5B8 /* dossier-4b42878d497ca473-object1.png */; };
 		4DBFB1DD2A2CF1E4C2911868 /* dossier-product-6196533399287.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 40AEA2C38321128FC52F7EA8 /* dossier-product-6196533399287.jpg */; };
@@ -260,6 +261,7 @@
 		969E01B07575E71A226BA893 /* prototype-product-feature-salomon-6882430025799.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DF452154EC67EBCC6E2B03A /* prototype-product-feature-salomon-6882430025799.jpg */; };
 		97AAC846C268F2C7802B208B /* dossier-product-26446991587231.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2D630AD9E3278C896BA385CA /* dossier-product-26446991587231.jpg */; };
 		97E76E4E0480AA9785A6D61D /* GenerativeFeedInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1164B7CA48602B49F7D908FF /* GenerativeFeedInspector.swift */; };
+		981099FCBB56D38DBE5E838E /* dossier-6d91ee4227655be2-calm.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = ABC7FB351B1BF82F089B233A /* dossier-6d91ee4227655be2-calm.mp4 */; };
 		988B93E3649AC1B5738C25EC /* dossier-6d91ee4227655be2-object3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6D21112B24A4474A7083683 /* dossier-6d91ee4227655be2-object3.jpg */; };
 		98D83D0C0F84AEB561D147B1 /* dossier-5527c8904c1155d7-object0.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DCD8B01BC6324AC90A63A11 /* dossier-5527c8904c1155d7-object0.png */; };
 		98DFEBD7F08D2A3F5580130F /* dossier-review-library.json in Resources */ = {isa = PBXBuildFile; fileRef = C1F09598B357058811C824C7 /* dossier-review-library.json */; };
@@ -706,6 +708,7 @@
 		AA9D5906A69998EDBB387925 /* NextGenerationFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextGenerationFeedCard.swift; sourceTree = "<group>"; };
 		AB7E22A8C16DB6B0755FE858 /* DeliveryDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryDetailPage.swift; sourceTree = "<group>"; };
 		AB9814ED8FB1597FE8380CFA /* OrdersWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersWidget.swift; sourceTree = "<group>"; };
+		ABC7FB351B1BF82F089B233A /* dossier-6d91ee4227655be2-calm.mp4 */ = {isa = PBXFileReference; path = "dossier-6d91ee4227655be2-calm.mp4"; sourceTree = "<group>"; };
 		ABDB93701BAEF1FE5E631857 /* dossier-4b42878d497ca473-object1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "dossier-4b42878d497ca473-object1.jpg"; sourceTree = "<group>"; };
 		AD7C5AECC27CBFF98B8E1E8D /* GravityShadows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityShadows.swift; sourceTree = "<group>"; };
 		ADE99ED0E5A45B447A29C439 /* dossier-product-42472222141064.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "dossier-product-42472222141064.jpg"; sourceTree = "<group>"; };
@@ -714,6 +717,7 @@
 		AE9489015A1EBB73FED6C444 /* prototype-product-house-of-leon-7873592721581.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-house-of-leon-7873592721581.jpg"; sourceTree = "<group>"; };
 		AF15B9E17E009E05951942F7 /* ProductPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPage.swift; sourceTree = "<group>"; };
 		B00A32297420675EE361C168 /* dossier-6d91ee4227655be2-object1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "dossier-6d91ee4227655be2-object1.jpg"; sourceTree = "<group>"; };
+		B172850BABDE5BE267680340 /* dossier-6d91ee4227655be2-calm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "dossier-6d91ee4227655be2-calm.jpg"; sourceTree = "<group>"; };
 		B18262E716DCDD16CD3EDC9D /* dossier-product-90759102791067.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "dossier-product-90759102791067.jpg"; sourceTree = "<group>"; };
 		B1E6AE3B696D0E384D631284 /* TryFavesConfigurationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryFavesConfigurationSheet.swift; sourceTree = "<group>"; };
 		B22C8870A7F8F264871C2C53 /* prototype-product-standards-manual-9250967847128.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-9250967847128.jpg"; sourceTree = "<group>"; };
@@ -1049,6 +1053,8 @@
 				F54288FEA5A3CF5AD59A3850 /* dossier-4b42878d497ca473-object3.png */,
 				06F3BB752A0BECC0EA52F11D /* dossier-4b42878d497ca473-pair.jpg */,
 				2236F02C1C804821FDE89524 /* dossier-4b42878d497ca473-pairSquare.jpg */,
+				B172850BABDE5BE267680340 /* dossier-6d91ee4227655be2-calm.jpg */,
+				ABC7FB351B1BF82F089B233A /* dossier-6d91ee4227655be2-calm.mp4 */,
 				E840B3F253E4BE42038BD9F2 /* dossier-6d91ee4227655be2-look0.jpg */,
 				FA22E77218E31DEF0A41EB35 /* dossier-6d91ee4227655be2-look1.jpg */,
 				B6DC673A0C09FA656802383D /* dossier-6d91ee4227655be2-look1.mp4 */,
@@ -1608,6 +1614,8 @@
 				918055EEDF76855F634CF203 /* dossier-601abf8c7dca97ce-object3.png in Resources */,
 				80CD2D76CDBEE3CBC62C1B72 /* dossier-601abf8c7dca97ce-pair.jpg in Resources */,
 				BFD0E4B642F198D6156BBC0D /* dossier-601abf8c7dca97ce-pairSquare.jpg in Resources */,
+				4C3A2BB41D6BCA9BC724D6CA /* dossier-6d91ee4227655be2-calm.jpg in Resources */,
+				981099FCBB56D38DBE5E838E /* dossier-6d91ee4227655be2-calm.mp4 in Resources */,
 				CB2AF427D1D63D160DCC8A66 /* dossier-6d91ee4227655be2-look0.jpg in Resources */,
 				C6614A08B42030276A31AAF2 /* dossier-6d91ee4227655be2-look1.jpg in Resources */,
 				1FB152AF5B8676005B98D5C2 /* dossier-6d91ee4227655be2-look1.mp4 in Resources */,

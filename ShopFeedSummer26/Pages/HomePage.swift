@@ -1149,7 +1149,10 @@ struct HomePage: View {
                     || generativeSession.composition(for: spec) == .fisheye)
                     ? FeedCardStyle.foregroundBottomPadding + GravitySpacing.space16
                         + (entry.id == feedEntries.first?.id ? max(windowSafeAreaTopInset, GravitySpacing.space64) : 0)
-                    : FeedCardStyle.bottomNavigationClearance + GravitySpacing.space24
+                    : FeedCardStyle.bottomNavigationClearance + GravitySpacing.space24,
+                // cardHeight already reserves navigation/peek space; do not
+                // subtract that clearance a second time from the jacket footer.
+                visibleContentBottom: layout.cardHeight - GravitySpacing.space24
             )
 
         case let .suggestedCollections(presentation):

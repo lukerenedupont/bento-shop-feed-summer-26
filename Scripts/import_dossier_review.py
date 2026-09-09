@@ -120,6 +120,8 @@ def main():
             note='Generated styling studies, not exact renders of changed selections. Export prices have no currency metadata and are not displayed as verified prices.'))
     (OUT/'dossier-review-library.json').write_text(json.dumps(records,indent=2)+'\n')
     (OUT/'dossier-review-merchants.json').write_text(json.dumps(dict(merchants=list(merchants.values())),indent=2)+'\n')
+    from prepare_calm_jacket import prepare
+    prepare()
     for path in sorted(OUT.iterdir()):
         hashes.append(dict(file=path.name,bytes=path.stat().st_size,sha256=hashlib.sha256(path.read_bytes()).hexdigest()))
     (PROVENANCE/'asset-hashes.json').write_text(json.dumps(hashes,indent=2)+'\n')
