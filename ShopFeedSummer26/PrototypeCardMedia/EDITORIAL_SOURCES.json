@@ -1,0 +1,715 @@
+[
+  {
+    "merchant": "forom",
+    "product": 7914833051779,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0356/2795/8403/files/gallerwallmirrorsandporcupine-beaunaySQ_1100x_66a7927f-7385-46bd-8697-ab807198137b.webp?v=1697392113",
+    "file": "editorial-forom-7914833051779-0.jpg",
+    "crop": null,
+    "sha256": "37a3b7d27fa8e3062fd9a3a49dbac115d75aa4717bf526ed6e8a7bfc1a288dd4"
+  },
+  {
+    "merchant": "forom",
+    "product": 9080102322307,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0356/2795/8403/files/elyse_wall_mirror_mahogany.png?v=1782481684",
+    "file": "editorial-forom-9080102322307-0.jpg",
+    "crop": null,
+    "sha256": "17b18f3685b44b01f9829129faeb0538098d99ff96e3bcbaf8d9f5d64250ead3"
+  },
+  {
+    "merchant": "forom",
+    "product": 9080109072515,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0356/2795/8403/files/elyse_floor_mirror_off_white.png?v=1780589904",
+    "file": "editorial-forom-9080109072515-0.jpg",
+    "crop": null,
+    "sha256": "4c56fddb078a83a607fc9186a107120b54645dada68d89d110fad6d19d9d15a9"
+  },
+  {
+    "merchant": "extra-butter-salomon",
+    "product": 8151144530103,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0236/4333/files/L49125800-1.jpg?v=1753481777",
+    "file": "editorial-extra-butter-salomon-8151144530103-0.jpg",
+    "crop": [
+      214,
+      657,
+      1762,
+      1478
+    ],
+    "sha256": "c36eb800bd7260d00e648e5fa78567425ca716789951079d8321443e5891f90b"
+  },
+  {
+    "merchant": "extra-butter-salomon",
+    "product": 8349773922487,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0236/4333/files/L49111700-1.jpg?v=1773341418",
+    "file": "editorial-extra-butter-salomon-8349773922487-0.jpg",
+    "crop": [
+      227,
+      666,
+      1788,
+      1486
+    ],
+    "sha256": "2eb378c907f740c3b560ed238c29abc1b249a00eb8778303ccfce6764931f6b6"
+  },
+  {
+    "merchant": "extra-butter-salomon",
+    "product": 7919493251255,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0236/4333/files/L47762000-1_9f2dfe77-2d5f-4efe-8d80-759c45f3cb77.jpg?v=1738004890",
+    "file": "editorial-extra-butter-salomon-7919493251255-0.jpg",
+    "crop": [
+      219,
+      645,
+      1781,
+      1484
+    ],
+    "sha256": "948f02573ee612d6ef9437435ee0ae2b04802ef846ad9ba774c3a0eda4478c49"
+  },
+  {
+    "merchant": "standards-manual",
+    "product": 1424479363,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0883/7252/products/payment_01-2500.jpg?v=1476792940",
+    "file": "editorial-standards-manual-1424479363-0.jpg",
+    "crop": null,
+    "sha256": "191c25c57c21f6a978a36ba2c5b2c8b58bf4281937acfad9ac1509ac97030a97"
+  },
+  {
+    "merchant": "standards-manual",
+    "product": 5842516163,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0883/7252/products/SHOP_NASA.jpg?v=1476802297",
+    "file": "editorial-standards-manual-5842516163-0.jpg",
+    "crop": null,
+    "sha256": "8ea8126abf2b112a6425bb35a35cd064b2987350cbf6296f7ef81b2ae96a2531"
+  },
+  {
+    "merchant": "standards-manual",
+    "product": 92039479320,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0883/7252/products/SHOP_EPA.jpg?v=1509903774",
+    "file": "editorial-standards-manual-92039479320-0.jpg",
+    "crop": null,
+    "sha256": "974be298ca1aeaa66eade5f981af1ec6c9f8b1a20387a72f0d317836118e9351"
+  },
+  {
+    "merchant": "fellow",
+    "product": 7507479003236,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0057/6235/1219/files/Web_PDP_Aiden_Black_1.png?v=1773352095",
+    "file": "editorial-fellow-7507479003236-0.jpg",
+    "crop": [
+      281,
+      420,
+      1284,
+      1749
+    ],
+    "sha256": "71e5fc4a9bda9a1e1f3e56f648d33616fdaa2816301eb63b153b9a9f7d2f9b7e"
+  },
+  {
+    "merchant": "fellow",
+    "product": 2055410221171,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0057/6235/1219/files/Web_PDP_StaggEKGElectricKettle-Pro_Black_1.png?v=1773351258",
+    "file": "editorial-fellow-2055410221171-0.jpg",
+    "crop": [
+      20,
+      572,
+      1517,
+      1720
+    ],
+    "sha256": "7fb16d762f6f7f4296aa482649316cfc86e6a18fe51ccef70e432f94b8815f1a"
+  },
+  {
+    "merchant": "doiy",
+    "product": 8491003314332,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0659/9376/9116/files/DYVASLGOLF.jpg?v=1764060542",
+    "file": "editorial-doiy-8491003314332-0.jpg",
+    "crop": [
+      304,
+      208,
+      1419,
+      1881
+    ],
+    "sha256": "ef15b531c6452b8c93192d92274abdb1bca0ad1b115c2e540ec2270a87b7a282"
+  },
+  {
+    "merchant": "doiy",
+    "product": 8491003314332,
+    "index": 1,
+    "url": "https://cdn.shopify.com/s/files/1/0659/9376/9116/files/DYVASLGOLF-3.jpg?v=1764060565",
+    "file": "editorial-doiy-8491003314332-1.jpg",
+    "crop": null,
+    "sha256": "0a28150fac213e2284bfaf9d9876192745ea78bfc075322cf87b210d26f19462"
+  },
+  {
+    "merchant": "ceremonia",
+    "product": 7219216580772,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0414/8301/0212/files/amber-glass-jar-of-ceremonia-papaya-scalp-scrub-exfoliating-shampoo-treatment-wi-eskkq0.webp?v=1783716067",
+    "file": "editorial-ceremonia-7219216580772-0.jpg",
+    "crop": null,
+    "sha256": "aed4a25131389ce17afbe6e105ed3799efe5d0c3658a4c72b97baeb3256652eb"
+  },
+  {
+    "merchant": "ceremonia",
+    "product": 7219216580772,
+    "index": 3,
+    "url": "https://cdn.shopify.com/s/files/1/0414/8301/0212/files/person-massaging-white-papaya-scalp-scrub-into-wet-dark-hair-along-the-hairline-xnaxtk.webp?v=1783716111",
+    "file": "editorial-ceremonia-7219216580772-3.jpg",
+    "crop": null,
+    "sha256": "3fe86771bdf02b3b332202e821d562f68a1492340b37343737e31f5c6bc26ef5"
+  },
+  {
+    "merchant": "ceremonia",
+    "product": 6060165300388,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0414/8301/0212/files/ceremonia-guava-leave-in-conditioner-deep-hydration-repair-cream-in-an-amber-pum-82tlod.webp?v=1783715395",
+    "file": "editorial-ceremonia-6060165300388-0.jpg",
+    "crop": null,
+    "sha256": "eb6559199f2ff3da4dd71c01fd7ec38b3b0d18174502c851139149012b0be7cb"
+  },
+  {
+    "merchant": "ceremonia",
+    "product": 15369056321905,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0414/8301/0212/files/Ceremonia_ECOMM_HairTowel-Cream_4x5_c29ec441-5b4e-4e1d-9c7f-d6cd96b3880e.jpg?v=1767030994",
+    "file": "editorial-ceremonia-15369056321905-0.jpg",
+    "crop": null,
+    "sha256": "20c7bf369d1b760b7edd32092d8ec34fe4aab00d1df4649a84229793e5334f70"
+  },
+  {
+    "merchant": "nocs",
+    "product": 10432692846871,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0232/3270/8686/files/Pro-NOC-PRO-GN2-main17194187966781.webp?v=1773419212",
+    "file": "editorial-nocs-10432692846871-0.jpg",
+    "crop": [
+      16,
+      220,
+      1000,
+      817
+    ],
+    "sha256": "1797f7f97f0c12cae2bdc447ecade7f0cf8976c553dafefa3690275605ae51a9"
+  },
+  {
+    "merchant": "nocs",
+    "product": 6591770722382,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0232/3270/8686/files/NOC-ZTU-BL4-profile_main.jpg?v=1764727839",
+    "file": "editorial-nocs-6591770722382-0.jpg",
+    "crop": [
+      49,
+      178,
+      947,
+      864
+    ],
+    "sha256": "5eaa2abb835ca727d69f69d166864e211f52894d3983358e2c5bf1b321ad179d"
+  },
+  {
+    "merchant": "coming-soon",
+    "product": 9603401253170,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/1343/6503/files/FABI_SHOOT_6544962.jpg?v=1770146120",
+    "file": "editorial-coming-soon-9603401253170-0.jpg",
+    "crop": null,
+    "sha256": "1e3a8687b44be58346a23471948d3d3cbc9dd5a654f997daebb80ead26d358f8"
+  },
+  {
+    "merchant": "coming-soon",
+    "product": 9908030275890,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/1343/6503/files/FABI_SHOOT_6243752.jpg?v=1769200979",
+    "file": "editorial-coming-soon-9908030275890-0.jpg",
+    "crop": null,
+    "sha256": "b3eb3ab69db8eb5e3b4f45abbd432b3338f1508e13ae874a91c978a1495ef85e"
+  },
+  {
+    "merchant": "coming-soon",
+    "product": 9603148841266,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/1343/6503/files/FABI_SHOOT_797402.jpg?v=1786054572",
+    "file": "editorial-coming-soon-9603148841266-0.jpg",
+    "crop": null,
+    "sha256": "bf688072bcbdda2940aa7c68f16138f6f6307f7d6f21255569c2cfa39d3952ac"
+  },
+  {
+    "merchant": "kinto",
+    "product": 2214011961392,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0146/0862/9808/products/27576.jpg?v=1595805119",
+    "file": "editorial-kinto-2214011961392-0.jpg",
+    "crop": [
+      239,
+      305,
+      733,
+      678
+    ],
+    "sha256": "0ae4d20b173df11ef9f2166f8ab2b77c1c4938b1b55723c09b85f29f826d454c"
+  },
+  {
+    "merchant": "kinto",
+    "product": 2214011961392,
+    "index": 1,
+    "url": "https://cdn.shopify.com/s/files/1/0146/0862/9808/products/scs_s02_w_pd_top_001_0d533b99-6c77-4ae3-8110-cbd15d1210a1.jpg?v=1595805079",
+    "file": "editorial-kinto-2214011961392-1.jpg",
+    "crop": null,
+    "sha256": "ddfa1d488220c26390caead28dfa444b226573e97ec631c27304ca3cfb067392"
+  },
+  {
+    "merchant": "kinto",
+    "product": 2214022053936,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0146/0862/9808/products/8434.jpg?v=1550833192",
+    "file": "editorial-kinto-2214022053936-0.jpg",
+    "crop": [
+      288,
+      337,
+      712,
+      664
+    ],
+    "sha256": "29ff310281a138c3e4df1c2bae28b4b9f48b27a819b198f84398f952f78d17c3"
+  },
+  {
+    "merchant": "kinto",
+    "product": 2214023331888,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0146/0862/9808/products/23107.jpg?v=1550833252",
+    "file": "editorial-kinto-2214023331888-0.jpg",
+    "crop": [
+      316,
+      281,
+      680,
+      712
+    ],
+    "sha256": "fb3060dba463edc00137285502cd475f022cda38e7a0e676140d262a48b28369"
+  },
+  {
+    "merchant": "house-of-leon",
+    "product": 7873592688813,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0593/2217/1565/files/chair-1-camel-nubuck.jpg?v=1742496762",
+    "file": "editorial-house-of-leon-7873592688813-0.jpg",
+    "crop": null,
+    "sha256": "410894456d04c105a24e511edab260acf48cd37cb3392fe171fbd122b4a8d7fb"
+  },
+  {
+    "merchant": "house-of-leon",
+    "product": 7873592688813,
+    "index": 4,
+    "url": "https://cdn.shopify.com/s/files/1/0593/2217/1565/files/chrome-nubuck-chair.jpg?v=1742496747",
+    "file": "editorial-house-of-leon-7873592688813-4.jpg",
+    "crop": null,
+    "sha256": "c9f6c9824f7e8fd8706f19748a935f7e634a1854199122f82617af45ad89503b"
+  },
+  {
+    "merchant": "house-of-leon",
+    "product": 7873592721581,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0593/2217/1565/files/metal-black-leather-chair-house-of-leon-lifestyle.jpg?v=1775260744",
+    "file": "editorial-house-of-leon-7873592721581-0.jpg",
+    "crop": null,
+    "sha256": "ddb56c74d902642c0659d88914dbcc3e8495e0bc5f11666e9ca34bd966778826"
+  },
+  {
+    "merchant": "moma",
+    "product": 9604489248998,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0623/7962/2630/files/3b5c586c-e76c-4620-b971-e53a46ef05ac.jpg?v=1768317967",
+    "file": "editorial-moma-9604489248998-0.jpg",
+    "crop": [
+      570,
+      153,
+      1480,
+      1920
+    ],
+    "sha256": "a68047c703ff7e17db01ccfcc1bc2cc5499bff7f42ce96d08a32e47c6b080ced"
+  },
+  {
+    "merchant": "moma",
+    "product": 9604489248998,
+    "index": 1,
+    "url": "https://cdn.shopify.com/s/files/1/0623/7962/2630/files/c122148b-8768-4c1a-83cf-b4fa3a7f2908.jpg?v=1768317967",
+    "file": "editorial-moma-9604489248998-1.jpg",
+    "crop": null,
+    "sha256": "51c6720251dcfaf055e81967aab834d8e9847c8beec650a293eba757024f2457"
+  },
+  {
+    "merchant": "moma",
+    "product": 8398523367654,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0623/7962/2630/files/152568_a_30a04bfe-4521-4ca1-b94f-837cb711f430.jpg?v=1704233168",
+    "file": "editorial-moma-8398523367654-0.jpg",
+    "crop": [
+      187,
+      162,
+      3566,
+      3614
+    ],
+    "sha256": "be55362b51d8716a51e1fd88c61e5a6d183262b718f367416f88f676df236533"
+  },
+  {
+    "merchant": "moma",
+    "product": 9686879502566,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0623/7962/2630/files/d5a9f30b-6c44-4af0-81cb-3564e2613650.jpg?v=1779136875",
+    "file": "editorial-moma-9686879502566-0.jpg",
+    "crop": [
+      342,
+      255,
+      1698,
+      1862
+    ],
+    "sha256": "ea9989a408e2c31c2005c8506737ae6bbdef707add5de5d76f8764710ab7187a"
+  },
+  {
+    "merchant": "draw-down",
+    "product": 1591926554714,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/1681/2497/products/TheoryofTypeDesign_21s.jpg?v=1636908151",
+    "file": "editorial-draw-down-1591926554714-0.jpg",
+    "crop": null,
+    "sha256": "4f64067a47b900ac169d5066da9dfa66d6a91d294223d129a2df5121f25564c0"
+  },
+  {
+    "merchant": "draw-down",
+    "product": 1591926554714,
+    "index": 1,
+    "url": "https://cdn.shopify.com/s/files/1/1681/2497/files/IMG_5981.jpg?v=1703088810",
+    "file": "editorial-draw-down-1591926554714-1.jpg",
+    "crop": null,
+    "sha256": "0a7c35e5df466c08dfe0c9e72095d2fabc019620f89f5ed2d0247cbab4bc2f57"
+  },
+  {
+    "merchant": "draw-down",
+    "product": 7804062892286,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/1681/2497/products/DesigningTypeRevivals.jpg?v=1659718308",
+    "file": "editorial-draw-down-7804062892286-0.jpg",
+    "crop": null,
+    "sha256": "c10f1163ed77f6f772e565595c20638fcdab19928b58cb2510b9a2001d733ba4"
+  },
+  {
+    "merchant": "draw-down",
+    "product": 8336413458686,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/1681/2497/files/New_Aesthetic_1.jpg?v=1711895373",
+    "file": "editorial-draw-down-8336413458686-0.jpg",
+    "crop": null,
+    "sha256": "9e8d2efdbee81582d56af43ec491d25f8a7db432be4c1dec50866394e7787027"
+  },
+  {
+    "merchant": "babyletto",
+    "product": 7652167647286,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/1801/7811/files/M27901W-1_M27901W_crib-front-1.1.jpg?v=1786412074",
+    "file": "editorial-babyletto-7652167647286-0.jpg",
+    "crop": null,
+    "sha256": "c20d3366e8cfb63dadb5fddf9435b0865bece0afbe5d8628a29e9e71d5a91696"
+  },
+  {
+    "merchant": "babyletto",
+    "product": 7652167942198,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/1801/7811/files/M27902HY-1_M27902HY_changing_20table-front-1.1.jpg?v=1786412102",
+    "file": "editorial-babyletto-7652167942198-0.jpg",
+    "crop": null,
+    "sha256": "18f0bc5c67157d8cd954102b5af18b0e867ee6c82e218fba38b81b50150d89e6"
+  },
+  {
+    "merchant": "babyletto",
+    "product": 7784483389494,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/1801/7811/files/M27916PY-1_M27916PY_dresser-front-1.1.jpg?v=1786412079",
+    "file": "editorial-babyletto-7784483389494-0.jpg",
+    "crop": null,
+    "sha256": "7b1503ab145983b2207d1677980cd60a73cf8726995a8e77ebed20b06a73fb85"
+  },
+  {
+    "merchant": "feature-salomon",
+    "product": 6753846853703,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0408/9909/products/Salomon-XT-4-OG---White-Ebony-Silver-Metallic-L47133000---01-31-23---Feature--JP-KN.jpg?v=1676328722",
+    "file": "editorial-feature-salomon-6753846853703-0.jpg",
+    "crop": [
+      0,
+      287,
+      1024,
+      847
+    ],
+    "sha256": "db310db8616e6846a89339fa5b982d56a163c4fa349091ccfb59c55a24d6d10d"
+  },
+  {
+    "merchant": "feature-salomon",
+    "product": 6753846919239,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0408/9909/products/Salomon-XT-4-OG---Black-Ebony-Silver-Metallic-L47132900---03-05-23---Feature--VR-KN-5.jpg?v=1678634272",
+    "file": "editorial-feature-salomon-6753846919239-0.jpg",
+    "crop": [
+      0,
+      278,
+      1024,
+      845
+    ],
+    "sha256": "b3316bc374ede0c8baa15aad7deda5008ae3b678a3a98367d5ca884df22d024a"
+  },
+  {
+    "merchant": "feature-salomon",
+    "product": 7243015094343,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0408/9909/files/XT-6GTX-Delicioso-Tee-Brilli-L49202100-8.jpg?v=1776282948",
+    "file": "editorial-feature-salomon-7243015094343-0.jpg",
+    "crop": [
+      0,
+      277,
+      1024,
+      840
+    ],
+    "sha256": "7028b2b735b13e572348fcd5f8a9d74d529df57dc8bb745d0df4371c26e143cc"
+  },
+  {
+    "merchant": "rhode",
+    "product": 8070391660782,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0606/5451/8510/files/glazing-milk-sq.png?v=1746170157",
+    "file": "editorial-rhode-8070391660782-0.jpg",
+    "crop": [
+      567,
+      37,
+      1188,
+      1661
+    ],
+    "sha256": "413b3fa4af076504e48179db95f0a538b0915b870335cde99abc591993965bb7"
+  },
+  {
+    "merchant": "rhode",
+    "product": 8070391660782,
+    "index": 2,
+    "url": "https://cdn.shopify.com/s/files/1/0606/5451/8510/files/milk-video-mobile.jpg?v=1776700766",
+    "file": "editorial-rhode-8070391660782-2.jpg",
+    "crop": null,
+    "sha256": "36a98f509664523c356b6b9711895a284da10085dd38a7789ec83df545c251d8"
+  },
+  {
+    "merchant": "rhode",
+    "product": 7672597414126,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0606/5451/8510/products/brc-2000x2000_1.png?v=1677822162",
+    "file": "editorial-rhode-7672597414126-0.jpg",
+    "crop": [
+      570,
+      119,
+      1447,
+      1870
+    ],
+    "sha256": "3f9adbebb75c04b59bcbdb2b2ea9021fec423ef12a86992286740ab0a22caddc"
+  },
+  {
+    "merchant": "rhode",
+    "product": 8858064388334,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0606/5451/8510/files/mist-menu-png-2000x2000_bf2f0f50-ad7a-4ffb-bd85-a5dc7ab67aec.png?v=1776707735",
+    "file": "editorial-rhode-8858064388334-0.jpg",
+    "crop": [
+      687,
+      137,
+      1343,
+      1845
+    ],
+    "sha256": "8bc7384b4a43caa8f52495c411e99d6c7e1881c3a7d04a16bf02e826cddee6ea"
+  },
+  {
+    "merchant": "lichen",
+    "product": 12518383059262,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0026/8907/3221/files/DSCF1596.jpg?v=1784402191",
+    "file": "editorial-lichen-12518383059262-0.jpg",
+    "crop": null,
+    "sha256": "6b68b2f378ddb43303bc4b8e4731bd2f5483d002ad28ba47b3a398c59ad0fa84"
+  },
+  {
+    "merchant": "lichen",
+    "product": 12374848700734,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0026/8907/3221/files/HOVA1151.jpg?v=1740173843",
+    "file": "editorial-lichen-12374848700734-0.jpg",
+    "crop": null,
+    "sha256": "8385a79e93a9f9709eb3ad19b6fbffc2ee443e27eee40b479849e3154622322e"
+  },
+  {
+    "merchant": "lalo",
+    "product": 4363480432704,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0037/5062/5344/products/The-Chair-Coconut-02.jpg?v=1762275619",
+    "file": "editorial-lalo-4363480432704-0.jpg",
+    "crop": [
+      96,
+      103,
+      822,
+      1141
+    ],
+    "sha256": "5d6a7d7092268ad55a873bba846c4ab690048a2a4db57fa164d79ac8f6e837c5"
+  },
+  {
+    "merchant": "lalo",
+    "product": 6603936137280,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0037/5062/5344/products/The-Booster-Seat-Coconut-A5.jpg?v=1762277209",
+    "file": "editorial-lalo-6603936137280-0.jpg",
+    "crop": [
+      132,
+      232,
+      789,
+      932
+    ],
+    "sha256": "982152f4ac095de5c4c32b67ba1eb0aaa48269fb0377c5333035cb919a2d7c3d"
+  },
+  {
+    "merchant": "lalo",
+    "product": 7134036885568,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0037/5062/5344/files/The-Hook-On-Chair-Licorice-01_50895634-15eb-4213-80ba-2e043091e595.jpg?v=1785787199",
+    "file": "editorial-lalo-7134036885568-0.jpg",
+    "crop": [
+      80,
+      212,
+      913,
+      951
+    ],
+    "sha256": "93f92e67fd09d2bca0140a3fe9187b941ebb944c3a46cd74cb83251a09f8ac72"
+  },
+  {
+    "merchant": "doiy",
+    "product": 8300748931228,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0659/9376/9116/files/DYVASUNYE_PROD_GB_72_8c9009b4-5b20-4495-815d-126a2d372c99.jpg?v=1737721533",
+    "file": "editorial-doiy-8300748931228-0.jpg",
+    "crop": [
+      164,
+      476,
+      1458,
+      1728
+    ],
+    "sha256": "de6a897b03e36fa5ce5f69745da3bdea016ad17438e978461c02d08d73d9c384"
+  },
+  {
+    "merchant": "doiy",
+    "product": 8300748931228,
+    "index": 1,
+    "url": "https://cdn.shopify.com/s/files/1/0659/9376/9116/files/DYVASUNYE_AMB12_72.jpg?v=1748263612",
+    "file": "editorial-doiy-8300748931228-1.jpg",
+    "crop": null,
+    "sha256": "f3870e9baa100864ba17450ce656121c2c4d8fdc965259b6f9bdc844e5c83c7d"
+  },
+  {
+    "merchant": "doiy",
+    "product": 9135917301916,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0659/9376/9116/files/DYVASXSBFAY__1_4207e5cb-9be0-4a66-b58b-77cc3832b857.jpg?v=1782739709",
+    "file": "editorial-doiy-9135917301916-0.jpg",
+    "crop": [
+      116,
+      313,
+      1375,
+      1844
+    ],
+    "sha256": "6aaffecc517cdeccf881f182e051fe3f2473ff820f630b89e01587633945a778"
+  },
+  {
+    "merchant": "doiy",
+    "product": 8712550678684,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0659/9376/9116/files/DYVASMSRI.jpg?v=1765812307",
+    "file": "editorial-doiy-8712550678684-0.jpg",
+    "crop": [
+      465,
+      91,
+      1236,
+      1860
+    ],
+    "sha256": "7e0348d62414ff29d1148a0620fe4b91f6eaceeccd386032e55828e54614c7f4"
+  },
+  {
+    "merchant": "fellow",
+    "product": 4807420739684,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0057/6235/1219/files/Web_PDP_CarterMoveMug-16oz_Sienna_2.png?v=1774035954",
+    "file": "editorial-fellow-4807420739684-0.jpg",
+    "crop": [
+      203,
+      324,
+      1239,
+      1834
+    ],
+    "sha256": "63f499c10d0f86681d33d01678a97cf73a87312d1a80aff95e66b3e44789792a"
+  },
+  {
+    "merchant": "fellow",
+    "product": 4807420739684,
+    "index": 3,
+    "url": "https://cdn.shopify.com/s/files/1/0057/6235/1219/files/Carter-MoveMug-Sienna-16oz-wSplashGuard.png?v=1774035928",
+    "file": "editorial-fellow-4807420739684-3.jpg",
+    "crop": [
+      419,
+      281,
+      2348,
+      3000
+    ],
+    "sha256": "1ac53a2656956a535b4f5284158672fdf6876510ef0ebef28ef1bea8d4d6170e"
+  },
+  {
+    "merchant": "fellow",
+    "product": 2055409762419,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0057/6235/1219/products/Stagg-Tasting-Glasses-01.png?v=1757441368",
+    "file": "editorial-fellow-2055409762419-0.jpg",
+    "crop": [
+      147,
+      723,
+      1872,
+      2000
+    ],
+    "sha256": "10d6afaea0ddfba2c8feabecce5c71ab2d2a9fb21e02390cd7510a8165623be1"
+  },
+  {
+    "merchant": "moma",
+    "product": 9787655160038,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0623/7962/2630/files/02942c29-1db5-4a0b-83db-d5e1884814cd.jpg?v=1786392518",
+    "file": "editorial-moma-9787655160038-0.jpg",
+    "crop": [
+      138,
+      154,
+      1649,
+      1921
+    ],
+    "sha256": "da7fef9dc36bfa315ff531ea7f37751b34962246f7d6c96f1417bc69629e36e0"
+  },
+  {
+    "merchant": "moma",
+    "product": 9787655160038,
+    "index": 1,
+    "url": "https://cdn.shopify.com/s/files/1/0623/7962/2630/files/84496249-e272-4d11-8648-b3ebd43c2386.jpg?v=1786050103",
+    "file": "editorial-moma-9787655160038-1.jpg",
+    "crop": null,
+    "sha256": "7d8833bd050e02abbe455e6f24d31ef8ab22a8d09c7dda5a69c85050ba762113"
+  },
+  {
+    "merchant": "moma",
+    "product": 8909829603558,
+    "index": 0,
+    "url": "https://cdn.shopify.com/s/files/1/0623/7962/2630/files/f69d0706-6548-47c1-9074-f7b68e43670b.jpg?v=1736905335",
+    "file": "editorial-moma-8909829603558-0.jpg",
+    "crop": [
+      437,
+      87,
+      1684,
+      1969
+    ],
+    "sha256": "07a908d372a90ffe5f23bcfb82b6f8bbf4cf97fddfe8a62e3f922d931a50bd8b"
+  }
+]

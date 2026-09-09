@@ -1,6 +1,31 @@
-# Generative Shop Feed — steerable feel test
+# Generative Shop Feed — twenty-card review
 
-## Question
+## Current prototype
+
+Twenty authored commerce scenes demonstrate possible generative output using 52 canonical products from 17 merchants. This is **not a live AI generator**. `main` is the confirmed native visual and flick-and-stick reference; all work stays on `feed-interactive-cards`.
+
+The approved Graphic standards card is preserved. The rejected outfit/chair treatments are outside the default sequence. The new cards still require human visual approval; twenty is a coverage target, not a quality certificate.
+
+```sh
+./Scripts/run_generative_feed.sh feed 0
+./Scripts/run_generative_feed.sh gallery 2   # Approved books
+./Scripts/run_generative_feed.sh consumer 0
+python3 Scripts/prepare_editorial_feed.py --check
+```
+
+Indices are `0...19`. `PrototypeCardMedia/EDITORIAL_PLANS.json` holds shopping purposes, canonical references, bounded image placements, headline anchors and trusted palette/interaction choices. `EditorialFeedCatalog.swift` validates and resolves them; `EditorialCommerceFeedCard.swift` composes native scenes rather than supplying twenty separate hard-coded views. Existing Shop typography, navigation and transitions remain shared.
+
+Photographic stories keep the photographed product as their anchor and open related products directly. Selectable product scenes couple their photo, title, price and destination to session selection. Other interactions include horizontal footwear browsing and a canonical book cover/interior reveal. Plans are authored; regeneration only revalidates them. Inventory and prices are frozen catalog data, not a live availability check.
+
+The media script bundles 62 canonical gallery images, trims pale studio margins with recorded crop rectangles, and preserves source URLs and derivative hashes in `EDITORIAL_SOURCES.json`. The earlier nineteen images remain. No generated product imagery, invented reviews, measurements or account history are used.
+
+`EditorialFeedUITests` exercises the twenty-card native scrolling sequence and representative identity/selection handoffs. Full legacy regression and physical-device QA remain separate pending work. Review in the actual feed, including neighboring cards; gallery screenshots alone cannot establish quality.
+
+## Historical six-job scaffold
+
+The remainder records the previous experiment, available via `-legacyGenerativeJobs`. Its six-item indices and earlier validation results do not describe the current default.
+
+### Original question
 
 Can a shopping job produce the right small experience—and can we change its inputs, composition and state at the pace of a design discussion?
 

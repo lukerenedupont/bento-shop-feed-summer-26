@@ -18,7 +18,11 @@ The finite set of trusted presentation and interaction structures available to g
 
 ## Card specification
 
-The interface between generation and rendering: stable identity, source signal, shopping job, canonical anchor/candidate references, semantic composition, copy, local interaction, context and rationale. Alternate compositions retain the same entities and session state. Arbitrary fonts, color values, spacing and animation curves are not generated.
+The interface between generation and rendering: stable identity, source signal, shopping job, canonical anchor/candidate references, semantic composition, copy, local interaction, context and rationale. Alternate compositions retain the same entities and session state. The editorial prototype adds bounded normalized media placements, headline anchors and trusted palette choices. Native typography, navigation clearance and animation behavior remain renderer-owned; arbitrary executable layouts are not accepted.
+
+## Editorial scene plan
+
+An authored, catalog-backed example of a possible generated card. Twenty plans currently demonstrate the composition boundary; no model is invoked. Photographic scenes retain a canonical pictured anchor and link to related products. Selectable product scenes couple their media and commerce handoff to session selection. User visual approval is separate from schema validation and successful rendering.
 
 ## Content grouping
 

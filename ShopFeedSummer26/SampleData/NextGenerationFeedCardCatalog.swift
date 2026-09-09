@@ -17,6 +17,9 @@ enum NextGenerationFeedCardCatalog {
         signal: PrototypeShoppingSignal, merchants: [SampleMerchant],
         jobOverride: PrototypeShoppingJob? = nil, generation: Int = 0
     ) -> NextGenerationFeedCardSpec? {
+        if let plan = EditorialFeedCatalog.plan(for: signal.id) {
+            return EditorialFeedCatalog.specification(plan, merchants: merchants, generation: generation)
+        }
         let observed = signal.products.compactMap { NextGenerationFeedCardSpec.resolve($0, in: merchants) }
         guard observed.count == signal.products.count,
               let merchant = merchants.first(where: { $0.id == signal.merchantID }) else { return nil }

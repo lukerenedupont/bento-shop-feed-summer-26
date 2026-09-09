@@ -41,7 +41,7 @@ struct NextGenerationFeedGallery: View {
                                 .accessibilityLabel("Previous experience")
                             Spacer()
                             Text(session.designMode
-                                ? "\(selectedIndex + 1) / \(cards.count) · \(session.composition(for: session.resolve(card, merchants: merchants)).rawValue)"
+                                ? "\(selectedIndex + 1) / \(cards.count) · \(EditorialFeedCatalog.plan(for: card.signal.id)?.treatment.capitalized ?? session.composition(for: session.resolve(card, merchants: merchants)).rawValue)"
                                 : "\(selectedIndex + 1) of \(cards.count)")
                                 .font(GravityFont.semiBold.fixedFont(size: 14))
                             Spacer()

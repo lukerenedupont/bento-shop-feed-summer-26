@@ -7,12 +7,13 @@ DERIVED="/tmp/pi-feed-interactive-cards-derived"
 BUNDLE="com.shopify.purl.prototype.shop.feed.summer.26"
 MODE="${1:-feed}"
 INDEX="${2:-0}"
-case "$MODE" in feed|gallery|consumer) ;; *) echo "Usage: $0 [feed|gallery|consumer] [0...5]"; exit 2 ;; esac
-case "$INDEX" in 0|1|2|3|4|5) ;; *) echo "Card index must be 0...5"; exit 2 ;; esac
+case "$MODE" in feed|gallery|consumer) ;; *) echo "Usage: $0 [feed|gallery|consumer] [0...19]"; exit 2 ;; esac
+case "$INDEX" in [0-9]|1[0-9]) ;; *) echo "Card index must be 0...19"; exit 2 ;; esac
 mkdir -p .build/generative-review
 xcrun simctl boot "$SIM" 2>/dev/null || true
 xcrun simctl bootstatus "$SIM" -b
 python3 Scripts/prepare_generative_demo_media.py --check
+python3 Scripts/prepare_editorial_feed.py --check
 xcodegen generate
 if ! xcodebuild -project ShopFeedSummer26.xcodeproj -scheme ShopFeedSummer26 \
     -configuration Debug -destination "platform=iOS Simulator,id=$SIM" \

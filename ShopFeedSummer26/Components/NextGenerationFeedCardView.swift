@@ -41,7 +41,14 @@ struct NextGenerationFeedCardView: View {
         GenerativeFeedStyle.surface(for: spec)
             .frame(width: width, height: height)
             .overlay(alignment: .topLeading) {
-                if session.composition(for: spec) == .merchant {
+                if let plan = EditorialFeedCatalog.plan(for: spec.signal.id), plan.treatment != "books" {
+                    EditorialCommerceFeedCard(
+                        plan: plan, spec: spec, products: products, session: session,
+                        width: width, height: height,
+                        topPadding: foregroundTopPadding, bottomPadding: bottomContentPadding,
+                        onInspect: { showsInspector = true }, onOpen: { detailProduct = $0 }
+                    )
+                } else if session.composition(for: spec) == .merchant {
                     GenerativeEditorialMerchantCard(
                         spec: spec, products: products, session: session,
                         width: width, height: height,
@@ -383,7 +390,7 @@ struct NextGenerationFeedCardView: View {
     private var actionControls: some View {
         HStack(spacing: GravitySpacing.space12) {
             VStack(alignment: .leading, spacing: 4) {
-                if spec.interaction != .swap {
+                if spec.interaction != .swap || ProcessInfo.processInfo.arguments.contains("-legacyGenerativeJobs") {
                     Text(progressLabel)
                         .font(GravityFont.medium.fixedFont(size: 13))
                         .foregroundStyle(ink.opacity(0.65))
@@ -505,7 +512,8 @@ struct GenerativeProductMedia: View {
         let name = "prototype-product-\(item.merchant.id)-\(item.product.id)"
         if let presentation, let local = Bundle.main.url(forResource: "\(name)-\(presentation)", withExtension: "jpg") { return local }
         let local = Bundle.main.url(forResource: name, withExtension: "jpg")
-        return local ?? item.product.imageURL.flatMap(URL.init(string:))
+        let editorial = Bundle.main.url(forResource: "editorial-\(item.merchant.id)-\(item.product.id)-0", withExtension: "jpg")
+        return local ?? editorial ?? item.product.imageURL.flatMap(URL.init(string:))
     }
     var body: some View {
         GeometryReader { proxy in

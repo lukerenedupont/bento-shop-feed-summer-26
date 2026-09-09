@@ -21,7 +21,7 @@ struct GenerativePrototypeTools: ViewModifier {
                         Text("Preview the shopping feed")
                             .font(GravityFont.expressiveSemiBold.fixedFont(size: 28))
                         Text("Real products. Simulated activity.").font(.headline)
-                        Text("This prototype uses an authored Luke scenario—not your actual purchases, saves or searches. Selections stay on this device for this session. No purchases or account changes are made.")
+                        Text("These cards are authored examples of generative output, using real merchant catalogs and photography. No AI model is called, and activity is simulated—not your actual purchases, saves or searches. Selections last only for this session. No purchases or account changes are made.")
                         Text("After this setup, the feed is shown without debug labels. Long-press any card heading to inspect or direct it.")
                             .foregroundStyle(.secondary)
                         Button("Preview feed") { session.enterConsumerPreview() }

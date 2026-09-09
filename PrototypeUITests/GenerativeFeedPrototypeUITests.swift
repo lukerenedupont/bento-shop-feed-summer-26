@@ -4,7 +4,7 @@ import XCTest
 final class GenerativeFeedPrototypeUITests: XCTestCase {
     private func launchCard(_ index: Int) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments = ["-nextGenerationGallery", String(index), "-feedDesignMode"]
+        app.launchArguments = ["-nextGenerationGallery", String(index), "-feedDesignMode", "-legacyGenerativeJobs"]
         app.launch()
         XCTAssertTrue(app.staticTexts["generative.heading"].waitForExistence(timeout: 10))
         return app
@@ -85,7 +85,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
 
     func testRoomHeroUsesTheFeedAndCarriesSwipedSelection() {
         let app = XCUIApplication()
-        app.launchArguments = ["-openNextGenerationCard", "0"]
+        app.launchArguments = ["-openNextGenerationCard", "0", "-legacyGenerativeJobs"]
         app.launch()
         XCTAssertTrue(app.buttons["generative.previewConsumer"].waitForExistence(timeout: 10))
         app.buttons["generative.previewConsumer"].tap()
@@ -115,7 +115,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
 
     func testConsumerPreviewDisclosesFixturesThenHidesDesignChrome() {
         let app = XCUIApplication()
-        app.launchArguments = ["-nextGenerationGallery", "0"]
+        app.launchArguments = ["-nextGenerationGallery", "0", "-legacyGenerativeJobs"]
         app.launch()
         XCTAssertTrue(app.buttons["generative.previewConsumer"].waitForExistence(timeout: 10))
         app.buttons["generative.previewConsumer"].tap()
@@ -221,7 +221,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
 
     func testFirstCardsInConsumerFeedHaveClearNavigationAndReachableDecisions() {
         let app = XCUIApplication()
-        app.launchArguments = ["-openNextGenerationCard", "0"]
+        app.launchArguments = ["-openNextGenerationCard", "0", "-legacyGenerativeJobs"]
         app.launch()
         XCTAssertTrue(app.buttons["generative.previewConsumer"].waitForExistence(timeout: 10))
         app.buttons["generative.previewConsumer"].tap()
@@ -295,7 +295,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
 
     func testFeedScrollKeepsCardSelection() {
         let app = XCUIApplication()
-        app.launchArguments = ["-feedDesignMode", "-openNextGenerationCard", "0"]
+        app.launchArguments = ["-feedDesignMode", "-openNextGenerationCard", "0", "-legacyGenerativeJobs"]
         app.launch()
         let action = app.buttons["generative.primaryAction"].firstMatch
         XCTAssertTrue(action.waitForExistence(timeout: 10))
@@ -308,7 +308,7 @@ final class GenerativeFeedPrototypeUITests: XCTestCase {
 
     func testFeedShellSwapIsReachableAboveNavigation() {
         let app = XCUIApplication()
-        app.launchArguments = ["-feedDesignMode", "-openNextGenerationCard", "0"]
+        app.launchArguments = ["-feedDesignMode", "-openNextGenerationCard", "0", "-legacyGenerativeJobs"]
         app.launch()
         let action = app.buttons["generative.primaryAction"].firstMatch
         XCTAssertTrue(action.waitForExistence(timeout: 10))

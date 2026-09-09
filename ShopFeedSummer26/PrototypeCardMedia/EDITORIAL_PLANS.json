@@ -1,0 +1,675 @@
+[
+  {
+    "id": "mirror-room",
+    "merchant": "forom",
+    "title": "A different perspective",
+    "kicker": "Forom",
+    "treatment": "immersive",
+    "palette": "ink",
+    "products": [
+      7914833051779,
+      9080102322307,
+      9080109072515
+    ],
+    "labels": [
+      "Amorphous",
+      "Elyse wall",
+      "Elyse floor"
+    ],
+    "job": "Browse mirrors in their actual catalog photography, keeping each product distinct.",
+    "scene": [],
+    "backdrop": true,
+    "photoIndex": 0,
+    "headlineAnchor": "bottom",
+    "interaction": "select",
+    "showChoices": true
+  },
+  {
+    "id": "trail-city",
+    "merchant": "extra-butter-salomon",
+    "title": "Take the long way",
+    "kicker": "Extra Butter \u00b7 Salomon",
+    "treatment": "panorama",
+    "palette": "white",
+    "products": [
+      8151144530103,
+      8349773922487,
+      7919493251255
+    ],
+    "labels": [
+      "XT-Quest",
+      "XA Pro",
+      "XT-Whisper"
+    ],
+    "job": "Explore three distinct Salomon silhouettes, then inspect the exact shoe.",
+    "scene": [
+      {
+        "product": -1,
+        "x": 0.5,
+        "y": 0.5,
+        "width": 1,
+        "height": 0.88,
+        "image": 0,
+        "shape": "rect"
+      }
+    ],
+    "backdrop": false,
+    "photoIndex": 0,
+    "headlineAnchor": "top",
+    "interaction": "swipe",
+    "showChoices": true
+  },
+  {
+    "id": "merchant-books",
+    "merchant": "standards-manual",
+    "title": "Graphic standards",
+    "kicker": "Standards Manual",
+    "treatment": "books",
+    "palette": "paper",
+    "products": [
+      1424479363,
+      5842516163,
+      92039479320
+    ],
+    "labels": [
+      "Transit",
+      "Space",
+      "Environment"
+    ],
+    "job": "Explore graphic-design reference books through their recognizable covers.",
+    "scene": [],
+    "backdrop": false,
+    "photoIndex": 0,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": false
+  },
+  {
+    "id": "fellow-counter",
+    "merchant": "fellow",
+    "title": "Make room for coffee",
+    "kicker": "Fellow",
+    "treatment": "duet",
+    "palette": "white",
+    "products": [
+      7507479003236,
+      2055410221171
+    ],
+    "labels": [
+      "Aiden",
+      "Stagg"
+    ],
+    "job": "Inspect a coffee maker or kettle without claiming they perform the same task.",
+    "scene": [
+      {
+        "product": 0,
+        "x": 0.34,
+        "y": 0.6,
+        "width": 0.66,
+        "height": 0.77,
+        "image": 0,
+        "shape": "rect"
+      },
+      {
+        "product": 1,
+        "x": 0.78,
+        "y": 0.28,
+        "width": 0.42,
+        "height": 0.5,
+        "image": 0,
+        "shape": "rect"
+      }
+    ],
+    "backdrop": false,
+    "photoIndex": 0,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": false
+  },
+  {
+    "id": "doiy-fish",
+    "merchant": "doiy",
+    "title": "Not your usual vase",
+    "kicker": "DOIY",
+    "treatment": "poster",
+    "palette": "ink",
+    "products": [
+      8491003314332
+    ],
+    "labels": [
+      "Goldfish Vase"
+    ],
+    "job": "Discover a characterful single object and open its real product details.",
+    "scene": [],
+    "backdrop": true,
+    "photoIndex": 1,
+    "headlineAnchor": "bottom",
+    "interaction": "select",
+    "showChoices": false
+  },
+  {
+    "id": "ceremonia-reset",
+    "merchant": "ceremonia",
+    "title": "Sunday, slowed down",
+    "kicker": "Ceremonia",
+    "treatment": "ritual",
+    "palette": "ink",
+    "products": [
+      7219216580772,
+      6060165300388,
+      15369056321905
+    ],
+    "labels": [
+      "Scalp scrub",
+      "Leave-in",
+      "Hair towel"
+    ],
+    "job": "Browse three hair-care categories; no invented regimen or efficacy claims.",
+    "scene": [],
+    "backdrop": true,
+    "photoIndex": 3,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": true
+  },
+  {
+    "id": "nocs-field",
+    "merchant": "nocs",
+    "title": "Look a little closer",
+    "kicker": "Nocs Provisions",
+    "treatment": "lens",
+    "palette": "white",
+    "products": [
+      10432692846871,
+      6591770722382
+    ],
+    "labels": [
+      "Pro Issue",
+      "Zoom Tube"
+    ],
+    "job": "Choose between binoculars and a monocular; inspect the canonical model.",
+    "scene": [
+      {
+        "product": -1,
+        "x": 0.5,
+        "y": 0.43,
+        "width": 0.96,
+        "height": 0.82,
+        "image": 0,
+        "shape": "circle"
+      }
+    ],
+    "backdrop": false,
+    "photoIndex": 0,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": true
+  },
+  {
+    "id": "coming-soon-mirrors",
+    "merchant": "coming-soon",
+    "title": "Objects with a point of view",
+    "kicker": "Coming Soon",
+    "treatment": "gallery",
+    "palette": "white",
+    "products": [
+      9603401253170,
+      9908030275890,
+      9603148841266
+    ],
+    "labels": [
+      "Round",
+      "Jelly",
+      "Gemini"
+    ],
+    "job": "Explore three mirror designs as a visual edit, not a claimed official collection.",
+    "scene": [
+      {
+        "product": 0,
+        "x": 0.35,
+        "y": 0.305,
+        "width": 0.68,
+        "height": 0.59,
+        "image": 0,
+        "shape": "rect"
+      },
+      {
+        "product": 1,
+        "x": 0.76,
+        "y": 0.65,
+        "width": 0.46,
+        "height": 0.5,
+        "image": 0,
+        "shape": "rect"
+      },
+      {
+        "product": 2,
+        "x": 0.26,
+        "y": 0.825,
+        "width": 0.43,
+        "height": 0.33,
+        "image": 0,
+        "shape": "rect"
+      }
+    ],
+    "backdrop": false,
+    "photoIndex": 0,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": false
+  },
+  {
+    "id": "kinto-pour",
+    "merchant": "kinto",
+    "title": "One quiet cup",
+    "kicker": "KINTO",
+    "treatment": "stillLife",
+    "palette": "white",
+    "products": [
+      2214011961392,
+      2214022053936,
+      2214023331888
+    ],
+    "labels": [
+      "Server",
+      "CAST",
+      "KRONOS"
+    ],
+    "job": "Find a server or cup while retaining each item's actual identity and price.",
+    "scene": [
+      {
+        "product": 0,
+        "x": 0.42,
+        "y": 0.39,
+        "width": 0.82,
+        "height": 0.75,
+        "image": 1,
+        "shape": "rect"
+      },
+      {
+        "product": 1,
+        "x": 0.81,
+        "y": 0.79,
+        "width": 0.36,
+        "height": 0.37,
+        "image": 0,
+        "shape": "rect"
+      },
+      {
+        "product": 2,
+        "x": 0.38,
+        "y": 0.855,
+        "width": 0.4,
+        "height": 0.27,
+        "image": 0,
+        "shape": "rect"
+      }
+    ],
+    "backdrop": false,
+    "photoIndex": 1,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": false
+  },
+  {
+    "id": "house-leon-seat",
+    "merchant": "house-of-leon",
+    "title": "The chair makes the room",
+    "kicker": "House of Leon",
+    "treatment": "portrait",
+    "palette": "ink",
+    "products": [
+      7873592688813,
+      7873592721581
+    ],
+    "labels": [
+      "Camel Nubuck",
+      "Black Leather"
+    ],
+    "job": "Browse the two Chair #1 finishes in their own canonical photographs, without fit claims.",
+    "scene": [],
+    "backdrop": true,
+    "photoIndex": 4,
+    "headlineAnchor": "bottom",
+    "interaction": "select",
+    "showChoices": true
+  },
+  {
+    "id": "moma-time",
+    "merchant": "moma",
+    "title": "Good times, by design",
+    "kicker": "MoMA Design Store",
+    "treatment": "dial",
+    "palette": "ink",
+    "products": [
+      9604489248998,
+      8398523367654,
+      9686879502566
+    ],
+    "labels": [
+      "Wrist",
+      "Desk",
+      "Ring"
+    ],
+    "job": "Explore three different timekeeping objects by where they are worn or placed.",
+    "scene": [],
+    "backdrop": true,
+    "photoIndex": 1,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": true
+  },
+  {
+    "id": "draw-down-type",
+    "merchant": "draw-down",
+    "title": "Letters worth studying",
+    "kicker": "Draw Down",
+    "treatment": "shelf",
+    "palette": "white",
+    "products": [
+      1591926554714,
+      7804062892286,
+      8336413458686
+    ],
+    "labels": [
+      "Theory",
+      "Revivals",
+      "New Aesthetic"
+    ],
+    "job": "Discover type-design books and inspect their actual descriptions.",
+    "scene": [
+      {
+        "product": 0,
+        "x": 0.5,
+        "y": 0.38,
+        "width": 1,
+        "height": 0.65,
+        "image": 1,
+        "shape": "rect"
+      },
+      {
+        "product": 1,
+        "x": 0.25,
+        "y": 0.83,
+        "width": 0.46,
+        "height": 0.32,
+        "image": 0,
+        "shape": "rect"
+      },
+      {
+        "product": 2,
+        "x": 0.75,
+        "y": 0.83,
+        "width": 0.46,
+        "height": 0.32,
+        "image": 0,
+        "shape": "rect"
+      }
+    ],
+    "backdrop": false,
+    "photoIndex": 1,
+    "headlineAnchor": "top",
+    "interaction": "reveal",
+    "showChoices": false
+  },
+  {
+    "id": "babyletto-room",
+    "merchant": "babyletto",
+    "title": "Room for a new chapter",
+    "kicker": "Babyletto",
+    "treatment": "room",
+    "palette": "ink",
+    "products": [
+      7652167647286,
+      7652167942198,
+      7784483389494
+    ],
+    "labels": [
+      "Crib",
+      "Changing table",
+      "Dresser"
+    ],
+    "job": "Explore furniture from the Swell family; do not imply a room's dimensions or compatibility.",
+    "scene": [],
+    "backdrop": true,
+    "photoIndex": 0,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": true
+  },
+  {
+    "id": "feature-salomon",
+    "merchant": "feature-salomon",
+    "title": "Different routes. Same instinct.",
+    "kicker": "Feature \u00b7 Salomon",
+    "treatment": "contactSheet",
+    "palette": "white",
+    "products": [
+      6753846853703,
+      6753846919239,
+      7243015094343
+    ],
+    "labels": [
+      "XT-4 White",
+      "XT-4 Black",
+      "XT-6 Delicioso"
+    ],
+    "job": "Compare named shoe products visually, with their own merchant destinations.",
+    "scene": [
+      {
+        "product": 0,
+        "x": 0.565,
+        "y": 0.17,
+        "width": 0.85,
+        "height": 0.31,
+        "image": 0,
+        "shape": "rect"
+      },
+      {
+        "product": 1,
+        "x": 0.41,
+        "y": 0.51,
+        "width": 0.8,
+        "height": 0.31,
+        "image": 0,
+        "shape": "rect"
+      },
+      {
+        "product": 2,
+        "x": 0.59,
+        "y": 0.835,
+        "width": 0.8,
+        "height": 0.31,
+        "image": 0,
+        "shape": "rect"
+      }
+    ],
+    "backdrop": false,
+    "photoIndex": 0,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": false
+  },
+  {
+    "id": "rhode-skin",
+    "merchant": "rhode",
+    "title": "Keep it simple",
+    "kicker": "rhode",
+    "treatment": "sequence",
+    "palette": "ink",
+    "products": [
+      8070391660782,
+      7672597414126,
+      8858064388334
+    ],
+    "labels": [
+      "Milk",
+      "Cream",
+      "Mist"
+    ],
+    "job": "Browse three skincare products without prescribing order, ingredients or results.",
+    "scene": [],
+    "backdrop": true,
+    "photoIndex": 2,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": true
+  },
+  {
+    "id": "lichen-shelf",
+    "merchant": "lichen",
+    "title": "A place for the things you keep",
+    "kicker": "Lichen",
+    "treatment": "architecture",
+    "palette": "ink",
+    "products": [
+      12518383059262,
+      12374848700734
+    ],
+    "labels": [
+      "Floyd Shelf",
+      "Magnetic Rack"
+    ],
+    "job": "Explore storage pieces without inventing dimensions or installation compatibility.",
+    "scene": [],
+    "backdrop": true,
+    "photoIndex": 0,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": true
+  },
+  {
+    "id": "lalo-table",
+    "merchant": "lalo",
+    "title": "Pull up a little chair",
+    "kicker": "Lalo",
+    "treatment": "family",
+    "palette": "white",
+    "products": [
+      4363480432704,
+      6603936137280,
+      7134036885568
+    ],
+    "labels": [
+      "Chair",
+      "Booster",
+      "Hook-On"
+    ],
+    "job": "Browse distinct seating formats; product details, not the card, establish age and safety suitability.",
+    "scene": [
+      {
+        "product": 0,
+        "x": 0.36,
+        "y": 0.47,
+        "width": 0.7,
+        "height": 0.9,
+        "image": 0,
+        "shape": "rect"
+      },
+      {
+        "product": 1,
+        "x": 0.83,
+        "y": 0.32,
+        "width": 0.32,
+        "height": 0.35,
+        "image": 0,
+        "shape": "rect"
+      },
+      {
+        "product": 2,
+        "x": 0.79,
+        "y": 0.815,
+        "width": 0.4,
+        "height": 0.35,
+        "image": 0,
+        "shape": "rect"
+      }
+    ],
+    "backdrop": false,
+    "photoIndex": 0,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": false
+  },
+  {
+    "id": "doiy-sun",
+    "merchant": "doiy",
+    "title": "A sunny disposition",
+    "kicker": "DOIY",
+    "treatment": "sunrise",
+    "palette": "ink",
+    "products": [
+      8300748931228,
+      9135917301916,
+      8712550678684
+    ],
+    "labels": [
+      "Sun",
+      "Trophy",
+      "Corner Shop"
+    ],
+    "job": "Discover sculptural vases through form, without adding fictional availability.",
+    "scene": [],
+    "backdrop": true,
+    "photoIndex": 1,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": true
+  },
+  {
+    "id": "fellow-outside",
+    "merchant": "fellow",
+    "title": "Your coffee has plans",
+    "kicker": "Fellow",
+    "treatment": "travel",
+    "palette": "white",
+    "products": [
+      4807420739684,
+      2055409762419
+    ],
+    "labels": [
+      "Take it along",
+      "Stay a while"
+    ],
+    "job": "Choose a travel mug or tasting glasses by shopping context, not a fabricated comparison.",
+    "scene": [
+      {
+        "product": -1,
+        "x": 0.5,
+        "y": 0.5,
+        "width": 0.95,
+        "height": 1,
+        "image": 0,
+        "shape": "rect"
+      }
+    ],
+    "backdrop": false,
+    "photoIndex": 3,
+    "headlineAnchor": "top",
+    "interaction": "select",
+    "showChoices": true
+  },
+  {
+    "id": "moma-table",
+    "merchant": "moma",
+    "title": "Everyday, less ordinary",
+    "kicker": "MoMA Design Store",
+    "treatment": "tabletop",
+    "palette": "ink",
+    "products": [
+      9787655160038,
+      8909829603558
+    ],
+    "labels": [
+      "Espresso maker",
+      "Flatware"
+    ],
+    "job": "Discover two design objects for the table while keeping them separate purchases.",
+    "scene": [],
+    "backdrop": true,
+    "photoIndex": 1,
+    "headlineAnchor": "bottom",
+    "interaction": "select",
+    "showChoices": true
+  }
+]

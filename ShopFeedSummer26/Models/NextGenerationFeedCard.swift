@@ -54,7 +54,7 @@ struct PrototypeShoppingSignal: Identifiable {
         case purchase = "Purchased jacket"
         case repeatedViews = "Repeated chair views"
         case savedShortlist = "Saved chair shortlist"
-        case merchantAffinity = "Publishing affinity"
+        case merchantAffinity = "Merchant affinity"
         case activeWorld = "Active living room"
         case broadJourney = "Broad coffee search"
         case aestheticAffinity = "Furniture affinity"
@@ -115,7 +115,7 @@ struct NextGenerationFeedCardSpec: Identifiable {
         default: anchor.map(PrototypePrimaryEntity.product) ?? .journey(signal.worldID ?? signal.id)
         }
     }
-    var prefersDarkNavigationText: Bool { true }
+    var prefersDarkNavigationText: Bool { EditorialFeedCatalog.plan(for: signal.id)?.darkText ?? true }
     var accessibilityDescription: String { "\(title). \(subtitle). \(interaction.rawValue)." }
 
     func resolvedProducts(from merchants: [SampleMerchant]) -> [ResolvedStoryProduct] {
