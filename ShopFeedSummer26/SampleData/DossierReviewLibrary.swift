@@ -76,7 +76,11 @@ enum DossierReviewLibrary {
             for (index, object) in record.objects.dropFirst().enumerated() {
                 var choices = [object.reference]
                 if record.family == "outfit", index == 0 {
-                    choices += QuietFeedReviewCatalog.pants.prefix(2)
+                    // Vomero's supplied pants are already the Carhartt Shale pair.
+                    // Offer two genuinely different products, not a second ID for it.
+                    choices += record.key == "4b42878d497ca473"
+                        ? Array(QuietFeedReviewCatalog.pants.dropFirst())
+                        : Array(QuietFeedReviewCatalog.pants.prefix(2))
                 } else if record.family == "room", object.role.lowercased().contains("chair") {
                     choices += [.init(merchantID: "house-of-leon", productID: 7873592688813), .init(merchantID: "house-of-leon", productID: 7873592721581)]
                 } else if record.family == "room", object.role.lowercased().contains("table") {

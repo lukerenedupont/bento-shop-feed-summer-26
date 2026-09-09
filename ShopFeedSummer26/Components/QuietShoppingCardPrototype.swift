@@ -340,9 +340,9 @@ struct QuietShoppingCardPrototype: View {
 
     private func primary(_ title: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            HStack { Text(title); Spacer(); Image(systemName: "arrow.right") }
+            Text(title)
                 .font(GravityFont.semiBold.fixedFont(size: 15))
-                .padding(.horizontal, 20).frame(height: 48)
+                .padding(.horizontal, 20).frame(maxWidth: .infinity).frame(height: 48)
                 .foregroundStyle(.white).background(.black, in: Capsule())
         }
         .disabled(!state.interactionsEnabled)

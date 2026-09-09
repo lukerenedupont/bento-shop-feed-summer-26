@@ -268,10 +268,9 @@ struct DossierShoppingCardPrototype: View {
         } label: {
             HStack {
                 Text(record.family == "room" ? "Review room" : record.family == "outfit" || record.family == "kids" ? "View look" : record.family == "setup" ? "Review setup" : record.family == "gift" ? "Keep for Leon" : record.family == "watch" ? "View watch" : "View hat")
-                Spacer(); Image(systemName: "arrow.up.right")
             }
             .font(GravityFont.semiBold.fixedFont(size: 15))
-            .padding(.horizontal, 18).frame(height: 48)
+            .padding(.horizontal, 18).frame(maxWidth: .infinity).frame(height: 48)
             .foregroundStyle(.white).background(.black, in: Capsule())
         }
         .disabled(!state.interactionsEnabled)

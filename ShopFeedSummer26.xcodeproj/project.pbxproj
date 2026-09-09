@@ -193,6 +193,7 @@
 		742702615A76B801716AE690 /* dossier-5527c8904c1155d7-object2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 745E4A48AD4568F30C21F26E /* dossier-5527c8904c1155d7-object2.jpg */; };
 		742ADA927F28DE885852A247 /* Shopify Sans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EAC89D255BADA19142CCCFBF /* Shopify Sans-Regular.otf */; };
 		74C326EB021E3234C7A66079 /* dossier-6d91ee4227655be2-object2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 32DCB50060D3FD98F03924DE /* dossier-6d91ee4227655be2-object2.jpg */; };
+		74DD1D2FF31E44DF3D2FA585 /* VomeroBentoPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E128F49D6A73276AA7249E /* VomeroBentoPrototype.swift */; };
 		74E6A8C039328D5987937076 /* quiet-product-sneaker-politics-8925922951356.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 01F914A6CE9E4A18C23B6ECA /* quiet-product-sneaker-politics-8925922951356.jpg */; };
 		7532BD57E517EAEC6DE07D36 /* prototype-product-standards-manual-8062714904792.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FFBD210836172335D0C9DF57 /* prototype-product-standards-manual-8062714904792.jpg */; };
 		76323E9FB1923A17DDE73A5A /* dossier-8ccc0ca672d0d77f-pairSquare.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2510A19217563CAA8F05E633 /* dossier-8ccc0ca672d0d77f-pairSquare.jpg */; };
@@ -255,6 +256,7 @@
 		94BE6F44ACFC1C02F23856CD /* FeedNavigationStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B6534412DD17581C329BC2 /* FeedNavigationStyle.swift */; };
 		9533C8CF095DBE831F8653E2 /* dossier-product-64479672140763.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DEB458384D4690B9B7BF4A0 /* dossier-product-64479672140763.jpg */; };
 		95F5A2A1A3A30E675FD1A9A0 /* dossier-601abf8c7dca97ce-look1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 43E440847CBCBFC6A146AB25 /* dossier-601abf8c7dca97ce-look1.jpg */; };
+		962FEF4C620B16AAFABCA0A2 /* JacketLookCardPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0AE462EB7DF52C12EBF67 /* JacketLookCardPrototype.swift */; };
 		969E01B07575E71A226BA893 /* prototype-product-feature-salomon-6882430025799.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DF452154EC67EBCC6E2B03A /* prototype-product-feature-salomon-6882430025799.jpg */; };
 		97AAC846C268F2C7802B208B /* dossier-product-26446991587231.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2D630AD9E3278C896BA385CA /* dossier-product-26446991587231.jpg */; };
 		97E76E4E0480AA9785A6D61D /* GenerativeFeedInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1164B7CA48602B49F7D908FF /* GenerativeFeedInspector.swift */; };
@@ -626,6 +628,7 @@
 		79DFAE3FAAFA8C1029FA6C12 /* dossier-98979f976a7a42f3-pair.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "dossier-98979f976a7a42f3-pair.jpg"; sourceTree = "<group>"; };
 		7ACA72BD0A8A01D2AAAD7A96 /* prototype-product-standards-manual-9036702908632.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-9036702908632.jpg"; sourceTree = "<group>"; };
 		7B1F02424B2B5BB561153EDF /* dossier-519234f72b73ffaa-object3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "dossier-519234f72b73ffaa-object3.jpg"; sourceTree = "<group>"; };
+		7CE0AE462EB7DF52C12EBF67 /* JacketLookCardPrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JacketLookCardPrototype.swift; sourceTree = "<group>"; };
 		7E3506BBA3CAF16F94A6C934 /* BuyerFeedNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerFeedNavigationBar.swift; sourceTree = "<group>"; };
 		7E3F31ABD00A86DFF0320BE3 /* BentoGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BentoGrid.swift; sourceTree = "<group>"; };
 		7EDFC8443A325D0CC5EB1042 /* quiet-product-house-of-leon-8505646055597.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-house-of-leon-8505646055597.jpg"; sourceTree = "<group>"; };
@@ -800,6 +803,7 @@
 		E840B3F253E4BE42038BD9F2 /* dossier-6d91ee4227655be2-look0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "dossier-6d91ee4227655be2-look0.jpg"; sourceTree = "<group>"; };
 		E8A21C6D06C8893714676D02 /* ShopFisheyeCanvas */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ShopFisheyeCanvas; path = Packages/ShopFisheyeCanvas; sourceTree = SOURCE_ROOT; };
 		E8B31A6309C4C4BBC83EC4FB /* dossier-601abf8c7dca97ce-object2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "dossier-601abf8c7dca97ce-object2.jpg"; sourceTree = "<group>"; };
+		E8E128F49D6A73276AA7249E /* VomeroBentoPrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VomeroBentoPrototype.swift; sourceTree = "<group>"; };
 		E8E1A573A940E934F04C9D35 /* WarmLightingBluDotBrandCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarmLightingBluDotBrandCard.swift; sourceTree = "<group>"; };
 		E8E677D9D376373855CF68D3 /* quiet-product-house-of-leon-7873592688813.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "quiet-product-house-of-leon-7873592688813.jpg"; sourceTree = "<group>"; };
 		E94C324D717E607494A8347E /* prototype-product-standards-manual-7835076985048.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-7835076985048.jpg"; sourceTree = "<group>"; };
@@ -1349,6 +1353,7 @@
 				6B414620B3EDC53466841BC6 /* HolidayDestinationFeeds.swift */,
 				81893883E934BAC0B3B769E2 /* HolidayFeedHeader.swift */,
 				1C19A304A47A9AE92E877FF8 /* HomeUtilityPrototypeCards.swift */,
+				7CE0AE462EB7DF52C12EBF67 /* JacketLookCardPrototype.swift */,
 				68957DDA92869BB303188B83 /* LoopingVideoPlayer.swift */,
 				B9F58EB0B320715CD835B076 /* MerchantAvatarView.swift */,
 				54E1ECE0C5E966F35189CB65 /* MerchantCollectionFeedCard.swift */,
@@ -1370,6 +1375,7 @@
 				1900539FD305AC1A165342BB /* TryFavesSheet.swift */,
 				D63224A20DCCA6A2867E3E63 /* TryOnFeedCard.swift */,
 				F0E301D39B0B91316EE529A6 /* UtilityBeltCustomization.swift */,
+				E8E128F49D6A73276AA7249E /* VomeroBentoPrototype.swift */,
 				0A8D4B82FB1A08F0EF2FDAAD /* Search */,
 			);
 			path = Components;
@@ -1935,6 +1941,7 @@
 				204193C47C04797D57AFB531 /* HomeUtilityPrototypeCards.swift in Sources */,
 				12EC66C26DB004D29E1B43E1 /* HypothesisShelfCatalog.swift in Sources */,
 				9C9C4E768F481DBBF61445E2 /* InjectableView.swift in Sources */,
+				962FEF4C620B16AAFABCA0A2 /* JacketLookCardPrototype.swift in Sources */,
 				824ADF93916375DD59209CE0 /* KeyboardAnimation.swift in Sources */,
 				D9ECF9FC8FF0AA02E4A29533 /* LegacyFeedArchive.swift in Sources */,
 				13D4F8E2F7F72D421D0DFF83 /* LocalMerchantService.swift in Sources */,
@@ -2013,6 +2020,7 @@
 				8C2EB560B08BE7A816BB298A /* UtilityBeltCustomization.swift in Sources */,
 				F576CA8CE7B1F4DA744D1E49 /* VariableBlurView.swift in Sources */,
 				08CF9DE31D0D6890CB15C684 /* VerySpecialWatchCatalog.swift in Sources */,
+				74DD1D2FF31E44DF3D2FA585 /* VomeroBentoPrototype.swift in Sources */,
 				A5A9C4A567FFE85BD6D90EEC /* WarmLightingBluDotBrandCard.swift in Sources */,
 				E8440503B767D27E47C1B515 /* WorldDomain.swift in Sources */,
 				38CEC374844DF33016F5AC0D /* WorldExperienceViews.swift in Sources */,

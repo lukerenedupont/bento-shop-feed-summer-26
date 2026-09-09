@@ -42,10 +42,21 @@ struct NextGenerationFeedCardView: View {
             .frame(width: width, height: height)
             .overlay(alignment: .topLeading) {
                 if let record = DossierReviewLibrary.record(for: spec) {
-                    DossierShoppingCardPrototype(record: record, spec: spec, merchants: merchants, session: session,
-                        width: width, height: height, topPadding: foregroundTopPadding,
-                        bottomPadding: bottomContentPadding, isActive: isActive,
-                        onInspect: { showsInspector = true })
+                    if record.key == "4b42878d497ca473" {
+                        VomeroBentoPrototype(record: record, spec: spec, merchants: merchants, session: session,
+                            width: width, height: height, topPadding: foregroundTopPadding,
+                            bottomPadding: bottomContentPadding, onInspect: { showsInspector = true })
+                    } else if record.key == "6d91ee4227655be2" {
+                        JacketLookCardPrototype(record: record, spec: spec, merchants: merchants, session: session,
+                            width: width, height: height, topPadding: foregroundTopPadding,
+                            bottomPadding: bottomContentPadding, isActive: isActive,
+                            onInspect: { showsInspector = true })
+                    } else {
+                        DossierShoppingCardPrototype(record: record, spec: spec, merchants: merchants, session: session,
+                            width: width, height: height, topPadding: foregroundTopPadding,
+                            bottomPadding: bottomContentPadding, isActive: isActive,
+                            onInspect: { showsInspector = true })
+                    }
                 } else if spec.isQuietReview {
                     QuietShoppingCardPrototype(spec: spec, merchants: merchants, session: session,
                         width: width, height: height, topPadding: foregroundTopPadding,

@@ -1,5 +1,14 @@
 # Dossier-led feed review
 
+## Latest screenshot-directed changes
+
+- **Jacket (index 0):** full-card image/video background, the existing Shop `ProductCard` list treatment in a horizontally snapping carousel, and a centered **View the look** CTA anchored above navigation. No beige footer panel, loose object strip, helper text, or CTA arrow. Tapping a product opens its exact details; the CTA retains the shared look review.
+- **Vomero (index 2):** separate one-card bento experiment. A full-width shoe anchor sits above a pants compartment and stacked jacket/sock compartments, following the existing bento grammar. No poster, duplicate rail, or resting-state CTA. Tap Swap pants to browse three genuinely different pants inside that same compartment; the other objects stay fixed. Details and View look appear after interaction.
+- Removed arrow glyphs from the other review-feed primary CTAs without changing those cards' layouts.
+- Verified the jacket carousel pans to the next product and its CTA opens the composition. Verified the Vomero inline pager changes pants and updates the selected product without leaving the card.
+
+The remaining sections describe the shared Dossier pass; these two treatments override its generic presentation.
+
 This is the visual revision following the five-card structural pass. It reuses the existing feed planner, semantic specs, native renderer host, session, inspector, gallery, product review, and Spatial destination.
 
 ## Open
