@@ -7,7 +7,9 @@ struct RootView: View {
 
     var body: some View {
 #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("-nextGenerationGallery") {
+        if ProcessInfo.processInfo.arguments.contains("-productSpecificFeedGallery") {
+            ProductSpecificFeedGallery()
+        } else if ProcessInfo.processInfo.arguments.contains("-nextGenerationGallery") {
             NextGenerationFeedGallery()
         } else {
             feedShell
@@ -120,6 +122,8 @@ struct RootView: View {
                     namespace: namespace
                 )
             }
+        case .agentProduct(let product):
+            ProductPage(agentProduct: product, namespace: namespace)
         case .deliveries:
             DeliveriesPage(namespace: namespace)
         case .deliveryDetail(let deliveryId):

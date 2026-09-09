@@ -19,6 +19,8 @@ enum HomeRoute: Hashable {
     /// outside `SampleMerchant`, so they resolve through `TryFavesCatalog`
     /// and render the PDP's agent-product form.
     case tryFavesProduct(variantID: String)
+    /// Opens a catalog-backed prototype recommendation in Shop's native PDP.
+    case agentProduct(AgentProduct)
     case deliveries
     case deliveryDetail(deliveryId: String)
     case account

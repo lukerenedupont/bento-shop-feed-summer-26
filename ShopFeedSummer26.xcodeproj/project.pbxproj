@@ -14,6 +14,7 @@
 		035881778FD5938BEFF7430C /* GravitySpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54499965144553181DE87600 /* GravitySpacing.swift */; };
 		03A777854E6B9272D63E30CA /* editorial-lichen-12518383059262-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 38794D648D9F705EDDF385FC /* editorial-lichen-12518383059262-0.jpg */; };
 		0427D72C37C063702656079C /* TryFavesWorldPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158ABF7CF9F4752B30DDEBC3 /* TryFavesWorldPage.swift */; };
+		0523FE135DA0C364E2B3BEDB /* PRODUCT_SPECIFIC_SOURCES.json in Resources */ = {isa = PBXBuildFile; fileRef = 82B61D5923370380E44C5B77 /* PRODUCT_SPECIFIC_SOURCES.json */; };
 		054735FF9345DF7AAF3DE7B8 /* TryFavesLookService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B484A6F4AA747AE39ACEE4 /* TryFavesLookService.swift */; };
 		05D751E6996490FF59B3199C /* GravityBorderRadii.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA40258C915F1A57D84E196 /* GravityBorderRadii.swift */; };
 		083B701A8D85055676BEA34D /* editorial-rhode-8070391660782-2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 67352BC98B0F1EBAA65B0396 /* editorial-rhode-8070391660782-2.jpg */; };
@@ -23,12 +24,14 @@
 		0DF570B671E7A54D3E4CA0BC /* editorial-kinto-2214011961392-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 65574DBE68DBBCAC7E3BFB57 /* editorial-kinto-2214011961392-1.jpg */; };
 		0E4E3D2D57C24C839C25E870 /* TopicPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985A864019C3ED3E09A2E4B1 /* TopicPresentation.swift */; };
 		0EC6F69EB7B7D14036157A35 /* DeepDivePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E341D075DF8D562DB32C3EB /* DeepDivePage.swift */; };
+		0F322A01FD8830CF32B9EC3A /* olive-and-june-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = D99AFB39ACB942A8AD825BF9 /* olive-and-june-mark.png */; };
 		0FFC56081675CC2D30E54780 /* StoryCardLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0E1B41F7855616362EB10F /* StoryCardLayouts.swift */; };
 		1174093C09CBAD32B3D087EF /* TryFavesConfigurationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E6AE3B696D0E384D631284 /* TryFavesConfigurationSheet.swift */; };
 		11FC0467DDD38B21A4FE32AA /* AgentConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B983AC901056B787D37F13CA /* AgentConversationView.swift */; };
 		12E86BB3DC5018B03CF40896 /* TryFavesEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AA14B88E7EFA9A153D8F19 /* TryFavesEnvironment.swift */; };
 		12EC66C26DB004D29E1B43E1 /* HypothesisShelfCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093A07A204BF4836CBBC996 /* HypothesisShelfCatalog.swift */; };
 		13397C055EE0093E3A5E9D24 /* TryOnFeedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63224A20DCCA6A2867E3E63 /* TryOnFeedCard.swift */; };
+		13954ADAA450CB721DD97D17 /* dsdurga-wordmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 514112487360062904AA193B /* dsdurga-wordmark.png */; };
 		13D4F8E2F7F72D421D0DFF83 /* LocalMerchantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2537D9E279EC49B168BFF767 /* LocalMerchantService.swift */; };
 		16BC6F274BF3266109322406 /* SearchHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D64725EFF88C7418AC33BE /* SearchHeader.swift */; };
 		16C933133297720B35CFAEE3 /* EDITORIAL_PLANS.json in Resources */ = {isa = PBXBuildFile; fileRef = 85FDE31B3C8EE07C68E3AA0A /* EDITORIAL_PLANS.json */; };
@@ -52,6 +55,8 @@
 		231B142E1D707B96DA651AE9 /* editorial-draw-down-1591926554714-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 189B6FCCD4D0BA8ED32C9BE8 /* editorial-draw-down-1591926554714-1.jpg */; };
 		2338DF902EB6C4BE9AA20CA6 /* SpringPresets.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49BBF6216CEAF899FCF335C /* SpringPresets.swift */; };
 		23E98555D3805A7A1243B2A3 /* TryOnStudioPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBC2461909BC7E1B376CB27 /* TryOnStudioPage.swift */; };
+		24516F8F55C85A760DD2A3FF /* cotopaxi-trozo-product.webp in Resources */ = {isa = PBXBuildFile; fileRef = F24E0D82E08EFA2C98D54EC4 /* cotopaxi-trozo-product.webp */; };
+		27049D085886902E3C8022B1 /* cotopaxi-pop-cable.webp in Resources */ = {isa = PBXBuildFile; fileRef = B947EE79B157FE0E172282FB /* cotopaxi-pop-cable.webp */; };
 		27242F66E36E4890EE5A9E2C /* editorial-ceremonia-15369056321905-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1A124A9CFA7911DCC28A12AE /* editorial-ceremonia-15369056321905-0.jpg */; };
 		27C6901D16FDC1F6B50C61DC /* GTStandard-MBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 825938AC5196B6F59F942B37 /* GTStandard-MBold.otf */; };
 		2822CEDA04B25E4864E667D0 /* ConversationStartersClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A588205457B7125D9C517E /* ConversationStartersClient.swift */; };
@@ -60,6 +65,7 @@
 		29199A2F65CBE81BB66F662A /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B1902261AD08A0770FD0F2 /* RootView.swift */; };
 		2921D4D05F20AE30E2EB8036 /* GoodSans-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 362AA9ECF0FBCBF6C312897A /* GoodSans-Medium.otf */; };
 		299A9737EF448D259314D36B /* ComparisonCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7196F22BB191093106BD6651 /* ComparisonCard.swift */; };
+		29B63F764A37C36DCBBB1CE3 /* cotopaxi-daily-spf.png in Resources */ = {isa = PBXBuildFile; fileRef = 62C3003142D8F890F79A228C /* cotopaxi-daily-spf.png */; };
 		2A6BA0C7069F457B3960CFDE /* RecentsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD2F47D24C455081A6C9B863 /* RecentsPanel.swift */; };
 		2B8A29EE7F0CC928CE5FA9F0 /* GenerativeFeedPrototypeSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390025A24F5078EAE73F1F0B /* GenerativeFeedPrototypeSession.swift */; };
 		2BBA09260865DBAD6863F6B9 /* prototype-product-house-of-leon-8590788591789.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A823CA23C0788118EB3E2893 /* prototype-product-house-of-leon-8590788591789.jpg */; };
@@ -76,6 +82,7 @@
 		350F39E52F99123BC6BAC887 /* BuyerPersonalizationCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CCB4CFDC34CC4E6C357680 /* BuyerPersonalizationCatalog.swift */; };
 		35C553E9A9B75C59FABEDC29 /* ShopServerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1132BFE84890181F234405 /* ShopServerClient.swift */; };
 		37D0324C880186342E360A16 /* editorial-coming-soon-9603148841266-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 34CBB25272FEB86070DE427D /* editorial-coming-soon-9603148841266-0.jpg */; };
+		38518A8B5D9D5A5AF20B080E /* fellow-wordmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 22DDC6960856164282826F24 /* fellow-wordmark.png */; };
 		387121928B8DFA2B5B1F74AC /* PriceFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA86AF2A33B20F0C6C103A6 /* PriceFormatting.swift */; };
 		38A8E833637099BF6284BE1A /* editorial-kinto-2214023331888-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8898171E08696174F1D25B2A /* editorial-kinto-2214023331888-0.jpg */; };
 		38CEC374844DF33016F5AC0D /* WorldExperienceViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B5F9A0D28975561CB034B5 /* WorldExperienceViews.swift */; };
@@ -85,6 +92,7 @@
 		3CFDAC07B41804103EAAE0A1 /* prototype-product-lichen-12462683128126.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2A8A6C01D1AE689BFA8DC211 /* prototype-product-lichen-12462683128126.jpg */; };
 		3D93993FCB3E4C5AA0B45448 /* GoodSansText-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = BB7B5177A7500A2232144B64 /* GoodSansText-Bold.otf */; };
 		3E0B498A68A13DA18E28E20E /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50FED85087F954198F8D79A /* AuthService.swift */; };
+		3EAD166F89D32C9B94CE6E9D /* fellow-opus-2.webp in Resources */ = {isa = PBXBuildFile; fileRef = CD4581D5B67842258F349BAF /* fellow-opus-2.webp */; };
 		3FA57584147CDB93B61536C7 /* GTStandard-MSemibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3C16419B525AF6EF1235C9C9 /* GTStandard-MSemibold.otf */; };
 		4060EEC0E4242387936C6947 /* editorial-nocs-10432692846871-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 42333CFCB1BAD94A996F7EBA /* editorial-nocs-10432692846871-0.jpg */; };
 		41B00863BA727A355068DD71 /* prototype-product-house-of-leon-7014265454765.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9474F96EB2EBCF7752FCCC8E /* prototype-product-house-of-leon-7014265454765.jpg */; };
@@ -118,6 +126,7 @@
 		56630523C4F642C774872B2A /* TypeaheadResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD5A98DA569DCD4B253C47B /* TypeaheadResultsView.swift */; };
 		56F73CB1F1EA0FE05171C0D8 /* editorial-doiy-8712550678684-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C786DBD3E40032CA38352C06 /* editorial-doiy-8712550678684-0.jpg */; };
 		581D48210ECEB8A9328A89DD /* editorial-doiy-8491003314332-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 00F31E239847222EEF4FED01 /* editorial-doiy-8491003314332-1.jpg */; };
+		58B9642D777AAD7704730810 /* graza-trio-bento.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7F959F01D1887E844125ED8D /* graza-trio-bento.jpg */; };
 		58F8E82CD7CDDEC84397406E /* editorial-feature-salomon-6753846919239-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8C814B6B0265A85ABCC57323 /* editorial-feature-salomon-6753846919239-0.jpg */; };
 		5A3B8922B520F928F71CF5A3 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0431B7327888F447B9C4106E /* SettingsPage.swift */; };
 		5A9D30DE59F5FC2A9E73AE44 /* UserProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43FBABAF01048CCC0C88C54 /* UserProfileService.swift */; };
@@ -130,6 +139,7 @@
 		652CB476ECB71B1AA3838BC2 /* GravityColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9012D58DAABA6EE0D2AC1F73 /* GravityColors.swift */; };
 		65A2C8C6A24B148547C33DE5 /* editorial-moma-9604489248998-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 99A9106F16C42C4617B289EC /* editorial-moma-9604489248998-1.jpg */; };
 		65CC87D24FABEF9A7510DAF1 /* FeedStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10B16167B932BDE28BA2B48 /* FeedStory.swift */; };
+		663E7A3DF8A0CF39A8E9D684 /* ProductSpecificFeedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC9582C8813801345C59B02 /* ProductSpecificFeedUITests.swift */; };
 		66D666D821C978F241A0D584 /* GravityTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C51EBDE4F5231C8FC1BDCD /* GravityTheme.swift */; };
 		66DA429285D18ECFD7FEE3A1 /* editorial-coming-soon-9603401253170-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5884D15BFA49C63E0889DC36 /* editorial-coming-soon-9603401253170-0.jpg */; };
 		67E569485FF22BD8914066DC /* NextGenerationFeedCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA430267E6AF9B64D5983EBF /* NextGenerationFeedCardView.swift */; };
@@ -140,6 +150,7 @@
 		6B962694A2D5A76349334EE4 /* DeliveryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D0AC7FA7992C3C84A593D9 /* DeliveryCard.swift */; };
 		6EDE79A78E4C857E0826A02E /* editorial-feature-salomon-7243015094343-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8D6368EB2579FC42BF7EA13E /* editorial-feature-salomon-7243015094343-0.jpg */; };
 		701D9E180841F535074E77E3 /* GTStandard-LSemibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 70B6EA62F63A7A6F39EC015E /* GTStandard-LSemibold.otf */; };
+		731885839029DE63FF6EA310 /* fellow-pirch-glasses.webp in Resources */ = {isa = PBXBuildFile; fileRef = F4C01E1330A4271B6E612D18 /* fellow-pirch-glasses.webp */; };
 		73A8C5E857F8C8D23B0AB657 /* CartPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3502071F386F04F63B93A6 /* CartPage.swift */; };
 		742ADA927F28DE885852A247 /* Shopify Sans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = EAC89D255BADA19142CCCFBF /* Shopify Sans-Regular.otf */; };
 		79107058DF87EE30F6B96998 /* AgentWorkPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8AC86AF8135B7D410FFAA7 /* AgentWorkPreview.swift */; };
@@ -169,6 +180,8 @@
 		90F6E899F9C2210C465957E7 /* GravityShadows.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7C5AECC27CBFF98B8E1E8D /* GravityShadows.swift */; };
 		91F66CB6220A01C44609CD78 /* editorial-ceremonia-7219216580772-3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C9A2512F5B07176A5AC09AA6 /* editorial-ceremonia-7219216580772-3.jpg */; };
 		94BE6F44ACFC1C02F23856CD /* FeedNavigationStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B6534412DD17581C329BC2 /* FeedNavigationStyle.swift */; };
+		9575ABA94938F3E79ADBC95E /* ProductSpecificFeedGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9DDCB65F884F92482C3691 /* ProductSpecificFeedGallery.swift */; };
+		9583C766BF91A4E3C6BF1C6F /* cotopaxi-layflat-notebook.png in Resources */ = {isa = PBXBuildFile; fileRef = B8DCE1A9C330D9CEDFFF3148 /* cotopaxi-layflat-notebook.png */; };
 		969E01B07575E71A226BA893 /* prototype-product-feature-salomon-6882430025799.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DF452154EC67EBCC6E2B03A /* prototype-product-feature-salomon-6882430025799.jpg */; };
 		976B108819EA4F7299C1E5E8 /* editorial-forom-9080109072515-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F760F4600607966F9687E1C9 /* editorial-forom-9080109072515-0.jpg */; };
 		97E76E4E0480AA9785A6D61D /* GenerativeFeedInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1164B7CA48602B49F7D908FF /* GenerativeFeedInspector.swift */; };
@@ -183,6 +196,8 @@
 		A38FACCAADAFAEE276D55A88 /* editorial-fellow-4807420739684-3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1C093D88188F8BECBC7BC583 /* editorial-fellow-4807420739684-3.jpg */; };
 		A5A9C4A567FFE85BD6D90EEC /* WarmLightingBluDotBrandCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E1A573A940E934F04C9D35 /* WarmLightingBluDotBrandCard.swift */; };
 		A62857209CB14C4402C911AE /* editorial-fellow-4807420739684-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F352EB6877433D772204665C /* editorial-fellow-4807420739684-0.jpg */; };
+		A62DF9FFAB41D5FB6AE986DA /* cotopaxi-wordmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8470E370984E49154C2DB598 /* cotopaxi-wordmark.png */; };
+		A62FF9BBA484CF0610AB7EFD /* dsdurga-big-sur-after-rain.webp in Resources */ = {isa = PBXBuildFile; fileRef = CACD427B87AADE33A5A06FC0 /* dsdurga-big-sur-after-rain.webp */; };
 		A68615A36BAFB29CF5F532F5 /* prototype-product-house-of-leon-7873592721581-comparison.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6A51F45B1BC34358EAE84956 /* prototype-product-house-of-leon-7873592721581-comparison.jpg */; };
 		A7E88F039954B5B789BC28C5 /* HolidayFeedHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81893883E934BAC0B3B769E2 /* HolidayFeedHeader.swift */; };
 		A82E10EDFA71EA5612CAC292 /* PurlTuneRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206CA1295E8B6FC39644D1DE /* PurlTuneRuntime.swift */; };
@@ -199,6 +214,7 @@
 		B57F48ACE1B213EBD20A1DF0 /* EditorialFeedCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C786D37679D015795CFCAA4 /* EditorialFeedCatalog.swift */; };
 		B68995C67E667E9BF2E10E4E /* GenerativeFeedPrototypeFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAD078B4815E78E63DBC18E /* GenerativeFeedPrototypeFixtures.swift */; };
 		B71963093A9A562454CBF39A /* editorial-standards-manual-92039479320-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6EDA54E29035699AFA65113F /* editorial-standards-manual-92039479320-0.jpg */; };
+		B73A122F000A82D0DAEC11CB /* fellow-series-1.webp in Resources */ = {isa = PBXBuildFile; fileRef = 37B464DF269B7F4C79DADDF6 /* fellow-series-1.webp */; };
 		B7BC6E89DB3AE68F166CD965 /* FloatingPanelSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A32D3620048BECC91CDCAC /* FloatingPanelSheet.swift */; };
 		B9941023B1530544D245555F /* StoryTopicPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D860120DF5795DCF4608E92 /* StoryTopicPage.swift */; };
 		B9F8E91B113B4C17FF218973 /* AgentStreamClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6B78800FEDE269650DB81 /* AgentStreamClient.swift */; };
@@ -222,7 +238,9 @@
 		D037EE96317684455BFB1576 /* OrdersWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9814ED8FB1597FE8380CFA /* OrdersWidget.swift */; };
 		D0BA7B0AE2FD5B79CE755497 /* Shopify Sans-Black Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = B332EE65073C4B19C9DD3957 /* Shopify Sans-Black Italic.otf */; };
 		D1111CE9CEEC25BC0A816AE1 /* GenerativeFeedPrototypeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EE806882C427056496C963 /* GenerativeFeedPrototypeUITests.swift */; };
+		D149584F3430C4353F6C7219 /* graza-wordmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E9AAA2E31C008C795B9AE19 /* graza-wordmark.png */; };
 		D335D92A9124DE5D27AAE6A1 /* Shopify Sans-Light Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3C23C2E41BB47CB79D885200 /* Shopify Sans-Light Italic.otf */; };
+		D33AC0244A187A17DFDAC9E9 /* cotopaxi-trozo-interior.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C2596A1E83F89D7039C142E9 /* cotopaxi-trozo-interior.jpg */; };
 		D640512F87C0281F24BDB184 /* editorial-babyletto-7652167647286-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B5F1A985D3413CFCAEB12DF6 /* editorial-babyletto-7652167647286-0.jpg */; };
 		D810490AFF0EF5D302F762DB /* GoodSans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3279B82B1E80A5AE1150FD8D /* GoodSans-Regular.otf */; };
 		D97D7EE57AAC0B35095594E8 /* SpatialARWorldDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8A4827DE4ECA8D96010781 /* SpatialARWorldDestination.swift */; };
@@ -238,6 +256,7 @@
 		E231D47C9DC5088B813021BB /* QuickSearchCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A8B6A48F59AE65A5A915C9 /* QuickSearchCard.swift */; };
 		E26E101FAB34700D33AA8995 /* ComparisonShelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5307D982E8802D5BA2FABA39 /* ComparisonShelf.swift */; };
 		E30DA8088645106108A6FEA4 /* HomeRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F86BE7F786EB1CCFC0C29 /* HomeRoute.swift */; };
+		E337467B845C1331F6CAA984 /* ugmonk-analog-weekly-kit.webp in Resources */ = {isa = PBXBuildFile; fileRef = 4659ADB5ECD10A2A93C5069A /* ugmonk-analog-weekly-kit.webp */; };
 		E352C341526A906E5BC82805 /* editorial-lalo-6603936137280-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E85038D93D9D7F9B83F7C742 /* editorial-lalo-6603936137280-0.jpg */; };
 		E5208F7A51253D5DC3A67B78 /* prototype-product-forom-8817998889091.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F4D0E2FEE272F2F38A000DD1 /* prototype-product-forom-8817998889091.jpg */; };
 		E57A40AA084F7234D6FFCD9A /* TypewriterText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EB1852CA445A1A84EA1B4F /* TypewriterText.swift */; };
@@ -273,6 +292,7 @@
 		F9D2E23619A7BD30F6F89874 /* editorial-lichen-12374848700734-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 705E76BFC97D2F212D078DC4 /* editorial-lichen-12374848700734-0.jpg */; };
 		FB827AE5DFD79957E8B64840 /* editorial-doiy-8300748931228-1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2F6A2DFC637BF3F54BBC09FE /* editorial-doiy-8300748931228-1.jpg */; };
 		FB8F76CC5298CD93B346D6DD /* TopicPresentationBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E733B02FA0A2456A50F957 /* TopicPresentationBlockView.swift */; };
+		FC5FEE3AEB27BD8C776CEBE8 /* taylor-stitch-wordmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 251515E9BC3D658D1BAF35FA /* taylor-stitch-wordmark.png */; };
 		FD300761B371966C3151A2E4 /* editorial-moma-9686879502566-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EB54FAE852A153D48787C331 /* editorial-moma-9686879502566-0.jpg */; };
 		FD893D5A6FAB277622257C54 /* editorial-forom-9080102322307-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F229E6E5CC05AC99E03AADB5 /* editorial-forom-9080102322307-0.jpg */; };
 		FDD19A90BC1AA11E24F0921A /* ShopFeedSummer26App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D295B4AB8C545AB13095CD54 /* ShopFeedSummer26App.swift */; };
@@ -330,6 +350,8 @@
 		206CA1295E8B6FC39644D1DE /* PurlTuneRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurlTuneRuntime.swift; sourceTree = "<group>"; };
 		212C72618735964CE2EE2CA6 /* RemoteFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedService.swift; sourceTree = "<group>"; };
 		228F0094F0DBEA5C16F0AF41 /* GenerativeShoppingReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeShoppingReview.swift; sourceTree = "<group>"; };
+		22DDC6960856164282826F24 /* fellow-wordmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fellow-wordmark.png"; sourceTree = "<group>"; };
+		251515E9BC3D658D1BAF35FA /* taylor-stitch-wordmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "taylor-stitch-wordmark.png"; sourceTree = "<group>"; };
 		2537D9E279EC49B168BFF767 /* LocalMerchantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalMerchantService.swift; sourceTree = "<group>"; };
 		281FDFAC7B3A9E95703E93EE /* FeedTopic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTopic.swift; sourceTree = "<group>"; };
 		29FA85B0BA2C65C517A6CD0D /* GenerativeEditorialMerchantCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeEditorialMerchantCard.swift; sourceTree = "<group>"; };
@@ -349,6 +371,7 @@
 		34CBB25272FEB86070DE427D /* editorial-coming-soon-9603148841266-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-coming-soon-9603148841266-0.jpg"; sourceTree = "<group>"; };
 		35197E9F1FF1535D14BB9F00 /* EditorialCommerceFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorialCommerceFeedCard.swift; sourceTree = "<group>"; };
 		362AA9ECF0FBCBF6C312897A /* GoodSans-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GoodSans-Medium.otf"; sourceTree = "<group>"; };
+		37B464DF269B7F4C79DADDF6 /* fellow-series-1.webp */ = {isa = PBXFileReference; path = "fellow-series-1.webp"; sourceTree = "<group>"; };
 		37F30F295103DACCFE9D78BD /* prototype-product-lichen-12518383059262.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-lichen-12518383059262.jpg"; sourceTree = "<group>"; };
 		38794D648D9F705EDDF385FC /* editorial-lichen-12518383059262-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-lichen-12518383059262-0.jpg"; sourceTree = "<group>"; };
 		38E8DE96062F5624D3957EF7 /* ShopFeedSummer26.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ShopFeedSummer26.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -361,6 +384,7 @@
 		43C9CC8574E3C0E8C22EAC5D /* GenerativeDiscoveryComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeDiscoveryComposition.swift; sourceTree = "<group>"; };
 		451CDFE4421E5E2587BF065A /* NextGenerationFeedGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextGenerationFeedGallery.swift; sourceTree = "<group>"; };
 		454F86BE7F786EB1CCFC0C29 /* HomeRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRoute.swift; sourceTree = "<group>"; };
+		4659ADB5ECD10A2A93C5069A /* ugmonk-analog-weekly-kit.webp */ = {isa = PBXFileReference; path = "ugmonk-analog-weekly-kit.webp"; sourceTree = "<group>"; };
 		486B1C4273CF70179DC8AC26 /* EDITORIAL_SOURCES.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = EDITORIAL_SOURCES.json; sourceTree = "<group>"; };
 		48BF042243E1DA796AB16D5F /* NavigationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinator.swift; sourceTree = "<group>"; };
 		4AAD078B4815E78E63DBC18E /* GenerativeFeedPrototypeFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeFeedPrototypeFixtures.swift; sourceTree = "<group>"; };
@@ -373,6 +397,7 @@
 		4EB209BF03135794AA09F836 /* MerchantImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerchantImage.swift; sourceTree = "<group>"; };
 		4F73DE9617D361AC48520EA8 /* AgentProductShelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentProductShelf.swift; sourceTree = "<group>"; };
 		5021385873ED5EC57C1D0C75 /* editorial-extra-butter-salomon-8151144530103-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-extra-butter-salomon-8151144530103-0.jpg"; sourceTree = "<group>"; };
+		514112487360062904AA193B /* dsdurga-wordmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dsdurga-wordmark.png"; sourceTree = "<group>"; };
 		51BE5BDC93BF6AFB29F6731D /* ExplorePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorePage.swift; sourceTree = "<group>"; };
 		5307D982E8802D5BA2FABA39 /* ComparisonShelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonShelf.swift; sourceTree = "<group>"; };
 		54499965144553181DE87600 /* GravitySpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravitySpacing.swift; sourceTree = "<group>"; };
@@ -390,6 +415,7 @@
 		61F3FDD0745D3BA8C4C8F491 /* ConversationHistoryClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHistoryClient.swift; sourceTree = "<group>"; };
 		627E10652A5F17765EF97F86 /* editorial-nocs-6591770722382-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-nocs-6591770722382-0.jpg"; sourceTree = "<group>"; };
 		62A9CE71B60B11CF53D45EEF /* TryFavesStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryFavesStyle.swift; sourceTree = "<group>"; };
+		62C3003142D8F890F79A228C /* cotopaxi-daily-spf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cotopaxi-daily-spf.png"; sourceTree = "<group>"; };
 		635B2846FCD46E1DFF7F03D1 /* editorial-extra-butter-salomon-8349773922487-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-extra-butter-salomon-8349773922487-0.jpg"; sourceTree = "<group>"; };
 		64EC5E34A29A38445CB9628B /* ShopPostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPostService.swift; sourceTree = "<group>"; };
 		65574DBE68DBBCAC7E3BFB57 /* editorial-kinto-2214011961392-1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-kinto-2214011961392-1.jpg"; sourceTree = "<group>"; };
@@ -427,13 +453,17 @@
 		79B5EE001CCDA550692C9022 /* TopicPageBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicPageBlocks.swift; sourceTree = "<group>"; };
 		7E3506BBA3CAF16F94A6C934 /* BuyerFeedNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerFeedNavigationBar.swift; sourceTree = "<group>"; };
 		7E3F31ABD00A86DFF0320BE3 /* BentoGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BentoGrid.swift; sourceTree = "<group>"; };
+		7E9AAA2E31C008C795B9AE19 /* graza-wordmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "graza-wordmark.png"; sourceTree = "<group>"; };
 		7F2C1A0A84FDDE28DC408251 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
 		7F39B6F46EBC3D657496BF6D /* FloatingBackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingBackButton.swift; sourceTree = "<group>"; };
 		7F7FE9B3DC8AB77C41671E1D /* FeedScrollInfrastructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedScrollInfrastructure.swift; sourceTree = "<group>"; };
+		7F959F01D1887E844125ED8D /* graza-trio-bento.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "graza-trio-bento.jpg"; sourceTree = "<group>"; };
 		80517E38CAA945575C1D7159 /* editorial-moma-8398523367654-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-moma-8398523367654-0.jpg"; sourceTree = "<group>"; };
 		806008B0AC9479D3A84AC83A /* editorial-house-of-leon-7873592688813-4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-house-of-leon-7873592688813-4.jpg"; sourceTree = "<group>"; };
 		81893883E934BAC0B3B769E2 /* HolidayFeedHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayFeedHeader.swift; sourceTree = "<group>"; };
 		825938AC5196B6F59F942B37 /* GTStandard-MBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GTStandard-MBold.otf"; sourceTree = "<group>"; };
+		82B61D5923370380E44C5B77 /* PRODUCT_SPECIFIC_SOURCES.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PRODUCT_SPECIFIC_SOURCES.json; sourceTree = "<group>"; };
+		8470E370984E49154C2DB598 /* cotopaxi-wordmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cotopaxi-wordmark.png"; sourceTree = "<group>"; };
 		85FDE31B3C8EE07C68E3AA0A /* EDITORIAL_PLANS.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = EDITORIAL_PLANS.json; sourceTree = "<group>"; };
 		885EDAD2BA255AF356EA526D /* editorial-standards-manual-1424479363-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-standards-manual-1424479363-0.jpg"; sourceTree = "<group>"; };
 		8898171E08696174F1D25B2A /* editorial-kinto-2214023331888-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-kinto-2214023331888-0.jpg"; sourceTree = "<group>"; };
@@ -491,6 +521,8 @@
 		B688BEC7F76E8968601FF28E /* StorePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorePage.swift; sourceTree = "<group>"; };
 		B6E07104E33E24EFFA26DDEE /* AmbientProductVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientProductVideo.swift; sourceTree = "<group>"; };
 		B8390B3AB280B4DA9E1B9867 /* Shopify Sans-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Black.otf"; sourceTree = "<group>"; };
+		B8DCE1A9C330D9CEDFFF3148 /* cotopaxi-layflat-notebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cotopaxi-layflat-notebook.png"; sourceTree = "<group>"; };
+		B947EE79B157FE0E172282FB /* cotopaxi-pop-cable.webp */ = {isa = PBXFileReference; path = "cotopaxi-pop-cable.webp"; sourceTree = "<group>"; };
 		B96694C6EED1830A1ED8C4FF /* InjectableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectableView.swift; sourceTree = "<group>"; };
 		B983AC901056B787D37F13CA /* AgentConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentConversationView.swift; sourceTree = "<group>"; };
 		B9D284B4531C1094FD7A9792 /* EvergreenDestinationFeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvergreenDestinationFeeds.swift; sourceTree = "<group>"; };
@@ -502,16 +534,19 @@
 		BE0ED552AC81FCFE75A32C68 /* GoodSansText-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GoodSansText-Regular.otf"; sourceTree = "<group>"; };
 		C15E4F43A8568B6BFE596E7E /* Shopify Sans-Regular Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Regular Italic.otf"; sourceTree = "<group>"; };
 		C234820E2C6C5EE50006661C /* prototype-product-standards-manual-5842516163.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-standards-manual-5842516163.jpg"; sourceTree = "<group>"; };
+		C2596A1E83F89D7039C142E9 /* cotopaxi-trozo-interior.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "cotopaxi-trozo-interior.jpg"; sourceTree = "<group>"; };
 		C2E733B02FA0A2456A50F957 /* TopicPresentationBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicPresentationBlockView.swift; sourceTree = "<group>"; };
 		C3AC86BC4EA8BB2C4C9FCDC4 /* AgentMetaRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentMetaRow.swift; sourceTree = "<group>"; };
 		C786DBD3E40032CA38352C06 /* editorial-doiy-8712550678684-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-doiy-8712550678684-0.jpg"; sourceTree = "<group>"; };
 		C7DBF299D0C3E6ED78EA6267 /* HomeFeedModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeedModels.swift; sourceTree = "<group>"; };
 		C9A2512F5B07176A5AC09AA6 /* editorial-ceremonia-7219216580772-3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-ceremonia-7219216580772-3.jpg"; sourceTree = "<group>"; };
+		CACD427B87AADE33A5A06FC0 /* dsdurga-big-sur-after-rain.webp */ = {isa = PBXFileReference; path = "dsdurga-big-sur-after-rain.webp"; sourceTree = "<group>"; };
 		CB2EB5100CC246E29163580F /* editorial-moma-8909829603558-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-moma-8909829603558-0.jpg"; sourceTree = "<group>"; };
 		CC1132BFE84890181F234405 /* ShopServerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopServerClient.swift; sourceTree = "<group>"; };
 		CC719A5F782082D53B9247E3 /* AgentProductCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentProductCard.swift; sourceTree = "<group>"; };
 		CCE3E16218D05884C2913958 /* editorial-babyletto-7652167942198-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-babyletto-7652167942198-0.jpg"; sourceTree = "<group>"; };
 		CD367E62234493CBAE43F5E7 /* editorial-standards-manual-5842516163-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-standards-manual-5842516163-0.jpg"; sourceTree = "<group>"; };
+		CD4581D5B67842258F349BAF /* fellow-opus-2.webp */ = {isa = PBXFileReference; path = "fellow-opus-2.webp"; sourceTree = "<group>"; };
 		CDA40258C915F1A57D84E196 /* GravityBorderRadii.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityBorderRadii.swift; sourceTree = "<group>"; };
 		CDC3E1EA342E896457F7A44E /* FollowUpBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUpBar.swift; sourceTree = "<group>"; };
 		CEA5F85C077AA997213249D2 /* ShopPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPost.swift; sourceTree = "<group>"; };
@@ -521,9 +556,11 @@
 		D5DABD3517DBD36A83E1F1BD /* editorial-draw-down-1591926554714-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-draw-down-1591926554714-0.jpg"; sourceTree = "<group>"; };
 		D63224A20DCCA6A2867E3E63 /* TryOnFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryOnFeedCard.swift; sourceTree = "<group>"; };
 		D980F4F049B8BD00365E5845 /* GravityIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityIcon.swift; sourceTree = "<group>"; };
+		D99AFB39ACB942A8AD825BF9 /* olive-and-june-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "olive-and-june-mark.png"; sourceTree = "<group>"; };
 		DAA03D4C904C81520ECE119F /* PurlInjectionDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurlInjectionDiagnostics.swift; sourceTree = "<group>"; };
 		DB02EED712F616C19BAB6144 /* Shopify Sans-Medium Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Medium Italic.otf"; sourceTree = "<group>"; };
 		DC06D59AD96C7C93BE1EB595 /* editorial-kinto-2214011961392-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-kinto-2214011961392-0.jpg"; sourceTree = "<group>"; };
+		DD9DDCB65F884F92482C3691 /* ProductSpecificFeedGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductSpecificFeedGallery.swift; sourceTree = "<group>"; };
 		E0340E8B08C4ACA990499EDC /* prototype-product-house-of-leon-7873592688813.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-house-of-leon-7873592688813.jpg"; sourceTree = "<group>"; };
 		E05B44C91B18A28E6D1BD8EF /* editorial-fellow-2055410221171-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-fellow-2055410221171-0.jpg"; sourceTree = "<group>"; };
 		E25FDAAFB82E67A6B234DCA9 /* GenerativePrototypeTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativePrototypeTools.swift; sourceTree = "<group>"; };
@@ -544,10 +581,12 @@
 		F10B16167B932BDE28BA2B48 /* FeedStory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStory.swift; sourceTree = "<group>"; };
 		F2251D504F382A3F44A38EDB /* editorial-rhode-8070391660782-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-rhode-8070391660782-0.jpg"; sourceTree = "<group>"; };
 		F229E6E5CC05AC99E03AADB5 /* editorial-forom-9080102322307-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-forom-9080102322307-0.jpg"; sourceTree = "<group>"; };
+		F24E0D82E08EFA2C98D54EC4 /* cotopaxi-trozo-product.webp */ = {isa = PBXFileReference; path = "cotopaxi-trozo-product.webp"; sourceTree = "<group>"; };
 		F2A7391405F0949BDC85A56D /* EditorialFeedUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorialFeedUITests.swift; sourceTree = "<group>"; };
 		F2CE543A596530FA1FB54679 /* DebugInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugInjection.swift; sourceTree = "<group>"; };
 		F352EB6877433D772204665C /* editorial-fellow-4807420739684-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-fellow-4807420739684-0.jpg"; sourceTree = "<group>"; };
 		F4A8B6A48F59AE65A5A915C9 /* QuickSearchCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSearchCard.swift; sourceTree = "<group>"; };
+		F4C01E1330A4271B6E612D18 /* fellow-pirch-glasses.webp */ = {isa = PBXFileReference; path = "fellow-pirch-glasses.webp"; sourceTree = "<group>"; };
 		F4D0E2FEE272F2F38A000DD1 /* prototype-product-forom-8817998889091.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prototype-product-forom-8817998889091.jpg"; sourceTree = "<group>"; };
 		F65CA5F68FD9BBBA9174AB03 /* Dossiers */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Dossiers; path = ShopFeedSummer26/Dossiers; sourceTree = SOURCE_ROOT; };
 		F6915A5ED111B873EFB9D852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -560,6 +599,7 @@
 		FA35C76B80BB93C38B16B89C /* Shopify Sans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shopify Sans-Bold.otf"; sourceTree = "<group>"; };
 		FA404FA99441FEFBD442E7B0 /* editorial-forom-7914833051779-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "editorial-forom-7914833051779-0.jpg"; sourceTree = "<group>"; };
 		FD2F47D24C455081A6C9B863 /* RecentsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentsPanel.swift; sourceTree = "<group>"; };
+		FFC9582C8813801345C59B02 /* ProductSpecificFeedUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductSpecificFeedUITests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -649,6 +689,31 @@
 				F10DF90854E86C476B522742 /* Search */,
 			);
 			path = Pages;
+			sourceTree = "<group>";
+		};
+		172087EB3A1B3907990084EC /* ProductSpecificMedia */ = {
+			isa = PBXGroup;
+			children = (
+				62C3003142D8F890F79A228C /* cotopaxi-daily-spf.png */,
+				B8DCE1A9C330D9CEDFFF3148 /* cotopaxi-layflat-notebook.png */,
+				B947EE79B157FE0E172282FB /* cotopaxi-pop-cable.webp */,
+				C2596A1E83F89D7039C142E9 /* cotopaxi-trozo-interior.jpg */,
+				F24E0D82E08EFA2C98D54EC4 /* cotopaxi-trozo-product.webp */,
+				8470E370984E49154C2DB598 /* cotopaxi-wordmark.png */,
+				CACD427B87AADE33A5A06FC0 /* dsdurga-big-sur-after-rain.webp */,
+				514112487360062904AA193B /* dsdurga-wordmark.png */,
+				CD4581D5B67842258F349BAF /* fellow-opus-2.webp */,
+				F4C01E1330A4271B6E612D18 /* fellow-pirch-glasses.webp */,
+				37B464DF269B7F4C79DADDF6 /* fellow-series-1.webp */,
+				22DDC6960856164282826F24 /* fellow-wordmark.png */,
+				7F959F01D1887E844125ED8D /* graza-trio-bento.jpg */,
+				7E9AAA2E31C008C795B9AE19 /* graza-wordmark.png */,
+				D99AFB39ACB942A8AD825BF9 /* olive-and-june-mark.png */,
+				82B61D5923370380E44C5B77 /* PRODUCT_SPECIFIC_SOURCES.json */,
+				251515E9BC3D658D1BAF35FA /* taylor-stitch-wordmark.png */,
+				4659ADB5ECD10A2A93C5069A /* ugmonk-analog-weekly-kit.webp */,
+			);
+			path = ProductSpecificMedia;
 			sourceTree = "<group>";
 		};
 		2F4DA453E295EE4E4AE398C8 /* Worlds */ = {
@@ -914,6 +979,7 @@
 				AB9814ED8FB1597FE8380CFA /* OrdersWidget.swift */,
 				04CE0AD84A963D9B87DAC7A6 /* ProductCard.swift */,
 				8FD31991D306CEA29F0583C1 /* ProductImageView.swift */,
+				DD9DDCB65F884F92482C3691 /* ProductSpecificFeedGallery.swift */,
 				7441F231E112580CF7D84C6D /* ShopPostFeedCard.swift */,
 				0F0E1B41F7855616362EB10F /* StoryCardLayouts.swift */,
 				E670AA572DCA2DB88EE8D9C6 /* StoryFeedCard.swift */,
@@ -955,6 +1021,7 @@
 				5BE7BFA0C385A2493983C72B /* Models */,
 				34D33C611A9EF92EC02165CD /* Navigation */,
 				0F0CADD9C321AA4BA8C22B4E /* Pages */,
+				172087EB3A1B3907990084EC /* ProductSpecificMedia */,
 				A0A6C032341F791DDF785F08 /* PrototypeCardMedia */,
 				ACBB2AF8AB88EF30F85AA4F3 /* SampleData */,
 				2F4DA453E295EE4E4AE398C8 /* Worlds */,
@@ -976,6 +1043,7 @@
 			children = (
 				F2A7391405F0949BDC85A56D /* EditorialFeedUITests.swift */,
 				76EE806882C427056496C963 /* GenerativeFeedPrototypeUITests.swift */,
+				FFC9582C8813801345C59B02 /* ProductSpecificFeedUITests.swift */,
 			);
 			path = PrototypeUITests;
 			sourceTree = "<group>";
@@ -1087,6 +1155,7 @@
 				3D93993FCB3E4C5AA0B45448 /* GoodSansText-Bold.otf in Resources */,
 				879966519E152447631E4F76 /* GoodSansText-Medium.otf in Resources */,
 				DF2A664E61B4341B235D1085 /* GoodSansText-Regular.otf in Resources */,
+				0523FE135DA0C364E2B3BEDB /* PRODUCT_SPECIFIC_SOURCES.json in Resources */,
 				7ADB6AAFBD9415AF2F28D71F /* SOURCES.json in Resources */,
 				D0BA7B0AE2FD5B79CE755497 /* Shopify Sans-Black Italic.otf in Resources */,
 				80113771A59A338E75B6F4D0 /* Shopify Sans-Black.otf in Resources */,
@@ -1098,6 +1167,14 @@
 				ECCF6A2EA6F02169A525D1F9 /* Shopify Sans-Medium.otf in Resources */,
 				E90D9A254DB2B26CF0D9AA2A /* Shopify Sans-Regular Italic.otf in Resources */,
 				742ADA927F28DE885852A247 /* Shopify Sans-Regular.otf in Resources */,
+				29B63F764A37C36DCBBB1CE3 /* cotopaxi-daily-spf.png in Resources */,
+				9583C766BF91A4E3C6BF1C6F /* cotopaxi-layflat-notebook.png in Resources */,
+				27049D085886902E3C8022B1 /* cotopaxi-pop-cable.webp in Resources */,
+				D33AC0244A187A17DFDAC9E9 /* cotopaxi-trozo-interior.jpg in Resources */,
+				24516F8F55C85A760DD2A3FF /* cotopaxi-trozo-product.webp in Resources */,
+				A62DF9FFAB41D5FB6AE986DA /* cotopaxi-wordmark.png in Resources */,
+				A62FF9BBA484CF0610AB7EFD /* dsdurga-big-sur-after-rain.webp in Resources */,
+				13954ADAA450CB721DD97D17 /* dsdurga-wordmark.png in Resources */,
 				D640512F87C0281F24BDB184 /* editorial-babyletto-7652167647286-0.jpg in Resources */,
 				4835C0AC1B43A6AE693C04F4 /* editorial-babyletto-7652167942198-0.jpg in Resources */,
 				DA433CF72C06E3121A385D9A /* editorial-babyletto-7784483389494-0.jpg in Resources */,
@@ -1160,6 +1237,13 @@
 				FE9907FEE5B3346E3889FFF6 /* editorial-standards-manual-1424479363-0.jpg in Resources */,
 				5B6A71B5025A8B5FE5A298DB /* editorial-standards-manual-5842516163-0.jpg in Resources */,
 				B71963093A9A562454CBF39A /* editorial-standards-manual-92039479320-0.jpg in Resources */,
+				3EAD166F89D32C9B94CE6E9D /* fellow-opus-2.webp in Resources */,
+				731885839029DE63FF6EA310 /* fellow-pirch-glasses.webp in Resources */,
+				B73A122F000A82D0DAEC11CB /* fellow-series-1.webp in Resources */,
+				38518A8B5D9D5A5AF20B080E /* fellow-wordmark.png in Resources */,
+				58B9642D777AAD7704730810 /* graza-trio-bento.jpg in Resources */,
+				D149584F3430C4353F6C7219 /* graza-wordmark.png in Resources */,
+				0F322A01FD8830CF32B9EC3A /* olive-and-june-mark.png in Resources */,
 				EABC2C985CDDD275FE31BD6E /* prototype-product-feature-salomon-6882429796423.jpg in Resources */,
 				3B4CFFC372DC822A2E7B5DF7 /* prototype-product-feature-salomon-6882429993031.jpg in Resources */,
 				969E01B07575E71A226BA893 /* prototype-product-feature-salomon-6882430025799.jpg in Resources */,
@@ -1179,6 +1263,8 @@
 				2C28BDB175D4B02A4B98BACF /* prototype-product-standards-manual-3933686169669.jpg in Resources */,
 				1706C499ECEA1A44425C37D0 /* prototype-product-standards-manual-5842516163.jpg in Resources */,
 				2C33A7C1BC355A8863BE586D /* prototype-product-standards-manual-92039479320.jpg in Resources */,
+				FC5FEE3AEB27BD8C776CEBE8 /* taylor-stitch-wordmark.png in Resources */,
+				E337467B845C1331F6CAA984 /* ugmonk-analog-weekly-kit.webp in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1369,6 +1455,7 @@
 				ED7268A1F22F3B3555E97161 /* ProductDetailCard.swift in Sources */,
 				BAB57F30ED52BC33EBE5D21F /* ProductImageView.swift in Sources */,
 				01C5D6B8DAC61C865FBB857B /* ProductPage.swift in Sources */,
+				9575ABA94938F3E79ADBC95E /* ProductSpecificFeedGallery.swift in Sources */,
 				477D09CD55C612D590A21422 /* PurlInjectionDiagnostics.swift in Sources */,
 				A82E10EDFA71EA5612CAC292 /* PurlTuneRuntime.swift in Sources */,
 				BB89D0D2AA32282A22C6F72F /* PurlTuneTokenOptions.swift in Sources */,
@@ -1435,6 +1522,7 @@
 			files = (
 				2EAF1DF07CF578A52C143B2C /* EditorialFeedUITests.swift in Sources */,
 				D1111CE9CEEC25BC0A816AE1 /* GenerativeFeedPrototypeUITests.swift in Sources */,
+				663E7A3DF8A0CF39A8E9D684 /* ProductSpecificFeedUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

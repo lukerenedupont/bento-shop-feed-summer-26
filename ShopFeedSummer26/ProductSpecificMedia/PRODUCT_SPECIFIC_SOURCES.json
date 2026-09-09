@@ -1,0 +1,229 @@
+{
+  "assets": [
+    {
+      "merchant": "Olive & June",
+      "product_id": "7955407896618",
+      "product": "Actually Dramatic",
+      "source_url": "https://cdn.shopify.com/s/files/1/2665/7478/files/2_3cf157cd-3202-413a-a8e0-cbcc1945de2f.png?v=1785772386",
+      "gallery_index": 3,
+      "kind": "remote official shade preview",
+      "previous_prototype_file": "olive-actually-dramatic-light.jpg"
+    },
+    {
+      "merchant": "Olive & June",
+      "product_id": "7955407896618",
+      "product": "Actually Dramatic",
+      "source_url": "https://cdn.shopify.com/s/files/1/2665/7478/files/ActuallyDramaticNP2.png?v=1785877581",
+      "gallery_index": 7,
+      "kind": "remote official shade preview",
+      "previous_prototype_file": "olive-actually-dramatic-medium.jpg"
+    },
+    {
+      "merchant": "Olive & June",
+      "product_id": "7955407896618",
+      "product": "Actually Dramatic",
+      "source_url": "https://cdn.shopify.com/s/files/1/2665/7478/files/1_bfc68455-452b-4948-bbc1-ea90d62ae0b6.png?v=1785772386",
+      "gallery_index": 4,
+      "kind": "remote official shade preview",
+      "previous_prototype_file": "olive-actually-dramatic-deep.jpg"
+    },
+    {
+      "merchant": "Olive & June",
+      "product_id": "7955412189226",
+      "product": "Lowkey Perfect",
+      "source_url": "https://cdn.shopify.com/s/files/1/2665/7478/files/LowkeyPerfectNP3.png?v=1785877296",
+      "gallery_index": 8,
+      "kind": "remote official shade preview",
+      "previous_prototype_file": "olive-lowkey-perfect-light.jpg"
+    },
+    {
+      "merchant": "Olive & June",
+      "product_id": "7955412189226",
+      "product": "Lowkey Perfect",
+      "source_url": "https://cdn.shopify.com/s/files/1/2665/7478/files/LowkeyPerfectNP2.png?v=1785877297",
+      "gallery_index": 7,
+      "kind": "remote official shade preview",
+      "previous_prototype_file": "olive-lowkey-perfect-medium.jpg"
+    },
+    {
+      "merchant": "Olive & June",
+      "product_id": "7955412189226",
+      "product": "Lowkey Perfect",
+      "source_url": "https://cdn.shopify.com/s/files/1/2665/7478/files/2_5b4a475f-fcf9-48ae-a75b-8d1eee64c8f6.png?v=1785772906",
+      "gallery_index": 3,
+      "kind": "remote official shade preview",
+      "previous_prototype_file": "olive-lowkey-perfect-deep.jpg"
+    },
+    {
+      "merchant": "Olive & June",
+      "product_id": "7955410092074",
+      "product": "Unbothered Energy",
+      "source_url": "https://cdn.shopify.com/s/files/1/2665/7478/files/Artboard1-4.png?v=1785772479",
+      "gallery_index": 3,
+      "kind": "remote official shade preview",
+      "previous_prototype_file": "olive-unbothered-energy-light.jpg"
+    },
+    {
+      "merchant": "Olive & June",
+      "product_id": "7955410092074",
+      "product": "Unbothered Energy",
+      "source_url": "https://cdn.shopify.com/s/files/1/2665/7478/files/UnbotheredEnergyNP2.png?v=1785877470",
+      "gallery_index": 7,
+      "kind": "remote official shade preview",
+      "previous_prototype_file": "olive-unbothered-energy-medium.jpg"
+    },
+    {
+      "merchant": "Olive & June",
+      "product_id": "7955410092074",
+      "product": "Unbothered Energy",
+      "source_url": "https://cdn.shopify.com/s/files/1/2665/7478/files/Artboard1-3.png?v=1785772479",
+      "gallery_index": 4,
+      "kind": "remote official shade preview",
+      "previous_prototype_file": "olive-unbothered-energy-deep.jpg"
+    },
+    {
+      "merchant": "Olive & June",
+      "product_id": "7955411304490",
+      "product": "Not Quiet Luxury",
+      "source_url": "https://cdn.shopify.com/s/files/1/2665/7478/files/NotQuietLuxuryNP1.png?v=1785877400",
+      "gallery_index": 6,
+      "kind": "remote official shade preview",
+      "previous_prototype_file": "olive-not-quiet-luxury-light.jpg"
+    },
+    {
+      "merchant": "Olive & June",
+      "product_id": "7955411304490",
+      "product": "Not Quiet Luxury",
+      "source_url": "https://cdn.shopify.com/s/files/1/2665/7478/files/NotQuietLuxuryNP2.png?v=1785877400",
+      "gallery_index": 7,
+      "kind": "remote official shade preview",
+      "previous_prototype_file": "olive-not-quiet-luxury-medium.jpg"
+    },
+    {
+      "merchant": "Olive & June",
+      "product_id": "7955411304490",
+      "product": "Not Quiet Luxury",
+      "source_url": "https://cdn.shopify.com/s/files/1/2665/7478/files/Artboard1-4_f876526b-2d12-4f2a-a46d-32323352bf13.png?v=1785772656",
+      "gallery_index": 4,
+      "kind": "remote official shade preview",
+      "previous_prototype_file": "olive-not-quiet-luxury-deep.jpg"
+    },
+    {
+      "file": "olive-and-june-mark.png",
+      "merchant": "Olive & June",
+      "kind": "official storefront mark",
+      "source_url": "https://oliveandjune.com/cdn/shop/files/main-logo_2x_32c6d76d-f837-4a47-8fae-8b2868b06da5.png?v=1651863832"
+    },
+    {
+      "file": "graza-trio-bento.jpg",
+      "merchant": "Graza",
+      "product_id": "gid://shopify/p/8o4GxDVXTu8ItfqJ6KSWs",
+      "product": "The Trio",
+      "kind": "dossier lookbook bento",
+      "dossier": "60a314b2f4cc79ce",
+      "source": "/api/ai/image?key=f00f1750d3a73738"
+    },
+    {
+      "merchant": "Graza",
+      "product_id": "8843130863830",
+      "product": "Frizzle Squeeze",
+      "kind": "official game rules and product data",
+      "source_url": "https://www.graza.co/blogs/education/sizzle-drizzle-or-frizzle"
+    },
+    {
+      "file": "graza-wordmark.png",
+      "merchant": "Graza",
+      "kind": "official storefront wordmark",
+      "source_url": "https://www.graza.co/cdn/shop/files/graza-logo.png?v=1638847956"
+    },
+    {
+      "file": "ugmonk-analog-weekly-kit.webp",
+      "merchant": "Ugmonk",
+      "product_id": "7802067779734",
+      "product": "Analog Weekly Planning Kit (Walnut)",
+      "kind": "official product image from Quick inventory",
+      "source_url": "https://shop-aigen-feed.quick.shopify.io/assets/20-0-0.webp"
+    },
+    {
+      "file": "fellow-wordmark.png",
+      "merchant": "Fellow",
+      "kind": "official wordmark exported from Quick reference",
+      "source_url": "https://shop-aigen-feed.quick.shopify.io/assets/demo-logo-fellow.svg"
+    },
+    {
+      "files": ["fellow-series-1.webp", "fellow-opus-2.webp", "fellow-pirch-glasses.webp"],
+      "merchant": "Fellow",
+      "kind": "official product images from Quick reference",
+      "source_url": "https://shop-aigen-feed.quick.shopify.io/",
+      "product_ids": ["8041603498084", "8426192404580", "8203553013860"]
+    },
+    {
+      "file": "dsdurga-wordmark.png",
+      "merchant": "D.S. & Durga",
+      "kind": "official wordmark exported from Quick reference",
+      "source_url": "https://shop-aigen-feed.quick.shopify.io/assets/demo-logo-durga.svg"
+    },
+    {
+      "file": "dsdurga-big-sur-after-rain.webp",
+      "merchant": "D.S. & Durga",
+      "product_id": "9694949212451",
+      "product": "Big Sur After Rain",
+      "kind": "official product image from Quick reference",
+      "source_url": "https://shop-aigen-feed.quick.shopify.io/assets/06-0-0.webp"
+    },
+    {
+      "file": "taylor-stitch-wordmark.png",
+      "merchant": "Taylor Stitch",
+      "kind": "official wordmark exported from Quick reference",
+      "source_url": "https://shop-aigen-feed.quick.shopify.io/assets/demo-logo-taylor.svg"
+    },
+    {
+      "file": "cotopaxi-wordmark.png",
+      "merchant": "Cotopaxi",
+      "kind": "official wordmark exported from Quick reference",
+      "source_url": "https://shop-aigen-feed.quick.shopify.io/assets/demo-logo-cotopaxi.svg?v=2"
+    },
+    {
+      "file": "cotopaxi-trozo-product.webp",
+      "merchant": "Cotopaxi",
+      "product_id": "7956765048893",
+      "product": "Trozo 8L Shoulder Bag - Cada Día",
+      "kind": "official product cutout from Quick reference",
+      "source_url": "https://shop-aigen-feed.quick.shopify.io/assets/11-0-0.webp"
+    },
+    {
+      "file": "cotopaxi-pop-cable.webp",
+      "merchant": "Native Union",
+      "product_id": "8029318709387",
+      "product": "POP Cable",
+      "kind": "official product image from Quick reference",
+      "source_url": "https://shop-aigen-feed.quick.shopify.io/assets/17-0-0.webp"
+    },
+    {
+      "file": "cotopaxi-daily-spf.png",
+      "merchant": "Beauty of Joseon",
+      "product_id": "14990688223604",
+      "product": "Dayscreen Moisturizer SPF 30",
+      "kind": "product cutout from Quick reference",
+      "source_url": "https://shop-aigen-feed.quick.shopify.io/assets/demo-carry-spf.png"
+    },
+    {
+      "file": "cotopaxi-layflat-notebook.png",
+      "merchant": "Ugmonk",
+      "product_id": "8549075419286",
+      "product": "Layflat Notebook (Yellow)",
+      "kind": "product cutout from Quick reference",
+      "source_url": "https://shop-aigen-feed.quick.shopify.io/assets/demo-carry-notebook.png"
+    },
+    {
+      "file": "cotopaxi-trozo-interior.jpg",
+      "merchant": "Cotopaxi",
+      "product_id": "gid://shopify/p/5fxWUGSkA9f00CXZZ1Oh1v",
+      "product": "Trozo 8L Shoulder Bag - Cada D\u00eda",
+      "kind": "dossier lookbook interior crop",
+      "dossier": "cbf77307c46711db",
+      "source": "/api/ai/image?key=2d6147551955dbbc",
+      "crop": "bottom-right"
+    }
+  ]
+}
