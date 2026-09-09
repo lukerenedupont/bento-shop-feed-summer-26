@@ -22,7 +22,7 @@ struct EditorialCommerceFeedCard: View {
 
     var body: some View {
         ZStack {
-            (plan.palette == "paper" ? Color(hex: "#E9E6DD") : plan.darkText ? Color.white : .black)
+            atmosphere
             if plan.backdrop, let first = products.first {
                 EditorialCatalogPhoto(item: first, index: plan.photoIndex, fills: true)
                     .frame(width: width, height: height)
@@ -48,6 +48,7 @@ struct EditorialCommerceFeedCard: View {
                         scene(size: geometry.size)
                     }
                 }
+                .padding(.horizontal, plan.backdrop ? 0 : -12)
                 if plan.headlineAnchor == "bottom" { heading }
                 if plan.showChoices { choices }
                 productHandoff
@@ -59,6 +60,27 @@ struct EditorialCommerceFeedCard: View {
         }
         .frame(width: width, height: height)
         .environment(\.colorScheme, plan.darkText ? .light : .dark)
+    }
+
+    @ViewBuilder private var atmosphere: some View {
+        if plan.backdrop {
+            Color.black
+        } else {
+            // Color belongs to the surrounding light, never a filter over the
+            // product. A neutral center integrates the canonical studio images.
+            let colors = ["sage": "#DCE7D9", "sand": "#EEE2CA", "rose": "#EED9DE",
+                          "clay": "#EAD5C7", "lilac": "#E3DDED", "sky": "#D8E5EE",
+                          "paper": "#E9E6DD", "white": "#FFFFFF"]
+            let color = Color(hex: colors[plan.palette] ?? "#FFFFFF")
+            LinearGradient(stops: [
+                .init(color: color, location: 0),
+                .init(color: color.opacity(0.55), location: 0.20),
+                .init(color: .white, location: 0.38),
+                .init(color: .white, location: 0.72),
+                .init(color: color.opacity(0.65), location: 1)
+            ], startPoint: .top, endPoint: .bottom)
+            .background(.white)
+        }
     }
 
     private var byline: some View {

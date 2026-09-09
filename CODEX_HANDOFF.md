@@ -11,6 +11,8 @@ Updated: 2026-09-08
 
 ## Current review: twenty editorial commerce cards
 
+- Atmosphere pass: the nine product-led cards now use soft sage, sand, rose, clay, lilac or sky washes, with a neutral center around the unchanged studio photography. Media extends to 8pt side margins while text/controls retain 20pt clearance. Existing photographic scenes and approved books stay unchanged. No product color filters or new media were added. All four targeted tests pass in `/tmp/editorial-atmosphere-tests.log`; native screenshots are in `.build/generative-review/atmosphere/`.
+
 - Wordmark/product-scale pass: eighteen cards now use audited bundled storefront wordmarks through `MerchantWordmarkImage`; retailer marks remain separate from Salomon attribution. Ceremonia and Lalo assets were added from merchant-owned URLs through `sync_merchant_wordmarks.py`. Approved Standards Manual stays untouched; Babyletto retains plain attribution rather than an invented logo.
 - Coming Soon and Lalo now have dominant lead images with companion columns; Fellow's maker and Draw Down's lead book are larger. Feature's three undersized shoes became a full-size selectable product. Nocs no longer clips its product into a circle. Images remain fitted, and captions now hug the photograph's actual fitted height. This is a visual refinement, not completion of the deeper five-card UX work.
 - All four `EditorialFeedUITests` pass in `/tmp/editorial-wordmarks-final.log`, including all twenty native-feed frames and eighteen visible official wordmarks. Full legacy regression is still pending.
@@ -21,7 +23,7 @@ Updated: 2026-09-08
 - `Scripts/prepare_editorial_feed.py` records source URLs, derivative crops and hashes for 62 additional canonical gallery photos (1304 KB). Product reviews also resolve these local images. Original nineteen-image provenance remains intact.
 - Photographic cards retain the pictured anchor. Related-product links open that product's details rather than forcing a different packshot into the backdrop. Product-selection cards retain selection while browsing; the selected photo, name, price and handoff share one canonical item. Draw Down exposes a real book-interior photo.
 - Review: `./Scripts/run_generative_feed.sh [feed|gallery|consumer] [0...19]`. First cards: Forom mirrors, Extra Butter Salomon, approved Standards Manual. Exact-index gallery is reliable; the inherited native shortcut can settle on a neighboring slot.
-- Current app budget: 184140 / 184320 KB. Home remains below its 1900-line limit. Keep additions lean.
+- Current app budget: 184168 / 184320 KB. Home remains below its 1900-line limit. Keep additions lean.
 - Targeted `EditorialFeedUITests` cover all twenty actual-feed cards, clear navigation/action bounds, related-item destinations, book interior, and retained optics selection. The older six-job tests now explicitly launch their legacy fixture; their full regression remains pending. All four targeted checks passed across `/tmp/editorial-twenty-final.log` (native twenty-card sweep, related product and book interior) and `/tmp/editorial-optics-acceptance.log` (corrected canonical Zoom Tube test label). Final native screenshots live in `.build/generative-review/twenty-native-final/`.
 - Next: review this sequence with the user in the scrolling feed; strengthen weak cards before treating the twenty as approved. Preserve authored topics, custom feeds, utility belt, Worlds, genuine Canvas and both try-on paths.
 

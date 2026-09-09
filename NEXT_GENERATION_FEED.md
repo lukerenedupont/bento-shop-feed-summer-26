@@ -6,6 +6,8 @@ Twenty authored commerce scenes demonstrate possible generative output using 52 
 
 Eighteen cards use official storefront wordmarks, reusing `MerchantWordmarkImage` and the audited `MerchantWordmarks/manifest.json` assets. Ceremonia and Lalo were added through the existing sync script. Standards Manual remains unchanged and Babyletto uses plain attribution. Product-led scenes prioritize a larger lead image; Feature now shows one large selectable shoe rather than three tiny rows. Fitted photographs preserve complete products, with captions positioned against their actual image height.
 
+Product-led cards now have soft, photography-informed color washes rather than uniformly white surfaces. The image area extends to 8pt side margins; text and controls retain 20pt clearance. Studio images keep a neutral surrounding center and are never tinted to match the wash. These are art-direction choices, not claims about official merchant brand colors.
+
 The approved Graphic standards card is preserved. The rejected outfit/chair treatments are outside the default sequence. The new cards still require human visual approval; twenty is a coverage target, not a quality certificate.
 
 ```sh
