@@ -8,6 +8,9 @@ final class GenerativeFeedPrototypeSession {
         var selectedID: String?
         var selectedGroupID: String?
         var comparisonIDs: [String] = []
+        var dossierObjectsVisible = false
+        var dossierSceneIndex = 0
+        var savedDossierPlans: [[String]] = []
         var hasInteracted = false
         var comparisonRevealed = false
         var roomSlotID: String?
@@ -26,13 +29,31 @@ final class GenerativeFeedPrototypeSession {
         var lastAction = "No interaction yet"
     }
     private var states: [String: CardState] = [:]
-    private(set) var disabledSignalIDs: Set<String> = []
+    private(set) var disabledSignalIDs: Set<String> = DossierReviewLibrary.enabled
+        ? Set(DossierReviewLibrary.records.filter { !$0.defaultVisible }.map { "dossier-\($0.key)" }) : []
     private(set) var orderedSignalIDs = GenerativeFeedPrototypeFixtures.signals.map(\.id)
     var designMode = ProcessInfo.processInfo.arguments.contains("-feedDesignMode")
     var acknowledgedDemo = false
     var showsFeedControls = false
     var requestedFeedControls = false
 
+    func saveDossierPlan(_ items: [ResolvedStoryProduct], for spec: NextGenerationFeedCardSpec) {
+        guard state(for: spec).interactionsEnabled, !items.isEmpty,
+              items.allSatisfy({ item in spec.productReferences.contains { $0.merchantID == item.merchant.id && $0.productID == item.product.id } }) else { return }
+        let ids = items.map(\.id)
+        update(spec) {
+            if !$0.savedDossierPlans.contains(ids) { $0.savedDossierPlans.append(ids) }
+            $0.lastAction = "Saved the exact \(ids.count)-object composition for this session"
+        }
+    }
+    func setDossierScene(_ index: Int, for spec: NextGenerationFeedCardSpec) {
+        guard state(for: spec).interactionsEnabled else { return }
+        update(spec) { $0.dossierSceneIndex = index; $0.lastAction = "Browsed styling study \(index + 1)" }
+    }
+    func setDossierObjectsVisible(_ visible: Bool, for spec: NextGenerationFeedCardSpec) {
+        guard state(for: spec).interactionsEnabled else { return }
+        update(spec) { $0.dossierObjectsVisible = visible }
+    }
     func enterConsumerPreview() { acknowledgedDemo = true; designMode = false }
     func state(for spec: NextGenerationFeedCardSpec) -> CardState { states[spec.id] ?? CardState() }
 

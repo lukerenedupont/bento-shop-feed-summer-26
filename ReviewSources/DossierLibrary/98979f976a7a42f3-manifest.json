@@ -1,0 +1,116 @@
+{
+  "schema": "dossier-export-manifest/1",
+  "exportedAt": "2026-09-09T00:13:59.002Z",
+  "key": "98979f976a7a42f3",
+  "title": "1975 Rolex Oyster Perpetual Date Green Khanjar for Sultanate of Oman 34mm Stainless Steel 1500",
+  "documents": {
+    "portable": "dossier.json",
+    "canonical": "source.json",
+    "imageColors": "image-colors.json"
+  },
+  "counts": {
+    "images": 10,
+    "videos": 2,
+    "assets": 12
+  },
+  "bytes": 20241525,
+  "assets": [
+    {
+      "path": "media/images/look0.png",
+      "kind": "image",
+      "variant": "look0",
+      "bytes": 2770150,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=e214a9a81e33b2d5"
+    },
+    {
+      "path": "media/images/look1.png",
+      "kind": "image",
+      "variant": "look1",
+      "bytes": 2621799,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=d23df54b773e784a"
+    },
+    {
+      "path": "media/images/lookbook.png",
+      "kind": "image",
+      "variant": "lookbook",
+      "bytes": 3020044,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=5c17c1bc30fcc83b"
+    },
+    {
+      "path": "media/images/object0.png",
+      "kind": "image",
+      "variant": "object0",
+      "bytes": 849052,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=654c43be03982886"
+    },
+    {
+      "path": "media/images/object1.png",
+      "kind": "image",
+      "variant": "object1",
+      "bytes": 679944,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=e313aaa4c1053fdb"
+    },
+    {
+      "path": "media/images/object2.png",
+      "kind": "image",
+      "variant": "object2",
+      "bytes": 692852,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=71d1012509a6fed6"
+    },
+    {
+      "path": "media/images/object3.png",
+      "kind": "image",
+      "variant": "object3",
+      "bytes": 705148,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=0317458a24f80b72"
+    },
+    {
+      "path": "media/images/pair.png",
+      "kind": "image",
+      "variant": "pair",
+      "bytes": 1809352,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=492750d20532d0d3"
+    },
+    {
+      "path": "media/images/pair-square.png",
+      "kind": "image",
+      "variant": "pairSquare",
+      "bytes": 1006220,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=9cffa9ce7cb5192b"
+    },
+    {
+      "path": "media/videos/look0.mp4",
+      "kind": "video",
+      "variant": "look0",
+      "bytes": 2364380,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=ab563579dc51f8ce"
+    },
+    {
+      "path": "media/videos/look1.mp4",
+      "kind": "video",
+      "variant": "look1",
+      "bytes": 2324725,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=7bff479cca5500fc"
+    },
+    {
+      "path": "media/product.jpg",
+      "kind": "image",
+      "variant": "product",
+      "bytes": 1397859,
+      "contentType": "image/jpeg",
+      "source": "https://cdn.shopify.com/s/files/1/0594/5907/6207/files/upload_b59e05ef-cf55-41bd-83fb-a45c2c5a9c0f.jpg"
+    }
+  ],
+  "missing": []
+}

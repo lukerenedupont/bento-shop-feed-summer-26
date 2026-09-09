@@ -1,0 +1,606 @@
+{
+  "merchants": [
+    {
+      "id": "dossier-ea4b35e8f8",
+      "name": "COMPLEX",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "371017720884",
+          "title": "REVERSIBLE VALLEY OF FLOWERS WORK JACKET",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "COMPLEX",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0638/2659/1966/files/3y6-_yF7OKTBvqTOeAD-nQLwnvpGtGkHngf7dCZhQOY.jpg",
+          "shopUrl": "https://www.complex.com/shop/products/reversible-valley-of-flowers-work-jacket",
+          "description": null,
+          "productType": "Anchor"
+        }
+      ]
+    },
+    {
+      "id": "dossier-b70402af01",
+      "name": "OCEANFIRE SURF",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "224918922749071",
+          "title": "Levi's\u00ae Women's 501\u00ae Original Jeans",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "OCEANFIRE SURF",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0530/4500/2428/files/12501-0415-ModelFront_860x945_crop_center.progressive_aef4467f-25fa-4a90-b8bf-cf9075202565.webp",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Relaxed Denim"
+        }
+      ]
+    },
+    {
+      "id": "dossier-9b0c495192",
+      "name": "LILAC BLONDE",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "64174777239616",
+          "title": "adidas Samba OG Red Leopard Women's",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "LILAC BLONDE",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0566/9529/2053/files/red-leopard-side.png",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Chunky Sneaker"
+        }
+      ]
+    },
+    {
+      "id": "dossier-161bbaf248",
+      "name": "CHEAPESTEES",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "195240428604874",
+          "title": "Hanes Beefy-T T-Shirt",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "CHEAPESTEES",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0023/5497/0684/products/5180_50_z_192ce310-4c85-429f-9f53-7bc565082dee.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Cotton Tee"
+        }
+      ]
+    },
+    {
+      "id": "dossier-8a685ce757",
+      "name": "MESO",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "26033555029992",
+          "title": "Woven Floor Lamp Artefacto LS 16  by L\u00f8rdag & S\u00f8ndag",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "MESO",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/1424/5908/files/Woven_Floor_Lamp_Meso_L_S-Photoroom_1200x1200-Photoroom_1.jpg",
+          "shopUrl": "https://www.mesogoods.com/products/artefacto-ls-16-by-lordag-sondag",
+          "description": null,
+          "productType": "Anchor"
+        }
+      ]
+    },
+    {
+      "id": "dossier-77e821400e",
+      "name": "NORD",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "90759102791067",
+          "title": "Hans J. Wegner CH24 'Wishbone' Chair",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "NORD",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0010/1829/8429/files/IMG_4494.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Lounge chair"
+        }
+      ]
+    },
+    {
+      "id": "dossier-be62540615",
+      "name": "MODERN RESALE",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "34175992341668",
+          "title": "Nanimarquina Tres Rug in Ocher",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "MODERN RESALE",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0581/8153/files/IMG_9296_daba4472-48cc-4e3b-bfa7-fe659712e185.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Area rug"
+        }
+      ]
+    },
+    {
+      "id": "dossier-3eb3103a83",
+      "name": "CA MODERN HOME",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "155515157787452",
+          "title": "Noguchi Cyclone Dining Table",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "CA MODERN HOME",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0202/3990/files/rosewood-knoll-noguchi-cyclone-side-table-36-inch.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Side table"
+        }
+      ]
+    },
+    {
+      "id": "dossier-3b23833ffd",
+      "name": "SNEAKER POLITICS",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "183248787651281",
+          "title": "Nike Vomero Plus SP - Desert Camo/Yukon Brown",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "SNEAKER POLITICS",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0214/7974/files/AURORA_IV4522-200_PHSLH000-2000.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Anchor"
+        },
+        {
+          "id": "84546926989533",
+          "title": "Carhartt WIP Single Knee Pant - Shale",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "SNEAKER POLITICS",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0214/7974/files/CARHARTT-WIP-APRIL26-I034798.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Tapered trousers"
+        },
+        {
+          "id": "42472222141064",
+          "title": "Nike Sportswear Windrunner Lined Jacket - Black",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "SNEAKER POLITICS",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0214/7974/files/Sneaker-Politics-NIKE-SportswearWindrunner-Black-IV7342-010-WB-1.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Windbreaker jacket"
+        }
+      ]
+    },
+    {
+      "id": "dossier-006d8e819f",
+      "name": "ASPHALTGOLD",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "96107359307689",
+          "title": "Nike Everyday Cushioned Crew Socks 6 Pack",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "ASPHALTGOLD",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0473/6965/0340/files/b594199cbb7f5831abe1f894f182ff573bdeac4c_SX7666_100_Nike_Everyday_Cushioned_Crew_Socks_6_Pack_White_Black_os_1.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Crew socks"
+        }
+      ]
+    },
+    {
+      "id": "dossier-0325dead2f",
+      "name": "REFERENCE IN TIME",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "6196533399287",
+          "title": "1975 Rolex Oyster Perpetual Date Green Khanjar for Sultanate of Oman 34mm Stainless Steel 1500",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "REFERENCE IN TIME",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0594/5907/6207/files/upload_b59e05ef-cf55-41bd-83fb-a45c2c5a9c0f.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Anchor"
+        }
+      ]
+    },
+    {
+      "id": "dossier-4b7f349a75",
+      "name": "WATCH OBSESSION",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "270602034639478",
+          "title": "Hirsch DUKE Black Quick-Release Alligator Embossed Leather Watch Strap",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "WATCH OBSESSION",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0230/0031/products/Duke-Black-04-SB.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Leather watch strap"
+        }
+      ]
+    },
+    {
+      "id": "dossier-0f6c365e09",
+      "name": "TIME MACHINE PLUS",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "26446991587231",
+          "title": "WOLF Heritage Black 8 Piece Watch Box 99513",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "TIME MACHINE PLUS",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0283/1618/files/99513-1.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Wristwatch box"
+        }
+      ]
+    },
+    {
+      "id": "dossier-5cac4442ea",
+      "name": "TATEOSSIAN LONDON",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "59982934889035",
+          "title": "Star Weave Cufflinks with Grey Enamel and White Bronze Plated",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "TATEOSSIAN LONDON",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0477/5257/7179/files/RT-CF0687.png",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Cufflinks"
+        }
+      ]
+    },
+    {
+      "id": "dossier-b110d5e494",
+      "name": "TIN CAN",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "237637580875453",
+          "title": "Tin Can",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "TIN CAN",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0890/0296/7405/files/2026-06-Product-Photo-01-StaticWhite-Master-1200x810-Web-V2-TP.png",
+          "shopUrl": "https://tincan.kids/products/tin-can",
+          "description": null,
+          "productType": "Anchor"
+        }
+      ]
+    },
+    {
+      "id": "dossier-fc8ce16883",
+      "name": "YAMAZAKI HOME",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "60896730911313",
+          "title": "Pen + Desk Organizer - Large - Steel + Wood",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "YAMAZAKI HOME",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0066/5737/6307/products/sfq448jkb2i8vdquxu3c.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Kids desk organizer"
+        }
+      ]
+    },
+    {
+      "id": "dossier-35e5a61958",
+      "name": "HAT TRICK NYC",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "111632731070535",
+          "title": "Yankee Sitcom Hat (Pinstripe)",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "HAT TRICK NYC",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0762/0208/2600/files/Capture00016_50d84929-9968-48ce-ae26-411c46546591.jpg",
+          "shopUrl": "https://hattrick.nyc/products/yankee-sitcom-hat-season-8",
+          "description": null,
+          "productType": "Anchor"
+        }
+      ]
+    },
+    {
+      "id": "dossier-dab99b58d5",
+      "name": "URBAN INDUSTRY",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "268153265533079",
+          "title": "Levi's 501 Original Fit Jeans",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "URBAN INDUSTRY",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/1213/2346/products/Levis_501_Original_Fit_Jeans_Stone_Washed_01.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Vintage-fit jeans"
+        }
+      ]
+    },
+    {
+      "id": "dossier-04545216b2",
+      "name": "BODE",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "101025785603648",
+          "title": "Companion Tee",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "BODE",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/1218/8970/files/COMPANIONTEE-01.jpg",
+          "shopUrl": "https://bode.com/products/companion-tee-cream",
+          "description": null,
+          "productType": "Anchor"
+        }
+      ]
+    },
+    {
+      "id": "dossier-ec5a7980c7",
+      "name": "SOLE CLASSICS",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "99204711726004",
+          "title": "Converse Chuck 70 Low 'Black'",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "SOLE CLASSICS",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0409/9765/products/converse-1.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Sneaker"
+        }
+      ]
+    },
+    {
+      "id": "dossier-5a09c9bca1",
+      "name": "KITH",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "118893742484765",
+          "title": "Kith Stitched Patchwork Boxy Collared Overshirt - Mid Indigo",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "KITH",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0094/2252/files/KHM034812-452-Front.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Overshirt"
+        }
+      ]
+    },
+    {
+      "id": "dossier-e858e014f8",
+      "name": "THE SPOT CHICAGO",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "217973244996373",
+          "title": "Toddler's Nike Air Max 95 S Phantom/Silt Red-Tattoo (905462 012)",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "THE SPOT CHICAGO",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0530/5993/files/905462_20012-298ks_20_1.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Anchor"
+        }
+      ]
+    },
+    {
+      "id": "dossier-3be046a5b1",
+      "name": "GET THE LABEL",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "101220377897604",
+          "title": "adidas Originals Trefoil Solid Patterned Slim Joggers",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "GET THE LABEL",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0996/9939/2861/files/781d800c-ac28-4305-b55a-49e7ab1331fb.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Toddler joggers"
+        }
+      ]
+    },
+    {
+      "id": "dossier-fedf4898cb",
+      "name": "KIDSYARD GREENLAND",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "231659304370034",
+          "title": "Toddler/Kid Strawberry Floral Rabbit Graphic Cotton T-Shirt",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "KIDSYARD GREENLAND",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0273/1583/0826/files/2c5c8c84f6814eb46bc90a67a35d97f9.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Toddler tee"
+        }
+      ]
+    },
+    {
+      "id": "dossier-0a86ec610f",
+      "name": "KICKS CREW",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "64479672140763",
+          "title": "Nike Sportswear Therma-FIT Repel Hooded Puffer Classic Jacket 'Green' FZ1103-222",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "KICKS CREW",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0603/3031/1875/files/main-square_84bbe50d-83de-465d-b7e9-f24442650b40.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Toddler puffer jacket"
+        }
+      ]
+    },
+    {
+      "id": "dossier-330f94e21c",
+      "name": "MOMA DESIGN STORE",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "131556024222768",
+          "title": "Teenage Engineering EP-133 K.O. II Extended Player - EP\u201340 riddim",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "MOMA DESIGN STORE",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0623/7962/2630/files/4595d741-6aa2-4051-9b8b-b3b9d99de746.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Anchor"
+        }
+      ]
+    },
+    {
+      "id": "dossier-89ea7bdcf2",
+      "name": "PERFORMANCE AUDIO",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "21825262943732",
+          "title": "Sony MDR-7506 Studio Headphones",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "PERFORMANCE AUDIO",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0614/8122/2322/products/sony-mdr-7506-01.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Studio headphones"
+        }
+      ]
+    },
+    {
+      "id": "dossier-ec7b288173",
+      "name": "STUDIOCARE",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "118440413640738",
+          "title": "Teenage Engineering OP-1 OP1 Portable Synthesizer",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "STUDIOCARE",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0256/2988/4462/products/steeop1mkii.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Synthesizer"
+        }
+      ]
+    },
+    {
+      "id": "dossier-b874a268a4",
+      "name": "SOUNDPRO",
+      "rating": 0,
+      "totalRatings": 0,
+      "totalReviews": 0,
+      "products": [
+        {
+          "id": "92779219028222",
+          "title": "Hosa 3.5mm TRS to Dual TS Stereo Breakout Cable | Length: 3 feet",
+          "price": "Check merchant for price",
+          "slug": "",
+          "vendor": "SOUNDPRO",
+          "imageUrl": "https://cdn.shopify.com/s/files/1/0871/7382/4696/files/41205_Hosa-3-5mm-TRS-to-Dual-TS-Stereo-Breakout-Cable.jpg",
+          "shopUrl": null,
+          "description": null,
+          "productType": "Audio cable"
+        }
+      ]
+    }
+  ]
+}

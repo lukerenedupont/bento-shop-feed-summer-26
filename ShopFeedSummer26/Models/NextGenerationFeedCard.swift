@@ -116,7 +116,7 @@ struct NextGenerationFeedCardSpec: Identifiable {
         default: anchor.map(PrototypePrimaryEntity.product) ?? .journey(signal.worldID ?? signal.id)
         }
     }
-    var isQuietReview: Bool { signal.id.hasPrefix("quiet-") }
+    var isQuietReview: Bool { signal.id.hasPrefix("quiet-") || signal.id.hasPrefix("dossier-") }
     var prefersDarkNavigationText: Bool { isQuietReview || job != .merchantDiscovery }
     var accessibilityDescription: String { "\(title). \(subtitle). \(interaction.rawValue)." }
 

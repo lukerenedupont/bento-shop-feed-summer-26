@@ -1,0 +1,396 @@
+{
+  "token": "gid://shopify/p/5QJQ77406dlErFhPKwra9m",
+  "buildRequestId": "0d9a54d4-e1f6-4650-a5db-5995a5a90fc7",
+  "product": {
+    "id": "gid://shopify/p/5QJQ77406dlErFhPKwra9m",
+    "title": "Yankee Sitcom Hat (Pinstripe)",
+    "brand": "HAT TRICK NYC",
+    "description": "A collectible baseball cap inspired by the iconic Seinfeld sitcom, available in multiple styles and colors for fans of pop culture and retro fashion.",
+    "price": 39.99,
+    "image": "https://cdn.shopify.com/s/files/1/0762/0208/2600/files/Capture00016_50d84929-9968-48ce-ae26-411c46546591.jpg"
+  },
+  "dossier": {
+    "eyebrow": "HAT TRICK NYC · BASEBALL CAP",
+    "headline": "Yankee Sitcom Hat, Pinstripe Snapback",
+    "summary": "The Yankee Sitcom Hat is a collectible snapback baseball cap by Hat Trick NYC, a Brooklyn-based brand founded by Erik and Bronson that fuses 1990s baseball culture with classic sitcom nostalgia. It is an unstructured, one-size-fits-most snapback priced at $39.99, sold across several colorways in the brand's Seinfeld-inspired sitcom line.",
+    "medium": "apparel",
+    "creator": {
+      "role": "brand",
+      "name": "Hat Trick NYC"
+    },
+    "facts": [
+      {
+        "label": "Brand",
+        "value": "Hat Trick NYC"
+      },
+      {
+        "label": "Founders",
+        "value": "Erik and Bronson"
+      },
+      {
+        "label": "Ships from",
+        "value": "Brooklyn, New York"
+      },
+      {
+        "label": "Style",
+        "value": "Unstructured snapback baseball cap"
+      },
+      {
+        "label": "Closure",
+        "value": "One-size-fits-most snapback"
+      },
+      {
+        "label": "Material",
+        "value": "High-quality cotton or canvas (varies by colorway)"
+      },
+      {
+        "label": "Price",
+        "value": "$39.99 USD"
+      }
+    ],
+    "story": [
+      {
+        "title": "Born From Seinfeld and Baseball",
+        "detail": "Hat Trick NYC's founders, Erik and Bronson, state they both love watching Seinfeld and baseball and thought the two paired nicely, so they made a hat. The brand frames its products as a natural pairing of those two cultural touchstones.",
+        "sources": [
+          6
+        ]
+      },
+      {
+        "title": "90s Sports Nostalgia",
+        "detail": "Hat Trick NYC positions its caps as a revival of '90s sports nostalgia, explicitly tying them to Major League Baseball imagery and classic sitcom television, chiefly Seinfeld. The Yankees Season 8 variant references the 1996 World Series win and the show's eighth season (1996–97).",
+        "sources": [
+          1,
+          2
+        ]
+      },
+      {
+        "title": "A Growing Sitcom Collection",
+        "detail": "The Yankee Sitcom Hat sits within a broader sitcom collection that Hat Trick NYC has expanded to include the Mets Sitcom Hat and the Mariner Sitcom Hat, applying the same retro-baseball concept across teams.",
+        "sources": [
+          5,
+          7
+        ]
+      }
+    ],
+    "references": [
+      {
+        "title": "Yankees Seinfeld Hat",
+        "detail": "Hat Trick NYC describes the Yankee Sitcom Hat as 'a fusion of two beloved pop culture icons,' calling it the Yankees Seinfeld hat.",
+        "sources": [
+          1,
+          2,
+          4
+        ]
+      },
+      {
+        "title": "1996–97 Checkerboard Logo",
+        "detail": "The Season 8 variant is described as inspired by the iconic checkerboard logo from the 1996–97 season.",
+        "sources": [
+          1,
+          2
+        ]
+      },
+      {
+        "title": "Dad-Hat Silhouette",
+        "detail": "The unstructured crown is marketed as 'an updated version of your dad's favorite hat in the 90's,' with a relaxed fit.",
+        "sources": [
+          1,
+          2,
+          4
+        ]
+      }
+    ],
+    "styling": [
+      "Wear with a plain white tee for an everyday retro-sportswear look",
+      "Pair with vintage-inspired denim to lean into the 90s nostalgia",
+      "Layer under a bomber or coach's jacket for cool-weather styling",
+      "Style with classic court sneakers to complete the throwback ballpark vibe"
+    ],
+    "palette": [
+      {
+        "hex": "#F5F3EC",
+        "name": "Pinstripe Cream"
+      },
+      {
+        "hex": "#132448",
+        "name": "Yankees Navy"
+      },
+      {
+        "hex": "#1C2841",
+        "name": "Deep Pinstripe Blue"
+      },
+      {
+        "hex": "#C4CED4",
+        "name": "Stadium Grey"
+      },
+      {
+        "hex": "#8B8680",
+        "name": "Worn Charcoal"
+      }
+    ],
+    "pairWith": [
+      {
+        "label": "Vintage-fit jeans",
+        "category": "jean",
+        "examples": [
+          "Levi's 501 Original",
+          "Levi's 550 Relaxed",
+          "Wrangler Cowboy Cut"
+        ],
+        "queries": [
+          "vintage straight jeans",
+          "relaxed fit jeans",
+          "retro denim"
+        ],
+        "attributes": [
+          "indigo",
+          "denim",
+          "straight leg",
+          "relaxed",
+          "casual"
+        ],
+        "reason": "Classic denim underpins the 90s retro-sportswear aesthetic of the cap."
+      },
+      {
+        "label": "Court sneakers",
+        "category": "sneaker",
+        "examples": [
+          "Adidas Samba",
+          "Nike Air Force 1 Low",
+          "Reebok Club C 85"
+        ],
+        "queries": [
+          "white court sneakers",
+          "retro leather sneakers",
+          "classic low sneakers"
+        ],
+        "attributes": [
+          "white",
+          "leather",
+          "low top",
+          "minimal",
+          "casual"
+        ],
+        "reason": "Clean retro sneakers echo the throwback ballpark feel of the hat."
+      },
+      {
+        "label": "Cotton t-shirt",
+        "category": "t-shirt",
+        "examples": [
+          "Hanes Beefy-T",
+          "Champion Classic Jersey Tee",
+          "Fruit of the Loom Heavy Cotton Tee"
+        ],
+        "queries": [
+          "plain white tee",
+          "heavyweight cotton tee",
+          "crewneck t-shirt"
+        ],
+        "attributes": [
+          "white",
+          "cotton",
+          "crew neck",
+          "relaxed",
+          "casual"
+        ],
+        "reason": "A plain tee keeps the focus on the collectible cap and pairs cleanly with the pinstripe."
+      },
+      {
+        "label": "Bomber jacket",
+        "category": "jacket",
+        "examples": [
+          "Alpha Industries MA-1",
+          "Champion Nylon Bomber",
+          "Carhartt Active Jacket"
+        ],
+        "queries": [
+          "nylon bomber jacket",
+          "retro varsity jacket",
+          "coach jacket"
+        ],
+        "attributes": [
+          "navy",
+          "nylon",
+          "zip front",
+          "sporty",
+          "casual"
+        ],
+        "reason": "A sporty outer layer complements the 90s athletic-nostalgia mood."
+      }
+    ],
+    "pairingImagePrompt": "A single neatly aligned top-down knolling flat-lay on a seamless neutral background, editorial lighting: the HAT TRICK NYC Yankee Sitcom Hat in pinstripe placed alongside a pair of Levi's 501 Original jeans, a pair of white Adidas Samba sneakers, a plain white Hanes Beefy-T, and a navy Alpha Industries MA-1 bomber jacket. Use a true top-down flat-lay for all items. Every object whole and intact with parts connected, in its natural orientation, in correct scale relative to the others, evenly spaced on a grid with no overlaps.",
+    "pairLooks": [
+      {
+        "caption": "Ballpark Casual Weekend",
+        "prompt": "Editorial photograph of a person wearing the HAT TRICK NYC Yankee Sitcom Hat in pinstripe with a plain white Hanes Beefy-T tee, Levi's 501 Original jeans, and white Adidas Samba sneakers, standing outside a sunlit brick building in Brooklyn, relaxed daytime street mood, natural light."
+      },
+      {
+        "caption": "90s Layered Cool",
+        "prompt": "Editorial photograph of a person wearing the HAT TRICK NYC Yankee Sitcom Hat in pinstripe with a navy Alpha Industries MA-1 bomber jacket over a white tee and Levi's 501 jeans, cool overcast urban rooftop setting, muted retro-sportswear mood, evening tones."
+      }
+    ],
+    "selfProfile": {
+      "category": "baseball cap",
+      "gender": "unisex",
+      "attributes": [
+        "pinstripe",
+        "cotton or canvas",
+        "unstructured crown",
+        "snapback closure",
+        "retro dad-hat silhouette",
+        "sports-nostalgia graphic"
+      ]
+    },
+    "similar": [
+      {
+        "category": "baseball cap",
+        "queries": [
+          "unstructured dad hat",
+          "retro snapback cap"
+        ],
+        "attributes": [
+          "pinstripe",
+          "cotton",
+          "unstructured",
+          "adjustable",
+          "retro"
+        ]
+      },
+      {
+        "category": "baseball cap",
+        "queries": [
+          "novelty snapback hat",
+          "graphic baseball cap"
+        ],
+        "attributes": [
+          "navy",
+          "canvas",
+          "snapback",
+          "sports graphic",
+          "casual"
+        ]
+      }
+    ],
+    "lookbookStyle": "Sunlit editorial photography with warm natural light, slightly nostalgic film-stock grain, clean urban Brooklyn backdrops, relaxed 90s sportswear mood.",
+    "lookbookPrompt": "A single editorial lookbook sheet in one 3:2 landscape image, arranged as a strict 2x2 grid (2 rows x 2 columns) of four landscape photographs with uniform hairline gutters, grid flush to all four edges with no outer margin or border, all cells identical in size. Cell 1 (top-left): close crop of the HAT TRICK NYC Yankee Sitcom Hat in pinstripe worn on a person's head, three-quarter angle. Cell 2 (top-right): full styled look of the cap with a white tee and Levi's 501 jeans against a brick wall. Cell 3 (bottom-left): the cap paired with a navy bomber jacket, side profile portrait. Cell 4 (bottom-right): overhead detail of the pinstripe cap resting on a bench beside white Adidas Samba sneakers. In each cell frame the subject to fill about two thirds of the cell. Vary pose, crop, angle and setting between cells; every frame shares warm sunlit natural light with subtle film grain and a nostalgic 90s sportswear mood. No text, captions, numbers, watermarks, rounded corners or drop shadows."
+  },
+  "sources": [
+    {
+      "url": "https://hattrick.nyc/",
+      "title": "hattrick.nyc"
+    },
+    {
+      "url": "https://hattrick.nyc/products/yankee-sitcom-hat-season-8",
+      "title": "hattrick.nyc"
+    },
+    {
+      "url": "https://hattrick.nyc/collections/frontpage",
+      "title": "hattrick.nyc"
+    },
+    {
+      "url": "https://hattrick.nyc/products/yankee-sitcom-hat-blue",
+      "title": "hattrick.nyc"
+    },
+    {
+      "url": "https://hattrick.nyc/products/mets-sitcom-hat",
+      "title": "hattrick.nyc"
+    },
+    {
+      "url": "https://hattrick.nyc/pages/about-us",
+      "title": "hattrick.nyc"
+    },
+    {
+      "url": "https://hattrick.nyc/products/mariner-sitcom-hat",
+      "title": "hattrick.nyc"
+    },
+    {
+      "url": "https://hat-trick-nyc.tenereteam.com/coupons",
+      "title": "hat-trick-nyc.tenereteam.com"
+    },
+    {
+      "url": "https://connecttomag.com/hat-trick/",
+      "title": "connecttomag.com"
+    },
+    {
+      "url": "https://www.ifrogtees.com/products/seinfeld-yankees-hat-2026/",
+      "title": "ifrogtees.com"
+    },
+    {
+      "url": "https://www.linkedin.com/in/jeremy-sinclair-0b516b48",
+      "title": "linkedin.com"
+    },
+    {
+      "url": "http://quintessentialbarrington.com/pdf/ma19-interview.pdf",
+      "title": "quintessentialbarrington.com"
+    },
+    {
+      "url": "https://coralesque.com/2014/05/19/philip-treacy-hat-trick/",
+      "title": "coralesque.com"
+    },
+    {
+      "url": "https://www.linkedin.com/in/david-macdonald-b523a85a",
+      "title": "linkedin.com"
+    }
+  ],
+  "createdAt": 1788905703097,
+  "pairingCatalog": {
+    "version": "catalog-pairings-v1",
+    "status": "verified",
+    "slotsTotal": 4,
+    "slotsResolved": 3,
+    "resolvedAt": "2026-09-08T22:15:11.138Z",
+    "products": [
+      {
+        "slotIndex": 0,
+        "matchedName": "Levi's 501 Original",
+        "via": "named",
+        "category": "jean",
+        "label": "Vintage-fit jeans",
+        "product": {
+          "id": "gid://shopify/p/2UCbBVys7OacoHJNF2oqy2",
+          "title": "Levi's 501 Original Fit Jeans",
+          "brand": "URBAN INDUSTRY",
+          "price": 82,
+          "image": "https://cdn.shopify.com/s/files/1/1213/2346/products/Levis_501_Original_Fit_Jeans_Stone_Washed_01.jpg",
+          "description": "Iconic mid-rise straight-leg jeans made from 100% cotton denim for timeless durability and classic style.",
+          "color": "hsl(62, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 1,
+        "matchedName": "Adidas Samba",
+        "via": "named",
+        "category": "sneaker",
+        "label": "Court sneakers",
+        "product": {
+          "id": "gid://shopify/p/3H3z524x9AsQVc6bdWGWfS",
+          "title": "adidas Samba OG Red Leopard Women's",
+          "brand": "LILAC BLONDE",
+          "price": 140,
+          "image": "https://cdn.shopify.com/s/files/1/0566/9529/2053/files/red-leopard-side.png",
+          "description": "Classic adidas Samba OG sneakers with a bold red leopard print upper and suede leather for standout style and comfort.",
+          "color": "hsl(116, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 2,
+        "matchedName": "Hanes Beefy-T",
+        "via": "named",
+        "category": "t-shirt",
+        "label": "Cotton t-shirt",
+        "product": {
+          "id": "gid://shopify/p/4CrcIGU8PkFSid4LTr39pW",
+          "title": "Hanes Beefy-T T-Shirt",
+          "brand": "CHEAPESTEES",
+          "price": 7.88,
+          "image": "https://cdn.shopify.com/s/files/1/0023/5497/0684/products/5180_50_z_192ce310-4c85-429f-9f53-7bc565082dee.jpg",
+          "description": "A heavyweight, preshrunk 100% cotton t-shirt offering lasting comfort and classic style for everyday wear.",
+          "color": "hsl(147, 50%, 50%)"
+        }
+      }
+    ]
+  },
+  "key": "5527c8904c1155d7",
+  "savedAt": 1788905851080
+}

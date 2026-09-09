@@ -1,0 +1,116 @@
+{
+  "schema": "dossier-export-manifest/1",
+  "exportedAt": "2026-09-09T00:14:42.012Z",
+  "key": "7263898de0dd5a28",
+  "title": "Tin Can",
+  "documents": {
+    "portable": "dossier.json",
+    "canonical": "source.json",
+    "imageColors": "image-colors.json"
+  },
+  "counts": {
+    "images": 10,
+    "videos": 2,
+    "assets": 12
+  },
+  "bytes": 15722964,
+  "assets": [
+    {
+      "path": "media/images/look0.png",
+      "kind": "image",
+      "variant": "look0",
+      "bytes": 2109421,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=e2463eb1d54b4ed5"
+    },
+    {
+      "path": "media/images/look1.png",
+      "kind": "image",
+      "variant": "look1",
+      "bytes": 2067495,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=acacc7340fcc597a"
+    },
+    {
+      "path": "media/images/lookbook.png",
+      "kind": "image",
+      "variant": "lookbook",
+      "bytes": 2153555,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=2587ca28074a0332"
+    },
+    {
+      "path": "media/images/object0.png",
+      "kind": "image",
+      "variant": "object0",
+      "bytes": 563492,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=12975e2575070dee"
+    },
+    {
+      "path": "media/images/object1.png",
+      "kind": "image",
+      "variant": "object1",
+      "bytes": 575372,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=3bc630a6a49299c9"
+    },
+    {
+      "path": "media/images/object2.png",
+      "kind": "image",
+      "variant": "object2",
+      "bytes": 673071,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=c9904ae6fb4b2b44"
+    },
+    {
+      "path": "media/images/object3.png",
+      "kind": "image",
+      "variant": "object3",
+      "bytes": 755258,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=dbb25fa55a5c0207"
+    },
+    {
+      "path": "media/images/pair.png",
+      "kind": "image",
+      "variant": "pair",
+      "bytes": 913583,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=99f94e746060c024"
+    },
+    {
+      "path": "media/images/pair-square.png",
+      "kind": "image",
+      "variant": "pairSquare",
+      "bytes": 608934,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=1e4338934ebc2ee8"
+    },
+    {
+      "path": "media/videos/look0.mp4",
+      "kind": "video",
+      "variant": "look0",
+      "bytes": 2065236,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=104796ea3d8f743c"
+    },
+    {
+      "path": "media/videos/look1.mp4",
+      "kind": "video",
+      "variant": "look1",
+      "bytes": 2217816,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=fbd41dd4b61eb002"
+    },
+    {
+      "path": "media/product.png",
+      "kind": "image",
+      "variant": "product",
+      "bytes": 1019731,
+      "contentType": "image/png",
+      "source": "https://cdn.shopify.com/s/files/1/0890/0296/7405/files/2026-06-Product-Photo-01-StaticWhite-Master-1200x810-Web-V2-TP.png"
+    }
+  ],
+  "missing": []
+}

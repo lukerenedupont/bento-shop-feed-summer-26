@@ -1,0 +1,116 @@
+{
+  "schema": "dossier-export-manifest/1",
+  "exportedAt": "2026-09-09T00:18:22.248Z",
+  "key": "601abf8c7dca97ce",
+  "title": "Toddler's Nike Air Max 95 S Phantom/Silt Red-Tattoo (905462 012)",
+  "documents": {
+    "portable": "dossier.json",
+    "canonical": "source.json",
+    "imageColors": "image-colors.json"
+  },
+  "counts": {
+    "images": 10,
+    "videos": 2,
+    "assets": 12
+  },
+  "bytes": 20585577,
+  "assets": [
+    {
+      "path": "media/images/look0.png",
+      "kind": "image",
+      "variant": "look0",
+      "bytes": 2607502,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=a8d6c6fe6c0f9033"
+    },
+    {
+      "path": "media/images/look1.png",
+      "kind": "image",
+      "variant": "look1",
+      "bytes": 2577997,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=2f59355a4394eef8"
+    },
+    {
+      "path": "media/images/lookbook.png",
+      "kind": "image",
+      "variant": "lookbook",
+      "bytes": 3102776,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=8b2271e5e44964a2"
+    },
+    {
+      "path": "media/images/object0.png",
+      "kind": "image",
+      "variant": "object0",
+      "bytes": 810608,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=ea530598857b1ea8"
+    },
+    {
+      "path": "media/images/object1.png",
+      "kind": "image",
+      "variant": "object1",
+      "bytes": 820648,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=8adfd8311d77d1c0"
+    },
+    {
+      "path": "media/images/object2.png",
+      "kind": "image",
+      "variant": "object2",
+      "bytes": 1067734,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=35c8a1147ed97f04"
+    },
+    {
+      "path": "media/images/object3.png",
+      "kind": "image",
+      "variant": "object3",
+      "bytes": 979168,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=6e8cb157aee569a1"
+    },
+    {
+      "path": "media/images/pair.png",
+      "kind": "image",
+      "variant": "pair",
+      "bytes": 1798226,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=cf45bd883fa0d2dc"
+    },
+    {
+      "path": "media/images/pair-square.png",
+      "kind": "image",
+      "variant": "pairSquare",
+      "bytes": 1134020,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=8a529ebfe776b15f"
+    },
+    {
+      "path": "media/videos/look0.mp4",
+      "kind": "video",
+      "variant": "look0",
+      "bytes": 3078881,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=f2f7fbc866fbccac"
+    },
+    {
+      "path": "media/videos/look1.mp4",
+      "kind": "video",
+      "variant": "look1",
+      "bytes": 2556162,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=323ae6432ad171ff"
+    },
+    {
+      "path": "media/product.jpg",
+      "kind": "image",
+      "variant": "product",
+      "bytes": 51855,
+      "contentType": "image/jpeg",
+      "source": "https://cdn.shopify.com/s/files/1/0530/5993/files/905462_20012-298ks_20_1.jpg"
+    }
+  ],
+  "missing": []
+}

@@ -1143,7 +1143,9 @@ struct HomePage: View {
                 ) + GravitySpacing.space32,
                 isActive: isSnappedEntry,
                 session: generativeSession,
-                bottomContentPadding: ([.swap, .shortlist, .selectForWorld].contains(spec.interaction)
+                bottomContentPadding: spec.signal.id.hasPrefix("dossier-")
+                    ? FeedCardStyle.bottomNavigationClearance + GravitySpacing.space16
+                    : ([.swap, .shortlist, .selectForWorld].contains(spec.interaction)
                     || generativeSession.composition(for: spec) == .fisheye)
                     ? FeedCardStyle.foregroundBottomPadding + GravitySpacing.space16
                         + (entry.id == feedEntries.first?.id ? max(windowSafeAreaTopInset, GravitySpacing.space64) : 0)

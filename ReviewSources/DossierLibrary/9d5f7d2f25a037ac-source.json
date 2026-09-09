@@ -1,0 +1,372 @@
+{
+  "token": "gid://shopify/p/5DXNsTAYvwJOiyNoygOQnh",
+  "buildRequestId": "b3117492-7aad-4989-8129-c0da62d990c9",
+  "product": {
+    "id": "gid://shopify/p/5DXNsTAYvwJOiyNoygOQnh",
+    "title": "Woven Floor Lamp Artefacto LS 16  by Lørdag & Søndag",
+    "brand": "MESO",
+    "description": "Handwoven floor lamp crafted from natural fibers with a glossy white glass sphere, blending art and function.",
+    "price": 1280,
+    "image": "https://cdn.shopify.com/s/files/1/1424/5908/files/Woven_Floor_Lamp_Meso_L_S-Photoroom_1200x1200-Photoroom_1.jpg"
+  },
+  "dossier": {
+    "eyebrow": "LØRDAG & SØNDAG · FLOOR LAMP",
+    "headline": "Artefacto LS 16 Woven Floor Lamp",
+    "summary": "The Artefacto LS 16 is a handwoven wicker floor lamp designed by Mexico City studio Lørdag & Søndag and sold through MESO. It is woven from G'noo Xombé Nisin fiber by master artisan Don Claudio in the Sierra Madre Oriental of Oaxaca, Mexico, with no interior metal structure — the weave alone carries the piece.",
+    "medium": "object",
+    "creator": {
+      "role": "designer",
+      "name": "Lørdag & Søndag"
+    },
+    "facts": [
+      {
+        "label": "Designer",
+        "value": "Lørdag & Søndag (Mexico City)"
+      },
+      {
+        "label": "Made in",
+        "value": "Oaxaca, Mexico (Sierra Madre Oriental)"
+      },
+      {
+        "label": "Material",
+        "value": "Woven G'noo Xombé Nisin wicker fiber, no metal structure"
+      },
+      {
+        "label": "Year",
+        "value": "2024"
+      },
+      {
+        "label": "Dimensions",
+        "value": "27 × 21 × 130 cm (approx. 48\" H)"
+      },
+      {
+        "label": "Production",
+        "value": "Made-to-order, electrical components included"
+      },
+      {
+        "label": "Category",
+        "value": "Contemporary collectible floor lamp"
+      }
+    ],
+    "story": [
+      {
+        "title": "Woven by a master artisan",
+        "detail": "The lamp is hand-woven by master artisan Don Claudio in the Sierra Madre Oriental mountain range of Oaxaca, Mexico, using G'noo Xombé Nisin fiber named in the local Mazatec language.",
+        "sources": [
+          1,
+          12
+        ]
+      },
+      {
+        "title": "Structure without metal",
+        "detail": "The piece is built without any interior metal frame; the woven fiber alone carries the structure, a technique Adorno describes as unusual and technically demanding.",
+        "sources": [
+          3,
+          12
+        ]
+      },
+      {
+        "title": "Sculpture and lamp",
+        "detail": "Presented as functional art lighting, the Artefacto LS 16 is categorized under the biomaterial discipline and can be used as a sculpture or a standing lamp.",
+        "sources": [
+          3,
+          12
+        ]
+      }
+    ],
+    "references": [
+      {
+        "title": "Contemporary Mexican collectible design",
+        "detail": "1stDibs lists the Artefacto LS 16 among 21st Century and Contemporary Modern Mexican floor lamps, situating it within contemporary Mexican design made from wicker and natural fibers.",
+        "sources": [
+          10,
+          13
+        ]
+      },
+      {
+        "title": "Boho functional-art lighting",
+        "detail": "Adorno's editorial on boho lighting profiles the lamp for its fiber-only structure and positions it within functional art lighting.",
+        "sources": [
+          12
+        ]
+      },
+      {
+        "title": "Biomaterial discipline",
+        "detail": "Adorno tags the piece under its Biomaterial discipline and Open Editions catalog alongside other natural-material designer lamps.",
+        "sources": [
+          3,
+          15
+        ]
+      }
+    ],
+    "styling": [
+      "Place in a reading corner to cast warm, diffused light through the woven fiber",
+      "Pair with natural wood and rattan furniture for a tonal, textural setting",
+      "Reshape gently by spraying with water if the fiber bends; clean only with a dry cloth",
+      "Let it stand as a sculptural object against a plain wall"
+    ],
+    "palette": [
+      {
+        "hex": "#D8C4A0",
+        "name": "Natural Wicker"
+      },
+      {
+        "hex": "#B79B6E",
+        "name": "Woven Beige"
+      },
+      {
+        "hex": "#8A6E45",
+        "name": "Toasted Fiber"
+      },
+      {
+        "hex": "#F4EEE2",
+        "name": "Warm Ivory"
+      },
+      {
+        "hex": "#5C4A32",
+        "name": "Deep Sierra Brown"
+      }
+    ],
+    "pairWith": [
+      {
+        "label": "Lounge chair",
+        "category": "chair",
+        "examples": [
+          "Hans Wegner Wishbone Chair",
+          "IKEA Poäng",
+          "Carl Hansen CH25"
+        ],
+        "queries": [
+          "rattan lounge chair",
+          "woven accent chair",
+          "natural fiber armchair"
+        ],
+        "attributes": [
+          "natural",
+          "woven",
+          "wood frame",
+          "warm tone",
+          "organic"
+        ],
+        "reason": "Its natural fiber weave echoes the lamp's handwoven wicker in a reading corner."
+      },
+      {
+        "label": "Area rug",
+        "category": "rug",
+        "examples": [
+          "Armadillo Sahara Weave Rug",
+          "IKEA Lohals jute rug",
+          "Nanimarquina Tres"
+        ],
+        "queries": [
+          "jute area rug",
+          "natural fiber rug",
+          "handwoven wool rug"
+        ],
+        "attributes": [
+          "natural",
+          "jute",
+          "textured",
+          "neutral",
+          "flatweave"
+        ],
+        "reason": "A woven natural-fiber rug grounds the lamp in a tonal, tactile setting."
+      },
+      {
+        "label": "Side table",
+        "category": "table",
+        "examples": [
+          "Noguchi Cyclone Table",
+          "IKEA Listerby side table",
+          "Ethnicraft Bok side table"
+        ],
+        "queries": [
+          "wood side table",
+          "round accent table",
+          "solid oak side table"
+        ],
+        "attributes": [
+          "wood",
+          "round",
+          "warm tone",
+          "minimal",
+          "natural finish"
+        ],
+        "reason": "A solid-wood side table complements the lamp's organic warmth beside a seat."
+      }
+    ],
+    "pairingImagePrompt": "An editorial arrangement on a seamless warm-neutral background showing the handwoven wicker Artefacto LS 16 floor lamp together with a Hans Wegner Wishbone Chair, an Armadillo Sahara Weave jute rug, and an Ethnicraft Bok solid oak side table. Use a straight-on front elevation at eye level for every object since these are large three-dimensional furniture pieces; each item whole and intact, standing in its natural orientation, in correct scale relative to the others, evenly spaced on a grid with no overlaps, editorial lighting.",
+    "pairLooks": [
+      {
+        "caption": "Warm Reading Corner",
+        "prompt": "An editorial interior photograph of the handwoven wicker Artefacto LS 16 floor lamp standing beside a Hans Wegner Wishbone Chair on an Armadillo Sahara Weave jute rug, glowing warmly in a sunlit minimalist room, natural wood floor, calm neutral palette, late-afternoon light."
+      },
+      {
+        "caption": "Sculptural Living Vignette",
+        "prompt": "An editorial vignette of the Artefacto LS 16 woven floor lamp next to an Ethnicraft Bok solid oak side table on a neutral IKEA Lohals jute rug, styled as functional art against a plain plaster wall, soft diffused daylight, muted earth tones."
+      }
+    ],
+    "selfProfile": {
+      "category": "floor lamp",
+      "gender": "unisex",
+      "attributes": [
+        "natural wicker beige",
+        "handwoven fiber",
+        "tall sculptural silhouette",
+        "no metal structure",
+        "organic biomaterial",
+        "functional art"
+      ]
+    },
+    "similar": [
+      {
+        "category": "floor lamp",
+        "queries": [
+          "woven wicker floor lamp",
+          "rattan floor lamp"
+        ],
+        "attributes": [
+          "natural fiber",
+          "beige",
+          "woven",
+          "sculptural",
+          "tall"
+        ]
+      },
+      {
+        "category": "floor lamp",
+        "queries": [
+          "natural fiber floor lamp",
+          "boho standing lamp"
+        ],
+        "attributes": [
+          "organic",
+          "handmade",
+          "warm tone",
+          "diffused light",
+          "biomaterial"
+        ]
+      }
+    ],
+    "lookbookStyle": "Warm natural daylight on seamless neutral backdrops, soft film-stock tones, calm minimalist interior mood emphasizing woven texture.",
+    "lookbookPrompt": "A single editorial lookbook sheet in one 3:2 landscape image, arranged as a strict 2 rows x 2 columns grid of exactly 4 landscape photographs of the handwoven wicker Artefacto LS 16 floor lamp, all cells identical in size with uniform hairline gutters and the grid flush to all four edges with no outer margin. Reading order: top-left, full lamp standing front-on in a sunlit minimalist room; top-right, close crop of the woven fiber texture; bottom-left, the lamp glowing warmly at dusk beside a wood chair; bottom-right, three-quarter angle of the lamp as a sculptural object against a plaster wall. In each cell the lamp fills about two thirds of the frame. Vary pose, crop, angle and setting between cells; every frame shares warm natural daylight, soft film-stock tones and a calm neutral palette. No text, captions, numbers, watermarks, rounded corners or drop shadows."
+  },
+  "sources": [
+    {
+      "url": "https://www.mesogoods.com/products/artefacto-ls-16-by-lordag-sondag",
+      "title": "mesogoods.com"
+    },
+    {
+      "url": "https://www.mesogoods.com/collections/lighting",
+      "title": "mesogoods.com"
+    },
+    {
+      "url": "https://adorno.design/pieces/artefacto-ls-16-woven-wicker-fiber-floor-lamp/",
+      "title": "adorno.design"
+    },
+    {
+      "url": "https://lordagsondag.com/",
+      "title": "lordagsondag.com"
+    },
+    {
+      "url": "https://adorno.design/catalog/lighting/lamps/floor-lamps/",
+      "title": "adorno.design"
+    },
+    {
+      "url": "https://adorno.design/catalog/lighting/",
+      "title": "adorno.design"
+    },
+    {
+      "url": "https://www.1stdibs.com/buy/artefacto-furniture/",
+      "title": "1stdibs.com"
+    },
+    {
+      "url": "https://adorno.design/members/lordagsondag/pieces/",
+      "title": "adorno.design"
+    },
+    {
+      "url": "https://adorno.design/catalog/",
+      "title": "adorno.design"
+    },
+    {
+      "url": "https://www.1stdibs.com/locations/mexico-city-mexico/furniture/lighting/floor-lamps/",
+      "title": "1stdibs.com"
+    },
+    {
+      "url": "https://adorno.design/",
+      "title": "adorno.design"
+    },
+    {
+      "url": "https://adorno.design/editorial/the-warm-allure-of-the-boho-lamp/",
+      "title": "adorno.design"
+    },
+    {
+      "url": "https://www.1stdibs.com/furniture/lighting/floor-lamps/origin/mexican/",
+      "title": "1stdibs.com"
+    },
+    {
+      "url": "https://www.1stdibs.com/buy/wicker-urn/",
+      "title": "1stdibs.com"
+    }
+  ],
+  "createdAt": 1788905531714,
+  "pairingCatalog": {
+    "version": "catalog-pairings-v1",
+    "status": "verified",
+    "slotsTotal": 3,
+    "slotsResolved": 3,
+    "resolvedAt": "2026-09-08T22:12:21.370Z",
+    "products": [
+      {
+        "slotIndex": 0,
+        "matchedName": "Hans Wegner Wishbone Chair",
+        "via": "named",
+        "category": "chair",
+        "label": "Lounge chair",
+        "product": {
+          "id": "gid://shopify/p/3Q8aC76eTnRDBEGU962erm",
+          "title": "Hans J. Wegner CH24 'Wishbone' Chair",
+          "brand": "NORD",
+          "price": 1090,
+          "image": "https://cdn.shopify.com/s/files/1/0010/1829/8429/files/IMG_4494.jpg",
+          "description": "A vintage Danish armchair crafted from oak, papercord, and natural leather for timeless style and comfort.",
+          "color": "hsl(186, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 1,
+        "matchedName": "Nanimarquina Tres",
+        "via": "named",
+        "category": "rug",
+        "label": "Area rug",
+        "product": {
+          "id": "gid://shopify/p/4u5ldLZnvtfsbQCo9LOWlB",
+          "title": "Nanimarquina Tres Rug in Ocher",
+          "brand": "MODERN RESALE",
+          "price": 2100,
+          "image": "https://cdn.shopify.com/s/files/1/0581/8153/files/IMG_9296_daba4472-48cc-4e3b-bfa7-fe659712e185.jpg",
+          "description": "Nanimarquina Tres Rug in Ocher The Tres Collection embodies nanimarquina's dedication to artisanal excellence, honoring the time-honored tradition of weaving. This collection seeks to return to fundamentals, celebrating intricate details while preserving cultural heritage. Tres is an authentic Indian flat-weave Dhurrie rug distinguished by its three-part construction, where varying fibers take precedence in each section. The interplay of wool, felt, and cotton creates subtle tonal shifts and weaving irregularities that animate the design. This collection represents a study in transparency, presenting the weaving mechanics with educational clarity—unapologetically exposing the warp structure. The fringe details reveal the construction methodology, accentuating how the three components ultimately merge seamlessly into a unified whole.",
+          "color": "hsl(215, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 2,
+        "matchedName": "Noguchi Cyclone Table",
+        "via": "named",
+        "category": "table",
+        "label": "Side table",
+        "product": {
+          "id": "gid://shopify/p/9czphIIbGqzMfamaQrGvy",
+          "title": "Noguchi Cyclone Dining Table",
+          "brand": "CA MODERN HOME",
+          "price": 2747.25,
+          "image": "https://cdn.shopify.com/s/files/1/0202/3990/files/rosewood-knoll-noguchi-cyclone-side-table-36-inch.jpg",
+          "description": "A sculptural dining table with a cast iron base and chrome-plated steel wire frame, designed by Isamu Noguchi for Knoll.",
+          "color": "hsl(41, 50%, 50%)"
+        }
+      }
+    ]
+  },
+  "key": "9d5f7d2f25a037ac",
+  "savedAt": 1788905844094
+}

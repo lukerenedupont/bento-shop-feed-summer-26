@@ -1,0 +1,383 @@
+{
+  "token": "gid://shopify/p/1CW0jDuCMVx2nGFlsXhjfi",
+  "buildRequestId": "f7e311ff-5077-4a93-a772-2789e349ec13",
+  "product": {
+    "id": "gid://shopify/p/1CW0jDuCMVx2nGFlsXhjfi",
+    "title": "Teenage Engineering EP-133 K.O. II Extended Player - EP–40 riddim",
+    "brand": "MOMA DESIGN STORE",
+    "description": "A portable sampler sequencer and composer with advanced fluid sequencing, stereo sound, and hands-free sampling for creative music production.",
+    "price": 99,
+    "image": "https://cdn.shopify.com/s/files/1/0623/7962/2630/files/4595d741-6aa2-4051-9b8b-b3b9d99de746.jpg"
+  },
+  "dossier": {
+    "eyebrow": "TEENAGE ENGINEERING · PORTABLE SAMPLER",
+    "headline": "EP–40 Riddim Sampler Composer",
+    "summary": "The EP-133 K.O. II Extended Player – EP–40 riddim is a portable sampler, sequencer and composer from Swedish design company Teenage Engineering. Described as a complete rhythm and bass system inspired by reggae, dub, dancehall and sound system culture, it runs on four AAA batteries or USB-C.",
+    "medium": "object",
+    "creator": {
+      "role": "brand",
+      "name": "Teenage Engineering"
+    },
+    "facts": [
+      {
+        "label": "Brand",
+        "value": "Teenage Engineering"
+      },
+      {
+        "label": "Founded",
+        "value": "2005, Stockholm, Sweden"
+      },
+      {
+        "label": "Founders",
+        "value": "Jesper Kouthoofd, David Eriksson, Jens Rudberg, David Möllerstedt"
+      },
+      {
+        "label": "Product type",
+        "value": "Portable sampler, sequencer and composer"
+      },
+      {
+        "label": "Power",
+        "value": "Four AAA batteries or USB-C"
+      },
+      {
+        "label": "Series",
+        "value": "EP series (EP-133 K.O. II / EP–40 riddim)"
+      }
+    ],
+    "story": [
+      {
+        "title": "A Swedish design house",
+        "detail": "Teenage Engineering is a consumer electronics and design company founded in 2005 in Stockholm by Jesper Kouthoofd, David Eriksson, Jens Rudberg and David Möllerstedt.",
+        "sources": [
+          1
+        ]
+      },
+      {
+        "title": "Rooted in sound system culture",
+        "detail": "The EP–40 riddim is positioned as a complete rhythm and bass system, a sampler, sequencer and composer inspired by reggae, dub, dancehall and sound system culture.",
+        "sources": [
+          17,
+          26
+        ]
+      },
+      {
+        "title": "Part of the EP family",
+        "detail": "The EP–40 riddim is a variant within the same EP series as the standard EP-133 K.O. II Extended Player, described as a powerful sampler, sequencer and composer.",
+        "sources": [
+          17,
+          21,
+          29
+        ]
+      }
+    ],
+    "references": [
+      {
+        "title": "EP-133 K.O. II",
+        "detail": "The standard EP-133 K.O. II Extended Player shares the same product family and form factor as the EP–40 riddim.",
+        "sources": [
+          17,
+          29
+        ]
+      },
+      {
+        "title": "MoMA Design Store listing",
+        "detail": "Retailed through the MoMA Design Store, which describes it as a powerful sampler, sequencer and composer.",
+        "sources": [
+          21
+        ]
+      }
+    ],
+    "styling": [
+      "Pair with a compact studio desk setup for a clean workspace flat-lay",
+      "Combine with wired headphones for a portable, hands-on beat-making scene",
+      "Show alongside a small keyboard or synth to signal a modular music setup"
+    ],
+    "palette": [
+      {
+        "hex": "#1C1C1E",
+        "name": "Graphite Black"
+      },
+      {
+        "hex": "#E8E4DC",
+        "name": "Off-White"
+      },
+      {
+        "hex": "#F2A900",
+        "name": "Signal Amber"
+      },
+      {
+        "hex": "#B0B4B8",
+        "name": "Cool Grey"
+      },
+      {
+        "hex": "#3A3A3C",
+        "name": "Charcoal"
+      }
+    ],
+    "pairWith": [
+      {
+        "label": "Studio headphones",
+        "category": "headphone",
+        "examples": [
+          "Sony MDR-7506",
+          "Audio-Technica ATH-M50x",
+          "Sennheiser HD 25"
+        ],
+        "queries": [
+          "studio headphones",
+          "closed-back monitor headphones",
+          "wired headphones"
+        ],
+        "attributes": [
+          "black",
+          "over-ear",
+          "wired",
+          "matte",
+          "minimal"
+        ],
+        "reason": "Monitoring headphones are essential for beat-making on a portable sampler."
+      },
+      {
+        "label": "Synthesizer",
+        "category": "synthesizer",
+        "examples": [
+          "Teenage Engineering OP-1",
+          "Korg Volca Beats",
+          "Roland SH-01A"
+        ],
+        "queries": [
+          "portable synthesizer",
+          "compact synth",
+          "desktop synth"
+        ],
+        "attributes": [
+          "compact",
+          "knobs",
+          "buttons",
+          "electronic instrument",
+          "minimal"
+        ],
+        "reason": "Complements the sampler in a modular portable studio."
+      },
+      {
+        "label": "Audio cable",
+        "category": "cable",
+        "examples": [
+          "Hosa 3.5mm TRS cable",
+          "Mogami Gold TS cable",
+          "Fender 3.5mm patch cable"
+        ],
+        "queries": [
+          "audio patch cable",
+          "3.5mm cable",
+          "instrument cable"
+        ],
+        "attributes": [
+          "black",
+          "braided",
+          "coiled",
+          "connector",
+          "utilitarian"
+        ],
+        "reason": "Connects the sampler to speakers, mixers and other gear."
+      },
+      {
+        "label": "Portable speaker",
+        "category": "speaker",
+        "examples": [
+          "Teenage Engineering OB-4",
+          "Marshall Emberton",
+          "Bose SoundLink Flex"
+        ],
+        "queries": [
+          "portable speaker",
+          "bluetooth speaker",
+          "compact monitor speaker"
+        ],
+        "attributes": [
+          "compact",
+          "grille",
+          "matte",
+          "portable",
+          "minimal"
+        ],
+        "reason": "Plays back beats made on the sampler in any space."
+      }
+    ],
+    "pairingImagePrompt": "An editorial product arrangement on a seamless neutral grey background, shown as a true top-down knolling flat-lay because all items are small goods: the Teenage Engineering EP-133 K.O. II EP–40 riddim sampler shown together with Sony MDR-7506 headphones, a Teenage Engineering OP-1 synthesizer, a Hosa 3.5mm TRS cable coiled neatly, and a Teenage Engineering OB-4 portable speaker. Every object whole and intact with parts connected, in correct scale relative to the others, evenly spaced on a grid with no overlaps, uniform lighting.",
+    "pairLooks": [
+      {
+        "caption": "Portable Beat Bench",
+        "prompt": "An editorial photograph of the Teenage Engineering EP-133 K.O. II EP–40 riddim sampler styled on a light wooden desk beside Sony MDR-7506 headphones and a Teenage Engineering OP-1 synthesizer, hands resting on the pads, soft daylight from a nearby window, minimal Scandinavian workspace mood."
+      },
+      {
+        "caption": "Sound System Corner",
+        "prompt": "An editorial photograph of the Teenage Engineering EP-133 K.O. II EP–40 riddim sampler on a concrete surface connected via a Hosa 3.5mm TRS cable to a Teenage Engineering OB-4 portable speaker, warm amber accent lighting against a dark backdrop, dub sound system atmosphere."
+      }
+    ],
+    "selfProfile": {
+      "category": "sampler",
+      "gender": "unisex",
+      "attributes": [
+        "black",
+        "compact rectangular body",
+        "grid of rubber pads",
+        "numeric buttons",
+        "rotary controls",
+        "portable electronic instrument"
+      ]
+    },
+    "similar": [
+      {
+        "category": "sampler",
+        "queries": [
+          "portable sampler",
+          "groovebox sampler",
+          "beat maker"
+        ],
+        "attributes": [
+          "black",
+          "compact",
+          "pad grid",
+          "buttons",
+          "portable"
+        ]
+      },
+      {
+        "category": "groovebox",
+        "queries": [
+          "compact groovebox",
+          "sequencer drum machine",
+          "portable beat machine"
+        ],
+        "attributes": [
+          "compact",
+          "knobs",
+          "step sequencer",
+          "minimal",
+          "electronic instrument"
+        ]
+      }
+    ],
+    "lookbookStyle": "Clean daylight studio lighting, neutral concrete and pale wood surfaces, muted Scandinavian palette with warm amber accents, crisp editorial product photography.",
+    "lookbookPrompt": "A single editorial lookbook sheet in one 3:2 landscape image, arranged as a strict 2x2 grid (2 rows x 2 columns) of four landscape photographs, identical cell sizes, uniform hairline gutters, grid flush to all four edges with no outer margin. Cell 1 (top-left): the Teenage Engineering EP-133 K.O. II EP–40 riddim sampler seen straight-on filling two thirds of the frame on a pale wood desk. Cell 2 (top-right): a close crop of the sampler's rubber pad grid and controls at an angle. Cell 3 (bottom-left): hands playing the sampler on a concrete surface. Cell 4 (bottom-right): the sampler standing upright beside a coiled 3.5mm cable in soft daylight. All frames share clean daylight studio lighting, neutral concrete and pale wood surfaces, muted Scandinavian palette with warm amber accents. No text, captions, numbers, watermarks, rounded corners or drop shadows."
+  },
+  "sources": [
+    {
+      "url": "https://en.wikipedia.org/wiki/Teenage_Engineering",
+      "title": "en.wikipedia.org"
+    },
+    {
+      "url": "https://scandinavianmind.com/human-touch-interview-jesper-kouthoofd-teenage-engineering/",
+      "title": "scandinavianmind.com"
+    },
+    {
+      "url": "https://www.thecompanycheck.com/company/b/teenage-engineering/o83ab67gjqwlypgve",
+      "title": "thecompanycheck.com"
+    },
+    {
+      "url": "https://www.swedishtechnews.com/after-15-years-of-bootstrapping-teenage-engineering-raises-its-first-vc-funding-round/",
+      "title": "swedishtechnews.com"
+    },
+    {
+      "url": "https://waqasali.substack.com/p/why-teenage-engineering-is-so-cool",
+      "title": "waqasali.substack.com"
+    },
+    {
+      "url": "https://masters-talks.elisava.net/jesper-kouthoofd",
+      "title": "masters-talks.elisava.net"
+    },
+    {
+      "url": "https://tracxn.com/d/companies/teenage-engineering/__K0dZMiZFr_DNFlIKgFkk0-bQxrhYRHr3g3peAXl6aLQ/founders-and-board-of-directors",
+      "title": "tracxn.com"
+    },
+    {
+      "url": "https://www.sfmoma.org/read/stay-curious-stay-naive-an-interview-with-teenage-engineering-jesper-kouthoofd/",
+      "title": "sfmoma.org"
+    },
+    {
+      "url": "https://www.synthhistory.com/post/three-questions-with-teenage-engineering-founder-jesper-kouthoofd",
+      "title": "synthhistory.com"
+    },
+    {
+      "url": "https://www.linkedin.com/in/jesperkouthoofd",
+      "title": "linkedin.com"
+    },
+    {
+      "url": "https://tracxn.com/d/companies/teenage-engineering/__K0dZMiZFr_DNFlIKgFkk0-bQxrhYRHr3g3peAXl6aLQ",
+      "title": "tracxn.com"
+    },
+    {
+      "url": "https://synthpedia.net/teenage-engineering/",
+      "title": "synthpedia.net"
+    },
+    {
+      "url": "https://tracxn.com/d/companies/teenage-engineering/__gCCTK2-kOVYBvnq_yjVTxeV_2wWhPOHG9nxAjjM9GD4",
+      "title": "tracxn.com"
+    },
+    {
+      "url": "https://www.crunchbase.com/person/jesper-kouthoofd",
+      "title": "crunchbase.com"
+    }
+  ],
+  "createdAt": 1788896731826,
+  "pairingCatalog": {
+    "version": "catalog-pairings-v1",
+    "status": "verified",
+    "slotsTotal": 4,
+    "slotsResolved": 3,
+    "resolvedAt": "2026-09-08T19:45:37.621Z",
+    "products": [
+      {
+        "slotIndex": 0,
+        "matchedName": "Sony MDR-7506",
+        "via": "named",
+        "category": "headphone",
+        "label": "Studio headphones",
+        "product": {
+          "id": "gid://shopify/p/3QdEbooQSiGoBUBEuRz6yd",
+          "title": "Sony MDR-7506 Studio Headphones",
+          "brand": "PERFORMANCE AUDIO",
+          "price": 98.99,
+          "image": "https://cdn.shopify.com/s/files/1/0614/8122/2322/products/sony-mdr-7506-01.jpg",
+          "description": "Professional closed-back headphones delivering exceptional sound quality and comfort for studio and live use.",
+          "color": "hsl(114, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 1,
+        "matchedName": "Teenage Engineering OP-1",
+        "via": "named",
+        "category": "synthesizer",
+        "label": "Synthesizer",
+        "product": {
+          "id": "gid://shopify/p/6EiiubHINSKfdEC7XU9ks7",
+          "title": "Teenage Engineering OP-1 OP1 Portable Synthesizer",
+          "brand": "STUDIOCARE",
+          "price": 1000,
+          "image": "https://cdn.shopify.com/s/files/1/0256/2988/4462/products/steeop1mkii.jpg",
+          "description": "A compact, all-in-one portable synthesizer, sampler, and controller with modular architecture and advanced features for creative music production.",
+          "color": "hsl(137, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 2,
+        "matchedName": "Hosa 3.5mm TRS cable",
+        "via": "named",
+        "category": "cable",
+        "label": "Audio cable",
+        "product": {
+          "id": "gid://shopify/p/1mR5tihbZxEtsQTUztf5ly",
+          "title": "Hosa 3.5mm TRS to Dual TS Stereo Breakout Cable | Length: 3 feet",
+          "brand": "SOUNDPRO",
+          "price": 13.95,
+          "image": "https://cdn.shopify.com/s/files/1/0871/7382/4696/files/41205_Hosa-3-5mm-TRS-to-Dual-TS-Stereo-Breakout-Cable.jpg",
+          "description": "Connect devices with mini stereo outputs to pro audio equipment with unbalanced phone inputs using this durable 3.5mm TRS to dual TS stereo breakout cable.",
+          "color": "hsl(272, 50%, 50%)"
+        }
+      }
+    ]
+  },
+  "key": "519234f72b73ffaa",
+  "savedAt": 1788897051252
+}

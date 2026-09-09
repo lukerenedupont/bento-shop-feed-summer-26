@@ -102,7 +102,7 @@ struct SampleMerchant: Identifiable {
             supplementalMerchantIDs.contains($0.id) && !baseIDs.contains($0.id)
         }
         if QuietFeedReviewCatalog.enabled {
-            return LocalMerchantService.mergeMerchants([QuietFeedReviewCatalog.merchants, base + supplementalMerchants])
+            return LocalMerchantService.mergeMerchants([DossierReviewLibrary.enabled ? DossierReviewLibrary.merchants : [], QuietFeedReviewCatalog.merchants, base + supplementalMerchants])
         }
         return base + supplementalMerchants
     }

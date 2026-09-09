@@ -1,0 +1,116 @@
+{
+  "schema": "dossier-export-manifest/1",
+  "exportedAt": "2026-09-09T00:18:54.649Z",
+  "key": "519234f72b73ffaa",
+  "title": "Teenage Engineering EP-133 K.O. II Extended Player - EP–40 riddim",
+  "documents": {
+    "portable": "dossier.json",
+    "canonical": "source.json",
+    "imageColors": "image-colors.json"
+  },
+  "counts": {
+    "images": 10,
+    "videos": 2,
+    "assets": 12
+  },
+  "bytes": 18143481,
+  "assets": [
+    {
+      "path": "media/images/look0.png",
+      "kind": "image",
+      "variant": "look0",
+      "bytes": 2423839,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=8ea41c3936dceb51"
+    },
+    {
+      "path": "media/images/look1.png",
+      "kind": "image",
+      "variant": "look1",
+      "bytes": 2551150,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=6c71eb32b93d494d"
+    },
+    {
+      "path": "media/images/lookbook.png",
+      "kind": "image",
+      "variant": "lookbook",
+      "bytes": 2690996,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=056c521f0a902c16"
+    },
+    {
+      "path": "media/images/object0.png",
+      "kind": "image",
+      "variant": "object0",
+      "bytes": 853588,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=be5cbf76cb07ebf6"
+    },
+    {
+      "path": "media/images/object1.png",
+      "kind": "image",
+      "variant": "object1",
+      "bytes": 855844,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=30a2ba333e31a878"
+    },
+    {
+      "path": "media/images/object2.png",
+      "kind": "image",
+      "variant": "object2",
+      "bytes": 700176,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=bf2f11721d637dcc"
+    },
+    {
+      "path": "media/images/object3.png",
+      "kind": "image",
+      "variant": "object3",
+      "bytes": 626653,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=fc3cec6eef5790f1"
+    },
+    {
+      "path": "media/images/pair.png",
+      "kind": "image",
+      "variant": "pair",
+      "bytes": 1712843,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=8b2e5f6cc1b75b49"
+    },
+    {
+      "path": "media/images/pair-square.png",
+      "kind": "image",
+      "variant": "pairSquare",
+      "bytes": 1141296,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=a969655b2e46e36e"
+    },
+    {
+      "path": "media/videos/look0.mp4",
+      "kind": "video",
+      "variant": "look0",
+      "bytes": 2169065,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=35ebe69f57948b80"
+    },
+    {
+      "path": "media/videos/look1.mp4",
+      "kind": "video",
+      "variant": "look1",
+      "bytes": 2136789,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=d4309e267439bb54"
+    },
+    {
+      "path": "media/product.jpg",
+      "kind": "image",
+      "variant": "product",
+      "bytes": 281242,
+      "contentType": "image/jpeg",
+      "source": "https://cdn.shopify.com/s/files/1/0623/7962/2630/files/4595d741-6aa2-4051-9b8b-b3b9d99de746.jpg"
+    }
+  ],
+  "missing": []
+}

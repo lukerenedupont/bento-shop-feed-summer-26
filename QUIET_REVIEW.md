@@ -1,5 +1,7 @@
 # Quiet shopping feed — morning review
 
+> Historical structural pass. The current Dossier-led version is documented in [DOSSIER_REVIEW.md](DOSSIER_REVIEW.md). Use `./Scripts/run_quiet_review.sh structural 0` to open this earlier five-card version.
+
 A first functional pass on **SEE → TOUCH → RESPOND → GO DEEPER**, built on the existing generative feed, not a replacement application.
 
 ## Open it

@@ -1,0 +1,116 @@
+{
+  "schema": "dossier-export-manifest/1",
+  "exportedAt": "2026-09-09T00:18:05.799Z",
+  "key": "4b42878d497ca473",
+  "title": "Nike Vomero Plus SP - Desert Camo/Yukon Brown",
+  "documents": {
+    "portable": "dossier.json",
+    "canonical": "source.json",
+    "imageColors": "image-colors.json"
+  },
+  "counts": {
+    "images": 10,
+    "videos": 2,
+    "assets": 12
+  },
+  "bytes": 23993777,
+  "assets": [
+    {
+      "path": "media/images/look0.png",
+      "kind": "image",
+      "variant": "look0",
+      "bytes": 3175331,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=1ce49b90c42f20f4"
+    },
+    {
+      "path": "media/images/look1.png",
+      "kind": "image",
+      "variant": "look1",
+      "bytes": 3145035,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=4c167f90917a18f1"
+    },
+    {
+      "path": "media/images/lookbook.png",
+      "kind": "image",
+      "variant": "lookbook",
+      "bytes": 3173852,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=53aaa5c7d38b4e11"
+    },
+    {
+      "path": "media/images/object0.png",
+      "kind": "image",
+      "variant": "object0",
+      "bytes": 912150,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=b303b202cd53a615"
+    },
+    {
+      "path": "media/images/object1.png",
+      "kind": "image",
+      "variant": "object1",
+      "bytes": 1010023,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=c793ebf1545a31eb"
+    },
+    {
+      "path": "media/images/object2.png",
+      "kind": "image",
+      "variant": "object2",
+      "bytes": 772139,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=86301a17287cab49"
+    },
+    {
+      "path": "media/images/object3.png",
+      "kind": "image",
+      "variant": "object3",
+      "bytes": 892833,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=f7d392723d57f021"
+    },
+    {
+      "path": "media/images/pair.png",
+      "kind": "image",
+      "variant": "pair",
+      "bytes": 1749973,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=7b23deaf86e717e7"
+    },
+    {
+      "path": "media/images/pair-square.png",
+      "kind": "image",
+      "variant": "pairSquare",
+      "bytes": 1161493,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=66d0c1c8ccd074a7"
+    },
+    {
+      "path": "media/videos/look0.mp4",
+      "kind": "video",
+      "variant": "look0",
+      "bytes": 3947055,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=e0318951b955ff0f"
+    },
+    {
+      "path": "media/videos/look1.mp4",
+      "kind": "video",
+      "variant": "look1",
+      "bytes": 4003668,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=dd4b1b75b9308187"
+    },
+    {
+      "path": "media/product.jpg",
+      "kind": "image",
+      "variant": "product",
+      "bytes": 50225,
+      "contentType": "image/jpeg",
+      "source": "https://cdn.shopify.com/s/files/1/0214/7974/files/AURORA_IV4522-200_PHSLH000-2000.jpg"
+    }
+  ],
+  "missing": []
+}

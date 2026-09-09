@@ -1,0 +1,361 @@
+{
+  "token": "gid://shopify/p/3ONfON13WG8pfsGTg1YYYx",
+  "buildRequestId": "e3d83891-5fa5-447e-87fa-080fd1b8c53e",
+  "product": {
+    "id": "gid://shopify/p/3ONfON13WG8pfsGTg1YYYx",
+    "title": "Nike Vomero Plus SP - Desert Camo/Yukon Brown",
+    "brand": "SNEAKER POLITICS",
+    "description": "Breathable mesh upper Knit design Reflective details Webbed lace loops for an adjustable fit Full-length ZoomX foam midsole High-abrasion rubber outsole Color: Desert Camo/Yukon Brown/Ceramic Style: IV4522-200",
+    "price": 175,
+    "image": "https://cdn.shopify.com/s/files/1/0214/7974/files/AURORA_IV4522-200_PHSLH000-2000.jpg"
+  },
+  "dossier": {
+    "eyebrow": "NIKE · RUNNING SNEAKER",
+    "headline": "Vomero Plus SP Cheat Day",
+    "summary": "The Nike Vomero Plus SP \"Cheat Day\" (style IV4522-200) is a performance running sneaker in a Desert Camo/Yukon Brown/Ceramic colorway, built on a full-length ZoomX foam midsole with an engineered mesh upper. Part of Nike's Special Projects (SP) range, it pairs a neutral khaki upper with an orange gradient through the forefoot inspired by cheesy snack dust, retailing at $175.",
+    "medium": "apparel",
+    "creator": {
+      "role": "brand",
+      "name": "Nike"
+    },
+    "facts": [
+      {
+        "label": "Brand",
+        "value": "Nike (Special Projects / SP range)"
+      },
+      {
+        "label": "Model",
+        "value": "Vomero Plus SP \"Cheat Day\""
+      },
+      {
+        "label": "Style Code",
+        "value": "IV4522-200"
+      },
+      {
+        "label": "Colorway",
+        "value": "Desert Camo/Yukon Brown/Ceramic"
+      },
+      {
+        "label": "Material",
+        "value": "Engineered mesh upper with full-length ZoomX foam midsole, high-abrasion rubber outsole"
+      },
+      {
+        "label": "Released",
+        "value": "August 14, 2026"
+      },
+      {
+        "label": "Price",
+        "value": "$175"
+      }
+    ],
+    "story": [
+      {
+        "title": "A \"Cheat Day\" color story",
+        "detail": "Nike's narrative treats the neutral tan/khaki upper with a bright orange gradient through the forefoot and midsole, visually referencing cheesy snack dust after an indulgent cheat day.",
+        "sources": [
+          3,
+          11
+        ]
+      },
+      {
+        "title": "Special Projects designation",
+        "detail": "The shoe carries Nike's \"SP\" label, situating it within the Special Projects range reserved for more experimental, story-driven releases rather than the standard Vomero Plus inline offering.",
+        "sources": [
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "title": "ZoomX cushioning platform",
+        "detail": "The Vomero Plus midsole uses a mountainous stack of ZoomX foam with 4 mm more height than the Invincible 3, for a softer, lighter and more responsive ride than the Vomero 18.",
+        "sources": [
+          1,
+          15
+        ]
+      }
+    ],
+    "references": [
+      {
+        "title": "Vomero Plus running line",
+        "detail": "The shoe belongs to Nike's Vomero Plus running family, described with a 10 mm heel-to-toe drop and roughly 292 g weight for a men's US 10.",
+        "sources": [
+          1,
+          15
+        ]
+      },
+      {
+        "title": "Cheetos-dust palette",
+        "detail": "Hypebeast and House of Heat editorial coverage describe the khaki upper with an orange fade inspired by cheesy snack residue, plus orange pull tab and lace tips.",
+        "sources": [
+          3,
+          11
+        ]
+      }
+    ],
+    "styling": [
+      "Let the neutral khaki upper anchor an earth-toned casual outfit",
+      "Play up the orange gradient with warm-tone accessories",
+      "Pair with tapered trousers or cropped joggers to show the ZoomX stack",
+      "Keep branding minimal by styling with clean, tonal separates"
+    ],
+    "palette": [
+      {
+        "hex": "#C6B48A",
+        "name": "Desert Camo Khaki"
+      },
+      {
+        "hex": "#8A6A47",
+        "name": "Yukon Brown"
+      },
+      {
+        "hex": "#E8E1D3",
+        "name": "Ceramic"
+      },
+      {
+        "hex": "#E8621F",
+        "name": "Snack-Dust Orange"
+      },
+      {
+        "hex": "#9A9186",
+        "name": "College Grey"
+      }
+    ],
+    "pairWith": [
+      {
+        "label": "Tapered trousers",
+        "category": "trouser",
+        "examples": [
+          "Carhartt WIP Single Knee Pant",
+          "Dickies 874 Work Pant",
+          "Uniqlo Smart Ankle Pants"
+        ],
+        "queries": [
+          "tapered work trouser",
+          "khaki tapered pant",
+          "casual ankle trouser"
+        ],
+        "attributes": [
+          "khaki",
+          "cotton twill",
+          "tapered",
+          "casual"
+        ],
+        "reason": "Neutral tapered trousers echo the shoe's earth tones and reveal the ZoomX midsole."
+      },
+      {
+        "label": "Crew socks",
+        "category": "sock",
+        "examples": [
+          "Nike Everyday Cushioned Crew Socks",
+          "Carhartt Camo Crew Sock",
+          "Stance Icon Crew Sock"
+        ],
+        "queries": [
+          "ribbed crew sock",
+          "cushioned athletic sock",
+          "neutral crew sock"
+        ],
+        "attributes": [
+          "ribbed",
+          "cotton",
+          "neutral",
+          "athletic"
+        ],
+        "reason": "A cushioned crew sock complements the running silhouette and warm palette."
+      },
+      {
+        "label": "Windbreaker jacket",
+        "category": "jacket",
+        "examples": [
+          "Nike Sportswear Windrunner",
+          "Patagonia Houdini Jacket",
+          "The North Face Cyclone Jacket"
+        ],
+        "queries": [
+          "lightweight windbreaker",
+          "nylon running jacket",
+          "packable shell jacket"
+        ],
+        "attributes": [
+          "nylon",
+          "lightweight",
+          "earth tone",
+          "sporty"
+        ],
+        "reason": "A lightweight technical shell matches the performance running context of the sneaker."
+      }
+    ],
+    "pairingImagePrompt": "A neatly aligned flat-lay knolling arrangement on a seamless neutral background, editorial lighting, top-down view. Show the Nike Vomero Plus SP Cheat Day sneaker in Desert Camo/Yukon Brown with its orange forefoot gradient, alongside Carhartt WIP Single Knee Pants in khaki, Nike Everyday Cushioned Crew Socks, and a Nike Sportswear Windrunner jacket. Every object whole and intact, evenly spaced on a grid with no overlaps, correct scale relative to each other.",
+    "pairLooks": [
+      {
+        "caption": "Earthy Street Runner",
+        "prompt": "Editorial photograph of a person wearing the Nike Vomero Plus SP Cheat Day sneaker with khaki Carhartt WIP Single Knee Pants and Nike Everyday Cushioned Crew Socks, warm neutral urban setting with concrete and soft daylight, relaxed casual mood."
+      },
+      {
+        "caption": "Trail-Ready Layers",
+        "prompt": "Editorial photograph of the Nike Vomero Plus SP Cheat Day sneaker styled with Uniqlo Smart Ankle Pants and a Patagonia Houdini windbreaker, cool outdoor gravel path setting with overcast light, active technical mood."
+      }
+    ],
+    "selfProfile": {
+      "category": "sneaker",
+      "gender": "men",
+      "attributes": [
+        "khaki desert camo",
+        "engineered mesh upper",
+        "orange forefoot gradient",
+        "chunky ZoomX midsole",
+        "reflective details",
+        "running silhouette"
+      ]
+    },
+    "similar": [
+      {
+        "category": "sneaker",
+        "queries": [
+          "chunky running sneaker",
+          "neutral foam runner"
+        ],
+        "attributes": [
+          "khaki",
+          "mesh upper",
+          "thick foam midsole",
+          "running style"
+        ]
+      },
+      {
+        "category": "sneaker",
+        "queries": [
+          "earth tone dad shoe",
+          "tan performance sneaker"
+        ],
+        "attributes": [
+          "tan",
+          "breathable mesh",
+          "high stack midsole",
+          "casual athletic"
+        ]
+      }
+    ],
+    "lookbookStyle": "Warm natural daylight, soft neutral film grain, minimal earth-toned sets, calm editorial mood.",
+    "lookbookPrompt": "A single editorial lookbook sheet in one 3:2 landscape image, arranged as a strict 2x2 grid (2 rows x 2 columns) of four equal landscape cells with uniform hairline gutters, grid flush to all four edges, no outer margin. Cell 1 (top-left): close crop of the Nike Vomero Plus SP Cheat Day sneaker on concrete showing the orange forefoot gradient. Cell 2 (top-right): full-body shot of a person walking, sneakers visible, wearing khaki tapered trousers. Cell 3 (bottom-left): side-angle of both sneakers together on gravel. Cell 4 (bottom-right): seated pose with sneakers crossed, warm daylight. Each cell fills about two thirds with the product, varied pose and angle, all sharing warm natural daylight and soft neutral film grain. No text, captions, numbers, watermarks, rounded corners or drop shadows."
+  },
+  "sources": [
+    {
+      "url": "https://www.nike.com/t/vomero-plus-mens-shoes-cdYA0SoI/IV4522-200",
+      "title": "nike.com"
+    },
+    {
+      "url": "https://sneakerbardetroit.com/nike-vomero-plus-cheat-day/",
+      "title": "sneakerbardetroit.com"
+    },
+    {
+      "url": "https://hypebeast.com/fr/2026/7/nike-vomero-plus-cheat-day-iv4522-200-official-images",
+      "title": "hypebeast.com"
+    },
+    {
+      "url": "https://www.theillest.pl/nike-vomero-plus-cheat-day-iv4522-200/",
+      "title": "theillest.pl"
+    },
+    {
+      "url": "https://www.nike.com/au/launch/t/fa26-iv4522-200-nike-vomero-plus-sp-astla",
+      "title": "nike.com"
+    },
+    {
+      "url": "https://hypebeast.com/pt/2026/7/nike-vomero-plus-cheat-day-iv4522-200-official-images",
+      "title": "hypebeast.com"
+    },
+    {
+      "url": "https://www.nike.com/gb/launch/t/vomero-plus-desert-camo-and-ceramic",
+      "title": "nike.com"
+    },
+    {
+      "url": "https://hypebeast.com/id/2026/7/nike-vomero-plus-cheat-day-iv4522-200-official-images",
+      "title": "hypebeast.com"
+    },
+    {
+      "url": "https://hypebeast.kr/2026/7/nike-vomero-plus-cheat-day-iv4522-200-official-images",
+      "title": "hypebeast.kr"
+    },
+    {
+      "url": "https://pricespy.co.uk/product.php?p=14907083",
+      "title": "pricespy.co.uk"
+    },
+    {
+      "url": "https://houseofheat.co/nike/nike-vomero-plus-cheat-day-release-date",
+      "title": "houseofheat.co"
+    },
+    {
+      "url": "https://www.sneaktorious.com/nike-vomero-plus-cheat-day",
+      "title": "sneaktorious.com"
+    },
+    {
+      "url": "https://justfreshkicks.com/nike-vomero-plus-cheat-day-iv4522-200/",
+      "title": "justfreshkicks.com"
+    },
+    {
+      "url": "https://releases.footshop.com/nike-vomero-plus-EQpcPaAB855nFHXGVcLP",
+      "title": "releases.footshop.com"
+    }
+  ],
+  "createdAt": 1788900184741,
+  "pairingCatalog": {
+    "version": "catalog-pairings-v1",
+    "status": "verified",
+    "slotsTotal": 3,
+    "slotsResolved": 3,
+    "resolvedAt": "2026-09-08T20:43:07.387Z",
+    "products": [
+      {
+        "slotIndex": 0,
+        "matchedName": "Carhartt WIP Single Knee Pant",
+        "via": "named",
+        "category": "trouser",
+        "label": "Tapered trousers",
+        "product": {
+          "id": "gid://shopify/p/1j20fMjJ9FfQC6NSwcZscU",
+          "title": "Carhartt WIP Single Knee Pant - Shale",
+          "brand": "SNEAKER POLITICS",
+          "price": 103.4,
+          "image": "https://cdn.shopify.com/s/files/1/0214/7974/files/CARHARTT-WIP-APRIL26-I034798.jpg",
+          "description": "Classic Carhartt WIP single knee pants made from durable cotton in relaxed fit for everyday comfort and style.",
+          "color": "hsl(233, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 1,
+        "matchedName": "Nike Everyday Cushioned Crew Socks",
+        "via": "named",
+        "category": "sock",
+        "label": "Crew socks",
+        "product": {
+          "id": "gid://shopify/p/5kVFHC5HGcUQRhiYRhsnsR",
+          "title": "Nike Everyday Cushioned Crew Socks 6 Pack",
+          "brand": "ASPHALTGOLD",
+          "price": 25,
+          "image": "https://cdn.shopify.com/s/files/1/0473/6965/0340/files/b594199cbb7f5831abe1f894f182ff573bdeac4c_SX7666_100_Nike_Everyday_Cushioned_Crew_Socks_6_Pack_White_Black_os_1.jpg",
+          "description": "Comfortable crew socks with cushioned support and sweat-wicking technology for everyday wear.",
+          "color": "hsl(34, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 2,
+        "matchedName": "Nike Sportswear Windrunner",
+        "via": "named",
+        "category": "jacket",
+        "label": "Windbreaker jacket",
+        "product": {
+          "id": "gid://shopify/p/6X84Yqys6BLlfIW0VM4wae",
+          "title": "Nike Sportswear Windrunner Lined Jacket - Black",
+          "brand": "SNEAKER POLITICS",
+          "price": 120,
+          "image": "https://cdn.shopify.com/s/files/1/0214/7974/files/Sneaker-Politics-NIKE-SportswearWindrunner-Black-IV7342-010-WB-1.jpg",
+          "description": "100% Polyester Woven taffeta fabric Mesh lining Storm-FIT wind and water resistance Full-zip closure Elastic cuffs and hem Zippered side pockets Ventilation panel on back Embroidered Swoosh on left chest Color: Black Style: IV7342-010",
+          "color": "hsl(226, 50%, 50%)"
+        }
+      }
+    ]
+  },
+  "key": "4b42878d497ca473",
+  "savedAt": 1788898330008
+}

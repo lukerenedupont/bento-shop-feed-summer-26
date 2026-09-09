@@ -1,0 +1,116 @@
+{
+  "schema": "dossier-export-manifest/1",
+  "exportedAt": "2026-09-09T00:13:41.024Z",
+  "key": "9d5f7d2f25a037ac",
+  "title": "Woven Floor Lamp Artefacto LS 16  by Lørdag & Søndag",
+  "documents": {
+    "portable": "dossier.json",
+    "canonical": "source.json",
+    "imageColors": "image-colors.json"
+  },
+  "counts": {
+    "images": 10,
+    "videos": 2,
+    "assets": 12
+  },
+  "bytes": 22279314,
+  "assets": [
+    {
+      "path": "media/images/look0.png",
+      "kind": "image",
+      "variant": "look0",
+      "bytes": 3227097,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=90d861768e361023"
+    },
+    {
+      "path": "media/images/look1.png",
+      "kind": "image",
+      "variant": "look1",
+      "bytes": 2940726,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=cb2f416c33b3fb0e"
+    },
+    {
+      "path": "media/images/lookbook.png",
+      "kind": "image",
+      "variant": "lookbook",
+      "bytes": 2619211,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=0d9279e4e8bf7f88"
+    },
+    {
+      "path": "media/images/object0.png",
+      "kind": "image",
+      "variant": "object0",
+      "bytes": 817464,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=173a9f51b2b11417"
+    },
+    {
+      "path": "media/images/object1.png",
+      "kind": "image",
+      "variant": "object1",
+      "bytes": 685285,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=19223ddb416f80da"
+    },
+    {
+      "path": "media/images/object2.png",
+      "kind": "image",
+      "variant": "object2",
+      "bytes": 1385098,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=3c18e3b920e78560"
+    },
+    {
+      "path": "media/images/object3.png",
+      "kind": "image",
+      "variant": "object3",
+      "bytes": 771605,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=e3bfb03a9de50d2b"
+    },
+    {
+      "path": "media/images/pair.png",
+      "kind": "image",
+      "variant": "pair",
+      "bytes": 1409280,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=2ccd2853f85f802f"
+    },
+    {
+      "path": "media/images/pair-square.png",
+      "kind": "image",
+      "variant": "pairSquare",
+      "bytes": 1094180,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=b14aee58b1ffa125"
+    },
+    {
+      "path": "media/videos/look0.mp4",
+      "kind": "video",
+      "variant": "look0",
+      "bytes": 3396759,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=9226c6bf7d70a9b9"
+    },
+    {
+      "path": "media/videos/look1.mp4",
+      "kind": "video",
+      "variant": "look1",
+      "bytes": 3368708,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=b4038e78a2a861a3"
+    },
+    {
+      "path": "media/product.jpg",
+      "kind": "image",
+      "variant": "product",
+      "bytes": 563901,
+      "contentType": "image/jpeg",
+      "source": "https://cdn.shopify.com/s/files/1/1424/5908/files/Woven_Floor_Lamp_Meso_L_S-Photoroom_1200x1200-Photoroom_1.jpg"
+    }
+  ],
+  "missing": []
+}

@@ -1,0 +1,365 @@
+{
+  "token": "gid://shopify/p/2vAbR0TMdTEpyQjOrU6kq1",
+  "buildRequestId": "8a6e81a7-ea7b-4f8a-b45a-cf57e4c369f1",
+  "product": {
+    "id": "gid://shopify/p/2vAbR0TMdTEpyQjOrU6kq1",
+    "title": "Toddler's Nike Air Max 95 S Phantom/Silt Red-Tattoo (905462 012)",
+    "brand": "THE SPOT CHICAGO",
+    "description": "Lightweight cushioned toddler sneakers with breathable mesh and iconic Air Max 95 design.",
+    "price": 69.95,
+    "image": "https://cdn.shopify.com/s/files/1/0530/5993/files/905462_20012-298ks_20_1.jpg"
+  },
+  "dossier": {
+    "eyebrow": "NIKE · TODDLER SNEAKER",
+    "headline": "Air Max 95 Toddler Phantom Tattoo",
+    "summary": "The Nike Air Max 95 in Baby/Toddler sizing, colorway Phantom/Tattoo/Moon Particle/Silt Red, style code 905462-012. It carries the iconic Air Max 95 design with breathable mesh, synthetic leather layering, and visible Max Air cushioning, reissued for young children as a casual lifestyle sneaker.",
+    "medium": "apparel",
+    "facts": [
+      {
+        "label": "Brand",
+        "value": "Nike"
+      },
+      {
+        "label": "Model",
+        "value": "Air Max 95 (Baby/Toddler)"
+      },
+      {
+        "label": "Colorway",
+        "value": "Phantom/Tattoo/Moon Particle/Silt Red"
+      },
+      {
+        "label": "Style Code",
+        "value": "905462-012"
+      },
+      {
+        "label": "Material",
+        "value": "Breathable mesh with synthetic leather"
+      },
+      {
+        "label": "Cushioning",
+        "value": "Visible Max Air units, foam midsole"
+      },
+      {
+        "label": "Made in",
+        "value": "Vietnam (related little kids' sizing)"
+      }
+    ],
+    "story": [
+      {
+        "title": "A '90s Icon, Toddler-Sized",
+        "detail": "Nordstrom frames the Air Max 95 as a '90s-throwback sneaker reissued for sporty little feet, sold in walker, toddler and little kid sizing. The chunky retro silhouette carries its recognized 1990s design lineage.",
+        "sources": [
+          7
+        ]
+      },
+      {
+        "title": "Inspired by the Human Body",
+        "detail": "Nike states the model's wavy panels and sculpted foam outsole are inspired by the human body, resembling muscles and a spine. Visible Max Air units provide lightweight cushioning.",
+        "sources": [
+          1,
+          14
+        ]
+      },
+      {
+        "title": "A Soft-Toned Gradient",
+        "detail": "Sneaker coverage describes Phantom suede fading into red Tattoo on lower layers, with Moon Particle and Silt Red across eyelets and branding, a white midsole and reflective metallic silver on the spine.",
+        "sources": [
+          13
+        ]
+      }
+    ],
+    "references": [
+      {
+        "title": "Air Max 95 Recraft (Kids)",
+        "detail": "Parallel toddler and preschool Air Max 95 Recraft models combine real and synthetic leather with mesh, sharing construction cues with this pair.",
+        "sources": [
+          4,
+          6
+        ]
+      },
+      {
+        "title": "Phantom/Tattoo GS Colorway",
+        "detail": "The grade-school Air Max 95 in the same Phantom/Tattoo palette confirms this as a kids-exclusive color scheme.",
+        "sources": [
+          13
+        ]
+      },
+      {
+        "title": "Little Kids' Air Max 95",
+        "detail": "The closely related little kids' pair in the same palette lists Country of Origin as Vietnam.",
+        "sources": [
+          15
+        ]
+      }
+    ],
+    "styling": [
+      "Pair with soft neutral joggers or leggings to echo the Phantom tone",
+      "Layer over cuffed denim for a classic retro sneaker look",
+      "Keep the rest of the outfit muted so the gradient panels stand out",
+      "Match red accents in outerwear to the Silt Red details"
+    ],
+    "palette": [
+      {
+        "hex": "#EDE8E2",
+        "name": "Phantom"
+      },
+      {
+        "hex": "#8A4A47",
+        "name": "Tattoo Red"
+      },
+      {
+        "hex": "#C9BBB0",
+        "name": "Moon Particle"
+      },
+      {
+        "hex": "#B5544E",
+        "name": "Silt Red"
+      },
+      {
+        "hex": "#C0C0C0",
+        "name": "Reflective Silver"
+      }
+    ],
+    "pairWith": [
+      {
+        "label": "Toddler joggers",
+        "category": "jogger",
+        "examples": [
+          "Nike Sportswear Club Fleece Joggers",
+          "Adidas Trefoil Joggers",
+          "Carter's Pull-On Joggers"
+        ],
+        "queries": [
+          "toddler joggers",
+          "kids fleece joggers",
+          "children sweatpants"
+        ],
+        "attributes": [
+          "neutral",
+          "cotton fleece",
+          "elastic waist",
+          "casual",
+          "tapered"
+        ],
+        "reason": "Soft joggers complement the sneaker's casual retro styling"
+      },
+      {
+        "label": "Toddler tee",
+        "category": "t-shirt",
+        "examples": [
+          "Nike Sportswear Futura Tee",
+          "Adidas Trefoil Tee",
+          "Gap Kids Logo Tee"
+        ],
+        "queries": [
+          "toddler graphic tee",
+          "kids cotton t-shirt",
+          "children logo tee"
+        ],
+        "attributes": [
+          "white",
+          "cotton",
+          "short sleeve",
+          "casual",
+          "logo"
+        ],
+        "reason": "A simple tee balances the sneaker's layered color scheme"
+      },
+      {
+        "label": "Toddler puffer jacket",
+        "category": "jacket",
+        "examples": [
+          "Nike Sportswear Puffer Jacket",
+          "The North Face Toddler Reversible Jacket",
+          "Columbia Powder Lite Jacket"
+        ],
+        "queries": [
+          "toddler puffer jacket",
+          "kids winter jacket",
+          "children insulated coat"
+        ],
+        "attributes": [
+          "neutral",
+          "quilted",
+          "zip front",
+          "warm",
+          "casual"
+        ],
+        "reason": "A puffer completes a cold-weather retro sportswear look"
+      }
+    ],
+    "pairingImagePrompt": "A single neatly aligned flat-lay knolling arrangement on a seamless neutral beige background, editorial lighting, true top-down view. Depict the Nike Air Max 95 toddler sneaker in Phantom/Tattoo/Moon Particle/Silt Red alongside Nike Sportswear Club Fleece Joggers (toddler), a Nike Sportswear Futura Tee (toddler, white), and a Nike Sportswear Puffer Jacket (toddler). Every object whole and intact with parts connected, in natural orientation, correct relative scale, evenly spaced on a grid with no overlaps.",
+    "pairLooks": [
+      {
+        "caption": "Retro Playground Casual",
+        "prompt": "Editorial photograph of a toddler wearing the Nike Air Max 95 in Phantom/Tattoo/Moon Particle/Silt Red styled with Nike Sportswear Club Fleece Joggers and a white Nike Sportswear Futura Tee, standing on a sunlit playground, bright natural daylight, soft shadows, casual playful mood."
+      },
+      {
+        "caption": "Cold-Weather Sport Layers",
+        "prompt": "Editorial photograph of a toddler wearing the Nike Air Max 95 in Phantom/Tattoo/Moon Particle/Silt Red with a Nike Sportswear Puffer Jacket and dark joggers, styled vignette against a cool grey urban wall, overcast diffused light, cozy autumn mood."
+      }
+    ],
+    "selfProfile": {
+      "category": "sneaker",
+      "gender": "unisex",
+      "attributes": [
+        "phantom off-white",
+        "mesh and synthetic leather",
+        "chunky retro silhouette",
+        "visible air cushioning",
+        "gradient red panels",
+        "low collar"
+      ]
+    },
+    "similar": [
+      {
+        "category": "sneaker",
+        "queries": [
+          "toddler air max sneaker",
+          "kids retro chunky sneaker"
+        ],
+        "attributes": [
+          "neutral tone",
+          "mesh upper",
+          "visible air unit",
+          "retro silhouette",
+          "low collar"
+        ]
+      },
+      {
+        "category": "sneaker",
+        "queries": [
+          "toddler running sneaker",
+          "kids lifestyle trainer"
+        ],
+        "attributes": [
+          "off-white",
+          "layered panels",
+          "foam midsole",
+          "casual",
+          "lace-up"
+        ]
+      }
+    ],
+    "lookbookStyle": "Bright natural daylight, soft film grain, warm neutral backdrops, playful editorial mood with clean minimal sets.",
+    "lookbookPrompt": "One editorial lookbook sheet in a single 3:2 landscape image, arranged as a strict 2x2 grid (2 rows x 2 columns), all cells identical size, uniform hairline gutters, grid flush to all four edges with no outer margin. Each cell is a landscape crop of the Nike Air Max 95 toddler sneaker in Phantom/Tattoo/Moon Particle/Silt Red, filling about two thirds of the frame. Cell 1 (top-left): straight-on side profile of the sneaker pair on a warm beige surface. Cell 2 (top-right): three-quarter angle close-up highlighting the gradient panels and reflective spine. Cell 3 (bottom-left): overhead top-down of both shoes on soft neutral fabric. Cell 4 (bottom-right): the sneaker worn by a toddler mid-step on a sunlit floor. All frames share bright natural daylight, soft film grain and warm neutral tones. No text, captions, numbers, watermarks, rounded corners or drop shadows."
+  },
+  "sources": [
+    {
+      "url": "https://www.nike.com/t/air-max-95-baby-toddler-shoes-HX6aTG7t",
+      "title": "nike.com"
+    },
+    {
+      "url": "https://poshmark.com/listing/Nike-Toddler-Air-Max-95-6a90376c88963fd5453492ab",
+      "title": "poshmark.com"
+    },
+    {
+      "url": "https://www.nike.com/t/air-max-95-baby-toddler-shoes-HX6aTG7t/905462-080",
+      "title": "nike.com"
+    },
+    {
+      "url": "https://www.footlocker.com/product/~/Q6365009.html",
+      "title": "footlocker.com"
+    },
+    {
+      "url": "https://www.footlocker.com/product/model/nike-air-max-95-recraft/462461.html",
+      "title": "footlocker.com"
+    },
+    {
+      "url": "https://www.footlocker.com/product/model/nike-air-max-95-recraft-boys-toddler/462776.html",
+      "title": "footlocker.com"
+    },
+    {
+      "url": "https://www.nordstrom.com/s/nike-kids-air-max-95-sneaker-walker-toddler-little-kid/8177472",
+      "title": "nordstrom.com"
+    },
+    {
+      "url": "https://www.champssports.com/product/model/nike-air-max-95-girls-toddler/196845.html",
+      "title": "champssports.com"
+    },
+    {
+      "url": "https://www.nike.com/t/air-max-95-premium-baby-toddler-shoes-HX6aTG7t",
+      "title": "nike.com"
+    },
+    {
+      "url": "https://www.finishline.com/pdp/little-kids-nike-air-max-95-premium-casual-shoes/prod2871403/905461/075",
+      "title": "finishline.com"
+    },
+    {
+      "url": "https://www.finishline.com/pdp/little-kids-nike-air-max-95-casual-shoes/prod2871403/905461/075",
+      "title": "finishline.com"
+    },
+    {
+      "url": "https://www.kidsfootlocker.com/product/model/nike-air-max-95-boys-toddler/95804.html",
+      "title": "kidsfootlocker.com"
+    },
+    {
+      "url": "https://sneakernews.com/2025/12/25/nike-air-max-95-gs-phantom-tattoo-moon-particle-silt-red-hf7054-012/",
+      "title": "sneakernews.com"
+    },
+    {
+      "url": "https://www.hibbett.com/nike-air-max-95-big-bubble-preschool-kids-shoe/009JD.html",
+      "title": "hibbett.com"
+    }
+  ],
+  "createdAt": 1788897009148,
+  "pairingCatalog": {
+    "version": "catalog-pairings-v1",
+    "status": "verified",
+    "slotsTotal": 3,
+    "slotsResolved": 3,
+    "resolvedAt": "2026-09-08T19:50:23.463Z",
+    "products": [
+      {
+        "slotIndex": 0,
+        "matchedName": "Adidas Trefoil Joggers",
+        "via": "named",
+        "category": "jogger",
+        "label": "Toddler joggers",
+        "product": {
+          "id": "gid://shopify/p/53TdKJIqJnaPZwijQLwbL3",
+          "title": "adidas Originals Trefoil Solid Patterned Slim Joggers",
+          "brand": "GET THE LABEL",
+          "price": 44,
+          "image": "https://cdn.shopify.com/s/files/1/0996/9939/2861/files/781d800c-ac28-4305-b55a-49e7ab1331fb.jpg",
+          "description": "Versatile gray track pants with adjustable waistband for all-day comfort and style.",
+          "color": "hsl(353, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 1,
+        "matchedName": "",
+        "via": "category",
+        "category": "t-shirt",
+        "label": "Toddler tee",
+        "product": {
+          "id": "gid://shopify/p/2wB74LiaaPF0eivR68SlLe",
+          "title": "Toddler/Kid Strawberry Floral Rabbit Graphic Cotton T-Shirt",
+          "brand": "KIDSYARD GREENLAND",
+          "price": 13.99,
+          "image": "https://cdn.shopify.com/s/files/1/0273/1583/0826/files/2c5c8c84f6814eb46bc90a67a35d97f9.jpg",
+          "description": "Soft cotton tee featuring a playful strawberry and floral design with an adorable rabbit graphic. Perfect for warm days, this lightweight shirt offers comfort and style for toddlers and kids. The vibrant print brings joy to everyday wear, while the quality fabric ensures durability through active play and frequent washing. Brand Name: Kidsyard Greenland Main Material: COTTON Gender: Girl Fit: Normal Size Fit Include: T-Shirt Machine wash, tumble dry Imported",
+          "color": "hsl(309, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 2,
+        "matchedName": "Nike Sportswear Puffer Jacket",
+        "via": "named",
+        "category": "jacket",
+        "label": "Toddler puffer jacket",
+        "product": {
+          "id": "gid://shopify/p/1cL9NLVPk4gHZuVxYY6ehx",
+          "title": "Nike Sportswear Therma-FIT Repel Hooded Puffer Classic Jacket 'Green' FZ1103-222",
+          "brand": "KICKS CREW",
+          "price": 167.04,
+          "image": "https://cdn.shopify.com/s/files/1/0603/3031/1875/files/main-square_84bbe50d-83de-465d-b7e9-f24442650b40.jpg",
+          "description": "A lightweight, insulated puffer jacket with a hood for warmth and comfort in cool weather.",
+          "color": "hsl(287, 50%, 50%)"
+        }
+      }
+    ]
+  },
+  "key": "601abf8c7dca97ce",
+  "savedAt": 1788898323176
+}

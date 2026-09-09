@@ -68,7 +68,7 @@ struct GenerativeFeedInspector: View {
                         .font(.footnote).foregroundStyle(.secondary)
                 }
                 Section {
-                    DisclosureGroup("Canonical entities (\(spec.productReferences.count))") {
+                    DisclosureGroup("\(DossierReviewLibrary.record(for: spec) == nil ? "Canonical entities" : "Dossier references") (\(spec.productReferences.count))") {
                         if let ref = spec.anchor,
                            let item = NextGenerationFeedCardSpec.resolve(ref, in: merchants) {
                             entity(item, role: "Anchor")
@@ -94,7 +94,12 @@ struct GenerativeFeedInspector: View {
                             LabeledContent(slot.title, value: session.roomProduct(slot: slot, for: spec, merchants: merchants)?.product.title ?? "None")
                         }
                     }
-                    if spec.isQuietReview, spec.interaction == .swap {
+                    if let record = DossierReviewLibrary.record(for: spec) {
+                        Text(record.note).font(.footnote).foregroundStyle(.secondary)
+                        LabeledContent("Saved compositions", value: String(session.state(for: spec).savedDossierPlans.count))
+                        Text("Dossier product IDs are local surrogates for the original global IDs, not verified merchant IDs. Original mappings are preserved in ReviewSources.")
+                            .font(.footnote).foregroundStyle(.secondary)
+                    } else if spec.isQuietReview, spec.interaction == .swap {
                         Text("The flat tee is a generated Dossier styling illustration. Product details use the original merchant photograph. The Dossier look is inspiration, not a render of the current selection.")
                             .font(.footnote).foregroundStyle(.secondary)
                     }

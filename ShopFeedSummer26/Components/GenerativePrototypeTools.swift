@@ -21,6 +21,10 @@ struct GenerativePrototypeTools: ViewModifier {
                         Text("Preview the shopping feed")
                             .font(GravityFont.expressiveSemiBold.fixedFont(size: 28))
                         Text("Real products. Simulated activity.").font(.headline)
+                        if DossierReviewLibrary.enabled {
+                            Text("Scenes and films are generated styling studies, not photographs of you or renders of a changed selection. Product details retain source photographs; prices and compatibility are not independently verified.")
+                                .font(.footnote).foregroundStyle(.secondary)
+                        }
                         Text("This prototype uses an authored Luke scenario—not your actual purchases, saves or searches. Selections stay on this device for this session. No purchases or account changes are made.")
                         Text("After this setup, the feed is shown without debug labels. Long-press any card heading to inspect or direct it.")
                             .foregroundStyle(.secondary)

@@ -7,12 +7,15 @@ DERIVED="${QUIET_REVIEW_DERIVED:-/tmp/shop-quiet-review-derived}"
 BUNDLE="com.shopify.purl.prototype.shop.feed.summer.26"
 MODE="${1:-feed}"
 INDEX="${2:-0}"
-case "$MODE" in feed|gallery|design) ;; *) echo "Usage: $0 [feed|gallery|design] [0...4]"; exit 2 ;; esac
-case "$INDEX" in 0|1|2|3|4) ;; *) echo "Card index must be 0...4"; exit 2 ;; esac
+case "$MODE" in feed|gallery|design|structural) ;; *) echo "Usage: $0 [feed|gallery|design|structural] [index]"; exit 2 ;; esac
+case "$INDEX" in 0|1|2|3|4|5|6|7|8) ;; *) echo "Card index must be 0...8"; exit 2 ;; esac
+if [[ "$MODE" == feed && "$INDEX" -gt 5 ]]; then echo "Use gallery/design for optional dossier indexes 6...8"; exit 2; fi
+if [[ "$MODE" == structural && "$INDEX" -gt 4 ]]; then echo "Structural indexes are 0...4"; exit 2; fi
 mkdir -p .build/quiet-review
 xcrun simctl boot "$SIM" 2>/dev/null || true
 xcrun simctl bootstatus "$SIM" -b
 python3 Scripts/validate_quiet_review.py
+python3 Scripts/validate_dossier_library.py
 xcodegen generate
 if ! xcodebuild -project ShopFeedSummer26.xcodeproj -scheme ShopFeedSummer26 \
     -configuration Debug -destination "platform=iOS Simulator,id=$SIM" \
@@ -22,12 +25,14 @@ if ! xcodebuild -project ShopFeedSummer26.xcodeproj -scheme ShopFeedSummer26 \
 fi
 xcrun simctl terminate "$SIM" "$BUNDLE" 2>/dev/null || true
 xcrun simctl install "$SIM" "$DERIVED/Build/Products/Debug-iphonesimulator/ShopFeedSummer26.app"
-if [ "$MODE" = gallery ]; then
-    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -nextGenerationGallery "$INDEX"
+if [ "$MODE" = structural ]; then
+    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -quietStructuralReview -nextGenerationGallery "$INDEX" -feedDesignMode
+elif [ "$MODE" = gallery ]; then
+    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -bentoMediaReview -nextGenerationGallery "$INDEX"
 elif [ "$MODE" = design ]; then
-    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -nextGenerationGallery "$INDEX" -feedDesignMode
+    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -bentoMediaReview -nextGenerationGallery "$INDEX" -feedDesignMode
 else
-    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -openNextGenerationCard "$INDEX"
+    xcrun simctl launch "$SIM" "$BUNDLE" -quietFeedReview -bentoMediaReview -openNextGenerationCard "$INDEX"
 fi
 open -a Simulator --args -CurrentDeviceUDID "$SIM"
 echo "Ready: Shop Quiet Feed Review. Activity and recommendations are authored. State is session-only."

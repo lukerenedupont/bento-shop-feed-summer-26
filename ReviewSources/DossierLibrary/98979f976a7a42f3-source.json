@@ -1,0 +1,362 @@
+{
+  "token": "gid://shopify/p/3aj2rdHyczMR34KRTOCb95",
+  "buildRequestId": "b1341953-f27f-4fc7-9c4d-94c32e0a250a",
+  "product": {
+    "id": "gid://shopify/p/3aj2rdHyczMR34KRTOCb95",
+    "title": "1975 Rolex Oyster Perpetual Date Green Khanjar for Sultanate of Oman 34mm Stainless Steel 1500",
+    "brand": "REFERENCE IN TIME",
+    "description": "A rare 1975 Rolex Oyster Perpetual Date in stainless steel with a distinctive green Khanjar dial and automatic movement.",
+    "price": 8995,
+    "image": "https://cdn.shopify.com/s/files/1/0594/5907/6207/files/upload_b59e05ef-cf55-41bd-83fb-a45c2c5a9c0f.jpg"
+  },
+  "dossier": {
+    "eyebrow": "ROLEX · VINTAGE WATCH",
+    "headline": "Green Khanjar Oyster Perpetual Date",
+    "summary": "A 1975 Rolex Oyster Perpetual Date reference 1500 in stainless steel, distinguished by a green Khanjar dial bearing the National Emblem of Oman. Made by Rolex with a 34mm steel case and automatic movement, it belongs to the known family of Omani special-order Rolex watches.",
+    "medium": "object",
+    "facts": [
+      {
+        "label": "Maison",
+        "value": "Rolex"
+      },
+      {
+        "label": "Model",
+        "value": "Oyster Perpetual Date, ref. 1500"
+      },
+      {
+        "label": "Year",
+        "value": "1975"
+      },
+      {
+        "label": "Case",
+        "value": "34mm stainless steel, smooth bezel"
+      },
+      {
+        "label": "Movement",
+        "value": "Automatic (calibre 1575)"
+      },
+      {
+        "label": "Dial",
+        "value": "Green Khanjar, National Emblem of Oman"
+      },
+      {
+        "label": "Founded",
+        "value": "Rolex founded 1905 in London by Hans Wilsdorf"
+      }
+    ],
+    "story": [
+      {
+        "title": "An Omani Special Order",
+        "detail": "The green Khanjar logo on the dial is the National Emblem of Oman; these Rolexes were made as a special-order variant for the Sultanate of Oman.",
+        "sources": [
+          1,
+          2,
+          15
+        ]
+      },
+      {
+        "title": "The Reference 1500 Date",
+        "detail": "The ref. 1500 is a vintage Rolex Oyster Perpetual Date, commonly documented as a 34mm stainless steel automatic watch with a smooth bezel and date function.",
+        "sources": [
+          3,
+          8,
+          11
+        ]
+      },
+      {
+        "title": "Rolex in Geneva",
+        "detail": "Rolex was founded by Hans Wilsdorf in 1905 in London and moved to Geneva, registering Montres Rolex S.A. there in 1920.",
+        "sources": [
+          16
+        ]
+      }
+    ],
+    "references": [
+      {
+        "title": "Khanjar Dial Rolex",
+        "detail": "A comparable listing shows a Khanjar dial on a Rolex Oyster Perpetual Date and explicitly ties it to Oman.",
+        "sources": [
+          1,
+          15
+        ]
+      },
+      {
+        "title": "Reference 1500 Calibre",
+        "detail": "Buyer's guides note Cal. 1565/1575 for ref. 1500 production, with a c.1975 example identified with a calibre 1575 automatic movement.",
+        "sources": [
+          8,
+          10,
+          11
+        ]
+      }
+    ],
+    "styling": [
+      "Wear on a slim leather strap to echo the watch's understated 34mm proportions",
+      "Pair with tonal tailoring that lets the green dial read as the accent",
+      "Keep cuffs slim so the modest case sits cleanly at the wrist"
+    ],
+    "palette": [
+      {
+        "hex": "#1E5631",
+        "name": "Khanjar Green"
+      },
+      {
+        "hex": "#C9CDD2",
+        "name": "Steel Silver"
+      },
+      {
+        "hex": "#0F1A12",
+        "name": "Deep Emerald Shadow"
+      },
+      {
+        "hex": "#E8E6DF",
+        "name": "Warm Ivory"
+      },
+      {
+        "hex": "#6E5A3B",
+        "name": "Vintage Leather"
+      }
+    ],
+    "pairWith": [
+      {
+        "label": "Leather watch strap",
+        "category": "strap",
+        "examples": [
+          "Hirsch Duke Leather Strap",
+          "Barton Alligator Grain Strap",
+          "Hodinkee Nubuck Strap"
+        ],
+        "queries": [
+          "leather watch strap",
+          "brown alligator strap",
+          "vintage watch band"
+        ],
+        "attributes": [
+          "brown",
+          "leather",
+          "slim",
+          "20mm",
+          "classic"
+        ],
+        "reason": "A slim leather strap complements the 34mm vintage case and warm dial tone"
+      },
+      {
+        "label": "Wristwatch box",
+        "category": "box",
+        "examples": [
+          "Wolf Heritage Watch Box",
+          "Wolf Windsor Watch Box",
+          "Rothschild Watch Case"
+        ],
+        "queries": [
+          "watch storage box",
+          "single watch box",
+          "leather watch case"
+        ],
+        "attributes": [
+          "leather",
+          "cushioned",
+          "compact",
+          "classic",
+          "neutral"
+        ],
+        "reason": "Protective storage suited to a collectible vintage timepiece"
+      },
+      {
+        "label": "Cufflinks",
+        "category": "cufflink",
+        "examples": [
+          "Tateossian Enamel Cufflinks",
+          "Deakin & Francis Silver Cufflinks",
+          "Paul Smith Cufflinks"
+        ],
+        "queries": [
+          "silver cufflinks",
+          "enamel cufflinks",
+          "green enamel cufflinks"
+        ],
+        "attributes": [
+          "silver",
+          "green enamel",
+          "polished",
+          "formal",
+          "minimal"
+        ],
+        "reason": "Echoes the steel case and green dial for a coordinated formal look"
+      }
+    ],
+    "pairingImagePrompt": "An editorial top-down knolling flat-lay on a seamless neutral background showing the 1975 Rolex Oyster Perpetual Date ref. 1500 with green Khanjar dial in stainless steel, arranged with a Hirsch Duke Leather Strap, a Wolf Heritage Watch Box, and Tateossian Enamel Cufflinks. Every object whole and intact, shown straight top-down, in correct scale relative to each other, evenly spaced on a grid with no overlaps, soft even lighting.",
+    "pairLooks": [
+      {
+        "caption": "Tailored Green Accent",
+        "prompt": "Editorial photograph of a wrist wearing the 1975 Rolex Oyster Perpetual Date ref. 1500 with green Khanjar dial on a Hirsch Duke Leather Strap, paired with Tateossian Enamel Cufflinks on a crisp white shirt cuff and charcoal tailoring, warm daylight, refined menswear setting."
+      },
+      {
+        "caption": "Collector's Desk Vignette",
+        "prompt": "Styled vignette of the 1975 Rolex Oyster Perpetual Date ref. 1500 with green Khanjar dial resting beside an open Wolf Heritage Watch Box on a walnut desk, soft directional light, moody collector's study atmosphere."
+      }
+    ],
+    "selfProfile": {
+      "category": "wristwatch",
+      "gender": "unisex",
+      "attributes": [
+        "green Khanjar dial",
+        "stainless steel",
+        "34mm case",
+        "smooth bezel",
+        "automatic",
+        "vintage"
+      ]
+    },
+    "similar": [
+      {
+        "category": "wristwatch",
+        "queries": [
+          "vintage rolex date",
+          "stainless steel date watch"
+        ],
+        "attributes": [
+          "stainless steel",
+          "34mm",
+          "smooth bezel",
+          "date",
+          "automatic"
+        ]
+      },
+      {
+        "category": "wristwatch",
+        "queries": [
+          "green dial dress watch",
+          "vintage automatic watch"
+        ],
+        "attributes": [
+          "green dial",
+          "steel case",
+          "vintage",
+          "date function",
+          "classic"
+        ]
+      }
+    ],
+    "lookbookStyle": "Warm natural daylight, fine-grain film stock, quiet collector's mood with neutral surfaces and soft shadows.",
+    "lookbookPrompt": "A single editorial lookbook sheet in one 3:2 landscape image, arranged as a strict 2x2 grid of exactly 4 landscape photographs, identical cell sizes, uniform hairline gutters, grid flush to all four edges with no outer margin. Reading order: top-left, a close macro of the 1975 Rolex Oyster Perpetual Date ref. 1500 green Khanjar dial filling two thirds of the frame; top-right, the watch on a wrist against tailored charcoal fabric; bottom-left, the watch resting on a walnut desk beside a leather strap; bottom-right, a three-quarter angle of the stainless steel case and bezel. All frames share warm daylight and fine-grain film stock. No text, captions, numbers, watermarks, rounded corners or drop shadows."
+  },
+  "sources": [
+    {
+      "url": "https://rolexpassionmarket.com/watches/1975-rolex-oyster-perpetual-date-khanjar-ref-1500/",
+      "title": "rolexpassionmarket.com"
+    },
+    {
+      "url": "https://momentum-dubai.com/products/1975-rolex-oyster-perpetual-date-khanjar-ref-1500",
+      "title": "momentum-dubai.com"
+    },
+    {
+      "url": "https://parkersjewellers.co.uk/shop/rolex-oyster-perpetual-date-1500-2/",
+      "title": "parkersjewellers.co.uk"
+    },
+    {
+      "url": "https://www.chrono24.com/rolex/date-1500--id43987357.htm",
+      "title": "chrono24.com"
+    },
+    {
+      "url": "https://www.chrono24.com/rolex/oyster-perpetual-date--id39031225.htm",
+      "title": "chrono24.com"
+    },
+    {
+      "url": "https://www.chrono24.com/rolex/ref-1500.htm",
+      "title": "chrono24.com"
+    },
+    {
+      "url": "https://www.chrono24.ca/rolex/vintage-1975-rolex-oyster-perpetual-date-silver-stainless-steel-oyster-34mm-1500--id45314755.htm",
+      "title": "chrono24.ca"
+    },
+    {
+      "url": "https://www.watchguys.com/pages/rolex-date-guide",
+      "title": "watchguys.com"
+    },
+    {
+      "url": "https://www.chrono24.com.ru/rolex/oyster-perpetual-date---mod955-cm4.htm",
+      "title": "chrono24.com.ru"
+    },
+    {
+      "url": "https://www.bobswatches.com/rolex-blog/watch-review/vintage-week-rolex-oyster-perpetual-chronometer-date-ref-1500.html",
+      "title": "bobswatches.com"
+    },
+    {
+      "url": "https://www.watchprosite.com/page-c.collection.detail.e/brand-Rolex/ref-1500/eid-1067049/",
+      "title": "watchprosite.com"
+    },
+    {
+      "url": "https://www.watchprosite.com/page-c.collection.detail.e/brand-Rolex/ref-1500/eid-789201/",
+      "title": "watchprosite.com"
+    },
+    {
+      "url": "https://grymrkt.co/watches/rolex/oyster-perpetual/1500",
+      "title": "grymrkt.co"
+    },
+    {
+      "url": "https://www.ebay.com/shop/1975-rolex?_nkw=1975+rolex",
+      "title": "ebay.com"
+    }
+  ],
+  "createdAt": 1788905583201,
+  "pairingCatalog": {
+    "version": "catalog-pairings-v1",
+    "status": "verified",
+    "slotsTotal": 3,
+    "slotsResolved": 3,
+    "resolvedAt": "2026-09-08T22:13:08.367Z",
+    "products": [
+      {
+        "slotIndex": 0,
+        "matchedName": "Hirsch Duke Leather Strap",
+        "via": "named",
+        "category": "strap",
+        "label": "Leather watch strap",
+        "product": {
+          "id": "gid://shopify/p/6egDXqeAwoie6CTRgVhUDK",
+          "title": "Hirsch DUKE Black Quick-Release Alligator Embossed Leather Watch Strap",
+          "brand": "WATCH OBSESSION",
+          "price": 65,
+          "image": "https://cdn.shopify.com/s/files/1/0230/0031/products/Duke-Black-04-SB.jpg",
+          "description": "A premium alligator-embossed Italian calfskin watch strap with quick-release spring bars for easy, tool-free replacement.",
+          "color": "hsl(119, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 1,
+        "matchedName": "Wolf Heritage Watch Box",
+        "via": "named",
+        "category": "box",
+        "label": "Wristwatch box",
+        "product": {
+          "id": "gid://shopify/p/5b7nFGVqUrdHKAHG9URAX7",
+          "title": "WOLF Heritage Black 8 Piece Watch Box 99513",
+          "brand": "TIME MACHINE PLUS",
+          "price": 155,
+          "image": "https://cdn.shopify.com/s/files/1/0283/1618/files/99513-1.jpg",
+          "description": "A compact, durable black watch box with tempered glass lid to securely store up to eight watches.",
+          "color": "hsl(144, 50%, 50%)"
+        }
+      },
+      {
+        "slotIndex": 2,
+        "matchedName": "Tateossian Enamel Cufflinks",
+        "via": "named",
+        "category": "cufflink",
+        "label": "Cufflinks",
+        "product": {
+          "id": "gid://shopify/p/6PXJDzoPStLS4wlKFwzac3",
+          "title": "Star Weave Cufflinks with Grey Enamel and White Bronze Plated",
+          "brand": "TATEOSSIAN LONDON",
+          "price": 125,
+          "image": "https://cdn.shopify.com/s/files/1/0477/5257/7179/files/RT-CF0687.png",
+          "description": "Elegant cufflinks featuring a star center and intricate geometric star weave, crafted from white bronze plated base with hand-painted enamel accents.",
+          "color": "hsl(281, 50%, 50%)"
+        }
+      }
+    ]
+  },
+  "key": "98979f976a7a42f3",
+  "savedAt": 1788905847279
+}

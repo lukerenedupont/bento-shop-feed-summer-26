@@ -1,0 +1,116 @@
+{
+  "schema": "dossier-export-manifest/1",
+  "exportedAt": "2026-09-09T00:14:25.540Z",
+  "key": "5527c8904c1155d7",
+  "title": "Yankee Sitcom Hat (Pinstripe)",
+  "documents": {
+    "portable": "dossier.json",
+    "canonical": "source.json",
+    "imageColors": "image-colors.json"
+  },
+  "counts": {
+    "images": 10,
+    "videos": 2,
+    "assets": 12
+  },
+  "bytes": 24193066,
+  "assets": [
+    {
+      "path": "media/images/look0.png",
+      "kind": "image",
+      "variant": "look0",
+      "bytes": 3286455,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=d616abcbd461d8ce"
+    },
+    {
+      "path": "media/images/look1.png",
+      "kind": "image",
+      "variant": "look1",
+      "bytes": 3066387,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=4ec626fbce7fc153"
+    },
+    {
+      "path": "media/images/lookbook.png",
+      "kind": "image",
+      "variant": "lookbook",
+      "bytes": 3086612,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=b6a308adbbc4d706"
+    },
+    {
+      "path": "media/images/object0.png",
+      "kind": "image",
+      "variant": "object0",
+      "bytes": 1057281,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=0ad8fb486a2b87aa"
+    },
+    {
+      "path": "media/images/object1.png",
+      "kind": "image",
+      "variant": "object1",
+      "bytes": 986820,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=40d2132c7074daeb"
+    },
+    {
+      "path": "media/images/object2.png",
+      "kind": "image",
+      "variant": "object2",
+      "bytes": 884376,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=22ad313db0fd0117"
+    },
+    {
+      "path": "media/images/object3.png",
+      "kind": "image",
+      "variant": "object3",
+      "bytes": 1122734,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=74a40e7b5f1c5646"
+    },
+    {
+      "path": "media/images/pair.png",
+      "kind": "image",
+      "variant": "pair",
+      "bytes": 2183765,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=f4cdabf41a93bef2"
+    },
+    {
+      "path": "media/images/pair-square.png",
+      "kind": "image",
+      "variant": "pairSquare",
+      "bytes": 1432076,
+      "contentType": "image/png",
+      "source": "/api/ai/image?key=b4bef5c08b30c23b"
+    },
+    {
+      "path": "media/videos/look0.mp4",
+      "kind": "video",
+      "variant": "look0",
+      "bytes": 3525791,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=24ee0c1e1a9448a4"
+    },
+    {
+      "path": "media/videos/look1.mp4",
+      "kind": "video",
+      "variant": "look1",
+      "bytes": 3348429,
+      "contentType": "video/mp4",
+      "source": "/api/ai/video-file?key=64dff18e28c9f2a3"
+    },
+    {
+      "path": "media/product.jpg",
+      "kind": "image",
+      "variant": "product",
+      "bytes": 212340,
+      "contentType": "image/jpeg",
+      "source": "https://cdn.shopify.com/s/files/1/0762/0208/2600/files/Capture00016_50d84929-9968-48ce-ae26-411c46546591.jpg"
+    }
+  ],
+  "missing": []
+}
