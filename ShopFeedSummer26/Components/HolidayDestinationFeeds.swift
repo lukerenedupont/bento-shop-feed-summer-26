@@ -588,7 +588,7 @@ private struct HolidayProductTile: View {
             productName: item.product.title,
             rating: item.merchant.rating,
             ratingCount: item.merchant.totalRatings,
-            price: formatPrice(item.product.price)
+            price: formatPrice(item.product)
         )
     }
 }

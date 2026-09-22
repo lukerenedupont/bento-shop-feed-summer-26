@@ -14,7 +14,12 @@ settings:
   configs:
     Debug:
       ENABLE_DEBUG_DYLIB: YES
+      # The complete imported UI/icon set stays inside the existing app budget
+      # with optimized code; do not remove UX or raise the shipping-size limit.
+      SWIFT_OPTIMIZATION_LEVEL: "-O"
 packages:
+  JulianAgentUI:
+    path: Vendor/JulianAgentUI
   LiveKitWebRTC:
     url: https://github.com/livekit/webrtc-xcframework.git
     exactVersion: "144.7559.11"
@@ -34,6 +39,14 @@ targets:
           - "**/.DS_Store"
           - "**/*.env"
           - "Dossiers"
+          - "LibraryAssets"
+          # Retain optional kit fonts in source, but do not ship unused families.
+          - "Fonts/GoodSans*.otf"
+          - "Fonts/Shopify Sans*.otf"
+      - path: Vendor/JulianAgentUI/AppIcons
+      - path: ShopFeedSummer26/LibraryAssets
+        type: folder
+        buildPhase: resources
       # Dossier drop zone: bundled as a folder reference so newly dropped
       # dossier JSON + mp4 films ship without regenerating the project.
       - path: ShopFeedSummer26/Dossiers
@@ -44,6 +57,8 @@ targets:
       # Resources avoids copying it before replacing it with the optimized
       # bundle on every build.
     dependencies:
+      - package: JulianAgentUI
+        product: JulianAgentUI
       - package: LiveKitWebRTC
         product: LiveKitWebRTC
       - package: SwiftMsgpack
@@ -52,9 +67,14 @@ targets:
     settings:
       base:
         FAL_TOKEN_ENDPOINT: ""
-        PRODUCT_BUNDLE_IDENTIFIER: com.shopify.purl.prototype.shop.feed.summer.26
+        PRODUCT_BUNDLE_IDENTIFIER: com.shopify.purl.prototype.shop.feed.library.preview
         PRODUCT_NAME: ShopFeedSummer26
-        INFOPLIST_KEY_CFBundleDisplayName: "Shop Feed Summer 26"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "20"
+        ASSETCATALOG_COMPILER_APPICON_NAME: shopiconpainted2
+        ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: "shopicon shopicon2 shopicon3 shopicon4 shopicon5 shopicon6 shopicon7 shopicon8 shopicon9 shopicon10 shopicon11 shopicon12 shopiconpainted"
+        SHOP_CANVAS_LIBRARY_PREVIEW: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "Shop Library Preview"
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
@@ -66,22 +86,6 @@ targets:
           - GTStandard-MMedium.otf
           - GTStandard-MRegular.otf
           - GTStandard-MSemibold.otf
-          - GoodSans-Bold.otf
-          - GoodSans-Medium.otf
-          - GoodSans-Regular.otf
-          - GoodSansText-Bold.otf
-          - GoodSansText-Medium.otf
-          - GoodSansText-Regular.otf
-          - Shopify Sans-Black Italic.otf
-          - Shopify Sans-Black.otf
-          - Shopify Sans-Bold Italic.otf
-          - Shopify Sans-Bold.otf
-          - Shopify Sans-Light Italic.otf
-          - Shopify Sans-Light.otf
-          - Shopify Sans-Medium Italic.otf
-          - Shopify Sans-Medium.otf
-          - Shopify Sans-Regular Italic.otf
-          - Shopify Sans-Regular.otf
     preBuildScripts:
       - name: Validate Personalized Feed
         basedOnDependencyAnalysis: false
@@ -93,19 +97,54 @@ targets:
         outputFiles:
           - "$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/bundle/.optimization-stamp"
         script: |
-          "${SRCROOT}/Scripts/optimize_feed_bundle.sh"
+          # This alternate catalog does not render the old frozen feed.
+          if [ "${SHOP_CANVAS_LIBRARY_PREVIEW:-NO}" != "YES" ]; then
+            "${SRCROOT}/Scripts/optimize_feed_bundle.sh"
+          fi
+      - name: Copy Local Shop Server Env
+        basedOnDependencyAnalysis: false
+        script: |
+          "${SRCROOT}/Scripts/copy_local_shop_env.sh"
       - name: Validate Build Product
         basedOnDependencyAnalysis: false
         script: |
           "${SRCROOT}/Scripts/validate_build_product.sh"
-      - name: Copy Local Shop Server Env
-        basedOnDependencyAnalysis: false
-        script: |
-          ENV_FILE="${SRCROOT}/.env.local"
-          DEST_DIR="${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
-          if [ -f "$ENV_FILE" ]; then
-            mkdir -p "$DEST_DIR"
-            cp "$ENV_FILE" "$DEST_DIR/ShopServer.env"
-          else
-            rm -f "$DEST_DIR/ShopServer.env"
-          fi
+  ShopFeedSummer26Tests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: ShopFeedSummer26Tests
+    dependencies:
+      - target: ShopFeedSummer26
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/ShopFeedSummer26.app/ShopFeedSummer26"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+  ShopFeedSummer26UITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: ShopFeedSummer26UITests
+        excludes:
+          - DemoSmokeTests.swift
+    dependencies:
+      - target: ShopFeedSummer26
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: ShopFeedSummer26
+schemes:
+  ShopFeedSummer26:
+    build:
+      targets:
+        ShopFeedSummer26: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - ShopFeedSummer26Tests
+        - ShopFeedSummer26UITests
+    archive:
+      config: Release

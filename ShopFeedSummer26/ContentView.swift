@@ -17,6 +17,10 @@ struct ContentView: View {
     var body: some View {
         RootView()
             .task {
+                if ShopCanvasLibrary.isEnabled {
+                    merchantService.publishLookupMerchants(ShopCanvasLibrary.merchants)
+                    return
+                }
                 await feedService.load()
                 // A bundled editorial feed and the signed-in relationship
                 // graph are complementary. Always hydrate Luke's followed
@@ -39,9 +43,11 @@ struct ContentView: View {
             // frame. Load it concurrently so a slow history or posts request
             // never delays merchant hydration or topic interaction.
             .task {
+                guard !ShopCanvasLibrary.isEnabled else { return }
                 await historyClient.fetch()
             }
             .task {
+                guard !ShopCanvasLibrary.isEnabled else { return }
                 await postService.loadLukePosts()
             }
     }

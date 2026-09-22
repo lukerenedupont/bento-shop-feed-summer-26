@@ -132,7 +132,7 @@ private struct TryOnWorldView: View {
                                 Text(selected.product.title)
                                     .font(GravityFont.bold.fixedFont(size: 17))
                                     .lineLimit(1)
-                                Text("\(selected.merchant.displayName) · \(formatPrice(selected.product.price))")
+                                Text("\(selected.merchant.displayName) · \(formatPrice(selected.product))")
                                     .font(GravityFont.medium.fixedFont(size: 12))
                                     .foregroundStyle(.white.opacity(0.68))
                             }
@@ -463,7 +463,7 @@ private struct MissionWorldView: View {
                                 .font(GravityFont.semiBold.fixedFont(size: 13))
                                 .lineLimit(1)
                             Spacer()
-                            Text(formatPrice(selected.product.price))
+                            Text(formatPrice(selected.product))
                                 .font(GravityFont.medium.fixedFont(size: 12))
                                 .foregroundStyle(.white.opacity(0.62))
                             Image(systemName: "arrow.up.right")
@@ -650,7 +650,7 @@ private struct WorldProductTile: View {
                 imageURL: item.product.imageURL,
                 merchantName: item.merchant.displayName,
                 productName: item.product.title,
-                price: formatPrice(item.product.price),
+                price: formatPrice(item.product),
                 showFavoriteButton: true,
                 favoriteIconHasContrastShadow: true
             )

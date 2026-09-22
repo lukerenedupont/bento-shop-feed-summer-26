@@ -1,0 +1,1312 @@
+{
+  "archiveSha256": "81abe216a6f6a065a6a8ce208d84a107818f2070c6660b143e1c2ffd5c8166f1",
+  "reusePermission": "not_established (all tiers; internal review only)",
+  "merchantKeys": {
+    "domain:djerfavenue.com": "cosmos-profile:2129365259",
+    "gid://shopify/Shop/1964605539": "gid://shopify/Shop/1964605539",
+    "gid://shopify/Shop/6917057": "cosmos-profile:1784728528",
+    "domain:nordicknots.com": "cosmos-profile:125685194",
+    "domain:sohohome.com": "cosmos-profile:714612829",
+    "gid://shopify/Shop/29035626574": "cosmos-profile:1016317650",
+    "gid://shopify/Shop/60704260314": "gid://shopify/Shop/60704260314",
+    "domain:zarahome.com": "cosmos-profile:971721951",
+    "gid://shopify/Shop/8665580": "gid://shopify/Shop/8665580",
+    "gid://shopify/Shop/64140968152": "gid://shopify/Shop/64140968152",
+    "gid://shopify/Shop/2955521": "gid://shopify/Shop/2955521",
+    "domain:allblues.se": "cosmos-profile:453020477",
+    "gid://shopify/Shop/69545427101": "cosmos-profile:721267692",
+    "gid://shopify/Shop/83980288319": "gid://shopify/Shop/83980288319",
+    "gid://shopify/Shop/72582365480": "cosmos-profile:1737295498",
+    "gid://shopify/Shop/46461485224": "gid://shopify/Shop/46461485224",
+    "gid://shopify/Shop/69054038247": "gid://shopify/Shop/69054038247",
+    "domain:shop.mango.com": "cosmos-profile:1474104953",
+    "gid://shopify/Shop/67152904457": "cosmos-profile:189829904",
+    "gid://shopify/Shop/79597502806": "cosmos-profile:1212545369",
+    "gid://shopify/Shop/1189904435": "gid://shopify/Shop/1189904435",
+    "gid://shopify/Shop/7116849252": "gid://shopify/Shop/7116849252",
+    "gid://shopify/Shop/17134363": "gid://shopify/Shop/17134363",
+    "gid://shopify/Shop/43179540638": "gid://shopify/Shop/43179540638",
+    "gid://shopify/Shop/39660388519": "cosmos-profile:86695814",
+    "gid://shopify/Shop/60911616205": "gid://shopify/Shop/60911616205",
+    "gid://shopify/Shop/61588471939": "gid://shopify/Shop/61588471939",
+    "domain:freepeople.com": "cosmos-profile:1808160611",
+    "gid://shopify/Shop/25343852596": "gid://shopify/Shop/25343852596",
+    "gid://shopify/Shop/7546175546": "cosmos-profile:293553762",
+    "gid://shopify/Shop/33032994860": "gid://shopify/Shop/33032994860",
+    "gid://shopify/Shop/24615780433": "gid://shopify/Shop/24615780433",
+    "gid://shopify/Shop/1240727612": "gid://shopify/Shop/1240727612",
+    "gid://shopify/Shop/55203135593": "gid://shopify/Shop/55203135593",
+    "gid://shopify/Shop/6688407610": "cosmos-profile:361057280",
+    "gid://shopify/Shop/9509820": "gid://shopify/Shop/9509820",
+    "domain:massimodutti.com": "cosmos-profile:981164961",
+    "gid://shopify/Shop/12350652473": "cosmos-profile:670541390",
+    "gid://shopify/Shop/64156139760": "cosmos-profile:2058582098",
+    "gid://shopify/Shop/68165599532": "cosmos-profile:65483074",
+    "gid://shopify/Shop/26555908132": "cosmos-profile:1179670180",
+    "gid://shopify/Shop/52325613759": "cosmos-profile:2026755513",
+    "gid://shopify/Shop/45961183387": "gid://shopify/Shop/45961183387",
+    "gid://shopify/Shop/66085650660": "gid://shopify/Shop/66085650660",
+    "domain:thereformation.com": "cosmos-profile:807673726",
+    "gid://shopify/Shop/78310867220": "cosmos-profile:1955890368",
+    "gid://shopify/Shop/66761425143": "cosmos-profile:1533749985",
+    "gid://shopify/Shop/3367793": "cosmos-profile:1244339186",
+    "gid://shopify/Shop/55113842854": "gid://shopify/Shop/55113842854",
+    "gid://shopify/Shop/83419791701": "cosmos-profile:1055323414",
+    "gid://shopify/Shop/5629737": "cosmos-profile:316461581",
+    "gid://shopify/Shop/981008447": "cosmos-profile:1681528902",
+    "gid://shopify/Shop/14608629808": "gid://shopify/Shop/14608629808",
+    "gid://shopify/Shop/7539621924": "gid://shopify/Shop/7539621924",
+    "gid://shopify/Shop/96067387723": "gid://shopify/Shop/96067387723",
+    "domain:basic.space": "cosmos-profile:2118718682",
+    "gid://shopify/Shop/67459383396": "gid://shopify/Shop/67459383396",
+    "domain:loewe.com": "cosmos-profile:839483923",
+    "gid://shopify/Shop/40180482198": "gid://shopify/Shop/40180482198",
+    "gid://shopify/Shop/12338898": "gid://shopify/Shop/12338898",
+    "gid://shopify/Shop/10400808": "cosmos-profile:2054573964",
+    "gid://shopify/Shop/29982346": "cosmos-profile:813296393",
+    "domain:auralee.jp": "cosmos-profile:836728536",
+    "gid://shopify/Shop/6328809": "gid://shopify/Shop/6328809",
+    "gid://shopify/Shop/69448794420": "gid://shopify/Shop/69448794420",
+    "gid://shopify/Shop/8945382": "gid://shopify/Shop/8945382",
+    "gid://shopify/Shop/95659295067": "gid://shopify/Shop/95659295067"
+  },
+  "groupKeys": {
+    "Eckhaus Latta": "cosmos-profile:1784728528",
+    "Nordic Knots": "cosmos-profile:125685194",
+    "Snow Peak": "gid://shopify/Shop/33032994860",
+    "Balenciaga": "cosmos-profile:1058078761",
+    "Jil Sander": "cosmos-profile:1829324199",
+    "Dries Van Noten": "gid://shopify/Shop/58974732484",
+    "On": "cosmos-profile:890734513",
+    "Lemaire": "gid://shopify/Shop/43179540638",
+    "JW Anderson": "gid://shopify/Shop/67459383396",
+    "Our Legacy": "cosmos-profile:473159284"
+  },
+  "assets": {
+    "cosmos-profile:1016317650": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/24e2a782-5c5b-482f-9bc3-a8353ace8070",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/mast-books-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/mast-books-white.svg",
+        "sha256": "497cc97158fbf68743a407ac07437ef19036bba2c944cd098bdc79a0e2c5075b",
+        "nativeSha256": "6c2f14213836179a4f1b6090dfdc277389f0b483a13d4a59fe30ae29fba7e1b8"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/mast-books-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/mast-books-original.svg",
+        "sha256": "54e1782ee73ebf4debd3082e97b41c8ab4880431c12f4dc4235ad69e268db25a",
+        "nativeSha256": "31d954536f324816db58a03c25e3b03aca12bcb2bab9d39f901ea908755d378c"
+      }
+    },
+    "cosmos-profile:1055323414": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/6ae9e839-0d1e-4e24-ad51-3466acea2c70",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/mental-athletic-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/mental-athletic-white.svg",
+        "sha256": "dc58f4275d910d35294b8f28336f8abf80287a448afcb27b3f33f0cac8f4ce2e",
+        "nativeSha256": "af8615c5f4c75196fd8e117b4eab6774c4bc023d75bc86fafbec89c5ce43c170"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/mental-athletic-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/mental-athletic-original.svg",
+        "sha256": "bae9773c47f5b021333e2c71d2aae4ac3a14d854ac65b8aceb3c3657046d3212",
+        "nativeSha256": "94dd7643671a950f84586136cd409befd17c07db283838147dbe3254cf73873b"
+      }
+    },
+    "cosmos-profile:1058078761": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/a3a723d2-8695-451a-8591-ed7f4984a971",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/balenciaga-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/balenciaga-white.svg",
+        "sha256": "1f173005e847c5191218b19a78acc264dc84eb53e07d850a3639517b7c7e1955",
+        "nativeSha256": "ebe2ea7e98efe13fef2d2321e2ccd9fb845ff486be2637a81cb6d36c1a340c2f"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/balenciaga-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/balenciaga-original.svg",
+        "sha256": "975f56c45d4f52a0b33a158857e7c1db63f196761e2a684ba6d306b2e5d52404",
+        "nativeSha256": "fc6ff8386609fd99f720bb2cd477f26f1c0f6c9eb353c36978d5d4aebbf59240"
+      }
+    },
+    "cosmos-profile:1179670180": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/7180c61b-f9b1-4042-9a7e-7fedc6e64c76",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/dissh-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/dissh-white.svg",
+        "sha256": "2f8f3960a9eac1521e40d1582a71e40003210c58d6273e492993ee40b62e7e4b",
+        "nativeSha256": "4df3f85d3585795c7847534dc6d2976a2e04f3b085240fe8b42811b0e2e1f2b4"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/dissh-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/dissh-original.svg",
+        "sha256": "1d6793225ba07d750e0668418b29aa87dec7d0919d990dc592367820be453094",
+        "nativeSha256": "138e1482ac1bf474a23c53b1861110516f75cb9c0a03468df4d8248f13f9f27c"
+      }
+    },
+    "cosmos-profile:1212545369": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/b97aafbd-9275-4092-8bfc-208c54b99535",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/gottlob-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/gottlob-white.svg",
+        "sha256": "5179f8acfb32bd75582eb5aaf9e50c4cf7dd3e9b3548e65417583ff507f694b2",
+        "nativeSha256": "30250d7c41b5a86bb950eca4a45cae70eb36522f5338922d9feb7087058b116d"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/gottlob-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/gottlob-original.svg",
+        "sha256": "35a6be0dcc86b4bf7972e8af39738f7fd10969390fd14537334d0d4bf8ed164c",
+        "nativeSha256": "650119626e15580f20481ca4e5d6cd065ff1e613d7a361f54b71704a5d917a53"
+      }
+    },
+    "cosmos-profile:1244339186": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/25cf9aef-af04-4b47-9758-63ee6022e647",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/cult-gaia-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/cult-gaia-white.svg",
+        "sha256": "dbe76f1b000acd6cda944cd411f1a70f646d84a41f46b960e27bd66b76afc0e0",
+        "nativeSha256": "f2e43f7b16b6091b392fd1a3e223c20f4c09d0a24d308cff6c9cd8f4b74fb544"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/cult-gaia-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/cult-gaia-original.svg",
+        "sha256": "db2d9e3160bed80511fbc2a8a7388723bc8f7e1b24fb65368850e8dcc1c62a6f",
+        "nativeSha256": "8245477f15f411b50aca657a61d7e23f9d11c83a68d1988cb51aec740a718bd3"
+      }
+    },
+    "cosmos-profile:125685194": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/a139415f-bc8e-4949-a0e2-dec28d602b09",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/nordic-knots-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/nordic-knots-white.svg",
+        "sha256": "135a3869dafc353f1d4e7c28f64a09f26cd39d8cb875686887fc9968a6fe6c47",
+        "nativeSha256": "674854c121a43d51c77c827561c115335529a89ed36c37f6c2649b06acbc65c2"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/nordic-knots-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/nordic-knots-original.svg",
+        "sha256": "0294d9d293f37ed4b16faffcd053f8d5e1b31c451f28879cd8996e6c8031a650",
+        "nativeSha256": "f639f283b546adca979c2c7f87ee6435d87daae7079ac4aa991c0ac5c9424b12"
+      }
+    },
+    "cosmos-profile:1474104953": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/a49c0d1a-a05b-4804-97c4-83f6364edb99",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/mango-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/mango-white.svg",
+        "sha256": "a4a78852a1665ebd16c5aa50cda0f397fa834e182c57cd3b93c89a1207829733",
+        "nativeSha256": "bffd6f87fbc88995f78a19c1be7d2ec523c5a9b797543562aae1bb726f18f6c4"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/mango-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/mango-original.svg",
+        "sha256": "bf01b0ae3af6dc9f1b776d22cfb17d62eded6d2a89dc3577de46fb339b275507",
+        "nativeSha256": "c39a7d760b33eee06c2073c8b6d002cdba1fc320f6d7d68599b94feb38c763b7"
+      }
+    },
+    "cosmos-profile:1533749985": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/433da096-31f1-4dc8-926c-55430a56e369",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/aflalo-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/aflalo-white.svg",
+        "sha256": "6af93665d4c8060d6efbe94caa955f2b05a18e994ac73510cf87e1261f360a91",
+        "nativeSha256": "ddaef793c924b75b49b4dd742f0523317f2a0bdf3fc392e3313492490a7b3494"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/aflalo-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/aflalo-original.svg",
+        "sha256": "b727543fc5ba8e8dba2e08b9ad74a1005f96e4242dd940d36e6d1ea117d312f4",
+        "nativeSha256": "5328265d9f766e72c1c60bed88f4360a6ee5702ff6644b6e6341a4d9184b95b4"
+      }
+    },
+    "cosmos-profile:1681528902": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/929a1558-56a3-494b-8f10-910cc5be8685",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/knickerbocker-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/knickerbocker-white.png",
+        "sha256": "6f2ce9dfc7f832f601700e208d543a80d36f53b119349aaec028583b5f66bdda",
+        "nativeSha256": "6f2ce9dfc7f832f601700e208d543a80d36f53b119349aaec028583b5f66bdda"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/knickerbocker-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/knickerbocker-original.svg",
+        "sha256": "3d0ae56a1c95d4aad9175567df9debef10ba9202323a670e55e1ef0771097d12",
+        "nativeSha256": "91f2525187ded010bdfae99cd78aab0e0819d53c10ff93fb8af2b3c40ff61c87"
+      }
+    },
+    "cosmos-profile:1737295498": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/47491053-1c78-49fd-98c9-c16c690b23a3",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/alcova-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/alcova-white.svg",
+        "sha256": "a4bccb8ff2e0ef54096a025a0f469d05ab1dec3e627a2ca36449dc08dc63d5a3",
+        "nativeSha256": "00293271ee266d0f49db8b52aec7705e11c053da6b21f24671e67c8a69d3c343"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/alcova-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/alcova-original.svg",
+        "sha256": "cb1b9c4199eb680427dce3f595d85a232a793414c4a5fecf31f5e50d76916533",
+        "nativeSha256": "4684365207cc5606418b7f737f5673500fcce74e1c869efd6ae5c690448453cb"
+      }
+    },
+    "cosmos-profile:1784728528": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/2f26d5e9-abdc-409b-9dce-19c55b5ca388",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/eckhauslatta-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/eckhauslatta-white.svg",
+        "sha256": "cef7259c2a0d21b97c8b4528d2bfb9215426cd90b272f52227344f7b8f95d79c",
+        "nativeSha256": "31c6cec24c0aafc5db3bf9adb7b4391987d0205a3039ec9b5e687627fe834d8d"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/eckhauslatta-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/eckhauslatta-original.svg",
+        "sha256": "270ee0ff851c075cf94d02ece506409be8ff57a58151d2a13a27f625b6557356",
+        "nativeSha256": "fc0be5910d0d42316dd6ac0c62057088fb518bbc3dfcfb7dc5ff2bd40aca4cd0"
+      }
+    },
+    "cosmos-profile:1808160611": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/046caba7-07d7-427c-b06a-51ea206a197d",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/free-people-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/free-people-white.svg",
+        "sha256": "9b3983c40e4af943eed3aae7ca3da2bcc183f02979fb8fbe43c76053686a459c",
+        "nativeSha256": "7be57f14ed25bfe0312b0594b2a6cfc99219ff3e6a7be1c42739c30ca285bba5"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/free-people-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/free-people-original.svg",
+        "sha256": "67ef21b30ee667fe4c37aab19f75113a65d572df539443222761e4e6c6d3d02a",
+        "nativeSha256": "889b0ab1952e27c88123f65b00af97386b8ed59544c9347dcc90fca3118978bf"
+      }
+    },
+    "cosmos-profile:1829324199": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/80dab2c6-8f33-401f-a115-5ab131c05e34",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/jil-sander-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/jil-sander-white.png",
+        "sha256": "2e03ba45bd5f283b0989c979fe8d074dfdc45e0e3ed22335d9a1705004355764",
+        "nativeSha256": "2e03ba45bd5f283b0989c979fe8d074dfdc45e0e3ed22335d9a1705004355764"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/jil-sander-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/jil-sander-original.svg",
+        "sha256": "2db54ae3e74ad74808e57f758491df446e7010ddc471f751ebe42c17d2376900",
+        "nativeSha256": "be7a450f7b45a32f15628b115fbd37a8fa1d0118b06f5c42f8476d4360e9b89c"
+      }
+    },
+    "cosmos-profile:189829904": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/5bbf73d9-f49a-4a86-9072-a01de7a90297",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/the-oblist-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/the-oblist-white.svg",
+        "sha256": "d21ae5c6c00f0a5baadce2eab8f9a3741ecf54eb0da990bd437e7cb902d9b9dc",
+        "nativeSha256": "7881974ae8d178239fd0612654441ac4341b98e8e2b2514f8fad4cbc22fd150e"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/the-oblist-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/the-oblist-original.svg",
+        "sha256": "75b102d594351c0985bdfdb5d2772e9a5f2438a53112f80caf7cfd2b84df4c92",
+        "nativeSha256": "baa6ea3d2f9ca04db21356b2123f41556f277f1c8307d48cfc634640d915b4fb"
+      }
+    },
+    "cosmos-profile:1955890368": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/b7aa8d75-17b2-4180-ab22-270a51395e00",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/emily-dawn-long-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/emily-dawn-long-white.png",
+        "sha256": "9091485b519bc940e7c15ebd497c5407d9c9bd14d5b1de7709854e5256b11412",
+        "nativeSha256": "9091485b519bc940e7c15ebd497c5407d9c9bd14d5b1de7709854e5256b11412"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/emily-dawn-long-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/emily-dawn-long-original.svg",
+        "sha256": "97da36badd4b539701dc1250c72b50d3718e9542d66a8ef16fff298652eb6e05",
+        "nativeSha256": "5dd904e3a49dae54b952570cb0a9524ec3f22ff30ca5c112ff530e9c382d0cc5"
+      }
+    },
+    "cosmos-profile:2026755513": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/be976dd4-94bf-41dc-87da-83e34332d2c8",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/geel-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/geel-white.svg",
+        "sha256": "630b3600b62b60dbe8c42ffbaf6d8c60e642d4e8120cf1f1d5e8b35020a4636d",
+        "nativeSha256": "d35cd413e2f623ec92443183e2b3c294f967bc3adde8710ab86f24d452c9ac50"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/geel-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/geel-original.svg",
+        "sha256": "a294dc8f01e990443b6017a2ea8cdd35b915a8e89d2b5d15b38cde5fe6409884",
+        "nativeSha256": "64803900965ab5dd83f24cbc01d685791b07c79bfe201947839d631e5ae8ad51"
+      }
+    },
+    "cosmos-profile:2054573964": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/df2fc138-d90f-4ce8-9b41-ff0a10fd9f24",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/craighill-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/craighill-white.svg",
+        "sha256": "ce070332c6f6da70c5a844cd2fd326b126ec28878b1629336f4d7d1463145c6e",
+        "nativeSha256": "7ea1dfbb3bce3f2a84e6555efe9b7bb113a40c4ee88fec19abf2c51fbd69d166"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/craighill-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/craighill-original.svg",
+        "sha256": "dbfe9fbaf1b2b827ff9d915ae00c73c0bcce6c741aeb2efe5219fc244a957ecd",
+        "nativeSha256": "65e9575d45f4fd8a377ce9c3e26b9927b74e1635d9be2338cc9e47a84b4262d9"
+      }
+    },
+    "cosmos-profile:2058582098": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/2d9d1742-8843-4b6c-b3fe-2002090f5463",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/guestinresidence-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/guestinresidence-white.svg",
+        "sha256": "670b17a9071569ce7cefed3a228c6905bad5882405297c8f21c8dbce63c999ed",
+        "nativeSha256": "77f5a70f7cc8278666d62bad4a381dd8bb6e89d4b4d00c558b27e944a934d2be"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/guestinresidence-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/guestinresidence-original.svg",
+        "sha256": "40a912e8f4f3134085688781464883e0ea0ed236433740f0e46d96e529090f02",
+        "nativeSha256": "5ef192d2a6e3d414b50f3f0797cfdc9b6e7338f0048ac0bdea1ea39e1c34f1bb"
+      }
+    },
+    "cosmos-profile:2118718682": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/a3dfdee6-f0ed-43c3-ba2d-8130013b07e5",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/basic-space-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/basic-space-white.png",
+        "sha256": "cd1e5ca455a0b4447f730e1545b5e5f7fd50c5475ad0f29a215d0e54b11182d6",
+        "nativeSha256": "cd1e5ca455a0b4447f730e1545b5e5f7fd50c5475ad0f29a215d0e54b11182d6"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/basic-space-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/basic-space-original.svg",
+        "sha256": "d4a7a69415283705143c69edaa3b62adead48a8099ec080357687e35904058d0",
+        "nativeSha256": "0c510f42150b3006eac1c86d42e8a688924d0917fc5fdb76fb5f7508352fd2d2"
+      }
+    },
+    "cosmos-profile:2129365259": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/bdb20df7-72f5-43ea-b285-7f9156326ec3",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/djerfavenue-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/djerfavenue-white.svg",
+        "sha256": "64d7c20c17a659993abe5138294b2729d9ce6eab8e345c5f2da6327c2e238774",
+        "nativeSha256": "f934e285c5522b95cc0d5164b2708d357d7839393ead41cb6dd439e7cc1c85e9"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/djerfavenue-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/djerfavenue-original.svg",
+        "sha256": "5ee7d6af42cedc56a5ff2514074f1f4b0e835b9302a44b2baadf8fc8777d9912",
+        "nativeSha256": "47e02db1ae8250da43f91910d3bc0709dfe9353483fdebb89e30fb689b5ab26b"
+      }
+    },
+    "cosmos-profile:293553762": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/499acbc1-a44c-47eb-b321-6f2c1de0c0b5",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/satisfyrunning-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/satisfyrunning-white.svg",
+        "sha256": "374d492811efb6056408784fc5e578be4e472695767c42fb07ad4655ec329da3",
+        "nativeSha256": "df16ca796097972a65d002560aaa2e1d1091c289338fbc9b3124bea54711230d"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/satisfyrunning-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/satisfyrunning-original.svg",
+        "sha256": "0cbb36e044297c598f82c905e69061f7652ea2c688b7b98a8aeefa0f3590f475",
+        "nativeSha256": "9c0b17561ddd9a13e33bc9e297eb2d0c68cb6a51a11da285c50d1bb35d71c17b"
+      }
+    },
+    "cosmos-profile:316461581": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/ccddd073-3d3d-42e5-8cd5-3dd8601892d1",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/jjjjound-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/jjjjound-white.svg",
+        "sha256": "35b6c06ef97baa899d848a6142cc26615a324f8c7da15de038ed1ca4dcf287b8",
+        "nativeSha256": "86737d007f260e9abff6833e358cd9054f0becd530ec8d46c63ceabcbd77f46d"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/jjjjound-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/jjjjound-original.svg",
+        "sha256": "8c7c0b92fde2061ba54b1b40473986e1aa8a0cc93b4f13aaa70aa5f8f4bbeeba",
+        "nativeSha256": "3316ddfd98c8c65080c8fbbc97189496b8a916a61279c28d1450eff2845f44cf"
+      }
+    },
+    "cosmos-profile:361057280": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/239ed931-a297-4b20-b58b-c35eea893f70",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/walden-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/walden-white.svg",
+        "sha256": "23f7df16b661ab5094807e01016fc4d6b5b57ac28e89504d6b8c78e6ee620221",
+        "nativeSha256": "110229a6fa483a073f9e98f4d8855faed1de80696ff9ce5834b68beb712fc823"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/walden-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/walden-original.svg",
+        "sha256": "a958ef874a0c8487e546d882c6602e86996a7d74bf8033a5417d8e93c5a607a5",
+        "nativeSha256": "de3eabec32ca6364a267ee15e98b48dbd4c2a84f4421c023ee8c18db6864bd27"
+      }
+    },
+    "cosmos-profile:453020477": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/a26d8f02-e4cd-4b41-b6bf-05f1cd2b0c11",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/all-blues-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/all-blues-white.svg",
+        "sha256": "8d746b37fe41d9b226a85c50a46a2f8b55edb7be1f10e05a59d1b77c0425abd0",
+        "nativeSha256": "c014a69bcdce028a60907a32a682b7232e55e378d1ae10987cb2f64ed3e06764"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/all-blues-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/all-blues-original.svg",
+        "sha256": "703254102a7c05100422565c55a9a539b5de111cafa3afff1c65fbbb797fbac2",
+        "nativeSha256": "a02f6eceb2c254bc99cb6b2b3433ab45ba9cefd41f79a4d6a4ea16163fc89fd7"
+      }
+    },
+    "cosmos-profile:473159284": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/1d463c5c-5fad-45c4-8a07-926b478ee888",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/ourlegacy-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/ourlegacy-white.svg",
+        "sha256": "8b4169a17e6de926d87853f49fbf197a556e0bf4038c0b048fcf6dc99d72d0d3",
+        "nativeSha256": "73a1585dd52c61cfc220aa0c3afbf121818c4b135b4b86e830ef6918efe22196"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/ourlegacy-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/ourlegacy-original.svg",
+        "sha256": "06478633f0ec833439c64bce1b0b8d908d102d5bbf683d8aec9f1ad63b58f50b",
+        "nativeSha256": "1284d8de977f7237a10f41517a0ebabedfc7ed3588a643f8169c365a8aabb6f3"
+      }
+    },
+    "cosmos-profile:65483074": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/ecc54f05-05ca-4d54-8d86-ab8970b9860c",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/literary-sport-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/literary-sport-white.svg",
+        "sha256": "899e25050c76c85ae636137a04ae8f25a8e22a1cba966b3ae3e0d7e2627a0693",
+        "nativeSha256": "367c612182e163c46dff485954d3c0fab6f381bf8ba7a4a6d7d02dc2f9defe3f"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/literary-sport-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/literary-sport-original.svg",
+        "sha256": "5feb0f584890a452c9b18dec35823abc938f1a8c986abc358c35faf9c6c6e875",
+        "nativeSha256": "8b87d39ea350c37cfe969299b5c0b9767f07de5fc4e56f2bd8ddb4de83853844"
+      }
+    },
+    "cosmos-profile:670541390": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/a6be3992-a7c1-4ad6-a2d0-1bc7719f805f",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/buck-mason-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/buck-mason-white.svg",
+        "sha256": "d44bcf54ad3b3f4441df834ab59c35571bc791c9093a0d0f9b1c03f910141ee7",
+        "nativeSha256": "be1b872294dcf6cc7fb2a52e4c4769baa6c51a4815a1957410cb16bc04e0ad21"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/buck-mason-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/buck-mason-original.svg",
+        "sha256": "d238e964a68d4ce7e65d02ea55e2c7a9676c7e21e263381f3050f16029719d94",
+        "nativeSha256": "28b038f66088fac79ba4af76f1fce5a5d7aed0347da68bbb3dc6a44ce8f074bc"
+      }
+    },
+    "cosmos-profile:714612829": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/1539b550-c1e7-4837-96aa-57fe15982d07",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/soho-home-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/soho-home-white.svg",
+        "sha256": "41f28d05a59ff279d6b61f50d0e19e5c88043d474293dd011846109f379ba860",
+        "nativeSha256": "106c60b98b1a4fae66b289df0539ec47b97efc837ed9e99d56fa849b7b911ce2"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/soho-home-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/soho-home-original.svg",
+        "sha256": "6ed355d04fe346acb64ab347674243753ff20e02236d8f1da9a999b9db2328bf",
+        "nativeSha256": "9ed9f6b44a0a810897e25b6bca5cd1d917875c1400a80f1dabc3aef193396dfa"
+      }
+    },
+    "cosmos-profile:721267692": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/b75ec5ff-662c-4ab9-b694-686ebca2ffe4",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/atorie-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/atorie-white.svg",
+        "sha256": "5257854b057c01323dcc473dc353f1598d9c6396992ec28b53c5248110ead159",
+        "nativeSha256": "26ae872e40418b578061d4a97fccc5cd4e8e435e4f5b493d494b11871c9d8221"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/atorie-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/atorie-original.svg",
+        "sha256": "8a03a0c0e7dd12995230ccdc0f193aca32ec35ce653a11ce31609aed44c13efa",
+        "nativeSha256": "c2f319a003be52025a224866d74ab4ed2f0a3285a4fc3cc21a66d9afdf743675"
+      }
+    },
+    "cosmos-profile:807673726": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/6751158f-0a4a-4492-b8cf-026067db19b3",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/reformation-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/reformation-white.svg",
+        "sha256": "a780afd4340a1e67f1f28090366c6a3a8395f58cc5d52d5e9793a0180b4c7c4c",
+        "nativeSha256": "0552957f3d4ef3a6b88a56d32604b845efa19f18f9e550fa1e7173dfe504e4b4"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/reformation-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/reformation-original.svg",
+        "sha256": "d433ef8a8e6908962d024f8d5cb10f3869407dc9857da4396c4c9c0a40d7b678",
+        "nativeSha256": "4793339cbd609dfda4ddd1ad986ec0321950d91e1db2dd288c39e4ab0c9e7365"
+      }
+    },
+    "cosmos-profile:813296393": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/539fe9a6-4234-4d2e-8c26-9fb6df4274f3",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/in-common-with-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/in-common-with-white.svg",
+        "sha256": "0de1f2c888c55fb10c3fb1dc7621b51202c3a593a93d819a649a5bb636f5ef33",
+        "nativeSha256": "98dbde718f7cbc0a60678c71e69ac974a8c299737e56583a43ca542f88f5a38d"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/in-common-with-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/in-common-with-original.svg",
+        "sha256": "a682632ef3d4d02c4e3de64803ad8ba12c562431d7278cb1148e8865a84f638e",
+        "nativeSha256": "3c69ea73b395a7c3ecfcd63af039d7fc86247763f5219d9e5a683d136ab2ecf1"
+      }
+    },
+    "cosmos-profile:836728536": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/5ab61d1a-efc9-4c2d-9332-6d6196eb144f",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/auralee-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/auralee-white.svg",
+        "sha256": "3edeac03890f626e59da6fbadf48741eca06d96b2c0fa3855f642ffefd107194",
+        "nativeSha256": "2b5c110ff37e14464efd03dbe29691fed9003c5317c04afe663275f620423d3d"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/auralee-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/auralee-original.svg",
+        "sha256": "6d39424102ceabf16c5c732e8375013d21fd2f55b15487ecb615ab987985bc41",
+        "nativeSha256": "a5cbaf4888ef43a8a89d083e85f7a3271998c1dc0f102bc842c51ac0da65fb83"
+      }
+    },
+    "cosmos-profile:839483923": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/ab1a0069-4aad-42b8-9871-18804d077872",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/loewe-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/loewe-white.svg",
+        "sha256": "8981941ee9a8a7b1521612fd1b37930088cb979b6441a9b64a41bac252ede9dd",
+        "nativeSha256": "86c209dd2f9b5b65fb3ee7d68189d38eef170a761f1e6d996757f7acaad61e80"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/loewe-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/loewe-original.svg",
+        "sha256": "9fd10fb434e61343bd7c32ff220876794bfdf845478cd80621dfb75593f8c097",
+        "nativeSha256": "dd38e5dce22bb02c8c1a97a3dc2a111cd1cb77a10900759693a94577df55d868"
+      }
+    },
+    "cosmos-profile:86695814": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/5eb233ad-f31c-449a-a4c7-fcd607a01f9c",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/obakki-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/obakki-white.svg",
+        "sha256": "c6f46758193a42fdc8f43070cd4390664b2647b58781df975d453113b2ef7e8d",
+        "nativeSha256": "3127f9f1906ad0f56c8ca3b8a386fd69f809c729924075dce86dbb753646e098"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/obakki-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/obakki-original.svg",
+        "sha256": "5821ddc4cb55a014d81c328ecab3d9b6615c3c8bb9ee66dd521614de9ceaead7",
+        "nativeSha256": "258a335d4c017e0b3c6b595c88dbbe71d7cb687d8f71d0c76f1acf2078f08a7d"
+      }
+    },
+    "cosmos-profile:890734513": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/fe20f73f-4a23-4d30-b267-0db78095e2f0",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/on-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/on-white.svg",
+        "sha256": "857b81de9b3a144b9643987aecdff7e06d619f77a295fe7343d0bcdbb45439c8",
+        "nativeSha256": "986a6903831c4972891eb190d112037bc54fb848965f6c0267295a426de5d31d"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/on-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/on-original.svg",
+        "sha256": "5e1fdbe209fc93f20fedcc79f3cf0df0a715affd8643aaaed393add3b9eb2eca",
+        "nativeSha256": "6f91a76c1d15f29ef0fcac343f13694ceb9f5af18e0e341800607061568f76c4"
+      }
+    },
+    "cosmos-profile:971721951": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/faaa5cfb-3e7b-46a1-b6f0-4c679b16b7c7",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/zara-home-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/zara-home-white.png",
+        "sha256": "02f79176ca5e4344038ebb053f16115dab07396e2b2b961fcfff6ba14c1e5ddb",
+        "nativeSha256": "02f79176ca5e4344038ebb053f16115dab07396e2b2b961fcfff6ba14c1e5ddb"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/zara-home-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/zara-home-original.svg",
+        "sha256": "9494c35dc2b24e7795631c8b70c565b0d4cc5ef3b69524e5e49457e7e51648dc",
+        "nativeSha256": "e1b9602c5e0808fed00a325ad8aa8ac101c10ce403c1537528d34bceb34fe894"
+      }
+    },
+    "cosmos-profile:981164961": {
+      "tier": "cosmos-brands",
+      "review": "cosmos_native_capture_visually_reviewed",
+      "source": "https://cdn.cosmos.so/98df9648-0fae-4cba-95e9-172c6e051443",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/massimodutti-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/massimodutti-white.svg",
+        "sha256": "8cc09f6c2f767fe373aac0344f698c9e77cc60eeabacdda3f0b4910758b17cce",
+        "nativeSha256": "6ac188a2461a8baad72dae9c78db4804a4633c115f9a2b6f9e5cd94af0a1d63b"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/cosmos-brands/massimodutti-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/cosmos-brands/massimodutti-original.svg",
+        "sha256": "d322fc648f42fdbcc5452464d3f4b1f6599288e1c2316222485f77a8bff48782",
+        "nativeSha256": "e7eaebe1f26be884e77f2bcb244ec78983e4ac565e2881acaa6e43fc28ab72ba"
+      }
+    },
+    "gid://shopify/Shop/1189904435": {
+      "tier": "launch-approved",
+      "review": "approved",
+      "source": "https://trnk-nyc.com/ (rendered header SVG, previously approved)",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/trnk-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/trnk-white.svg",
+        "sha256": "06aefe52d121333993791be2bb17e7c3c41d8be90a50753cd8fe512219ec3d9a",
+        "nativeSha256": "1a00be69af38bedcd35d1f9ef950efbb39cf29152a9532cb8c413bd896eb7773"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/trnk-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/trnk-original.svg",
+        "sha256": "b3ffc46b41df309841343254416107d0f46baf037b95f7b9f803540f8aed440c",
+        "nativeSha256": "1a00be69af38bedcd35d1f9ef950efbb39cf29152a9532cb8c413bd896eb7773"
+      }
+    },
+    "gid://shopify/Shop/12338898": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-17 (sheet render on dark ground)",
+      "source": "https://cdn.cosmos.so/1c734d26-2089-4e11-98f6-fbc6c37a9bf9",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/mfpen-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/mfpen-white.png",
+        "sha256": "44a55a02863ce01b3c402c5d5f0aa31026fe104c2ec266e58dbecf2ba4ac8434",
+        "nativeSha256": "44a55a02863ce01b3c402c5d5f0aa31026fe104c2ec266e58dbecf2ba4ac8434"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/mfpen-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/mfpen-original.png",
+        "sha256": "44a55a02863ce01b3c402c5d5f0aa31026fe104c2ec266e58dbecf2ba4ac8434",
+        "nativeSha256": "44a55a02863ce01b3c402c5d5f0aa31026fe104c2ec266e58dbecf2ba4ac8434"
+      }
+    },
+    "gid://shopify/Shop/1240727612": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-16 (alpha white derivative rendered on dark ground)",
+      "source": "https://shop.tortoisegeneralstore.com/cdn/shop/files/tgs-logo_48c011c6-b187-4dbd-9b63-531ea271497a.png",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/tortoise-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/tortoise-white.png",
+        "sha256": "44f02ea6c7f1e74fd713de97ef3660a64ce031224fe96c83d83edc47c32ba44a",
+        "nativeSha256": "44f02ea6c7f1e74fd713de97ef3660a64ce031224fe96c83d83edc47c32ba44a"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/tortoise-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/tortoise-original.png",
+        "sha256": "cb362593f00bbc1503c0382c3b61670b9f5726b65399f3ed72c64dffedbd2c7f",
+        "nativeSha256": "cb362593f00bbc1503c0382c3b61670b9f5726b65399f3ed72c64dffedbd2c7f"
+      }
+    },
+    "gid://shopify/Shop/14608629808": {
+      "tier": "launch-approved",
+      "review": "approved",
+      "source": "https://kinto-usa.com/",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/kinto-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/kinto-white.svg",
+        "sha256": "d70d85ce7b5978c403fb655e01a8860feb3e007a8c9179572b7759d8de57e800",
+        "nativeSha256": "77aa654bbab58b93daa0d146682d27f4724944c0dd48478b18d3fcb2c455766f"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/kinto-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/kinto-original.svg",
+        "sha256": "56342349af1d487c7526de5595b704874cad311f697aea3b406779f8fcc990c1",
+        "nativeSha256": "42f6e3d9ec2188916744dbd175f50fd0b57077f60d9be6997002ae332a173a5c"
+      }
+    },
+    "gid://shopify/Shop/17134363": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-16 (alpha white derivative rendered on dark ground)",
+      "source": "https://nickeykehoe.com/cdn/shop/files/NK_Web_Logo_91adfe6c-e2b6-45c6-88e3-13de234e9e32.png",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/nickey-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/nickey-white.png",
+        "sha256": "cfa0d26a93bd38649c69abd1a60487a832bd796638365ef5afe0ee4442a7d428",
+        "nativeSha256": "cfa0d26a93bd38649c69abd1a60487a832bd796638365ef5afe0ee4442a7d428"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/nickey-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/nickey-original.png",
+        "sha256": "060513fd49baf915dc2a41171565726d483d4cae080fac3a9962bde296866225",
+        "nativeSha256": "060513fd49baf915dc2a41171565726d483d4cae080fac3a9962bde296866225"
+      }
+    },
+    "gid://shopify/Shop/1964605539": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-16 (alpha-preserving white derivative rendered against dark ground)",
+      "source": "https://veark.com/cdn/shop/files/veark_logo_hp_600.png?v=1690270162",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/veark-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/veark-white.png",
+        "sha256": "f02c170a18dc9e9db27b4566ca6ea4246615f99dadfa45b374f36c5e94402332",
+        "nativeSha256": "f02c170a18dc9e9db27b4566ca6ea4246615f99dadfa45b374f36c5e94402332"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/veark-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/veark-original.png",
+        "sha256": "a88552a8ede1a7520a18e4c001fb8e6bfe807726f1daeb608fd56add20a6d2b1",
+        "nativeSha256": "a88552a8ede1a7520a18e4c001fb8e6bfe807726f1daeb608fd56add20a6d2b1"
+      }
+    },
+    "gid://shopify/Shop/24615780433": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-17 (sheet render on dark ground)",
+      "source": "https://cdn.cosmos.so/5e9f6af4-faef-47a2-a05f-a054072d68cf",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/collina-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/collina-white.png",
+        "sha256": "d6b980ea4a48b11642a0cafa198a1677427cbf01b19b4035e5a2475bc972a8b1",
+        "nativeSha256": "d6b980ea4a48b11642a0cafa198a1677427cbf01b19b4035e5a2475bc972a8b1"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/collina-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/collina-original.png",
+        "sha256": "d6b980ea4a48b11642a0cafa198a1677427cbf01b19b4035e5a2475bc972a8b1",
+        "nativeSha256": "d6b980ea4a48b11642a0cafa198a1677427cbf01b19b4035e5a2475bc972a8b1"
+      }
+    },
+    "gid://shopify/Shop/25343852596": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-16 (alpha white derivative on dark ground)",
+      "source": "https://loefflerrandall.com/cdn/shop/files/LR_Logo_NewBrown.png?v=1687979278",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/loeffler-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/loeffler-white.png",
+        "sha256": "883d6a4501cbbeb4acc5f093d400431e72f96b4d925d5456c16b0211c80f9148",
+        "nativeSha256": "883d6a4501cbbeb4acc5f093d400431e72f96b4d925d5456c16b0211c80f9148"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/loeffler-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/loeffler-original.png",
+        "sha256": "f1da4c97e5bf46524ec567ef6ff0532690272b58485a40de4196e6ac800c32fa",
+        "nativeSha256": "f1da4c97e5bf46524ec567ef6ff0532690272b58485a40de4196e6ac800c32fa"
+      }
+    },
+    "gid://shopify/Shop/2955521": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-16 (rendered on dark ground) geometry_unchanged",
+      "source": "https://www.alexmill.com/ (rendered header SVG)",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/alexmill-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/alexmill-white.svg",
+        "sha256": "5f0e06ced063d788fa229bdc7f419508075e062c8fd0b99fd7f8ce156bdac0cb",
+        "nativeSha256": "94e53cc3fa086f61809ea1f5ad4fed77bd7c1e8c4d7b3c5d86798c3620da95ac"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/alexmill-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/alexmill-original.svg",
+        "sha256": "5f0e06ced063d788fa229bdc7f419508075e062c8fd0b99fd7f8ce156bdac0cb",
+        "nativeSha256": "94e53cc3fa086f61809ea1f5ad4fed77bd7c1e8c4d7b3c5d86798c3620da95ac"
+      }
+    },
+    "gid://shopify/Shop/33032994860": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-16 (rendered on dark ground) geometry_unchanged",
+      "source": "https://www.snowpeak.com/ (rendered header SVG)",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/snowpeak-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/snowpeak-white.svg",
+        "sha256": "db147d634ab3f0f02ae0b7f01e7d113bfbd713cd1826aa949e30fe2820aa7288",
+        "nativeSha256": "3351f0be633d2a2388eb88758fe4be5c4571a4d952dc108436250335040e8418"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/snowpeak-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/snowpeak-original.svg",
+        "sha256": "db147d634ab3f0f02ae0b7f01e7d113bfbd713cd1826aa949e30fe2820aa7288",
+        "nativeSha256": "3351f0be633d2a2388eb88758fe4be5c4571a4d952dc108436250335040e8418"
+      }
+    },
+    "gid://shopify/Shop/40180482198": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-17 (sheet render)",
+      "source": "https://cdn.cosmos.so/c7e267f9-2b65-473b-b732-d28bd3079aea",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/palomawool-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/palomawool-white.svg",
+        "sha256": "3ed4426168c82197d7010650fac6f3e4fc0141a3857fca5bbfb0af23f4463fa9",
+        "nativeSha256": "18598bda0fde7a6d3da1860c30d56d96d47745f0dd7a57fda6f4590eae38e617"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/palomawool-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/palomawool-original.svg",
+        "sha256": "46a67b2d71fddd625d916027876dc6f5d2de5dd1c53f06bf99c7c897f76a6cfa",
+        "nativeSha256": "6297599bf7edff5e7c13c59187ca32e3001b5e62283df57ffddaf7569d114ef7"
+      }
+    },
+    "gid://shopify/Shop/43179540638": {
+      "tier": "launch-approved",
+      "review": "approved",
+      "source": "https://www.lemaire.fr/",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/lemaire-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/lemaire-white.svg",
+        "sha256": "6cc7ce43194b0c8fdf18257d1cd5ac9ef0d8b1541633cd021991d3ac2145d9a2",
+        "nativeSha256": "04287b100d7862c6fdfce12fff9439f173d5c150703bdb2ff19fbe203ee3be07"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/lemaire-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/lemaire-original.svg",
+        "sha256": "98a99ee89552422969cdb5c82d5fa1f153dbb061517dcdc8c2797f3a97c5345a",
+        "nativeSha256": "d5d19ff8d5da09a798205236dea8262327950ce6d3dc1882576a550f574c8d70"
+      }
+    },
+    "gid://shopify/Shop/45961183387": {
+      "tier": "approved",
+      "review": "approved_prior_strict_batch",
+      "source": "https://aligne.co",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/approved/aligne-9a4a994a-eb8d05cb-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/approved/aligne-9a4a994a-eb8d05cb-white.svg",
+        "sha256": "52c3c1df5ffa3cd02fbf8dcc1db92033e748f8aa7546fca24dd6c44c5860b547",
+        "nativeSha256": "0e58a7791356bebf2a0d30250ecc834fe38d85b54f7d266ef62795545771eb84"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/approved/aligne-9a4a994a-eb8d05cb-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/approved/aligne-9a4a994a-eb8d05cb-original.svg",
+        "sha256": "eb8d05cbb6f7c8ad139e02f949771af22688b4c397f5a8856f9ec239b9113880",
+        "nativeSha256": "0e58a7791356bebf2a0d30250ecc834fe38d85b54f7d266ef62795545771eb84"
+      }
+    },
+    "gid://shopify/Shop/46461485224": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-17 (sheet render on dark ground)",
+      "source": "https://cdn.cosmos.so/d2ff443c-8924-414d-beef-d60ed2ec156e",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/districtvision-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/districtvision-white.png",
+        "sha256": "dc4eb6ad1773794254bfa8df01bcfc2f571b394c0d3d81f76213cf226665a862",
+        "nativeSha256": "dc4eb6ad1773794254bfa8df01bcfc2f571b394c0d3d81f76213cf226665a862"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/districtvision-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/districtvision-original.png",
+        "sha256": "dc4eb6ad1773794254bfa8df01bcfc2f571b394c0d3d81f76213cf226665a862",
+        "nativeSha256": "dc4eb6ad1773794254bfa8df01bcfc2f571b394c0d3d81f76213cf226665a862"
+      }
+    },
+    "gid://shopify/Shop/55113842854": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-17 (sheet render on dark ground)",
+      "source": "https://wmscoshop.com/",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/wms-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/wms-white.png",
+        "sha256": "b4ef91b7bbf362dc84dbd572d11eddda2a732e704a3205590c02ec6872f78390",
+        "nativeSha256": "b4ef91b7bbf362dc84dbd572d11eddda2a732e704a3205590c02ec6872f78390"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/wms-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/wms-original.png",
+        "sha256": "e8a2851028a4815050fe7666f32d022edfdb41a90adc0020ab211c34fd1bdc9c",
+        "nativeSha256": "e8a2851028a4815050fe7666f32d022edfdb41a90adc0020ab211c34fd1bdc9c"
+      }
+    },
+    "gid://shopify/Shop/55203135593": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-17 (sheet render on dark ground)",
+      "source": "https://cdn.cosmos.so/48d643f8-96cb-457b-9f73-b792a96f5edc",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/therow-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/therow-white.png",
+        "sha256": "3736899f3ce5480428db092e2ec03110cfc691295714d301f6337abda8c5b547",
+        "nativeSha256": "3736899f3ce5480428db092e2ec03110cfc691295714d301f6337abda8c5b547"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/therow-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/therow-original.png",
+        "sha256": "3736899f3ce5480428db092e2ec03110cfc691295714d301f6337abda8c5b547",
+        "nativeSha256": "3736899f3ce5480428db092e2ec03110cfc691295714d301f6337abda8c5b547"
+      }
+    },
+    "gid://shopify/Shop/58974732484": {
+      "tier": "approved",
+      "review": "approved_prior_strict_batch",
+      "source": "https://www.driesvannoten.com",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/approved/dries-van-noten-0ef5274d-c9bc8f7b-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/approved/dries-van-noten-0ef5274d-c9bc8f7b-white.svg",
+        "sha256": "5ef40d7f01b0f429ac71f3c8a08ac79b1b241894333830e1f1b1c71733a40beb",
+        "nativeSha256": "11f4a534f479ab58060a576ff3939a7053cfc3c991f8b7a5aa2807e2f4c4b97f"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/approved/dries-van-noten-0ef5274d-c9bc8f7b-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/approved/dries-van-noten-0ef5274d-c9bc8f7b-original.svg",
+        "sha256": "c9bc8f7bef77404bb3a8bb6a6859f94c8f3ceab131e097da38a47a798f5f8a8c",
+        "nativeSha256": "990ceeac97c129b060dee249dd8b0a23400f1213dcc775429de21e6bbe725075"
+      }
+    },
+    "gid://shopify/Shop/60704260314": {
+      "tier": "launch-approved",
+      "review": "approved",
+      "source": "https://porta-nyc.com/",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/porta-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/porta-white.svg",
+        "sha256": "9b6c6a8354cee1bb590a070628d1ad3c406ec9762163272b48603b453a02e6ec",
+        "nativeSha256": "7497fabbe68da817224171a98892b59c51b9beda7d2960cdec473ea12f0db43d"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/porta-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/porta-original.svg",
+        "sha256": "3b363cef7e4a847c147eac4832e0002764ef46329856a445414f6992ab53d055",
+        "nativeSha256": "f9a16a357cfa56f5b9db329310ea4adfc7d2b44d21316bb6cecf5baab81e321f"
+      }
+    },
+    "gid://shopify/Shop/60911616205": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-16 (rendered against dark ground; matches merchant header script mark)",
+      "source": "https://gohar.world/cdn/shop/files/logo-white.svg?v=1719554235",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/gohar-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/gohar-white.svg",
+        "sha256": "3fa2788f7068ddab530bfa91a3159d395cd4d0d3d9d302a4fcb49291c534a5b0",
+        "nativeSha256": "9ae8b2f8d27ff49f003720a7fe734790411352d2247a9c8a0a87703d915040cd"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/gohar-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/gohar-original.svg",
+        "sha256": "3fa2788f7068ddab530bfa91a3159d395cd4d0d3d9d302a4fcb49291c534a5b0",
+        "nativeSha256": "9ae8b2f8d27ff49f003720a7fe734790411352d2247a9c8a0a87703d915040cd"
+      }
+    },
+    "gid://shopify/Shop/61588471939": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-16 (alpha white derivative on dark ground)",
+      "source": "https://salter.house/cdn/shop/files/footer-logo.webp?v=1727294984",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/salter-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/salter-white.png",
+        "sha256": "cf386f02394dcee4c6c304605a4009405d4f1d59c3526aa136c816fcb82f737f",
+        "nativeSha256": "cf386f02394dcee4c6c304605a4009405d4f1d59c3526aa136c816fcb82f737f"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/salter-original.webp",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/salter-original.webp",
+        "sha256": "c43f405479695802cc89816cdcb210f1ef6cfd3d50fd5397bef41dc665a23c20",
+        "nativeSha256": "c43f405479695802cc89816cdcb210f1ef6cfd3d50fd5397bef41dc665a23c20"
+      }
+    },
+    "gid://shopify/Shop/6328809": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-16 (alpha white derivative rendered on dark ground)",
+      "source": "https://spartan-shop.com/cdn/shop/t/5/assets/logo.png",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/spartan-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/spartan-white.png",
+        "sha256": "b9326090cafb9a96d7b6de20bf69b0a9b43178a7915c2986ca9352a01d456a45",
+        "nativeSha256": "b9326090cafb9a96d7b6de20bf69b0a9b43178a7915c2986ca9352a01d456a45"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/spartan-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/spartan-original.png",
+        "sha256": "fc57b1d051bd1a8d553bb949a9933f164e8f01e3e1b1dac367eedfdbf4249299",
+        "nativeSha256": "fc57b1d051bd1a8d553bb949a9933f164e8f01e3e1b1dac367eedfdbf4249299"
+      }
+    },
+    "gid://shopify/Shop/64140968152": {
+      "tier": "approved",
+      "review": "approved_prior_strict_batch",
+      "source": "https://www.abask.com/en-us",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/approved/abask-377a9868-358489f1-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/approved/abask-377a9868-358489f1-white.svg",
+        "sha256": "1d2dd33c033b0dd9aba81f6756a2789a8e690f8bc41af24a8a92abc7a5f21c2d",
+        "nativeSha256": "61966513898bd9c6c637e5495cebe08a426606243d8f6651bfbd34172189227d"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/approved/abask-377a9868-358489f1-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/approved/abask-377a9868-358489f1-original.svg",
+        "sha256": "358489f18a1d4007fc08fe845e42f663fcaebbd1b7ad94d02bfcfbe30a680faf",
+        "nativeSha256": "f50acbb69134a18b58e4e48023dd01106b4016ce898d137150a30cddd93d4b0d"
+      }
+    },
+    "gid://shopify/Shop/66085650660": {
+      "tier": "approved",
+      "review": "approved_prior_strict_batch",
+      "source": "https://www.taschen.com/en/",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/approved/taschen-america-e961e8a7-4bd45ee8-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/approved/taschen-america-e961e8a7-4bd45ee8-white.svg",
+        "sha256": "13750ee62366dbb50388edda7800250b09ee969eb4c3e5f88b7c1a27d5852dec",
+        "nativeSha256": "dfc2b6396ea92ce3fb4ef6597ef38c920f64b131467dd420118303e738b3b08f"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/approved/taschen-america-e961e8a7-4bd45ee8-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/approved/taschen-america-e961e8a7-4bd45ee8-original.svg",
+        "sha256": "4bd45ee8559c9cbfe4d3e9f5c91317805dfe8943b6e84031dd22a40f345d6761",
+        "nativeSha256": "ddf8584c4ec26f710a87612c5fb449db57e106a232681fb7941bbe9ff61ab9b1"
+      }
+    },
+    "gid://shopify/Shop/67459383396": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-17 (sheet render)",
+      "source": "https://cdn.cosmos.so/710d4161-e38f-4fe2-b3ed-f242acd9562b",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/jwanderson-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/jwanderson-white.svg",
+        "sha256": "bfa9f270ab52f63bcc8d6a3ecc9bf51dadc2213c1e886b3b47cb25583c4d8723",
+        "nativeSha256": "acf7d95d8e83af083c29b7aaff0e7555397565142530bed5076df79d5d69f720"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/jwanderson-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/jwanderson-original.svg",
+        "sha256": "ebfe259c1a841ce04aa060f1a59d52450d852c5b8e150638daf6fcbde96f09aa",
+        "nativeSha256": "56e361ad3051a59593d1fc66bf142b7ffdbf4b138b27b6809b28aa331b459707"
+      }
+    },
+    "gid://shopify/Shop/69054038247": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-17 (sheet render on dark ground)",
+      "source": "https://cdn.cosmos.so/0b499986-5bd4-43e7-969c-b0f0acb65a58",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/eterne-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/eterne-white.png",
+        "sha256": "06def1ae8c9232973977ac1df38dca31d32ddab9ee8e17657724d544160dc8c6",
+        "nativeSha256": "06def1ae8c9232973977ac1df38dca31d32ddab9ee8e17657724d544160dc8c6"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/eterne-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/eterne-original.png",
+        "sha256": "06def1ae8c9232973977ac1df38dca31d32ddab9ee8e17657724d544160dc8c6",
+        "nativeSha256": "06def1ae8c9232973977ac1df38dca31d32ddab9ee8e17657724d544160dc8c6"
+      }
+    },
+    "gid://shopify/Shop/69448794420": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-17 (sheet render on dark ground)",
+      "source": "https://cdn.cosmos.so/5af5fa19-548f-471e-874d-a6195c6619c7",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/olive-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/olive-white.png",
+        "sha256": "8faa340b7008727653ebfdd448127ca5ae44f509139520efada69aa171420644",
+        "nativeSha256": "8faa340b7008727653ebfdd448127ca5ae44f509139520efada69aa171420644"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/olive-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/olive-original.png",
+        "sha256": "8faa340b7008727653ebfdd448127ca5ae44f509139520efada69aa171420644",
+        "nativeSha256": "8faa340b7008727653ebfdd448127ca5ae44f509139520efada69aa171420644"
+      }
+    },
+    "gid://shopify/Shop/7116849252": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-17 (sheet render on dark ground)",
+      "source": "https://www.goodeeworld.com/",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/goodee-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/goodee-white.png",
+        "sha256": "68d525697754b497acfd03a44f9575b3d93de9bebbd90b89a1b8904b5adda453",
+        "nativeSha256": "68d525697754b497acfd03a44f9575b3d93de9bebbd90b89a1b8904b5adda453"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/goodee-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/goodee-original.png",
+        "sha256": "9ba78595758eb913b034aab7c3706cd853ffc6c72966f4e4109d8f1db3fc0cfe",
+        "nativeSha256": "9ba78595758eb913b034aab7c3706cd853ffc6c72966f4e4109d8f1db3fc0cfe"
+      }
+    },
+    "gid://shopify/Shop/7539621924": {
+      "tier": "launch-approved",
+      "review": "approved",
+      "source": "https://us.audocph.com/ (rendered header SVG, previously approved)",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/audo-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/audo-white.svg",
+        "sha256": "c72e36806c91574e0645b527f07699b21e9718e1b9977e1d738ba55f95253757",
+        "nativeSha256": "ec3f62cab360ff81f4b55f25a3345888e195b6a36a7a5e31cf3fdb529eeec8a1"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/audo-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/audo-original.svg",
+        "sha256": "28374ef6e34873db58f2c660cb4a354e3f24a06c727f58c095f2eb1d6c53530d",
+        "nativeSha256": "b07b2dd048ab60ed331bcfe6c7a83ee2b9f8e4cf5b77f9714343e76e77a05fce"
+      }
+    },
+    "gid://shopify/Shop/83980288319": {
+      "tier": "launch-approved",
+      "review": "approved",
+      "source": "https://us.framacph.com/",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/frama-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/frama-white.svg",
+        "sha256": "52d70f7b95ea58740ed66389dc723b329dae20d91bb93b2fa4dd29c6a3c88631",
+        "nativeSha256": "5b8b1cfbcffe84b3c844d10eb37e85b4dea14667b6d7f621db3395ff546186f7"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/frama-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/frama-original.svg",
+        "sha256": "ae30d7fb65974990cd6cfb8eca2dd21b3ccc05a5b2410febae6240745fc330af",
+        "nativeSha256": "c9807b0fcf429897d106166473900da7f622a235ffc86135286a8b60eb90907c"
+      }
+    },
+    "gid://shopify/Shop/8665580": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-17 (sheet render on dark ground)",
+      "source": "https://cdn.cosmos.so/0bfafd8b-d2a5-4936-9e38-9658ad707b6c",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/actualsource-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/actualsource-white.png",
+        "sha256": "844598738cab99d196f4b32d4165b4b967374065801cdcc5b90d180950642d36",
+        "nativeSha256": "844598738cab99d196f4b32d4165b4b967374065801cdcc5b90d180950642d36"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/actualsource-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/actualsource-original.png",
+        "sha256": "844598738cab99d196f4b32d4165b4b967374065801cdcc5b90d180950642d36",
+        "nativeSha256": "844598738cab99d196f4b32d4165b4b967374065801cdcc5b90d180950642d36"
+      }
+    },
+    "gid://shopify/Shop/8945382": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-16 (rendered on dark ground)",
+      "source": "https://cultiver.com/cdn/shop/files/Logo_white.svg?v=1726117737",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/cultiver-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/cultiver-white.svg",
+        "sha256": "9a7e49f75d092a8d084312d0745c8f06b78b562a6f8731b0c37774a296609698",
+        "nativeSha256": "83c70235fab4ca42ff367e7b4dfaea6e9af4d61f945d15d8d41d23cfb0e77097"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/cultiver-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/cultiver-original.svg",
+        "sha256": "9a7e49f75d092a8d084312d0745c8f06b78b562a6f8731b0c37774a296609698",
+        "nativeSha256": "83c70235fab4ca42ff367e7b4dfaea6e9af4d61f945d15d8d41d23cfb0e77097"
+      }
+    },
+    "gid://shopify/Shop/9509820": {
+      "tier": "launch-approved",
+      "review": "approved",
+      "source": "https://www.shopdoen.com/",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/doen-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/doen-white.svg",
+        "sha256": "b03790a04d8b8174a200d9c23cebe0ba9f271c6ce411deae77507c69b2c0ac85",
+        "nativeSha256": "252ac213a662d2548aa66208213177be39b008291198ae0fd471964e72bef81e"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/doen-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/doen-original.svg",
+        "sha256": "b0d3ea214bf9fe7bb7b3531401830613dcd15b73de9ff029d3e4154024796bb2",
+        "nativeSha256": "aadfc39d58c9f993795747fcca66e767758787d9540f2e533569a0fc69b3a380"
+      }
+    },
+    "gid://shopify/Shop/95659295067": {
+      "tier": "approved",
+      "review": "approved_prior_strict_batch",
+      "source": "https://www.fornasetti.com/en-us",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/approved/fornasetti-store-ddb54754-7d1206b6-white.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/approved/fornasetti-store-ddb54754-7d1206b6-white.svg",
+        "sha256": "cebe3f0a78d6e8bd393b01071b02789c1cdacfc9b909c13180db183d19ba32a2",
+        "nativeSha256": "16b39c557f8365992606ac2a9ecca1e314396485f7f20b3abf4d6cb37198cbc6"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/approved/fornasetti-store-ddb54754-7d1206b6-original.svg.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/approved/fornasetti-store-ddb54754-7d1206b6-original.svg",
+        "sha256": "7d1206b66f08c8ca39c5051164b3d067a31e9942b78a890e93b4afb76584ec74",
+        "nativeSha256": "7ee55f3e2ba57265e82d130cc0fa9378108d8ffaec0381a091fd4f078446e16f"
+      }
+    },
+    "gid://shopify/Shop/96067387723": {
+      "tier": "launch-approved",
+      "review": "approved_2026-09-17 (sheet render on dark ground)",
+      "source": "https://norseprojects.com/cdn/shop/files/NorseProjects_Logo_Grey.png",
+      "white": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/norse-white.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/norse-white.png",
+        "sha256": "8695ea7b176f468d190b83696df42e5c18e56110f58378c33dff5b1c5184de25",
+        "nativeSha256": "8695ea7b176f468d190b83696df42e5c18e56110f58378c33dff5b1c5184de25"
+      },
+      "original": {
+        "path": "./merchant-assets/imported-wordmarks/launch-approved/norse-original.png",
+        "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/norse-original.png",
+        "sha256": "caef22966538b1eda4240fad0ee35ec4bbd77438f9c7dbf7ad802ca589a5c7ba",
+        "nativeSha256": "caef22966538b1eda4240fad0ee35ec4bbd77438f9c7dbf7ad802ca589a5c7ba"
+      }
+    }
+  },
+  "excludedPendingRows": 618
+}

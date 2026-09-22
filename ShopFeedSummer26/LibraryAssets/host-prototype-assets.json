@@ -1,0 +1,51 @@
+{
+  "welcome-tray": {
+    "path": "./catalog/host-prototype/welcome-tray.jpg",
+    "sourceProductID": "cosmos:1081070780",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0729/9298/1340/files/0784_7a93e282-1dda-4019-8cef-4a890fa59bf5.jpg?v=1773134797&width=640",
+    "sha256": "ad6054377e2bb2b72b645fc89896ca1208eb749d07c7d9fd8daf31048fcdb026",
+    "reviewedAt": "2026-09-17"
+  },
+  "porta-table": {
+    "path": "./catalog/host-prototype/porta-table.jpg",
+    "sourceProductID": "cosmos:1197942807",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0607/0426/0314/files/LOOK_8_20785.jpg?v=1773248823&width=640",
+    "sha256": "931317e1c90c2a28ef85875aa82347fc0db40b062ff2c453a50b0dea96ed5617",
+    "reviewedAt": "2026-09-17"
+  },
+  "linen-garden": {
+    "path": "./catalog/host-prototype/linen-garden.jpg",
+    "sourceProductID": "cosmos:820800012",
+    "sourceURL": "https://cdn.cosmos.so/01a0821e-3660-7c4f-91a0-899f688cc078?format=webp&w=800",
+    "sha256": "dee578442d9256b772f9a2e2eff3923e708e718b60affaa822760ae34f77b572",
+    "reviewedAt": "2026-09-17"
+  },
+  "linen-detail": {
+    "path": "./catalog/host-prototype/linen-detail.jpg",
+    "sourceProductID": "cosmos:820800012",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0615/8847/1939/files/SHLinens-JT_0100__37785.1664126044.1280.1280.jpg?v=1763583649&width=640",
+    "sha256": "14da2d6ce4a1cd8b44847b5df4ccfa72d4d570c932f9938c37777c694f4b5788",
+    "reviewedAt": "2026-09-17"
+  },
+  "porta-bowl-detail": {
+    "path": "./catalog/host-prototype/porta-bowl-detail.jpg",
+    "sourceProductID": "cosmos:1197942807",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0607/0426/0314/files/EZF-PB23-JSTR-BL_Folk_Pasta_Bowl_Jester_a.jpg?v=1733777146&width=640",
+    "sha256": "b99ff671f607b38c952804d3319a319537635e773155a337af2fb57f02ba7539",
+    "reviewedAt": "2026-09-17"
+  },
+  "serving-tray-table": {
+    "path": "./catalog/host-prototype/serving-tray-table.jpg",
+    "sourceProductID": "cosmos:1081070780",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0729/9298/1340/files/0586_4efaab8d-99e9-4f79-a292-06343fc8423f.jpg?v=1773134797&width=640",
+    "sha256": "6446c7bacade6ce23a3a683d5e119e29e8fde7a26285f567b2ac54ba7840c094",
+    "reviewedAt": "2026-09-17"
+  },
+  "linen-table-green": {
+    "path": "./catalog/host-prototype/linen-table-green.jpg",
+    "sourceProductID": "cosmos:820800012",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0615/8847/1939/files/linen.tablecloth-3.jpg?v=1763583649&width=640",
+    "sha256": "d631e8421980bd51d139898094ee645759b348f148ee2fb72f9e4cd9c82dd741",
+    "reviewedAt": "2026-09-17"
+  }
+}

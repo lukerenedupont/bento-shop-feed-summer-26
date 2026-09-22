@@ -135,7 +135,7 @@ struct TryOnFeedCard: View {
                     ProductCard(
                         image: nil,
                         imageURL: item.product.imageURL,
-                        priceBadge: formatPrice(item.product.price),
+                        priceBadge: formatPrice(item.product),
                         showFavoriteButton: true
                     )
                     .allowsHitTesting(false)

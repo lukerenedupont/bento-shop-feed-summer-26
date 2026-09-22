@@ -48,7 +48,7 @@ struct RelatedDealCard: View {
                     merchantIdentity.frame(height: 100)
                     productRow
 
-                    Text("Save $10 on orders over $50")
+                    Text("Explore the shop")
                         .gravityTextStyle(GravityTypography.buttonSmall)
                         .foregroundStyle(.black)
                         .lineLimit(1)
@@ -165,7 +165,9 @@ struct TopicCollectionCard: View {
         } label: {
             ZStack(alignment: .bottomLeading) {
                 Group {
-                    if let lifestyleURL {
+                    if ShopCanvasLibrary.isLibraryStory(story) {
+                        LibraryProductHero(story: story, width: 364, height: height)
+                    } else if let lifestyleURL {
                         CachedAsyncImage(url: lifestyleURL) { phase in
                             if case .success(let image) = phase {
                                 image.resizable().scaledToFill()
@@ -196,10 +198,15 @@ struct TopicCollectionCard: View {
 
                 HStack(alignment: .bottom, spacing: GravitySpacing.space12) {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(story.title)
-                            .font(GravityFont.expressiveBold.fixedFont(size: 23))
-                            .tracking(-0.5)
-                            .lineLimit(2)
+                        if LibraryWordmarkCatalog.key(for: story) != nil {
+                            LibraryCollectionWordmark(story: story)
+                                .frame(width: 220, height: 30, alignment: .leading)
+                        } else {
+                            Text(story.title)
+                                .font(GravityFont.expressiveBold.fixedFont(size: 23))
+                                .tracking(-0.5)
+                                .lineLimit(2)
+                        }
                         if !story.subtitle.isEmpty {
                             Text(story.subtitle)
                                 .font(GravityFont.medium.fixedFont(size: 13))
@@ -208,10 +215,6 @@ struct TopicCollectionCard: View {
                         }
                     }
                     Spacer(minLength: 4)
-                    Image(systemName: "arrow.right")
-                        .font(.system(size: 14, weight: .semibold))
-                        .frame(width: 36, height: 36)
-                        .background(.white.opacity(0.18), in: Circle())
                 }
                 .foregroundStyle(.white)
                 .padding(GravitySpacing.space16)
@@ -357,7 +360,12 @@ struct TopicCuratedLookCard: View {
 
 struct TopicRecentPostCard: View {
     let post: ShopPost
-    var ageLabel = "4m ago"
+    var ageLabel: String? = nil
+    var width: CGFloat = 148
+    var height: CGFloat = 219
+    var playbackEnabled = true
+    var onOpen: (() -> Void)? = nil
+    @State private var isVisible = false
 
     @ViewBuilder
     private var media: some View {
@@ -365,6 +373,7 @@ struct TopicRecentPostCard: View {
         case let .video(url, _, _, _):
             LoopingVideoPlayer(
                 url: url,
+                playbackEnabled: playbackEnabled && isVisible,
                 playbackGroupID: "topic-recent-post-\(post.id)"
             )
         case let .image(url, _, _):
@@ -381,12 +390,15 @@ struct TopicRecentPostCard: View {
     var body: some View {
         Button {
             HapticFeedback.light.fire()
-            guard let actionURL = post.actionURL else { return }
-            UIApplication.shared.open(actionURL)
+            if let onOpen { onOpen() }
+            else if let actionURL = post.actionURL { UIApplication.shared.open(actionURL) }
         } label: {
             media
-            .frame(width: 148, height: 219)
+            .frame(width: width, height: height)
             .clipped()
+            .overlay {
+                LinearGradient(colors: [.clear, .black.opacity(0.60)], startPoint: .center, endPoint: .bottom)
+            }
             .overlay(alignment: .bottomLeading) {
                 HStack(alignment: .bottom, spacing: GravitySpacing.space8) {
                     MerchantAvatarView(
@@ -400,14 +412,16 @@ struct TopicRecentPostCard: View {
                         Text(post.merchant.name)
                             .gravityTextStyle(GravityTypography.captionBold)
                             .lineLimit(1)
-                        Text(ageLabel)
-                            .gravityTextStyle(GravityTypography.caption)
-                            .foregroundStyle(GravityColors.textFixedLight.opacity(0.75))
-                            .lineLimit(1)
+                        if let ageLabel {
+                            Text(ageLabel)
+                                .gravityTextStyle(GravityTypography.caption)
+                                .foregroundStyle(GravityColors.textFixedLight.opacity(0.75))
+                                .lineLimit(1)
+                        }
                     }
-                    .frame(width: 84, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .frame(width: 124, alignment: .leading)
+                .frame(width: width - 24, alignment: .leading)
                 .foregroundStyle(GravityColors.textFixedLight)
                 .padding(GravitySpacing.space12)
             }
@@ -419,7 +433,8 @@ struct TopicRecentPostCard: View {
             .gravityShadow(GravityShadows.medium)
         }
         .buttonStyle(PressScaleButtonStyle())
-        .accessibilityLabel("Recent post from \(post.merchant.name)")
+        .accessibilityLabel("Post from \(post.merchant.name)")
+        .onScrollVisibilityChange(threshold: 0.35) { isVisible = $0 }
     }
 }
 
@@ -667,7 +682,7 @@ struct TopicBrandGridCard: View {
             ProductImageView(product: product, merchant: merchant)
                 .frame(width: 108, height: 108)
 
-            Text(formatPrice(product.price))
+            Text(formatPrice(product))
                 .font(GravityFont.medium.fixedFont(size: 12))
                 .foregroundStyle(.white)
                 .padding(.horizontal, 8)
@@ -768,7 +783,7 @@ struct TopicCategoryClusterCard: View {
 
                 Color.black.opacity(0.04)
 
-                Text(formatPrice(item.product.price))
+                Text(formatPrice(item.product))
                     .gravityTextStyle(GravityTypography.badgeBold)
                     .foregroundStyle(GravityColors.textFixedLight)
                     .padding(.horizontal, GravitySpacing.space6)
@@ -789,7 +804,7 @@ struct TopicCategoryClusterCard: View {
             }
         }
         .buttonStyle(PressScaleButtonStyle())
-        .accessibilityLabel("\(item.product.title), \(formatPrice(item.product.price))")
+        .accessibilityLabel("\(item.product.title), \(formatPrice(item.product))")
     }
 
     private func open(_ item: ResolvedStoryProduct) {
@@ -849,7 +864,7 @@ struct TopicBentoProductTile: View {
 
                 Color.black.opacity(0.04)
 
-                Text(formatPrice(item.product.price))
+                Text(formatPrice(item.product))
                     .gravityTextStyle(GravityTypography.badgeBold)
                     .foregroundStyle(GravityColors.textFixedLight)
                     .padding(.horizontal, GravitySpacing.space6)
@@ -870,7 +885,7 @@ struct TopicBentoProductTile: View {
             }
         }
         .buttonStyle(PressScaleButtonStyle())
-        .accessibilityLabel("\(item.product.title), \(formatPrice(item.product.price))")
+        .accessibilityLabel("\(item.product.title), \(formatPrice(item.product))")
     }
 }
 
@@ -913,10 +928,12 @@ struct TopicExploreProductCard: View {
                         .foregroundStyle(.white)
                         .lineLimit(2)
 
-                    Text(formatPrice(item.product.price))
-                        .font(GravityFont.medium.fixedFont(size: 13))
-                        .foregroundStyle(.white)
-                        .lineLimit(1)
+                    if !item.product.price.isEmpty {
+                        Text(formatPrice(item.product))
+                            .font(GravityFont.medium.fixedFont(size: 13))
+                            .foregroundStyle(.white)
+                            .lineLimit(1)
+                    }
                 }
                 .frame(height: 66, alignment: .topLeading)
                 .padding(.horizontal, GravitySpacing.space2)
@@ -925,7 +942,7 @@ struct TopicExploreProductCard: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(PressScaleButtonStyle())
-        .accessibilityLabel("\(item.product.title), \(formatPrice(item.product.price))")
+        .accessibilityLabel("\(item.product.title), \(formatPrice(item.product))")
     }
 }
 
@@ -960,7 +977,7 @@ struct TopicProductCollectionSheet: View {
                                 imageURL: item.product.imageURL,
                                 merchantName: item.merchant.displayName,
                                 productName: item.product.title,
-                                price: formatPrice(item.product.price),
+                                price: formatPrice(item.product),
                                 showFavoriteButton: true
                             )
                         }

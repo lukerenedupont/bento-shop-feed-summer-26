@@ -1,0 +1,3588 @@
+{
+  "repository": "Shopify/shop-client",
+  "branch": "feature/agent-vision-prototype-refresh",
+  "commit": "79849f634b495df011aeefc0c4ef04a7180e633d",
+  "files": [
+    {
+      "source": "Shop/Sources/AppShell/ShopVisionBottomNavigation.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopVisionBottomNavigation.swift",
+      "sha256": "385f37b8fcbea303d374dd7db32bda836498c2e8599e138c125783ff42059f67",
+      "adaptations": [
+        "Propagate the UIKit trait color scheme into pre-rendered SwiftUI tab icons and use adaptive system material for the protection blur, so the persistent source chrome follows the host media contrast mode.",
+        "Explicitly propagate the SwiftUI host color scheme to the persistent UIKit controller so child composer chrome resolves the same media-aware appearance as navigation."
+      ],
+      "portedSha256": "739f876900fd57045cf606b6b6be8979d510b0dee80db22e8a6e9c7a1b5b3a02"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopBottomNavigationViewController.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopBottomNavigationViewController.swift",
+      "sha256": "0d646652061a632a53e251d0c27cb12231a289197ff86600dbaaec13d7db75fe",
+      "adaptations": [
+        "Propagate the shell override style to the persistent composer controller before configuration so its pre-rendered compact Ask icon follows media-aware chrome."
+      ],
+      "portedSha256": "48b5ee35fac5eb2cdef88251260432d0234bc11aee69bced6558fd6d20e7ad86"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopBottomNavigationConversation.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopBottomNavigationConversation.swift",
+      "sha256": "52212fc9a906f7eef666948953a8b26b119ce2cb1f75efd32fab7e3c1f0089f8",
+      "adaptations": [],
+      "portedSha256": "52212fc9a906f7eef666948953a8b26b119ce2cb1f75efd32fab7e3c1f0089f8"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopBottomNavigationComposerSource.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopBottomNavigationComposerSource.swift",
+      "sha256": "1e1b3060dfb4aa39599cd1eab04cea9732c4ae10301d151a6909fbce8ff8f3c5",
+      "adaptations": [],
+      "portedSha256": "1e1b3060dfb4aa39599cd1eab04cea9732c4ae10301d151a6909fbce8ff8f3c5"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopFloatingChromeStyle.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopFloatingChromeStyle.swift",
+      "sha256": "3d7299daba98480433cd716933210318f8d4b834d83ce2ed02e0bebad2db7376",
+      "adaptations": [],
+      "portedSha256": "3d7299daba98480433cd716933210318f8d4b834d83ce2ed02e0bebad2db7376"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopUIKitFloatingShadow.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopUIKitFloatingShadow.swift",
+      "sha256": "f8d6cc6fd7964dee1f25fd7ba1f1d7241fb34671597eb1cbff65ba62bfd35012",
+      "adaptations": [],
+      "portedSha256": "f8d6cc6fd7964dee1f25fd7ba1f1d7241fb34671597eb1cbff65ba62bfd35012"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopDockSwapDepthAnimation.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopDockSwapDepthAnimation.swift",
+      "sha256": "bc91c6f90571e6840585971fad0e147fc4fd9dd94f323976835b5e8cef559834",
+      "adaptations": [],
+      "portedSha256": "bc91c6f90571e6840585971fad0e147fc4fd9dd94f323976835b5e8cef559834"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentUIKitComposer.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentUIKitComposer.swift",
+      "sha256": "3ce0f589c75abc32798e047019b1d775aeeccbd8f9d97a4dcab3d5925073cb57",
+      "adaptations": [
+        "Removed ShopFoundation import; standalone String utilities supplied at adapter boundary.",
+        "Remove ShopFoundation import; required source utilities are imported separately.",
+        "Standalone state ownership: do not overwrite the live UITextView text/selection with a lagging render snapshot while it is first responder. No geometry, controls, styling or motion changes.",
+        "Propagate the UIKit trait color scheme into pre-rendered composer icons and refresh the compact Ask icon when host media contrast changes. No geometry or motion changes."
+      ],
+      "portedSha256": "75e007a1650c513be176c7cd7aeec7a70f77ebc0c8e7c12043e70470691b0a5f"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentComposerHostViewController.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentComposerHostViewController.swift",
+      "sha256": "2a80ede0bb7fa87efe8ee974a0a97844a5181e64945f1a7e5be89350817222b3",
+      "adaptations": [],
+      "portedSha256": "2a80ede0bb7fa87efe8ee974a0a97844a5181e64945f1a7e5be89350817222b3"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentComposerSession.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentComposerSession.swift",
+      "sha256": "ef973d781719dca0a5e83dcdc185a63448df34c69d56b082ea048c4110a7e6ce",
+      "adaptations": [],
+      "portedSha256": "ef973d781719dca0a5e83dcdc185a63448df34c69d56b082ea048c4110a7e6ce"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentComposerSessionOverlay.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentComposerSessionOverlay.swift",
+      "sha256": "a1cc1d7a2e7e548f8b4b3af349988d7c07e6437df4400b7e2d4c82ce2c848d80",
+      "adaptations": [],
+      "portedSha256": "a1cc1d7a2e7e548f8b4b3af349988d7c07e6437df4400b7e2d4c82ce2c848d80"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentComposerProductImageOverlay.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentComposerProductImageOverlay.swift",
+      "sha256": "1c4d809247afe767d0d371d355fadc1becd3094c10eace56a3a66c387fa6468e",
+      "adaptations": [],
+      "portedSha256": "1c4d809247afe767d0d371d355fadc1becd3094c10eace56a3a66c387fa6468e"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentInlineComposerPresentation.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentInlineComposerPresentation.swift",
+      "sha256": "93bc720131c3b7804aa09a5fd1132b551707da665bf3b533a4aded98fbb7377f",
+      "adaptations": [],
+      "portedSha256": "93bc720131c3b7804aa09a5fd1132b551707da665bf3b533a4aded98fbb7377f"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentInlineAccessoryContainer.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentInlineAccessoryContainer.swift",
+      "sha256": "28f017835d33c0c43a3a873ff0d75c48b079cb7ec67e48a29657a9d60cbc1897",
+      "adaptations": [],
+      "portedSha256": "28f017835d33c0c43a3a873ff0d75c48b079cb7ec67e48a29657a9d60cbc1897"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentDockedAccessory.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentDockedAccessory.swift",
+      "sha256": "5d3be8f6888d2b880ae82df533bf64d3cdaef61a9730bb72d40b6786719be0aa",
+      "adaptations": [],
+      "portedSha256": "5d3be8f6888d2b880ae82df533bf64d3cdaef61a9730bb72d40b6786719be0aa"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentDraftPresentationController.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentDraftPresentationController.swift",
+      "sha256": "a3fae437a0fa9a7be22e44789b55f72210df8ac5333352631fea2d9cbbee5556",
+      "adaptations": [],
+      "portedSha256": "a3fae437a0fa9a7be22e44789b55f72210df8ac5333352631fea2d9cbbee5556"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopComposerFocusBackdropView.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopComposerFocusBackdropView.swift",
+      "sha256": "a1bd9f13130e31ec346a38b4d15ed8022c1df5e26c22dc07d94dadf8c825a148",
+      "adaptations": [],
+      "portedSha256": "a1bd9f13130e31ec346a38b4d15ed8022c1df5e26c22dc07d94dadf8c825a148"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAskPage.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAskPage.swift",
+      "sha256": "75352979b36501013723481d5a9005ac98d76fa6bb2a192abb3c02ab5a88d245",
+      "adaptations": [],
+      "portedSha256": "75352979b36501013723481d5a9005ac98d76fa6bb2a192abb3c02ab5a88d245"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopConversationStarterStack.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopConversationStarterStack.swift",
+      "sha256": "d144ee85d56ff59f83f50a8739871bf2cc34a244fe86303a9c600af731fe71a3",
+      "adaptations": [],
+      "portedSha256": "d144ee85d56ff59f83f50a8739871bf2cc34a244fe86303a9c600af731fe71a3"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopConversationStarterGlass.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopConversationStarterGlass.swift",
+      "sha256": "58a006e5cd9423cadbf4ac2d1f1c7600ed016f4af4aaf4d9785a64d0031f61f0",
+      "adaptations": [],
+      "portedSha256": "58a006e5cd9423cadbf4ac2d1f1c7600ed016f4af4aaf4d9785a64d0031f61f0"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentFloatingSurfaceStyle.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentFloatingSurfaceStyle.swift",
+      "sha256": "9f8f321f52390819f87a3c61fb0f7a6d4e0985f03589736dc1e266329bf3126e",
+      "adaptations": [],
+      "portedSha256": "9f8f321f52390819f87a3c61fb0f7a6d4e0985f03589736dc1e266329bf3126e"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/AgentIndex/ShopAgentConversationToolbar.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentConversationToolbar.swift",
+      "sha256": "3acfc6cda691c457cc3703304f2c368f4f7f9548fb18efdf77b1a19ce91a6826",
+      "adaptations": [],
+      "portedSha256": "3acfc6cda691c457cc3703304f2c368f4f7f9548fb18efdf77b1a19ce91a6826"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/AgentIndex/ShopAgentContextToolbarLabel.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentContextToolbarLabel.swift",
+      "sha256": "2d1cb420a95de04f8c8847f37ba0e89b3942eb63da5769f61c7606d279ca1791",
+      "adaptations": [],
+      "portedSha256": "2d1cb420a95de04f8c8847f37ba0e89b3942eb63da5769f61c7606d279ca1791"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopNavigationTitleStyle.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopNavigationTitleStyle.swift",
+      "sha256": "5f60e93f14a1ed9bfc5d0ec537acebe4b2ee8ec0e8ee59cb8dbf2b81b77f5eba",
+      "adaptations": [],
+      "portedSha256": "5f60e93f14a1ed9bfc5d0ec537acebe4b2ee8ec0e8ee59cb8dbf2b81b77f5eba"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopNavigationTitleStyleController.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopNavigationTitleStyleController.swift",
+      "sha256": "4e7de46d83b8a9fd2f610e0aa6799d69bcfea7cff5722a5a69b20246f123939c",
+      "adaptations": [],
+      "portedSha256": "4e7de46d83b8a9fd2f610e0aa6799d69bcfea7cff5722a5a69b20246f123939c"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopToolbarBackButton.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopToolbarBackButton.swift",
+      "sha256": "bc195ef2da1dd0643126299727b97d8e0c0645edd48e94e94b2a5140f8ff3f52",
+      "adaptations": [],
+      "portedSha256": "bc195ef2da1dd0643126299727b97d8e0c0645edd48e94e94b2a5140f8ff3f52"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopPrototypeAppIconPicker.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopPrototypeAppIconPicker.swift",
+      "sha256": "0b5e15536ae90b244b89c79dbb814b6b773212ba6765044b6d19e2ab90e835e4",
+      "adaptations": [],
+      "portedSha256": "0b5e15536ae90b244b89c79dbb814b6b773212ba6765044b6d19e2ab90e835e4"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopAddToCartAnimationCoordinator.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAddToCartAnimationCoordinator.swift",
+      "sha256": "41e7be699a6c7af0815822b0650478d597e6792d61b659336db51c6fa95d4284",
+      "adaptations": [],
+      "portedSha256": "41e7be699a6c7af0815822b0650478d597e6792d61b659336db51c6fa95d4284"
+    },
+    {
+      "source": "Shop/Sources/Shared/ShopContextLockup.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopContextLockup.swift",
+      "sha256": "37da50153fdbae5f224d4fa68748a09cf9eef06642220ea16cc94ac894533476",
+      "adaptations": [],
+      "portedSha256": "37da50153fdbae5f224d4fa68748a09cf9eef06642220ea16cc94ac894533476"
+    },
+    {
+      "source": "Shop/Sources/Features/Search/Components/ShopSearchToolbarTextField.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopSearchToolbarTextField.swift",
+      "sha256": "50177e03c9c6189a0bf46c625fc825b3b621553b76d9e0aa56fe4e727202456f",
+      "adaptations": [
+        "Forward the host isEnabled environment into UITextField and reject focus when disabled, preventing obscured search from stealing composer focus. No layout or styling changes."
+      ],
+      "portedSha256": "cf1b7aff93b470d6829960b6220d2868591e5965a7bf5c3c6f4f488be23deb83"
+    },
+    {
+      "source": "ShopFoundation/Sources/Images/ShopRemoteImageURLBuilder.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopRemoteImageURLBuilder.swift",
+      "sha256": "17f93f0b70835b0916de7dbd95d81759dd9d8f3601ce0c8cbb805adfad6f3955",
+      "adaptations": [
+        "Accept bundled file URLs at the catalog-data boundary; preserve all remote URL behavior."
+      ],
+      "portedSha256": "baf660a18e70a57fa72ed830719358f373714fb44d1803d2b5b089519686b137"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAskStarter.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAskStarter.swift",
+      "sha256": "4b76e67a9ef7d145f773c4bd78b967d34ae0e9696256a22c43ddfbc51f98b413",
+      "adaptations": [],
+      "portedSha256": "4b76e67a9ef7d145f773c4bd78b967d34ae0e9696256a22c43ddfbc51f98b413"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAskStartersView.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAskStartersView.swift",
+      "sha256": "3733258bdd8ec4274fddc6741288befaecf02d8076b96b4c65eb9ca49463ea12",
+      "adaptations": [
+        "Removed ShopFoundation import.",
+        "Remove ShopFoundation import; required source utilities are imported separately."
+      ],
+      "portedSha256": "fb6fda4193f39c97a559080b36829ed7d85708125d67c8b434bb9439cdd8d1fb"
+    },
+    {
+      "source": "Shop/Sources/Shared/ShopImageSaturatedColor.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopImageSaturatedColor.swift",
+      "sha256": "9fa4b1ed97b2d359d66b71a4f372da732d3d86dfd97c2ffb50d0fe9829c65e7f",
+      "adaptations": [],
+      "portedSha256": "9fa4b1ed97b2d359d66b71a4f372da732d3d86dfd97c2ffb50d0fe9829c65e7f"
+    },
+    {
+      "source": "Shop/Sources/Shared/ShopRemoteImageFannedStack.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopRemoteImageFannedStack.swift",
+      "sha256": "08d06136ef036646d0b364fe56fa6e6ad5813debf1383078ddec106a9df88784",
+      "adaptations": [],
+      "portedSha256": "08d06136ef036646d0b364fe56fa6e6ad5813debf1383078ddec106a9df88784"
+    },
+    {
+      "source": "Shop/Sources/Shared/ShopRemoteImage.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopRemoteImage.swift",
+      "sha256": "20a45adcf21ab47e1d430b11aef6bf9ecc0c41b34469a9259367f930871de032",
+      "adaptations": [
+        "Removed ShopFoundation import.",
+        "Remove ShopFoundation import; required source utilities are imported separately."
+      ],
+      "portedSha256": "9b8e5948a6c9f1bb5e7f9cb317075093ade71f91e835a629664142e14bceab4f"
+    },
+    {
+      "source": "Shop/Sources/Shared/ShopRemoteImagePreviewIndex.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopRemoteImagePreviewIndex.swift",
+      "sha256": "5c268bafb2732c5b6a592e19989c303bb078aedf557c17a7900f04a900cb9862",
+      "adaptations": [],
+      "portedSha256": "5c268bafb2732c5b6a592e19989c303bb078aedf557c17a7900f04a900cb9862"
+    },
+    {
+      "source": "Shop/Sources/Shared/ShopThumbhashDecoder.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopThumbhashDecoder.swift",
+      "sha256": "19a0b82815771fe7458fdda671d62ec72804adbe929c1c0dfa9677adfdc16d42",
+      "adaptations": [],
+      "portedSha256": "19a0b82815771fe7458fdda671d62ec72804adbe929c1c0dfa9677adfdc16d42"
+    },
+    {
+      "source": "Shop/Sources/Features/Product/ShopProductConversationStarter.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopProductConversationStarter.swift",
+      "sha256": "a712ec18c63df5eddf88b3699273d036eb1df71fd65c2e823e3981082abca63a",
+      "adaptations": [],
+      "portedSha256": "a712ec18c63df5eddf88b3699273d036eb1df71fd65c2e823e3981082abca63a"
+    },
+    {
+      "source": "Shop/Sources/Features/Product/ShopProductConversationStartersView.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopProductConversationStartersView.swift",
+      "sha256": "b6a384a7aef14f1084d153fc7e243ef53dbe177fc5f7c0ab7afe9e1fa7939010",
+      "adaptations": [],
+      "portedSha256": "b6a384a7aef14f1084d153fc7e243ef53dbe177fc5f7c0ab7afe9e1fa7939010"
+    },
+    {
+      "source": "Shop/Sources/Features/Product/ShopProductConversationStartersPlacement.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopProductConversationStartersPlacement.swift",
+      "sha256": "d3d7e1295d6fbe6574374b6e525b78c17f972de143cd523fe538b056a072308d",
+      "adaptations": [],
+      "portedSha256": "d3d7e1295d6fbe6574374b6e525b78c17f972de143cd523fe538b056a072308d"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentInlineComposerContainer.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentInlineComposerContainer.swift",
+      "sha256": "6070534b8a841e0c7435439e2f81f62d7e41709b04038890b46de1cb7e7a6a76",
+      "adaptations": [],
+      "portedSha256": "6070534b8a841e0c7435439e2f81f62d7e41709b04038890b46de1cb7e7a6a76"
+    },
+    {
+      "source": "Shop/Sources/Shared/ShopRemoteImagePreparationCache.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopRemoteImagePreparationCache.swift",
+      "sha256": "852427205c17cf318af67fa11018d24ad4251d229f813f45c27e096d26fb9c1c",
+      "adaptations": [],
+      "portedSha256": "852427205c17cf318af67fa11018d24ad4251d229f813f45c27e096d26fb9c1c"
+    },
+    {
+      "source": "Shop/Sources/Shared/ShopRemoteImagePreviewIdentity.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopRemoteImagePreviewIdentity.swift",
+      "sha256": "06b2a7647a7ce53f7613859d6fc7f761dc7bdd3f508a65118fd2bc9da92370aa",
+      "adaptations": [
+        "Remove ShopFoundation import; required source utilities are imported separately."
+      ],
+      "portedSha256": "731343b7e6b939f753169f9fa8240472f5f7af394ea1a6ad7ee89987d98bf544"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopTabBarChrome.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopTabBarMetrics.swift",
+      "sha256": "b9fb361cd1bfad43ccda236bbe74da865bb97514163d4ffd11d94ea1a01f9e90",
+      "extraction": {
+        "start": "enum ShopTabBarMetrics {",
+        "end": "struct ShopTabBarChrome:"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "4c6cc3d7ccf5b14cabbc651cec05efb0c4f357b1a824b181f44ab7c02ea76b24"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopTabRouter.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopRootTab.swift",
+      "sha256": "ea1549650a075f5bc8232e3304c71132a07c24f0bc950c04968afb80550b5cd3",
+      "extraction": {
+        "start": "enum ShopRootTab:",
+        "end": "/// Canonical root-route mapping"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "f865be6a808a43f0f1623f77d7dc9c19b65b8081d6e204fab6199470a1cbd7e5"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopHomeView.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopHomeSearchLayout.swift",
+      "sha256": "9ee6e5373525d44616935926c8cd873bf9a7d5c555507e8c132a06ba123f1346",
+      "extraction": {
+        "start": "enum ShopHomeSearchLayout:",
+        "end": "/// The single set"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "b2d072f5c9d1bf0e7d8e31f35c2b69dc67d545e291490225be7cd2146f6fa75b"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopTabShellView.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopPrototypeSettings.swift",
+      "sha256": "f82cdebe0c4cadf823d6852f375d2dfd275d28a8ddd2749124140911f175529d",
+      "extraction": {
+        "start": "private struct ShopNavigationStylePickerSheet:",
+        "end": "#if DEBUG\nprivate struct ShopLoupeTools"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes.",
+        "Changed file-private settings structs to module-internal visibility."
+      ],
+      "portedSha256": "f3677f3e16f4ebab58de484fa0acaf6df65916492e161358205f67d716a9301c"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/AgentIndex/ShopAgentIndexModels.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentMessageContextItemType.swift",
+      "sha256": "8993324fd769a98515f8ca854720293d1b31a1a4f0d36025d49c9257a9c8ad09",
+      "extraction": {
+        "start": "enum ShopAgentMessageContextItemType:",
+        "end": "struct ShopAgentHint:"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "dc8aca3a8d4849352489c74194819447376dea81f50f2f5912858a5bc281973e"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/AgentIndex/ShopAgentIndexModels.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentMessageContextItem.swift",
+      "sha256": "8993324fd769a98515f8ca854720293d1b31a1a4f0d36025d49c9257a9c8ad09",
+      "extraction": {
+        "start": "struct ShopAgentMessageContextItem:",
+        "end": "struct ShopAgentQueryClassificationBreakdown:"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "19b29713e62c208f89c18b4b38d8f1179d714e45d1d24faf3fdba9394205a97f"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/Attachments/ShopAgentImageAttachmentModels.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentImageAttachmentModels.swift",
+      "sha256": "e3b79e0111e97b2b7fe444b22bbca2178530e287b8f98b853911e2c9b17118ff",
+      "extraction": {
+        "start": "/// Web parity",
+        "end": null
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "c4ce28ed1b813c91b2493c0000b309626e05603662cd2719675513cc10aa3497"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/Attachments/ShopAgentImageAttachmentPreview.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentImageAttachmentPreviewMetrics.swift",
+      "sha256": "16c88dac61ec85c799673150d28dbd509dd891b2dcc21f9becee83b7a9a0fd7d",
+      "extraction": {
+        "start": "enum ShopAgentImageAttachmentPreviewMetrics",
+        "end": "struct ShopAgentImageAttachmentPreviewRow"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "a63627c9471bbf21c5930a109b1e102ae24fad9108b690fdddb9179bc541e514"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/Attachments/ShopAgentImageAttachmentPicker.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentComposerAttachmentPickerSource.swift",
+      "sha256": "86168156defeb5b48e123ce2ebc6b9cf025610cc99e17e6b5faad3a81c332a1f",
+      "extraction": {
+        "start": "enum ShopAgentComposerAttachmentPickerSource:",
+        "end": "enum ShopAgentImageAttachmentPermissionAlert:"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "dfdc8edc1d8ab5efb77644633d39e578348494d22a3abf45e48f7ec0fcc5a490"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopFloatingCartControl.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopFloatingCartButtonMode.swift",
+      "sha256": "69afebd5c29bc54dfb955944aad23f3a602d3982d4d91ef3064bc525d97e46fe",
+      "extraction": {
+        "start": "enum ShopFloatingCartButtonMode:",
+        "end": "func shopFloatingCartHasSavedForLaterItems"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "da85a14664a682aba3b5de9d464acd9b62a1389f3aae9faeca9698499e3f0a29"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentLandingModels.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentLandingContextItem.swift",
+      "sha256": "19efe26868c5e62e88ccfe3f9556da7e4ed657c0eb5bfa0e7e6cd8e248cafad1",
+      "extraction": {
+        "start": "enum ShopAgentLandingContextItemType:",
+        "end": "@MainActor\n@Observable\nfinal class ShopAgentLandingFocusRequests"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "00d4ed677b5d1337c1592972a02ed695b75c83107c1d699e69c61ac785062765"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/AgentIndex/ShopAgentRouteContext.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentMessageContextSummary.swift",
+      "sha256": "87a6df813295f478956d57f9f92db009b36864ac4745ce3ffa9b58395f24e298",
+      "extraction": {
+        "start": "func shopAgentMessageContextSummary(",
+        "end": null
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "f6aabb15445d4cf9eea0e45bce6bce138114ea31fedf31803ff0ae55ef44ca3c"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopTabShellView.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopCartPresentationOwner.swift",
+      "sha256": "f82cdebe0c4cadf823d6852f375d2dfd275d28a8ddd2749124140911f175529d",
+      "extraction": {
+        "start": "enum ShopCartPresentationOwner:",
+        "end": "/// Routes cart actions"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "25f58ab8cf2feabc172b7dd471a4354750bcf19924ff8352a8b4944e5481af88"
+    },
+    {
+      "source": "Shop/Sources/Features/Search/Components/ShopSearchToolbar.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopSearchToolbarReturnContext.swift",
+      "sha256": "b1ce38dacaca5a9afb324d599088d8a6ab5c73af67a67e254bdaf7486da3b2f4",
+      "extraction": {
+        "start": "/// A retained conversation",
+        "end": "/// One persistent search field"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "a7e915c6ede4f66714c2895e93ea98c666cbe6924756ad47628ec52fd80ef705"
+    },
+    {
+      "source": "Shop/Sources/Features/Search/Components/ShopSearchToolbar.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopSearchToolbarControls.swift",
+      "sha256": "b1ce38dacaca5a9afb324d599088d8a6ab5c73af67a67e254bdaf7486da3b2f4",
+      "extraction": {
+        "start": "private struct ShopSearchToolbarControls",
+        "end": "private struct ShopSearchToolbarAccountButton"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes.",
+        "Module-internal visibility for standalone header host."
+      ],
+      "portedSha256": "da30e9122be64b5cad31c6d60b4dfebf1e34f2d42f2b411fc741c87fe214eec5"
+    },
+    {
+      "source": "Shop/Sources/Features/Feed/Header/ShopFeedQuickLinksBar.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopFeedSearchControls.swift",
+      "sha256": "825478ec7cb1838529671be1a541664877f2931eaf1b3c97f59046a91b30d827",
+      "extraction": {
+        "start": "private struct ShopFeedSearchQuickLinkPill:",
+        "end": "struct ShopFeedTrackedQuickLinkPill:"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "3ca08b1528d84e7b1d0a7026a457ac665d874f929bc44a59b7b0736e6072bec4"
+    },
+    {
+      "source": "Shop/Sources/Features/Feed/Header/ShopFeedHeaderBackdrop.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopFeedHeaderMetrics.swift",
+      "sha256": "a82a1a5f6ef0c6c9f60f41ee4a16fdab80d64f4458178a27c83fc4a80e429624",
+      "extraction": {
+        "start": "enum ShopFeedHeaderMetrics",
+        "end": "struct ShopFeedHeaderBackdrop:"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "2cabced932867849c85f3f50abe86e644e100befdb0d24879eab6b49dd519afb"
+    },
+    {
+      "source": "Shop/Sources/Features/Feed/Header/ShopFeedQuickLinksBar.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopFeedQuickLinkPressButtonStyle.swift",
+      "sha256": "825478ec7cb1838529671be1a541664877f2931eaf1b3c97f59046a91b30d827",
+      "extraction": {
+        "start": "private struct ShopFeedQuickLinkPressButtonStyle:",
+        "end": "private struct ShopFeedQuickLinkBackgroundImage:"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "cb59ec7b287e8907dbcc0d287fd0c4ff347753e2880ca9f14c8d34115090a5bf"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentLandingDockSource.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentLandingDockSource.swift",
+      "sha256": "332643b09e3052e8f90c830559ebfdd3b305254778ae8f984420b85b61cb56b1",
+      "extraction": {
+        "start": "/// Adapts the existing landing",
+        "end": "/// Toolbar preferences"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "755bef511e87648593f71d3051908652e170542aa28b9a423363ad8fab730326"
+    },
+    {
+      "source": "Shop/Sources/Features/Agent/ShopAgentComposerBar.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopAgentComposerInput.swift",
+      "sha256": "fceb7657b8c43b95a7e3a6aa3f88c0dd7e704e187b556391361a85b2cb463f5c",
+      "extraction": {
+        "start": "enum ShopAgentComposerMotion",
+        "end": "struct ShopAgentComposerBar:"
+      },
+      "adaptations": [
+        "Extracted complete UI/type declarations from a production integration file; no visual or motion changes."
+      ],
+      "portedSha256": "ff1a36e480a8b28ce4e5e81cdc0e1b29f180026574465e6a9fd9e7faaf78b7a7"
+    },
+    {
+      "source": "Shop/Sources/AppShell/ShopLegacyUIAliases.swift",
+      "destination": "Sources/JulianAgentUI/Upstream/ShopLegacyUIAliases.swift",
+      "sha256": "3b3a22037643d5e598e448523c5e73316fdd8d5fabbc9aefd824edc4455038ea",
+      "adaptations": [],
+      "portedSha256": "3b3a22037643d5e598e448523c5e73316fdd8d5fabbc9aefd824edc4455038ea"
+    }
+  ],
+  "supportingFiles": [
+    {
+      "source": "Gravity/Sources/Feedback/ShopHaptics.swift",
+      "destination": "Gravity/Sources/Feedback/ShopHaptics.swift",
+      "sha256": "b66f3f3f059896e5f53e959c315e74e19537f82d4cb8dadba7bea4cd23686ba9"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopIconButton.swift",
+      "destination": "Gravity/Sources/Components/ShopIconButton.swift",
+      "sha256": "acfe2866a53eab3cfe349f14807073759af86becd465f6f10ee5467c17d2ee86"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopRatingView.swift",
+      "destination": "Gravity/Sources/Components/ShopRatingView.swift",
+      "sha256": "a1fe12525d459b05236e8bb16c53ec6ae8685c57fb320454d2a395eebcf05844"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopifyLogoWordmark.swift",
+      "destination": "Gravity/Sources/Components/ShopifyLogoWordmark.swift",
+      "sha256": "6136e760ca1ef410137911489439bc1c4c7f8097d3d66af2503e5469c816fda9"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopKeyboardHeight.swift",
+      "destination": "Gravity/Sources/Components/ShopKeyboardHeight.swift",
+      "sha256": "b775be2343c22150a55c14978b965dc75fa551cacfa0afd62ddb40c856affb0a"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopFavoriteButton.swift",
+      "destination": "Gravity/Sources/Components/ShopFavoriteButton.swift",
+      "sha256": "c33f17a94f19636a14a057aa2867d28f746a80243104952ede24e78b6256d0dd"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopCompactRating.swift",
+      "destination": "Gravity/Sources/Components/ShopCompactRating.swift",
+      "sha256": "69eeed2828ebcef361c0154d9f4b2a606b6a5c529d11737ba234939dba41b48a"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopOtherShopperAvatar.swift",
+      "destination": "Gravity/Sources/Components/ShopOtherShopperAvatar.swift",
+      "sha256": "9aa01267812da6e65c87350b53558ef324aa3efa6a967a1adcc5a85bff855884"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopRatingFormatter.swift",
+      "destination": "Gravity/Sources/Components/ShopRatingFormatter.swift",
+      "sha256": "2e536ed5b338793203aac0eed7c150218f5c3975ddcf693304c67c5a569a5f7e"
+    },
+    {
+      "source": "Gravity/Sources/Components/GravityTextConfiguration.swift",
+      "destination": "Gravity/Sources/Components/GravityTextConfiguration.swift",
+      "sha256": "36b0f070b204f7b990e7cb37e51f947ba05c771594713103688ffcb37ef8dbfe"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopFadeIn.swift",
+      "destination": "Gravity/Sources/Components/ShopFadeIn.swift",
+      "sha256": "c944f7f601d17178ebebab90b071d842041bc328765756fa1554433e9fe5bf8b"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopPriceLabel.swift",
+      "destination": "Gravity/Sources/Components/ShopPriceLabel.swift",
+      "sha256": "02e93b770767abbf1c99b238946f84464e9ef699a8d77e565c603fd8f1ca0fd9"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopLoopingVideo.swift",
+      "destination": "Gravity/Sources/Components/ShopLoopingVideo.swift",
+      "sha256": "1e691f4ca03a692e7634350a4dc728cf0d24e8da4ee60ce1231493484facecc9"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopIcon.swift",
+      "destination": "Gravity/Sources/Components/ShopIcon.swift",
+      "sha256": "40ccc428d560ed54b2aa58e9074b4dd7de5ac7524284954ef28d9c97b70e22c6"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopTextField.swift",
+      "destination": "Gravity/Sources/Components/ShopTextField.swift",
+      "sha256": "3f7c134f7dd55678f92f4d74e6a251ea599016724ecec32b49e9a82c7a3ee1a8"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopBadgeCutout.swift",
+      "destination": "Gravity/Sources/Components/ShopBadgeCutout.swift",
+      "sha256": "e794c201999bd92d09064902dee77936002515835bd0f8ae579a521f8f7ff7a4"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopStatusBarStyle.swift",
+      "destination": "Gravity/Sources/Components/ShopStatusBarStyle.swift",
+      "sha256": "98c9b139026c0a02ad7e2d397328be2e741ae2969ee1872a6e162c3b35588ba2"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopListRow.swift",
+      "destination": "Gravity/Sources/Components/ShopListRow.swift",
+      "sha256": "2b30434143ef409dd63870aceb21747261b7a641892cb5b76236f71821a0ce3b"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopBadge.swift",
+      "destination": "Gravity/Sources/Components/ShopBadge.swift",
+      "sha256": "e85d04a11e548767b45088c7e3bc9505fe837d00710bd80be0bf3e6403af05d3"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopToolbarIconStyle.swift",
+      "destination": "Gravity/Sources/Components/ShopToolbarIconStyle.swift",
+      "sha256": "4782938ee18e1a780b26842ad3d9254e63a41d637a3da39fee3c3f476b580f5b"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopGlassCapsuleBackground.swift",
+      "destination": "Gravity/Sources/Components/ShopGlassCapsuleBackground.swift",
+      "sha256": "0929bffd4b156c2d1690e7bf332ce85439036062db838572163bafb92f9a622d"
+    },
+    {
+      "source": "Gravity/Sources/Components/GravityIconName+Generated.swift",
+      "destination": "Gravity/Sources/Components/GravityIconName+Generated.swift",
+      "sha256": "dd44cbe72eada75fd587a7e8e77cdb64e527c5ffc0d189d4896a5bc29eea00a1"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopShimmer.swift",
+      "destination": "Gravity/Sources/Components/ShopShimmer.swift",
+      "sha256": "e70eba06c4905dc54325927d12e531f2488465e944499bf5c522e3a6717385b1"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopScrollEdgeEffect.swift",
+      "destination": "Gravity/Sources/Components/ShopScrollEdgeEffect.swift",
+      "sha256": "80d951bb4aa04d2f3a939dca7b0be0fe1d888b66f97b10e90e7cd81381b837d1"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopChip.swift",
+      "destination": "Gravity/Sources/Components/ShopChip.swift",
+      "sha256": "f90f0a6401db3503e4d598015842800c02808728c7db2ab48a02e2644ecfc7dd"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopCard.swift",
+      "destination": "Gravity/Sources/Components/ShopCard.swift",
+      "sha256": "780cda3c4c3524202bbad5ff43d88865bfd871a5ac05ef46ca6ac8409dd89b45"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopToast.swift",
+      "destination": "Gravity/Sources/Components/ShopToast.swift",
+      "sha256": "4757a6e436142b13f5a22720f82372051c2d0d9c56cc612ce6c1046172eeb5c9"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopSpinner.swift",
+      "destination": "Gravity/Sources/Components/ShopSpinner.swift",
+      "sha256": "c00a23d160fa1a6d097a50e919f51bf0aa09e0a159bec02fa71af02be77a3bee"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopScrollViewProxy.swift",
+      "destination": "Gravity/Sources/Components/ShopScrollViewProxy.swift",
+      "sha256": "90c584053a4414a66b386858fa3fdadd8f513d39f0b3c48cabc7a88555889409"
+    },
+    {
+      "source": "Gravity/Sources/Components/GravityContentTranslator.swift",
+      "destination": "Gravity/Sources/Components/GravityContentTranslator.swift",
+      "sha256": "dec3579333dee8c0469f4bfda086d8594811b09f48201a85ffdf8c5048a56ea5"
+    },
+    {
+      "source": "Gravity/Sources/Components/GravityIconRenderingStyle.swift",
+      "destination": "Gravity/Sources/Components/GravityIconRenderingStyle.swift",
+      "sha256": "171ac08017025900322560c64f40cf662d0a559f45ebe21ffd40837a083e0838"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopScrollViewNavigationBridge.swift",
+      "destination": "Gravity/Sources/Components/ShopScrollViewNavigationBridge.swift",
+      "sha256": "e7d671763dda12baae019f9dec04ece036fc175c456cc5d50af4937952822cbe"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopButton.swift",
+      "destination": "Gravity/Sources/Components/ShopButton.swift",
+      "sha256": "8b71fc9b64d581c515d50f2b3b45f9cf6255cfab971ec0733b868abfffc366e7"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopStateCard.swift",
+      "destination": "Gravity/Sources/Components/ShopStateCard.swift",
+      "sha256": "074f97cbf4830b82de015541464c2fcfcb4d11b9e8ccb23e0d50f52e91f7b3d0"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopProductCardRating.swift",
+      "destination": "Gravity/Sources/Components/ShopProductCardRating.swift",
+      "sha256": "0207058cd610f41d7ca8152df058d8ff4699f40d4ff877b9073a9a30372121d8"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopRatingStars.swift",
+      "destination": "Gravity/Sources/Components/ShopRatingStars.swift",
+      "sha256": "d25f001e1eb9840abc87ef487b4d6727e3fc8ac5f997bb5ddafb6ab2fc227096"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopFannedImageStack.swift",
+      "destination": "Gravity/Sources/Components/ShopFannedImageStack.swift",
+      "sha256": "811970c1af16cdc02db7f8e8f08b9b7809d491a3a62f6c072178aac115dd890f"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopToastModels.swift",
+      "destination": "Gravity/Sources/Components/ShopToastModels.swift",
+      "sha256": "f3609fdb4718455906b70bbf5ca60310b537c424f05c15f88e41b3f179ced704"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopRefreshIndicator.swift",
+      "destination": "Gravity/Sources/Components/ShopRefreshIndicator.swift",
+      "sha256": "e4cc549aa9ad15eded6fd0de0bb5eabaf96d14b90c9934edec3c4dfb62f4f39e"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopProgressBar.swift",
+      "destination": "Gravity/Sources/Components/ShopProgressBar.swift",
+      "sha256": "93b64c4645bb1986a7d22b31a394e8321185f8a5359e8f272fda6249e14f67d2"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopPressScaleButtonStyle.swift",
+      "destination": "Gravity/Sources/Components/ShopPressScaleButtonStyle.swift",
+      "sha256": "7fd99b2b317a79220fed8b424217c3541ccd9bdc16735558b20f6107483faac2"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopAvatar.swift",
+      "destination": "Gravity/Sources/Components/ShopAvatar.swift",
+      "sha256": "a9ed9e261d51c2921ee09c61a354ca60d6ac2860b91775e6f427a32071172efd"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopSectionHeader.swift",
+      "destination": "Gravity/Sources/Components/ShopSectionHeader.swift",
+      "sha256": "7ffbfac68cb1111c8c14997d161e859f43e11012bcbe770602e1da151efac198"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopImageOverlayBlurBackground.swift",
+      "destination": "Gravity/Sources/Components/ShopImageOverlayBlurBackground.swift",
+      "sha256": "b973f9e1af00641884199992d3cccf17669a34cec0818a0df06a29a91e2995cf"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopRefreshControl.swift",
+      "destination": "Gravity/Sources/Components/ShopRefreshControl.swift",
+      "sha256": "a87a4fdda4c4fc0971632e795ba3588e9cea3503c85ec85b817b4cacbd04bed6"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopText.swift",
+      "destination": "Gravity/Sources/Components/ShopText.swift",
+      "sha256": "cbbea878fca11d3a2113f3b5c369508bf3c44b469b29e3c5a921f28ee6d1461d"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopDivider.swift",
+      "destination": "Gravity/Sources/Components/ShopDivider.swift",
+      "sha256": "ecb0d2fa400d2ee0c59a96e8e71d9872dbc4076a1aba0dae5845ccdae4fddef1"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopFlowLayout.swift",
+      "destination": "Gravity/Sources/Components/ShopFlowLayout.swift",
+      "sha256": "f4f55539677376b5f260f01d53b1ffd733cfe57a3e6574cd170d4426be5ed6ca"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopScrollScreen.swift",
+      "destination": "Gravity/Sources/Components/ShopScrollScreen.swift",
+      "sha256": "8883817edd5233e3d1eb68b1d3a0f59cade2e2382bd4552bdb1e6fb5b4595333"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopWordmark.swift",
+      "destination": "Gravity/Sources/Components/ShopWordmark.swift",
+      "sha256": "52b97ffc3153ca73010f1d0d4aaa463fc7039945f96e561096e6179e1e77c2b2"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopReviewStarsInput.swift",
+      "destination": "Gravity/Sources/Components/ShopReviewStarsInput.swift",
+      "sha256": "43203a7157123948c825e021a24b7753feedc5e38c96eb4c4b7c13e2ad8d31ff"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopImageBorderOverlay.swift",
+      "destination": "Gravity/Sources/Components/ShopImageBorderOverlay.swift",
+      "sha256": "d53d72a91afc03cf73b5d90eac092149c2dd6e612c2544f7e911042a722ac201"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopContainerWidthHost.swift",
+      "destination": "Gravity/Sources/Components/ShopContainerWidthHost.swift",
+      "sha256": "94acaaf49b7ed1a2a240aff870b55c34626cfcfb8e8c65b852b7132ffc814219"
+    },
+    {
+      "source": "Gravity/Sources/Components/ShopShelf.swift",
+      "destination": "Gravity/Sources/Components/ShopShelf.swift",
+      "sha256": "171c5f70597c58d3024fe86ff5a1556bb342f68c64784a4083636be4d9d73e22"
+    },
+    {
+      "source": "Gravity/Sources/Theme/GravityTextStyle+UIKit.swift",
+      "destination": "Gravity/Sources/Theme/GravityTextStyle+UIKit.swift",
+      "sha256": "d3ca257d33293b516491f39ecb2f4caaba27fca1751fcfcffa7cdfe2f013ad52"
+    },
+    {
+      "source": "Gravity/Sources/Theme/ShopTheme.swift",
+      "destination": "Gravity/Sources/Theme/ShopTheme.swift",
+      "sha256": "3c16c8c78d6fb66a6687b6f17cd56ad58eabaf18056ac4880da1392463a2a5ea"
+    },
+    {
+      "source": "Gravity/Sources/Theme/GravityShadow.swift",
+      "destination": "Gravity/Sources/Theme/GravityShadow.swift",
+      "sha256": "f14781cfb893d2bc4c5d5a070c63d23c38e02cea0a7387ed9e03d4102bb21d64"
+    },
+    {
+      "source": "Gravity/Sources/Theme/GravityRadius.swift",
+      "destination": "Gravity/Sources/Theme/GravityRadius.swift",
+      "sha256": "8cecedff440a7170248b1ee64b6c11df77256746bc91615a1489236125ee6e7e"
+    },
+    {
+      "source": "Gravity/Sources/Theme/GravityButtonVariant.swift",
+      "destination": "Gravity/Sources/Theme/GravityButtonVariant.swift",
+      "sha256": "b0ca852b6de0f8acd69974c25fd86a2b998436a7d786810dca4f64b7aef6d083"
+    },
+    {
+      "source": "Gravity/Sources/Theme/ShopGravityLegacyAliases.swift",
+      "destination": "Gravity/Sources/Theme/ShopGravityLegacyAliases.swift",
+      "sha256": "c3d80419a1f5e856ee01748cc2c2adafc6fa21849acb6ea5f6935af047210df1"
+    },
+    {
+      "source": "Gravity/Sources/Theme/GravityColor.swift",
+      "destination": "Gravity/Sources/Theme/GravityColor.swift",
+      "sha256": "d932007462120d5acdf0e4ff8947b72b9a3c299941d509d35528c79291d504ec"
+    },
+    {
+      "source": "Gravity/Sources/Theme/GravityTextStyle.swift",
+      "destination": "Gravity/Sources/Theme/GravityTextStyle.swift",
+      "sha256": "afe93758bbef738004847f2537ef3de620da93d69bacdff2961cf9a618dab8f1"
+    },
+    {
+      "source": "Gravity/Sources/Theme/GravitySpacing.swift",
+      "destination": "Gravity/Sources/Theme/GravitySpacing.swift",
+      "sha256": "3564332151aac0075df2900ea55da319af36669ce0eecf88caa23e9ae04ab434"
+    },
+    {
+      "source": "Gravity/Sources/Theme/GravityMotion.swift",
+      "destination": "Gravity/Sources/Theme/GravityMotion.swift",
+      "sha256": "eebd9d958fcd3eff39780d28c2843edc5ab6c06806e9401f09c96f18079497f1"
+    },
+    {
+      "source": "Gravity/Sources/Theme/GravityFonts.swift",
+      "destination": "Gravity/Sources/Theme/GravityFonts.swift",
+      "sha256": "28e4733caea988e2ec817f48c491e1d3f4abd65be90318a4172f24f3eafa8346"
+    },
+    {
+      "source": "Gravity/Sources/Formatting/ShopNumberFormatting.swift",
+      "destination": "Gravity/Sources/Formatting/ShopNumberFormatting.swift",
+      "sha256": "32662f16acca98051d2f1df62b26fcb9ab9066c132b69ecffd9e74c0dda64d10"
+    },
+    {
+      "source": "Gravity/Sources/Localization/ShopPluralCategory.swift",
+      "destination": "Gravity/Sources/Localization/ShopPluralCategory.swift",
+      "sha256": "422d516fc53d565df0fa700a9871f6ce61beebfe4de390f4ca84115fdba6f241"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionListSection.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionListSection.swift",
+      "sha256": "52c2ea878a5fd7ac850c9fae7ea54d5cb64ee26132c39dbdd634d2e9c6dc898b"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionListContentInsets.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionListContentInsets.swift",
+      "sha256": "8cd239fedc5ae846c300b235ae1deeed77c67ba1179c1a737fea5d6b1511d4b1"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionListPreview.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionListPreview.swift",
+      "sha256": "5f0a2e121b3226dc6d22638600bf85c399ff9ca7eb62d852b3bb55df0ea30918"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionListLayout.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionListLayout.swift",
+      "sha256": "50b9fae35435ea88bf504fdd938cc38f7c404ae66fa8a1ea0cae56467bf5e319"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionListHostingCell.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionListHostingCell.swift",
+      "sha256": "b270999c9732bd765d7958b33b4797ec8cdb5ecda40f0a21d403bcc835976150"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionList.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionList.swift",
+      "sha256": "4b7cc928f6c518d114e53b218e1469db8187575dc799f032c560bd83ac85182f"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionEndReachedController.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionEndReachedController.swift",
+      "sha256": "03b0f53149fd855cbbd56552731cfb8f3a2b9965998035563d186bfb69aebb0f"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionListScreen.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionListScreen.swift",
+      "sha256": "e88b8458d940d8ab3f24cb8efa69f0c09c85c65fc16fb2a9909296dd039ee2f5"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionListRowReuseKind.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionListRowReuseKind.swift",
+      "sha256": "5ac3be41e53a2c0c39e888ffb4860b5fd62f50a0b26c6f822c58740b1d8e72bd"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/README.md",
+      "destination": "Gravity/Sources/Components/CollectionList/README.md",
+      "sha256": "54e827983c198fc6e2bd474427f00c8be3f46535c5b0783d238b430a5af02fcd"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionListHostedContent.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionListHostedContent.swift",
+      "sha256": "62a335793a932e1a5735ee490062ff8762da18753df1ca5e05c246e7a548ac84"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionListView.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionListView.swift",
+      "sha256": "5248883a3cbe275d75e95455b9cd9856d8c3f306f7e2cd59aaaba696e3744985"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionListHostingSupplementaryView.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionListHostingSupplementaryView.swift",
+      "sha256": "119952a04f10ff269e1bab1d864fd37eb316525d06b555838f50aa1a5316d885"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionListCustomLayout.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionListCustomLayout.swift",
+      "sha256": "7b8367affa04a54561ba48a775a9da79b9e2b6e473e73d701a7e3abb0de40cc3"
+    },
+    {
+      "source": "Gravity/Sources/Components/CollectionList/ShopCollectionListRepresentable.swift",
+      "destination": "Gravity/Sources/Components/CollectionList/ShopCollectionListRepresentable.swift",
+      "sha256": "fda92993261be7e8b955f5c099b1d4bb4bd1bbbc96055ccc287b3b45fd197db5"
+    },
+    {
+      "source": "Gravity/Sources/Components/ProductCard/ShopProductCardMetadata.swift",
+      "destination": "Gravity/Sources/Components/ProductCard/ShopProductCardMetadata.swift",
+      "sha256": "4d22398df89d71cf83647f016aa5b2e507543d79664a36377c171cf76526a26b"
+    },
+    {
+      "source": "Gravity/Sources/Components/ProductCard/ShopProductCardGalleryPreviews.swift",
+      "destination": "Gravity/Sources/Components/ProductCard/ShopProductCardGalleryPreviews.swift",
+      "sha256": "944224aa9ec416ed79ec801603d2c42308d464efaca8af3ee163e1b429cb88a5"
+    },
+    {
+      "source": "Gravity/Sources/Components/ProductCard/ShopProductImageTile.swift",
+      "destination": "Gravity/Sources/Components/ProductCard/ShopProductImageTile.swift",
+      "sha256": "f2fcea8dddcefa2b84192fd23c7e0abc49158f183ef20123062675e5eed47e3d"
+    },
+    {
+      "source": "Gravity/Sources/Components/ProductCard/ShopProductCardRichMetadata.swift",
+      "destination": "Gravity/Sources/Components/ProductCard/ShopProductCardRichMetadata.swift",
+      "sha256": "038afea363a94ad45ceea1991b09dd4be21866af9272ffa7cf84350c0c7985e2"
+    },
+    {
+      "source": "Gravity/Sources/Components/ProductCard/ShopProductCard.swift",
+      "destination": "Gravity/Sources/Components/ProductCard/ShopProductCard.swift",
+      "sha256": "3b63cd43ad355784cdbfa715cec87ccf850a4f00a075c099ce0fb620a64b7813"
+    },
+    {
+      "source": "Gravity/Sources/Components/ProductCard/ShopProductImageOverlay.swift",
+      "destination": "Gravity/Sources/Components/ProductCard/ShopProductImageOverlay.swift",
+      "sha256": "5ee4e9d7cb2aa1bb8308c505867b638e3b2d70c97a85dd1dfa1d6e8eb33c0b26"
+    },
+    {
+      "source": "Gravity/Sources/Components/ProductCard/ShopProductCard+Previews.swift",
+      "destination": "Gravity/Sources/Components/ProductCard/ShopProductCard+Previews.swift",
+      "sha256": "e883e8c24f1b238ae4ef79dec5b3efe48abdf7559167fe4b4abc18f71a76eeda"
+    },
+    {
+      "source": "Gravity/Sources/Components/ProductCard/ShopProductCardRichMetadata+Previews.swift",
+      "destination": "Gravity/Sources/Components/ProductCard/ShopProductCardRichMetadata+Previews.swift",
+      "sha256": "458237ea17a66ee1c3b9c742602a99b768b3b98740a4cfbcd32c01ec9c23486c"
+    },
+    {
+      "source": "Gravity/Sources/Components/Menu/ShopContextMenu.swift",
+      "destination": "Gravity/Sources/Components/Menu/ShopContextMenu.swift",
+      "sha256": "1734275249734da3a1c8a2c73ef752b5a5f38839169ce41710349425ad6a578b"
+    },
+    {
+      "source": "Gravity/Sources/Components/Menu/ShopOverflowMenu.swift",
+      "destination": "Gravity/Sources/Components/Menu/ShopOverflowMenu.swift",
+      "sha256": "fe10df892bdf121b5f35305d30310055354b1794ad4a1e5eb9af89f7319b1f1a"
+    },
+    {
+      "source": "Gravity/Sources/Components/Menu/ShopContextMenu+Previews.swift",
+      "destination": "Gravity/Sources/Components/Menu/ShopContextMenu+Previews.swift",
+      "sha256": "edf6024ad1731711fcd82b5568072efce10099cd1cec0695e52278aa72b3d9d9"
+    },
+    {
+      "source": "Gravity/Resources/de.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/de.lproj/Localizable.strings",
+      "sha256": "b7f837e93bd83d27689ab70b6e561c548d9118593e84b0d322c9b826bbe6683d"
+    },
+    {
+      "source": "Gravity/Resources/lt-LT.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/lt-LT.lproj/Localizable.strings",
+      "sha256": "96e53167127282a2862c8f9f6ee8a36bf216c670b8a6ce433a4f62d45ebe6150"
+    },
+    {
+      "source": "Gravity/Resources/ja.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/ja.lproj/Localizable.strings",
+      "sha256": "5c6ec0e0aa2470815f43ba005bd7be6fef91d0406b3bf5ba55dc61aa1559b6ea"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/Contents.json",
+      "sha256": "f5fb0e1f3a8142892ed092efb5955c1c2cc537003a89ad7bbdb9dade7fe8985f"
+    },
+    {
+      "source": "Gravity/Resources/en.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/en.lproj/Localizable.strings",
+      "sha256": "8ece07cd91bf2bd897f399beb0b0225c06a307deb9c513e22e3eda0c69c68738"
+    },
+    {
+      "source": "Gravity/Resources/nb.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/nb.lproj/Localizable.strings",
+      "sha256": "aa019a16b2afc996c77ad90ecc063a5aa9f483ba16426e929f596703a148a8f2"
+    },
+    {
+      "source": "Gravity/Resources/es.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/es.lproj/Localizable.strings",
+      "sha256": "d71a5810a2e7e521683dbe816d82cb6df7e4df429a5112bc1520685e3207b8ad"
+    },
+    {
+      "source": "Gravity/Resources/da.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/da.lproj/Localizable.strings",
+      "sha256": "ae8d3349191c32662392f5e1c225133f4009e6d494fdfc5187765b264e438963"
+    },
+    {
+      "source": "Gravity/Resources/it.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/it.lproj/Localizable.strings",
+      "sha256": "b734071a60b7ad70e331d7f2b1e4a629f76cf08256d7d3c1cebe84db7fe7aaee"
+    },
+    {
+      "source": "Gravity/Resources/sv.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/sv.lproj/Localizable.strings",
+      "sha256": "0483190dfc494ea2b1360d0a37dd3b67a10cfc326dad540ec650c9179f1dbea6"
+    },
+    {
+      "source": "Gravity/Resources/cs.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/cs.lproj/Localizable.strings",
+      "sha256": "7fb3cb6509c3d724aa1fe712df1b4ee4192aed89c0a0ac91eb16cab86554c642"
+    },
+    {
+      "source": "Gravity/Resources/ro-RO.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/ro-RO.lproj/Localizable.strings",
+      "sha256": "f814a4fdb8318b17a628aab72017d0c320ea3bb932f6ad2901cb327d3aabeebb"
+    },
+    {
+      "source": "Gravity/Resources/pl.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/pl.lproj/Localizable.strings",
+      "sha256": "cfc0d11a48a4c4ce95fc0d06fb664517edb71ee786acacd878d87bf13529f05d"
+    },
+    {
+      "source": "Gravity/Resources/ShopBrand.xcassets/Contents.json",
+      "destination": "Gravity/Resources/ShopBrand.xcassets/Contents.json",
+      "sha256": "f5fb0e1f3a8142892ed092efb5955c1c2cc537003a89ad7bbdb9dade7fe8985f"
+    },
+    {
+      "source": "Gravity/Resources/fr.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/fr.lproj/Localizable.strings",
+      "sha256": "b68f501da8cb2827b427abdfe69e9c3ba37f9588a9a5ddcc8cd15a0d7a35db82"
+    },
+    {
+      "source": "Gravity/Resources/fi.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/fi.lproj/Localizable.strings",
+      "sha256": "e3812d44b99dc0bf7210f5cbe1746ba5b2cf44443e89a011ef026dba8153393a"
+    },
+    {
+      "source": "Gravity/Resources/nl.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/nl.lproj/Localizable.strings",
+      "sha256": "e9a1e9fe1f4598b1d567dbebceb62790f14ec835a42335c468074c8d8fdaffde"
+    },
+    {
+      "source": "Gravity/Resources/Fonts/GTStandard-LHeavy.otf",
+      "destination": "Gravity/Resources/Fonts/GTStandard-LHeavy.otf",
+      "sha256": "05e6c616d8f30381ad3d37c47611f65b1051d996eebcdcbd2cdab37e363289b5"
+    },
+    {
+      "source": "Gravity/Resources/Fonts/GTStandard-MRegular.otf",
+      "destination": "Gravity/Resources/Fonts/GTStandard-MRegular.otf",
+      "sha256": "ea553fd20ca3175c24dd645f55d4eb24fdfae568802d695d7983fd334072f787"
+    },
+    {
+      "source": "Gravity/Resources/Fonts/GTStandard-MBold.otf",
+      "destination": "Gravity/Resources/Fonts/GTStandard-MBold.otf",
+      "sha256": "32893b477d5644952bf0dcbbc7fe8722d1ef12894cd3052e08c237e0a4a2cf8b"
+    },
+    {
+      "source": "Gravity/Resources/Fonts/GTStandard-MMedium.otf",
+      "destination": "Gravity/Resources/Fonts/GTStandard-MMedium.otf",
+      "sha256": "92fb6873259adfc8a780b18f1b4dba839f272911eb88df342ead4aac79d015a5"
+    },
+    {
+      "source": "Gravity/Resources/Fonts/GTStandard-MSemibold.otf",
+      "destination": "Gravity/Resources/Fonts/GTStandard-MSemibold.otf",
+      "sha256": "164b2eae26ff273cec2e0e4488eec487878c4f1cca4266e43c3ad78b41a08ba8"
+    },
+    {
+      "source": "Gravity/Resources/pt-PT.lproj/Localizable.strings",
+      "destination": "Gravity/Resources/pt-PT.lproj/Localizable.strings",
+      "sha256": "ec46c47ece41d1f428f85908c9cf1fc8147bcfa950419a9e26cf3215d790c999"
+    },
+    {
+      "source": "Gravity/Resources/ShopBrand.xcassets/shopWordmark.imageset/shopWordmark.svg",
+      "destination": "Gravity/Resources/ShopBrand.xcassets/shopWordmark.imageset/shopWordmark.svg",
+      "sha256": "8d4f795c54408cb7c15b45a281181be09d0f16e423ea3ff29ff180894835e405"
+    },
+    {
+      "source": "Gravity/Resources/ShopBrand.xcassets/shopWordmark.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopBrand.xcassets/shopWordmark.imageset/Contents.json",
+      "sha256": "982d0303e4a73aa68c7dbb792243733179d9053512cae15347dd1e23cdfc1701"
+    },
+    {
+      "source": "Gravity/Resources/ShopBrand.xcassets/shopifyLogo.imageset/shopifyLogo.svg",
+      "destination": "Gravity/Resources/ShopBrand.xcassets/shopifyLogo.imageset/shopifyLogo.svg",
+      "sha256": "9796072e1ad2af4d4fa33cf5edd00282858e1c34ced14442996cdac298e5bfe9"
+    },
+    {
+      "source": "Gravity/Resources/ShopBrand.xcassets/shopifyLogo.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopBrand.xcassets/shopifyLogo.imageset/Contents.json",
+      "sha256": "9ed22922f36f8ab36de997f18a35ca4e0d3d5ce3ac861e0db0ffa901f3c50565"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationHome.imageset/navigationHome.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationHome.imageset/navigationHome.svg",
+      "sha256": "91f02eaef7d1852e238796bba8ab479f2d9bcdf7b0339cb743c806f9313101fd"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationHome.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationHome.imageset/Contents.json",
+      "sha256": "8dd611bcb03b5c86ab18f2e310af2f8711fde161a1b308882bd7a1697c73305e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/play.imageset/play.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/play.imageset/play.svg",
+      "sha256": "c0f7c7a275945c028efef3d8add08ff8e9e188f1aa30dcb6586a5a72501cf305"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/play.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/play.imageset/Contents.json",
+      "sha256": "939d57e63fc03eb905d3ae87eeef0edea36852b8b63cc2bb3125d181f51f9ead"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopLogo.imageset/shopLogo.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopLogo.imageset/shopLogo.svg",
+      "sha256": "879148367c5c8f9bfb2a02ab74dd141501ea8632ca78574db03e9cfab2146b0c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopLogo.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopLogo.imageset/Contents.json",
+      "sha256": "4f10ef2a4364f2c478cc40b6c37e321763d69573fa4204f65c45443b6896fbd3"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/newThread.imageset/newThread.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/newThread.imageset/newThread.svg",
+      "sha256": "118be4ff3302f2c6876125caa9f40c0d7ebb974daaa70aa74280ec5752c38215"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/newThread.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/newThread.imageset/Contents.json",
+      "sha256": "fb77125d17d01b1fc6e1ea6af3881c229bf4e261194c9749329139b0255a614f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/starFilled.imageset/starFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/starFilled.imageset/starFilled.svg",
+      "sha256": "b9004525e1b9205624bd9d79ed98d71df245b91efdfb20ccaedaaef21866f390"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/starFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/starFilled.imageset/Contents.json",
+      "sha256": "f84d0fe478f243d64d6495985aab794ff3c09c27959eb5b16a00623b74d7c192"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/archivedOrderFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/archivedOrderFilled.imageset/Contents.json",
+      "sha256": "a4a45cb2800dbaff56f122b2afeac67c9457f21c3bfcb7261d68727b976c5450"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/archivedOrderFilled.imageset/archivedOrderFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/archivedOrderFilled.imageset/archivedOrderFilled.svg",
+      "sha256": "0badb26e3ee2b1fe9492edaf90a2bfaab03303a5e20cc4dffbc23ba31459f867"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/arrowRight.imageset/arrowRight.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/arrowRight.imageset/arrowRight.svg",
+      "sha256": "2ee02bff5752cccd9308eef18565a03b643e6c72ef47d9bbed5e5f9542b2b753"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/arrowRight.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/arrowRight.imageset/Contents.json",
+      "sha256": "75f1f78ea16e297df2d0343045e948b3fc4034fd6ca39a124ddc1de5faadb2a0"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/addToCart.imageset/addToCart.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/addToCart.imageset/addToCart.svg",
+      "sha256": "af818efb3b76588b02574dd68ce7ca4d6f8555d2d7c69921c7347b9764f2578e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/addToCart.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/addToCart.imageset/Contents.json",
+      "sha256": "39c8ca1950e630145bbf7d1e7c438b82f281f30a7e58d7ba481fc056b737ca0c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyFilled.imageset/passkeyFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyFilled.imageset/passkeyFilled.svg",
+      "sha256": "27bdfb29ca44e1ef6f2652e32bd93f2c4f6c654dc7c335828c1a86f864b4739c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyFilled.imageset/Contents.json",
+      "sha256": "05503ec77d03458e7d029256aa5dcab739cb28b62615450b20804b27cf4f103e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/globe.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/globe.imageset/Contents.json",
+      "sha256": "2f9e92fcc10cbbb9e603e9da7c6a8ed6cb86daa8a27658e5cb425733ec68581d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/globe.imageset/globe.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/globe.imageset/globe.svg",
+      "sha256": "a14de40015ab3554c4857f4c92f6296398f1ccfadedcc0dbc6fddfb81c41aa64"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopTwitter.imageset/shopTwitter.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopTwitter.imageset/shopTwitter.svg",
+      "sha256": "c7eba8ea933f1b330b3e4e091997f51bc830ae75a29f1d11afe101ca81a3df48"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopTwitter.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopTwitter.imageset/Contents.json",
+      "sha256": "2a995a09515b4a518f33b488ffe878e70840c193bab3e2e10ff4cabd7c8b241f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/favoritesHeartFilled.imageset/favoritesHeartFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/favoritesHeartFilled.imageset/favoritesHeartFilled.svg",
+      "sha256": "ed7cc5c5c01fdf3c35704e80f65e1dd9d8380a82e015f256731ad52256b4e10d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/favoritesHeartFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/favoritesHeartFilled.imageset/Contents.json",
+      "sha256": "b699b48ccccbd70c05ca33511d742dbd21fe96af4d8e5197aa18da0b77dddd04"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/crossCircle.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/crossCircle.imageset/Contents.json",
+      "sha256": "e0020273ea46ca03bb95a8699c8a373db6f95b758665701268aa65aa03c7e0f8"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/crossCircle.imageset/crossCircle.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/crossCircle.imageset/crossCircle.svg",
+      "sha256": "80ee1e2e6472d20b073d4f5c5bf80007c003b212e279d0603cee85d09bcf4a3a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/supportFilled.imageset/supportFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/supportFilled.imageset/supportFilled.svg",
+      "sha256": "a42eb57ac3b3eb979d729f318975fe27ace9f525addf8f240bf5e9abc5e0b46b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/supportFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/supportFilled.imageset/Contents.json",
+      "sha256": "5676394e0bebe1ccfc8b20583c5fbd95f3a15f6fdccdf742312ebba7ceb02862"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationHomeFilled.imageset/navigationHomeFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationHomeFilled.imageset/navigationHomeFilled.svg",
+      "sha256": "5b6951bc5a85c0c5cd232ee4c9e1a7e081be45f36aa8a718457b2e32405e8a32"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationHomeFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationHomeFilled.imageset/Contents.json",
+      "sha256": "9d123f945ca7b6d8e167807fff338e0057cb75602752b14ae4c4f143b47ee3a0"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/profileCircleFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/profileCircleFilled.imageset/Contents.json",
+      "sha256": "7911e847dfcfdf517887e8c311ab867215ed95ea634b03244822bdef7fe81777"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/profileCircleFilled.imageset/profileCircleFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/profileCircleFilled.imageset/profileCircleFilled.svg",
+      "sha256": "384aa312a04d792639f88f67a889a2b2a0fea8e10cd62fdd841afa704b339747"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/questionMarkCircleFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/questionMarkCircleFilled.imageset/Contents.json",
+      "sha256": "e1322860ebec177ceaddf13a47ac9b9e9c758553d3112cd75104c3e5c939309f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/questionMarkCircleFilled.imageset/questionMarkCircleFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/questionMarkCircleFilled.imageset/questionMarkCircleFilled.svg",
+      "sha256": "596672e1d536d7572c779af8a8f1b71c8d1fbc9321ce17793dec520bf4cf67f2"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/sparkle.imageset/sparkle.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/sparkle.imageset/sparkle.svg",
+      "sha256": "96a024c3cb7f964f0ae086c71771cf8cd47e795c31dfffbb142bd2084a91133b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/sparkle.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/sparkle.imageset/Contents.json",
+      "sha256": "d81585b2da13b047f824bdb91e067089e64040401da7dedb642ad7aca481c82c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyGooglePasswordManager.imageset/passkeyGooglePasswordManager.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyGooglePasswordManager.imageset/passkeyGooglePasswordManager.svg",
+      "sha256": "1d13f0fc763169a5f3bd105daa370aa854a0948d9203e80b5d526d15396e6e39"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyGooglePasswordManager.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyGooglePasswordManager.imageset/Contents.json",
+      "sha256": "e6fa923221c409685631e83f9eaa4c94631a9d6e136fbf42210ce6207be68269"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationFavoritesFilled.imageset/navigationFavoritesFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationFavoritesFilled.imageset/navigationFavoritesFilled.svg",
+      "sha256": "5f10c9c439d87268ccfad06396bc0fed8ebaa9d349f6d53f3d9eac1e9eca58ab"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationFavoritesFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationFavoritesFilled.imageset/Contents.json",
+      "sha256": "32546f0d67c335af0c2abff9ed5f13bead97f6016717bc80641dc1419ac32edf"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boldRightChevronList.imageset/boldRightChevronList.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boldRightChevronList.imageset/boldRightChevronList.svg",
+      "sha256": "05bc19f6f7d2247e75b6d96a296fffc3440ba0cb0662c331c3f0517030342221"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boldRightChevronList.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boldRightChevronList.imageset/Contents.json",
+      "sha256": "bcd2fc6c294aa7edac31cfc897fdc78a934324195fe624c63f3199a3f257974c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/crossBold.imageset/crossBold.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/crossBold.imageset/crossBold.svg",
+      "sha256": "be1c51a575ce9996df5a1c69136848eaf3ba72621a721fa51a90bce476e385ab"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/crossBold.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/crossBold.imageset/Contents.json",
+      "sha256": "bee4f1233239ccd854df1616e24821833fa32c2be4e1de00d986e0ed49cadbaa"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bolt.imageset/bolt.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bolt.imageset/bolt.svg",
+      "sha256": "d85401017bcf32f729743ae0bbe85afdc337da59f8ad7c8f29f18a7de0870b61"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bolt.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bolt.imageset/Contents.json",
+      "sha256": "67276811b233946747cd334d5d70850d5f34ef8b368540532f50031ea70ff04e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/language.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/language.imageset/Contents.json",
+      "sha256": "4356aa82e88064bb64a56f12eaaab0c41d50a659eb07a828016db6bb21bb86e1"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/language.imageset/language.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/language.imageset/language.svg",
+      "sha256": "3006c1852c2c82791aee8cff929aa3d48b4a2d222f1ccc5027e448b91a03cc51"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/checkmarkVerifyFilled.imageset/checkmarkVerifyFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/checkmarkVerifyFilled.imageset/checkmarkVerifyFilled.svg",
+      "sha256": "44127f87c975a47d03200b050f85caf8e3ac690af0adbdb9f3b1f45f32956506"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/checkmarkVerifyFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/checkmarkVerifyFilled.imageset/Contents.json",
+      "sha256": "07f16ec447478caaf68833a2ad6e3c23158d6ec9cdd119abbd6e8e7607e1cd44"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/order.imageset/order.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/order.imageset/order.svg",
+      "sha256": "d2db00140e4b6d9b86f3adbaf2205884cf15df9a5dace95521d99c73a1607232"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/order.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/order.imageset/Contents.json",
+      "sha256": "13098ed4af60888e2ed4dc042b2af01d230d6fb5a20f35115ee957808744d45a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/locationArrow.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/locationArrow.imageset/Contents.json",
+      "sha256": "4c0236f7e1528402d208623a6c923dc5d1d1f8b1fb0ed4b99699a7570d13e947"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/locationArrow.imageset/locationArrow.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/locationArrow.imageset/locationArrow.svg",
+      "sha256": "5fceb755ed310359067ee6e62525260dd275c3705a6abe89e5ef918d2fa97693"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/mapPin.imageset/mapPin.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/mapPin.imageset/mapPin.svg",
+      "sha256": "6ea1b6022fbab567a3da1270eeffcf0997c5bdf57f1a6c37153f2e99fe40e37b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/mapPin.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/mapPin.imageset/Contents.json",
+      "sha256": "91008534337be6566b49a263c29c9630992dd716a5354f3b34b5b6f781d76fd8"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/palette.imageset/palette.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/palette.imageset/palette.svg",
+      "sha256": "8b442ac990c618bc7755b13ad12399b61ca226ab652a17b2cefed8d6a18f42c3"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/palette.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/palette.imageset/Contents.json",
+      "sha256": "fb1e363cb417400947cc8a58da226b8d7b315572c1686af31fa549a64f4e455f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/videoCamera.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/videoCamera.imageset/Contents.json",
+      "sha256": "3053c124cc603db687512999c8b7d2d1c251ecc67561e633d4c0d9997bfd633c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/videoCamera.imageset/videoCamera.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/videoCamera.imageset/videoCamera.svg",
+      "sha256": "8c2a29f3919576f31e1acb7c5c12cf2aff8d18b495258cb0fc6c07cc75fcb464"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/globeGrid.imageset/globeGrid.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/globeGrid.imageset/globeGrid.svg",
+      "sha256": "e56f7d9ab7cacc6dc28e8a4be58d2e10f0fae67fc2496517f71f363cd246d517"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/globeGrid.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/globeGrid.imageset/Contents.json",
+      "sha256": "6271c6c8004bdbfb08fa9c9e60dfbe934b4a2eabafdb7f42eaa50ea81ee001d6"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/privacyShieldFilled.imageset/privacyShieldFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/privacyShieldFilled.imageset/privacyShieldFilled.svg",
+      "sha256": "57a0103f16b25a8ce0739952a8a56098a450dffcf70ca73a4ef65c6a9e26f46a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/privacyShieldFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/privacyShieldFilled.imageset/Contents.json",
+      "sha256": "06472468a388d9231f9c59b9b549534b9234424e4746cebc203e96080ad3ad58"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyWindowsHello.imageset/passkeyWindowsHello.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyWindowsHello.imageset/passkeyWindowsHello.svg",
+      "sha256": "dcbea3426cece59602f078bde3c81d4020b83e96add4f6f4dc8c613c6595b60e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyWindowsHello.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyWindowsHello.imageset/Contents.json",
+      "sha256": "259a0adfcb5b6f28c08cfe0cfb31b6baace1e8b614a9e0d728e76bd7315fa992"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/linkFilled.imageset/linkFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/linkFilled.imageset/linkFilled.svg",
+      "sha256": "d2a8b474a174dc4c24b054949df8118a44377b93fd4b39513215170af2997cfa"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/linkFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/linkFilled.imageset/Contents.json",
+      "sha256": "fd6cb8a7452f3fa56431fc431ac72c173868eab2884e64dcf9e0ea4eddd3cb84"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bell.imageset/bell.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bell.imageset/bell.svg",
+      "sha256": "2c7b1d915f7a21379c44f88c035d5248577546581ce80b75ca29d623087c7269"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bell.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bell.imageset/Contents.json",
+      "sha256": "053e50cefb65094c790d908ea1e423a901a6b1c957559aee313fe7cc12d2c3d9"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/filter.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/filter.imageset/Contents.json",
+      "sha256": "d9db565e5550175b714a8ae0da8dc8660247b190e83c08235ecdec44da80000e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/filter.imageset/filter.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/filter.imageset/filter.svg",
+      "sha256": "74742ea98004002741bbe71a0a96a508d611371c880a11b3394bb8a5e392fc8b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/pause.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/pause.imageset/Contents.json",
+      "sha256": "36d862dfb38d97bb676adda0cfc29798b1f17f530d8df7c6a1d4a8412847de64"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/pause.imageset/pause.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/pause.imageset/pause.svg",
+      "sha256": "5593868fe8d5517ecddbad7edd0183f0cb71c4afd26b3c57563d4bd930d7f8b1"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationProfile.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationProfile.imageset/Contents.json",
+      "sha256": "535dd3d969c81f3827cbeff3b1ce66b8649608483ea1a79168a65b679f95ce13"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationProfile.imageset/navigationProfile.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationProfile.imageset/navigationProfile.svg",
+      "sha256": "b6220e947db4d6f575465f6d0dfcdbb4393dc5ac43d3ca8e8468b6734dcea9ca"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/chatFollowUp.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/chatFollowUp.imageset/Contents.json",
+      "sha256": "20d3e1ababcbcbb07f6ac951f3d5ecd49746dcc7362e45a3d194f93fef746296"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/chatFollowUp.imageset/chatFollowUp.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/chatFollowUp.imageset/chatFollowUp.svg",
+      "sha256": "fde133b76e73f3a848d88e5a41bec9de6fb5118b6bb03b49fbfea0aa9e827bb8"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/sparkleFilled.imageset/sparkleFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/sparkleFilled.imageset/sparkleFilled.svg",
+      "sha256": "38a3896e78e0f47921be390c219eecf3355a1a504d9177a518fe37f6e9a7887a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/sparkleFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/sparkleFilled.imageset/Contents.json",
+      "sha256": "9c687021915c059118fe25acfb2f85d10a6e860617134d5f10e91ee4ae09d518"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopQrCode.imageset/shopQrCode.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopQrCode.imageset/shopQrCode.svg",
+      "sha256": "1d10668e370045c5dea46bbc19efb9ed42665146106da2d1fa41d0d98bb703ed"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopQrCode.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopQrCode.imageset/Contents.json",
+      "sha256": "09f64a4b7f0b021865a754e54d03a93c5328525f5eb1ea0768839497e0924cd2"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/privacyShield.imageset/privacyShield.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/privacyShield.imageset/privacyShield.svg",
+      "sha256": "d85c4e011d6469da2f12601c0167b4aa32b5e89a45b264af985a2e76ecffeda9"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/privacyShield.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/privacyShield.imageset/Contents.json",
+      "sha256": "4dd4910321ff174207ede7a7fe66e860a539ae92e8d48d93303042431adb232a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/internationalization.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/internationalization.imageset/Contents.json",
+      "sha256": "a834b50cea6a707ed1aa2e89e0645128e2d3822a906e259b049a7b6ba0e3001c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/internationalization.imageset/internationalization.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/internationalization.imageset/internationalization.svg",
+      "sha256": "b8632a21732d9ec5e9200a92c8cd6858715fe975e5698ad0a7c2a178ab14b622"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationThreads.imageset/navigationThreads.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationThreads.imageset/navigationThreads.svg",
+      "sha256": "332703711f77a24220376235979d3499eea7e01b38f8914a41a58048c106c75b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationThreads.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationThreads.imageset/Contents.json",
+      "sha256": "0ce397149df7a59f73a72e4f4162a6d03a3922fb8336e9f493c64e9fa6518b9d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/exclamationCircleFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/exclamationCircleFilled.imageset/Contents.json",
+      "sha256": "e1d38adc8edf5a04c762ed9a0bce4ecc78614bbdf3c44469018b7ef4f657f3a4"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/exclamationCircleFilled.imageset/exclamationCircleFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/exclamationCircleFilled.imageset/exclamationCircleFilled.svg",
+      "sha256": "ddc3f26dcc401e6333d8b4b8cae853687c9e1d9973b52be96b75d2b54934e1cd"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/email.imageset/email.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/email.imageset/email.svg",
+      "sha256": "9ac91f2b03e05705e930228872393059ac8f0708e33917c18515590464c728f3"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/email.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/email.imageset/Contents.json",
+      "sha256": "091917c629a19f6405f19986d534adf5c4ef1d6fff9f1ee93ebf4802b6e22d58"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationProfileTophatFilled.imageset/navigationProfileTophatFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationProfileTophatFilled.imageset/navigationProfileTophatFilled.svg",
+      "sha256": "369271c2990d0b652e0f1e98a6b65694b1f18160791d4a39a2919df09a778bfa"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationProfileTophatFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationProfileTophatFilled.imageset/Contents.json",
+      "sha256": "9b1a393f129375f26365cd21d218bb174b03921e18781756848e2cfcb044e56f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/feedback.imageset/feedback.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/feedback.imageset/feedback.svg",
+      "sha256": "824249509aa47f318ad65f45e2d6703c4b396eb5e2be3627b940aa7e225c85b9"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/feedback.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/feedback.imageset/Contents.json",
+      "sha256": "46c48397d7be9c27acf4a692a3c7f0583b135461d6cc87f7148427a3ca98c3cd"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/upChevron.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/upChevron.imageset/Contents.json",
+      "sha256": "b20cf122a48b983bb629ff56732bab46bd414751c5c0144195f06b2aa6ddc337"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/upChevron.imageset/upChevron.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/upChevron.imageset/upChevron.svg",
+      "sha256": "0e6375288d74abee52fb987aa7051166ceb45a3756fa4babc5b01ba3e9711cc8"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/exclamationCircle.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/exclamationCircle.imageset/Contents.json",
+      "sha256": "9fb14189b7ff95293938e9c0835245eb8e7a1ec98defa1a181a519f7489ae25f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/exclamationCircle.imageset/exclamationCircle.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/exclamationCircle.imageset/exclamationCircle.svg",
+      "sha256": "1e096fc08a8c14f799b8504ea1c036bc9ab726b96ed8ae118a744ce08a78dfaf"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boldUpDown.imageset/boldUpDown.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boldUpDown.imageset/boldUpDown.svg",
+      "sha256": "cfebcbb29052318d47c59743f50c8321feed13ff5164cd2e5d01f75854bde243"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boldUpDown.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boldUpDown.imageset/Contents.json",
+      "sha256": "63e2b741bde7b73ed0da396873cb4cba4e346b05d778f375ecf0c56a405cd9a4"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/speechBubble.imageset/speechBubble.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/speechBubble.imageset/speechBubble.svg",
+      "sha256": "a0cfb78233c95782a8a090c104d9958f40b1828de9d78c46861b67816a2f06e5"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/speechBubble.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/speechBubble.imageset/Contents.json",
+      "sha256": "7b3c11f60624bcf35ebe8226f9bc2fcbadc784cd3d90afb3efe62584d5f0cd63"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/leafOutline.imageset/leafOutline.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/leafOutline.imageset/leafOutline.svg",
+      "sha256": "827d9645c302040e9ff0cec91422398ec52e7d8d3e7916d7c5702e4526191c2e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/leafOutline.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/leafOutline.imageset/Contents.json",
+      "sha256": "f56b83d8bf88c6e77fa0fea522a442f049ce69507981947eec5cf080639f5ec6"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/volumeFull.imageset/volumeFull.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/volumeFull.imageset/volumeFull.svg",
+      "sha256": "a612b9da05db4c8a52e5a8d3d412e4696493d1d7e9839c22b012aaf9bb964fee"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/volumeFull.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/volumeFull.imageset/Contents.json",
+      "sha256": "3c57504a9102d68bc7ebac79be2f63f1cc829d3d59c7a5b332d258a2d72876f6"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/silent.imageset/silent.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/silent.imageset/silent.svg",
+      "sha256": "c717cb085f20199175165caae7b0cedcdf0bee10fd243f53f26116650a16343b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/silent.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/silent.imageset/Contents.json",
+      "sha256": "cd20d9dec3ac4987518442fc86525eea2e8217b57a350165674d04ce88e865a1"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/signature.imageset/signature.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/signature.imageset/signature.svg",
+      "sha256": "62a27bd94f9a6168c3b48eb8620f4657d271dc780208bc9984c5dede0172a05c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/signature.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/signature.imageset/Contents.json",
+      "sha256": "5378895252e653784db2f58560a33ac7bf5de0ac8458d3ed27e5ea67ab388a80"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/cloud.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/cloud.imageset/Contents.json",
+      "sha256": "46325c19abfb5492ada44a1c25fa5a5d55e5637874313a785b745a34d473fb58"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/cloud.imageset/cloud.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/cloud.imageset/cloud.svg",
+      "sha256": "bd78659d7f7a9db69da5fa26c90566992be319bb1dcf74014a8c63a1ef504fc6"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/faceUnlock.imageset/faceUnlock.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/faceUnlock.imageset/faceUnlock.svg",
+      "sha256": "fd7b71b83734901ec919dfb8bef060550aaa766c385798a2b73057b57551c87a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/faceUnlock.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/faceUnlock.imageset/Contents.json",
+      "sha256": "8e20d0556c9e888a98241428e8695bfafe45bfba3f7cff7f38a1f75046c75b1e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/downChevron.imageset/downChevron.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/downChevron.imageset/downChevron.svg",
+      "sha256": "c3663ac04c682fae63348abd6caee9b6517db70e2a1110c0591e17d4f36db5fe"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/downChevron.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/downChevron.imageset/Contents.json",
+      "sha256": "d8f56c8992737d7c79edccea315201f08c772c49c7576036f045a13c086d804a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationThreadsFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationThreadsFilled.imageset/Contents.json",
+      "sha256": "eca4342227e7434ae8777b7e2888cec9ef78b6ef178e21d61b60ebd0aee9def7"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationThreadsFilled.imageset/navigationThreadsFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationThreadsFilled.imageset/navigationThreadsFilled.svg",
+      "sha256": "67d0f625b37e9977ac8f9b5325a494e296274fbade1b18c8e4cbd01ef147cda0"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/minis.imageset/minis.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/minis.imageset/minis.svg",
+      "sha256": "833c1bb817ef3726027ee90543c33974471b1b3677df361b701504f057932ebc"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/minis.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/minis.imageset/Contents.json",
+      "sha256": "3ea6ae9bba1e024f00e6950da6475b05d5d51fd419811c46ed0f7a34d632f223"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/history.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/history.imageset/Contents.json",
+      "sha256": "f7f460c0c9039e46779c723994043dd3dbd4bc62ecdf215642aec0030ec8dcfe"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/history.imageset/history.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/history.imageset/history.svg",
+      "sha256": "7f3f8b796a98bb7ce884d1558cf62768b284e4ef546833a8ebe0f1ec659067ef"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/tag.imageset/tag.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/tag.imageset/tag.svg",
+      "sha256": "d41475da3035233a92445c57608b6999158c8278d3a3524bb91cd05601257149"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/tag.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/tag.imageset/Contents.json",
+      "sha256": "1648c0a7ee1d1ff5393b102d430964c424d426ad89b5213ce7981ebcf6ae20f3"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/clock.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/clock.imageset/Contents.json",
+      "sha256": "89d11de6449b703683a129cef7f2c13f448d181eaa563fbabb46089ca4791273"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/clock.imageset/clock.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/clock.imageset/clock.svg",
+      "sha256": "c805ce2bed066449a8f14ac953f9865350146417ff091f681942c873c0366a44"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/googleLogoColored.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/googleLogoColored.imageset/Contents.json",
+      "sha256": "0a574e897572ad582c210b52b44050354273862d826b6e8f4fcb7047f414ba26"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/googleLogoColored.imageset/googleLogoColored.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/googleLogoColored.imageset/googleLogoColored.svg",
+      "sha256": "e5b34bead2dd1e56f39a369a3e8ed4b97e183791248f4c92ead6d13a6a7e55a8"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/profileCircle.imageset/profileCircle.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/profileCircle.imageset/profileCircle.svg",
+      "sha256": "f4301c12adf5a8537e63c12b86823f2e6ac2751144d3060574621f4fdb199796"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/profileCircle.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/profileCircle.imageset/Contents.json",
+      "sha256": "7f36621a6de54fdb235ce1d12f152f3e28f30b745b1b2b8392147555a1b69295"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/returnPackage.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/returnPackage.imageset/Contents.json",
+      "sha256": "987e2a32bdc36b20836fda445c489cfed8d6f582d308e144624acf9796cde0e2"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/returnPackage.imageset/returnPackage.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/returnPackage.imageset/returnPackage.svg",
+      "sha256": "aadea292cc47712ed571ac025ffb0ae8da0c378d87032dffcee56b27464714c2"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/cross.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/cross.imageset/Contents.json",
+      "sha256": "e1ff38e427b3d9132fae9486b4d1c9b779b9f9a4243c8d2d62b254cabb656b0b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/cross.imageset/cross.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/cross.imageset/cross.svg",
+      "sha256": "4a89363562712cc88eca9f03df6d995b6b7cbb8d9acc7667c3ee46a0bdf7335c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/cameraFilled.imageset/cameraFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/cameraFilled.imageset/cameraFilled.svg",
+      "sha256": "38a68f0b2514ec6cd6e5600f10afc2e8609cef1b73e934e46ae2ed53f64c0be5"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/cameraFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/cameraFilled.imageset/Contents.json",
+      "sha256": "fb9781fb68ffefacd749dd7d5f38444c7a38cad6c7cd273aae97d2224acedc75"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/settingsFilled.imageset/settingsFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/settingsFilled.imageset/settingsFilled.svg",
+      "sha256": "1def983ddb87e5f530144086dfb51a67172162fb370d3a5cc06d071cf263192a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/settingsFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/settingsFilled.imageset/Contents.json",
+      "sha256": "28da2b8f39c1eb91ea20bf5c578f5275e49542420ae59e1f8892d4ab32af9ccb"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationCategoriesFilled.imageset/navigationCategoriesFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationCategoriesFilled.imageset/navigationCategoriesFilled.svg",
+      "sha256": "6e47a279520b7d7caa92326d422795d87c0be77172b35d41da96a73404cf97e2"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationCategoriesFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationCategoriesFilled.imageset/Contents.json",
+      "sha256": "7f9c76d4f8a360ead5b88a42ec0b2a40889321c15c02f10d848d98ff69eea72f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/installments.imageset/installments.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/installments.imageset/installments.svg",
+      "sha256": "d1945ebef73ed5716afbe0693227c7d6322d46644097d73f6197a8e9fb50af79"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/installments.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/installments.imageset/Contents.json",
+      "sha256": "35bad6d9a2a5b7f4b3b9131baf9ec32dca49d8fc7eede873c13bddf9d2698e6e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bank.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bank.imageset/Contents.json",
+      "sha256": "d51d494fa52da9116dacfc3c07ed77e0e9d365b63d8c5729d50ab1aa4b3f385d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bank.imageset/bank.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bank.imageset/bank.svg",
+      "sha256": "54a8e89ff2d6df12eb1f4e71ee9e176d5b1305a84a57737ae9e3641ed27ed243"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boltFilled.imageset/boltFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boltFilled.imageset/boltFilled.svg",
+      "sha256": "b0e4b9ee3518d8e4f7c42442a0f4a97169c158fefa93472eb8ca7b7267e08356"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boltFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boltFilled.imageset/Contents.json",
+      "sha256": "fe7ddbb9db7941136945dbac63145276ae4886d0ae726100968f0dfa8b7e02d4"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/googleLogo.imageset/googleLogo.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/googleLogo.imageset/googleLogo.svg",
+      "sha256": "c625c92ba09acaf02e8fb16fed9d6ab496fb76f7badc17622c90a7ece5444b40"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/googleLogo.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/googleLogo.imageset/Contents.json",
+      "sha256": "8fe67e300f67d498578fcd63bb20790a3501645ec42bd72bf7b85a30388550a9"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/arrowDown.imageset/arrowDown.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/arrowDown.imageset/arrowDown.svg",
+      "sha256": "0b1d36d95d2cc02b1b0aaebb93f1c147e640fc8a9aa1b724ef4856f56c3df6e4"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/arrowDown.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/arrowDown.imageset/Contents.json",
+      "sha256": "49aa798be7c85ead147c31b48ed81cbe1843368155e58473be4c1fbac89e393d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/list.imageset/list.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/list.imageset/list.svg",
+      "sha256": "7694869926ed4f41a1fe0e9aa83fb53a8666300147b759ecbae44d6b69f59d44"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/list.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/list.imageset/Contents.json",
+      "sha256": "4e15f6f97442ac75593ab19e9fc75edc84a0c4e66420c4e1f3962415e611c19b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/unhide.imageset/unhide.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/unhide.imageset/unhide.svg",
+      "sha256": "dd03154bd370efb763f754544df57d2c4a4ccbfb4ba5343c74c704966f76a55d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/unhide.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/unhide.imageset/Contents.json",
+      "sha256": "d65b506df6b097a9d740c8ad779e742dd8045b49e06c6a012b87f77d0f85da86"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/filterFilled.imageset/filterFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/filterFilled.imageset/filterFilled.svg",
+      "sha256": "7aedfb792fc3030f0a9d8e00d6dc1cf1cf0f555558a857148de919c846d9ce70"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/filterFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/filterFilled.imageset/Contents.json",
+      "sha256": "53391d4c73d130d46d41080dbec9068ef4d3debc896ef3294498d3b19e4e82e6"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/questionMarkCircle.imageset/questionMarkCircle.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/questionMarkCircle.imageset/questionMarkCircle.svg",
+      "sha256": "02675031f431495b93b874f0852398b10431b97379eceeeb27f28fcfc9ba34b3"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/questionMarkCircle.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/questionMarkCircle.imageset/Contents.json",
+      "sha256": "fc8b2f57d6b4f8fcef8c26e76a30b3d32686a3f1e40bd33af6eed4fb050249ac"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/signoutFilled.imageset/signoutFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/signoutFilled.imageset/signoutFilled.svg",
+      "sha256": "7c2893f54ce42514674660d6afe9a2b52be9074f58ef762372062074815e4eed"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/signoutFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/signoutFilled.imageset/Contents.json",
+      "sha256": "959716f9f214b58ced1234aea44f3781799ca8662640d9f37ec8c4ec651c6b47"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/lock.imageset/lock.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/lock.imageset/lock.svg",
+      "sha256": "f201837a6432c270435cae97ca804a7d7aeafaec7c85d8d0ab7816e5ac4c7928"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/lock.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/lock.imageset/Contents.json",
+      "sha256": "00761495d557a9a839f82ca59bdf3c2fd0a17aa936c031c143d510d4c07beb6c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shipment.imageset/shipment.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shipment.imageset/shipment.svg",
+      "sha256": "3313d54605d5429eec72d36a9eb7a4930a31eeb8cb009e50ed7ddd11f9db0e22"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shipment.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shipment.imageset/Contents.json",
+      "sha256": "e94c360501d54f916b1930ff15005c97c8bd256af8884150b6d82227e949d8b6"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bulletList.imageset/bulletList.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bulletList.imageset/bulletList.svg",
+      "sha256": "7694869926ed4f41a1fe0e9aa83fb53a8666300147b759ecbae44d6b69f59d44"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bulletList.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bulletList.imageset/Contents.json",
+      "sha256": "cbd7911290fed44258da60dbfa6a572e2ab16de49037e779f3e0c208c1408a08"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/lockFilled.imageset/lockFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/lockFilled.imageset/lockFilled.svg",
+      "sha256": "2f06a65f7b427336d7ead0c637d45b55f4a345460cce3c7ce2d875e0e3ce78b1"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/lockFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/lockFilled.imageset/Contents.json",
+      "sha256": "0f915a23d07067295429be04d711283983ebb8363f4f38c354c7d67cd42c9375"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/phone.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/phone.imageset/Contents.json",
+      "sha256": "37497fc5f3930b66e978b67c8a6e3a8c2c85d60aa664852fa98060803cf0d3b7"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/phone.imageset/phone.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/phone.imageset/phone.svg",
+      "sha256": "c53708d573328c24ea5152d0184e6a62daccb380fa1c60a57b9bfaba7e32818b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/dollarFilled.imageset/dollarFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/dollarFilled.imageset/dollarFilled.svg",
+      "sha256": "be44c609a6fea80f478fe9b05fd0bdcc50d7e847bd61614fca2b99ef71f8dcac"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/dollarFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/dollarFilled.imageset/Contents.json",
+      "sha256": "c79febdc563968a1ae3663497474e29bbd68bf89dab1b88e4ee30cb40296f87e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/unlink.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/unlink.imageset/Contents.json",
+      "sha256": "e519e828c90e34a7d2839c6f316bf1d1d5153d940bdab7d1b2779e6652f8bab1"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/unlink.imageset/unlink.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/unlink.imageset/unlink.svg",
+      "sha256": "cdc56aec91cb75e88a6c037ab53327813583342cb2a189e56af1013203eeaef3"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/amazonLogo.imageset/amazonLogo.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/amazonLogo.imageset/amazonLogo.svg",
+      "sha256": "777f78053fed24b2193d5adde06bcc95a24c86f55b5b09666fcc50dcbf44f740"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/amazonLogo.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/amazonLogo.imageset/Contents.json",
+      "sha256": "7496163777e73aa1c321d8b065f39773f56e3f413a4431bcf1a30db60e02a831"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/faq.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/faq.imageset/Contents.json",
+      "sha256": "c218881e99f21c5de097744d625e4aeb62780128761f2d65362bf58b41444931"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/faq.imageset/faq.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/faq.imageset/faq.svg",
+      "sha256": "d3eba1c544234c39566a94e7f383b8f7957211c3d9b877890e70bf769fc918df"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/mapPinFilled.imageset/mapPinFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/mapPinFilled.imageset/mapPinFilled.svg",
+      "sha256": "1fdc6a1f0a47475fce6ee8a4e944461c083f69885cd74a67577a246acea1bfed"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/mapPinFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/mapPinFilled.imageset/Contents.json",
+      "sha256": "c1150f03668733651e4c2737ef3d148fc4c58a2203028c3f3797c6d54bb7ff1c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boldDownChevron.imageset/boldDownChevron.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boldDownChevron.imageset/boldDownChevron.svg",
+      "sha256": "501e4f15235ebde344912f22aa03f36ec85ecc1b14d35025718dd4e5bb910181"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boldDownChevron.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boldDownChevron.imageset/Contents.json",
+      "sha256": "fd82bc0658021ca78c8fa8315e6a3195cc4bea44d82361d8cc6443ae92eca638"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopChatFilled.imageset/shopChatFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopChatFilled.imageset/shopChatFilled.svg",
+      "sha256": "1ddc6745f088ae64cfe05eb5f6a2cd82bfc1680c0a0a7a3e6ecdf422d3bebb65"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopChatFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopChatFilled.imageset/Contents.json",
+      "sha256": "5ca11705eebc74000f55992afec9c5882b1f98df9f88c0a6cbf927348dae07a1"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/tapHand.imageset/tapHand.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/tapHand.imageset/tapHand.svg",
+      "sha256": "4182c7e807529af9ea836ceda965745b6c3308de69e406d9bfd8d6168a8982e8"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/tapHand.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/tapHand.imageset/Contents.json",
+      "sha256": "d198f177b6f65982f454c804bfa79d786e4eace7fed1f19a4472e5ad72d46eb1"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/question.imageset/question.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/question.imageset/question.svg",
+      "sha256": "862ea0c9230b340d139c144a7445f947fc80fd506d0f60ec78eb1f986c8bf535"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/question.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/question.imageset/Contents.json",
+      "sha256": "6cc2d48e2d313b94e520afbe80364f424776c471cdee4678fcc67e2dde3ac82a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyChrome.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyChrome.imageset/Contents.json",
+      "sha256": "b0f941d1aaaaee3f0666ade32e1192b3bf1ce240bdef06de97d29c946eda3eac"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyChrome.imageset/passkeyChrome.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyChrome.imageset/passkeyChrome.svg",
+      "sha256": "e5e7db6a12ff0e8b36d102bca06beff5402b2cf7d7361cd5e0d72ad9de27f858"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/collapse.imageset/collapse.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/collapse.imageset/collapse.svg",
+      "sha256": "fde516b573cdced29f9ff5280da254448f288165596cdf7de897b0917cac1989"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/collapse.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/collapse.imageset/Contents.json",
+      "sha256": "e7c0c4117fc359177a3bfea1c3ba0ec41e072149aa5922b576869c7e1079409f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/copy.imageset/copy.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/copy.imageset/copy.svg",
+      "sha256": "1e9f96b7006a369af1336d1f0cab0cea43acb0d0ab43192f91d162946af4df9b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/copy.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/copy.imageset/Contents.json",
+      "sha256": "da3a4f42a5188396de5461cabf20b9d37dc0231c1ecbd2456f2b120c10cfd19b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/plusSign.imageset/plusSign.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/plusSign.imageset/plusSign.svg",
+      "sha256": "b1054771c32e728518e5de5e4a9b1610c0deb9bb7e4bd24b45d709eee7d3c890"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/plusSign.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/plusSign.imageset/Contents.json",
+      "sha256": "a7d7c39da2414e4b953c66610a69a4ff26513fc1a9df988390ebf7ccb8faedb5"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/faceId.imageset/faceId.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/faceId.imageset/faceId.svg",
+      "sha256": "e363b0e86110d134064adb75d6d80869bd32b887910c7d53244a5b905353ef5a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/faceId.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/faceId.imageset/Contents.json",
+      "sha256": "08f1924f0ebf91d0a066c39cb3228d2d4bd6d9bc8d1b8a9d730caf4308652b36"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/overflow.imageset/overflow.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/overflow.imageset/overflow.svg",
+      "sha256": "77ef99411206d38967a223642391d24e303834809c2720f27eca1a75e3609279"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/overflow.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/overflow.imageset/Contents.json",
+      "sha256": "9ce6ef64c32951930465aa9c6619d8bebf16638bf2691f04368a828ad86a3cea"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/camera.imageset/camera.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/camera.imageset/camera.svg",
+      "sha256": "28145bc4e0380983cb1609c0064820ae0041669caa76479f956d46a6dd975fcf"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/camera.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/camera.imageset/Contents.json",
+      "sha256": "36ffbe9b7a2f3bf09d4ec14db979304354c75cfc5acf5322e2360cd9b758f903"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/website.imageset/website.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/website.imageset/website.svg",
+      "sha256": "4d07de14be834f0ed432020dba56430ddeb45479751dc109217e39a52084a27d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/website.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/website.imageset/Contents.json",
+      "sha256": "7b84c22ecfb0aca6c5864d432776742b4b88bea77961df2a6e219d9f123c852d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/noImage.imageset/noImage.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/noImage.imageset/noImage.svg",
+      "sha256": "02f23cd9490148b0b413015d70864b8c090d7f0edf87234e41e626832b05ead0"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/noImage.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/noImage.imageset/Contents.json",
+      "sha256": "ed7760fc7702fe4742ad3001ff2a48986fe25c85665b4455ae99df118a542ace"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/pencil.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/pencil.imageset/Contents.json",
+      "sha256": "1954db764347c1fc1bb72e87f78564f4218c1d985a532fbb0c14529dc59059df"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/pencil.imageset/pencil.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/pencil.imageset/pencil.svg",
+      "sha256": "87382de5938ff1763690c39b5353246a504522a5cf96dcbbb245a7e7f87c8310"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationProfileTophat.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationProfileTophat.imageset/Contents.json",
+      "sha256": "0e229469928587ab81c4551213be0df489f74e501ba35ff1b99bb11838bf3635"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationProfileTophat.imageset/navigationProfileTophat.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationProfileTophat.imageset/navigationProfileTophat.svg",
+      "sha256": "6df3f25732e11810c023ede09e2ef7e6fd9938992332e84506b2d01345b5231a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/rightChevron.imageset/rightChevron.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/rightChevron.imageset/rightChevron.svg",
+      "sha256": "b3a6ef200d54d3f4fd4c111f7bcdeec4264f44a14e4956626fb45cf04c8f0231"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/rightChevron.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/rightChevron.imageset/Contents.json",
+      "sha256": "ab6daa208e2c43193d93cf34c759afefb821c4db7b3b3c2348748206663b8640"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/archivedOrder.imageset/archivedOrder.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/archivedOrder.imageset/archivedOrder.svg",
+      "sha256": "cbed367eb388a8a42b0c030847c511954707a2c922900fb606e7d627583c9e33"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/archivedOrder.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/archivedOrder.imageset/Contents.json",
+      "sha256": "987293259d6dd9c62babdcac6047db0924c9c6d68677db2c85700735c9820dab"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationOrdersFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationOrdersFilled.imageset/Contents.json",
+      "sha256": "5bfffcaa9d53d7434283f70829feda91371b4327fa0beae92aee6a7cd9534feb"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationOrdersFilled.imageset/navigationOrdersFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationOrdersFilled.imageset/navigationOrdersFilled.svg",
+      "sha256": "1205f35eaddb100a9e707580c222875bb3f563295b9d5e6c5c2854d10eafd2b9"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/languageFilled.imageset/languageFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/languageFilled.imageset/languageFilled.svg",
+      "sha256": "6f75490373f18e5d8eae4e352a76853a1c3141a35badd403cfe2708f6fc57af4"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/languageFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/languageFilled.imageset/Contents.json",
+      "sha256": "7daf132d3442c175cad8787b03bb3991ff1949337def2852b55e5ba7d66d02bf"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/yahooLogo.imageset/yahooLogo.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/yahooLogo.imageset/yahooLogo.svg",
+      "sha256": "1dc8180c03835aafcd82053f59e7560813e24f4e21e5c146e7f78f1848fa4cce"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/yahooLogo.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/yahooLogo.imageset/Contents.json",
+      "sha256": "67f448ebbcd37ca76a9cdf2f7f0353e5d238183eb5418054ea7696687a4de486"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyApplePasswords.imageset/passkeyApplePasswords.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyApplePasswords.imageset/passkeyApplePasswords.svg",
+      "sha256": "041406ebad539a03ff926ee9afefd99430be0b50f1078cd778cafe4da2a0698c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyApplePasswords.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyApplePasswords.imageset/Contents.json",
+      "sha256": "6f44d9ffb584e361197ff3552ee823ed3b32563c11621d83bd45e419101ec57c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/aboutFilled.imageset/aboutFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/aboutFilled.imageset/aboutFilled.svg",
+      "sha256": "9a1ab31cde38fc3056cc6057b78cf2e58caa19dabec54c514c08aa249f541b1d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/aboutFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/aboutFilled.imageset/Contents.json",
+      "sha256": "5498e7c3b1572ccd98b76bb69236490c8b48b45a64067cfc98a897ed770e8c38"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boldRightChevron.imageset/boldRightChevron.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boldRightChevron.imageset/boldRightChevron.svg",
+      "sha256": "c42a956df1dd7d2df1ca77f53e02746c4aa35feb2fbf721a565e5ffdefbfdc44"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boldRightChevron.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boldRightChevron.imageset/Contents.json",
+      "sha256": "d17ff899c0bb146f661fada8d00fe26bc05fabf13aeddf139aa6a88cbf5c9db0"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopFacebook.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopFacebook.imageset/Contents.json",
+      "sha256": "e3b24d75b03952fecbc46ba907bc4c9f883b7497111bf720860994ca061e0456"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopFacebook.imageset/shopFacebook.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopFacebook.imageset/shopFacebook.svg",
+      "sha256": "0c3ad295ce292ac0c02fe45dffb913e80ae1ed3b360f2bd21a9085967ea9553a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/box.imageset/box.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/box.imageset/box.svg",
+      "sha256": "f430b31da178ed12a266f5284afad17c0e54cec73d37dd964f0322e67c25657f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/box.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/box.imageset/Contents.json",
+      "sha256": "09907a12186e4a38c94f15e0ee6544b82aa4e94cc61f37884102997ddb96a40b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/addCircle.imageset/addCircle.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/addCircle.imageset/addCircle.svg",
+      "sha256": "8e18b3592ddf1a3593f69060ff3aef53d90b0c981efa8be8dbcc67e55efc8ae4"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/addCircle.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/addCircle.imageset/Contents.json",
+      "sha256": "ee44798a24f23e948759ee041f97cbc981f66de63242f241bcc2d87b8ece9c00"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopCash.imageset/shopCash.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopCash.imageset/shopCash.svg",
+      "sha256": "c824294ba5767ddfc0560c82ecee121d006a5a9a539aed8507de27ab5d2a78da"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopCash.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopCash.imageset/Contents.json",
+      "sha256": "ba7914936c3a4c16d1746e38ce5d6d7f43ab27c2c8751ce212c5e8e46b012087"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/gift.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/gift.imageset/Contents.json",
+      "sha256": "5a6d524dc193ce9861db32d3bf77fcba4a5591fba0900d57667485dd41782a6a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/gift.imageset/gift.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/gift.imageset/gift.svg",
+      "sha256": "441628d3686431124b0b34fc4eb728057bc610121df32b367891b502e00a6666"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeySamsungPass.imageset/passkeySamsungPass.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeySamsungPass.imageset/passkeySamsungPass.svg",
+      "sha256": "50aef2f8574dc6314a393bfed38a87332c4408747679b102992f2c3acc10226d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeySamsungPass.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeySamsungPass.imageset/Contents.json",
+      "sha256": "8ebea41088129a4630f19aaa6133e2e1c3dab0cf0cfcf52acec6a77063220e0c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/sparkleSingle.imageset/sparkleSingle.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/sparkleSingle.imageset/sparkleSingle.svg",
+      "sha256": "fce5fa529b7ecb23a03861d5cfe5f676558df8bd3d43c3fab7145f5198ef7ab5"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/sparkleSingle.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/sparkleSingle.imageset/Contents.json",
+      "sha256": "923058cc9da75b2cd7876d04339a0cf990b79ea9c77a23ca1fd5eb1fe1cb7d42"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/thumbsDown.imageset/thumbsDown.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/thumbsDown.imageset/thumbsDown.svg",
+      "sha256": "c65713d41ca4908172b4d3039414d4789d6123d6606e62080eb320b3ddaadd7c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/thumbsDown.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/thumbsDown.imageset/Contents.json",
+      "sha256": "bfcced04b6364f179243393dff0c0953606d6bc40c16e0dc760f1323ab415915"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/truckFilled.imageset/truckFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/truckFilled.imageset/truckFilled.svg",
+      "sha256": "a238796493f1db15ec916ee9beccf837d60c361ea8d43321189a5f4d521e0306"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/truckFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/truckFilled.imageset/Contents.json",
+      "sha256": "dcc62fe94ba6328b4060480d5b20443978ce86757ff09aaacfc2b776d3c7f4bf"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/link.imageset/link.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/link.imageset/link.svg",
+      "sha256": "79ce1618d4a9ea03fde4fa9424e8cc9ff7e729f8c825218aa5101ae01bf79d10"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/link.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/link.imageset/Contents.json",
+      "sha256": "edc1090f28d7ccd8cbca4bd751fb35874da7c130719300f42c52936a07907d76"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/notifications.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/notifications.imageset/Contents.json",
+      "sha256": "391767c31a22aba19b1546a2d5a5715dbfed111f2fffed5eaaeb1872548c72c2"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/notifications.imageset/notifications.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/notifications.imageset/notifications.svg",
+      "sha256": "90aa5a7901267544453946c5bdd5a4e6903262ccad87baa89b939b07a6301dc2"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shop.imageset/shop.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shop.imageset/shop.svg",
+      "sha256": "4bfa93b3f32f31259e1ef4f025283d04df7df652d779d8fab701b9f84bc3208c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shop.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shop.imageset/Contents.json",
+      "sha256": "f8e4d77e9e2b23784ffbde22ac8ae7156b22086ebf783acdd790b7eb22e768bf"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/pinterest.imageset/pinterest.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/pinterest.imageset/pinterest.svg",
+      "sha256": "031c08fd7c44179caf619ccbbfdf43f26f8b3125ab7cd15e7fa1e198624de227"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/pinterest.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/pinterest.imageset/Contents.json",
+      "sha256": "368f438eb0dba9c6ac019afa3db3b09e60339601f60b8da26e7b87bbcb1121b7"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/chatDock.imageset/chatDock.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/chatDock.imageset/chatDock.svg",
+      "sha256": "5d8a93ba1366e5e1de7af7d8cc4cc685bb3d910f2c503e7a448d133ac722aa45"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/chatDock.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/chatDock.imageset/Contents.json",
+      "sha256": "7b8d945ecfa941908b18edbd3349c1b81f2ebdbe7df95f58bdc8e17fd4062739"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/signInKey.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/signInKey.imageset/Contents.json",
+      "sha256": "3397b04d8a6f60dbbe5d6b4e3f0ff9c03981fc42dc0e1951253e129d2d0bb406"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/signInKey.imageset/signInKey.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/signInKey.imageset/signInKey.svg",
+      "sha256": "ae75be7d36d9c2d8616e9dfd5d8d9f6b6b9b07adc6bf7a3b2978719710eab0a4"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/licenses.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/licenses.imageset/Contents.json",
+      "sha256": "439029e7e7f1e6de598ee9548e74be7eebec941ee1b809f937ce8fd5c67d0ecc"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/licenses.imageset/licenses.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/licenses.imageset/licenses.svg",
+      "sha256": "db458469a7a01c771cb8ae2920e552507b25cf8e147ce3b8e497e5e09c9c6906"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/checkmarkCircleFilled.imageset/checkmarkCircleFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/checkmarkCircleFilled.imageset/checkmarkCircleFilled.svg",
+      "sha256": "1e07dd9255c170ad29e719adccfb434f3f9e5447e991bc91740e99b7edf18dc2"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/checkmarkCircleFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/checkmarkCircleFilled.imageset/Contents.json",
+      "sha256": "bc1118dd2c8ccc00ad259e6aba160137b449d73bc1a56e398589686bc374309c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationCategories.imageset/navigationCategories.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationCategories.imageset/navigationCategories.svg",
+      "sha256": "942e4d157e702fe2386b5bf778326c2480e3b11da696cdac5a3a3c11ff7c2c6d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationCategories.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationCategories.imageset/Contents.json",
+      "sha256": "a89448dfb554f43a53e8bf5b355931b4f61f8c4ffbbfb69ffddb6497acc164a9"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/upDown.imageset/upDown.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/upDown.imageset/upDown.svg",
+      "sha256": "f0676b833435de2fe60dd99233f90e593665f1916a7fb051ecd4cb809fc39a5d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/upDown.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/upDown.imageset/Contents.json",
+      "sha256": "bd3842c4e2fc4fc1bd0b45e8dfbe380cd96990e54b93a47881d82368a0ca3f09"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/sub.imageset/sub.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/sub.imageset/sub.svg",
+      "sha256": "4b9d6f8fc4bb7b1224694d60267c7ec26e2d12fb36d77c0e87b2370818801f1c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/sub.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/sub.imageset/Contents.json",
+      "sha256": "81694eefec8012142c118608631e6ddcb8cf8b5d0c33acf2402b3e184edefc06"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/reset.imageset/reset.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/reset.imageset/reset.svg",
+      "sha256": "127f3ad63494edb735c5b5357a9c0c4dee802b4760f3cd744f749808cc911e6f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/reset.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/reset.imageset/Contents.json",
+      "sha256": "b7e2c0a22765bf98e5841b12d93fd5d0c3398fcebdadb5258dc46e1ed065f26c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationCart.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationCart.imageset/Contents.json",
+      "sha256": "1b149365ad0180f3c83bef2d4f2fd233a70c7d2442a5a11795a5d06c50aa7d4a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationCart.imageset/navigationCart.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationCart.imageset/navigationCart.svg",
+      "sha256": "e1df2e54de0cfa5f54d08b6b058fbe23040f23ac27858205afc90e3cdfe13df3"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/checkmarkCircle.imageset/checkmarkCircle.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/checkmarkCircle.imageset/checkmarkCircle.svg",
+      "sha256": "e1a6129efc434fecedc50bef36c675be015c18ec1e115bc3cce7b504e88afeea"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/checkmarkCircle.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/checkmarkCircle.imageset/Contents.json",
+      "sha256": "69a0b465dd9d1f5d300e8d66b197dbe5627ea3a0d2445cf580e0d88fc5fddd56"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkey.imageset/passkey.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkey.imageset/passkey.svg",
+      "sha256": "e3a2d38c94ef94bfc7608a6f6fc2a06e90c11682c16f7345836ba08005d9a02a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkey.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkey.imageset/Contents.json",
+      "sha256": "2d9e5ba5dcfa5d6040d0a51a0653d4ccbfa0880dbf029063c3f50104f83cbb47"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/hide.imageset/hide.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/hide.imageset/hide.svg",
+      "sha256": "8aab19f4f23617ceab843606557d3bc6402cbafe92373b879ec157c58d47561b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/hide.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/hide.imageset/Contents.json",
+      "sha256": "0e0af9f2fa6b6a5a196efce76f33606c740d114da21f89640c6525cfd467bfc9"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bellFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bellFilled.imageset/Contents.json",
+      "sha256": "15c7bcffcb2bb5cead2706783ff1dbe67bcc086afcb31487f286e081da8bc94e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bellFilled.imageset/bellFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bellFilled.imageset/bellFilled.svg",
+      "sha256": "e68da91b14d7c15d624ff629de846cb1510c9f5353d2a0677aed29ed5c0b6c21"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/arrowRightCorner.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/arrowRightCorner.imageset/Contents.json",
+      "sha256": "5bdf8af54ff8b5daba05a96436b77bcdd17512917fdf82f0d8c82dc0b5ecaf51"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/arrowRightCorner.imageset/arrowRightCorner.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/arrowRightCorner.imageset/arrowRightCorner.svg",
+      "sha256": "2ce9953b89a7021310e4495efb9e058ce4a0192aa75cf1ddc967284d6a57c01f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/code.imageset/code.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/code.imageset/code.svg",
+      "sha256": "e2ad7755e19da0af305c710a4883475cd8999e558ba7c6fb29b4bc9eb1daa1e5"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/code.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/code.imageset/Contents.json",
+      "sha256": "fd9145daa4c7a3a23aae3798ec24bcd0872e19f0b0213b0f909af8c1d0fdb0b2"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/arrowUp.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/arrowUp.imageset/Contents.json",
+      "sha256": "6dde3b9f75d0e1da77de7c1877424fcfc508f92a9259d180ef401af12b7a88ed"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/arrowUp.imageset/arrowUp.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/arrowUp.imageset/arrowUp.svg",
+      "sha256": "dee05c2d3f6d27a54852b7452de0afbd9c6db22bcd747882b050d6e591b2d823"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/map.imageset/map.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/map.imageset/map.svg",
+      "sha256": "d76108c17dee66b651a320df3c8e1dc8c83d28fb57e1508791131fa43eeda1c9"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/map.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/map.imageset/Contents.json",
+      "sha256": "e4651f09e503ed198ac329a4c98b6ac65f0864391cc782e9b5b2b0da8531e8fa"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/dollar.imageset/dollar.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/dollar.imageset/dollar.svg",
+      "sha256": "f2d28c6ff1a6f7179835e79d65e88505388e8cc38b15efccfe94c5c7a2d7d95e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/dollar.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/dollar.imageset/Contents.json",
+      "sha256": "e76f04f8583fe255f23901960468306e224684ec1b2116f64bfa1fd10eed0856"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationCartFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationCartFilled.imageset/Contents.json",
+      "sha256": "1cbec5a294ac3630cf42642dfbea1e45246e15888569f5b4e4236d1bf84f996b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationCartFilled.imageset/navigationCartFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationCartFilled.imageset/navigationCartFilled.svg",
+      "sha256": "279143b0f72a7d97891e5354bea5a81ff84085f7620863b3ccc2613568d095fb"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/repeatIcon.imageset/repeatIcon.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/repeatIcon.imageset/repeatIcon.svg",
+      "sha256": "1947db2bb1dcf8cad1c2bed89a1a7797625bb5412fbcd1b09a100c523bfd4127"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/repeatIcon.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/repeatIcon.imageset/Contents.json",
+      "sha256": "87d8d26050e1a16c6d98269bcd8e48572b2585aab809fa7a321e852b7d0f5dde"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/creditCard.imageset/creditCard.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/creditCard.imageset/creditCard.svg",
+      "sha256": "bb7a24166b98b35df7b50d32c1a28c54333d41eb4502ee1b20fad00de744a117"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/creditCard.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/creditCard.imageset/Contents.json",
+      "sha256": "182672f0aefd81c7c80ee05d403734ab99668466435e3189fbb8bc77db47db5a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/thumbsUp.imageset/thumbsUp.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/thumbsUp.imageset/thumbsUp.svg",
+      "sha256": "33e6f82e449eb486283e525c39598bb7f32405b9af78a1de47e81edd8c4c0775"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/thumbsUp.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/thumbsUp.imageset/Contents.json",
+      "sha256": "5d4ffa9595114e70c38037d54f8f824d4de1de4685ae2fb15d82e83377df9b96"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/cvv.imageset/cvv.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/cvv.imageset/cvv.svg",
+      "sha256": "385b9468d2a52b2aba34be2590fca2172aeafc346f88c03759a901a29d31fb05"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/cvv.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/cvv.imageset/Contents.json",
+      "sha256": "22b0d92cfd1de09bb196c44071d2e37da7337409172ba665c52a73c02288169a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/about.imageset/about.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/about.imageset/about.svg",
+      "sha256": "c97d89f3049e4454ff438d3d0263cac4253c335741baaa32f8ac3ab4f61cb74b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/about.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/about.imageset/Contents.json",
+      "sha256": "9cd44f2ca074599e1983f7644e9a98604a411a936c53ec975bb7f9ef71a66408"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopInstagram.imageset/shopInstagram.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopInstagram.imageset/shopInstagram.svg",
+      "sha256": "eda248c02c03adff2a50e881c0b0b444e00249e6a33db37b7145e91425b8c7d6"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopInstagram.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopInstagram.imageset/Contents.json",
+      "sha256": "b83da7df1cc5567eb02184b322c40d3947fe93dc5ade98a09d578ff5b53dcabc"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/delivered.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/delivered.imageset/Contents.json",
+      "sha256": "7e9e4b15ec9b2ef05790807305adde53059d2aa936800a6ced9a3cfdd79dd94e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/delivered.imageset/delivered.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/delivered.imageset/delivered.svg",
+      "sha256": "0945bb8e4a2359a2d2e7c793173d2678ede2cbfa8db893e411abc3c8e6e18a1f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationFavorites.imageset/navigationFavorites.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationFavorites.imageset/navigationFavorites.svg",
+      "sha256": "3eaeae19317198f8212742754bc89d919a51fcd224688d3711bebc07da0180cf"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationFavorites.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationFavorites.imageset/Contents.json",
+      "sha256": "de4e007f483850cae9b498b174f97d5d5c2bf42737518da50f004ec71296f8c0"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/termsAndConditions.imageset/termsAndConditions.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/termsAndConditions.imageset/termsAndConditions.svg",
+      "sha256": "cb84cfcf1f1e1fceb115d2d5ffb1ecd8d0c0f1124befc3aa339a63e0f9d5cdab"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/termsAndConditions.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/termsAndConditions.imageset/Contents.json",
+      "sha256": "59193b72f0107bda209a3f29c5169f9c7c7747235ca9a5697e8f89012371c2c2"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyEdge.imageset/passkeyEdge.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyEdge.imageset/passkeyEdge.svg",
+      "sha256": "976a395271417ebb50032e1def5517d1697f8cebccc6b0ec66af97ae8787ca14"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyEdge.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyEdge.imageset/Contents.json",
+      "sha256": "937775e9c0df375ce228794c0cd619848b954789f9e9af55a7da135413c3072d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationSearchFilled.imageset/navigationSearchFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationSearchFilled.imageset/navigationSearchFilled.svg",
+      "sha256": "29c47faff28a2e8ca36f783c3076a2cda03be85c1acbfc2367a161888f4f1c48"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationSearchFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationSearchFilled.imageset/Contents.json",
+      "sha256": "40e389a10da894e423a51739e89d7b726bf05589fdb0ade7b6407102d2e3e14a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/sort.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/sort.imageset/Contents.json",
+      "sha256": "7cc7031dd55519f56db31312fcfcf72053cc905a471633895f68fd27ed2a508c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/sort.imageset/sort.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/sort.imageset/sort.svg",
+      "sha256": "a2649deb88ae268716d42e64d95693cf6af2ed3d6161fda0277abbcd573c3b9f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/edit.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/edit.imageset/Contents.json",
+      "sha256": "fa1686f5833130ebdcbb84d2c2bf8225d0c6277e87cc2d7a56a75d20b545742c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/edit.imageset/edit.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/edit.imageset/edit.svg",
+      "sha256": "b18c173b893f8320077414ce6969d948aff934867f52ff4ac6a3acb4d9b20907"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopFilled.imageset/shopFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopFilled.imageset/shopFilled.svg",
+      "sha256": "3e758c24e1785cfb4d8bc7d74cf4a25b59ef4179439ef7aa0726e84f7419199d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopFilled.imageset/Contents.json",
+      "sha256": "6bd8b5348465a6f2566206272a57d2da34225f62744f2aace45e0b91d85fb8f4"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/helpFilled.imageset/helpFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/helpFilled.imageset/helpFilled.svg",
+      "sha256": "e807911d4192b74bb1e4ebc1e76504a29854a1f399160c44e9399fe8e11531a6"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/helpFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/helpFilled.imageset/Contents.json",
+      "sha256": "449688b4674c710b4c45b812918cd069db3c46cbee6f5c58645dc9ec4270b3bc"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/codeFilled.imageset/codeFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/codeFilled.imageset/codeFilled.svg",
+      "sha256": "e2ad7755e19da0af305c710a4883475cd8999e558ba7c6fb29b4bc9eb1daa1e5"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/codeFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/codeFilled.imageset/Contents.json",
+      "sha256": "d5336ff53e707dbf6410960550cc161476a409bb098cd68ce9e3eb8be1a0347c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/tagFilled.imageset/tagFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/tagFilled.imageset/tagFilled.svg",
+      "sha256": "199882749ec574eff59c76ebd401ce5a5003e3ebc66029fa16909040160f6912"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/tagFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/tagFilled.imageset/Contents.json",
+      "sha256": "014a6ce51d29b9e0a0aee1145700b24e57359000c256fa5dbd64c396d954925e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationSearch.imageset/navigationSearch.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationSearch.imageset/navigationSearch.svg",
+      "sha256": "687a225cd4685a2531f6ae5d4bfa9fa5f03c84f06cc00d52b2b154db26e2101b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationSearch.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationSearch.imageset/Contents.json",
+      "sha256": "30d05f81a251aaa8e456dbf67ce704062bc9aba6cfc66b1c4dd746091f4e0c60"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/delete.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/delete.imageset/Contents.json",
+      "sha256": "af48242f288d07f4f43f0bda314cae0d435ff5f2a7b44349d1bfea2f965c676b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/delete.imageset/delete.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/delete.imageset/delete.svg",
+      "sha256": "7dbb6f4e4b480a54b5ecbf39491520d28d6ca171e9b56790c0e766ae3fa880f0"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shareAndroid.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shareAndroid.imageset/Contents.json",
+      "sha256": "e3871d76bded6deee7b3771731610e5992ee8abb3eb83f9a4439e52f1835373f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shareAndroid.imageset/shareAndroid.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shareAndroid.imageset/shareAndroid.svg",
+      "sha256": "d491e05373df327c97d23967c97ce7356d5eced8ea0af7f2258b9e80b73624f7"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bookmark.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bookmark.imageset/Contents.json",
+      "sha256": "50f9a15d5a758c3bd315f76b94dd2ef8dd02325c2e776fb1ea215ca450aeb3e8"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bookmark.imageset/bookmark.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bookmark.imageset/bookmark.svg",
+      "sha256": "ca0fe11285484ae4b809eef2b4f3f6d495d0f119b7d09ffb94f5f0d71d35dce1"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationProfileFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationProfileFilled.imageset/Contents.json",
+      "sha256": "f3a0752668064cd604f5ce8550069df795e23195ac0e91b6b28742e3949b4934"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationProfileFilled.imageset/navigationProfileFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationProfileFilled.imageset/navigationProfileFilled.svg",
+      "sha256": "4e44c215cd38c18ab358b0e6978289ffb03db9885e310b5affc351c70c5356e7"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/searchCircle.imageset/searchCircle.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/searchCircle.imageset/searchCircle.svg",
+      "sha256": "332d5b12674ca63d4937ffea63f67ae058dac069b2684f33b2cce5f06ba644a7"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/searchCircle.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/searchCircle.imageset/Contents.json",
+      "sha256": "ea6b365ab6ee2d258557a0eb48567c2f26c220f62d07fc90cb2e0253cc8b0510"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/checkmark.imageset/checkmark.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/checkmark.imageset/checkmark.svg",
+      "sha256": "7178839004b952c0070f604f4679c33779c9c210ecab46713cbd70659401414e"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/checkmark.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/checkmark.imageset/Contents.json",
+      "sha256": "f9399740f80366168d807fea0b60647b9578a05af3a63d77a0cdcccb659474d2"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/chatMinimize.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/chatMinimize.imageset/Contents.json",
+      "sha256": "e80034aeaaa5cb16c3c94afb2591bad9fd15f1f4f93d0875bd32ef2545af82a4"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/chatMinimize.imageset/chatMinimize.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/chatMinimize.imageset/chatMinimize.svg",
+      "sha256": "a6015a202994c36e112980712680ede6843fe7c0f5bdeb65e914082ec34e57b6"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/help.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/help.imageset/Contents.json",
+      "sha256": "818e198edb7fdb071ad4ac4076bb8af12edf6e1cb37aa6b4b77c915345934777"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/help.imageset/help.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/help.imageset/help.svg",
+      "sha256": "7dd42a1914347852826616f03af225bda58ccd8762b512dd7e609493d411f626"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/refresh.imageset/refresh.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/refresh.imageset/refresh.svg",
+      "sha256": "71d79a7c11e211f961167be39bc35e522e578ac2d8a26c51f7da1ec5a5938fa6"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/refresh.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/refresh.imageset/Contents.json",
+      "sha256": "4fbc8cf042f719b03eb56c8516d1a4825bcf3a3040fc5d176110dae4e09b63ec"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/calendarFilled.imageset/calendarFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/calendarFilled.imageset/calendarFilled.svg",
+      "sha256": "4e7c693821a795de17c1e1f2ee9da188e83171b359e4ff0e3d037b6206c6c8f7"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/calendarFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/calendarFilled.imageset/Contents.json",
+      "sha256": "6a1c0a34b1f231287613ce6d4aa0e47f820d19bb9de8f59f399b6527348ebee0"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/signout.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/signout.imageset/Contents.json",
+      "sha256": "cf81a0f0ab98e27bdbf2c7c044122d15a5e8f1719c63d68c553f8c716c52879b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/signout.imageset/signout.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/signout.imageset/signout.svg",
+      "sha256": "38f270907cbedb4623cd961c392a683d33ee4ab20dda67f4906b93c5bed2a85d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyOnePassword.imageset/passkeyOnePassword.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyOnePassword.imageset/passkeyOnePassword.svg",
+      "sha256": "64e8140a9fa3e90139a46aa1eb233c58c4c8911fa1d2955a18962bc9f754f73d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/passkeyOnePassword.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/passkeyOnePassword.imageset/Contents.json",
+      "sha256": "546987ba8c01cb9b472af06cc51771d732d674f4b7c96163ed9f4b35cdd1ca09"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/fingerprint.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/fingerprint.imageset/Contents.json",
+      "sha256": "a76d571c5afeee73c4a0ab1512d4661a392eeb268fd5a8a901052f42bbf51352"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/fingerprint.imageset/fingerprint.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/fingerprint.imageset/fingerprint.svg",
+      "sha256": "2ecac9e6da18b1d4d2e163b3e63f666568fed6087514e5d33f54597c54f9b3ee"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/share.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/share.imageset/Contents.json",
+      "sha256": "db1a34af5136e1782170927cc86f5549db793c864143058083cc53af780c2f9d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/share.imageset/share.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/share.imageset/share.svg",
+      "sha256": "8c6e6e083b0cda7b13192988ff0a48bb52bf13d5f99d448a3ed8c803288386bc"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/smileyHappy.imageset/smileyHappy.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/smileyHappy.imageset/smileyHappy.svg",
+      "sha256": "2fad0da790c9eed02d1c415a3cf2ee210f21c40cd7966e6b35f03558b5c94d05"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/smileyHappy.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/smileyHappy.imageset/Contents.json",
+      "sha256": "c59eeea2e6d5f06d4c3c669b8fd414c4fa751cc59511fb15f8cf4fcd163576e3"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/youtube.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/youtube.imageset/Contents.json",
+      "sha256": "105153aad053218ef11a3789d37ecad68b6abcb2827dc3cc602eed332adc0329"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/youtube.imageset/youtube.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/youtube.imageset/youtube.svg",
+      "sha256": "79f1242f92c36717d800419dc0f9e8b5253317a7bd2a40674e01eca87e27b692"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/settings.imageset/settings.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/settings.imageset/settings.svg",
+      "sha256": "e68846a168f00f7fa4aa186685cfe5542673432a7dd4fd491ae5fb1f36497d55"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/settings.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/settings.imageset/Contents.json",
+      "sha256": "4c8418dce941e4c1c7397ef841a735ba482b9769bbc944d9378c220f1fae0287"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/orderFilled.imageset/orderFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/orderFilled.imageset/orderFilled.svg",
+      "sha256": "92156394bc0a4d497440255ebff08d0dd107ea7a2f1041d9d1ceeb7c7fd0013f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/orderFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/orderFilled.imageset/Contents.json",
+      "sha256": "8172ec95a9a5213aa4408808b2a72b6751d269e723334c05484cad9cc4a4a899"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/arrowLeft.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/arrowLeft.imageset/Contents.json",
+      "sha256": "521a8c7f559314a1c3ac285c3b0bdb27063bcc9667f87d003afff16d95ff88fd"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/arrowLeft.imageset/arrowLeft.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/arrowLeft.imageset/arrowLeft.svg",
+      "sha256": "480350957433d12ae15ab09a014edaf7a143ba4c9396bb760f9cb79735296c56"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/launch.imageset/launch.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/launch.imageset/launch.svg",
+      "sha256": "fc1fe7814d70d6c4b1b45c5b1c38fdc79a880795fab7efc28861f8c3dfa28977"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/launch.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/launch.imageset/Contents.json",
+      "sha256": "f6be2cb34a946f478841c94a972d20db32c347b2a58277b8a3ca20779167455a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/alertTriangleFilled.imageset/alertTriangleFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/alertTriangleFilled.imageset/alertTriangleFilled.svg",
+      "sha256": "38bc7f505c6bc2b14449c955a47d8a1c9b3ae34c817af0fe591a1a8937d0e6c9"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/alertTriangleFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/alertTriangleFilled.imageset/Contents.json",
+      "sha256": "5c720371e83b2e12393d42c69097e54feff6076e8d716b0820ac6dc5437f83ae"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/favoritesHeart.imageset/favoritesHeart.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/favoritesHeart.imageset/favoritesHeart.svg",
+      "sha256": "8acf24eea10639ada2130b8f5bb89cf286ca04ae8fb1cb3630bd0e2df1cdde0c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/favoritesHeart.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/favoritesHeart.imageset/Contents.json",
+      "sha256": "3c40b49b26de5a299b57c638b3d66916e25c5d501b6705b6d40b6055109fd1b8"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boldLeftChevron.imageset/boldLeftChevron.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boldLeftChevron.imageset/boldLeftChevron.svg",
+      "sha256": "795d620da531f7441bb74481eb80a92a6606bb45cfd69f8d9cbfccba11a2f29a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boldLeftChevron.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boldLeftChevron.imageset/Contents.json",
+      "sha256": "70df9b5bb142c7d9d78bdc167c2f6d529831af38671649602a1ff5894f4c87c0"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/volumeOff.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/volumeOff.imageset/Contents.json",
+      "sha256": "3dee98f235aa836702a250d348a3faaa2ae5b01edd7a61b069928860cbaaad37"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/volumeOff.imageset/volumeOff.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/volumeOff.imageset/volumeOff.svg",
+      "sha256": "9b61dbf6cecd0011b09841b8d603fdb8d34e7151783146a61e3b833ade29ffa6"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationOrders.imageset/navigationOrders.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationOrders.imageset/navigationOrders.svg",
+      "sha256": "22dec06c7776bf5e1b494ac6dacbd7125cd70484033b795dd071a4ac181fb340"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/navigationOrders.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/navigationOrders.imageset/Contents.json",
+      "sha256": "b04246503ed036265f6101f2295cd8d93d369debe47bf171275b42ccd20eac12"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/search.imageset/search.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/search.imageset/search.svg",
+      "sha256": "e6d6ebc8732dd5ea868769f986ab81b3b60abd425566d86cf7c7371670eba723"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/search.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/search.imageset/Contents.json",
+      "sha256": "da5a6b7893a7fb1a6b7d4e426d74933fbe7911fab5f3b155426dc8da53a82a40"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopChat.imageset/shopChat.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopChat.imageset/shopChat.svg",
+      "sha256": "c7dd7bf58859f1c570bceb6f3ab55810577fd10bfc0572db54a578f2c984aceb"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/shopChat.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/shopChat.imageset/Contents.json",
+      "sha256": "caaf299d79c411c3597d0f5351f1c050343cce545a6e9e367e4e63e16ddf5498"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/editFilled.imageset/editFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/editFilled.imageset/editFilled.svg",
+      "sha256": "352bfc5dfd1634ea4c61fdc0587046141bedbcdcea64f69204ea883730cc92ca"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/editFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/editFilled.imageset/Contents.json",
+      "sha256": "d9d5abca9f9ab7bbd9ace1a2dedae4506391df321fa7ca9f8655b4a3e13f0cb0"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/sendFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/sendFilled.imageset/Contents.json",
+      "sha256": "ad795db5a31ed384722b8696fd247c04d67484cff866ff67d0fa0b0fef7a8ca7"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/sendFilled.imageset/sendFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/sendFilled.imageset/sendFilled.svg",
+      "sha256": "c35fdaad92aaec7535214e051544f2c037620455943c558990923eebdad3de04"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/outlookLogo.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/outlookLogo.imageset/Contents.json",
+      "sha256": "ca9a9557d612be11c920cd091c54daa90da0006778f6e17004d0ba9911df9fad"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/outlookLogo.imageset/outlookLogo.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/outlookLogo.imageset/outlookLogo.svg",
+      "sha256": "71584a5803367c9ba2d0c5a148a1414b7e9edb29ea67345fa7a1e4c63094822d"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/cashback.imageset/cashback.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/cashback.imageset/cashback.svg",
+      "sha256": "619b84b304203b1a57f35b9e40724a5650b2acb9f679af27781c9352769ef140"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/cashback.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/cashback.imageset/Contents.json",
+      "sha256": "dd13f81950747fac0c2754cc93dde30b719cf775ceef278ea1dc917151ba8aa4"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/alertTriangle.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/alertTriangle.imageset/Contents.json",
+      "sha256": "1272447a09a07f0244be8be2453008f1798e7048c9386b51c99e10a53d2b938f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/alertTriangle.imageset/alertTriangle.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/alertTriangle.imageset/alertTriangle.svg",
+      "sha256": "18b8f95a59b18d4731bc023ca8110ac620e756870beefa241081cb1b19da9844"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bookmarkFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bookmarkFilled.imageset/Contents.json",
+      "sha256": "9caa3c0609d76edcc5c3d6d4992bdbeda3a5de73ecad83952c5053de4d1b4c2b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/bookmarkFilled.imageset/bookmarkFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/bookmarkFilled.imageset/bookmarkFilled.svg",
+      "sha256": "60ed2a86b8b1c4b54b6060124bf5a439356beaed083d52cd0d3c129c43b7e443"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/amazonPrimeLogo.imageset/amazonPrimeLogo.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/amazonPrimeLogo.imageset/amazonPrimeLogo.svg",
+      "sha256": "1244ab5e370c96e8f8f99fd6eb54df4d1f87e8dfe66fd3b3cd1628fa951efe1c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/amazonPrimeLogo.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/amazonPrimeLogo.imageset/Contents.json",
+      "sha256": "64cf509a6de43652f8ce41668d1a5a20728f0cdb0d7a9e3ca696a9662cf0df54"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/arSymbol.imageset/arSymbol.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/arSymbol.imageset/arSymbol.svg",
+      "sha256": "781b7cf86305c37ffae1b3b052c4a8ef7bceaa6b23bd443f9eecf1b57970008a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/arSymbol.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/arSymbol.imageset/Contents.json",
+      "sha256": "706f2533465acaafa3452d7391abd093431616c46ec2ce7b22d1ed15723d48c5"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/paletteFilled.imageset/paletteFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/paletteFilled.imageset/paletteFilled.svg",
+      "sha256": "f3e054835e5d5441fe1259ba9063049e683ba8cbe626215d098c6540176e3943"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/paletteFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/paletteFilled.imageset/Contents.json",
+      "sha256": "f99aad6fed02e9067022f4c23cb29db00e38be8f30cecdaa00b73f6fec03c619"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/hamburgerMenu.imageset/hamburgerMenu.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/hamburgerMenu.imageset/hamburgerMenu.svg",
+      "sha256": "74f65ccb7366dba2be2c9ef6966ec676ae0c6ab1464449290fb3a6b232f84b2f"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/hamburgerMenu.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/hamburgerMenu.imageset/Contents.json",
+      "sha256": "83dbb873e0835d62fbbc4e249e00b346ea1435099aafe95d9df8b8f05ecaaaa1"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/send.imageset/send.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/send.imageset/send.svg",
+      "sha256": "4ec8ea30acfce3e9dc2e4bb5ad009fe5bf0f00add9143ae21552135dbe73bf9c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/send.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/send.imageset/Contents.json",
+      "sha256": "e44abfa86a4a71f93b18c310bae08e8fba401b26c053bd0718da4b6ffe64b420"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/wrapLeftArrow.imageset/wrapLeftArrow.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/wrapLeftArrow.imageset/wrapLeftArrow.svg",
+      "sha256": "8d79038a604ac33a4f4f824650d78b20c1d978b3e3c2a5817fdeddf382ee6c49"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/wrapLeftArrow.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/wrapLeftArrow.imageset/Contents.json",
+      "sha256": "c944e2a7a068bab3f51276c52b12103bf9341c1b9696151ed295aa62579fe991"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/appleLogo.imageset/appleLogo.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/appleLogo.imageset/appleLogo.svg",
+      "sha256": "9530d02b046b65642fd4c8f0c7ade6779e977ba07fa3f3d64393f0491675aba4"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/appleLogo.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/appleLogo.imageset/Contents.json",
+      "sha256": "ee30a2faed13567717be7c8a0f86ae5fb3abd184172ff5f509246400b83e1249"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/chatMagic.imageset/chatMagic.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/chatMagic.imageset/chatMagic.svg",
+      "sha256": "02763bf738d4cb34da14983f9f68c6d463a80fe8d367668dd9b523b4897a57ed"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/chatMagic.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/chatMagic.imageset/Contents.json",
+      "sha256": "cc1db15d64b6e88723b9e06d9acbda33ead23dbc3495eb8e3c449c37891f498a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/searchArea.imageset/searchArea.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/searchArea.imageset/searchArea.svg",
+      "sha256": "8d840b401e531cd3f08aa983084e178051024d9b4f0fb9cc7efeb53398b0a545"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/searchArea.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/searchArea.imageset/Contents.json",
+      "sha256": "d53c76720a1f1ffcc6be48796e47581c4b33168fb8459b25e809e4306bd702ae"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/crossCircleFilled.imageset/crossCircleFilled.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/crossCircleFilled.imageset/crossCircleFilled.svg",
+      "sha256": "ade71030dd73411f3fa1d14fe8560fe3b483d3fdd6f27473162754ed5e794e25"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/crossCircleFilled.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/crossCircleFilled.imageset/Contents.json",
+      "sha256": "46856f9a4039078125b79a6bfdbff2538bc305048d254279ea3f76719dd2af27"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/minusSign.imageset/minusSign.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/minusSign.imageset/minusSign.svg",
+      "sha256": "9514920e7ff794ca53b938cdd8547277ade39aba6674cdc53a6740a38377078c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/minusSign.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/minusSign.imageset/Contents.json",
+      "sha256": "09126ef6f0cc780485cc6420a7345712b19edb027d26d9ccfe5bebd620db8efc"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/development.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/development.imageset/Contents.json",
+      "sha256": "105c726d0bb35908a7715de630c27aa91dcf768eb844ddc33d082c778ab83a4c"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/development.imageset/development.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/development.imageset/development.svg",
+      "sha256": "cb37ddc6ddf480f26e9aa51beba6a4db94a45b59f891cda948c4d5b12876709a"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boldUpChevron.imageset/boldUpChevron.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boldUpChevron.imageset/boldUpChevron.svg",
+      "sha256": "da2bbd7afa1810f409a8b6290405876518c305a989cb177f3e00f297e82854c3"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/boldUpChevron.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/boldUpChevron.imageset/Contents.json",
+      "sha256": "877f14d3e1871818acf924b844aac2a9bf37e2c091e21e950a06e3544ab166e8"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/leftChevron.imageset/leftChevron.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/leftChevron.imageset/leftChevron.svg",
+      "sha256": "90a05f2e93e8c9a0bdefe5c64d957bb842773888f660f0404241dd76df045bf3"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/leftChevron.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/leftChevron.imageset/Contents.json",
+      "sha256": "b1c24951f3d29f623e2cd24348177e80296db1b9d869f144132c858575f2c8e7"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/info.imageset/info.svg",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/info.imageset/info.svg",
+      "sha256": "e88c04f3bf4598d992780da247b4c965d0c4eec6ce064ba6e499592093da102b"
+    },
+    {
+      "source": "Gravity/Resources/ShopIcons.xcassets/info.imageset/Contents.json",
+      "destination": "Gravity/Resources/ShopIcons.xcassets/info.imageset/Contents.json",
+      "sha256": "886e70af1c74220a1b91f9d155efafa8bb54a59cd1d9cfbf0dc5b336f07d9b30"
+    },
+    {
+      "source": "Shop/Resources/en.lproj/Localizable.strings",
+      "destination": "Sources/JulianAgentUI/Resources/en.lproj/Localizable.strings",
+      "sha256": "4bfb1c46b4e540833682c64c00e07c3fc68ba24dee098f15682a0f78db7b1616"
+    },
+    {
+      "source": "Shop/Resources/shopicon6.icon/icon.json",
+      "destination": "AppIcons/shopicon6.icon/icon.json",
+      "sha256": "071750f740fc653085aeccdf4ee5139a0230cbb07a2e866721aa454c211575e5"
+    },
+    {
+      "source": "Shop/Resources/shopiconpainted2.icon/icon.json",
+      "destination": "AppIcons/shopiconpainted2.icon/icon.json",
+      "sha256": "5fbe9e859c99b2b3633a51a921ec3c61bec70a811df409d5fa7ca585eb5c9b5f"
+    },
+    {
+      "source": "Shop/Resources/shopicon7.icon/icon.json",
+      "destination": "AppIcons/shopicon7.icon/icon.json",
+      "sha256": "8fbad130844c6513fd2b8f07c7ec8e69e535919f001e42489eb2ee9ca4f1f5b8"
+    },
+    {
+      "source": "Shop/Resources/shopiconpainted.icon/icon.json",
+      "destination": "AppIcons/shopiconpainted.icon/icon.json",
+      "sha256": "960b3dc966818756099429c36b9bc3f6f1e508b8017490c0578beb0e06962b35"
+    },
+    {
+      "source": "Shop/Resources/shopicon12.icon/icon.json",
+      "destination": "AppIcons/shopicon12.icon/icon.json",
+      "sha256": "1d1c9e13763cf33b036559c5bacf742e1b229308343ebdd3b6541e8ebe777f6c"
+    },
+    {
+      "source": "Shop/Resources/shopicon11.icon/icon.json",
+      "destination": "AppIcons/shopicon11.icon/icon.json",
+      "sha256": "fdfeaf1d3aa310565745cfc2dce67233ef1f31dd0c629b7eec68f6c90f1f3ff7"
+    },
+    {
+      "source": "Shop/Resources/shopicon2.icon/icon.json",
+      "destination": "AppIcons/shopicon2.icon/icon.json",
+      "sha256": "a3e220e23f1d441ccaad3cd5fdf19518951250df9e8f6c28762b7374a7255483"
+    },
+    {
+      "source": "Shop/Resources/shopicon.icon/icon.json",
+      "destination": "AppIcons/shopicon.icon/icon.json",
+      "sha256": "55a106bf96e190d7d558f6aeaa7e5d5467471d349f18236af4a52abb066da45d"
+    },
+    {
+      "source": "Shop/Resources/shopicon3.icon/icon.json",
+      "destination": "AppIcons/shopicon3.icon/icon.json",
+      "sha256": "bbc95d4e2113371e706109aaf00fee375b3a2055af7b557819478ef33e4592ac"
+    },
+    {
+      "source": "Shop/Resources/shopicon10.icon/icon.json",
+      "destination": "AppIcons/shopicon10.icon/icon.json",
+      "sha256": "905da03ee8368ebee1e86ea7c164add0459117b1509dbcdcec4ff59ee9fe8973"
+    },
+    {
+      "source": "Shop/Resources/shopicon4.icon/icon.json",
+      "destination": "AppIcons/shopicon4.icon/icon.json",
+      "sha256": "39efc1651d3a1837fd174045ac863fb8dbe244ff98a1703db41d1674b35c9951"
+    },
+    {
+      "source": "Shop/Resources/shopicon8.icon/icon.json",
+      "destination": "AppIcons/shopicon8.icon/icon.json",
+      "sha256": "d0f5749edd2c866b5930383585c5f0b317b922cee57c2b931a174efa0cd99975"
+    },
+    {
+      "source": "Shop/Resources/shopicon9.icon/icon.json",
+      "destination": "AppIcons/shopicon9.icon/icon.json",
+      "sha256": "1144eb12c2a537f02eb6a79100bf5f568437671221bca024869b352dcd4c2cd4"
+    },
+    {
+      "source": "Shop/Resources/shopicon5.icon/icon.json",
+      "destination": "AppIcons/shopicon5.icon/icon.json",
+      "sha256": "391d4bba94ba48c47707c76c7f69fadddd8091ee97c905e6a51f0ad5bb025d02"
+    },
+    {
+      "source": "Shop/Resources/shopicon5.icon/Assets/Frame 11.png",
+      "destination": "AppIcons/shopicon5.icon/Assets/Frame 11.png",
+      "sha256": "1382aba1f750f11b1692b3874dfa2ad285d64878bbd199773aa74f11be58b4f2"
+    },
+    {
+      "source": "Shop/Resources/shopicon5.icon/Assets/Frame 13.png",
+      "destination": "AppIcons/shopicon5.icon/Assets/Frame 13.png",
+      "sha256": "8cc4c7617945f0385d36f1e65942cfda2805d12a3a4107f6db85facb51a4b8d6"
+    },
+    {
+      "source": "Shop/Resources/shopicon5.icon/Assets/crazyhighlights.png",
+      "destination": "AppIcons/shopicon5.icon/Assets/crazyhighlights.png",
+      "sha256": "263d85b6bc1447efc6700994688917d2aa8e2a77230e4aabdacb03541da8fd06"
+    },
+    {
+      "source": "Shop/Resources/shopicon9.icon/Assets/Frame 34000.png",
+      "destination": "AppIcons/shopicon9.icon/Assets/Frame 34000.png",
+      "sha256": "61a5c7cf7d24107d39d947acb4b89c898d3fab5e85a0a042afee133884584ca5"
+    },
+    {
+      "source": "Shop/Resources/shopicon9.icon/Assets/Frame 320.png",
+      "destination": "AppIcons/shopicon9.icon/Assets/Frame 320.png",
+      "sha256": "dab00132aeb36c5d5a49d77804e518876ab755fa63ad3cca277e5e206adc824a"
+    },
+    {
+      "source": "Shop/Resources/shopicon9.icon/Assets/Frame 33000.png",
+      "destination": "AppIcons/shopicon9.icon/Assets/Frame 33000.png",
+      "sha256": "561c769deb5ab1a9133b328b3af6a5e5d3fee496652fb370f35d24e0a240ac1e"
+    },
+    {
+      "source": "Shop/Resources/shopicon9.icon/Assets/Frame 3200.png",
+      "destination": "AppIcons/shopicon9.icon/Assets/Frame 3200.png",
+      "sha256": "9a99e5f11e949284db1268368e0bae37783d3d127f0e9c00eec98f410a723e16"
+    },
+    {
+      "source": "Shop/Resources/shopicon8.icon/Assets/crazy 2.png",
+      "destination": "AppIcons/shopicon8.icon/Assets/crazy 2.png",
+      "sha256": "d6a2ff88f7f30909f4e675de1ab4c2bcb2896b09e9f2905c818da96782b3ba83"
+    },
+    {
+      "source": "Shop/Resources/shopicon8.icon/Assets/wordmark.png",
+      "destination": "AppIcons/shopicon8.icon/Assets/wordmark.png",
+      "sha256": "e33d532da3178c30b8749324c7e931956095b49522129093f476765beb1c926a"
+    },
+    {
+      "source": "Shop/Resources/shopicon4.icon/Assets/Frame 10.png",
+      "destination": "AppIcons/shopicon4.icon/Assets/Frame 10.png",
+      "sha256": "88c5e03f889905b92c2dd24003210703ac333e1320bdc398c2246a261d5f2da2"
+    },
+    {
+      "source": "Shop/Resources/shopicon4.icon/Assets/Frame 11.png",
+      "destination": "AppIcons/shopicon4.icon/Assets/Frame 11.png",
+      "sha256": "1382aba1f750f11b1692b3874dfa2ad285d64878bbd199773aa74f11be58b4f2"
+    },
+    {
+      "source": "Shop/Resources/shopicon10.icon/Assets/Frame 38000.png",
+      "destination": "AppIcons/shopicon10.icon/Assets/Frame 38000.png",
+      "sha256": "ea500cca6c9c707fcdfec8579b27fe8a8e0e1a1a0aef4c6acf34c31c0f627109"
+    },
+    {
+      "source": "Shop/Resources/shopicon10.icon/Assets/forgedlogo.png",
+      "destination": "AppIcons/shopicon10.icon/Assets/forgedlogo.png",
+      "sha256": "ac6944acd6fb48ca6e2149bb66a0cfbd84d2bea78743a2b409f23faabd9554c8"
+    },
+    {
+      "source": "Shop/Resources/shopicon10.icon/Assets/forgedbg.png",
+      "destination": "AppIcons/shopicon10.icon/Assets/forgedbg.png",
+      "sha256": "f08c1e7e742a2af4147bd3019f40069443a4cf3554c34ed05bbc3ffbfb736462"
+    },
+    {
+      "source": "Shop/Resources/shopicon3.icon/Assets/Frame 100.png",
+      "destination": "AppIcons/shopicon3.icon/Assets/Frame 100.png",
+      "sha256": "3585d8a07565be758543ea0ca379b94aa7d0e5dea14400bfb525240993e248bf"
+    },
+    {
+      "source": "Shop/Resources/shopicon3.icon/Assets/crazymd.png",
+      "destination": "AppIcons/shopicon3.icon/Assets/crazymd.png",
+      "sha256": "1250e60ba8d0f220de949dc1d7a65f78ee6ec4d5dce17d23b5b5eeeea5dacf5f"
+    },
+    {
+      "source": "Shop/Resources/shopicon3.icon/Assets/Frame 9.png",
+      "destination": "AppIcons/shopicon3.icon/Assets/Frame 9.png",
+      "sha256": "04dbf9cf0cb8f8a8d92ad357597b0e96dc12973613169fb74facf2552c1f0882"
+    },
+    {
+      "source": "Shop/Resources/shopicon.icon/Assets/gradientlogo 5.png",
+      "destination": "AppIcons/shopicon.icon/Assets/gradientlogo 5.png",
+      "sha256": "61999e0435d25cfe4c5e73bd433a214c404b79655af9fcdb0ff071363ac55c03"
+    },
+    {
+      "source": "Shop/Resources/shopicon.icon/Assets/gradientlogobg 6.png",
+      "destination": "AppIcons/shopicon.icon/Assets/gradientlogobg 6.png",
+      "sha256": "f55216547fc280fc0efb698e121090fa938ff945a905fcd6c8b78bf691733a1b"
+    },
+    {
+      "source": "Shop/Resources/shopicon2.icon/Assets/Frame 11 2.png",
+      "destination": "AppIcons/shopicon2.icon/Assets/Frame 11 2.png",
+      "sha256": "1382aba1f750f11b1692b3874dfa2ad285d64878bbd199773aa74f11be58b4f2"
+    },
+    {
+      "source": "Shop/Resources/shopicon2.icon/Assets/Frame 5 2.png",
+      "destination": "AppIcons/shopicon2.icon/Assets/Frame 5 2.png",
+      "sha256": "b5ef65c3f34a0b1a7c046cb1209498d7d7cc4075cd85179abcd899e766ef3804"
+    },
+    {
+      "source": "Shop/Resources/shopicon11.icon/Assets/shimmer.png",
+      "destination": "AppIcons/shopicon11.icon/Assets/shimmer.png",
+      "sha256": "3f4e8906a7489d90013ac2b5c7ca3cacb742fe552e58586eda825c7aa82b51f1"
+    },
+    {
+      "source": "Shop/Resources/shopicon11.icon/Assets/Frame 41.png",
+      "destination": "AppIcons/shopicon11.icon/Assets/Frame 41.png",
+      "sha256": "fa7d4113dd0e3e67c0d9928714e950e616cb942b00dcaa9bd44e77ae9ac5bfa9"
+    },
+    {
+      "source": "Shop/Resources/shopicon11.icon/Assets/Frame 43.png",
+      "destination": "AppIcons/shopicon11.icon/Assets/Frame 43.png",
+      "sha256": "6c654e35da99c5ea859b32634ec4e5e4c5f4e3f828962f1171f2e5ae9e12255b"
+    },
+    {
+      "source": "Shop/Resources/shopicon12.icon/Assets/shimmerglows.png",
+      "destination": "AppIcons/shopicon12.icon/Assets/shimmerglows.png",
+      "sha256": "e9f940741e5467423a361016452cf93cd7011df410239e9d6fe99a4c320bfc4b"
+    },
+    {
+      "source": "Shop/Resources/shopicon12.icon/Assets/shimmer.png",
+      "destination": "AppIcons/shopicon12.icon/Assets/shimmer.png",
+      "sha256": "3f4e8906a7489d90013ac2b5c7ca3cacb742fe552e58586eda825c7aa82b51f1"
+    },
+    {
+      "source": "Shop/Resources/shopiconpainted.icon/Assets/Frame 50.png",
+      "destination": "AppIcons/shopiconpainted.icon/Assets/Frame 50.png",
+      "sha256": "5f0a806ff02769459341285cc6365111dee27219150f639831cc4ac0bc8bffba"
+    },
+    {
+      "source": "Shop/Resources/shopicon7.icon/Assets/Frame 38000.png",
+      "destination": "AppIcons/shopicon7.icon/Assets/Frame 38000.png",
+      "sha256": "ea500cca6c9c707fcdfec8579b27fe8a8e0e1a1a0aef4c6acf34c31c0f627109"
+    },
+    {
+      "source": "Shop/Resources/shopicon7.icon/Assets/Frame 240.png",
+      "destination": "AppIcons/shopicon7.icon/Assets/Frame 240.png",
+      "sha256": "bb7ffca8913c931104f3e6434eec6150f376a1ea00afc35ed96503029ff3d9aa"
+    },
+    {
+      "source": "Shop/Resources/shopicon7.icon/Assets/supershiny.png",
+      "destination": "AppIcons/shopicon7.icon/Assets/supershiny.png",
+      "sha256": "51faa515e96e2066c2c0399e721910fc43df8ef45c0cba46e25d824c3f44b5c3"
+    },
+    {
+      "source": "Shop/Resources/shopiconpainted2.icon/Assets/Frame 52.png",
+      "destination": "AppIcons/shopiconpainted2.icon/Assets/Frame 52.png",
+      "sha256": "2d00f4d10bca6a648b3b0ac4edb67a8e4a9864a5783b0ce2fca9faf8d50580c9"
+    },
+    {
+      "source": "Shop/Resources/shopiconpainted2.icon/Assets/Frame 53.png",
+      "destination": "AppIcons/shopiconpainted2.icon/Assets/Frame 53.png",
+      "sha256": "8afaf5e9ff5f88e001c02670eee5f7044766b0fb155761fa6eaafd866fc0f137"
+    },
+    {
+      "source": "Shop/Resources/shopiconpainted2.icon/Assets/Frame 51.png",
+      "destination": "AppIcons/shopiconpainted2.icon/Assets/Frame 51.png",
+      "sha256": "2470aa683afd90009be9ee27235ce0ca1d5dad02b211acdeb2eb075ab1862094"
+    },
+    {
+      "source": "Shop/Resources/shopiconpainted2.icon/Assets/Frame 50.png",
+      "destination": "AppIcons/shopiconpainted2.icon/Assets/Frame 50.png",
+      "sha256": "a4318524953a7778ae1f3a26c50d9f3a96e5bbb975067f56c6ad03e3256bba34"
+    },
+    {
+      "source": "Shop/Resources/shopicon6.icon/Assets/Frame 140.png",
+      "destination": "AppIcons/shopicon6.icon/Assets/Frame 140.png",
+      "sha256": "e33d532da3178c30b8749324c7e931956095b49522129093f476765beb1c926a"
+    },
+    {
+      "source": "Shop/Resources/shopicon6.icon/Assets/Frame 220.png",
+      "destination": "AppIcons/shopicon6.icon/Assets/Frame 220.png",
+      "sha256": "2cb2990909d4986b387853e8fd7ac541bedc89eada64c693329ffe2fe6ec8d18"
+    },
+    {
+      "source": "Shop/Resources/shopicon6.icon/Assets/Frame 15.png",
+      "destination": "AppIcons/shopicon6.icon/Assets/Frame 15.png",
+      "sha256": "a9071da012cd54da955ab90dc209ff1334adf13abca645e6bb5ebd5c3030de99"
+    }
+  ]
+}

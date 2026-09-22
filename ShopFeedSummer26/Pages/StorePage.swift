@@ -67,8 +67,14 @@ struct StorePage: View {
     @ViewBuilder
     private func floatingHeader(merchant: SampleMerchant) -> some View {
         HStack {
-            // Hamburger menu button
-            glassCircleButton(icon: .hamburgerMenu, merchant: merchant)
+            if ShopCanvasLibrary.isEnabled {
+                Button { coordinator.popCurrentPage() } label: {
+                    glassCircleButton(icon: .arrowLeft, merchant: merchant)
+                }
+                .accessibilityLabel("Back")
+            } else {
+                glassCircleButton(icon: .hamburgerMenu, merchant: merchant)
+            }
 
             Spacer()
 
@@ -140,11 +146,12 @@ struct StorePage: View {
 
                     // Wordmark or merchant name
                     if merchant.bestWordmarkURL != nil {
-                        MerchantWordmarkImage(merchant: merchant, maxHeight: 80, maxWidth: 220)
+                        MerchantWordmarkImage(merchant: merchant, maxHeight: 80, maxWidth: 220,
+                            onDarkBackground: merchant.bestCoverImageURL != nil || isDarkBackground)
                     } else {
                         Text(merchant.name)
                             .gravityTextStyle(GravityTypography.heroBold)
-                            .foregroundStyle(.white)
+                            .foregroundStyle(ShopCanvasLibrary.isEnabled && merchant.bestCoverImageURL == nil && !isDarkBackground ? .black : .white)
                     }
 
                     // Rating info only appears when the catalog actually
@@ -182,7 +189,7 @@ struct StorePage: View {
     private func storeContent(merchant: SampleMerchant) -> some View {
         VStack(alignment: .leading, spacing: GravitySpacing.space8) {
             // Filter chips
-            filterChips(merchant: merchant)
+            if !ShopCanvasLibrary.isEnabled { filterChips(merchant: merchant) }
 
             // Product grid
             productGrid(merchant: merchant)
@@ -241,7 +248,7 @@ struct StorePage: View {
                         productName: product.title,
                         rating: merchant.rating,
                         ratingCount: merchant.totalRatings,
-                        price: formatPrice(product.price)
+                        price: formatPrice(product)
                     )
                     .matchedTransitionSource(id: product.id, in: namespace)
                 }

@@ -8,7 +8,7 @@ import Foundation
 /// retargeting stay honest and testable. Views ask for a `SignalStrength`
 /// and never read raw signal arrays, so swapping in a live source later
 /// only touches this file.
-struct ShopperSignals: Codable {
+struct ShopperSignals: Codable, Equatable {
     struct ProductRef: Codable, Hashable {
         let merchantID: String
         let productID: Int

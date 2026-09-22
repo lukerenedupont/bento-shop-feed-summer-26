@@ -1,4 +1,5 @@
 import SwiftUI
+import JulianAgentUI
 
 /// Shared top-level buyer navigation used by every personalized feed.
 ///
@@ -7,6 +8,9 @@ import SwiftUI
 struct BuyerFeedNavigationBar: View {
     let profile: BuyerPreviewProfile
     let topics: [BuyerFeedTopic]
+    var showsAvatar = true
+    var showsSearchChip = false
+    var onSearch: () -> Void = {}
     let selectedTopicID: String
     @Bindable var chromeTransitionState: FeedChromeTransitionState
     var usesInverseStyle = false
@@ -21,8 +25,10 @@ struct BuyerFeedNavigationBar: View {
     var body: some View {
         ZStack(alignment: .leading) {
             topicRail
-            avatarButton
-                .zIndex(1)
+            if showsAvatar {
+                avatarButton
+                    .zIndex(1)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, GravitySpacing.space16)
@@ -49,9 +55,10 @@ struct BuyerFeedNavigationBar: View {
 
     private var topicRail: some View {
         ScrollViewReader { proxy in
-            let leadingInset = FeedNavigationStyle.avatarSize + GravitySpacing.space6
+            let leadingInset = showsAvatar ? FeedNavigationStyle.avatarSize + GravitySpacing.space6 : 0
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: FeedNavigationStyle.itemSpacing) {
+                    if showsSearchChip { JulianSearchChip(onTap: onSearch) }
                     ForEach(topics) { topic in
                         topicButton(topic)
                             .id(topic.id)
@@ -72,7 +79,7 @@ struct BuyerFeedNavigationBar: View {
                     // before they can emerge from its opposite edge. The
                     // vertical expansion preserves the selected-pill shadow.
                     Color.clear
-                        .frame(width: FeedNavigationStyle.avatarSize / 2)
+                        .frame(width: showsAvatar ? FeedNavigationStyle.avatarSize / 2 : 0)
                     Color.black
                 }
                 .padding(.vertical, -GravitySpacing.space16)

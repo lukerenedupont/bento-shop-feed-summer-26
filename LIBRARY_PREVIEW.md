@@ -1,0 +1,419 @@
+# Native Shop asset-library preview
+
+This is an alternate Swift app, not the Shop Canvas UI and not a replacement
+for the five-video demo currently installed on Luke's phone.
+
+- Working copy: `/Users/lukedupont/bento-shop-feed-library-demo`
+- Branch: `ceo-library-preview`
+- Display name: **Shop Library Preview**
+- Bundle ID: `com.shopify.purl.prototype.shop.feed.library.preview`
+- Version: 1.0 (20)
+- Original demo: `/Users/lukedupont/bento-shop-feed-ceo-demo`, unchanged by this import.
+
+## Restarting the local preview
+
+The project and simulator data survive a computer restart. This preview is local—not deployed to a server—and the active worktree contains uncommitted work, so do not delete or reset `/Users/lukedupont/bento-shop-feed-library-demo`.
+
+From Terminal, rebuild and open the all-blocks World with one command:
+
+```sh
+cd /Users/lukedupont/bento-shop-feed-library-demo
+Scripts/run_library_preview.sh host
+```
+
+Other supported destinations are `self-care` and `home`. The script boots the exact **Bento Architecture Review** simulator, validates the 328-product library snapshot, rebuilds the app, installs it, and launches the requested destination. To work in Xcode instead, open `ShopFeedSummer26.xcodeproj`, select the `ShopFeedSummer26` scheme and **Bento Architecture Review** simulator, then press Run. `xcodegen generate` is needed only after changing `project.yml`.
+
+The phone installation survives both Mac and phone restarts and can be opened directly as **Shop Library Preview**. It does not require the Mac unless rebuilding or using a local development service.
+
+## Rich movement World — build 20
+
+`library-edit-9` (**For your self-care reset**) is promoted to the first World in Luke’s For You feed. Its motion-led feed card uses the cinematic material-detail film rather than the grid film, the same compact two-line editorial title component as the destination hero, the shared product rail, and coordinated media-aware dark chrome. The grid film is reserved for a later editorial beat inside the World. The Nike lockup is neither rendered nor bundled.
+
+The destination uses the campaign’s warm brown surface and a long-form editorial sequence: two campaign films, 26 filmstrip frames, six independent campaign stills, seven autoplaying collection/fabric films, four native Shop product shelves, and the complete 18-product edit. The fabric chapter retains the first-party collection names and full descriptions for Studio Stretch, Matte, Airy, Satin Shine, Weightless, Ribbed Seamless, and Stretch Knit. Collection, color, styling, and movement galleries now include concise editorial context, and paired media is explicitly clipped to prevent overlap.
+
+Every commercial action stays native to Shop: product cards open the existing PDP using exact product/merchant joins. Campaign films and galleries do not navigate, and there are no Nike URLs or Nike shopping actions. The campaign media is isolated under `LibraryAssets/nikeskims-world/manifest.json` as internal-reference-only with permission not established, source URLs, dimensions, and SHA-256 checksums. `Scripts/import_nikeskims_world.py` reproduces the optimized bundle while excluding the Nike lockup; `Scripts/validate_nikeskims_world.py` verifies all 48 files.
+
+## Source and editorial contract
+
+Read-only source: `/Users/lukedupont/Developer/apx3000-shop-canvas/public/`.
+The importer reads `catalog/catalog.json`, `catalog/merchants.json`, and
+`catalog/merchant-depth.json` in full.
+
+The preview includes exactly **328 curated products**. `selectedIds` is the
+ordering authority, both for the complete **All finds** (328 products) destination and within
+each filtered collection. For You groups those records by their existing group
+labels, ordered by each group's first appearance; it does not claim that a
+grouped feed is the same thing as the flat 328-product sequence.
+
+All product-to-merchant associations are retained and joined by **exact ID** to
+the current 114-merchant directory. Embedded product-record branding is not
+used. A card uses its product's first supplied merchant association as its
+default destination; the full association list is retained, and the product
+also appears under its other associated merchants. There is not yet a
+multi-seller picker on the PDP.
+
+Enrichment is joined by exact source product ID (132 curated records matched).
+The original source IDs remain on the native products; deterministic numeric
+IDs only adapt them to the existing Swift model. Collisions are rejected.
+
+The broader 6,083-product archive and 663 merchant-depth rows are **not published
+in this initial preview**. The importer's optional broader-inventory merge
+retains non-curated status rather than promoting records into editorial feeds.
+
+## All-blocks World prototype
+
+**For the thoughtful host** is the current kitchen-sink World for evaluating page richness. It deliberately combines the safe block palette in one long destination: editorial statement, authentic merchant film, reviewed image gallery, native product shelf, authentic post rail, dynamic curated table, full merchant feature, material diptych, full-bleed image pause, contextual Ask refinement, neutral merchant spotlights, reviewed category subsets, merchant and maker rails, mixed-size product bento, full exploration grid, and related Worlds. The implementation is marked `PROTOTYPE`; it exists to decide cadence and density before these beats move into the planned shared `EditorialWorldRecipe` renderer. Deal language remains disabled—the former promotional card now uses the evidence-safe **Explore the shop** CTA.
+
+## Feed-card comparison control
+
+The overflow menu’s **Utility belt** sheet includes a persisted **Show product carousels** toggle. Turn it off to compare a lighter, full-bleed editorial treatment: reviewed merchant artwork can replace the title, while other cards show a compact title, an authored mood or point-of-view deck, and an outlined **Explore** or **See more** CTA. Every library World has its own reviewed deck copy; inventory counts are not used as editorial description. In this mode the heart/share rail collapses to one top-right overflow action. Turn the setting on to restore the authored product rails and full feedback stack. This changes presentation only and does not alter feed membership or product data.
+
+## Assets and branding
+
+The app bundles only referenced local assets, keeping these directory paths:
+
+- `catalog/`
+- `cosmos-brand-assets/`
+- `merchant-assets/`
+- `merchant-cover-assets/`
+
+`ShopFeedSummer26/LibraryAssets/` contains 511 original local files plus native
+SVG raster siblings, the normalized manifests, and higher-resolution copies of
+23 reviewed product-cover photographs. The initial import was about 24 MiB;
+with the explicit cover edit the library resources are about **33 MiB**.
+All relative URLs resolve from that root, never from its `catalog/` subfolder.
+Remote CDN URLs remain external. Original images are retained for larger
+surfaces; local thumbnails provide a fallback. This is not a fully offline
+copy of the merchants' catalogs, and it does not depend on localhost:5184.
+
+Source JSON and asset hashes are recorded and validated. Source files are never
+edited; imports require a separate, empty output directory. `merchant-review/`,
+path traversal, and escaping symlinks are not publishable.
+
+For dark surfaces the native wordmark loader tries **wordmarkWhite → wordmark →
+logo**; light surfaces prefer wordmark first. The matte algorithm in
+`src/merchant-wordmark.js` was adapted to Swift, not its UI: uniform opaque
+white/black backplates become real alpha off the main thread, transparent
+artwork is tinted appropriately, and unknown opaque artwork is not converted
+into a destructive silhouette. Results are cached with bounded memory.
+
+A merchant having a logo and cover does **not** create an editorial card or
+approve a feed hero. For You is driven by curated products and their authored
+groups. Build 4 restores the original edge-to-edge World-card treatment using
+30 separately reviewed cover decisions in `editorial-covers.json`. Each cover
+has a rationale, a role, a source product or exact merchant ID, and a byte hash.
+Validation checks that the source belongs to the edit. The authoring script is
+pinned to the reviewed snapshot, so a new import requires renewed cover review.
+Merchant pages continue to use the directory's current branding as branding.
+
+The framed-product treatment from build 3 was rejected. Build 4 removes the
+white hero panel and blank color gap, keeps the title/products in the original
+anchored composition, restores Luke's avatar, and replaces the raw count/group
+navigation with Living, Style, Travel, Wellness and All finds. Unrecorded prices
+are omitted from feed-image badges rather than repeated as fake CTA pills.
+When a reviewed product image serves as a hero, its duplicate thumbnail is
+omitted from that card's preview rail; the full collection and All finds keep
+all products in their original order. Portrait framing is explicitly adjusted
+where needed rather than blindly cropping a face at the edge.
+
+## Native surfaces connected
+
+- For You and collection navigation use the existing Swift feed/card system.
+- All 328 retains the exact full selection order.
+- Collection pages use the existing recipe blocks with honest labels: From the
+  edit, More curated edits, The full selection. They do not invent best-seller,
+  new-arrival, discount, or availability evidence.
+- PDPs and merchant pages route through the existing native navigation stack.
+- 277 missing prices remain unknown (View at shop), not $0 or guessed USD.
+  The 50 USD prices and one TRY price retain their supplied currencies.
+- Library PDPs suppress prototype ratings, urgency, shipping, discounts and
+  checkout claims; they link to the supplied merchant product URL and show the
+  source's commerce/provenance note.
+
+Live Shop account/history/search and camera/AI experiences have not been
+reimplemented against this library. This is a catalog-browsing/content preview,
+not a production commerce integration.
+
+## Julian source navigation and composer — builds 13–14
+
+Build 12's simplified navigation/Ask sheet was rejected. It is no longer mounted.
+Build 13 imports the actual source components from `Shopify/shop-client` branch
+`feature/agent-vision-prototype-refresh`, commit
+`79849f634b495df011aeefc0c4ef04a7180e633d`, into the local `JulianAgentUI` package.
+
+**Long-press the bottom tab pill** to open the original **Bottom navigation**
+controls: Rodeo/Pistons, full/chip/floating/tab-bar search, starter glass, all 14
+app icons, and Reset to defaults. The tab/input swap, persistent UIKit input,
+keyboard geometry, draft curtain/toolbar, starter stack/glass, context lane and
+follow-up input come from the source, not substitute SwiftUI approximations.
+
+The library retains its feed, utility belt, products, Worlds and post rail. The
+source header replaces the added build-12 search pill; the avatar is not duplicated
+in the category rail in full-search mode. Catalog queries remain local to the
+328 approved records. The source's empty-cart policy is retained rather than
+inventing cart items to force its Cart button visible.
+
+Source provenance is recorded for 65 upstream files plus 596 unchanged support
+files (Gravity, icons and translations). Local data/routing adapters and the two
+input-ownership fixes are explicitly separated/documented in
+`Vendor/JulianAgentUI/README.md` and `source-manifest.json`.
+`Scripts/validate_julian_ui_port.py` checks the recorded port hashes and removal
+of temporary diagnostic logging. This contains private Shopify source and must
+not be published to the public feed repository without authorization.
+
+**Service boundary (build 14):** Julian’s initial and follow-up composer submissions
+now drive the app’s existing Shop OAuth + live Agent transport: conversation
+creation, signed stream URL creation, SSE responses, product shelves, suggestions,
+stream cancellation, and follow-ups. Signed-out submissions remain saved and open
+the real Shop web-session sign-in action; no request is sent until authentication
+succeeds. Production history/threads, notifications, and image upload remain
+unavailable and are identified as such rather than simulated. Catalog search uses
+Julian’s source chrome over exactly the 328 approved local products. This is not a
+complete standalone copy of the Shop production app or all of its services.
+
+Build 13 is optimized Debug (`-O`) to keep the complete imported source/icon set
+inside the unchanged 180 MiB budget. The original demo worktree and phone build
+remain unchanged. Final regression: **59 passed, 0 failed, 3 intentionally skipped
+legacy fixtures**. This includes Julian's 26 imported component tests and all 8 UI
+integration/content tests. Settings/reset across relaunch, both layouts, every
+search placement, exact typed-draft retention, follow-up input, product routing,
+worlds, gift creation and the post/merchant walkthrough are covered. Source hashes,
+curated snapshot validation and `git diff --check` pass. Screenshots and the test
+summary are in `DemoArtifacts/Verification/julian-source/`; the full result bundle
+is `/tmp/julian-port-final2.xcresult`. Home, both dock layouts, search and the focused
+composer/follow-up surfaces were visually inspected.
+
+## Superseded navigation approximation — build 12
+
+A single Pistons-inspired native shell, not a transplant of Julian's Shop-client
+branch. Home, Orders and Favorites occupy the leading pill; Ask and Cart sit
+alongside it. The library keeps the bar available inside Worlds. The original
+app's `BottomNavBar` implementation and physical-phone installation are unchanged.
+
+A compact search entry stays pinned above the existing avatar/category rail as
+Home scrolls. Launch clearance and pinned-title clearance increase by 56pt;
+card heights, full-bleed widths and product sizes do not change. The existing
+utility belt remains at the top. Search opens a native sheet, searches only the
+328 curated records (product, brand, group and exact-joined merchant names),
+retains the query during this app session, and opens existing PDPs after the
+sheet finishes dismissing. Empty results are explicit; no remote Agent request
+is used as a search fallback.
+
+Ask uses the current World, product or merchant context. Drafts and demo exchanges
+are separately retained by stable context ID in memory; dismissing the sheet or
+visiting a product does not overwrite its parent World's draft. The sheet clearly
+labels itself **Demo · On-device catalog only**. Its deterministic replies expose
+catalog products and recorded shop names; it is not connected to a live Agent,
+does not fabricate answers to arbitrary questions, and does not claim stock,
+shipping, prices, or purchase history. Other root tabs use the general library
+context rather than pretending to know their account contents.
+
+Implementation: `Navigation/LibraryShellSession.swift`,
+`Navigation/LibraryNavigationPrototype.swift`, `Pages/LibrarySearchPrototype.swift`,
+and `Pages/LibraryAskPrototype.swift`.
+
+Verification: 25 applicable unit tests and all 7 UI tests passed; 3 original-buyer
+fixture tests remain intentionally skipped. Checks cover pinned search, empty
+results, exact PDP routing, retained search query, all four navigation destinations,
+World/product draft isolation and context restoration, plus the existing belt,
+gift creation, covers, merchant links and post-rail walkthrough. The bundled
+snapshot validator and `git diff --check` pass. Rendered Home, scrolled feed,
+World, Search and Ask screens were inspected; screenshots and the test summary
+are in `DemoArtifacts/Verification/navigation/`.
+
+Build 12 is a Debug simulator iteration, not a newly signed phone or Release
+artifact. Full results: `/tmp/library-navigation-verified.xcresult`.
+
+## Utility belt restored — build 11
+
+The library profile now uses the existing top-of-feed utility belt, including
+its gift-guide entry, original orders demo card, horizontal paging and pull
+expansion/refresh behavior. No second belt implementation was added. There is
+no invented purchase/saved-product history; buy-again, saved and cart signals
+remain unset for this catalog-only profile. The orders card remains the original
+illustrative prototype fixture, not a claim about purchases from this library.
+
+Gift creation stays on the curated library: the existing brief form opens a
+resolvable World of library products selected by the entered interests. Pull
+to refresh does not load the old dossier feed or authenticated post catalog.
+The library's feed, post rail and World pages remain below the belt; the preserved
+original demo working copy and phone app are untouched.
+
+## Actual post rail — build 10
+
+The single full-width Service Projects gallery was not the requested post rail.
+Build 10 replaces it with the existing `TopicRecentPostCard` format in a
+horizontal snapping rail with separate cards and a neighboring peek. It uses
+the original app's user-supplied Caraway table-setting and Fuumuu studio demo
+post examples, retaining their identities. These are existing demo fixtures,
+not newly fetched live posts or catalog photographs relabeled as social posts.
+No dates, engagement counts, product matches or new merchant relationships are
+invented. The 328-product catalog remains unchanged.
+
+Tapping a post opens the existing `ShopPostFeedCard` presentation. Rail videos
+pause when offscreen or while the post viewer is presented. The shared PORTA
+card and linen-detail block remain below the rail. Changes remain local to the
+host World in the simulator preview; the phone demo is untouched.
+
+The first swipe check exposed an AVPlayer preroll exception while an asset was
+still loading. Frame warming now requires both the player and current item to
+be ready. After that fix all four UI checks passed, including separate rail
+cards, horizontal swiping, opening/closing a post, and the existing merchant and
+product routes. The rendered rail was visually checked; screenshots and results
+are in `DemoArtifacts/Verification/post-rail/`.
+
+## Host gallery and detail iteration — build 9 (superseded gallery)
+
+The current host World keeps the cleaner build-8 presentation: no selected-count
+subtitles, domain-style merchant labels, placeholder price text, added all-caps
+eyebrows or decorative section arrows. It reuses `MerchantCollectionFeedCard`
+for PORTA rather than maintaining a bespoke merchant panel.
+
+Build 9 replaces the single lifestyle scene with a two-image, attributed
+Service Projects gallery and replaces the bento with a matching green-linen
+setting/detail pair from Salter House. Gallery photographs link to the actual
+steel tray; the attribution links to its merchant. Both linen photographs link
+to the existing linen product. These are catalog gallery photographs, not
+fabricated merchant posts: no social captions, dates, likes or engagement counts
+are asserted. The 17-product selection and other Worlds are unchanged.
+
+All 21 applicable native data/navigation checks passed (3 legacy-fixture tests
+remain skipped). The UI walkthrough verified the gallery swipe, product links,
+PORTA navigation and linen detail link; rendered screenshots were reviewed.
+This is a simulator prototype; the phone's existing demo is unchanged.
+
+## Initial one-World editorial prototype — build 7
+
+Only `library-edit-0` (For the thoughtful host) uses the new authored sequence:
+existing hero → four opening picks → a serving-tray lifestyle scene → PORTA
+feature → linen/candle/vase bento → the complete 17-product selection → related
+edits. All other Worlds retain the shared recipe.
+
+The middle blocks live in `Pages/ThoughtfulHostWorldPrototype.swift` and are
+intentionally a local prototype until the direction is agreed. Its five
+additional photos are copied into our native snapshot from the same products'
+galleries, with source IDs/URLs and byte hashes in `host-prototype-assets.json`.
+The source library is not modified.
+
+“View steel tray” routes to the pictured tray. “Shop this mood” opens a curated
+assortment, explicitly described as inspiration rather than claiming all items
+are pictured. The PORTA feature routes to its real merchant page; its product
+tiles and the bento tiles route to their real product pages. No stock, price,
+shipping or checkout claims are invented.
+
+## Supplied wordmarks — build 6
+
+Source archive: `http://127.0.0.1:56239/cosmos-wordmarks.zip` (downloaded once;
+the running app does not depend on that server). Its manifest explicitly marks
+reuse permission as **not established / internal review only**. No public
+publication or rights clearance is implied.
+
+The importer selected 72 reviewed asset identities for 67 exact merchant
+mappings and 10 explicitly branded edits. It excluded 618 pending/unreviewed
+rows, including the entire sweep-generated tier and two pending entries inside
+the launch-approved folder. Selected originals and native rasters add about
+4.4 MiB, not the full 93 MiB ZIP.
+
+Exact Shopify/domain IDs map directly. Numeric Cosmos IDs map only through the
+current directory's exact `curatedBranding.sourceProfileId` metadata. No
+merchant-name or slug matching is used. The ten named brand edits also have
+an explicit identity map, checked against every product's supplied brand.
+A brand logo on a multi-retailer edit never replaces the product's seller ID.
+
+The supplied marks replace plain brand headings on applicable feed cards,
+related-collection cards and their World heroes. Mixed editorial Worlds retain
+their titles. Merchant avatars/store headers prefer the new reviewed marks,
+with the previous current-directory sources retained as fallbacks. The data,
+cover choices and spacing are otherwise unchanged.
+
+Reimport with:
+
+```sh
+python3 Scripts/import_merchant_wordmarks.py /path/to/cosmos-wordmarks.zip \
+  /Users/lukedupont/Developer/apx3000-shop-canvas/public/catalog/merchants.json \
+  ShopFeedSummer26/LibraryAssets
+python3 -m unittest discover -s Scripts -p 'test_*import.py'
+```
+
+Mappings and SHA-256 hashes are in `LibraryAssets/wordmarks.json`. ZIP paths,
+checksums, review status, native rasters and source-library separation are
+validated. This import did not edit the source library or the phone's original
+demo. During verification, the external `merchant-depth.json` was updated by
+another process; the native preview deliberately retains its pinned enrichment
+snapshot. The source catalog, merchant directory and 511 original asset hashes
+still match the imported snapshot.
+
+Verification: all 11 importer tests passed; 16 native data/state tests passed
+with 3 legacy-fixture tests skipped, and all 3 UI navigation/screenshot tests
+passed. The Release build passed the 180 MiB budget at 125,576 KiB (~123 MiB).
+Eckhaus Latta and Nordic Knots feed renders were visually inspected; screenshots
+and test output are in `DemoArtifacts/Verification/wordmarks/`. This remains an
+internal simulator preview; the phone's existing demo was not updated.
+
+## World-page spacing — build 5
+
+The shared topic block layout now uses 44pt between standard sections (48pt for
+relaxed recipes), 24pt between a heading and its content, 24pt between product
+grid rows, and 24pt between the hero and the first block. Card dimensions,
+font sizes, horizontal gutters, and the For You feed composition are unchanged.
+This spacing pass is confined to the library preview, not the installed phone demo.
+
+## Verification
+
+Build 4 adds explicit cover/rail validation and screenshot checks across the
+opening World cards. Visual review includes the actual rendered hosting, gift,
+fashion and living-room cards, not only successful image decoding.
+
+Verified 2026-09-17: 18 native tests passed, with the 3 intentionally inapplicable
+legacy-demo fixture tests skipped; all 7 importer tests passed. The Release
+simulator build passed the unchanged size guardrail at 120,880 KiB (~118 MiB).
+It is running in the simulator, with screenshots and the test summary in
+`DemoArtifacts/Verification/editorial/`. The source library and the original
+phone demo were not modified. No physical-phone installation of build 4 has
+been performed.
+
+### Initial build 3 checks
+
+- All 7 importer tests passed.
+- All 6 native library tests passed, along with 8 shared state/planning tests;
+  the 3 original-demo fixture tests were explicitly skipped.
+- Both native UI flows passed twice after targeting the actual collection
+  button: feed/artwork → collection → Close, and collection → product → merchant
+  → Back. The checks include loaded artwork, clear title geometry, missing-price
+  handling, and the absence of fabricated checkout claims.
+- Release simulator build succeeded at **111,280 KiB (~109 MiB)**, including
+  **24,108 KiB (~24 MiB)** of library resources.
+- The Release preview was installed and launched in the simulator. It has not
+  been installed on the physical phone; the original build 2 remains there.
+- Hashes confirm all 3 source JSON files and all 511 referenced original assets
+  are unchanged. No `merchant-review/` files were copied.
+- `git diff --check` passed and temporary diagnostic logs were removed.
+
+The Release app is `DemoArtifacts/ShopLibraryPreview-Simulator.app`. A screenshot
+and navigation-test summary are in `DemoArtifacts/Verification/`. Full local
+native test results are `/tmp/bento-library-final-tests.xcresult` (data/matting)
+and `/tmp/bento-library-ui-verified.xcresult` (repeated final UI checks).
+
+## Import, validate, build
+
+```sh
+# Choose a new empty output location for an import; do not overwrite the source.
+python3 Scripts/import_shop_canvas_library.py \
+  /Users/lukedupont/Developer/apx3000-shop-canvas/public \
+  /tmp/new-shop-library-snapshot
+
+python3 -m unittest discover -s Scripts -p 'test_shop_canvas_import.py'
+python3 Scripts/validate_shop_canvas_snapshot.py ShopFeedSummer26/LibraryAssets
+xcodegen generate
+Scripts/build_demo.sh simulator <exact-simulator-UUID>
+```
+
+The library preview deliberately does not embed the old 77 MiB frozen feed.
+Existing native UI assets remain available, but its active catalog never merges
+in the old buyer inventory. The app's 180 MiB budget is unchanged.
+
+Native tests cover order, exact merchant associations, URL roots, current dark
+wordmark priority, unknown prices/currency, alpha matting, artwork loading and
+layout, and feed → collection → PDP → merchant navigation. Three tests for the
+original demo's Luke/Mikhail opening are explicitly skipped in this alternate
+app; they remain covered in the preserved original project.

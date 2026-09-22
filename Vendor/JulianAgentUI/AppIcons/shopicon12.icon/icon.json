@@ -1,0 +1,53 @@
+{
+  "fill" : {
+    "solid" : "srgb:0.00000,0.02384,0.01892,1.00000"
+  },
+  "groups" : [
+    {
+      "blend-mode" : "hard-light",
+      "layers" : [
+        {
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "shimmer.png",
+          "name" : "shimmer"
+        }
+      ],
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
+      }
+    },
+    {
+      "blend-mode" : "lighten",
+      "hidden" : false,
+      "layers" : [
+        {
+          "glass" : false,
+          "image-name" : "shimmerglows.png",
+          "name" : "shimmerglows"
+        }
+      ],
+      "opacity" : 0.4,
+      "shadow" : {
+        "kind" : "none",
+        "opacity" : 0.5
+      },
+      "specular" : false,
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

@@ -1,0 +1,303 @@
+[
+  {
+    "group": "For the thoughtful host",
+    "role": "inContext",
+    "note": "PORTA breakfast table: hosting context, distinct from the lead apron tile.",
+    "reviewedAt": "2026-09-17",
+    "sourceMerchantID": "gid://shopify/Shop/60704260314",
+    "path": "./cosmos-brand-assets/porta/cover-wide.webp",
+    "sourcePath": "./cosmos-brand-assets/porta/cover-wide.webp",
+    "sha256": "b4d3720837a6edfde8cbf2c7fc0e1bf321d5161b9ecc640f37f45875de257e54"
+  },
+  {
+    "group": "Gifts for him",
+    "role": "editorial",
+    "note": "Mast Books interior: a considered gift-shopping context, not another knife thumbnail.",
+    "reviewedAt": "2026-09-17",
+    "sourceMerchantID": "gid://shopify/Shop/29035626574",
+    "path": "./cosmos-brand-assets/mast-books/cover-wide.webp",
+    "sourcePath": "./cosmos-brand-assets/mast-books/cover-wide.webp",
+    "sha256": "20f32976f9925b6f6429c62666cbbad4392cb76873ab7a099d393f376909c949"
+  },
+  {
+    "group": "Eckhaus Latta",
+    "role": "editorial",
+    "note": "Eckhaus street/editorial portrait, distinct from the studio product rail.",
+    "reviewedAt": "2026-09-17",
+    "sourceMerchantID": "gid://shopify/Shop/6917057",
+    "path": "./cosmos-brand-assets/eckhauslatta/cover-wide.webp",
+    "sourcePath": "./cosmos-brand-assets/eckhauslatta/cover-wide.webp",
+    "sha256": "8dac4ae4e31c203ce7a7c3e52a5806a848e6511a433e6c5fe37a70a4e736af3d",
+    "portraitOffsetRatio": -0.5
+  },
+  {
+    "group": "Nordic Knots",
+    "role": "inContext",
+    "note": "Savanna rug photographed in a dining room.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:1901255376",
+    "path": "./catalog/editorial/58d254fe4f20cdf9fa74d9b2ff3d32613522dcc1037f8005834971517fa94aa7.jpg",
+    "sourceURL": "https://cdn.cosmos.so/01a0845b-2073-771b-a2fe-3a7a3df99136?format=webp&w=800",
+    "sha256": "7e8af957f400ba1d9b20af393a0ccaa563470c477c2baf6bae676cd9d126b8c6"
+  },
+  {
+    "group": "objects",
+    "role": "inContext",
+    "note": "Brass bookends in use with books on a tiled shelf.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "catalog:gid://shopify/p/5d4PpgClbXc4x7Hyyg2qVh",
+    "path": "./catalog/editorial/959f8281edbf6958bd51f83b66beb48ca54747b3ae56805dd46b0fcd016ccd04.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0641/4096/8152/products/flix7xqdfwdtkoddlnux.jpg",
+    "sha256": "01f3287bffb09378b7a2538022aabf161a0f4296795bdd53f0e074f84e320063"
+  },
+  {
+    "group": "Travelling light",
+    "role": "wornOrUsed",
+    "note": "Travel knitwear worn as a complete comfortable outfit.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:715770015",
+    "path": "./catalog/editorial/e6384f36d93e88d43610c7d78f38325a282163e40b94a565554997cca326f489.jpg",
+    "sourceURL": "https://cdn.cosmos.so/531565c0-8bfe-4f4b-82f1-ec790b60299f?format=webp&w=800",
+    "sha256": "0f6ef092da7beaa3a9b1f6c45b77fba7d09c72a4755bf1c5441faee7d687b92c"
+  },
+  {
+    "group": "lighting",
+    "role": "inContext",
+    "note": "Obsidian lamp in a lit, styled tabletop scene.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "catalog:gid://shopify/p/6aRngRO9bGxkV3wC6eH73n",
+    "path": "./catalog/editorial/e52792566e36909910dbd0ce06994a9c5a1f01eacca60cdc18ad96c3f8d97efb.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0671/5290/4457/files/mejfgqh3erlbxi8j55l0.jpg",
+    "sha256": "cebbb1575a54085fb4a3a628f72b84a7b817776991694fbe4dd341ea451fbfa5"
+  },
+  {
+    "group": "fashion",
+    "role": "wornOrUsed",
+    "note": "Scarf worn in a portrait, not an isolated accessory packshot.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "catalog:gid://shopify/p/16lkR8ApJ34bNsDWBRXjlL",
+    "path": "./catalog/editorial/938401d32b29043264e5d0642ad188eb1a30ee1373d7e6305b73019c0284f3f2.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0431/7954/0638/files/TA0027LK1070_BK999_3.jpg",
+    "sha256": "fb602ce03636f53ad74a131ef6d2ded57c6aa8f2f8ae657a4770e8555b68e2fa"
+  },
+  {
+    "group": "For your self-care reset",
+    "role": "wornOrUsed",
+    "note": "Activewear worn as a complete outfit.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:2077845162",
+    "path": "./catalog/editorial/aca971fc64e96ae6a60373ec3201c8a40923485242fd9ada53b754eca0dcc4be.jpg",
+    "sourceURL": "https://cdn.cosmos.so/01a06a6f-29ba-7a23-b577-3257a19041c3?format=webp&w=800",
+    "sha256": "1c5fab6b6dbeaabacca924099b031f41f5f61d6f8b49cc9af2091b6c9bf246f6"
+  },
+  {
+    "group": "tableware",
+    "role": "wornOrUsed",
+    "note": "Veark kitchen-use photography: hands preparing bread.",
+    "reviewedAt": "2026-09-17",
+    "sourceMerchantID": "gid://shopify/Shop/1964605539",
+    "path": "./cosmos-brand-assets/veark/cover-wide.webp",
+    "sourcePath": "./cosmos-brand-assets/veark/cover-wide.webp",
+    "sha256": "4384ed2cbc880891f23b9194b1b7d0c7e47497f737f7866501f645fa243c0b47"
+  },
+  {
+    "group": "Snow Peak",
+    "role": "inContext",
+    "note": "Snow Peak shelter in use at a campsite at sunset.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:1353213226",
+    "path": "./catalog/editorial/6683c132bdaba0c9b6c8f634440c5d02b48eea720090f1d99127b5e4e86b3765.jpg",
+    "sourceURL": "https://cdn.cosmos.so/29bdcd3c-272a-48f5-8f14-9d25f12472e7?format=webp&w=800",
+    "sha256": "1e38f60458e133742d703f5aadc17cfe2303372ae099abf601d552a5eed4086f"
+  },
+  {
+    "group": "Balenciaga",
+    "role": "wornOrUsed",
+    "note": "Balenciaga tailoring worn as a complete look.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:769576205",
+    "path": "./catalog/editorial/28150e00baaf60e7483ccbd48ae40986f011c69422152ac5d26f9425f9be2a1f.jpg",
+    "sourceURL": "https://cdn.cosmos.so/01a073f5-779a-7a1f-af76-78b33afaf5b2?format=webp&w=800",
+    "sha256": "c3856527df069b37c625fbb98b9d0900b0f09dc324575570a04f8309b0bf009e"
+  },
+  {
+    "group": "Soft launching fall",
+    "role": "wornOrUsed",
+    "note": "Warm, close-up jewelry styling for the fall edit.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:594263079",
+    "path": "./catalog/editorial/a9cb9a763a61477beb209f4d13b01d2d44f03b3150315ba8c6d88c848f4ceeae.jpg",
+    "sourceURL": "https://cdn.cosmos.so/06b18701-8aa1-460a-975b-5a95a089bd73?format=webp&w=800",
+    "sha256": "7dc07c72e92d5aa81fa268416ba19d383d2ff7a1bed05edabe758087cd82213d"
+  },
+  {
+    "group": "The best-dressed guest",
+    "role": "wornOrUsed",
+    "note": "Gold cuff worn against orange occasionwear.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:1464806775",
+    "path": "./catalog/editorial/fde0242ca5f88180fb52af55cd7881e77c674187e098b8e8002f4b951196620b.jpg",
+    "sourceURL": "https://cdn.cosmos.so/0562dc0b-fd5b-4003-9d51-b960d6365ff7?format=webp&w=800",
+    "sha256": "919a3233c5c6316523ba40a3e8e7df6b5525bd12cfc694222618c3badc3b6431"
+  },
+  {
+    "group": "Jil Sander",
+    "role": "wornOrUsed",
+    "note": "Jil Sander bag carried on the body.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:1261648508",
+    "path": "./catalog/editorial/791df636db8d12407c6c021daa0cd5d0e45094d6d30b711dd301141c0dfc2a64.jpg",
+    "sourceURL": "https://cdn.cosmos.so/01a07f0d-0e37-73d1-a3b8-51ac6d8d88e4?format=webp&w=800",
+    "sha256": "2f2b5c7da7428830d0dd09218a2c6d1373304b017492031c8ccd8cd76659707e"
+  },
+  {
+    "group": "Dries Van Noten",
+    "role": "wornOrUsed",
+    "note": "Dries clutch worn with a complete look.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:1848856002",
+    "path": "./catalog/editorial/91fd576a522bf51a94c3a00b7a0d90448cc039e553038f4e91ef88800d7471db.jpg",
+    "sourceURL": "https://cdn.cosmos.so/01a073ed-6c4b-71ae-ba83-4cdbefeeb3af?format=webp&w=800",
+    "sha256": "25c6ed7a256078f29413378a9cf35a283b0b5f1511cc0a759a54fa63134a67ee"
+  },
+  {
+    "group": "Working from home",
+    "role": "inContext",
+    "note": "Bellevue lamp in a room with a work cabinet and chair.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:25635699",
+    "path": "./catalog/editorial/1aa15536274b6027d52195b0ebe9813f1c3052935298d186034a5009ac76c154.jpg",
+    "sourceURL": "https://cdn.cosmos.so/01a082c0-a552-70ed-9372-f2c02e6f7176?format=webp&w=800",
+    "sha256": "1e50340cc80f26a522f290e43c3aeb72fe2fa270d028513bde20869415c68f5b"
+  },
+  {
+    "group": "books",
+    "role": "editorial",
+    "note": "Hokusai volume staged against its illustrated print.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "catalog:gid://shopify/p/5fZd8rmkUywfIccQcAwwSm",
+    "path": "./catalog/editorial/4bac0776d28bbe4e02ca12a90d80f04c0549478a96a9511c42c404f90f56d7cb.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0076/3327/2890/files/b779d3e358ed9b3eedd5e659b516000e.jpg",
+    "sha256": "f3592e7bbdf15ee696321b80e9bd5690f0ff0a86765a6c52a19fafc8af06face"
+  },
+  {
+    "group": "Big sports guy",
+    "role": "wornOrUsed",
+    "note": "Graphic tee worn in a skate setting.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:1132170092",
+    "path": "./catalog/editorial/ebd8bb51e375d801d903e7ddc0ef060cfef017e484a81095be968d809afc0c8c.jpg",
+    "sourceURL": "https://cdn.cosmos.so/01a08895-f74f-7ec0-85f0-dcf7955c996c?format=webp&w=800",
+    "sha256": "475080b5ce1c13c4079ae0f90d553c9cf663172e75324b3798fca14e2d711e5a"
+  },
+  {
+    "group": "furniture",
+    "role": "inContext",
+    "note": "FRAMA furnished interior, rather than an isolated furniture cutout.",
+    "reviewedAt": "2026-09-17",
+    "sourceMerchantID": "gid://shopify/Shop/83980288319",
+    "path": "./cosmos-brand-assets/frama/cover-wide.webp",
+    "sourcePath": "./cosmos-brand-assets/frama/cover-wide.webp",
+    "sha256": "2de8ffa97900678aac82d424ad774f37859dd13905fc53424bc4f90c780a46d2"
+  },
+  {
+    "group": "On",
+    "role": "wornOrUsed",
+    "note": "On runners in an outdoor running scene beside a yellow car.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:467197135",
+    "path": "./catalog/editorial/4951d6210e843eee7529072ed6db7ba8e03b7e6ff91c3f017fb5f7f29bd1b71c.jpg",
+    "sourceURL": "https://cdn.cosmos.so/01a086d0-eb42-750e-98fb-832a3bbc2abf?format=webp&w=800",
+    "sha256": "1c24a95ba548ec7a220508bbbb2f9b20acae818aa1977207605687b96c540fa0"
+  },
+  {
+    "group": "Lemaire",
+    "role": "editorial",
+    "note": "Lemaire street portrait and architecture.",
+    "reviewedAt": "2026-09-17",
+    "sourceMerchantID": "gid://shopify/Shop/43179540638",
+    "path": "./cosmos-brand-assets/lemaire/cover-wide.webp",
+    "sourcePath": "./cosmos-brand-assets/lemaire/cover-wide.webp",
+    "sha256": "1063d56682546d4bebb0094c61b5a30082224fd5edba367c694362aedfafde29"
+  },
+  {
+    "group": "All suited up",
+    "role": "wornOrUsed",
+    "note": "Derby shoes worn with tailoring.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:2007988447",
+    "path": "./catalog/editorial/a0170b08d5b844dd0a41f8c5ed06eedeb22761f0efae018da10d15cc61680312.jpg",
+    "sourceURL": "https://cdn.cosmos.so/01a08285-ae1f-7bf5-a237-2bba4ce0d024?format=webp&w=800",
+    "sha256": "0e6ac34dd2e826a50296e132c1baa11873033810b1dd20572cebf51ff6d3ca9b"
+  },
+  {
+    "group": "home textiles",
+    "role": "inContext",
+    "note": "White bed linen photographed on a made bed.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "catalog:gid://shopify/p/7sxb68BnhKfk5eNAmjnhby",
+    "path": "./catalog/editorial/128688f2bd86198fc4c6e2f3ea204e36d6ff8eb37ba04f7c933f747886c5be73.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0894/5382/files/Flat-White-04.jpg",
+    "sha256": "5919487ee0e5c138644cf69c81d650c2f66fa5f427245fe848c3faace0466c32"
+  },
+  {
+    "group": "The coziest corner",
+    "role": "inContext",
+    "note": "Soho Home lounge interior with warm upholstered seating.",
+    "reviewedAt": "2026-09-17",
+    "sourceMerchantID": "domain:sohohome.com",
+    "path": "./cosmos-brand-assets/soho-home/cover-wide.webp",
+    "sourcePath": "./cosmos-brand-assets/soho-home/cover-wide.webp",
+    "sha256": "fbe09058d6e0d7ef073c17d0bfcd8696a74a25516644a8f84e0c6c2570fa9e50"
+  },
+  {
+    "group": "JW Anderson",
+    "role": "wornOrUsed",
+    "note": "JW Anderson bag worn against a vivid red top.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:821346223",
+    "path": "./catalog/editorial/3ea4deaa77ecd14a12ad345fb931fc62844b10d261aebba447d8a17ef21d0a4d.jpg",
+    "sourceURL": "https://cdn.cosmos.so/01a07f0c-2d6c-78d7-aa1d-0676b5b6bfa4?format=webp&w=800",
+    "sha256": "ac0860350c17858bdc74e1c91cba3b306cd2fe46639c7709fd4c60f5f1efa0f8"
+  },
+  {
+    "group": "Our Legacy",
+    "role": "wornOrUsed",
+    "note": "Our Legacy coat worn as a complete look.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:1585075171",
+    "path": "./catalog/editorial/70757c1ea58be60b782e143ea00ff8941cdbb451139f4d587aa289fedefd8661.jpg",
+    "sourceURL": "https://cdn.cosmos.so/01a08481-2e93-7365-8275-3697d72cd34d?format=webp&w=800",
+    "sha256": "db63aed3ee767c3fcea29cf81267fea56522decc7b50bb839c6d9c5d3f5a6090"
+  },
+  {
+    "group": "Turn off the big light",
+    "role": "inContext",
+    "note": "Peach lamps illuminating a dark room.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "cosmos:367584713",
+    "path": "./catalog/editorial/db9ee531ed22ed40224644809bae33a9787080d8458434e6ecdf926e58497ce9.jpg",
+    "sourceURL": "https://cdn.cosmos.so/01a07cbb-7d2b-7417-8c05-b01299fd1f50?format=webp&w=800",
+    "sha256": "1670f7fc7bd31a2053e869ac3f7ef64603681ed85f74965c902e2b57742776a4"
+  },
+  {
+    "group": "accessories",
+    "role": "inContext",
+    "note": "Carabiners in use with keys on a wooden surface.",
+    "reviewedAt": "2026-09-17",
+    "sourceProductID": "catalog:gid://shopify/p/3NHhfZPHrHYfxUNzVJCjyA",
+    "path": "./catalog/editorial/f7ba1151173866121587747f576f906b235973b5c64e6efe467c20ecd37b5865.jpg",
+    "sourceURL": "https://cdn.shopify.com/s/files/1/0228/6779/files/BB50810D-B086-476B-979E-4C820F240ACB.jpg",
+    "sha256": "3b1445e9cfb1b7cffc646b645c34d0e3170907c49c2bf9709b8ef6b8c94f8cd9"
+  },
+  {
+    "group": "__all__",
+    "role": "inContext",
+    "note": "Selected table scene for the complete library overview.",
+    "reviewedAt": "2026-09-17",
+    "sourceMerchantID": "gid://shopify/Shop/60704260314",
+    "path": "./cosmos-brand-assets/porta/cover-wide.webp",
+    "sourcePath": "./cosmos-brand-assets/porta/cover-wide.webp",
+    "sha256": "b4d3720837a6edfde8cbf2c7fc0e1bf321d5161b9ecc640f37f45875de257e54"
+  }
+]

@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<!-- The dossier-lab feed API is a local Vite dev server over plain HTTP, and
 	     its image/video URLs point back at the same origin. App Transport
 	     Security blocks cleartext by default, so the feed and every generated
@@ -31,22 +35,6 @@
 		<string>GTStandard-MMedium.otf</string>
 		<string>GTStandard-MRegular.otf</string>
 		<string>GTStandard-MSemibold.otf</string>
-		<string>GoodSans-Bold.otf</string>
-		<string>GoodSans-Medium.otf</string>
-		<string>GoodSans-Regular.otf</string>
-		<string>GoodSansText-Bold.otf</string>
-		<string>GoodSansText-Medium.otf</string>
-		<string>GoodSansText-Regular.otf</string>
-		<string>Shopify Sans-Black Italic.otf</string>
-		<string>Shopify Sans-Black.otf</string>
-		<string>Shopify Sans-Bold Italic.otf</string>
-		<string>Shopify Sans-Bold.otf</string>
-		<string>Shopify Sans-Light Italic.otf</string>
-		<string>Shopify Sans-Light.otf</string>
-		<string>Shopify Sans-Medium Italic.otf</string>
-		<string>Shopify Sans-Medium.otf</string>
-		<string>Shopify Sans-Regular Italic.otf</string>
-		<string>Shopify Sans-Regular.otf</string>
 	</array>
 </dict>
 </plist>

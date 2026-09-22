@@ -1,11 +1,40 @@
 import SwiftUI
+import JulianAgentUI
 
 /// Shared navigation state: selected page index + independent nav paths per page.
+@MainActor
 @Observable
 final class NavigationCoordinator {
     /// 0 = Home, 1 = Orders/Deliveries, 2 = Explore, 3 = Search,
     /// 4 = Cart, 5 = Favorites
     var selectedPage: Int = 0
+    let libraryShell = LibraryShellSession()
+    let julianShell = JulianShellState()
+    let agentConversationControl = AgentConversationControl()
+    var agentInitialQuery = ""
+    var utilityBeltVisible = UserDefaults.standard.object(forKey: "utilityBeltVisible") as? Bool ?? true {
+        didSet { UserDefaults.standard.set(utilityBeltVisible, forKey: "utilityBeltVisible") }
+    }
+    var feedProductCarouselsVisible = UserDefaults.standard.object(
+        forKey: "feedProductCarouselsVisible"
+    ) as? Bool ?? true {
+        didSet {
+            UserDefaults.standard.set(
+                feedProductCarouselsVisible,
+                forKey: "feedProductCarouselsVisible"
+            )
+        }
+    }
+
+    func updateJulianContext(_ context: LibraryAskContext) {
+        let product = context.products.first
+        julianShell.activate(.init(id: context.id, title: context.title,
+            imageURL: product.flatMap { ShopCanvasLibrary.resolve($0.image)?.absoluteString },
+            isProduct: context.id.hasPrefix("product:")))
+        let products = Array(context.products.prefix(3))
+        julianShell.setStarters(titles: products.map(\.title),
+            images: products.compactMap { ShopCanvasLibrary.resolve($0.image)?.absoluteString })
+    }
 
     var homePath = NavigationPath()
     var accountPath = NavigationPath()

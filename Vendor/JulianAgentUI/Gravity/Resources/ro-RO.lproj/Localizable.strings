@@ -1,0 +1,10 @@
+"Reviews.DisplayRating.RatedStars" = "Evaluat cu %1$@ din %2$d stele";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.One" = "Evaluat cu %1$@ din 5 stele. %2$d recenzie.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Few" = "Evaluat cu %1$@ din 5 stele. %2$d recenzii.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Many" = "Evaluat cu %1$@ din 5 stele. %2$d de recenzii.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Other" = "Evaluat cu %1$@ din 5 stele. %2$d de recenzii.";
+"TextField.ClearA11yLabel" = "Șterge %1$@";
+"Reviews.RateInput.RateStars.One" = "Evaluează cu %1$d stea";
+"Reviews.RateInput.RateStars.Few" = "Evaluează cu %1$d stele";
+"Reviews.RateInput.RateStars.Many" = "Evaluează cu %1$d de stele";
+"Reviews.RateInput.RateStars.Other" = "Evaluează cu %1$d stele";

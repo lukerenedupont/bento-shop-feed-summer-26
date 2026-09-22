@@ -489,7 +489,7 @@ private struct BentoCompartmentCard: View {
 
     private var price: String? {
         switch compartment.surface {
-        case .product(let item): return formatPrice(item.product.price)
+        case .product(let item): return formatPrice(item.product)
         case .merchant, .merchantSpotlight, .avatarCluster, .story, .videoProductMosaic: return nil
         }
     }
@@ -634,7 +634,7 @@ private struct BentoSpotlightSurface: View {
                         .clipShape(RoundedRectangle(cornerRadius: GravityRadius.r8, style: .continuous))
                 }
                 .overlay(alignment: .topLeading) {
-                    Text(formatPrice(item.product.price))
+                    Text(formatPrice(item.product))
                         .gravityTextStyle(GravityTypography.badgeBold)
                         .foregroundStyle(.white)
                         .padding(.horizontal, 6)

@@ -106,6 +106,7 @@ final class RemoteFeedService: ObservableObject {
         merchants = []
         isLive = false
         error = nil
+        revision += 1
     }
 
     /// Absolutise the snapshot's `media/...` values once, at its decoding

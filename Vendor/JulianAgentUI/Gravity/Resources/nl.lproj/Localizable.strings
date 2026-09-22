@@ -1,0 +1,10 @@
+"Reviews.DisplayRating.RatedStars" = "Beoordeeld met %1$@ van de %2$d sterren";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.One" = "Beoordeeld met %1$@ van de 5 sterren. %2$d review.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Few" = "Beoordeeld met %1$@ van de 5 sterren. %2$d reviews.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Many" = "Beoordeeld met %1$@ van de 5 sterren. %2$d reviews.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Other" = "Beoordeeld met %1$@ van de 5 sterren. %2$d reviews.";
+"TextField.ClearA11yLabel" = "%1$@ wissen";
+"Reviews.RateInput.RateStars.One" = "%1$d ster geven";
+"Reviews.RateInput.RateStars.Few" = "%1$d sterren geven";
+"Reviews.RateInput.RateStars.Many" = "%1$d sterren geven";
+"Reviews.RateInput.RateStars.Other" = "%1$d sterren geven";

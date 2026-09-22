@@ -111,7 +111,6 @@ final class FeedCompositionPreferences {
 
 /// Stable identities for cards that can appear in the top-of-feed utility belt.
 enum UtilityBeltItem: String, CaseIterable, Identifiable {
-    case giftGuide
     case orders
     case buyAgain
     case cart
@@ -126,7 +125,6 @@ enum UtilityBeltItem: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .giftGuide: "Start a gift guide"
         case .orders: "Orders"
         case .buyAgain: "Buy again"
         case .cart: "Cart"
@@ -141,7 +139,6 @@ enum UtilityBeltItem: String, CaseIterable, Identifiable {
 
     var subtitle: String {
         switch self {
-        case .giftGuide: "Create ideas for someone you care about"
         case .orders: "Track active deliveries"
         case .buyAgain: "Quickly reorder past purchases"
         case .cart: "Return to your active cart"
@@ -156,7 +153,6 @@ enum UtilityBeltItem: String, CaseIterable, Identifiable {
 
     var symbol: String {
         switch self {
-        case .giftGuide: "gift"
         case .orders: "shippingbox"
         case .buyAgain: "arrow.clockwise"
         case .cart: "cart"
@@ -176,25 +172,28 @@ final class UtilityBeltPreferences {
     static let shared = UtilityBeltPreferences()
 
     private static let defaultsKey = "enabledUtilityBeltItems"
-    private static let giftGuideMigrationKey = "didAddGiftGuideUtilityItem"
+    private static let visibilityKey = "utilityBeltVisible"
     private(set) var enabledItems: Set<UtilityBeltItem>
+    private(set) var isVisible: Bool
 
     private init() {
         if let stored = UserDefaults.standard.array(forKey: Self.defaultsKey) as? [String] {
             enabledItems = Set(stored.compactMap(UtilityBeltItem.init(rawValue:)))
-            if !UserDefaults.standard.bool(forKey: Self.giftGuideMigrationKey) {
-                enabledItems.insert(.giftGuide)
-                UserDefaults.standard.set(enabledItems.map(\.rawValue).sorted(), forKey: Self.defaultsKey)
-                UserDefaults.standard.set(true, forKey: Self.giftGuideMigrationKey)
-            }
         } else {
             enabledItems = Set(UtilityBeltItem.allCases)
-            UserDefaults.standard.set(true, forKey: Self.giftGuideMigrationKey)
         }
+        isVisible = UserDefaults.standard.object(forKey: Self.visibilityKey) as? Bool ?? true
+        // Persist the normalized set so retired cards cannot return from old preferences.
+        UserDefaults.standard.set(enabledItems.map(\.rawValue).sorted(), forKey: Self.defaultsKey)
     }
 
     func isEnabled(_ item: UtilityBeltItem) -> Bool {
         enabledItems.contains(item)
+    }
+
+    func setVisible(_ visible: Bool) {
+        isVisible = visible
+        UserDefaults.standard.set(visible, forKey: Self.visibilityKey)
     }
 
     func setEnabled(_ enabled: Bool, for item: UtilityBeltItem) {
@@ -348,6 +347,15 @@ struct HomeFeedControlsSheet: View {
                 }
 
                 Section {
+                    Toggle(
+                        "Show utility belt",
+                        isOn: Binding(
+                            get: { beltPreferences.isVisible },
+                            set: { beltPreferences.setVisible($0) }
+                        )
+                    )
+                    .tint(Color(hex: "#5433EB"))
+
                     Toggle(isOn: $extendoEnabled) {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
@@ -362,8 +370,10 @@ struct HomeFeedControlsSheet: View {
                         }
                     }
                     .tint(Color(hex: "#5433EB"))
+                    .disabled(!beltPreferences.isVisible)
 
-                    ForEach(UtilityBeltItem.allCases) { item in
+                    if beltPreferences.isVisible {
+                        ForEach(UtilityBeltItem.allCases) { item in
                         Toggle(
                             isOn: Binding(
                                 get: { beltPreferences.isEnabled(item) },
@@ -382,12 +392,13 @@ struct HomeFeedControlsSheet: View {
                                     .foregroundStyle(Color(hex: "#5433EB"))
                             }
                         }
-                        .tint(Color(hex: "#5433EB"))
+                            .tint(Color(hex: "#5433EB"))
+                        }
                     }
                 } header: {
                     Text("Utility belt")
                 } footer: {
-                    Text("Choose which cards appear at the top of For You.")
+                    Text("Show or hide the belt, then choose which cards appear at the top of For You.")
                 }
             }
             .navigationTitle("Feed controls")
@@ -404,10 +415,101 @@ struct HomeFeedControlsSheet: View {
     }
 }
 
+/// Focused entry from Julian's overflow menu. It reuses the exact preference
+/// model and controls shown in Feed controls rather than introducing another belt.
+struct UtilityBeltControlsSheet: View {
+    @Bindable var preferences: UtilityBeltPreferences
+    @Binding var isVisible: Bool
+    @Binding var extendoEnabled: Bool
+    @Binding var feedProductCarouselsVisible: Bool
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section("Feed cards") {
+                    Toggle(isOn: $feedProductCarouselsVisible) {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Show product carousels")
+                                Text("Turn off for full-screen media and titles only")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        } icon: {
+                            Image(systemName: "rectangle.stack")
+                                .foregroundStyle(Color(hex: "#5433EB"))
+                        }
+                    }
+                    .tint(Color(hex: "#5433EB"))
+                    .accessibilityIdentifier("feed-card-product-carousels")
+                }
+
+                Section("Utility belt") {
+                    Button {
+                        let visible = !isVisible
+                        isVisible = visible
+                        preferences.setVisible(visible)
+                    } label: {
+                        HStack {
+                            Text("Show utility belt")
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: isVisible ? "checkmark.circle.fill" : "circle")
+                                .foregroundStyle(isVisible ? Color(hex: "#5433EB") : .secondary)
+                        }
+                        .contentShape(.rect)
+                    }
+                    .accessibilityIdentifier("utility-belt-visibility")
+                    .accessibilityValue(isVisible ? "On" : "Off")
+
+                    Toggle("Pull to expand", isOn: $extendoEnabled)
+                        .tint(Color(hex: "#5433EB"))
+                        .disabled(!isVisible)
+                }
+
+                if isVisible {
+                    Section("Cards") {
+                        ForEach(UtilityBeltItem.allCases) { item in
+                            Toggle(
+                                isOn: Binding(
+                                    get: { preferences.isEnabled(item) },
+                                    set: { preferences.setEnabled($0, for: item) }
+                                )
+                            ) {
+                                Label {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(item.title)
+                                        Text(item.subtitle)
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                } icon: {
+                                    Image(systemName: item.symbol)
+                                        .foregroundStyle(Color(hex: "#5433EB"))
+                                }
+                            }
+                            .tint(Color(hex: "#5433EB"))
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Utility belt")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }.fontWeight(.semibold)
+                }
+            }
+        }
+        .presentationDetents([.large])
+        .presentationDragIndicator(.visible)
+    }
+}
+
 /// Compact promotional cards matching the shared top-of-feed rail geometry.
 struct UtilityBeltPromotionCard: View {
     enum Kind: CaseIterable {
-        case giftGuide
         case connectShopEmail
         case connectProviders
         case fiveDollarGift
@@ -415,7 +517,6 @@ struct UtilityBeltPromotionCard: View {
 
         var beltItem: UtilityBeltItem {
             switch self {
-            case .giftGuide: .giftGuide
             case .connectShopEmail: .connectShopEmail
             case .connectProviders: .connectProviders
             case .fiveDollarGift: .fiveDollarGift
@@ -495,8 +596,6 @@ struct UtilityBeltPromotionCard: View {
 
     private var title: String {
         switch kind {
-        case .giftGuide:
-            "Find a gift they’ll love"
         case .connectShopEmail, .connectProviders:
             "Connect your email to track more deliveries with Shop"
         case .fiveDollarGift:
@@ -508,7 +607,6 @@ struct UtilityBeltPromotionCard: View {
 
     private var subtitle: String? {
         switch kind {
-        case .giftGuide: "A few details are enough"
         case .fiveDollarGift: "7 days left to claim"
         default: nil
         }
@@ -516,7 +614,6 @@ struct UtilityBeltPromotionCard: View {
 
     private var eyebrow: String? {
         switch kind {
-        case .giftGuide: "Gift guide"
         case .weeklyStoreBonus: "This week only"
         default: nil
         }
@@ -524,7 +621,6 @@ struct UtilityBeltPromotionCard: View {
 
     private var buttonTitle: String {
         switch kind {
-        case .giftGuide: "Get started"
         case .connectShopEmail: "Connect now"
         case .connectProviders: "Connect"
         case .fiveDollarGift: "Claim now"
@@ -535,15 +631,6 @@ struct UtilityBeltPromotionCard: View {
     @ViewBuilder
     private var artwork: some View {
         switch kind {
-        case .giftGuide:
-            ZStack {
-                RoundedRectangle(cornerRadius: GravityRadius.r16, style: .continuous)
-                    .fill(Color(hex: "#EEE8FF"))
-                Image(systemName: "gift.fill")
-                    .font(.system(size: 30, weight: .semibold))
-                    .foregroundStyle(Color(hex: "#5433EB"))
-            }
-            .padding(4)
         case .connectShopEmail:
             if let url = Bundle.main.url(
                 forResource: "utility-connect-email",

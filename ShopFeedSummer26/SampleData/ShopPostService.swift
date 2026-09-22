@@ -47,7 +47,7 @@ final class ShopPostService {
 
     /// User-supplied social media guarantees that both post presentations can
     /// be reviewed even when Shop authentication is absent.
-    private var bundledPrototypePosts: [ShopPost] {
+    var bundledPrototypePosts: [ShopPost] {
         [
             bundledHouseOfErrorsPost,
             bundledKithPost,

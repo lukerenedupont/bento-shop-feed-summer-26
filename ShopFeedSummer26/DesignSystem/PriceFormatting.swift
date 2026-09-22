@@ -1,9 +1,29 @@
 import Foundation
 
-/// Shared price formatting used across all surfaces.
-func formatPrice(_ price: String) -> String {
-    if let dollars = Double(price) {
-        return String(format: "$%.2f", dollars)
+private enum CurrencyFormatters {
+    static let values: [String: NumberFormatter] = Dictionary(uniqueKeysWithValues:
+        ["USD", "CAD", "EUR", "GBP", "AUD", "TRY", "JPY", "KRW"].map { code in
+            let formatter = NumberFormatter()
+            formatter.locale = Locale(identifier: "en_US")
+            formatter.numberStyle = .currency
+            formatter.currencyCode = code
+            return (code, formatter)
+        }
+    )
+}
+
+/// Missing amounts stay unknown; currency belongs to the product, not its view.
+func formatPrice(_ price: String, currencyCode: String = "USD") -> String {
+    let value = price.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !value.isEmpty else { return "" }
+    guard let amount = Double(value), amount.isFinite else { return value }
+    if let formatter = CurrencyFormatters.values[currencyCode],
+       let result = formatter.string(from: NSNumber(value: amount)) {
+        return result
     }
-    return "$\(price)"
+    return "\(currencyCode) \(String(format: "%.2f", amount))"
+}
+
+func formatPrice(_ product: SampleMerchant.Product) -> String {
+    formatPrice(product.price, currencyCode: product.currencyCode)
 }

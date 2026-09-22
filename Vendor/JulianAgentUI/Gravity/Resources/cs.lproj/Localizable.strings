@@ -1,0 +1,10 @@
+"Reviews.DisplayRating.RatedStars" = "Hodnoceno %1$@ z %2$d hvězdiček";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.One" = "Hodnoceno %1$@ z 5 hvězdiček. %2$d recenze.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Few" = "Hodnoceno %1$@ z 5 hvězdiček. %2$d recenze.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Many" = "Hodnoceno %1$@ z 5 hvězdiček. %2$d recenzí.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Other" = "Hodnoceno %1$@ z 5 hvězdiček. %2$d recenzí.";
+"TextField.ClearA11yLabel" = "Vymazat %1$@";
+"Reviews.RateInput.RateStars.One" = "Udělit %1$d hvězdičku";
+"Reviews.RateInput.RateStars.Few" = "Udělit %1$d hvězdičky";
+"Reviews.RateInput.RateStars.Many" = "Udělit %1$d hvězdiček";
+"Reviews.RateInput.RateStars.Other" = "Udělit %1$d hvězdiček";

@@ -14,8 +14,11 @@ enum TopicPageKind {
 }
 
 enum TopicBlockMetrics {
-    static let sectionSpacing: CGFloat = 28
-    static let relaxedSectionSpacing: CGFloat = 32
+    static let sectionSpacing: CGFloat = 44
+    static let relaxedSectionSpacing: CGFloat = 48
+    static let heroContentSpacing: CGFloat = 24
+    static let headingContentSpacing: CGFloat = 24
+    static let productRowSpacing: CGFloat = 24
     static let compactProductWidth: CGFloat = 116
     static let mediumProductWidth: CGFloat = 132
     static let compactCollectionHeight: CGFloat = 200
@@ -128,6 +131,27 @@ struct TopicCuratedLookDefinition {
 }
 
 enum TopicPageRecipeCatalog {
+    /// PROTOTYPE: commerce beats used after the authored editorial spine in
+    /// the all-blocks Thoughtful Host World.
+    static let thoughtfulHostAllBlocks = TopicPageRecipe(
+        sectionSpacing: 52,
+        blocks: [
+            .featuredDeals(title: "Merchant spotlights"),
+            .categories(
+                title: "Explore the table",
+                items: [
+                    .init(title: "Serve", query: .init(matching: ["tray", "bowl", "plate", "serve"], fallbackOffset: 0, count: 5)),
+                    .init(title: "Gather", query: .init(matching: ["table", "linen", "cloth", "napkin"], fallbackOffset: 4, count: 5)),
+                    .init(title: "Finish", query: .init(matching: ["glass", "vase", "candle", "object"], fallbackOffset: 8, count: 5)),
+                ],
+                snaps: true
+            ),
+            .topMerchants(title: "From the shops"),
+            .brandGrid(title: "More from the makers"),
+            .bento(title: "Objects in conversation"),
+        ]
+    )
+
     static func recipe(
         for kind: TopicPageKind,
         contextualBentoTitle: String,

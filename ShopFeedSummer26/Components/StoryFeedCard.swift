@@ -53,6 +53,7 @@ struct PrototypeFeedbackActions: View {
     var includesVolume = false
     var includesThread = true
     var usesPostActionOrder = false
+    var overflowOnly = false
     var onOverflowTap: (() -> Void)?
     @State private var selectedActions: Set<Action> = []
 
@@ -71,6 +72,7 @@ struct PrototypeFeedbackActions: View {
     }
 
     private var actions: [Action] {
+        if overflowOnly { return [.more] }
         if usesPostActionOrder {
             return [.share, .thread, .like]
         }
@@ -205,6 +207,14 @@ struct StoryFeedCard: View {
     @State private var productDeckDirection = 1
     @State private var productDeckIsSettling = false
 
+    private var usesEditorialOnlyPresentation: Bool {
+        !coordinator.feedProductCarouselsVisible && productLayout != nil
+    }
+
+    private var visibleProductLayout: FeedCardProductLayout? {
+        usesEditorialOnlyPresentation ? nil : productLayout
+    }
+
     private var items: [ResolvedStoryProduct] {
         story.resolvedProducts(from: merchants)
     }
@@ -215,6 +225,9 @@ struct StoryFeedCard: View {
     private var productAssortment: [ResolvedStoryProduct] {
         // Hypothesis shelves are exact authored assortments. Do not pad them
         // with products from another shelf just to fill a larger card layout.
+        if ShopCanvasLibrary.isLibraryStory(story) {
+            return LibraryArtDirection.railProducts(items, for: story)
+        }
         if story.id.hasPrefix("shelf-") || story.id.hasPrefix("custom-feed-") {
             return items
         }
@@ -355,6 +368,9 @@ struct StoryFeedCard: View {
                 }
             }
             .frame(width: width, height: height)
+            // Clipping only affects drawing. The next World's compositor-
+            // lifted foreground must not steal taps from the visible card.
+            .contentShape(.interaction, cardShape)
             .clipShape(cardShape)
             .overlay {
                 cardShape
@@ -373,13 +389,16 @@ struct StoryFeedCard: View {
         // A scroll drag begins as a press. Scaling the full card here made
         // its title spring on release just as the feed snap completed.
         .buttonStyle(.plain)
-        .accessibilityLabel("\(titleOverride ?? story.title). \(story.subtitle)")
+        .accessibilityLabel((titleOverride ?? story.title) + (story.subtitle.isEmpty ? "" : ". \(story.subtitle)"))
         .accessibilityHint(story.destinationLabel)
     }
 
     private var standardForeground: some View {
         ZStack {
-            if productLayout == .compactGrid {
+            if usesEditorialOnlyPresentation {
+                editorialOnlyForeground
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+            } else if visibleProductLayout == .compactGrid {
                 compactGridComposition
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             } else {
@@ -394,11 +413,11 @@ struct StoryFeedCard: View {
                 footerArrow
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
             }
-            if productLayout == .stackedDeck {
+            if visibleProductLayout == .stackedDeck {
                 productCarousel
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             }
-            if productLayout == .bottomCarousel {
+            if visibleProductLayout == .bottomCarousel {
                 bottomProductCarousel
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
             }
@@ -425,6 +444,18 @@ struct StoryFeedCard: View {
                     maxHeight: .infinity,
                     alignment: .bottom
                 )
+        } else if usesEditorialOnlyPresentation {
+            editorialOnlyForeground
+        } else if NikeSkimsWorldMedia.isStory(story) {
+            VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+                Spacer(minLength: 96)
+                SelfCareResetTitle(title: titleOverride ?? story.title)
+                worldCardProducts
+            }
+            .frame(
+                width: max(width - (GravitySpacing.space20 * 2), 0),
+                alignment: .leading
+            )
         } else {
             VStack(alignment: .leading, spacing: GravitySpacing.space12) {
                 Spacer(minLength: 80)
@@ -440,7 +471,7 @@ struct StoryFeedCard: View {
 
     @ViewBuilder
     private var worldCardProducts: some View {
-        switch productLayout {
+        switch visibleProductLayout {
         case .compactGrid:
             compactProductGrid
         case .stackedDeck:
@@ -458,7 +489,11 @@ struct StoryFeedCard: View {
         ZStack {
             Color(hex: story.accentHex)
 
-            if usesLightSphereCover {
+            if NikeSkimsWorldMedia.isStory(story) {
+                NikeSkimsFeedHero(playbackEnabled: backgroundPlaybackEnabled && isActive)
+            } else if ShopCanvasLibrary.isLibraryStory(story) {
+                LibraryProductHero(story: story, width: width, height: height)
+            } else if usesLightSphereCover {
                 Color.white
                 Image("canvas-sphere-cover")
                     .resizable()
@@ -593,13 +628,18 @@ struct StoryFeedCard: View {
     }
 
     private var backgroundScrim: some View {
-        let bottomOpacity = max(authoredCover?.textScrimOpacity ?? 0.34, 0.46)
+        let effectiveTopOpacity = usesEditorialOnlyPresentation
+            ? min(topScrimOpacity, 0.16)
+            : topScrimOpacity
+        let bottomOpacity = usesEditorialOnlyPresentation
+            ? max(authoredCover?.textScrimOpacity ?? 0.20, 0.28)
+            : max(authoredCover?.textScrimOpacity ?? 0.34, 0.46)
 
         return LinearGradient(
             stops: [
-                .init(color: .black.opacity(topScrimOpacity), location: 0),
-                .init(color: .black.opacity(topScrimOpacity * 0.62), location: 0.14),
-                .init(color: .black.opacity(topScrimOpacity * 0.18), location: 0.30),
+                .init(color: .black.opacity(effectiveTopOpacity), location: 0),
+                .init(color: .black.opacity(effectiveTopOpacity * 0.55), location: 0.14),
+                .init(color: .black.opacity(effectiveTopOpacity * 0.12), location: 0.30),
                 .init(color: .clear, location: 0.42),
                 .init(color: .clear, location: 0.62),
                 .init(color: .black.opacity(bottomOpacity * 0.22), location: 0.78),
@@ -612,10 +652,63 @@ struct StoryFeedCard: View {
 
     // MARK: - Header
 
+    private var editorialOnlyForeground: some View {
+        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+            Spacer(minLength: 96)
+            Group {
+                if NikeSkimsWorldMedia.isStory(story) {
+                    SelfCareResetTitle(title: titleOverride ?? story.title)
+                } else {
+                    storyHeader
+                }
+            }
+            Text(editorialDeck)
+                .font(GravityFont.regular.fixedFont(size: 16))
+                .lineSpacing(3)
+                .foregroundStyle(.white.opacity(0.92))
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: 330, alignment: .leading)
+                .gravityShadow(GravityShadows.feedText)
+            Text(editorialCTA)
+                .font(GravityFont.medium.fixedFont(size: 16))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 22)
+                .padding(.vertical, 12)
+                .background(.white.opacity(0.12), in: Capsule())
+                .overlay {
+                    Capsule().stroke(.white.opacity(0.38), lineWidth: 1)
+                }
+                .padding(.top, GravitySpacing.space4)
+        }
+        .frame(
+            width: max(width - (GravitySpacing.space20 * 2), 0),
+            alignment: .leading
+        )
+    }
+
+    private var editorialDeck: String {
+        if let libraryDeck = LibraryArtDirection.editorialDeck(for: story) {
+            return libraryDeck
+        }
+        if !story.subtitle.isEmpty { return story.subtitle }
+        return "A focused edit with a distinct point of view, designed to be explored as a complete World."
+    }
+
+    private var editorialCTA: String {
+        story.format == .world ? "Explore" : "See more"
+    }
+
     private var storyHeader: some View {
-        Text(titleOverride ?? story.title)
-            .feedCardTitleStyle()
-            .foregroundStyle(usesLightSphereCover ? Color.black : .white)
+        Group {
+            if LibraryWordmarkCatalog.key(for: story) != nil {
+                LibraryCollectionWordmark(story: story)
+                    .frame(width: min(width - 80, 264), height: 44, alignment: .leading)
+            } else {
+                Text(titleOverride ?? story.title)
+                    .feedCardTitleStyle()
+                    .foregroundStyle(usesLightSphereCover ? Color.black : .white)
+            }
+        }
             .gravityShadow(
                 usesLightSphereCover
                     ? GravityShadow(color: .clear, radius: 0, x: 0, y: 0)
@@ -726,8 +819,9 @@ struct StoryFeedCard: View {
         ProductCard(
             image: nil,
             imageURL: item.product.imageURL,
-            priceBadge: formatPrice(item.product.price),
-            showFavoriteButton: true
+            priceBadge: item.product.price.isEmpty ? nil : formatPrice(item.product),
+            showFavoriteButton: true,
+            favoriteIconHasContrastShadow: item.product.sourceProductID != nil
         )
         // The whole story card is the destination at this level. Controls are
         // presented in their native form without creating nested tap targets.
@@ -788,7 +882,7 @@ struct StoryFeedCard: View {
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(.white)
                     .lineLimit(1)
-                Text(formatPrice(item.product.price))
+                Text(formatPrice(item.product))
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(.white)
             }

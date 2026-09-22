@@ -482,7 +482,7 @@ struct ProductPage: View {
     /// Products added from buyer evidence carry verified catalog fields only.
     /// Prototype-only commerce claims must not bleed into those PDPs.
     private func isCanonicalCatalogProduct(_ product: SampleMerchant.Product) -> Bool {
-        product.tags.contains("canonical-catalog")
+        product.tags.contains("canonical-catalog") || product.sourceProductID != nil
     }
 
     /// Deterministic but varied badge generation — not every product gets every badge.
@@ -564,7 +564,7 @@ struct ProductPage: View {
 
         VStack(alignment: .leading, spacing: GravitySpacing.space4) {
             HStack(alignment: .firstTextBaseline, spacing: GravitySpacing.space8) {
-                Text(formattedPrice(product.price, currencyCode: currency))
+                Text(formatPrice(product))
                     .gravityTextStyle(GravityTypography.subtitle)
                     .foregroundStyle(PurlTune.token("Pages/ProductPage.swift:foregroundStyle:_:500:38", default: GravityColors.text, options: GravityColors.purlTuneColorOptions))
 
@@ -764,7 +764,26 @@ struct ProductPage: View {
 
     // MARK: - I. Buy Buttons (inline in scroll content)
 
+    @ViewBuilder
     private var buyButtons: some View {
+        if let product, let sourceID = product.sourceProductID {
+            VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+                if let value = product.shopURL, let url = URL(string: value),
+                   ["http", "https"].contains(url.scheme ?? "") {
+                    Link("Visit shop", destination: url)
+                        .gravityTextStyle(GravityTypography.buttonLarge)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity, minHeight: 52)
+                        .background(GravityColors.bgFillBrand, in: Capsule())
+                }
+                Text(ShopCanvasLibrary.productsByID[sourceID]?.commerceCheck ?? "Catalog reference")
+                    .gravityTextStyle(GravityTypography.caption)
+                    .foregroundStyle(GravityColors.textSecondary)
+                Text("Confirm current price and availability with the merchant.")
+                    .gravityTextStyle(GravityTypography.caption)
+                    .foregroundStyle(GravityColors.textSecondary)
+            }
+        } else {
         VStack(spacing: GravitySpacing.space8) {
             Button {
                 HapticFeedback.medium.fire()
@@ -794,6 +813,7 @@ struct ProductPage: View {
                     .clipShape(Capsule())
             }
         }
+        }
     }
 
     // MARK: - Image Preload
@@ -801,10 +821,8 @@ struct ProductPage: View {
     private func preloadProductImage() {
         guard let urlString = product?.imageURL, let url = URL(string: urlString) else { return }
         Task {
-            if let (data, _) = try? await URLSession.shared.data(from: url),
-               let image = UIImage(data: data) {
-                loadedProductImage = image
-            }
+            _ = await ImageURLCache.shared.loadImage(for: url)
+            loadedProductImage = ImageURLCache.shared.image(for: url)
         }
     }
 }

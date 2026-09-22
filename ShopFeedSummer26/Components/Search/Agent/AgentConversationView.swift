@@ -14,6 +14,22 @@ struct ConversationTurn: Identifiable {
     var isFromHistory: Bool = false
 }
 
+/// Host bridge for Julian's persistent source composer. The conversation remains
+/// the sole owner of transport state; the shell only sends user intents.
+@MainActor @Observable
+final class AgentConversationControl {
+    private(set) var submissionID = 0
+    private(set) var followUp = ""
+    private(set) var stopID = 0
+
+    func submit(_ query: String) {
+        followUp = query
+        submissionID += 1
+    }
+
+    func stop() { stopID += 1 }
+}
+
 /// Agent conversation view with multi-turn support.
 /// Each follow-up creates a new turn, visually separated by the user's query as a chapter header.
 struct AgentConversationView: View {
@@ -22,6 +38,9 @@ struct AgentConversationView: View {
 #endif
     let query: String
     var existingConversationId: String? = nil
+    var externalControl: AgentConversationControl? = nil
+    var usesExternalComposer = false
+    var onStreamingChanged: (Bool) -> Void = { _ in }
     var onDismiss: () -> Void = {}
 
     @State private var agentClient = AgentStreamClient()
@@ -48,7 +67,45 @@ struct AgentConversationView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            NavigationStack {
+            Group {
+                if usesExternalComposer {
+                    conversationContent
+                } else {
+                    NavigationStack { conversationContent }
+                }
+            }
+
+            // Julian's persistent UIKit owner supplies this when externally hosted.
+            if !usesExternalComposer {
+                followUpBar
+                    .zIndex(10)
+            }
+        }
+        .ignoresSafeArea(.keyboard)
+        .task { await startConversation(query: query) }
+        .onDisappear { cleanup() }
+        .onChange(of: externalControl?.submissionID) { _, _ in
+            guard let followUp = externalControl?.followUp else { return }
+            Task { await sendFollowUp(query: followUp) }
+        }
+        .onChange(of: externalControl?.stopID) { _, _ in agentClient.cancel() }
+        .onChange(of: agentClient.isStreaming, initial: true) { _, isStreaming in
+            onStreamingChanged(isStreaming)
+            guard !isStreaming, !turns.isEmpty else { return }
+            finalizeTurn()
+        }
+        .onChange(of: agentClient.contentBlocks.count) { _, _ in
+            syncCurrentTurn()
+        }
+        .onChange(of: agentClient.productSections.count) { _, _ in
+            syncCurrentTurn()
+        }
+        .onChange(of: agentClient.suggestions) { _, _ in
+            syncCurrentTurn()
+        }
+    }
+
+    private var conversationContent: some View {
                 ZStack(alignment: .bottom) {
                     if isLoadingHistory {
                         VStack(spacing: GravitySpacing.space12) {
@@ -68,7 +125,9 @@ struct AgentConversationView: View {
                     }
                 }
                 .animation(.easeInOut(duration: 0.3), value: isLoadingHistory)
-                .overlay(alignment: .topTrailing) { newConversationButton }
+                .overlay(alignment: .topTrailing) {
+                    if !usesExternalComposer { newConversationButton }
+                }
                 .overlay(alignment: .top) { topFadeGradient }
                 .background(PurlTune.token("Components/Search/Agent/AgentConversationView.swift:background:_:70:29", default: GravityColors.bg, options: GravityColors.purlTuneColorOptions))
                 .navigationDestination(item: $selectedProduct) { product in
@@ -86,30 +145,7 @@ struct AgentConversationView: View {
                         )
                     }
                 }
-                .toolbar(.hidden, for: .navigationBar)
-            }
-
-            // Follow-up bar floats above everything
-            followUpBar
-                .zIndex(10)
-        }
-        .ignoresSafeArea(.keyboard)
-        .task { await startConversation(query: query) }
-        .onDisappear { cleanup() }
-        .onChange(of: agentClient.isStreaming) { _, isStreaming in
-            guard !isStreaming, !turns.isEmpty else { return }
-            // Streaming ended — snapshot final state into the current turn
-            finalizeTurn()
-        }
-        .onChange(of: agentClient.contentBlocks.count) { _, _ in
-            syncCurrentTurn()
-        }
-        .onChange(of: agentClient.productSections.count) { _, _ in
-            syncCurrentTurn()
-        }
-        .onChange(of: agentClient.suggestions) { _, _ in
-            syncCurrentTurn()
-        }
+                .toolbar(usesExternalComposer ? .visible : .hidden, for: .navigationBar)
     }
 
     // MARK: - Scroll Content

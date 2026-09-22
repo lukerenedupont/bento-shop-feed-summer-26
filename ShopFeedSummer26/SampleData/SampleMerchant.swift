@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct SampleMerchant: Identifiable {
+struct SampleMerchant: Identifiable, Equatable {
     let id: String
     let name: String
     let description: String
@@ -67,9 +67,13 @@ struct SampleMerchant: Identifiable {
         var videoUrl: String? = nil
         /// Complete generated film set, in editorial playback order.
         var allVideoURLs: [String] = []
+        /// Exact external identity and editorial status, never inferred from branding.
+        var sourceProductID: String? = nil
+        var isCurated: Bool? = nil
+        var associatedMerchantIDs: [String]? = nil
     }
 
-    struct Collection: Identifiable {
+    struct Collection: Identifiable, Equatable {
         let id: String
         let name: String
         let imageURL: String?
@@ -83,6 +87,7 @@ struct SampleMerchant: Identifiable {
 
     @MainActor
     static var all: [SampleMerchant] {
+        if ShopCanvasLibrary.isEnabled { return ShopCanvasLibrary.merchants }
         let live = RemoteMerchantService.shared.merchants
         // Previews, deep links, and pushed pages can all render before
         // HomePage seeds RemoteMerchantService — the bundled snapshot is

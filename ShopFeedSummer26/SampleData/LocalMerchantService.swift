@@ -5,9 +5,13 @@ import SwiftUI
 /// Used as a fallback when the Shop Server token is missing or expired.
 enum LocalMerchantService {
 
-    static func loadMerchants() -> [SampleMerchant] {
+    private static let bundledMerchants: [SampleMerchant] = {
         guard let asset = NSDataAsset(name: "prototype-merchants") else { return [] }
         return decodeMerchants(from: asset.data)
+    }()
+
+    static func loadMerchants() -> [SampleMerchant] {
+        ShopCanvasLibrary.isEnabled ? ShopCanvasLibrary.merchants : bundledMerchants
     }
 
     /// Same mapping, from any snapshot payload — the bundled asset or a live

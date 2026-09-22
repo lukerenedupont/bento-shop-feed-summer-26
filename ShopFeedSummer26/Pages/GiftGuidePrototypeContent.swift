@@ -231,7 +231,7 @@ struct GiftGuidePrototypeContent: View {
                     HStack {
                         Text(item.merchant.displayName)
                         Spacer()
-                        Text(formatPrice(item.product.price))
+                        Text(formatPrice(item.product))
                     }
                     .font(GravityFont.medium.fixedFont(size: 12))
                     .foregroundStyle(.white.opacity(0.76))
@@ -355,7 +355,7 @@ struct GiftGuidePrototypeContent: View {
                         Text(item.merchant.displayName)
                         Text("·")
                             .foregroundStyle(.white.opacity(0.42))
-                        Text(formatPrice(item.product.price))
+                        Text(formatPrice(item.product))
                     }
                     .font(GravityFont.medium.fixedFont(size: 12))
                     .foregroundStyle(.white.opacity(0.72))
@@ -427,7 +427,7 @@ struct GiftGuidePrototypeContent: View {
                                 imageURL: item.product.imageURL,
                                 merchantName: item.merchant.displayName,
                                 productName: item.product.title,
-                                price: formatPrice(item.product.price),
+                                price: formatPrice(item.product),
                                 showFavoriteButton: true,
                                 favoriteIconHasContrastShadow: true
                             )

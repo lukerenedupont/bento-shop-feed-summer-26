@@ -26,6 +26,8 @@ prototype-merchants.json + personalized-feed.json + frozen dossier bundle
 - `RemoteMerchantService` publishes one merged lookup graph while retaining
   the authenticated followed-merchant collection separately.
 - `SampleMerchant` caches merchant and product indexes per catalog generation.
+- `CatalogSearchIndex` tokenizes the current immutable merchant snapshot once for suggested collections and custom-feed retrieval. Content changes invalidate it even when IDs and counts stay the same.
+- `HomeFeedPlanner` caches up to eight complete-input render plans; bundled merchant decoding and supplemental story merging are also snapshot-scoped.
 - The app renders bundled data immediately and hydrates followed shops, posts,
   and account history independently.
 - The frozen feed bundle is optimized to 540p video and phone-sized imagery at
@@ -51,12 +53,11 @@ the shared detail renderer.
 
 ## Topic recipes
 
-The four recipe families are:
-
-1. Sculptural living — the authored lighting/home sequence.
-2. Hypebeast — the authored sneaker/apparel sequence.
-3. Merchant — a tighter store-led sequence.
-4. Standard — a context-aware fallback shared by every other topic.
+The recipe kinds are sculptural living, warm designer lighting, hypebeast,
+performance sneakers, gift guide, merchant, and standard. The first four have
+authored sequences; merchant uses a tighter store-led sequence. Gift guide
+uses the standard recipe with its own presentation/state, and standard is
+the context-aware fallback for other topics.
 
 Recipes use only the block primitives documented in
 [`docs/TOPIC_PAGE_BLOCK_SYSTEM.md`](docs/TOPIC_PAGE_BLOCK_SYSTEM.md).
@@ -95,6 +96,11 @@ Validation covers stable IDs, product references, block items, dossier
 manifests, cover assets, frozen media references, minimum story depth, source
 file line budgets, the generated media inventory, and product-size budgets.
 
+The shared Xcode scheme also includes hosted feed/state regression tests and
+UI smoke tests for collection navigation and the visible bottom tabs. See
+[`docs/CEO_DEMO_HANDOFF.md`](docs/CEO_DEMO_HANDOFF.md) for the demo verification
+and reproducible Release artifact commands.
+
 Current hard limits:
 
 - Built app: 180 MB
@@ -114,6 +120,9 @@ Current hard limits:
 
 ## Security boundary
 
-Secrets remain in `.env.local` and are copied only into local debug products.
+Secrets remain in `.env.local` and are copied only into local Debug products by
+`Scripts/copy_local_shop_env.sh`. Other configurations remove any previous
+copy, and product validation rejects environment files and test runtimes in
+non-Debug products.
 Decart/FAL token minting stays behind the Shopify AI proxy. No long-lived
 vendor credential belongs in source control or the app bundle.

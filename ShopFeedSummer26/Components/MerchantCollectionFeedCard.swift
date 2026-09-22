@@ -69,9 +69,7 @@ struct MerchantCollectionFeedCard: View {
     var body: some View {
         Button {
             HapticFeedback.light.fire()
-            coordinator.homePath.append(
-                HomeRoute.store(merchantId: presentation.brandMerchantID ?? presentation.merchantID)
-            )
+            coordinator.pushRoute(.store(merchantId: presentation.brandMerchantID ?? presentation.merchantID))
         } label: {
             ZStack {
                 collectionCover
@@ -80,6 +78,7 @@ struct MerchantCollectionFeedCard: View {
                 collectionContent
             }
             .frame(width: width, height: height)
+            .contentShape(cardShape)
             .clipShape(cardShape)
             .overlay {
                 cardShape
@@ -297,14 +296,16 @@ struct MerchantCollectionFeedCard: View {
             }
             .overlay { Color.black.opacity(0.04) }
             .overlay(alignment: .topLeading) {
-                Text(formatPrice(product.price))
-                    .gravityTextStyle(GravityTypography.badgeBold)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, GravitySpacing.space6)
-                    .padding(.vertical, GravitySpacing.space2)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .environment(\.colorScheme, .dark)
-                    .padding(GravitySpacing.space8)
+                if !product.price.isEmpty {
+                    Text(formatPrice(product))
+                        .gravityTextStyle(GravityTypography.badgeBold)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, GravitySpacing.space6)
+                        .padding(.vertical, GravitySpacing.space2)
+                        .background(.ultraThinMaterial, in: Capsule())
+                        .environment(\.colorScheme, .dark)
+                        .padding(GravitySpacing.space8)
+                }
             }
             .overlay(alignment: .bottomTrailing) {
                 ProductFavoriteIcon()

@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-struct PersonalizedFeedCatalog: Codable {
+struct PersonalizedFeedCatalog: Codable, Equatable {
     let version: Int
     let topics: [FeedTopic]
     let stories: [FeedStory]
@@ -12,25 +12,35 @@ struct PersonalizedFeedCatalog: Codable {
     /// dossier-lab API, falling back to the bundled curation so the prototype
     /// opens with no server, no network, and no auth.
     static var current: PersonalizedFeedCatalog {
+        if let cachedCurrent { return cachedCurrent }
         let base = remote ?? bundled
+        if ShopCanvasLibrary.isEnabled { return base }
         let existingIDs = Set(base.stories.map(\.id))
         let supplementalStories = HypothesisShelfCatalog.stories.filter {
             !existingIDs.contains($0.id)
         }
-        guard !supplementalStories.isEmpty else { return base }
-        return PersonalizedFeedCatalog(
+        let result = supplementalStories.isEmpty ? base : PersonalizedFeedCatalog(
             version: base.version,
             topics: base.topics,
             stories: base.stories + supplementalStories,
             signals: base.signals
         )
+        cachedCurrent = result
+        return result
     }
 
     /// Generated catalog, set once the feed API answers. Views read it through
     /// `current`; nothing else should write it.
-    static var remote: PersonalizedFeedCatalog?
+    static var remote: PersonalizedFeedCatalog? {
+        didSet { cachedCurrent = nil }
+    }
+
+    /// The supplemental shelf merge belongs to a catalog update, not every
+    /// SwiftUI body evaluation. Reset it whenever the remote value changes.
+    private static var cachedCurrent: PersonalizedFeedCatalog?
 
     static let bundled: PersonalizedFeedCatalog = {
+        if ShopCanvasLibrary.isEnabled { return ShopCanvasLibrary.catalog }
         guard let asset = NSDataAsset(name: "personalized-feed"),
               let catalog = try? JSONDecoder().decode(PersonalizedFeedCatalog.self, from: asset.data) else {
             assertionFailure("personalized-feed.json is missing or invalid")

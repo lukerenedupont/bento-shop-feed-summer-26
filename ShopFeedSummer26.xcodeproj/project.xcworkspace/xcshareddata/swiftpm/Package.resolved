@@ -1,5 +1,5 @@
 {
-  "originHash" : "492e0d598de4dee3c383b978c97b3d91bbfb4499ec6a5be4e41e4596225a09f5",
+  "originHash" : "7a344b947a10439a2dcc1456b7c687db4cac7f2c755b4029dbd606c01deb084a",
   "pins" : [
     {
       "identity" : "floatingpanel",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "3803821e04bae3647c434495fab44fdd33cf7368",
         "version" : "3.2.3"
+      }
+    },
+    {
+      "identity" : "nuke",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kean/Nuke.git",
+      "state" : {
+        "revision" : "63a8fcbd6621340a2410bc3e9575ac97058615f4",
+        "version" : "13.0.6"
       }
     },
     {

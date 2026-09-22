@@ -1,0 +1,10 @@
+"Reviews.DisplayRating.RatedStars" = "Noté %1$@ sur %2$d étoiles";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.One" = "Noté %1$@ sur 5 étoiles. %2$d avis.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Few" = "Noté %1$@ sur 5 étoiles. %2$d avis.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Many" = "Noté %1$@ sur 5 étoiles. %2$d avis.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Other" = "Noté %1$@ sur 5 étoiles. %2$d avis.";
+"TextField.ClearA11yLabel" = "Effacer %1$@";
+"Reviews.RateInput.RateStars.One" = "Attribuer %1$d étoile";
+"Reviews.RateInput.RateStars.Few" = "Attribuer %1$d étoiles";
+"Reviews.RateInput.RateStars.Many" = "Attribuer %1$d étoiles";
+"Reviews.RateInput.RateStars.Other" = "Attribuer %1$d étoiles";

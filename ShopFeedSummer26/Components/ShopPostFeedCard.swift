@@ -287,7 +287,7 @@ struct ShopPostFeedCard: View {
                 Text(item.product.title)
                     .font(.system(size: 14, weight: .semibold))
                     .lineLimit(1)
-                Text(formatPrice(item.product.price))
+                Text(formatPrice(item.product))
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(.white.opacity(0.82))
             }

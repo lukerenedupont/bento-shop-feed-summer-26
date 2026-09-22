@@ -1,0 +1,10 @@
+"Reviews.DisplayRating.RatedStars" = "Vurdert til %1$@ av %2$d stjerner";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.One" = "Vurdert til %1$@ av 5 stjerner. %2$d anmeldelse.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Few" = "Vurdert til %1$@ av 5 stjerner. %2$d anmeldelser.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Many" = "Vurdert til %1$@ av 5 stjerner. %2$d anmeldelser.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Other" = "Vurdert til %1$@ av 5 stjerner. %2$d anmeldelser.";
+"TextField.ClearA11yLabel" = "Tøm %1$@";
+"Reviews.RateInput.RateStars.One" = "Gi %1$d stjerne";
+"Reviews.RateInput.RateStars.Few" = "Gi %1$d stjerner";
+"Reviews.RateInput.RateStars.Many" = "Gi %1$d stjerner";
+"Reviews.RateInput.RateStars.Other" = "Gi %1$d stjerner";

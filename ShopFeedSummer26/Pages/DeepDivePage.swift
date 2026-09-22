@@ -34,7 +34,7 @@ struct DeepDivePage: View {
                         Text(product.title)
                             .font(.system(size: 28, weight: .heavy))
                             .tracking(-0.8)
-                        Text("\(formatPrice(product.price)) · \(merchant.displayName)")
+                        Text("\(formatPrice(product)) · \(merchant.displayName)")
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundStyle(.secondary)
                     }

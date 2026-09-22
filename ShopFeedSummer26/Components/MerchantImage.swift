@@ -125,10 +125,14 @@ struct MerchantWordmarkImage: View {
     var tint: Color = .white
     var bundledAssetName: String? = nil
     var rendersAsTemplate = false
+    var onDarkBackground = true
 
     var body: some View {
         Group {
-            if let bundledAssetName,
+            if ShopCanvasLibrary.isEnabled, ShopCanvasLibrary.merchantsByID[merchant.id] != nil {
+                LibraryMerchantWordmark(merchantID: merchant.id, onDark: onDarkBackground)
+                    .frame(maxWidth: imageMaxWidth ?? maxWidth, maxHeight: maxHeight)
+            } else if let bundledAssetName,
                UIImage(named: bundledAssetName) != nil {
                 Image(bundledAssetName)
                     .renderingMode(rendersAsTemplate ? .template : .original)

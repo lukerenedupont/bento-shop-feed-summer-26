@@ -10,7 +10,7 @@ struct HomeFeedPlan {
 
 @MainActor
 enum HomeFeedPlanner {
-    struct Input {
+    struct Input: Equatable {
         let buyer: BuyerPreviewProfile
         let topic: BuyerFeedTopic
         let catalog: PersonalizedFeedCatalog
@@ -22,41 +22,19 @@ enum HomeFeedPlanner {
         let seasonalPlacement: SeasonalPlacement
     }
 
-    private struct Key: Hashable {
-        let buyerID: String
-        let topicID: String
-        let topicLabel: String
-        let customIntent: String?
-        let storyIDs: [String]
-        let catalogVersion: Int
-        let catalogStoryIDs: [String]
-        let merchantInventory: [String]
-        let followedMerchantIDs: [String]
-        let postIDs: [String]
-        let worldIDs: [String]
-        let contentKinds: [String]
-        let seasonalPlacement: String
-    }
-
-    private static var cached: (key: Key, plan: HomeFeedPlan)?
+    // Compare immutable values, not IDs/counts: a refreshed story, product,
+    // post, or buyer signal can change without changing its identity. Swift's
+    // copy-on-write arrays keep unchanged snapshots cheap to retain/compare.
+    // A small LRU also avoids rebuilding a feed when returning from another tab.
+    private static var cached: [(input: Input, plan: HomeFeedPlan)] = []
+    private static let cacheLimit = 8
 
     static func plan(_ input: Input) -> HomeFeedPlan {
-        let key = Key(
-            buyerID: input.buyer.id,
-            topicID: input.topic.id,
-            topicLabel: input.topic.label,
-            customIntent: input.topic.customIntent,
-            storyIDs: input.topic.storyIDs,
-            catalogVersion: input.catalog.version,
-            catalogStoryIDs: input.catalog.stories.map(\.id),
-            merchantInventory: input.merchants.map { "\($0.id):\($0.products.count)" },
-            followedMerchantIDs: input.followedMerchants.map(\.id),
-            postIDs: input.posts.map(\.id),
-            worldIDs: input.enabledWorldIDs.sorted(),
-            contentKinds: input.enabledContentKinds.map(\.rawValue).sorted(),
-            seasonalPlacement: input.seasonalPlacement.rawValue
-        )
-        if let cached, cached.key == key { return cached.plan }
+        if let index = cached.lastIndex(where: { $0.input == input }) {
+            let hit = cached.remove(at: index)
+            cached.append(hit)
+            return hit.plan
+        }
 
         let stories = stories(for: input)
         let posts = relevantPosts(input.posts, buyer: input.buyer, topic: input.topic, stories: stories, merchants: input.merchants)
@@ -75,13 +53,52 @@ enum HomeFeedPlanner {
             entries.insert(.seasonalSavings, at: min(1, entries.count))
         }
 
+        // Apply the demo opening after composition/campaign insertion so no
+        // mixed format interrupts the first five. Reorder only existing cards;
+        // a disabled recommendation remains disabled.
+        entries = prioritizingDemoWorlds(entries, input: input) { entry in
+            guard case let .story(story) = entry, !story.rendersAsMerchantCard else { return nil }
+            return story.id
+        }
+
         let plan = HomeFeedPlan(
-            stories: stories,
+            stories: prioritizingDemoWorlds(stories, input: input) {
+                $0.rendersAsMerchantCard ? nil : $0.id
+            },
             entries: entries,
             availableContentCounts: availableContentCounts
         )
-        cached = (key, plan)
+        cached.append((input, plan))
+        if cached.count > cacheLimit { cached.removeFirst() }
         return plan
+    }
+
+    /// Demo-only editorial opening. All five already have authored bundled
+    /// films; their original content, destination, and presentation stay intact.
+    private static let demoOpeningStoryIDs = [
+        NikeSkimsWorldMedia.storyID,
+        "kyle-argizari-lighting",
+        "shelf-luke-9-streetwear-caps-and-tees",
+        "shelf-luke-2-sculptural-living-room-pieces",
+        "shelf-luke-10-performance-sneakers-edit",
+        "shelf-luke-7-stylish-travel-essentials",
+    ]
+
+    private static func prioritizingDemoWorlds<Value>(
+        _ values: [Value],
+        input: Input,
+        storyID: (Value) -> String?
+    ) -> [Value] {
+        guard ["luke", ShopCanvasLibrary.profileID].contains(input.buyer.id),
+              input.topic.id == "for-you", input.topic.customIntent == nil else { return values }
+        let opening = demoOpeningStoryIDs.compactMap { id in
+            values.first { storyID($0) == id }
+        }
+        let openingIDs = Set(opening.compactMap(storyID))
+        return opening + values.filter { value in
+            guard let id = storyID(value) else { return true }
+            return !openingIDs.contains(id)
+        }
     }
 
     private static func contentCounts(
@@ -343,19 +360,21 @@ enum CustomFeedRecommendationEngine {
         let authoredMerchantCounts = authoredReferences.reduce(into: [String: Int]()) {
             $0[$1.merchantID, default: 0] += 1
         }
-        let authoredVocabulary = buyerAffinityVocabulary(
-            references: authoredReferences,
-            merchants: merchants
-        )
+        let documents = CatalogSearchIndex.documents(in: merchants)
+        let authoredVocabulary = documents.reduce(into: Set<String>()) { vocabulary, document in
+            if authoredReferences.contains(document.reference) {
+                vocabulary.formUnion(document.vocabulary)
+            }
+        }
+        let relatedTerms = expandedTerms.subtracting(intentTerms)
 
-        let ranked = merchants.flatMap { merchant in
-            merchant.products.compactMap { product -> Candidate? in
+        let ranked = documents.compactMap { document -> Candidate? in
+                let merchant = document.merchant
+                let product = document.product
                 guard isUseful(product) else { return nil }
-                let relevance = relevanceScore(
-                    product: product,
-                    merchant: merchant,
+                let relevance = document.relevance(
                     intentTerms: intentTerms,
-                    expandedTerms: expandedTerms
+                    relatedTerms: relatedTerms
                 )
                 guard relevance > 0 else { return nil }
 
@@ -366,7 +385,7 @@ enum CustomFeedRecommendationEngine {
                 ) {
                     affinity += 40
                 }
-                affinity += productTokens(product).intersection(authoredVocabulary).count
+                affinity += document.vocabulary.intersection(authoredVocabulary).count
                 if buyer.id == "luke", let signals = catalog.signals {
                     affinity += signals.strength(
                         merchantID: merchant.id,
@@ -379,7 +398,6 @@ enum CustomFeedRecommendationEngine {
                     relevance: relevance,
                     affinity: affinity
                 )
-            }
         }
         .sorted {
             if $0.relevance != $1.relevance { return $0.relevance > $1.relevance }
@@ -523,50 +541,15 @@ enum CustomFeedRecommendationEngine {
         expandedTerms: Set<String>
     ) -> Int {
         guard !intentTerms.isEmpty else { return 0 }
-        let title = tokens(in: product.title)
-        let type = tokens(in: product.productType ?? "")
-        let tags = tokens(in: product.tags.joined(separator: " "))
-        let description = tokens(in: product.productDescription ?? "")
-        let brand = tokens(in: "\(product.vendor) \(merchant.name)")
-        let direct = intentTerms
-
-        return title.intersection(direct).count * 30
-            + type.intersection(direct).count * 26
-            + tags.intersection(direct).count * 18
-            + brand.intersection(direct).count * 16
-            + description.intersection(direct).count * 5
-            + title.intersection(expandedTerms.subtracting(direct)).count * 18
-            + type.intersection(expandedTerms.subtracting(direct)).count * 16
-            + tags.intersection(expandedTerms.subtracting(direct)).count * 12
-            + brand.intersection(expandedTerms.subtracting(direct)).count * 10
-            + description.intersection(expandedTerms.subtracting(direct)).count * 3
+        return CatalogSearchIndex.Document(merchant: merchant, product: product).relevance(
+            intentTerms: intentTerms,
+            relatedTerms: expandedTerms.subtracting(intentTerms)
+        )
     }
 
     private static func storyRelevance(_ story: FeedStory, terms: Set<String>) -> Int {
         let searchable = tokens(in: "\(story.title) \(story.subtitle) \(story.topicKeys.joined(separator: " "))")
         return searchable.intersection(terms).count
-    }
-
-    private static func buyerAffinityVocabulary(
-        references: Set<FeedStory.ProductReference>,
-        merchants: [SampleMerchant]
-    ) -> Set<String> {
-        references.reduce(into: Set<String>()) { result, reference in
-            guard let merchant = merchants.first(where: { $0.id == reference.merchantID }),
-                  let product = merchant.products.first(where: { $0.id == reference.productID }) else {
-                return
-            }
-            result.formUnion(productTokens(product))
-        }
-    }
-
-    private static func productTokens(_ product: SampleMerchant.Product) -> Set<String> {
-        tokens(in: ([
-            product.title,
-            product.productType ?? "",
-            product.vendor,
-            product.productDescription ?? "",
-        ] + product.tags).joined(separator: " "))
     }
 
     private static func meaningfulTokens(in value: String) -> Set<String> {
@@ -580,24 +563,7 @@ enum CustomFeedRecommendationEngine {
     }
 
     private static func tokens(in value: String) -> Set<String> {
-        Set(
-            value.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current)
-                .lowercased()
-                .split(whereSeparator: { !$0.isLetter && !$0.isNumber })
-                .map { canonicalToken(String($0)) }
-                .filter { !$0.isEmpty }
-        )
-    }
-
-    private static func canonicalToken(_ token: String) -> String {
-        let irregular: [String: String] = [
-            "hats": "hat", "caps": "cap", "beanies": "beanie",
-            "shoes": "shoe", "sneakers": "sneaker", "boots": "boot",
-            "bags": "bag", "books": "book", "chairs": "chair",
-            "lamps": "lamp", "pants": "pant", "tees": "tee",
-            "watches": "watch",
-        ]
-        return irregular[token] ?? token
+        CatalogSearchText.tokens(in: value)
     }
 
     private static func isUseful(_ product: SampleMerchant.Product) -> Bool {

@@ -25,6 +25,9 @@ struct CachedAsyncImage<Content: View>: View {
                     phase = .success(Image(uiImage: cached))
                     return
                 }
+                // A reused cell must not display the previous buyer/product
+                // while its new URL loads. Keep the memory-hit path immediate.
+                phase = .empty
                 // Slow path: disk cache or network (off main thread)
                 let result = await ImageURLCache.shared.loadImage(for: url)
                 if !Task.isCancelled {
@@ -89,7 +92,9 @@ final class ImageURLCache: @unchecked Sendable {
     func prefetch(_ urls: [URL]) async {
         await withTaskGroup(of: Void.self) { group in
             for url in urls where image(for: url) == nil {
+                guard !Task.isCancelled else { break }
                 group.addTask { [self] in
+                    guard !Task.isCancelled else { return }
                     _ = await loadImage(for: url)
                 }
             }

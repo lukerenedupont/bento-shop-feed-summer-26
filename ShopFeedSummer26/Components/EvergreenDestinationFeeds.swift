@@ -131,7 +131,7 @@ struct FollowingDestinationFeed: View {
                             imageURL: item.product.imageURL,
                             merchantName: item.merchant.displayName,
                             productName: item.product.title,
-                            price: formatPrice(item.product.price),
+                            price: formatPrice(item.product),
                             showFavoriteButton: true
                         )
                     }
@@ -326,7 +326,7 @@ private struct FollowingProductRail: View {
                             ProductCard(
                                 image: nil,
                                 imageURL: item.product.imageURL,
-                                priceBadge: formatPrice(item.product.price),
+                                priceBadge: formatPrice(item.product),
                                 showFavoriteButton: false
                             )
                             .frame(width: 116)
@@ -841,7 +841,7 @@ private struct DealMerchantRail: View {
                             image: nil,
                             imageURL: product.imageURL,
                             productName: product.title,
-                            price: formatPrice(product.price),
+                            price: formatPrice(product),
                             showFavoriteButton: true
                         )
                         .frame(width: 116)

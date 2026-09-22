@@ -1,0 +1,10 @@
+"Reviews.DisplayRating.RatedStars" = "%2$dつ星のうち%1$@の評価";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.One" = "5つ星のうち%1$@の評価。%2$d件のレビュー。";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Few" = "5つ星のうち%1$@の評価。%2$d件のレビュー。";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Many" = "5つ星のうち%1$@の評価。%2$d件のレビュー。";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Other" = "5つ星のうち%1$@の評価。%2$d件のレビュー。";
+"TextField.ClearA11yLabel" = "%1$@をクリア";
+"Reviews.RateInput.RateStars.One" = "星 %1$d つで評価";
+"Reviews.RateInput.RateStars.Few" = "星 %1$d つで評価";
+"Reviews.RateInput.RateStars.Many" = "星 %1$d つで評価";
+"Reviews.RateInput.RateStars.Other" = "星 %1$d つで評価";

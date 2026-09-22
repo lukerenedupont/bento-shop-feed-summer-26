@@ -7,6 +7,7 @@ struct MerchantAvatarView: View {
     @ObservedObject private var _purlTuneRuntime = PurlTuneRuntime.shared
 #endif
     private let logoURL: URL?
+    private var libraryMerchantID: String? = nil
     private let fallbackName: String
     private let fallbackColor: Color
     var size: CGFloat = 32
@@ -22,6 +23,7 @@ struct MerchantAvatarView: View {
     /// Initialize with a SampleMerchant (existing usage).
     init(merchant: SampleMerchant, size: CGFloat = 32, shape: AvatarShape = .circle, borderColor: Color = GravityColors.borderImage, borderWidth: CGFloat = 0.5) {
         self.logoURL = merchant.bestLogoURL.flatMap { URL(string: $0) }
+        self.libraryMerchantID = ShopCanvasLibrary.isEnabled ? merchant.id : nil
         self.fallbackName = merchant.name
         self.fallbackColor = merchant.primaryColor
         self.size = size
@@ -43,7 +45,11 @@ struct MerchantAvatarView: View {
 
     var body: some View {
         Group {
-            if let url = logoURL {
+            if let libraryMerchantID {
+                LibraryMerchantWordmark(merchantID: libraryMerchantID, onDark: false)
+                    .padding(size * 0.12)
+                    .background(.white)
+            } else if let url = logoURL {
                 CachedAsyncImage(url: url) { phase in
                     switch phase {
                     case .success(let image):

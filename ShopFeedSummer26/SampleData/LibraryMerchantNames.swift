@@ -1,0 +1,68 @@
+import Foundation
+
+/// Presentation labels only. IDs, URLs, source records and seller associations
+/// stay untouched; a domain is not a good shopper-facing merchant name.
+enum LibraryMerchantNames {
+    private static let names: [String: String] = [
+        "domain:djerfavenue.com": "Djerf Avenue",
+        "domain:nordicknots.com": "Nordic Knots",
+        "domain:sohohome.com": "Soho Home",
+        "domain:zarahome.com": "Zara Home",
+        "domain:net-a-porter.com": "Net-a-Porter",
+        "domain:ln-cc.com": "LN-CC",
+        "domain:allblues.se": "All Blues",
+        "domain:shop.mango.com": "Mango",
+        "domain:ssense.com": "SSENSE",
+        "domain:freepeople.com": "Free People",
+        "domain:harrods.com": "Harrods",
+        "domain:backcountry.com": "Backcountry",
+        "domain:massimodutti.com": "Massimo Dutti",
+        "domain:zara.com": "Zara",
+        "domain:rei.com": "REI",
+        "domain:modaoperandi.com": "Moda Operandi",
+        "domain:bespokepost.com": "Bespoke Post",
+        "domain:anthropologie.com": "Anthropologie",
+        "domain:shopbop.com": "Shopbop",
+        "domain:cettire.com": "Cettire",
+        "domain:thereformation.com": "Reformation",
+        "domain:fwrd.com": "FWRD",
+        "domain:newegg.com": "Newegg",
+        "domain:endclothing.com": "END.",
+        "domain:footlocker.com": "Foot Locker",
+        "domain:jdsports.com": "JD Sports",
+        "domain:1stdibs.com": "1stDibs",
+        "domain:basic.space": "Basic.Space",
+        "domain:chairish.com": "Chairish",
+        "domain:bergdorfgoodman.com": "Bergdorf Goodman",
+        "domain:loewe.com": "Loewe",
+        "domain:cos.com": "COS",
+        "domain:farfetch.com": "Farfetch",
+        "domain:auralee.jp": "Auralee",
+        "domain:the-broken-arm.com": "The Broken Arm",
+        "gid://shopify/Shop/6917057": "Eckhaus Latta",
+        "gid://shopify/Shop/60704260314": "Porta",
+        "gid://shopify/Shop/64140968152": "Abask",
+        "gid://shopify/Shop/83980288319": "Frama",
+        "gid://shopify/Shop/69054038247": "Éterne",
+        "gid://shopify/Shop/7116849252": "Goodee",
+        "gid://shopify/Shop/43179540638": "Lemaire",
+        "gid://shopify/Shop/7546175546": "Satisfy",
+        "gid://shopify/Shop/55767433394": "Antonioli",
+        "gid://shopify/Shop/60330311875": "Kicks Crew",
+        "gid://shopify/Shop/9509820": "Dôen",
+        "gid://shopify/Shop/26555908132": "Dissh",
+        "gid://shopify/Shop/72843264212": "Tluxy",
+        "gid://shopify/Shop/45961183387": "Aligne",
+        "gid://shopify/Shop/78310867220": "Emily Dawn Long",
+        "gid://shopify/Shop/66761425143": "Aflalo",
+        "gid://shopify/Shop/3367793": "Cult Gaia",
+        "gid://shopify/Shop/7539621924": "Audo Copenhagen",
+        "gid://shopify/Shop/2539651": "Beam",
+        "gid://shopify/Shop/69448794420": "Olive Ateliers",
+        "gid://shopify/Shop/8945382": "Cultiver",
+    ]
+
+    static func name(for id: String, fallback: String) -> String {
+        names[id] ?? fallback
+    }
+}

@@ -11,11 +11,17 @@ DerivedData/
 .build/
 build/
 .build-cache/
+DemoArtifacts/
+*.xcresult/
 xcuserdata/
 *.xcuserdata
 *.xcuserdatad
 *.xcodeproj/xcuserdata/
 *.xcworkspace/xcuserdata/
+
+# Local Python caches
+__pycache__/
+*.py[cod]
 
 # Secrets (Shop Server auth) — never commit
 .env.local

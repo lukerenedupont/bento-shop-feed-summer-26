@@ -1,5 +1,6 @@
 import Combine
 import SwiftUI
+import JulianAgentUI
 import UIKit
 /// Home feed — scrollable merchant feed cards with focused topic feeds.
 struct HomePage: View {
@@ -13,7 +14,8 @@ struct HomePage: View {
             "tin-can-kids",
         ].contains($0.id)
     }
-    private static let initialMerchantSnapshot = LocalMerchantService.mergeMerchants([
+    private static let initialMerchantSnapshot = ShopCanvasLibrary.isEnabled
+        ? ShopCanvasLibrary.merchants : LocalMerchantService.mergeMerchants([
         bundledMerchantSnapshot,
         HypothesisShelfCatalog.merchants,
         personalizedMerchantSnapshot,
@@ -21,6 +23,7 @@ struct HomePage: View {
     /// Shared with `RootView` so a tapped feed card can zoom into the
     /// original full-screen topic content.
     var namespace: Namespace.ID
+    let utilityBeltVisible: Bool
 #if DEBUG
     @ObservedObject private var _purlTuneRuntime = PurlTuneRuntime.shared
 #endif
@@ -36,6 +39,7 @@ struct HomePage: View {
     /// full merchant/product graph during a swipe or tab animation creates a
     /// large amount of avoidable main-thread work.
     @State private var merchants: [SampleMerchant] = HomePage.initialMerchantSnapshot
+    @State private var mediaPrefetchTask: Task<Void, Never>?
     @State var selectedTopicID = "for-you"
     /// A drilled-in subcategory story rendered inline so the top bar stays.
     @State private var focusedStoryID: String?
@@ -51,6 +55,7 @@ struct HomePage: View {
     @State private var expandingStoryID: String?
     @State private var categoryMoveDirection = 1
     @State private var showsBuyerSwitcher = false
+    @AppStorage("shop.prototype.home-search-layout") private var julianSearchLayout = "full"
     @State private var showsGiftGuideCreation = false
     @State var showsFeedCreator = false
     @State var showsFeedManager = false
@@ -62,6 +67,9 @@ struct HomePage: View {
     @AppStorage("utilityBeltExtendoEnabled") private var utilityBeltExtendoEnabled = true
 
     private let utilityStoryID = "for-you-utility-hub"
+    private var showsUtilityBelt: Bool {
+        buyerPreview.selected.showsUtilityShelf && utilityBeltVisible
+    }
     /// Keep the full-height exploration available without placing it in the
     /// live feed. Switching this recipe restores the prototype for comparison.
     private let forYouUtilityPresentation: ForYouUtilityPresentation = .carouselOnly
@@ -81,6 +89,7 @@ struct HomePage: View {
     /// Campaign navigation changes the utility destinations at the front of
     /// the rail without disturbing the buyer's personalized topic order.
     private var navigationTopics: [BuyerFeedTopic] {
+        if ShopCanvasLibrary.isEnabled { return baseNavigationTopics }
         guard let forYou = baseNavigationTopics.first else { return [] }
         let personalizedTopics = Array(baseNavigationTopics.dropFirst())
         let utilityTopics = seasonalPlacement == .header
@@ -206,7 +215,7 @@ struct HomePage: View {
             posts: postService.posts(for: buyerPreview.selected),
             enabledWorldIDs: worldIDs,
             enabledContentKinds: FeedCompositionPreferences.shared.enabledKinds(in: selectedTopicID),
-            seasonalPlacement: seasonalPlacement
+            seasonalPlacement: ShopCanvasLibrary.isEnabled ? .off : seasonalPlacement
         ))
     }
 
@@ -246,12 +255,29 @@ struct HomePage: View {
         UtilityShelfPalette(onLightSurface: usesLightUtilityShelf)
     }
 
+    /// One contrast decision drives the source search, topic rail, and persistent
+    /// UIKit navigation. Search/results are white even when opened over media.
+    private var usesDarkFeedChrome: Bool {
+        !coordinator.julianShell.searchActive
+            && !isStaticUtilityDestination
+            && !(usesLightUtilityShelf && !feedChromeIsInverted && !isHolidayHeaderPresented)
+    }
+
     var body: some View {
         // This concrete container owns the persistent chrome. A transparent
         // `Group` forwards modifiers to its changing child, which caused the
         // safe-area bar to inherit the feed's horizontal replacement motion.
         ZStack {
-            if let focusedStoryID {
+            if ShopCanvasLibrary.isEnabled, coordinator.julianShell.searchActive {
+                LibraryInlineSearchResults(query: coordinator.julianShell.searchQuery) { product in
+                    guard let merchantID = product.merchantIDs.first else { return }
+                    coordinator.julianShell.searchActive = false
+                    coordinator.pushRoute(.product(merchantId: merchantID, productId: product.nativeID))
+                }
+                .padding(.top, 52)
+                .background(.white)
+                .environment(\.colorScheme, .light)
+            } else if let focusedStoryID {
                 StoryTopicPage(
                     storyID: focusedStoryID,
                     namespace: namespace,
@@ -284,7 +310,21 @@ struct HomePage: View {
         .overlay(alignment: .top) {
             ZStack(alignment: .top) {
                 if !buyerPreview.selected.usesInlineTopicNavigation || focusedStoryID == nil {
-                    topBar
+                    VStack(spacing: 8) {
+                        if ShopCanvasLibrary.isEnabled,
+                           julianSearchLayout == "full" || coordinator.julianShell.searchActive {
+                            JulianSearchHeader(state: coordinator.julianShell)
+                        }
+                        if !coordinator.julianShell.searchActive {
+                            topBar
+                                .overlay(alignment: .trailing) {
+                                    if ShopCanvasLibrary.isEnabled, julianSearchLayout == "floating" {
+                                        JulianFloatingSearch { coordinator.julianShell.searchActive = true }
+                                            .frame(width: 96, height: 44)
+                                    }
+                                }
+                        }
+                    }
                         .offset(
                             y: destinationFiltersPinned
                                 ? -(FeedNavigationStyle.controlSize + GravitySpacing.space16)
@@ -325,16 +365,16 @@ struct HomePage: View {
         }
         // Luke's resting For You surface is white; restore light system chrome
         // until the first card has substantially taken over the viewport.
-        .environment(
-            \.colorScheme,
-            isStaticUtilityDestination
-                || (usesLightUtilityShelf && !feedChromeIsInverted
-                    && !isHolidayHeaderPresented)
-                ? .light
-                : .dark
-        )
+        .environment(\.colorScheme, usesDarkFeedChrome ? .dark : .light)
         .toolbar(.hidden, for: .navigationBar)
         .toolbarBackground(.hidden, for: .navigationBar)
+        .onAppear {
+            coordinator.julianShell.onAccount = { showsBuyerSwitcher = true }
+            coordinator.julianShell.prefersDarkChrome = usesDarkFeedChrome
+        }
+        .onChange(of: usesDarkFeedChrome) { _, isDark in
+            coordinator.julianShell.prefersDarkChrome = isDark
+        }
         .task {
             refreshMerchantSnapshot()
             // Keep the curated assortment authoritative for this prototype and
@@ -351,7 +391,7 @@ struct HomePage: View {
                 buyerFixtureIssues.isEmpty,
                 "Invalid buyer feed fixtures:\n\(buyerFixtureIssues.joined(separator: "\n"))"
             )
-            let customFeedIssues = CustomFeedRecommendationEngine.validationIssues(
+            let customFeedIssues = ShopCanvasLibrary.isEnabled ? [] : CustomFeedRecommendationEngine.validationIssues(
                 buyer: buyerPreview.selected,
                 catalog: PersonalizedFeedCatalog.current,
                 merchants: merchants,
@@ -383,6 +423,9 @@ struct HomePage: View {
         }
         .onChange(of: utilityBeltExtendoEnabled) { _, isEnabled in
             if !isEnabled { utilityRailExpansion.reset() }
+        }
+        .onChange(of: utilityBeltVisible) { _, _ in
+            resetFeedPosition(for: selectedTopicID)
         }
         .onChange(of: seasonalPlacementRawValue) { oldValue, newValue in
             let wasHeader = SeasonalPlacement(rawValue: oldValue) == .header
@@ -445,6 +488,10 @@ struct HomePage: View {
                 return true
             }
         }
+        .onDisappear {
+            // Do not mutate source-view state while a shared zoom is leaving.
+            mediaPrefetchTask?.cancel()
+        }
         .purlInjectable()
     }
 
@@ -501,7 +548,8 @@ struct HomePage: View {
             let metrics = FeedViewportMetrics(
                 containerSize: geo.size,
                 safeAreaTop: max(geo.safeAreaInsets.top, windowSafeAreaTopInset),
-                isForYou: isForYou
+                isForYou: isForYou,
+                additionalHeaderHeight: ShopCanvasLibrary.isEnabled && julianSearchLayout == "full" ? 52 : 0
             )
             let layout = metrics.layout
 
@@ -526,7 +574,7 @@ struct HomePage: View {
 
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(spacing: FeedCardStyle.cardSpacing) {
-                        if selectedTopicID == "for-you", buyerPreview.selected.showsUtilityShelf {
+                        if selectedTopicID == "for-you", showsUtilityBelt {
                             utilityFeedEntry(
                                 containerWidth: geo.size.width,
                                 launchInset: metrics.utilityLaunchInset
@@ -693,7 +741,7 @@ struct HomePage: View {
         UtilityRailVerticalPanBridge(
             shouldBegin: { verticalVelocity in
                 guard selectedTopicID == "for-you",
-                      buyerPreview.selected.showsUtilityShelf,
+                      showsUtilityBelt,
                       !utilityRailExpansion.isRefreshing else { return false }
 
                 if utilityRailExpansion.isExpanded {
@@ -733,11 +781,15 @@ struct HomePage: View {
     }
 
     private func reloadFeedAfterPull() async {
-        await feedService.load(force: true)
-        if AuthService.shared.hasSession {
-            await merchantService.loadMerchants(force: true)
+        if ShopCanvasLibrary.isEnabled {
+            refreshMerchantSnapshot()
+        } else {
+            await feedService.load(force: true)
+            if AuthService.shared.hasSession {
+                await merchantService.loadMerchants(force: true)
+            }
+            await postService.loadLukePosts(force: true)
         }
-        await postService.loadLukePosts(force: true)
         // Preserve a readable completion beat when all sources are local or cached.
         try? await Task.sleep(for: .milliseconds(420))
         utilityRailExpansion.finishRefresh()
@@ -910,15 +962,6 @@ struct HomePage: View {
 
         return ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(alignment: .top, spacing: GravitySpacing.space10) {
-                if utilityBelt.isEnabled(.giftGuide) {
-                    UtilityBeltPromotionCard(
-                        kind: .giftGuide,
-                        width: railWidth,
-                        height: cardHeight,
-                        onTap: { showsGiftGuideCreation = true }
-                    )
-                }
-
                 if buyerPreview.selected.utility.showsOrders,
                    utilityBelt.isEnabled(.orders) {
                     orderTrackingRailCard(width: railWidth, height: cardHeight)
@@ -978,10 +1021,7 @@ struct HomePage: View {
                     }
                 }
 
-                ForEach(
-                    UtilityBeltPromotionCard.Kind.allCases.filter { $0 != .giftGuide },
-                    id: \.self
-                ) { kind in
+                ForEach(UtilityBeltPromotionCard.Kind.allCases, id: \.self) { kind in
                     if utilityBelt.isEnabled(kind.beltItem) {
                         UtilityBeltPromotionCard(kind: kind, width: railWidth, height: cardHeight)
                     }
@@ -993,6 +1033,7 @@ struct HomePage: View {
         }
         .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
         .scrollClipDisabled()
+        .accessibilityIdentifier("home.utility-belt")
     }
 
     private var cartSyncItem: ResolvedStoryProduct? {
@@ -1092,6 +1133,12 @@ struct HomePage: View {
             return false
         }()
         let feedbackForegroundColor: Color = usesDarkFeedbackIcons ? .black : .white
+        let usesSimplifiedStoryActions: Bool = {
+            guard !coordinator.feedProductCarouselsVisible,
+                  case let .story(story) = entry else { return false }
+            return !story.rendersAsMerchantCard
+                && story.id != WorldPrototypeCatalog.canvasID
+        }()
 
         ZStack(alignment: .topTrailing) {
             switch entry {
@@ -1224,22 +1271,42 @@ struct HomePage: View {
             }
 
             if !hidesFeedbackActions {
-                PrototypeFeedbackActions(
-                    layout: .vertical,
-                    foregroundColor: feedbackForegroundColor,
-                    appliesShadow: !usesDarkFeedbackIcons,
-                    includesOverflow: true,
-                    includesVolume: false,
-                    includesThread: !entry.usesBottomAnchoredWorldChrome,
-                    onOverflowTap: { showsBuyerSwitcher = true }
-                )
-                .positionedFeedFeedback(
-                    for: entry,
-                    layout: layout,
-                    showsAnchoredControls: hasEnteredFullBleedFeed && isSnappedEntry
-                )
-                .allowsHitTesting(hasEnteredFullBleedFeed)
-                .zIndex(4)
+                if usesSimplifiedStoryActions {
+                    PrototypeFeedbackActions(
+                        layout: .vertical,
+                        foregroundColor: .white,
+                        appliesShadow: true,
+                        includesOverflow: true,
+                        includesVolume: false,
+                        includesThread: false,
+                        overflowOnly: true,
+                        onOverflowTap: { showsBuyerSwitcher = true }
+                    )
+                    .padding(.top, layout.pinnedTitleTop)
+                    .padding(.trailing, GravitySpacing.space12)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                    .opacity(hasEnteredFullBleedFeed && isSnappedEntry ? 1 : 0)
+                    .allowsHitTesting(hasEnteredFullBleedFeed && isSnappedEntry)
+                    .animation(.easeOut(duration: 0.2), value: isSnappedEntry)
+                    .zIndex(4)
+                } else {
+                    PrototypeFeedbackActions(
+                        layout: .vertical,
+                        foregroundColor: feedbackForegroundColor,
+                        appliesShadow: !usesDarkFeedbackIcons,
+                        includesOverflow: true,
+                        includesVolume: false,
+                        includesThread: !entry.usesBottomAnchoredWorldChrome,
+                        onOverflowTap: { showsBuyerSwitcher = true }
+                    )
+                    .positionedFeedFeedback(
+                        for: entry,
+                        layout: layout,
+                        showsAnchoredControls: hasEnteredFullBleedFeed && isSnappedEntry
+                    )
+                    .allowsHitTesting(hasEnteredFullBleedFeed)
+                    .zIndex(4)
+                }
             }
         }
     }
@@ -1445,6 +1512,12 @@ struct HomePage: View {
 
         Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(320))
+            if ShopCanvasLibrary.isEnabled {
+                let story = ShopCanvasLibrary.giftGuide(for: brief)
+                coordinator.navigateToPage(0)
+                coordinator.pushRoute(.customStory(story: story, sourceId: story.id))
+                return
+            }
             guard let story = feedPlan.stories.first(where: {
                 $0.id == HypothesisShelfCatalog.giftGuideStoryID
             }) ?? HypothesisShelfCatalog.stories.first(where: {
@@ -1515,6 +1588,9 @@ struct HomePage: View {
         BuyerFeedNavigationBar(
             profile: buyerPreview.selected,
             topics: navigationTopics,
+            showsAvatar: !ShopCanvasLibrary.isEnabled || julianSearchLayout != "full",
+            showsSearchChip: ShopCanvasLibrary.isEnabled && julianSearchLayout == "chip",
+            onSearch: { coordinator.julianShell.searchActive = true },
             selectedTopicID: selectedTopicID,
             chromeTransitionState: feedChromeTransition,
             usesInverseStyle: isHolidayHeaderPresented
@@ -1636,6 +1712,11 @@ struct HomePage: View {
     }
 
     private func refreshMerchantSnapshot() {
+        if ShopCanvasLibrary.isEnabled {
+            merchants = ShopCanvasLibrary.merchants
+            prefetchFeedMedia(around: visibleStoryID)
+            return
+        }
         let refreshedMerchants = LocalMerchantService.mergeMerchants([
             merchantService.followedMerchants,
             feedService.merchants,
@@ -1666,7 +1747,8 @@ struct HomePage: View {
                 )
             }
 
-        Task(priority: .utility) {
+        mediaPrefetchTask?.cancel()
+        mediaPrefetchTask = Task(priority: .utility) {
             await ImageURLCache.shared.prefetch(urls)
         }
     }
@@ -1686,12 +1768,12 @@ struct HomePage: View {
             if ProcessInfo.processInfo.arguments.contains("-openSuggestedCollections") {
                 targetID = "suggested-collections"
             } else {
-                targetID = buyerPreview.selected.showsUtilityShelf
+                targetID = showsUtilityBelt
                     ? utilityStoryID
                     : feedEntries.first?.id
             }
 #else
-            targetID = buyerPreview.selected.showsUtilityShelf
+            targetID = showsUtilityBelt
                 ? utilityStoryID
                 : feedEntries.first?.id
 #endif
@@ -1739,7 +1821,7 @@ struct HomePage: View {
 #Preview {
     @Previewable @Namespace var namespace
     NavigationStack {
-        HomePage(namespace: namespace)
+        HomePage(namespace: namespace, utilityBeltVisible: true)
     }
     .environment(NavigationCoordinator())
 }

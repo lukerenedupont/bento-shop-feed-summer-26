@@ -1,0 +1,51 @@
+/* Accessibility label for a rating without review count.
+   RN key: Reviews.DisplayRating.RatedStars
+   RN source: Rated {{stars}} out of {{total}} stars */
+"Reviews.DisplayRating.RatedStars" = "Rated %1$@ out of %2$d stars";
+
+/* Accessibility label for an individual rating star. %1$d is the star number.
+   RN key: Reviews.RateInput.RateStars
+   RN source: Rate {{stars}} stars
+   Plural category: One. */
+"Reviews.RateInput.RateStars.One" = "Rate %1$d star";
+
+/* Accessibility label for an individual rating star. %1$d is the star number.
+   RN key: Reviews.RateInput.RateStars
+   RN source: Rate {{stars}} stars
+   Plural category: Few. */
+"Reviews.RateInput.RateStars.Few" = "Rate %1$d stars";
+
+/* Accessibility label for an individual rating star. %1$d is the star number.
+   RN key: Reviews.RateInput.RateStars
+   RN source: Rate {{stars}} stars
+   Plural category: Many. */
+"Reviews.RateInput.RateStars.Many" = "Rate %1$d stars";
+
+/* Accessibility label for an individual rating star. %1$d is the star number.
+   RN key: Reviews.RateInput.RateStars
+   RN source: Rate {{stars}} stars
+   Plural category: Other. */
+"Reviews.RateInput.RateStars.Other" = "Rate %1$d stars";
+
+/* Accessibility label for a product card rating with one review. %1$@ is the rating and %2$d is the review count.
+   RN key: Reviews.RatingSummaryOnProductCard.a11yLabel
+   Plural category: One (English singular source). */
+"Reviews.RatingSummaryOnProductCard.a11yLabel.One" = "Rated %1$@ out of 5 stars. %2$d review.";
+
+/* Accessibility label for a product card rating with a review count. %1$@ is the rating and %2$d is the review count.
+   RN key: Reviews.RatingSummaryOnProductCard.a11yLabel
+   Plural category: Few (English plural source). */
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Few" = "Rated %1$@ out of 5 stars. %2$d reviews.";
+
+/* Accessibility label for a product card rating with a review count. %1$@ is the rating and %2$d is the review count.
+   RN key: Reviews.RatingSummaryOnProductCard.a11yLabel
+   Plural category: Many (English plural source). */
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Many" = "Rated %1$@ out of 5 stars. %2$d reviews.";
+
+/* Accessibility label for a product card rating with a review count. %1$@ is the rating and %2$d is the review count.
+   RN key: Reviews.RatingSummaryOnProductCard.a11yLabel
+   Plural category: Other (English plural source). */
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Other" = "Rated %1$@ out of 5 stars. %2$d reviews.";
+
+/* %@ is the text field label. */
+"TextField.ClearA11yLabel" = "Clear %@";

@@ -1,4 +1,11 @@
-# Shop Feed Summer 26
+# Shop Feed Summer 26 — library preview
+
+This working copy is the **Shop Library Preview** experiment. See
+[`LIBRARY_PREVIEW.md`](LIBRARY_PREVIEW.md) for its read-only source contract,
+curated inventory, native asset handling, build commands, and limitations.
+The original five-video phone demo is preserved in `../bento-shop-feed-ceo-demo`.
+
+The original prototype documentation follows for context:
 
 **A personalized, editorial home feed for the Shop app** — opening Shop feels
 like opening a magazine written about your own taste, that you can buy from.
@@ -75,3 +82,36 @@ Runtime-specific metadata is stored in `purl.json`.
 ## Feed Development
 
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the personalized feed schema, component boundaries, validation command, and scaling plan. Run `Scripts/validate_personalized_feed.py` after editing catalog or story data.
+
+## Demo release and regression checks
+
+Build a credential-free Release simulator app with an exact device UUID:
+
+```sh
+Scripts/build_demo.sh simulator <simulator-UUID>
+```
+
+Build an **unsigned** iPhone archive for validation and signing handoff:
+
+```sh
+Scripts/build_demo.sh archive-unsigned
+```
+
+Artifacts go into ignored `DemoArtifacts/`. The unsigned archive is not an
+installable IPA and is not a TestFlight upload. An Apple team, provisioning,
+and the intended distribution method must be selected before delivery.
+`BUILD_NUMBER` overrides the build number configured in `project.yml`.
+
+Run the hosted data/state tests and the UI smoke tests:
+
+```sh
+xcodebuild -project ShopFeedSummer26.xcodeproj -scheme ShopFeedSummer26 \
+  -destination 'platform=iOS Simulator,id=<simulator-UUID>' \
+  -parallel-testing-enabled NO test
+```
+
+Only Debug builds may copy `.env.local`. Release products reject environment
+files and test runtimes. The six GT Standard fonts used by the app are bundled;
+optional unused kit font families remain in source but are excluded from the
+target. See [`docs/CEO_DEMO_HANDOFF.md`](docs/CEO_DEMO_HANDOFF.md) for this pass's
+verification, measurements, and remaining demo limitations.

@@ -1,0 +1,10 @@
+"Reviews.DisplayRating.RatedStars" = "Arvosana %1$@ / %2$d tähteä";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.One" = "Arvosana %1$@ / 5 tähteä. %2$d arvio.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Few" = "Arvosana %1$@ / 5 tähteä. %2$d arviota.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Many" = "Arvosana %1$@ / 5 tähteä. %2$d arviota.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Other" = "Arvosana %1$@ / 5 tähteä. %2$d arviota.";
+"TextField.ClearA11yLabel" = "Tyhjennä %1$@";
+"Reviews.RateInput.RateStars.One" = "Anna %1$d tähti";
+"Reviews.RateInput.RateStars.Few" = "Anna %1$d tähteä";
+"Reviews.RateInput.RateStars.Many" = "Anna %1$d tähteä";
+"Reviews.RateInput.RateStars.Other" = "Anna %1$d tähteä";

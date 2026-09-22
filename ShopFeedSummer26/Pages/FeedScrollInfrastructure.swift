@@ -24,6 +24,7 @@ struct FeedViewportMetrics {
     let containerSize: CGSize
     let safeAreaTop: CGFloat
     let isForYou: Bool
+    var additionalHeaderHeight: CGFloat = 0
 
     var compactWidth: CGFloat {
         guard isForYou else { return containerSize.width }
@@ -38,11 +39,12 @@ struct FeedViewportMetrics {
     }
 
     var utilityLaunchInset: CGFloat {
-        (FeedNavigationStyle.controlSize * 2) + GravitySpacing.space16
+        (FeedNavigationStyle.controlSize * 2) + GravitySpacing.space16 + additionalHeaderHeight
     }
 
     var fullBleedHeight: CGFloat {
-        let visibleHeight = containerSize.height - safeAreaTop + utilityLaunchInset
+        // Adding chrome changes launch clearance, not the existing card size or snap distance.
+        let visibleHeight = containerSize.height - safeAreaTop + utilityLaunchInset - additionalHeaderHeight
         return max(
             compactHeight,
             visibleHeight
@@ -59,6 +61,7 @@ struct FeedViewportMetrics {
             expandedHeight: fullBleedHeight,
             viewportHeight: containerSize.height,
             pinnedTitleTop: safeAreaTop
+                + additionalHeaderHeight
                 + FeedNavigationStyle.controlSize
                 + GravitySpacing.space12
                 + FeedCardStyle.titleHeaderGap

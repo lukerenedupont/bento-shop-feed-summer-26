@@ -130,10 +130,10 @@ struct ProductCard: View {
                             .foregroundStyle(PurlTune.token("Components/ProductCard.swift:foregroundStyle:_:86:46", default: GravityColors.text, options: GravityColors.purlTuneColorOptions))
                             .lineLimit(2)
                     }
-                    if let rating, let ratingCount {
+                    if let rating, let ratingCount, ratingCount > 0 {
                         ratingRow(rating: rating, count: ratingCount)
                     }
-                    if let price {
+                    if let price, !price.isEmpty {
                         HStack(spacing: GravitySpacing.space4) {
                             Text(price)
                                 .gravityTextStyle(GravityTypography.captionMedium)
@@ -267,7 +267,7 @@ struct ProductCard: View {
     private var imageControls: some View {
         ZStack {
             // Price badge (top-leading)
-            if let priceBadge {
+            if let priceBadge, !priceBadge.isEmpty {
                 VStack {
                     HStack {
                         Text(priceBadge)
@@ -337,12 +337,12 @@ struct ProductCard: View {
             }
 
             // Rating
-            if let rating, let ratingCount {
+            if let rating, let ratingCount, ratingCount > 0 {
                 ratingRow(rating: rating, count: ratingCount)
             }
 
             // Price
-            if let price {
+            if let price, !price.isEmpty {
                 priceRow
             }
         }
@@ -379,7 +379,7 @@ struct ProductCard: View {
 
     private var priceRow: some View {
         HStack(spacing: GravitySpacing.space4) {
-            if let price {
+            if let price, !price.isEmpty {
                 Text(price)
                     .gravityTextStyle(GravityTypography.captionMedium)
                     .foregroundStyle(PurlTune.token("Components/ProductCard.swift:foregroundStyle:_:367:38", default: GravityColors.text, options: GravityColors.purlTuneColorOptions))

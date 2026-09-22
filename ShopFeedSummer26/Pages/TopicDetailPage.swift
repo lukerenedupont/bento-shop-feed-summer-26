@@ -65,7 +65,7 @@ struct TopicDetailPage: View {
             expanded.append(item)
         }
         var seenMerchantIDs = Set<String>()
-        for item in resolved where seenMerchantIDs.insert(item.merchant.id).inserted {
+        for item in resolved where !ShopCanvasLibrary.isLibraryStory(story) && seenMerchantIDs.insert(item.merchant.id).inserted {
             for product in item.merchant.products {
                 let adjacent = ResolvedStoryProduct(merchant: item.merchant, product: product)
                 guard seen.insert(adjacent.id).inserted else { continue }
@@ -242,6 +242,9 @@ struct TopicDetailPage: View {
         }
     }
     private var surfaceColor: Color {
+        if NikeSkimsWorldMedia.isStory(story) {
+            return Color(hex: NikeSkimsWorldMedia.brownHex)
+        }
         if let fixedSurfaceHex = topicPresentation.fixedSurfaceHex {
             return Color(hex: fixedSurfaceHex)
         }
@@ -271,7 +274,10 @@ struct TopicDetailPage: View {
             }
     }
     private var heroVideoURL: URL? {
-        FeedCoverCatalog.presentation(for: story)?.source.videoURL
+        if NikeSkimsWorldMedia.isStory(story) {
+            return NikeSkimsWorldMedia.coverFilmURL
+        }
+        return FeedCoverCatalog.presentation(for: story)?.source.videoURL
             ?? products.lazy.flatMap {
                 $0.product.ambientFilmURLs(merchantID: $0.merchant.id)
             }.first
@@ -283,7 +289,14 @@ struct TopicDetailPage: View {
         return topicPresentation.heroTitleOverride ?? story.title
     }
     private var pageRecipe: TopicPageRecipe {
-        topicPresentation.recipe(
+        if ShopCanvasLibrary.isLibraryStory(story) {
+            return TopicPageRecipe(sectionSpacing: TopicBlockMetrics.sectionSpacing, blocks: [
+                .productRail(title: "From the edit", query: .init(count: 8), cardWidth: TopicBlockMetrics.mediumProductWidth),
+                .relatedCollections(title: "More curated edits", cardHeight: TopicBlockMetrics.collectionHeight),
+                .explore(title: "The full selection", filters: [.all]),
+            ])
+        }
+        return topicPresentation.recipe(
             contextualBentoTitle: contextualBentoTitle,
             automaticExploreFilters: automaticExploreFilters
         )
@@ -364,9 +377,11 @@ struct TopicDetailPage: View {
                     LazyVStack(alignment: .leading, spacing: 0) {
                         hero(width: geometry.size.width)
                         merchandising(containerWidth: geometry.size.width)
+                            .padding(.top, TopicBlockMetrics.heroContentSpacing)
                             .background { scrolledSurfaceBackground }
                     }
                 }
+                .contentMargins(.bottom, ShopCanvasLibrary.isEnabled ? 112 : 0, for: .scrollContent)
                 .scrollBounceBehavior(.basedOnSize)
                 .onScrollGeometryChange(for: CGFloat.self) { scrollGeometry in
                     scrollGeometry.contentOffset.y
@@ -427,7 +442,8 @@ struct TopicDetailPage: View {
             try? await Task.sleep(for: .milliseconds(250))
             guard !Task.isCancelled else { return }
             withAnimation(.easeOut(duration: 0.18)) {
-                coordinator.showNavBar = false
+                // The library experiment keeps contextual Ask available inside a World.
+                coordinator.showNavBar = ShopCanvasLibrary.isEnabled
             }
         }
         .task(id: heroVideoURL) {
@@ -547,14 +563,22 @@ struct TopicDetailPage: View {
                     .offset(y: -GravitySpacing.space40)
             }
             VStack(alignment: .leading, spacing: GravitySpacing.space12) {
-                Text(heroTitle)
-                    .font(FeedEditorialTypography.titleFont)
-                    .tracking(FeedEditorialTypography.titleTracking)
-                    .lineSpacing(FeedEditorialTypography.titleLineSpacing)
-                    .tightMultilineLeading(FeedEditorialTypography.titleLineTightening)
-                    .lineLimit(3)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityAddTraits(.isHeader)
+                if NikeSkimsWorldMedia.isStory(story) {
+                    SelfCareResetTitle(title: story.title)
+                } else if LibraryWordmarkCatalog.key(for: story) != nil {
+                    LibraryCollectionWordmark(story: story)
+                        .frame(width: min(width - 48, 300), height: 56, alignment: .leading)
+                        .accessibilityAddTraits(.isHeader)
+                } else {
+                    Text(heroTitle)
+                        .font(FeedEditorialTypography.titleFont)
+                        .tracking(FeedEditorialTypography.titleTracking)
+                        .lineSpacing(FeedEditorialTypography.titleLineSpacing)
+                        .tightMultilineLeading(FeedEditorialTypography.titleLineTightening)
+                        .lineLimit(3)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isHeader)
+                }
                 if !topicPresentation.usesExactHeroLayout,
                    !topicPresentation.usesGiftGuidePrototype,
                    !story.subtitle.isEmpty {
@@ -587,7 +611,7 @@ struct TopicDetailPage: View {
         items: [ResolvedStoryProduct],
         cardWidth: CGFloat = 132
     ) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
+        VStack(alignment: .leading, spacing: TopicBlockMetrics.headingContentSpacing) {
             sectionTitle(title)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(alignment: .top, spacing: GravitySpacing.space8) {
@@ -601,7 +625,7 @@ struct TopicDetailPage: View {
                                 imageURL: item.product.imageURL,
                                 merchantName: item.merchant.displayName,
                                 productName: item.product.title,
-                                price: formatPrice(item.product.price),
+                                price: formatPrice(item.product),
                                 showFavoriteButton: true,
                                 favoriteIconHasContrastShadow: true
                             )
@@ -618,7 +642,23 @@ struct TopicDetailPage: View {
     }
     @ViewBuilder
     private func merchandising(containerWidth: CGFloat) -> some View {
-        if topicPresentation.usesGiftGuidePrototype {
+        if ShopCanvasLibrary.isEnabled, NikeSkimsWorldMedia.isStory(story) {
+            NikeSkimsWorldPrototype(products: products)
+        } else if ShopCanvasLibrary.isEnabled, story.id == "library-edit-0" {
+            // PROTOTYPE: one deliberately expansive World that exercises the
+            // complete safe block palette before these beats move to a shared
+            // EditorialWorldRecipe renderer.
+            VStack(alignment: .leading, spacing: 52) {
+                productRail(title: "From the edit", items: Array(products.prefix(4)), cardWidth: TopicBlockMetrics.mediumProductWidth)
+                ThoughtfulHostWorldPrototype(products: products)
+                ForEach(Array(TopicPageRecipeCatalog.thoughtfulHostAllBlocks.blocks.enumerated()), id: \.offset) { _, block in
+                    defaultBlockView(block, containerWidth: containerWidth)
+                }
+                exploreMore(title: "The full selection", filters: [.all], containerWidth: containerWidth)
+                collectionRail(title: "More curated edits", cardHeight: TopicBlockMetrics.collectionHeight)
+            }
+            .padding(.bottom, 120)
+        } else if topicPresentation.usesGiftGuidePrototype {
             GiftGuidePrototypeContent(products: products, state: giftGuideState)
         } else if let worldDefinition,
                   let worldSession,
@@ -693,7 +733,7 @@ struct TopicDetailPage: View {
         return Array(candidates.filter { seen.insert($0.id).inserted }.prefix(query.count))
     }
     private func dealRail(title: String, containerWidth: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
+        VStack(alignment: .leading, spacing: TopicBlockMetrics.headingContentSpacing) {
             sectionTitle(title)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(alignment: .center, spacing: GravitySpacing.space10) {
@@ -712,7 +752,7 @@ struct TopicDetailPage: View {
         }
     }
     private func collectionRail(title: String, cardHeight: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
+        VStack(alignment: .leading, spacing: TopicBlockMetrics.headingContentSpacing) {
             sectionTitle(title)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: GravitySpacing.space10) {
@@ -731,7 +771,7 @@ struct TopicDetailPage: View {
         }
     }
     private func featuredMerchantRail(title: String) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
+        VStack(alignment: .leading, spacing: TopicBlockMetrics.headingContentSpacing) {
             sectionTitle(title)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: GravitySpacing.space10) {
@@ -746,7 +786,7 @@ struct TopicDetailPage: View {
         }
     }
     private func recentContentRail(title: String, allowsCatalogFallback: Bool) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+        VStack(alignment: .leading, spacing: TopicBlockMetrics.headingContentSpacing) {
             sectionTitle(title)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(alignment: .top, spacing: GravitySpacing.space8) {
@@ -767,7 +807,7 @@ struct TopicDetailPage: View {
         }
     }
     private func brandGridRail(title: String) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space16) {
+        VStack(alignment: .leading, spacing: TopicBlockMetrics.headingContentSpacing) {
             sectionTitle(title)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: GravitySpacing.space10) {
@@ -793,7 +833,7 @@ struct TopicDetailPage: View {
         definitions: [TopicCategoryDefinition],
         snaps: Bool
     ) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+        VStack(alignment: .leading, spacing: TopicBlockMetrics.headingContentSpacing) {
             sectionTitle(title)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: snaps ? GravitySpacing.space10 : GravitySpacing.space8) {
@@ -822,7 +862,7 @@ struct TopicDetailPage: View {
         title: String,
         looks: [TopicCuratedLookDefinition]
     ) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+        VStack(alignment: .leading, spacing: TopicBlockMetrics.headingContentSpacing) {
             sectionTitle(title)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: GravitySpacing.space8) {
@@ -849,7 +889,7 @@ struct TopicDetailPage: View {
         title: String = "Pairs well with warm lighting",
         containerWidth: CGFloat
     ) -> some View {
-        VStack(alignment: .leading, spacing: GravitySpacing.space12) {
+        VStack(alignment: .leading, spacing: TopicBlockMetrics.headingContentSpacing) {
             sectionTitle(title)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: GravitySpacing.space8) {
@@ -884,7 +924,7 @@ struct TopicDetailPage: View {
         let indexedProducts = Array(filteredProducts.enumerated())
         let leftColumn = indexedProducts.filter { $0.offset.isMultiple(of: 2) }
         let rightColumn = indexedProducts.filter { !$0.offset.isMultiple(of: 2) }
-        return VStack(alignment: .leading, spacing: GravitySpacing.space16) {
+        return VStack(alignment: .leading, spacing: TopicBlockMetrics.headingContentSpacing) {
             sectionTitle(title)
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: GravitySpacing.space8) {
@@ -912,7 +952,7 @@ struct TopicDetailPage: View {
                 .padding(.horizontal, padding)
             }
             HStack(alignment: .top, spacing: columnGap) {
-                VStack(spacing: GravitySpacing.space16) {
+                VStack(spacing: TopicBlockMetrics.productRowSpacing) {
                     ForEach(leftColumn, id: \.element.id) { index, item in
                         TopicExploreProductCard(
                             item: item,
@@ -921,7 +961,7 @@ struct TopicDetailPage: View {
                         )
                     }
                 }
-                VStack(spacing: GravitySpacing.space16) {
+                VStack(spacing: TopicBlockMetrics.productRowSpacing) {
                     ForEach(rightColumn, id: \.element.id) { index, item in
                         TopicExploreProductCard(
                             item: item,
@@ -953,11 +993,7 @@ struct TopicDetailPage: View {
             .lowercased()
     }
     private func sectionTitle(_ title: String) -> some View {
-        HStack(spacing: GravitySpacing.space6) {
-            Text(title)
-            Image(systemName: "chevron.right")
-                .font(.system(size: 13, weight: .semibold))
-        }
+        Text(title)
         .font(GravityFont.expressiveBold.fixedFont(size: 20))
         .tracking(-0.45)
         .foregroundStyle(.white)

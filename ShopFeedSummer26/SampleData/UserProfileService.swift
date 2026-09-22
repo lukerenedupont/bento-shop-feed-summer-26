@@ -577,7 +577,8 @@ final class BuyerPreviewStore {
         )
     ]
 
-    static let profiles: [BuyerPreviewProfile] = HypothesisShelfCatalog.profiles
+    static let profiles: [BuyerPreviewProfile] = ShopCanvasLibrary.isEnabled
+        ? [ShopCanvasLibrary.profile] : HypothesisShelfCatalog.profiles
 
     private(set) var selectedID: String
 
@@ -587,7 +588,7 @@ final class BuyerPreviewStore {
 
     private init() {
         let saved = UserDefaults.standard.string(forKey: "buyerPreviewProfileID")
-        selectedID = Self.profiles.contains(where: { $0.id == saved }) ? saved! : "luke"
+        selectedID = Self.profiles.contains(where: { $0.id == saved }) ? saved! : Self.profiles[0].id
     }
 
     func select(_ profile: BuyerPreviewProfile) {

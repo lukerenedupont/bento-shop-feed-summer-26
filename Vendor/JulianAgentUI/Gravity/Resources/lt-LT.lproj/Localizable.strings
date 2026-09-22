@@ -1,0 +1,10 @@
+"Reviews.DisplayRating.RatedStars" = "Įvertinta %1$@ iš %2$d žvaigždučių";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.One" = "Įvertinta %1$@ iš 5 žvaigždučių. %2$d atsiliepimas.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Few" = "Įvertinta %1$@ iš 5 žvaigždučių. %2$d atsiliepimai.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Many" = "Įvertinta %1$@ iš 5 žvaigždučių. %2$d atsiliepimų.";
+"Reviews.RatingSummaryOnProductCard.a11yLabel.Other" = "Įvertinta %1$@ iš 5 žvaigždučių. %2$d atsiliepimų.";
+"TextField.ClearA11yLabel" = "Išvalyti %1$@";
+"Reviews.RateInput.RateStars.One" = "Įvertinti %1$d žvaigždute";
+"Reviews.RateInput.RateStars.Few" = "Įvertinti %1$d žvaigždutėmis";
+"Reviews.RateInput.RateStars.Many" = "Įvertinti %1$d žvaigždučių";
+"Reviews.RateInput.RateStars.Other" = "Įvertinti %1$d žvaigždučių";

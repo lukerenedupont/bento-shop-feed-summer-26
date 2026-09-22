@@ -45,7 +45,7 @@ struct CartSyncUtilityCard: View {
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundStyle(palette.primary)
                             .lineLimit(1)
-                        Text("Subtotal \(formatPrice(item.product.price))")
+                        Text("Subtotal \(formatPrice(item.product))")
                             .font(.system(size: 14))
                             .foregroundStyle(palette.secondary)
                             .lineLimit(1)
@@ -151,7 +151,7 @@ struct FullHeightUtilityCard: View {
                                 ProductCard(
                                     image: nil,
                                     imageURL: item.product.imageURL,
-                                    priceBadge: formatPrice(item.product.price),
+                                    priceBadge: formatPrice(item.product),
                                     showFavoriteButton: true
                                 )
                             }
@@ -253,7 +253,7 @@ struct FullHeightUtilityCard: View {
                     Text("Cart ready")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(.black)
-                    Text("Subtotal \(formatPrice(item.product.price))")
+                    Text("Subtotal \(formatPrice(item.product))")
                         .font(.system(size: 14))
                         .foregroundStyle(.black.opacity(0.58))
                 }

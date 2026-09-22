@@ -32,7 +32,7 @@ struct BottomNavBar: View {
                     // Cart button — scales out from behind the tab pill
                     if showCart {
                         glassCircleButton(icon: .cart, style: .brand) {
-                            // TODO: open cart
+                            coordinator.navigateToPage(4)
                         }
                         .transition(
                             .scale(scale: 0.01, anchor: .leading)
@@ -75,6 +75,17 @@ struct BottomNavBar: View {
         .glassEffect(.regular, in: .capsule)
     }
 
+    private func tabLabel(for page: Int) -> String {
+        switch page {
+        case 0: "Home"
+        case 1: "Orders"
+        case 3: "Search"
+        case 4: "Cart"
+        case 5: "Favorites"
+        default: "Explore"
+        }
+    }
+
     private func tabItem(icon: GravityIcon, page: Int) -> some View {
         let isSelected = coordinator.selectedPage == page
 
@@ -105,6 +116,9 @@ struct BottomNavBar: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(PressScaleButtonStyle(scale: 0.85))
+        .accessibilityLabel(tabLabel(for: page))
+        .accessibilityIdentifier("tab.\(page)")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
         .animation(.spring(response: PurlTune.value("Navigation/BottomNavBar.swift:spring:response:164:38", default: 0.25), dampingFraction: PurlTune.value("Navigation/BottomNavBar.swift:spring:dampingFraction:164:142", default: 0.75)), value: isSelected)
     }
 

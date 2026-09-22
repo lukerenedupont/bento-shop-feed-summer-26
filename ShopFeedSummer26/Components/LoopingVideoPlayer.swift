@@ -13,6 +13,7 @@ struct LoopingVideoPlayer: UIViewRepresentable {
     var playbackGroupID: String?
     var videoGravity: AVLayerVideoGravity
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
 
     init(
         url: URL,
@@ -46,15 +47,16 @@ struct LoopingVideoPlayer: UIViewRepresentable {
         PlayerUIView(
             urls: urls,
             loops: loops,
-            playbackEnabled: playbackEnabled && !reduceMotion,
+            playbackEnabled: playbackEnabled && !reduceMotion && scenePhase == .active,
             playbackGroupID: playbackGroupID,
             videoGravity: videoGravity
         )
     }
 
     func updateUIView(_ uiView: PlayerUIView, context: Context) {
-        uiView.setPlaybackEnabled(playbackEnabled && !reduceMotion)
+        uiView.setPlaybackEnabled(playbackEnabled && !reduceMotion && scenePhase == .active)
         uiView.setVideoGravity(videoGravity)
+        uiView.setSource(urls: urls, loops: loops, playbackGroupID: playbackGroupID)
     }
 
     static func dismantleUIView(_ uiView: PlayerUIView, coordinator: ()) {
@@ -64,9 +66,9 @@ struct LoopingVideoPlayer: UIViewRepresentable {
     // MARK: - UIView surface
 
     final class PlayerUIView: UIView {
-        private let urls: [URL]
-        private let loops: Bool
-        private let playbackGroupID: String?
+        private var urls: [URL]
+        private var loops: Bool
+        private var playbackGroupID: String?
         private var playbackEnabled: Bool
         private var videoGravity: AVLayerVideoGravity
         private var session: SharedVideoPlaybackSession?
@@ -136,6 +138,18 @@ struct LoopingVideoPlayer: UIViewRepresentable {
                 // of keeping buffered frames alive off-screen.
                 tearDown()
             }
+        }
+
+        /// SwiftUI can reuse this UIView for another product or buyer. Keep
+        /// the media source in sync, not just its enabled/gravity settings.
+        func setSource(urls: [URL], loops: Bool, playbackGroupID: String?) {
+            guard self.urls != urls || self.loops != loops
+                    || self.playbackGroupID != playbackGroupID else { return }
+            tearDown()
+            self.urls = urls
+            self.loops = loops
+            self.playbackGroupID = playbackGroupID
+            if window != nil { setUp() }
         }
 
         func setPlaybackEnabled(_ enabled: Bool) {
@@ -408,7 +422,12 @@ private final class SharedVideoPlaybackSession {
     /// Decode one frame for those cells so focus only toggles playback instead
     /// of beginning asset preparation after the snap has already completed.
     private func prepareFirstFrame() {
-        guard !isPrepared, !isPrerolling, player.currentItem != nil else { return }
+        // AVPlayer raises an Objective-C exception if preroll is requested
+        // while its asynchronously loaded asset is still .unknown. Visibility
+        // can change before readiness, so warming a frame must remain optional.
+        guard !isPrepared, !isPrerolling,
+              player.status == .readyToPlay,
+              player.currentItem?.status == .readyToPlay else { return }
         isPrerolling = true
         player.preroll(atRate: 1) { [weak self] finished in
             Task { @MainActor in
