@@ -18,7 +18,6 @@ struct RootView: View {
                         namespace: namespace,
                         utilityBeltVisible: coordinator.utilityBeltVisible
                     )
-                        .onAppear { coordinator.activateShoppingContext(.home) }
                         .navigationDestination(for: HomeRoute.self) { route in
                             destinations(for: route)
                         }
@@ -126,7 +125,6 @@ struct RootView: View {
             coordinator.activateShoppingContext(coordinator.libraryShell.context)
         }
         .onChange(of: coordinator.selectedPage) { _, page in
-            coordinator.activateShoppingContext(.home)
             coordinator.julianShell.selectedPage = page
             if page != 0 {
                 coordinator.julianShell.onAccount = { coordinator.pushRoute(.account) }
@@ -176,18 +174,6 @@ struct RootView: View {
     @ViewBuilder
     private func destinations(for route: HomeRoute) -> some View {
         destinationContent(for: route)
-            .onAppear { coordinator.activateShoppingContext(askContext(for: route)) }
-    }
-
-    private func askContext(for route: HomeRoute) -> LibraryAskContext {
-        switch route {
-        case .product(_, let productID): return .product(productID)
-        case .store(let merchantID): return .merchant(merchantID)
-        case .customStory(let story, _): return .world(story)
-        case .story(let storyID, _), .topicExpanded(_, let storyID):
-            return ShopCanvasLibrary.stories.first { $0.id == storyID }.map(LibraryAskContext.world) ?? .home
-        default: return .home
-        }
     }
 
     @ViewBuilder

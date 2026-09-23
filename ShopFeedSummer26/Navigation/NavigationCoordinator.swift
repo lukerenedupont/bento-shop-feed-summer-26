@@ -7,7 +7,9 @@ import JulianAgentUI
 final class NavigationCoordinator {
     /// 0 = Home, 1 = Orders/Deliveries, 2 = Explore, 3 = Search,
     /// 4 = Cart, 5 = Favorites
-    var selectedPage: Int = 0
+    var selectedPage: Int = 0 {
+        didSet { activateCurrentRouteContext() }
+    }
     let libraryShell = LibraryShellSession()
     let julianShell = JulianShellState()
     let agentConversationControl = AgentConversationControl()
@@ -29,12 +31,39 @@ final class NavigationCoordinator {
             images: products.compactMap { ShopCanvasLibrary.resolve($0.image)?.absoluteString })
     }
 
-    var homePath = NavigationPath()
-    var accountPath = NavigationPath()
-    var explorePath = NavigationPath()
-    var searchPath = NavigationPath()
-    var cartPath = NavigationPath()
-    var favoritesPath = NavigationPath()
+    var homePath: [HomeRoute] = [] { didSet { if selectedPage == 0 { activateCurrentRouteContext() } } }
+    var accountPath: [HomeRoute] = [] { didSet { if selectedPage == 1 { activateCurrentRouteContext() } } }
+    var explorePath: [HomeRoute] = [] { didSet { if selectedPage == 2 { activateCurrentRouteContext() } } }
+    var searchPath: [HomeRoute] = [] { didSet { if selectedPage == 3 { activateCurrentRouteContext() } } }
+    var cartPath: [HomeRoute] = [] { didSet { if selectedPage == 4 { activateCurrentRouteContext() } } }
+    var favoritesPath: [HomeRoute] = [] { didSet { if selectedPage == 5 { activateCurrentRouteContext() } } }
+
+    private var currentRoute: HomeRoute? {
+        switch selectedPage {
+        case 0: homePath.last
+        case 1: accountPath.last
+        case 2: explorePath.last
+        case 3: searchPath.last
+        case 4: cartPath.last
+        case 5: favoritesPath.last
+        default: nil
+        }
+    }
+
+    private func activateCurrentRouteContext() {
+        activateShoppingContext(currentRoute.map(shoppingContext) ?? .home)
+    }
+
+    private func shoppingContext(for route: HomeRoute) -> LibraryAskContext {
+        switch route {
+        case .product(_, let productID): return .product(productID)
+        case .store(let merchantID): return .merchant(merchantID)
+        case .customStory(let story, _): return .world(story)
+        case .story(let storyID, _), .topicExpanded(_, let storyID):
+            return ShopCanvasLibrary.stories.first { $0.id == storyID }.map(LibraryAskContext.world) ?? .home
+        default: return .home
+        }
+    }
 
     /// Whether the bottom nav bar shows its blur background.
     var showNavBarBlur: Bool = true
@@ -140,6 +169,9 @@ final class NavigationCoordinator {
            homePath.isEmpty,
            let inlineStoryHandler,
            inlineStoryHandler(storyID) {
+            activateShoppingContext(
+                ShopCanvasLibrary.stories.first { $0.id == storyID }.map(LibraryAskContext.world) ?? .home
+            )
             return
         }
         switch selectedPage {
@@ -155,12 +187,12 @@ final class NavigationCoordinator {
 
     func navigateToPage(_ page: Int) {
         switch selectedPage {
-        case 0: homePath = NavigationPath()
-        case 1: accountPath = NavigationPath()
-        case 2: explorePath = NavigationPath()
-        case 3: searchPath = NavigationPath()
-        case 4: cartPath = NavigationPath()
-        case 5: favoritesPath = NavigationPath()
+        case 0: homePath = []
+        case 1: accountPath = []
+        case 2: explorePath = []
+        case 3: searchPath = []
+        case 4: cartPath = []
+        case 5: favoritesPath = []
         default: break
         }
         selectedPage = page
@@ -175,6 +207,7 @@ final class NavigationCoordinator {
                 homePath.removeLast()
             } else {
                 topicBackAction?()
+                activateShoppingContext(.home)
             }
         case 1: if !accountPath.isEmpty { accountPath.removeLast() }
         case 2: if !explorePath.isEmpty { explorePath.removeLast() }
@@ -194,6 +227,9 @@ final class NavigationCoordinator {
            homePath.isEmpty,
            let inlineStoryHandler,
            inlineStoryHandler(storyID) {
+            activateShoppingContext(
+                ShopCanvasLibrary.stories.first { $0.id == storyID }.map(LibraryAskContext.world) ?? .home
+            )
             return
         }
         switch selectedPage {

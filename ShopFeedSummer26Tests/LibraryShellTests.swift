@@ -34,6 +34,25 @@ final class LibraryShellTests: XCTestCase {
     }
 
     @MainActor
+    func testNavigationOwnsContextThroughPushBackAndTabChanges() throws {
+        let coordinator = NavigationCoordinator()
+        let host = try XCTUnwrap(ShopCanvasLibrary.stories.first { $0.id == "library-edit-0" })
+
+        coordinator.pushRoute(.story(storyId: host.id, sourceId: host.id))
+        XCTAssertEqual(coordinator.libraryShell.context.id, "world:\(host.id)")
+
+        let product = try XCTUnwrap(host.products.first)
+        coordinator.pushRoute(.product(merchantId: product.merchantID, productId: product.productID))
+        XCTAssertEqual(coordinator.libraryShell.context.id, LibraryAskContext.product(product.productID).id)
+
+        coordinator.popCurrentPage()
+        XCTAssertEqual(coordinator.libraryShell.context.id, "world:\(host.id)")
+
+        coordinator.navigateToPage(2)
+        XCTAssertEqual(coordinator.libraryShell.context.id, LibraryAskContext.home.id)
+    }
+
+    @MainActor
     func testDraftsAndResponsesRemainIsolatedByContext() throws {
         let session = LibraryShellSession()
         let host = LibraryAskContext.world(try XCTUnwrap(ShopCanvasLibrary.stories.first { $0.id == "library-edit-0" }))
