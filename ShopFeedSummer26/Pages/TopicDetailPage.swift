@@ -71,9 +71,6 @@ struct TopicDetailPage: View {
         return products.map(\.merchant).filter { seen.insert($0.id).inserted }
     }
     private var relatedDeals: [RelatedDeal] {
-        // A deal is brand-led: keep the topic merchants first, but only show
-        // stores whose real wordmark can render. Fill any remaining slots with
-        // relevant catalog merchants instead of falling back to styled text.
         var seen = Set<String>()
         let dealMerchants = (relatedMerchants + featuredMerchants).filter {
             hasRenderableDealWordmark($0) && seen.insert($0.id).inserted
@@ -418,23 +415,18 @@ struct TopicDetailPage: View {
             var transaction = Transaction()
             transaction.disablesAnimations = true
             withTransaction(transaction) {
-                // Start with the same avatar silhouette as the feed header.
-                // The native card zoom then has no chrome discontinuity while
-                // the avatar resolves into the destination's close control.
-                showsControls = true
+                showsControls = false
                 closeMorphProgress = 0
             }
-            try? await Task.sleep(for: .milliseconds(90))
+            try? await Task.sleep(for: .milliseconds(260))
             guard !Task.isCancelled else { return }
-            withAnimation(.spring(response: 0.34, dampingFraction: 0.88)) {
+            withAnimation(.easeOut(duration: 0.16)) {
+                showsControls = true
                 closeMorphProgress = 1
             }
-            // Keep the bottom chrome stationary until the shared card has
-            // finished settling; moving it during the zoom reads as a bump.
-            try? await Task.sleep(for: .milliseconds(250))
+            try? await Task.sleep(for: .milliseconds(80))
             guard !Task.isCancelled else { return }
             withAnimation(.easeOut(duration: 0.18)) {
-                // The library experiment keeps contextual Ask available inside a World.
                 coordinator.showNavBar = ShopCanvasLibrary.isEnabled
             }
         }
@@ -448,10 +440,13 @@ struct TopicDetailPage: View {
                 sampledSurfaceColor = color
             }
         }
-        .onAppear { coordinator.showNavBar = true }
+        .onAppear { if !ShopCanvasLibrary.isEnabled { coordinator.showNavBar = true } }
         .onDisappear {
             coordinator.resetScrollState()
-            coordinator.showNavBar = true
+            if coordinator.navigationDepth == 0 {
+                coordinator.showNavBar = false
+                restoreNavigationAfterSharedTransition()
+            }
         }
     }
     private func hero(width: CGFloat) -> some View {
@@ -459,9 +454,6 @@ struct TopicDetailPage: View {
             surfaceColor
             Group {
                 if heroVideoURL != nil {
-                    // Carry the authored feed film into the destination so the
-                    // shared-card transition does not resolve into a frozen
-                    // Figma export as soon as navigation completes.
                     StoryFeedCard(
                         story: story,
                         merchants: merchants,
@@ -905,8 +897,6 @@ struct TopicDetailPage: View {
                 }
             }
             .contentMargins(.leading, GravitySpacing.space12, for: .scrollContent)
-            // Leave enough terminal runway for the final 240pt column to
-            // finish at the same left inset as the first column.
             .contentMargins(
                 .trailing,
                 max(GravitySpacing.space12, containerWidth - 252),
@@ -1027,11 +1017,21 @@ struct TopicDetailPage: View {
         .frame(width: width, height: windowSafeAreaTopInset + 72, alignment: .top)
     }
     private func closeTopic() {
-        coordinator.showNavBar = true
+        withAnimation(.easeOut(duration: 0.14)) {
+            coordinator.showNavBar = false
+        }
         if coordinator.homePath.isEmpty, coordinator.topicBackAction != nil {
             coordinator.popCurrentPage()
         } else {
             dismiss()
+        }
+        restoreNavigationAfterSharedTransition()
+    }
+
+    private func restoreNavigationAfterSharedTransition() {
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(360))
+            withAnimation(.easeOut(duration: 0.18)) { coordinator.showNavBar = true }
         }
     }
 

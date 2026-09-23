@@ -476,7 +476,15 @@ struct HomePage: View {
             if visibleStoryID == nil {
                 resetFeedPosition(for: selectedTopicID)
             } else {
-                expandingStoryID = nil
+                // Preserve the source card until the reverse shared zoom has
+                // settled back into the feed.
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(360))
+                    expandingStoryID = nil
+                    withAnimation(.easeOut(duration: 0.18)) {
+                        coordinator.showNavBar = true
+                    }
+                }
             }
             syncTopicBackAction()
             coordinator.inlineStoryHandler = { storyID in
@@ -1379,7 +1387,9 @@ struct HomePage: View {
                     // Resizing an active AV layer on every drag frame is the
                     // largest source of hitching. Hold its poster while the
                     // scroll is moving, then resume playback once locked.
-                    backgroundPlaybackEnabled: expandingStoryID != story.id,
+                    // Keep the shared playback session alive while the card
+                    // expands; pausing here produces a frozen transition frame.
+                    backgroundPlaybackEnabled: story.id == activeFeedStory?.id || expandingStoryID == story.id,
                     prefersVideoBackground: storyIndex?.isMultiple(of: 5) == true,
                     cornerRadius: cornerRadius,
                     bottomCornerRadius: bottomCornerRadius,
@@ -1418,6 +1428,8 @@ struct HomePage: View {
         )
         .matchedTransitionSource(id: story.id, in: namespace) { source in
             source
+                .background(.clear)
+                .clipShape(RoundedRectangle(cornerRadius: FeedCardStyle.cornerRadius, style: .continuous))
                 .shadow(
                     color: .black.opacity(0.10 * shadowOpacity),
                     radius: 12,
@@ -1532,9 +1544,16 @@ struct HomePage: View {
     /// match wins over secondary membership so cards such as New York graphics
     /// can own a destination even when they also appear in Type & transit.
     private func openTopic(for story: FeedStory) {
-        if story.id.hasPrefix("custom-feed-") {
+        func beginSharedExpansion() {
             coordinator.resetScrollState()
             expandingStoryID = story.id
+            withAnimation(.easeOut(duration: 0.16)) {
+                coordinator.showNavBar = false
+            }
+        }
+
+        if story.id.hasPrefix("custom-feed-") {
+            beginSharedExpansion()
             coordinator.pushRoute(.customStory(story: story, sourceId: story.id))
             return
         }
@@ -1543,8 +1562,7 @@ struct HomePage: View {
         // card so NavigationStack can perform the native shared-view zoom.
         if buyerPreview.selected.usesInlineTopicNavigation,
            selectedTopic.storyIDs.contains(story.id) {
-            coordinator.resetScrollState()
-            expandingStoryID = story.id
+            beginSharedExpansion()
             // Route in the same interaction turn. Waiting for another main-
             // actor pass made a topic tap feel ignored on a physical device,
             // especially while the active card's video was decoding.
@@ -1567,16 +1585,14 @@ struct HomePage: View {
             // NavigationCoordinator does not turn it into an inline content
             // swap and StoryTopicPage can perform the same system zoom as an
             // expanded topic.
-            expandingStoryID = story.id
+            beginSharedExpansion()
             coordinator.pushRoute(
                 .story(storyId: story.id, sourceId: story.id)
             )
             return
         }
 
-        coordinator.resetScrollState()
-        expandingStoryID = story.id
-
+        beginSharedExpansion()
         coordinator.pushRoute(
             .topicExpanded(topicId: destination.id, sourceStoryId: story.id)
         )
