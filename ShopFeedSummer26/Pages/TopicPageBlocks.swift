@@ -1,6 +1,18 @@
 import SwiftUI
 import UIKit
 
+struct TopicPresentedAssortment: Identifiable {
+    let id = UUID()
+    let title: String
+    let subtitle: String
+    let products: [ResolvedStoryProduct]
+}
+
+@Observable
+final class TopicHeaderScrollState {
+    var showsTitle = false
+}
+
 struct RelatedDeal: Identifiable {
     let merchant: SampleMerchant
     let products: [SampleMerchant.Product]

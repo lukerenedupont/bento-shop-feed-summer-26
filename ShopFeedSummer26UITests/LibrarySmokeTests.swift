@@ -256,6 +256,11 @@ final class LibrarySmokeTests: XCTestCase {
         XCTAssertFalse(app.staticTexts["View at shop"].exists)
         XCTAssertFalse(app.staticTexts["17 selected finds"].exists)
         app.buttons["For the thoughtful host"].firstMatch.tap()
+        let transitionHero = app.descendants(matching: .any)["world.transition-hero"]
+        XCTAssertTrue(transitionHero.waitForExistence(timeout: 10))
+        XCTAssertGreaterThanOrEqual(transitionHero.frame.height, app.frame.height * 0.9)
+        XCTAssertTrue(app.staticTexts["Warm, design-minded pieces for a table—and a home—that feels genuinely inviting."].exists)
+        app.swipeUp()
         let openingSection = app.staticTexts["From the edit"]
         XCTAssertTrue(openingSection.waitForExistence(timeout: 10))
         XCTAssertLessThan(openingSection.frame.minY, app.frame.height * 0.70)

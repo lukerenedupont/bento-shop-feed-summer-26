@@ -1,16 +1,6 @@
 import SwiftUI
 import UIKit
 import AVFoundation
-struct TopicPresentedAssortment: Identifiable {
-    let id = UUID()
-    let title: String
-    let subtitle: String
-    let products: [ResolvedStoryProduct]
-}
-@Observable
-private final class TopicHeaderScrollState {
-    var showsTitle = false
-}
 struct TopicDetailPage: View {
     let story: FeedStory
     let merchants: [SampleMerchant]
@@ -331,10 +321,12 @@ struct TopicDetailPage: View {
             TopicProductFilter(title: $0.capitalized, terms: [$0])
         }
     }
-    private var heroHeight: CGFloat {
-        if editorialWorldRecipe?.family == .merchant { return 500 }
-        return topicPresentation.usesExactHeroLayout ? 526 : 560
+    private func heroHeight(viewportHeight: CGFloat) -> CGFloat {
+        let minimum: CGFloat = editorialWorldRecipe?.family == .merchant
+            ? 500 : (topicPresentation.usesExactHeroLayout ? 526 : 560)
+        return max(minimum, viewportHeight)
     }
+    private var transitionDeck: String { FeedCardPresentation.resolve(story: story).deck }
     private var windowSafeAreaTopInset: CGFloat {
         guard let windowScene = UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene })
@@ -364,7 +356,7 @@ struct TopicDetailPage: View {
                     .ignoresSafeArea()
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(alignment: .leading, spacing: 0) {
-                        hero(width: geometry.size.width)
+                        hero(width: geometry.size.width, viewportHeight: geometry.size.height)
                         merchandising(containerWidth: geometry.size.width)
                             .padding(.top, TopicBlockMetrics.heroContentSpacing)
                             .background { scrolledSurfaceBackground }
@@ -375,7 +367,7 @@ struct TopicDetailPage: View {
                 .onScrollGeometryChange(for: CGFloat.self) { scrollGeometry in
                     scrollGeometry.contentOffset.y
                 } action: { _, offset in
-                    let shouldShowTitle = offset > heroHeight - 96
+                    let shouldShowTitle = offset > heroHeight(viewportHeight: geometry.size.height) - 96
                     guard shouldShowTitle != headerScrollState.showsTitle else { return }
                     headerScrollState.showsTitle = shouldShowTitle
                 }
@@ -449,8 +441,9 @@ struct TopicDetailPage: View {
             }
         }
     }
-    private func hero(width: CGFloat) -> some View {
-        ZStack(alignment: .topLeading) {
+    private func hero(width: CGFloat, viewportHeight: CGFloat) -> some View {
+        let resolvedHeroHeight = heroHeight(viewportHeight: viewportHeight)
+        return ZStack(alignment: .topLeading) {
             surfaceColor
             Group {
                 if heroVideoURL != nil {
@@ -458,7 +451,7 @@ struct TopicDetailPage: View {
                         story: story,
                         merchants: merchants,
                         width: width,
-                        height: heroHeight,
+                        height: resolvedHeroHeight,
                         isActive: true,
                         showsForegroundContent: false,
                         showsFooterArrow: false,
@@ -470,14 +463,14 @@ struct TopicDetailPage: View {
                     Image(heroFallbackAsset)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: width, height: heroHeight)
+                        .frame(width: width, height: resolvedHeroHeight)
                         .clipped()
                 } else {
                     StoryFeedCard(
                         story: story,
                         merchants: merchants,
                         width: width,
-                        height: heroHeight,
+                        height: resolvedHeroHeight,
                         isActive: true,
                         showsForegroundContent: false,
                         showsFooterArrow: false,
@@ -563,8 +556,8 @@ struct TopicDetailPage: View {
                 }
                 if !topicPresentation.usesExactHeroLayout,
                    !topicPresentation.usesGiftGuidePrototype,
-                   !story.subtitle.isEmpty {
-                    Text(story.subtitle)
+                   !transitionDeck.isEmpty {
+                    Text(transitionDeck)
                         .font(GravityFont.medium.fixedFont(size: 17))
                         .tracking(-0.2)
                         .lineSpacing(1)
@@ -583,10 +576,15 @@ struct TopicDetailPage: View {
                 alignment: .bottomLeading
             )
             .padding(.horizontal, GravitySpacing.space16)
-            .padding(.bottom, GravitySpacing.space20)
+            .padding(
+                .bottom,
+                ShopCanvasLibrary.isEnabled ? 138 : GravitySpacing.space20
+            )
         }
-        .frame(width: width, height: heroHeight)
+        .frame(width: width, height: resolvedHeroHeight)
         .clipped()
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("world.transition-hero")
     }
     private func productRail(
         title: String,
