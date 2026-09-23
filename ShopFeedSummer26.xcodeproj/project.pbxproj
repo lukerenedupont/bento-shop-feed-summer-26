@@ -19,7 +19,6 @@
 		08CF9DE31D0D6890CB15C684 /* VerySpecialWatchCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9B7BEA5251EDBCB9A73B8A /* VerySpecialWatchCatalog.swift */; };
 		09399C071718083016CE17FF /* bfcm-holiday-header.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = BBA14516121B4D65322B8E4D /* bfcm-holiday-header.mp4 */; };
 		0B57C3A7925E3C7402AE4D28 /* shopicon5.icon in Resources */ = {isa = PBXBuildFile; fileRef = AEF4DE3B6E15B620C38D244A /* shopicon5.icon */; };
-		0BAA615AA77D19B3910A3F92 /* hoe-streetwear.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D9F9A263E73A0DA198087CC3 /* hoe-streetwear.mp4 */; };
 		0C08C13F26335177E2728B05 /* FeedScrollInfrastructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7FE9B3DC8AB77C41671E1D /* FeedScrollInfrastructure.swift */; };
 		0D8258FE18916ACCB3BD85BD /* SearchResultsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D5503247C437CAFB0CE7681 /* SearchResultsPage.swift */; };
 		0DCB1DA8126594E7A3F76C68 /* LibraryMerchantNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1AC8E8125C059636B0C57D /* LibraryMerchantNames.swift */; };
@@ -412,7 +411,6 @@
 		D43FBABAF01048CCC0C88C54 /* UserProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileService.swift; sourceTree = "<group>"; };
 		D63224A20DCCA6A2867E3E63 /* TryOnFeedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryOnFeedCard.swift; sourceTree = "<group>"; };
 		D980F4F049B8BD00365E5845 /* GravityIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityIcon.swift; sourceTree = "<group>"; };
-		D9F9A263E73A0DA198087CC3 /* hoe-streetwear.mp4 */ = {isa = PBXFileReference; path = "hoe-streetwear.mp4"; sourceTree = "<group>"; };
 		DAA03D4C904C81520ECE119F /* PurlInjectionDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurlInjectionDiagnostics.swift; sourceTree = "<group>"; };
 		E39CA14FF88D8D8A9FBBB391 /* LibraryJulianSearchPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryJulianSearchPage.swift; sourceTree = "<group>"; };
 		E50FED85087F954198F8D79A /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -763,7 +761,6 @@
 				897BB35DD77D17C905156BA7 /* bfcm-holiday-sale-header.mp4 */,
 				5C93BF5FAA2E9F9509E17322 /* caraway-feed.mp4 */,
 				E85036657DD96D61D9AA923D /* fuumuu-painting.mp4 */,
-				D9F9A263E73A0DA198087CC3 /* hoe-streetwear.mp4 */,
 				C31CC646FA30A7AAC4C964F7 /* house-of-errors-post-poster.jpg */,
 				BD0EB04566BA0B6D8B742827 /* house-of-errors-post.mp4 */,
 				6559260A9790CFCAFD6B942A /* kith-post-poster.jpg */,
@@ -948,7 +945,6 @@
 				916EC7D568F415643DF205F5 /* bfcm-holiday-sale-header.mp4 in Resources */,
 				19A9C3504C4D7BB39D703E4E /* caraway-feed.mp4 in Resources */,
 				ED2C640CEF95CE4ABD85516B /* fuumuu-painting.mp4 in Resources */,
-				0BAA615AA77D19B3910A3F92 /* hoe-streetwear.mp4 in Resources */,
 				DA16E35F4E5AEECFD7EE2BF7 /* house-of-errors-post-poster.jpg in Resources */,
 				3F3C0A39840E135DFB616F29 /* house-of-errors-post.mp4 in Resources */,
 				879C8D336FD250C19D45B415 /* kith-post-poster.jpg in Resources */,
