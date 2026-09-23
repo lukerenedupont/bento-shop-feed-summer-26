@@ -188,6 +188,18 @@ final class FeedPlanningTests: XCTestCase {
         ))
     }
 
+    @MainActor
+    func testMediaRuntimeRefreshesLowPowerModeForActivePlayers() {
+        var lowPowerMode = false
+        let runtime = MediaPlaybackRuntime { lowPowerMode }
+        XCTAssertFalse(runtime.isLowPowerModeEnabled)
+
+        lowPowerMode = true
+        runtime.refreshSystemState()
+
+        XCTAssertTrue(runtime.isLowPowerModeEnabled)
+    }
+
     func testExplicitLocalWorldContextOverridesSubjectAndBuyerContext() {
         var context = WorldContext()
         context.set(.init(key: "budget", value: "500", source: .inferred, scope: .buyer))

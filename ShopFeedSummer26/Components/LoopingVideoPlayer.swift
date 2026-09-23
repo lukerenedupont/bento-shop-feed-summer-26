@@ -15,6 +15,24 @@ enum MediaPlaybackPolicy {
     }
 }
 
+@MainActor
+@Observable
+final class MediaPlaybackRuntime {
+    static let shared = MediaPlaybackRuntime()
+
+    private let readLowPowerMode: () -> Bool
+    private(set) var isLowPowerModeEnabled: Bool
+
+    init(readLowPowerMode: @escaping () -> Bool = { ProcessInfo.processInfo.isLowPowerModeEnabled }) {
+        self.readLowPowerMode = readLowPowerMode
+        isLowPowerModeEnabled = readLowPowerMode()
+    }
+
+    func refreshSystemState() {
+        isLowPowerModeEnabled = readLowPowerMode()
+    }
+}
+
 /// A muted video player for feed card backgrounds.
 ///
 /// `playbackGroupID` lets two render surfaces share one AVQueuePlayer. This is
@@ -29,6 +47,7 @@ struct LoopingVideoPlayer: UIViewRepresentable {
     var videoGravity: AVLayerVideoGravity
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
+    @State private var playbackRuntime = MediaPlaybackRuntime.shared
 
     init(
         url: URL,
@@ -67,7 +86,7 @@ struct LoopingVideoPlayer: UIViewRepresentable {
             requested: playbackEnabled,
             visible: isVisible,
             reduceMotion: reduceMotion,
-            lowPowerMode: ProcessInfo.processInfo.isLowPowerModeEnabled,
+            lowPowerMode: playbackRuntime.isLowPowerModeEnabled,
             sceneIsActive: scenePhase == .active
         )
     }

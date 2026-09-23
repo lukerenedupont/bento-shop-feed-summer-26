@@ -112,6 +112,9 @@ struct RootView: View {
         }
         .environment(coordinator)
         .ignoresSafeArea(.keyboard)
+        .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
+            MediaPlaybackRuntime.shared.refreshSystemState()
+        }
         .onAppear {
             coordinator.julianShell.avatar = UIImage(named: "luke-avatar")
             coordinator.julianShell.onSelectPage = { page in coordinator.navigateToPage(page) }
