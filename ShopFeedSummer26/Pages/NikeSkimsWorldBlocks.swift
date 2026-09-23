@@ -93,51 +93,57 @@ struct NikeSkimsFeedHero: View {
     }
 }
 
-/// The long-form, media-rich NikeSKIMS reference World. Product rails are Shop
-/// modules, visually separated from the campaign chapters they accompany.
-struct NikeSkimsWorldPrototype: View {
+/// Renders one authored NikeSKIMS block selected by its recipe. Product rails
+/// remain Shop modules, separated from the campaign chapters they accompany.
+struct NikeSkimsWorldBlock: View {
+    let blockID: String
     let products: [ResolvedStoryProduct]
     @Environment(NavigationCoordinator.self) private var coordinator
 
     private let gutter: CGFloat = 12
 
+    @ViewBuilder
     var body: some View {
-        LazyVStack(alignment: .leading, spacing: 64) {
-            productRail("The collection", items: window(0, 4))
+        switch blockID {
+        case "opening-products": productRail("The collection", items: window(0, 4))
+        case "collections":
             imageRail(
                 "Meet the collections",
                 subtitle: "Performance Cotton, Matte, Airy, Satin Shine, Weightless, Ribbed Seamless and Stretch Knit—each with its own hand, finish and level of support.",
                 urls: NikeSkimsWorldMedia.collectionGallery,
                 height: 390
             )
-            productRail("Soft structure", items: window(4, 4))
-            editorialPair(NikeSkimsWorldMedia.editorialLight)
-            fabricChapter
-            productRail("Support in motion", items: window(8, 4))
+        case "soft-structure": productRail("Soft structure", items: window(4, 4))
+        case "light-study": editorialPair(NikeSkimsWorldMedia.editorialLight)
+        case "fabrics": fabricChapter
+        case "support": productRail("Support in motion", items: window(8, 4))
+        case "color":
             imageRail(
                 "Explore by color",
                 subtitle: "A tonal study in warm neutrals, high-shine surfaces and grounded darks.",
                 urls: NikeSkimsWorldMedia.colorGallery,
                 height: 420
             )
-            closingFilm
-            productRail("Built to move", items: window(12, 6))
+        case "movement-film": closingFilm
+        case "built-to-move": productRail("Built to move", items: window(12, 6))
+        case "build-look":
             imageRail(
                 "Build the look",
                 subtitle: "Seven ways into a complete look—from bras and tights to soft layers, accessories and footwear.",
                 urls: NikeSkimsWorldMedia.buildGallery,
                 height: 390
             )
-            editorialPair(NikeSkimsWorldMedia.editorialDark)
+        case "dark-study": editorialPair(NikeSkimsWorldMedia.editorialDark)
+        case "movement-studies":
             imageRail(
                 "Movement studies",
                 subtitle: "Studio, training and everyday movement, seen through three distinct silhouettes.",
                 urls: NikeSkimsWorldMedia.movementGallery,
                 height: 430
             )
-            allProducts
+        case "complete-edit": allProducts
+        default: EmptyView()
         }
-        .padding(.bottom, 132)
     }
 
     private var fabricChapter: some View {

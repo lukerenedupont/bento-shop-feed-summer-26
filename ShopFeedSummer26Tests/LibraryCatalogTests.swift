@@ -83,7 +83,13 @@ final class LibraryCatalogTests: XCTestCase {
         XCTAssertEqual(selfCare.family, .campaign)
         XCTAssertEqual(selfCare.blocks.first?.kind, .productRail)
         XCTAssertEqual(selfCare.blocks.last?.kind, .exploreGrid)
-        XCTAssertGreaterThanOrEqual(selfCare.blocks.count, 10)
+        XCTAssertEqual(selfCare.blocks.map(\.title), [
+            "The collection", "Meet the collections", "Soft structure",
+            "Light study", "A study in fabric", "Support in motion",
+            "Explore by color", "Body in motion", "Built to move",
+            "Build the look", "Material study", "Movement studies",
+            "The full edit",
+        ])
         XCTAssertTrue(selfCare.validationIssues.isEmpty)
 
         let host = try XCTUnwrap(EditorialWorldRecipeCatalog.recipe(for: "library-edit-0"))

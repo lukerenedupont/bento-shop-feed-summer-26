@@ -636,7 +636,9 @@ struct TopicDetailPage: View {
         if let editorialWorldRecipe {
             switch editorialWorldRecipe.family {
             case .campaign:
-                NikeSkimsWorldPrototype(products: products)
+                LazyVStack(alignment: .leading, spacing: 64) {
+                    ForEach(editorialWorldRecipe.blocks) { NikeSkimsWorldBlock(blockID: $0.id, products: products) }
+                }.padding(.bottom, 132)
             case .merchant:
                 VStack(alignment: .leading, spacing: 52) {
                     ForEach(editorialWorldRecipe.blocks) { block in

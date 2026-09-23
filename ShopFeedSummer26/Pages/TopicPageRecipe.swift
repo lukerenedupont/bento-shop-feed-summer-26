@@ -116,12 +116,12 @@ enum EditorialWorldRecipeCatalog {
                 block("fabrics", .materialRail, "A study in fabric"),
                 block("support", .productRail, "Support in motion"),
                 block("color", .gallery, "Explore by color"),
-                block("movement-film", .film, "Movement"),
+                block("movement-film", .film, "Body in motion"),
                 block("built-to-move", .productRail, "Built to move"),
                 block("build-look", .gallery, "Build the look"),
                 block("dark-study", .diptych, "Material study"),
                 block("movement-studies", .gallery, "Movement studies"),
-                block("complete-edit", .exploreGrid, "The complete edit"),
+                block("complete-edit", .exploreGrid, "The full edit"),
             ]
         )
         let host = EditorialWorldRecipe(

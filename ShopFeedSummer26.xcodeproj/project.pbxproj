@@ -155,7 +155,7 @@
 		AFBB4BEFC4B934212FBF5232 /* StorePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B688BEC7F76E8968601FF28E /* StorePage.swift */; };
 		B183161ACDCC96DFC24576FF /* FollowUpBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC3E1EA342E896457F7A44E /* FollowUpBar.swift */; };
 		B1F85E63519B3AB3B81FC83A /* GTStandard-MRegular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4AEA08A7A0F99602B0464C7B /* GTStandard-MRegular.otf */; };
-		B3E4C73F4BE62FF75ADC62D1 /* NikeSkimsWorldPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90102240C229E6B212AEC96C /* NikeSkimsWorldPrototype.swift */; };
+		B3E4C73F4BE62FF75ADC62D1 /* NikeSkimsWorldBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90102240C229E6B212AEC96C /* NikeSkimsWorldBlocks.swift */; };
 		B7BC6E89DB3AE68F166CD965 /* FloatingPanelSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A32D3620048BECC91CDCAC /* FloatingPanelSheet.swift */; };
 		B9941023B1530544D245555F /* StoryTopicPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D860120DF5795DCF4608E92 /* StoryTopicPage.swift */; };
 		B9F8E91B113B4C17FF218973 /* AgentStreamClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6B78800FEDE269650DB81 /* AgentStreamClient.swift */; };
@@ -346,7 +346,7 @@
 		8E272B5992025C0FCC82BD63 /* ShopFeedSummer26Tests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ShopFeedSummer26Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EBD396C137066A16C363843 /* LibraryShellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryShellTests.swift; sourceTree = "<group>"; };
 		8FD31991D306CEA29F0583C1 /* ProductImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductImageView.swift; sourceTree = "<group>"; };
-		90102240C229E6B212AEC96C /* NikeSkimsWorldPrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikeSkimsWorldPrototype.swift; sourceTree = "<group>"; };
+		90102240C229E6B212AEC96C /* NikeSkimsWorldBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikeSkimsWorldBlocks.swift; sourceTree = "<group>"; };
 		9012D58DAABA6EE0D2AC1F73 /* GravityColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GravityColors.swift; sourceTree = "<group>"; };
 		902A5F8C87482DAA5084A6B9 /* DossierStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DossierStore.swift; sourceTree = "<group>"; };
 		90F225F073EF377341D05D20 /* shopicon8.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = shopicon8.icon; sourceTree = "<group>"; };
@@ -517,7 +517,7 @@
 				C9540CF3D128B864097B3063 /* LibraryAskPrototype.swift */,
 				E39CA14FF88D8D8A9FBBB391 /* LibraryJulianSearchPage.swift */,
 				8D208439D66B8183149C1C1A /* LibrarySearchPrototype.swift */,
-				90102240C229E6B212AEC96C /* NikeSkimsWorldPrototype.swift */,
+				90102240C229E6B212AEC96C /* NikeSkimsWorldBlocks.swift */,
 				AF15B9E17E009E05951942F7 /* ProductPage.swift */,
 				0431B7327888F447B9C4106E /* SettingsPage.swift */,
 				B688BEC7F76E8968601FF28E /* StorePage.swift */,
@@ -1164,7 +1164,7 @@
 				C9A6DC48035ED306A471F9CE /* MerchantCollectionFeedCard.swift in Sources */,
 				80240471BC5516F34CFFCA23 /* MerchantImage.swift in Sources */,
 				2DD7F0D8C4D5CC4F3C3101A1 /* NavigationCoordinator.swift in Sources */,
-				B3E4C73F4BE62FF75ADC62D1 /* NikeSkimsWorldPrototype.swift in Sources */,
+				B3E4C73F4BE62FF75ADC62D1 /* NikeSkimsWorldBlocks.swift in Sources */,
 				D037EE96317684455BFB1576 /* OrdersWidget.swift in Sources */,
 				7F24A3D355452FBD58EBFCF6 /* PersonalizedFeedCatalog.swift in Sources */,
 				EDCF00EA43F859CA13F59262 /* PreviewData.swift in Sources */,
