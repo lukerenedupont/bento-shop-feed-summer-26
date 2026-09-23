@@ -13,7 +13,19 @@ products = snapshot['products']
 assert len(selected) == len(set(selected)) == 328, 'Expected 328 unique editorial IDs'
 assert [p['id'] for p in products if p['curated']] == selected, 'Editorial order changed'
 assert len({p['nativeID'] for p in products}) == len(products), 'Native product ID collision'
-merchants = {m['id'] for m in snapshot['merchants']}
+merchant_records = snapshot['merchants']
+merchants = {m['id'] for m in merchant_records}
+confirmed_merchants = {
+    m['id'] for m in merchant_records
+    if m.get('platformOutcome') == 'confirmed_shopify'
+    and m['id'].startswith('gid://shopify/Shop/')
+}
+published_products = [
+    p for p in products
+    if p['id'] in selected and set(p['merchantIDs']) & confirmed_merchants
+]
+assert len(confirmed_merchants) == 79, 'Confirmed Shopify merchant set changed'
+assert len(published_products) == 213, 'Shopify-publishable product set changed'
 assert all(p['merchantIDs'] and set(p['merchantIDs']) <= merchants for p in products), 'Missing exact merchant join'
 assert all(p['price'] or not p['currency'] for p in products), 'Unknown price acquired a currency'
 for relative, digest in manifest.items():
@@ -56,4 +68,8 @@ if wordmark_file.exists():
                 assert hashlib.sha256(path.read_bytes()).hexdigest() == digest, 'Wordmark checksum mismatch'
     assert set(marks['merchantKeys']) <= merchants, 'Wordmark has an unknown merchant mapping'
     assert set(marks['merchantKeys'].values()) | set(marks['groupKeys'].values()) <= set(marks['assets'])
-print(f'Validated library: {len(selected)} curated products, {len(merchants)} merchants, {len(manifest)} original local assets')
+print(
+    f'Validated library source: {len(selected)} curated products, {len(merchants)} merchants; '
+    f'published Shopify set: {len(published_products)} products, {len(confirmed_merchants)} merchants; '
+    f'{len(manifest)} original local assets'
+)

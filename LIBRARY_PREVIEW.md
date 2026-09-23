@@ -21,7 +21,7 @@ cd /Users/lukedupont/bento-shop-feed-library-demo
 Scripts/run_library_preview.sh host
 ```
 
-Other supported destinations are `self-care` and `home`. The script boots the exact **Bento Architecture Review** simulator, validates the 328-product library snapshot, rebuilds the app, installs it, and launches the requested destination. To work in Xcode instead, open `ShopFeedSummer26.xcodeproj`, select the `ShopFeedSummer26` scheme and **Bento Architecture Review** simulator, then press Run. `xcodegen generate` is needed only after changing `project.yml`.
+Other supported destinations are `self-care` and `home`. The script boots the exact **Bento Architecture Review** simulator, validates the source snapshot and the Shopify-only publication set, rebuilds the app, installs it, and launches the requested destination. To work in Xcode instead, open `ShopFeedSummer26.xcodeproj`, select the `ShopFeedSummer26` scheme and **Bento Architecture Review** simulator, then press Run. `xcodegen generate` is needed only after changing `project.yml`.
 
 The phone installation survives both Mac and phone restarts and can be opened directly as **Shop Library Preview**. It does not require the Mac unless rebuilding or using a local development service.
 
@@ -39,17 +39,11 @@ Read-only source: `/Users/lukedupont/Developer/apx3000-shop-canvas/public/`.
 The importer reads `catalog/catalog.json`, `catalog/merchants.json`, and
 `catalog/merchant-depth.json` in full.
 
-The preview includes exactly **328 curated products**. `selectedIds` is the
-ordering authority, both for the complete **All finds** (328 products) destination and within
-each filtered collection. For You groups those records by their existing group
+The source snapshot contains exactly **328 curated products**. The Shop prototype publishes only the **213 products** associated with one of the **79 confirmed Shopify merchants**; domain-only, unresolved, and other-platform records are excluded from feeds, Worlds, search, merchant pages, and Agent context. `selectedIds` remains the ordering authority within that eligible subset and for **All finds**. For You groups those records by their existing group
 labels, ordered by each group's first appearance; it does not claim that a
 grouped feed is the same thing as the flat 328-product sequence.
 
-All product-to-merchant associations are retained and joined by **exact ID** to
-the current 114-merchant directory. Embedded product-record branding is not
-used. A card uses its product's first supplied merchant association as its
-default destination; the full association list is retained, and the product
-also appears under its other associated merchants. There is not yet a
+Published product-to-merchant associations are retained only when joined by **exact ID** to a merchant whose source outcome is `confirmed_shopify` and whose ID is a Shopify Shop GID. Embedded product-record branding is not used. A card uses its first confirmed Shopify association as its default destination; other confirmed associations remain available. There is not yet a
 multi-seller picker on the PDP.
 
 Enrichment is joined by exact source product ID (132 curated records matched).
@@ -119,12 +113,12 @@ where needed rather than blindly cropping a face at the edge.
 ## Native surfaces connected
 
 - For You and collection navigation use the existing Swift feed/card system.
-- All 328 retains the exact full selection order.
+- All finds retains the exact relative order of the 213 Shopify-eligible products.
 - Collection pages use the existing recipe blocks with honest labels: From the
   edit, More curated edits, The full selection. They do not invent best-seller,
   new-arrival, discount, or availability evidence.
 - PDPs and merchant pages route through the existing native navigation stack.
-- 277 missing prices remain unknown (View at shop), not $0 or guessed USD.
+- 162 missing prices remain unknown (View at shop), not $0 or guessed USD.
   The 50 USD prices and one TRY price retain their supplied currencies.
 - Library PDPs suppress prototype ratings, urgency, shipping, discounts and
   checkout claims; they link to the supplied merchant product URL and show the
@@ -150,7 +144,7 @@ follow-up input come from the source, not substitute SwiftUI approximations.
 The library retains its feed, utility belt, products, Worlds and post rail. The
 source header replaces the added build-12 search pill; the avatar is not duplicated
 in the category rail in full-search mode. Catalog queries remain local to the
-328 approved records. The source's empty-cart policy is retained rather than
+213 Shopify-eligible records. The source's empty-cart policy is retained rather than
 inventing cart items to force its Cart button visible.
 
 Source provenance is recorded for 65 upstream files plus 596 unchanged support
@@ -168,7 +162,7 @@ stream cancellation, and follow-ups. Signed-out submissions remain saved and ope
 the real Shop web-session sign-in action; no request is sent until authentication
 succeeds. Production history/threads, notifications, and image upload remain
 unavailable and are identified as such rather than simulated. Catalog search uses
-Julian’s source chrome over exactly the 328 approved local products. This is not a
+Julian’s source chrome over exactly the 213 Shopify-eligible local products. This is not a
 complete standalone copy of the Shop production app or all of its services.
 
 Build 13 is optimized Debug (`-O`) to keep the complete imported source/icon set

@@ -187,21 +187,11 @@ final class LibrarySmokeTests: XCTestCase {
     func testThoughtfulHostEditorialWalkthrough() {
         let app = XCUIApplication()
         openHost(app)
-        let firstPost = app.buttons["host.post.prototype-caraway-table"].firstMatch
-        scrollTo(firstPost, in: app, attempts: 4)
-        XCTAssertTrue(app.staticTexts["From the shops"].exists)
-        let secondPost = app.buttons["host.post.prototype-fuumuu-studio"].firstMatch
-        XCTAssertTrue(secondPost.exists)
-        XCTAssertLessThan(firstPost.frame.width, app.frame.width * 0.7)
-        XCTAssertNotEqual(firstPost.frame.minX, secondPost.frame.minX)
-        capture(app, name: "Host World — actual post rail")
-        firstPost.tap()
-        XCTAssertTrue(app.buttons["Close post"].waitForExistence(timeout: 10))
-        app.buttons["Close post"].tap()
-        XCTAssertTrue(app.buttons["Close post"].waitForNonExistence(timeout: 5))
-        firstPost.swipeLeft()
-        XCTAssertTrue(secondPost.isHittable)
-        capture(app, name: "Host World — post rail swipe")
+        let openingProduct = app.staticTexts["Camilla Vase"].firstMatch
+        XCTAssertTrue(openingProduct.waitForExistence(timeout: 10))
+        openingProduct.tap()
+        XCTAssertTrue(app.staticTexts["Not reverified; reference only"].waitForExistence(timeout: 10))
+        app.buttons["Back"].firstMatch.tap()
 
         let merchant = app.buttons["host.explore-porta"]
         scrollTo(merchant, in: app, attempts: 5)
@@ -227,10 +217,9 @@ final class LibrarySmokeTests: XCTestCase {
         XCTAssertTrue(app.images["Editorial cover: For the thoughtful host"].firstMatch.waitForExistence(timeout: 30))
         // The first upward swipe now lets the lead card take over from the belt.
         app.swipeUp()
-        for title in ["Gifts for him", "Eckhaus Latta", "Nordic Knots"] {
-            app.swipeUp()
+        for title in ["Gifts for him", "Eckhaus Latta", "Objects with character"] {
             let cover = app.images["Editorial cover: \(title)"].firstMatch
-            XCTAssertTrue(cover.waitForExistence(timeout: 10))
+            scrollTo(cover, in: app, attempts: 3)
             XCTAssertGreaterThan(cover.frame.intersection(app.frame).height, app.frame.height * 0.6)
             capture(app, name: "Editorial feed — \(title)")
         }
@@ -240,14 +229,14 @@ final class LibrarySmokeTests: XCTestCase {
     func testLibraryProductAndMerchantUseReferencesWithoutInventedCommerce() {
         let app = XCUIApplication()
         openHost(app)
-        let product = app.staticTexts["Kitchen Apron Lemonade"].firstMatch
+        let product = app.staticTexts["Camilla Vase"].firstMatch
         XCTAssertTrue(product.waitForExistence(timeout: 10))
         product.tap()
         XCTAssertTrue(app.staticTexts["Not reverified; reference only"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.buttons["Buy now"].exists)
         XCTAssertFalse(app.staticTexts["$0.00"].exists)
         XCTAssertFalse(app.staticTexts["djerfavenue.com"].exists)
-        let merchant = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "Djerf Avenue")).firstMatch
+        let merchant = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "Porta")).firstMatch
         XCTAssertTrue(merchant.exists)
         merchant.tap()
         XCTAssertTrue(app.staticTexts["Follow"].waitForExistence(timeout: 10))
@@ -276,13 +265,13 @@ final class LibrarySmokeTests: XCTestCase {
         let composer = app.descendants(matching: .any)["DYNAMIC_TYPEAHEAD_TEXT_INPUT"]
         XCTAssertTrue(composer.waitForExistence(timeout: 10))
         let openingProduct = app.buttons.matching(
-            NSPredicate(format: "label CONTAINS %@", "Kitchen Apron Lemonade")
+            NSPredicate(format: "label CONTAINS %@", "Camilla Vase")
         ).allElementsBoundByIndex.first { $0.frame.intersects(app.frame) }
         XCTAssertNotNil(openingProduct)
         if let openingProduct {
             XCTAssertLessThan(openingProduct.frame.maxY, composer.frame.minY)
         }
-        XCTAssertTrue(app.staticTexts["Djerf Avenue"].firstMatch.exists)
+        XCTAssertTrue(app.staticTexts["Porta"].firstMatch.exists)
         XCTAssertFalse(app.staticTexts["djerfavenue.com"].exists)
         XCTAssertFalse(app.staticTexts["View at shop"].exists)
         capture(app, name: "World — clean labels")

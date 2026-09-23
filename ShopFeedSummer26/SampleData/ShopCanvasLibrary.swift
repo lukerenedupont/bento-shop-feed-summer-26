@@ -26,6 +26,19 @@ enum ShopCanvasLibrary {
         let commerceCheck: String
         let checkedAt: String?
         let images: [String]
+
+        func restricted(to merchantIDs: Set<String>) -> Self? {
+            let approvedIDs = self.merchantIDs.filter(merchantIDs.contains)
+            guard !approvedIDs.isEmpty else { return nil }
+            return .init(
+                id: id, nativeID: nativeID, curated: curated,
+                merchantIDs: approvedIDs, title: title, brand: brand,
+                group: group, image: image, originalImage: originalImage,
+                url: url, price: price, currency: currency,
+                description: description, commerceCheck: commerceCheck,
+                checkedAt: checkedAt, images: images
+            )
+        }
     }
 
     struct Merchant: Decodable {
@@ -93,13 +106,20 @@ enum ShopCanvasLibrary {
         return resolve(manifest.nativeAssets[value] ?? value)
     }
 
-    static let productsByID = Dictionary(uniqueKeysWithValues: manifest.products.map { ($0.id, $0) })
-    static let productsByNativeID = Dictionary(uniqueKeysWithValues: manifest.products.map { ($0.nativeID, $0) })
-    static let merchantsByID = Dictionary(uniqueKeysWithValues: manifest.merchants.map { ($0.id, $0) })
+    static let confirmedMerchantRecords = manifest.merchants.filter {
+        $0.platformOutcome == "confirmed_shopify" && $0.id.hasPrefix("gid://shopify/Shop/")
+    }
+    private static let confirmedMerchantIDs = Set(confirmedMerchantRecords.map(\.id))
+    private static let publishedProducts = manifest.products.compactMap {
+        $0.restricted(to: confirmedMerchantIDs)
+    }
+    static let productsByID = Dictionary(uniqueKeysWithValues: publishedProducts.map { ($0.id, $0) })
+    static let productsByNativeID = Dictionary(uniqueKeysWithValues: publishedProducts.map { ($0.nativeID, $0) })
+    static let merchantsByID = Dictionary(uniqueKeysWithValues: confirmedMerchantRecords.map { ($0.id, $0) })
     static let curatedProducts = manifest.selectedIds.compactMap { productsByID[$0] }.filter(\.curated)
 
-    static let merchants: [SampleMerchant] = manifest.merchants.map { merchant in
-        let products = manifest.products.filter { $0.merchantIDs.contains(merchant.id) }.map { product in
+    static let merchants: [SampleMerchant] = confirmedMerchantRecords.map { merchant in
+        let products = publishedProducts.filter { $0.merchantIDs.contains(merchant.id) }.map { product in
             SampleMerchant.Product(
                 id: product.nativeID, title: product.title, price: product.price,
                 handle: "", productType: product.group, vendor: product.brand,
@@ -124,6 +144,17 @@ enum ShopCanvasLibrary {
         )
     }
 
+    private static func hasPublishableCover(for group: String) -> Bool {
+        guard let cover = LibraryArtDirection.cover(forGroup: group) else { return false }
+        if let merchantID = cover.sourceMerchantID {
+            return confirmedMerchantIDs.contains(merchantID)
+        }
+        if let productID = cover.sourceProductID {
+            return productsByID[productID] != nil
+        }
+        return false
+    }
+
     private static func references(_ ids: [String]) -> [FeedStory.ProductReference] {
         ids.compactMap { id in
             guard let product = productsByID[id], product.curated,
@@ -135,12 +166,13 @@ enum ShopCanvasLibrary {
     static let stories: [FeedStory] = {
         let accents = ["#4D6256", "#5B5350", "#58656B", "#65604F", "#615965", "#59614B"]
         let edits = manifest.groups.enumerated().compactMap { index, group -> FeedStory? in
-            guard group.productIDs.count >= 3 else { return nil }
+            let productReferences = references(group.productIDs)
+            guard productReferences.count >= 3, hasPublishableCover(for: group.title) else { return nil }
             return FeedStory(
                 id: "\(storyPrefix)\(index)", eyebrow: "Curated library", title: LibraryArtDirection.title(for: group.title),
                 subtitle: "", format: .world,
                 topicKeys: ["library", "catalog-only-media", "library-group:\(group.title)"], accentHex: accents[index % accents.count],
-                coverImageName: nil, destinationLabel: "Explore the edit", products: references(group.productIDs)
+                coverImageName: nil, destinationLabel: "Explore the edit", products: productReferences
             )
         }
         let all = FeedStory(id: "\(storyPrefix)all", eyebrow: "Curated library", title: "All curated finds",

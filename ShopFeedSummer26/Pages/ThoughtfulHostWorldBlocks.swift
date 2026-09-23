@@ -27,9 +27,8 @@ struct ThoughtfulHostWorldBlock: View {
         Group {
             switch block.kind {
             case .statement: statement
-            case .film: featuredFilm
             case .gallery: productStoryGallery
-            case .postRail: postRail
+            case .film, .postRail: EmptyView()
             case .curatedLook: curatedTable
             case .merchantFeature: portaFeature
             case .diptych: materialDetail

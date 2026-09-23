@@ -29,6 +29,10 @@ enum LibraryArtDirection {
 
     private static let byGroup = Dictionary(uniqueKeysWithValues: covers.map { ($0.group, $0) })
 
+    static func cover(forGroup group: String) -> Cover? {
+        byGroup[group]
+    }
+
     static func group(for story: FeedStory) -> String? {
         if story.id == "library-edit-all" { return "__all__" }
         return story.topicKeys.first { $0.hasPrefix("library-group:") }

@@ -5,7 +5,7 @@ import UIKit
 final class LibraryCatalogTests: XCTestCase {
     func testNikeSkimsWorldUsesTheCompleteApprovedSelfCareEditAndBundledReferenceMedia() throws {
         let story = try XCTUnwrap(ShopCanvasLibrary.stories.first { $0.id == NikeSkimsWorldMedia.storyID })
-        XCTAssertEqual(story.resolvedProducts(from: ShopCanvasLibrary.merchants).count, 18)
+        XCTAssertEqual(story.resolvedProducts(from: ShopCanvasLibrary.merchants).count, 11)
         XCTAssertEqual(NikeSkimsWorldMedia.fabrics.count, 7)
         XCTAssertEqual(NikeSkimsWorldMedia.collectionGallery.count, 9)
         XCTAssertEqual(NikeSkimsWorldMedia.colorGallery.count, 5)
@@ -97,8 +97,8 @@ final class LibraryCatalogTests: XCTestCase {
         XCTAssertEqual(host.blocks.first?.kind, .productRail)
         XCTAssertEqual(host.blocks.last?.kind, .relatedWorlds)
         XCTAssertEqual(host.blocks.map(\.id), [
-            "opening-products", "statement", "kitchen-film", "scene-gallery",
-            "posts", "table-look", "merchant-feature", "material-detail",
+            "opening-products", "statement", "scene-gallery", "table-look",
+            "merchant-feature", "material-detail",
             "image-pause", "ask", "merchant-spotlights", "categories",
             "merchants", "makers", "bento", "selection", "related",
         ])
@@ -128,12 +128,29 @@ final class LibraryCatalogTests: XCTestCase {
         ])
     }
 
+    func testPublishedLibraryContainsOnlyConfirmedShopifyMerchants() {
+        XCTAssertEqual(ShopCanvasLibrary.merchants.count, 79)
+        XCTAssertTrue(ShopCanvasLibrary.merchants.allSatisfy { $0.id.hasPrefix("gid://shopify/Shop/") })
+        XCTAssertTrue(ShopCanvasLibrary.curatedProducts.allSatisfy {
+            !$0.merchantIDs.isEmpty && $0.merchantIDs.allSatisfy { $0.hasPrefix("gid://shopify/Shop/") }
+        })
+        XCTAssertFalse(ShopCanvasLibrary.stories.contains { $0.title == "Nordic Knots" })
+        XCTAssertTrue(ShopCanvasLibrary.stories.flatMap(\.products).allSatisfy {
+            $0.merchantID.hasPrefix("gid://shopify/Shop/")
+        })
+    }
+
     func testCuratedSelectionAndAllCollectionPreserveExactEditorialOrder() {
-        XCTAssertEqual(ShopCanvasLibrary.curatedProducts.count, 328)
-        XCTAssertEqual(ShopCanvasLibrary.curatedProducts.map(\.id), ShopCanvasLibrary.manifest.selectedIds)
+        let confirmedIDs = Set(ShopCanvasLibrary.confirmedMerchantRecords.map(\.id))
+        let productsByID = Dictionary(uniqueKeysWithValues: ShopCanvasLibrary.manifest.products.map { ($0.id, $0) })
+        let expectedIDs = ShopCanvasLibrary.manifest.selectedIds.filter { id in
+            productsByID[id].map { !$0.merchantIDs.filter(confirmedIDs.contains).isEmpty } == true
+        }
+        XCTAssertEqual(ShopCanvasLibrary.curatedProducts.count, 213)
+        XCTAssertEqual(ShopCanvasLibrary.curatedProducts.map(\.id), expectedIDs)
         let all = ShopCanvasLibrary.stories.first { $0.id == "library-edit-all" }!
         XCTAssertEqual(all.products.map(\.productID), ShopCanvasLibrary.curatedProducts.map(\.nativeID))
-        XCTAssertEqual(ShopCanvasLibrary.merchants.count, 114)
+        XCTAssertEqual(ShopCanvasLibrary.merchants.count, 79)
         XCTAssertTrue(ShopCanvasLibrary.manifest.products.allSatisfy(\.curated))
     }
 
@@ -173,25 +190,22 @@ final class LibraryCatalogTests: XCTestCase {
         XCTAssertEqual(LibraryWordmarkCatalog.key(for: eckhaus), "cosmos-profile:1784728528")
         XCTAssertEqual(LibraryWordmarkCatalog.manifest.groupKeys.count, 10)
         for (group, key) in LibraryWordmarkCatalog.manifest.groupKeys {
-            let story = try XCTUnwrap(ShopCanvasLibrary.stories.first { LibraryArtDirection.group(for: $0) == group })
+            guard let story = ShopCanvasLibrary.stories.first(where: { LibraryArtDirection.group(for: $0) == group }) else {
+                continue
+            }
             XCTAssertEqual(LibraryWordmarkCatalog.key(for: story), key)
             let url = try XCTUnwrap(LibraryWordmarkCatalog.sources(for: key, onDark: true).first)
             let image = try XCTUnwrap(UIImage(contentsOfFile: url.path))
             XCTAssertNotNil(LibraryWordmarkMatte.prepare(image, onDark: true))
+            XCTAssertTrue(story.products.allSatisfy { $0.merchantID.hasPrefix("gid://shopify/Shop/") })
         }
-        let dries = try XCTUnwrap(ShopCanvasLibrary.stories.first { $0.title == "Dries Van Noten" })
-        XCTAssertEqual(LibraryWordmarkCatalog.key(for: dries), "gid://shopify/Shop/58974732484")
-        XCTAssertTrue(dries.products.allSatisfy { reference in
-            ShopCanvasLibrary.productsByNativeID[reference.productID]?.merchantIDs.first == reference.merchantID
-        }, "The displayed brand mark must retain each product's original primary retailer")
+        XCTAssertFalse(ShopCanvasLibrary.stories.contains { $0.title == "Dries Van Noten" })
     }
 
     func testMerchantDisplayLabelsAndWorldSubtitlesStayQuiet() throws {
-        let merchant = try XCTUnwrap(ShopCanvasLibrary.merchants.first { $0.id == "domain:djerfavenue.com" })
-        XCTAssertEqual(merchant.name, "Djerf Avenue")
-        XCTAssertEqual(merchant.id, "domain:djerfavenue.com")
-        XCTAssertEqual(ShopCanvasLibrary.merchantsByID[merchant.id]?.name, "djerfavenue.com",
-            "Presentation cleanup must not rewrite source directory records")
+        let merchant = try XCTUnwrap(ShopCanvasLibrary.merchants.first { $0.id == "gid://shopify/Shop/1964605539" })
+        XCTAssertEqual(merchant.name, "Veark")
+        XCTAssertEqual(ShopCanvasLibrary.merchantsByID[merchant.id]?.name, "Veark")
         XCTAssertTrue(ShopCanvasLibrary.stories.allSatisfy { $0.subtitle.isEmpty })
     }
 

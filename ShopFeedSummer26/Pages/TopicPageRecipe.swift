@@ -162,9 +162,7 @@ enum EditorialWorldRecipeCatalog {
                     "A table worth lingering around",
                     content: .statement(body: "Warm materials, useful objects, and small details for hosting that feels personal rather than perfect.")
                 ),
-                block("kitchen-film", .film, "In the kitchen"),
                 block("scene-gallery", .gallery, "Set the scene"),
-                block("posts", .postRail, "From the shops"),
                 block("table-look", .curatedLook, "Build the table"),
                 block("merchant-feature", .merchantFeature, "Featured shop"),
                 block("material-detail", .diptych, "Linen, up close"),
