@@ -288,6 +288,10 @@ struct TopicDetailPage: View {
         }
         return topicPresentation.heroTitleOverride ?? story.title
     }
+    private var editorialWorldRecipe: EditorialWorldRecipe? {
+        EditorialWorldRecipeCatalog.recipe(for: story.id)
+    }
+
     private var pageRecipe: TopicPageRecipe {
         if ShopCanvasLibrary.isLibraryStory(story) {
             return TopicPageRecipe(sectionSpacing: TopicBlockMetrics.sectionSpacing, blocks: [
@@ -642,22 +646,22 @@ struct TopicDetailPage: View {
     }
     @ViewBuilder
     private func merchandising(containerWidth: CGFloat) -> some View {
-        if ShopCanvasLibrary.isEnabled, NikeSkimsWorldMedia.isStory(story) {
-            NikeSkimsWorldPrototype(products: products)
-        } else if ShopCanvasLibrary.isEnabled, story.id == "library-edit-0" {
-            // PROTOTYPE: one deliberately expansive World that exercises the
-            // complete safe block palette before these beats move to a shared
-            // EditorialWorldRecipe renderer.
-            VStack(alignment: .leading, spacing: 52) {
-                productRail(title: "From the edit", items: Array(products.prefix(4)), cardWidth: TopicBlockMetrics.mediumProductWidth)
-                ThoughtfulHostWorldPrototype(products: products)
-                ForEach(Array(TopicPageRecipeCatalog.thoughtfulHostAllBlocks.blocks.enumerated()), id: \.offset) { _, block in
-                    defaultBlockView(block, containerWidth: containerWidth)
+        if let editorialWorldRecipe {
+            switch editorialWorldRecipe.family {
+            case .campaign:
+                NikeSkimsWorldPrototype(products: products)
+            case .merchant:
+                VStack(alignment: .leading, spacing: 52) {
+                    productRail(title: "From the edit", items: Array(products.prefix(4)), cardWidth: TopicBlockMetrics.mediumProductWidth)
+                    ThoughtfulHostWorldPrototype(products: products)
+                    ForEach(Array(TopicPageRecipeCatalog.thoughtfulHostAllBlocks.blocks.enumerated()), id: \.offset) { _, block in
+                        defaultBlockView(block, containerWidth: containerWidth)
+                    }
+                    exploreMore(title: "The full selection", filters: [.all], containerWidth: containerWidth)
+                    collectionRail(title: "More curated edits", cardHeight: TopicBlockMetrics.collectionHeight)
                 }
-                exploreMore(title: "The full selection", filters: [.all], containerWidth: containerWidth)
-                collectionRail(title: "More curated edits", cardHeight: TopicBlockMetrics.collectionHeight)
+                .padding(.bottom, 120)
             }
-            .padding(.bottom, 120)
         } else if topicPresentation.usesGiftGuidePrototype {
             GiftGuidePrototypeContent(products: products, state: giftGuideState)
         } else if let worldDefinition,

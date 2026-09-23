@@ -95,15 +95,13 @@ final class LibrarySmokeTests: XCTestCase {
         XCTAssertTrue(app.buttons["More"].firstMatch.waitForExistence(timeout: 30))
         let more = app.coordinate(withNormalizedOffset: CGVector(dx: 0.91, dy: 0.095))
         more.tap()
-        app.buttons["Utility belt"].tap()
+        if !app.buttons["utility-belt-visibility"].waitForExistence(timeout: 2) {
+            app.buttons["Utility belt"].tap()
+        }
 
-        let productCarouselToggle = app.switches["feed-card-product-carousels"]
-        XCTAssertTrue(productCarouselToggle.waitForExistence(timeout: 10))
-        let initialCarouselValue = productCarouselToggle.value as? String
-        productCarouselToggle.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
-        XCTAssertTrue(waitForValueChange(productCarouselToggle, from: initialCarouselValue))
-        productCarouselToggle.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
-        XCTAssertTrue(waitForValue(productCarouselToggle, equalTo: initialCarouselValue))
+        // Editorial cards have one fixed presentation; prototype product-row
+        // customization is intentionally no longer exposed.
+        XCTAssertFalse(app.switches["feed-card-product-carousels"].exists)
 
         var beltToggle = app.buttons["utility-belt-visibility"]
         XCTAssertTrue(beltToggle.waitForExistence(timeout: 10))
@@ -120,7 +118,9 @@ final class LibrarySmokeTests: XCTestCase {
         capture(app, name: "Library For You — configurable utility belt")
 
         more.tap()
-        app.buttons["Utility belt"].tap()
+        if !app.buttons["utility-belt-visibility"].waitForExistence(timeout: 2) {
+            app.buttons["Utility belt"].tap()
+        }
         beltToggle = app.buttons["utility-belt-visibility"]
         XCTAssertEqual(beltToggle.value as? String, "On")
         beltToggle.tap()
@@ -131,7 +131,9 @@ final class LibrarySmokeTests: XCTestCase {
 
         // Leave the demo in its visible default for subsequent walkthroughs.
         more.tap()
-        app.buttons["Utility belt"].tap()
+        if !app.buttons["utility-belt-visibility"].waitForExistence(timeout: 2) {
+            app.buttons["Utility belt"].tap()
+        }
         beltToggle = app.buttons["utility-belt-visibility"]
         beltToggle.tap()
         app.buttons["Done"].tap()

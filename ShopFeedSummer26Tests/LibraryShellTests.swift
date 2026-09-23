@@ -20,6 +20,20 @@ final class LibraryShellTests: XCTestCase {
     }
 
     @MainActor
+    func testNavigationActivatesOneShoppingContextAcrossTheAppAndAgentShell() throws {
+        let coordinator = NavigationCoordinator()
+        let world = LibraryAskContext.world(
+            try XCTUnwrap(ShopCanvasLibrary.stories.first { $0.id == "library-edit-0" })
+        )
+
+        coordinator.activateShoppingContext(world)
+
+        XCTAssertEqual(coordinator.libraryShell.context.id, world.id)
+        XCTAssertEqual(coordinator.julianShell.context.id, world.id)
+        XCTAssertEqual(coordinator.julianShell.context.title, world.title)
+    }
+
+    @MainActor
     func testDraftsAndResponsesRemainIsolatedByContext() throws {
         let session = LibraryShellSession()
         let host = LibraryAskContext.world(try XCTUnwrap(ShopCanvasLibrary.stories.first { $0.id == "library-edit-0" }))

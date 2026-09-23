@@ -18,7 +18,7 @@ struct RootView: View {
                         namespace: namespace,
                         utilityBeltVisible: coordinator.utilityBeltVisible
                     )
-                        .onAppear { coordinator.libraryShell.context = .home }
+                        .onAppear { coordinator.activateShoppingContext(.home) }
                         .navigationDestination(for: HomeRoute.self) { route in
                             destinations(for: route)
                         }
@@ -123,13 +123,10 @@ struct RootView: View {
             }
             coordinator.julianShell.onAgentFollowUp = coordinator.agentConversationControl.submit
             coordinator.julianShell.onStopAgent = coordinator.agentConversationControl.stop
-            coordinator.updateJulianContext(coordinator.libraryShell.context)
-        }
-        .onChange(of: coordinator.libraryShell.context.id) { _, _ in
-            coordinator.updateJulianContext(coordinator.libraryShell.context)
+            coordinator.activateShoppingContext(coordinator.libraryShell.context)
         }
         .onChange(of: coordinator.selectedPage) { _, page in
-            coordinator.libraryShell.context = .home
+            coordinator.activateShoppingContext(.home)
             coordinator.julianShell.selectedPage = page
             if page != 0 {
                 coordinator.julianShell.onAccount = { coordinator.pushRoute(.account) }
@@ -147,11 +144,7 @@ struct RootView: View {
                     get: { coordinator.utilityBeltVisible },
                     set: { coordinator.utilityBeltVisible = $0 }
                 ),
-                extendoEnabled: $utilityBeltExtendoEnabled,
-                feedProductCarouselsVisible: Binding(
-                    get: { coordinator.feedProductCarouselsVisible },
-                    set: { coordinator.feedProductCarouselsVisible = $0 }
-                )
+                extendoEnabled: $utilityBeltExtendoEnabled
             )
             .environment(\.colorScheme, .light)
         }
@@ -183,7 +176,7 @@ struct RootView: View {
     @ViewBuilder
     private func destinations(for route: HomeRoute) -> some View {
         destinationContent(for: route)
-            .onAppear { coordinator.libraryShell.context = askContext(for: route) }
+            .onAppear { coordinator.activateShoppingContext(askContext(for: route)) }
     }
 
     private func askContext(for route: HomeRoute) -> LibraryAskContext {

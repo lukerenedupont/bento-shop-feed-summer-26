@@ -66,6 +66,51 @@ final class LibraryCatalogTests: XCTestCase {
         )
     }
 
+    func testSelfCareUsesTheCanonicalEditorialFeedPresentation() throws {
+        let story = try XCTUnwrap(ShopCanvasLibrary.stories.first { $0.id == NikeSkimsWorldMedia.storyID })
+
+        let presentation = FeedCardPresentation.resolve(story: story)
+
+        XCTAssertEqual(presentation.kind, .editorial)
+        XCTAssertEqual(presentation.deck, "A movement study for training, recovery, and the quieter rituals in between.")
+        XCTAssertEqual(presentation.cta, "Explore")
+        XCTAssertEqual(presentation.actions, [.overflow])
+        XCTAssertFalse(presentation.showsProducts)
+    }
+
+    func testEditorialWorldRecipesOwnTheTwoRichDestinations() throws {
+        let selfCare = try XCTUnwrap(EditorialWorldRecipeCatalog.recipe(for: NikeSkimsWorldMedia.storyID))
+        XCTAssertEqual(selfCare.family, .campaign)
+        XCTAssertEqual(selfCare.blocks.first?.kind, .productRail)
+        XCTAssertEqual(selfCare.blocks.last?.kind, .exploreGrid)
+        XCTAssertGreaterThanOrEqual(selfCare.blocks.count, 10)
+        XCTAssertTrue(selfCare.validationIssues.isEmpty)
+
+        let host = try XCTUnwrap(EditorialWorldRecipeCatalog.recipe(for: "library-edit-0"))
+        XCTAssertEqual(host.family, .merchant)
+        XCTAssertEqual(host.blocks.first?.kind, .productRail)
+        XCTAssertEqual(host.blocks.last?.kind, .relatedWorlds)
+        XCTAssertGreaterThanOrEqual(host.blocks.count, 12)
+        XCTAssertTrue(host.validationIssues.isEmpty)
+    }
+
+    func testEditorialWorldRecipeValidationRejectsMissingAndDuplicateBlockIdentity() {
+        let recipe = EditorialWorldRecipe(
+            storyID: "",
+            family: .merchant,
+            blocks: [
+                .init(id: "repeat", kind: .statement, title: ""),
+                .init(id: "repeat", kind: .film, title: "Film"),
+            ]
+        )
+
+        XCTAssertEqual(recipe.validationIssues, [
+            "story ID must not be empty",
+            "block IDs must be unique",
+            "block identity and title must not be empty",
+        ])
+    }
+
     func testCuratedSelectionAndAllCollectionPreserveExactEditorialOrder() {
         XCTAssertEqual(ShopCanvasLibrary.curatedProducts.count, 328)
         XCTAssertEqual(ShopCanvasLibrary.curatedProducts.map(\.id), ShopCanvasLibrary.manifest.selectedIds)

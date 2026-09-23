@@ -15,18 +15,11 @@ final class NavigationCoordinator {
     var utilityBeltVisible = UserDefaults.standard.object(forKey: "utilityBeltVisible") as? Bool ?? true {
         didSet { UserDefaults.standard.set(utilityBeltVisible, forKey: "utilityBeltVisible") }
     }
-    var feedProductCarouselsVisible = UserDefaults.standard.object(
-        forKey: "feedProductCarouselsVisible"
-    ) as? Bool ?? true {
-        didSet {
-            UserDefaults.standard.set(
-                feedProductCarouselsVisible,
-                forKey: "feedProductCarouselsVisible"
-            )
-        }
-    }
-
-    func updateJulianContext(_ context: LibraryAskContext) {
+    /// Single context seam for feed, navigation, and Julian's persistent Agent UI.
+    /// Callers describe where the shopper is; the coordinator synchronizes the
+    /// local catalog context and source Agent shell atomically.
+    func activateShoppingContext(_ context: LibraryAskContext) {
+        libraryShell.context = context
         let product = context.products.first
         julianShell.activate(.init(id: context.id, title: context.title,
             imageURL: product.flatMap { ShopCanvasLibrary.resolve($0.image)?.absoluteString },

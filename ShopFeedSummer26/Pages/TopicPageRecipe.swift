@@ -13,6 +13,119 @@ enum TopicPageKind {
     case standard
 }
 
+/// Content-level description of a rich World. It deliberately carries intent
+/// and order, while the renderer owns geometry, playback, routing, and chrome.
+struct EditorialWorldRecipe: Equatable {
+    enum Family: Equatable {
+        case campaign
+        case merchant
+    }
+
+    struct Block: Equatable, Identifiable {
+        enum Kind: Equatable {
+            case statement
+            case film
+            case fullBleedImage
+            case gallery
+            case diptych
+            case materialRail
+            case productRail
+            case categoryRail
+            case curatedLook
+            case merchantFeature
+            case merchantRail
+            case postRail
+            case productBento
+            case exploreGrid
+            case relatedWorlds
+            case conversationalRefinement
+        }
+
+        let id: String
+        let kind: Kind
+        let title: String
+    }
+
+    let storyID: String
+    let family: Family
+    let blocks: [Block]
+
+    var validationIssues: [String] {
+        var issues: [String] = []
+        if storyID.isEmpty { issues.append("story ID must not be empty") }
+        if blocks.isEmpty { issues.append("recipe must contain blocks") }
+        let ids = blocks.map(\.id)
+        if Set(ids).count != ids.count { issues.append("block IDs must be unique") }
+        if blocks.contains(where: { $0.id.isEmpty || $0.title.isEmpty }) {
+            issues.append("block identity and title must not be empty")
+        }
+        return issues
+    }
+}
+
+enum EditorialWorldRecipeCatalog {
+    static func recipe(for storyID: String) -> EditorialWorldRecipe? {
+        recipes[storyID]
+    }
+
+    private static func block(
+        _ id: String,
+        _ kind: EditorialWorldRecipe.Block.Kind,
+        _ title: String
+    ) -> EditorialWorldRecipe.Block {
+        .init(id: id, kind: kind, title: title)
+    }
+
+    private static let recipes: [String: EditorialWorldRecipe] = {
+        let selfCare = EditorialWorldRecipe(
+            storyID: NikeSkimsWorldMedia.storyID,
+            family: .campaign,
+            blocks: [
+                block("opening-products", .productRail, "The collection"),
+                block("collections", .gallery, "Meet the collections"),
+                block("soft-structure", .productRail, "Soft structure"),
+                block("light-study", .diptych, "Light study"),
+                block("fabrics", .materialRail, "A study in fabric"),
+                block("support", .productRail, "Support in motion"),
+                block("color", .gallery, "Explore by color"),
+                block("movement-film", .film, "Movement"),
+                block("built-to-move", .productRail, "Built to move"),
+                block("build-look", .gallery, "Build the look"),
+                block("dark-study", .diptych, "Material study"),
+                block("movement-studies", .gallery, "Movement studies"),
+                block("complete-edit", .exploreGrid, "The complete edit"),
+            ]
+        )
+        let host = EditorialWorldRecipe(
+            storyID: "library-edit-0",
+            family: .merchant,
+            blocks: [
+                block("opening-products", .productRail, "From the edit"),
+                block("statement", .statement, "A table worth lingering around"),
+                block("kitchen-film", .film, "In the kitchen"),
+                block("scene-gallery", .gallery, "Set the scene"),
+                block("posts", .postRail, "From the shops"),
+                block("table-look", .curatedLook, "Build the table"),
+                block("merchant-feature", .merchantFeature, "Featured shop"),
+                block("material-detail", .diptych, "Linen, up close"),
+                block("image-pause", .fullBleedImage, "A quieter moment"),
+                block("ask", .conversationalRefinement, "Make it yours"),
+                block("categories", .categoryRail, "Explore the table"),
+                block("merchants", .merchantRail, "From the shops"),
+                block("makers", .merchantFeature, "More from the makers"),
+                block("bento", .productBento, "Objects in conversation"),
+                block("selection", .exploreGrid, "The full selection"),
+                block("related", .relatedWorlds, "More curated edits"),
+            ]
+        )
+#if DEBUG
+        assert(selfCare.validationIssues.isEmpty)
+        assert(host.validationIssues.isEmpty)
+#endif
+        return [selfCare.storyID: selfCare, host.storyID: host]
+    }()
+}
+
 enum TopicBlockMetrics {
     static let sectionSpacing: CGFloat = 44
     static let relaxedSectionSpacing: CGFloat = 48

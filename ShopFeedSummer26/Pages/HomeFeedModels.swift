@@ -1,5 +1,54 @@
 import SwiftUI
 
+/// The complete visual contract for a story card. Callers provide content;
+/// this module owns which chrome and commerce affordances belong on the card.
+struct FeedCardPresentation: Equatable {
+    enum Kind: Equatable {
+        case editorial
+        case commerce
+    }
+
+    enum Action: Equatable {
+        case overflow
+        case like
+        case thread
+        case share
+    }
+
+    let kind: Kind
+    let deck: String
+    let cta: String
+    let actions: [Action]
+    let showsProducts: Bool
+    let topScrimOpacity: Double
+    let bottomScrimOpacity: Double
+
+    static func resolve(story: FeedStory) -> Self {
+        if ShopCanvasLibrary.isLibraryStory(story) {
+            return Self(
+                kind: .editorial,
+                deck: LibraryArtDirection.editorialDeck(for: story)
+                    ?? story.subtitle,
+                cta: story.format == .world ? "Explore" : "See more",
+                actions: [.overflow],
+                showsProducts: false,
+                topScrimOpacity: 0.16,
+                bottomScrimOpacity: 0.28
+            )
+        }
+
+        return Self(
+            kind: .commerce,
+            deck: story.subtitle,
+            cta: story.destinationLabel,
+            actions: [.overflow, .like, .thread, .share],
+            showsProducts: true,
+            topScrimOpacity: 0.36,
+            bottomScrimOpacity: 0.46
+        )
+    }
+}
+
 struct SuggestedCollectionPresentation: Identifiable {
     let story: FeedStory
     let heroAssetName: String

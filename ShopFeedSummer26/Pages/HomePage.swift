@@ -1134,9 +1134,9 @@ struct HomePage: View {
         }()
         let feedbackForegroundColor: Color = usesDarkFeedbackIcons ? .black : .white
         let usesSimplifiedStoryActions: Bool = {
-            guard !coordinator.feedProductCarouselsVisible,
-                  case let .story(story) = entry else { return false }
-            return !story.rendersAsMerchantCard
+            guard case let .story(story) = entry else { return false }
+            return FeedCardPresentation.resolve(story: story).actions == [.overflow]
+                && !story.rendersAsMerchantCard
                 && story.id != WorldPrototypeCatalog.canvasID
         }()
 

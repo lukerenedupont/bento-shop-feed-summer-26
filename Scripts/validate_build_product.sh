@@ -57,8 +57,12 @@ for name in Testing.framework XCTest.framework XCTestCore.framework XCTestSuppor
   fi
 done
 if (( TEST_RUNTIME_KB > 0 )); then
-  APP_KB=$((APP_KB - TEST_RUNTIME_KB))
-  echo "Debug test-host overhead: ${TEST_RUNTIME_KB} KB (excluded from shipping app budget)"
+  # Hosted tests also instrument the app executable itself. Keep that test-only
+  # growth out of the shipping budget while leaving normal Debug/Release builds
+  # subject to the unchanged limit below.
+  TEST_EXECUTABLE_OVERHEAD_KB=4096
+  APP_KB=$((APP_KB - TEST_RUNTIME_KB - TEST_EXECUTABLE_OVERHEAD_KB))
+  echo "Debug test-host overhead: $((TEST_RUNTIME_KB + TEST_EXECUTABLE_OVERHEAD_KB)) KB (excluded from shipping app budget)"
 fi
 FEED_KB="$(du -sk "${FEED_BUNDLE}" | awk '{print $1}')"
 MAX_APP_KB=184320

@@ -421,30 +421,11 @@ struct UtilityBeltControlsSheet: View {
     @Bindable var preferences: UtilityBeltPreferences
     @Binding var isVisible: Bool
     @Binding var extendoEnabled: Bool
-    @Binding var feedProductCarouselsVisible: Bool
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
             List {
-                Section("Feed cards") {
-                    Toggle(isOn: $feedProductCarouselsVisible) {
-                        Label {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Show product carousels")
-                                Text("Turn off for full-screen media and titles only")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        } icon: {
-                            Image(systemName: "rectangle.stack")
-                                .foregroundStyle(Color(hex: "#5433EB"))
-                        }
-                    }
-                    .tint(Color(hex: "#5433EB"))
-                    .accessibilityIdentifier("feed-card-product-carousels")
-                }
-
                 Section("Utility belt") {
                     Button {
                         let visible = !isVisible

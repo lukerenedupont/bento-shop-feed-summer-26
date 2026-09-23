@@ -207,12 +207,16 @@ struct StoryFeedCard: View {
     @State private var productDeckDirection = 1
     @State private var productDeckIsSettling = false
 
+    private var presentation: FeedCardPresentation {
+        FeedCardPresentation.resolve(story: story)
+    }
+
     private var usesEditorialOnlyPresentation: Bool {
-        !coordinator.feedProductCarouselsVisible && productLayout != nil
+        presentation.kind == .editorial
     }
 
     private var visibleProductLayout: FeedCardProductLayout? {
-        usesEditorialOnlyPresentation ? nil : productLayout
+        presentation.showsProducts ? productLayout : nil
     }
 
     private var items: [ResolvedStoryProduct] {
@@ -629,11 +633,11 @@ struct StoryFeedCard: View {
 
     private var backgroundScrim: some View {
         let effectiveTopOpacity = usesEditorialOnlyPresentation
-            ? min(topScrimOpacity, 0.16)
+            ? min(topScrimOpacity, presentation.topScrimOpacity)
             : topScrimOpacity
         let bottomOpacity = usesEditorialOnlyPresentation
-            ? max(authoredCover?.textScrimOpacity ?? 0.20, 0.28)
-            : max(authoredCover?.textScrimOpacity ?? 0.34, 0.46)
+            ? max(authoredCover?.textScrimOpacity ?? 0.20, presentation.bottomScrimOpacity)
+            : max(authoredCover?.textScrimOpacity ?? 0.34, presentation.bottomScrimOpacity)
 
         return LinearGradient(
             stops: [
@@ -662,14 +666,14 @@ struct StoryFeedCard: View {
                     storyHeader
                 }
             }
-            Text(editorialDeck)
+            Text(presentation.deck)
                 .font(GravityFont.regular.fixedFont(size: 16))
                 .lineSpacing(3)
                 .foregroundStyle(.white.opacity(0.92))
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: 330, alignment: .leading)
                 .gravityShadow(GravityShadows.feedText)
-            Text(editorialCTA)
+            Text(presentation.cta)
                 .font(GravityFont.medium.fixedFont(size: 16))
                 .foregroundStyle(.white)
                 .padding(.horizontal, 22)
@@ -684,18 +688,6 @@ struct StoryFeedCard: View {
             width: max(width - (GravitySpacing.space20 * 2), 0),
             alignment: .leading
         )
-    }
-
-    private var editorialDeck: String {
-        if let libraryDeck = LibraryArtDirection.editorialDeck(for: story) {
-            return libraryDeck
-        }
-        if !story.subtitle.isEmpty { return story.subtitle }
-        return "A focused edit with a distinct point of view, designed to be explored as a complete World."
-    }
-
-    private var editorialCTA: String {
-        story.format == .world ? "Explore" : "See more"
     }
 
     private var storyHeader: some View {

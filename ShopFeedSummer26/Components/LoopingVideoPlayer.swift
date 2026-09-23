@@ -1,6 +1,20 @@
 import AVFoundation
 import SwiftUI
 
+/// Central policy for every ambient video surface. Views state intent and
+/// visibility; accessibility, power, and lifecycle constraints stay here.
+enum MediaPlaybackPolicy {
+    static func shouldPlay(
+        requested: Bool,
+        visible: Bool,
+        reduceMotion: Bool,
+        lowPowerMode: Bool,
+        sceneIsActive: Bool
+    ) -> Bool {
+        requested && visible && !reduceMotion && !lowPowerMode && sceneIsActive
+    }
+}
+
 /// A muted video player for feed card backgrounds.
 ///
 /// `playbackGroupID` lets two render surfaces share one AVQueuePlayer. This is
@@ -10,6 +24,7 @@ struct LoopingVideoPlayer: UIViewRepresentable {
     let urls: [URL]
     var loops: Bool
     var playbackEnabled: Bool
+    var isVisible: Bool
     var playbackGroupID: String?
     var videoGravity: AVLayerVideoGravity
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -19,12 +34,14 @@ struct LoopingVideoPlayer: UIViewRepresentable {
         url: URL,
         loops: Bool = true,
         playbackEnabled: Bool = true,
+        isVisible: Bool = true,
         playbackGroupID: String? = nil,
         videoGravity: AVLayerVideoGravity = .resizeAspectFill
     ) {
         self.urls = [url]
         self.loops = loops
         self.playbackEnabled = playbackEnabled
+        self.isVisible = isVisible
         self.playbackGroupID = playbackGroupID
         self.videoGravity = videoGravity
     }
@@ -33,28 +50,40 @@ struct LoopingVideoPlayer: UIViewRepresentable {
         urls: [URL],
         loops: Bool = true,
         playbackEnabled: Bool = true,
+        isVisible: Bool = true,
         playbackGroupID: String? = nil,
         videoGravity: AVLayerVideoGravity = .resizeAspectFill
     ) {
         self.urls = urls
         self.loops = loops
         self.playbackEnabled = playbackEnabled
+        self.isVisible = isVisible
         self.playbackGroupID = playbackGroupID
         self.videoGravity = videoGravity
+    }
+
+    private var policyAllowsPlayback: Bool {
+        MediaPlaybackPolicy.shouldPlay(
+            requested: playbackEnabled,
+            visible: isVisible,
+            reduceMotion: reduceMotion,
+            lowPowerMode: ProcessInfo.processInfo.isLowPowerModeEnabled,
+            sceneIsActive: scenePhase == .active
+        )
     }
 
     func makeUIView(context: Context) -> PlayerUIView {
         PlayerUIView(
             urls: urls,
             loops: loops,
-            playbackEnabled: playbackEnabled && !reduceMotion && scenePhase == .active,
+            playbackEnabled: policyAllowsPlayback,
             playbackGroupID: playbackGroupID,
             videoGravity: videoGravity
         )
     }
 
     func updateUIView(_ uiView: PlayerUIView, context: Context) {
-        uiView.setPlaybackEnabled(playbackEnabled && !reduceMotion && scenePhase == .active)
+        uiView.setPlaybackEnabled(policyAllowsPlayback)
         uiView.setVideoGravity(videoGravity)
         uiView.setSource(urls: urls, loops: loops, playbackGroupID: playbackGroupID)
     }

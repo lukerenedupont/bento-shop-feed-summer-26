@@ -165,6 +165,29 @@ final class FeedPlanningTests: XCTestCase {
         XCTAssertEqual(PersonalizedFeedCatalog.current.stories.first { $0.id == "test-story" }?.title, "After refresh")
     }
 
+    func testMediaPlaybackPolicyRequiresVisibilityAndRespectsUserAndSystemConstraints() {
+        XCTAssertTrue(MediaPlaybackPolicy.shouldPlay(
+            requested: true, visible: true, reduceMotion: false,
+            lowPowerMode: false, sceneIsActive: true
+        ))
+        XCTAssertFalse(MediaPlaybackPolicy.shouldPlay(
+            requested: true, visible: false, reduceMotion: false,
+            lowPowerMode: false, sceneIsActive: true
+        ))
+        XCTAssertFalse(MediaPlaybackPolicy.shouldPlay(
+            requested: true, visible: true, reduceMotion: true,
+            lowPowerMode: false, sceneIsActive: true
+        ))
+        XCTAssertFalse(MediaPlaybackPolicy.shouldPlay(
+            requested: true, visible: true, reduceMotion: false,
+            lowPowerMode: true, sceneIsActive: true
+        ))
+        XCTAssertFalse(MediaPlaybackPolicy.shouldPlay(
+            requested: true, visible: true, reduceMotion: false,
+            lowPowerMode: false, sceneIsActive: false
+        ))
+    }
+
     func testExplicitLocalWorldContextOverridesSubjectAndBuyerContext() {
         var context = WorldContext()
         context.set(.init(key: "budget", value: "500", source: .inferred, scope: .buyer))
