@@ -102,6 +102,11 @@ final class LibraryCatalogTests: XCTestCase {
             "image-pause", "ask", "merchant-spotlights", "categories",
             "merchants", "makers", "bento", "selection", "related",
         ])
+        let statement = try XCTUnwrap(host.blocks.first { $0.kind == .statement })
+        guard case .statement(let body) = statement.content else {
+            return XCTFail("Thoughtful Host statement must carry typed copy")
+        }
+        XCTAssertEqual(body, "Warm materials, useful objects, and small details for hosting that feels personal rather than perfect.")
         XCTAssertTrue(host.validationIssues.isEmpty)
     }
 
@@ -119,6 +124,7 @@ final class LibraryCatalogTests: XCTestCase {
             "story ID must not be empty",
             "block IDs must be unique",
             "block identity and title must not be empty",
+            "statement block requires statement content",
         ])
     }
 

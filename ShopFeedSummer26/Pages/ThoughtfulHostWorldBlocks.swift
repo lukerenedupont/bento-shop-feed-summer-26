@@ -4,7 +4,7 @@ import SwiftUI
 /// shared World renderer owns ordering; this adapter owns only block visuals.
 /// Demo posts retain their original merchant identity; no dates are invented.
 struct ThoughtfulHostWorldBlock: View {
-    let blockID: String
+    let block: EditorialWorldRecipe.Block
     let products: [ResolvedStoryProduct]
     @Environment(NavigationCoordinator.self) private var coordinator
     @State private var presentedPost: ShopPost?
@@ -25,16 +25,16 @@ struct ThoughtfulHostWorldBlock: View {
     @ViewBuilder
     var body: some View {
         Group {
-            switch blockID {
-            case "statement": statement
-            case "kitchen-film": featuredFilm
-            case "scene-gallery": productStoryGallery
-            case "posts": postRail
-            case "table-look": curatedTable
-            case "merchant-feature": portaFeature
-            case "material-detail": materialDetail
-            case "image-pause": fullBleedPause
-            case "ask": askRefinement
+            switch block.kind {
+            case .statement: statement
+            case .film: featuredFilm
+            case .gallery: productStoryGallery
+            case .postRail: postRail
+            case .curatedLook: curatedTable
+            case .merchantFeature: portaFeature
+            case .diptych: materialDetail
+            case .fullBleedImage: fullBleedPause
+            case .conversationalRefinement: askRefinement
             default: EmptyView()
             }
         }
@@ -61,17 +61,22 @@ struct ThoughtfulHostWorldBlock: View {
 
     private var statement: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("A table worth lingering around")
+            Text(block.title)
                 .font(GravityFont.expressiveBold.fixedFont(size: 34))
                 .tracking(-0.9)
                 .lineSpacing(-4)
-            Text("Warm materials, useful objects, and small details for hosting that feels personal rather than perfect.")
+            Text(statementBody)
                 .font(GravityFont.regular.fixedFont(size: 16))
                 .lineSpacing(3)
                 .foregroundStyle(.white.opacity(0.72))
         }
         .foregroundStyle(.white)
         .padding(.horizontal, 20)
+    }
+
+    private var statementBody: String {
+        guard case .statement(let body) = block.content else { return "" }
+        return body
     }
 
     @ViewBuilder

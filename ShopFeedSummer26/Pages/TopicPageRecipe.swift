@@ -42,9 +42,22 @@ struct EditorialWorldRecipe: Equatable {
             case conversationalRefinement
         }
 
+        enum Content: Equatable {
+            case none
+            case statement(body: String)
+        }
+
         let id: String
         let kind: Kind
         let title: String
+        let content: Content
+
+        init(id: String, kind: Kind, title: String, content: Content = .none) {
+            self.id = id
+            self.kind = kind
+            self.title = title
+            self.content = content
+        }
 
         /// Existing catalog-backed blocks use the standard renderer. Authored
         /// visual blocks return nil and are handled by the World's visual adapter.
@@ -87,6 +100,19 @@ struct EditorialWorldRecipe: Equatable {
         if blocks.contains(where: { $0.id.isEmpty || $0.title.isEmpty }) {
             issues.append("block identity and title must not be empty")
         }
+        if blocks.contains(where: {
+            guard $0.kind == .statement else { return false }
+            guard case .statement = $0.content else { return true }
+            return false
+        }) {
+            issues.append("statement block requires statement content")
+        }
+        if blocks.contains(where: {
+            guard case .statement(let body) = $0.content else { return false }
+            return body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }) {
+            issues.append("statement body must not be empty")
+        }
         return issues
     }
 }
@@ -99,9 +125,10 @@ enum EditorialWorldRecipeCatalog {
     private static func block(
         _ id: String,
         _ kind: EditorialWorldRecipe.Block.Kind,
-        _ title: String
+        _ title: String,
+        content: EditorialWorldRecipe.Block.Content = .none
     ) -> EditorialWorldRecipe.Block {
-        .init(id: id, kind: kind, title: title)
+        .init(id: id, kind: kind, title: title, content: content)
     }
 
     private static let recipes: [String: EditorialWorldRecipe] = {
@@ -129,7 +156,12 @@ enum EditorialWorldRecipeCatalog {
             family: .merchant,
             blocks: [
                 block("opening-products", .productRail, "From the edit"),
-                block("statement", .statement, "A table worth lingering around"),
+                block(
+                    "statement",
+                    .statement,
+                    "A table worth lingering around",
+                    content: .statement(body: "Warm materials, useful objects, and small details for hosting that feels personal rather than perfect.")
+                ),
                 block("kitchen-film", .film, "In the kitchen"),
                 block("scene-gallery", .gallery, "Set the scene"),
                 block("posts", .postRail, "From the shops"),

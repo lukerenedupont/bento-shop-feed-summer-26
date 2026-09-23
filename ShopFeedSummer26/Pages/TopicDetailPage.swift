@@ -676,7 +676,7 @@ struct TopicDetailPage: View {
         } else if block.kind == .relatedWorlds {
             collectionRail(title: block.title, cardHeight: TopicBlockMetrics.collectionHeight)
         } else {
-            ThoughtfulHostWorldBlock(blockID: block.id, products: products)
+            ThoughtfulHostWorldBlock(block: block, products: products)
         }
     }
 
