@@ -261,14 +261,15 @@ final class LibrarySmokeTests: XCTestCase {
         app.buttons["For the thoughtful host"].firstMatch.tap()
         let transitionHero = app.descendants(matching: .any)["world.transition-hero"]
         XCTAssertTrue(transitionHero.waitForExistence(timeout: 10))
-        XCTAssertGreaterThanOrEqual(transitionHero.frame.height, app.frame.height * 0.9)
+        XCTAssertGreaterThanOrEqual(transitionHero.frame.height, app.frame.height * 0.55)
+        XCTAssertLessThan(transitionHero.frame.height, app.frame.height * 0.8)
         XCTAssertLessThan(navigationSurface.frame.width, feedNavigationWidth * 0.5)
         XCTAssertTrue(app.descendants(matching: .any)["DYNAMIC_TYPEAHEAD_TEXT_INPUT"].exists)
         XCTAssertTrue(app.staticTexts["Warm, design-minded pieces for a table—and a home—that feels genuinely inviting."].exists)
-        app.swipeUp()
         let openingSection = app.staticTexts["From the edit"]
         XCTAssertTrue(openingSection.waitForExistence(timeout: 10))
-        XCTAssertLessThan(openingSection.frame.minY, app.frame.height * 0.70)
+        XCTAssertLessThan(openingSection.frame.minY, app.frame.height * 0.78)
+        XCTAssertTrue(app.staticTexts["Price at shop"].firstMatch.waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["Like"].exists)
         XCTAssertFalse(app.buttons["Thread"].exists)
         XCTAssertFalse(app.buttons["Share"].exists)
@@ -311,7 +312,11 @@ final class LibrarySmokeTests: XCTestCase {
             if element.exists && element.isHittable,
                element.frame.midY < app.frame.maxY - 120,
                element.frame.midY > app.frame.minY + 110 { break }
-            app.swipeUp()
+            if element.exists && element.frame.midY <= app.frame.minY + 110 {
+                app.swipeDown()
+            } else {
+                app.swipeUp()
+            }
         }
         XCTAssertTrue(element.isHittable)
     }

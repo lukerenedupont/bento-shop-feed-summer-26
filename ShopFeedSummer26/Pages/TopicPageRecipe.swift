@@ -186,10 +186,10 @@ enum EditorialWorldRecipeCatalog {
 }
 
 enum TopicBlockMetrics {
-    static let sectionSpacing: CGFloat = 44
-    static let relaxedSectionSpacing: CGFloat = 48
-    static let heroContentSpacing: CGFloat = 24
-    static let headingContentSpacing: CGFloat = 24
+    static let sectionSpacing: CGFloat = 36
+    static let relaxedSectionSpacing: CGFloat = 44
+    static let heroContentSpacing: CGFloat = 16
+    static let headingContentSpacing: CGFloat = 16
     static let productRowSpacing: CGFloat = 24
     static let compactProductWidth: CGFloat = 116
     static let mediumProductWidth: CGFloat = 132

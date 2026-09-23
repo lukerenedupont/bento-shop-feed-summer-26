@@ -324,7 +324,7 @@ struct TopicDetailPage: View {
     private func heroHeight(viewportHeight: CGFloat) -> CGFloat {
         let minimum: CGFloat = editorialWorldRecipe?.family == .merchant
             ? 500 : (topicPresentation.usesExactHeroLayout ? 526 : 560)
-        return max(minimum, viewportHeight)
+        return max(minimum, viewportHeight * 0.64)
     }
     private var transitionDeck: String { FeedCardPresentation.resolve(story: story).deck }
     private var windowSafeAreaTopInset: CGFloat {
@@ -573,10 +573,7 @@ struct TopicDetailPage: View {
                 alignment: .bottomLeading
             )
             .padding(.horizontal, GravitySpacing.space16)
-            .padding(
-                .bottom,
-                ShopCanvasLibrary.isEnabled ? 138 : GravitySpacing.space20
-            )
+            .padding(.bottom, ShopCanvasLibrary.isEnabled ? 48 : GravitySpacing.space20)
         }
         .frame(width: width, height: resolvedHeroHeight)
         .clipped()
@@ -602,7 +599,7 @@ struct TopicDetailPage: View {
                                 imageURL: item.product.imageURL,
                                 merchantName: item.merchant.displayName,
                                 productName: item.product.title,
-                                price: formatPrice(item.product),
+                                priceBadge: productCardPriceBadge(item.product),
                                 showFavoriteButton: true,
                                 favoriteIconHasContrastShadow: true
                             )

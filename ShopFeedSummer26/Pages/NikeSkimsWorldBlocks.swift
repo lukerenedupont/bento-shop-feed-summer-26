@@ -347,7 +347,7 @@ struct NikeSkimsWorldBlock: View {
                 imageURL: item.product.imageURL,
                 merchantName: item.merchant.displayName,
                 productName: item.product.title,
-                price: formatPrice(item.product),
+                priceBadge: productCardPriceBadge(item.product),
                 showFavoriteButton: true,
                 favoriteIconHasContrastShadow: true
             )

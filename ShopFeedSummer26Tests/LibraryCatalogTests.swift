@@ -209,10 +209,16 @@ final class LibraryCatalogTests: XCTestCase {
         XCTAssertTrue(ShopCanvasLibrary.stories.allSatisfy { $0.subtitle.isEmpty })
     }
 
-    func testUnknownPriceIsNotFreeAndRecordedCurrencyIsRetained() {
+    func testUnknownPriceIsNotFreeAndRecordedCurrencyIsRetained() throws {
         XCTAssertEqual(formatPrice("", currencyCode: ""), "")
         XCTAssertEqual(formatPrice("340.00", currencyCode: "USD"), "$340.00")
         XCTAssertTrue(formatPrice("340.00", currencyCode: "TRY").contains("TRY"))
+
+        let products = ShopCanvasLibrary.merchants.flatMap(\.products)
+        let unknown = try XCTUnwrap(products.first { $0.price.isEmpty })
+        let priced = try XCTUnwrap(products.first { !$0.price.isEmpty })
+        XCTAssertEqual(productCardPriceBadge(unknown), "Price at shop")
+        XCTAssertEqual(productCardPriceBadge(priced), formatPrice(priced))
     }
 
     func testWordmarkMatteRemovesOpaqueWhiteRectangle() throws {
