@@ -33,6 +33,7 @@ struct EditorialWorldRecipe: Equatable {
             case categoryRail
             case curatedLook
             case merchantFeature
+            case merchantSpotlights
             case merchantRail
             case postRail
             case productBento
@@ -44,6 +45,33 @@ struct EditorialWorldRecipe: Equatable {
         let id: String
         let kind: Kind
         let title: String
+
+        /// Existing catalog-backed blocks use the standard renderer. Authored
+        /// visual blocks return nil and are handled by the World's visual adapter.
+        var standardTopicBlock: TopicPageBlock? {
+            switch kind {
+            case .merchantSpotlights:
+                return .featuredDeals(title: title)
+            case .categoryRail:
+                return .categories(
+                    title: title,
+                    items: [
+                        .init(title: "Serve", query: .init(matching: ["tray", "bowl", "plate", "serve"], fallbackOffset: 0, count: 5)),
+                        .init(title: "Gather", query: .init(matching: ["table", "linen", "cloth", "napkin"], fallbackOffset: 4, count: 5)),
+                        .init(title: "Finish", query: .init(matching: ["glass", "vase", "candle", "object"], fallbackOffset: 8, count: 5)),
+                    ],
+                    snaps: true
+                )
+            case .merchantRail:
+                return .topMerchants(title: title)
+            case .merchantFeature where id == "makers":
+                return .brandGrid(title: title)
+            case .productBento:
+                return .bento(title: title)
+            default:
+                return nil
+            }
+        }
     }
 
     let storyID: String
@@ -110,6 +138,7 @@ enum EditorialWorldRecipeCatalog {
                 block("material-detail", .diptych, "Linen, up close"),
                 block("image-pause", .fullBleedImage, "A quieter moment"),
                 block("ask", .conversationalRefinement, "Make it yours"),
+                block("merchant-spotlights", .merchantSpotlights, "Merchant spotlights"),
                 block("categories", .categoryRail, "Explore the table"),
                 block("merchants", .merchantRail, "From the shops"),
                 block("makers", .merchantFeature, "More from the makers"),
@@ -244,27 +273,6 @@ struct TopicCuratedLookDefinition {
 }
 
 enum TopicPageRecipeCatalog {
-    /// PROTOTYPE: commerce beats used after the authored editorial spine in
-    /// the all-blocks Thoughtful Host World.
-    static let thoughtfulHostAllBlocks = TopicPageRecipe(
-        sectionSpacing: 52,
-        blocks: [
-            .featuredDeals(title: "Merchant spotlights"),
-            .categories(
-                title: "Explore the table",
-                items: [
-                    .init(title: "Serve", query: .init(matching: ["tray", "bowl", "plate", "serve"], fallbackOffset: 0, count: 5)),
-                    .init(title: "Gather", query: .init(matching: ["table", "linen", "cloth", "napkin"], fallbackOffset: 4, count: 5)),
-                    .init(title: "Finish", query: .init(matching: ["glass", "vase", "candle", "object"], fallbackOffset: 8, count: 5)),
-                ],
-                snaps: true
-            ),
-            .topMerchants(title: "From the shops"),
-            .brandGrid(title: "More from the makers"),
-            .bento(title: "Objects in conversation"),
-        ]
-    )
-
     static func recipe(
         for kind: TopicPageKind,
         contextualBentoTitle: String,

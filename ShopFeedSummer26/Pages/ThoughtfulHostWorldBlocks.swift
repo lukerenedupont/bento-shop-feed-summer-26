@@ -1,9 +1,10 @@
 import SwiftUI
 
-/// PROTOTYPE: one authored World. Reuse the native post rail with existing
-/// user-supplied demo posts, the shared merchant card, and a material diptych.
+/// Renders one authored Thoughtful Host block selected by its recipe. The
+/// shared World renderer owns ordering; this adapter owns only block visuals.
 /// Demo posts retain their original merchant identity; no dates are invented.
-struct ThoughtfulHostWorldPrototype: View {
+struct ThoughtfulHostWorldBlock: View {
+    let blockID: String
     let products: [ResolvedStoryProduct]
     @Environment(NavigationCoordinator.self) private var coordinator
     @State private var presentedPost: ShopPost?
@@ -21,17 +22,21 @@ struct ThoughtfulHostWorldPrototype: View {
         products.first { $0.product.sourceProductID == sourceID }
     }
 
+    @ViewBuilder
     var body: some View {
-        VStack(alignment: .leading, spacing: 52) {
-            statement
-            featuredFilm
-            productStoryGallery
-            postRail
-            curatedTable
-            portaFeature
-            materialDetail
-            fullBleedPause
-            askRefinement
+        Group {
+            switch blockID {
+            case "statement": statement
+            case "kitchen-film": featuredFilm
+            case "scene-gallery": productStoryGallery
+            case "posts": postRail
+            case "table-look": curatedTable
+            case "merchant-feature": portaFeature
+            case "material-detail": materialDetail
+            case "image-pause": fullBleedPause
+            case "ask": askRefinement
+            default: EmptyView()
+            }
         }
         .sheet(item: $presentedPost) { post in
             GeometryReader { geometry in

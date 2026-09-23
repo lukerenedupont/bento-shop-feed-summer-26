@@ -90,7 +90,12 @@ final class LibraryCatalogTests: XCTestCase {
         XCTAssertEqual(host.family, .merchant)
         XCTAssertEqual(host.blocks.first?.kind, .productRail)
         XCTAssertEqual(host.blocks.last?.kind, .relatedWorlds)
-        XCTAssertGreaterThanOrEqual(host.blocks.count, 12)
+        XCTAssertEqual(host.blocks.map(\.id), [
+            "opening-products", "statement", "kitchen-film", "scene-gallery",
+            "posts", "table-look", "merchant-feature", "material-detail",
+            "image-pause", "ask", "merchant-spotlights", "categories",
+            "merchants", "makers", "bento", "selection", "related",
+        ])
         XCTAssertTrue(host.validationIssues.isEmpty)
     }
 

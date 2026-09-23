@@ -11,20 +11,12 @@ struct TopicPresentedAssortment: Identifiable {
 private final class TopicHeaderScrollState {
     var showsTitle = false
 }
-/// Immersive destination for a tapped feed story. The Figma-derived header
-/// and first commerce rails resolve from the story, so every buyer and topic
-/// shares one presentation instead of branching into profile-specific views.
 struct TopicDetailPage: View {
     let story: FeedStory
     let merchants: [SampleMerchant]
-    /// Resolve the authored assortment once when navigation creates the
-    /// destination. This used to scan the full merchant catalog every time
-    /// SwiftUI evaluated any rail on the page.
     private let products: [ResolvedStoryProduct]
     private let topicPresentation: TopicPresentation
     private let worldDefinition: WorldDefinition?
-    /// The long rails share one stable assortment instead of rebuilding it
-    /// independently for every `productWindow` call.
     private let exploreProducts: [ResolvedStoryProduct]
     @Environment(NavigationCoordinator.self) private var coordinator
     @Environment(\.dismiss) private var dismiss
@@ -110,9 +102,6 @@ struct TopicDetailPage: View {
         let shifted = Array(products.dropFirst(offset).prefix(6))
         return shifted.count >= 3 ? shifted : Array(products.reversed().prefix(6))
     }
-    /// Prefer posts from merchants already represented in this topic. The
-    /// authenticated Shop feed remains the source of truth; we never invent a
-    /// social tile from catalog photography.
     private var recentPosts: [ShopPost] {
         let merchantNames = Set(relatedMerchants.map { normalizedMerchantName($0.displayName) })
         let verified = postService.posts(for: BuyerPreviewStore.shared.selected)
@@ -130,8 +119,6 @@ struct TopicDetailPage: View {
             .lowercased()
             .trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    /// Deal cards are brand-led, so they only render when we have a real
-    /// merchant wordmark rather than manufacturing a text approximation.
     private func hasRenderableDealWordmark(_ merchant: SampleMerchant) -> Bool {
         if UIImage(named: MerchantBrandAssets.wordmarkName(for: merchant.id)) != nil {
             return true
@@ -652,13 +639,9 @@ struct TopicDetailPage: View {
                 NikeSkimsWorldPrototype(products: products)
             case .merchant:
                 VStack(alignment: .leading, spacing: 52) {
-                    productRail(title: "From the edit", items: Array(products.prefix(4)), cardWidth: TopicBlockMetrics.mediumProductWidth)
-                    ThoughtfulHostWorldPrototype(products: products)
-                    ForEach(Array(TopicPageRecipeCatalog.thoughtfulHostAllBlocks.blocks.enumerated()), id: \.offset) { _, block in
-                        defaultBlockView(block, containerWidth: containerWidth)
+                    ForEach(editorialWorldRecipe.blocks) { block in
+                        merchantEditorialBlock(block, containerWidth: containerWidth)
                     }
-                    exploreMore(title: "The full selection", filters: [.all], containerWidth: containerWidth)
-                    collectionRail(title: "More curated edits", cardHeight: TopicBlockMetrics.collectionHeight)
                 }
                 .padding(.bottom, 120)
             }
@@ -681,6 +664,22 @@ struct TopicDetailPage: View {
             .padding(.bottom, 120)
         }
     }
+    /// Maps recipe blocks onto shared or authored rendering implementations.
+    @ViewBuilder
+    private func merchantEditorialBlock(_ block: EditorialWorldRecipe.Block, containerWidth: CGFloat) -> some View {
+        if block.kind == .productRail {
+            productRail(title: block.title, items: Array(products.prefix(4)), cardWidth: TopicBlockMetrics.mediumProductWidth)
+        } else if let standardBlock = block.standardTopicBlock {
+            defaultBlockView(standardBlock, containerWidth: containerWidth)
+        } else if block.kind == .exploreGrid {
+            exploreMore(title: block.title, filters: [.all], containerWidth: containerWidth)
+        } else if block.kind == .relatedWorlds {
+            collectionRail(title: block.title, cardHeight: TopicBlockMetrics.collectionHeight)
+        } else {
+            ThoughtfulHostWorldBlock(blockID: block.id, products: products)
+        }
+    }
+
     @ViewBuilder
     private func blockView(_ block: TopicPageBlock, containerWidth: CGFloat) -> some View {
         if let authoredBlock = topicPresentation.authoredBlock(for: block) {

@@ -142,7 +142,7 @@
 		9B4BAF4923D6C00594F5C5CA /* CachedAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACD1E2168C3779609CA48BE /* CachedAsyncImage.swift */; };
 		9C303CD037CB8D83360646A1 /* FeedCreationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0457AA3F2A1D05AFA3BDDC45 /* FeedCreationFlow.swift */; };
 		9C9C4E768F481DBBF61445E2 /* InjectableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96694C6EED1830A1ED8C4FF /* InjectableView.swift */; };
-		9EE0552A52746C67F2A3DFA3 /* ThoughtfulHostWorldPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1910262818A6C8132456EE30 /* ThoughtfulHostWorldPrototype.swift */; };
+		9EE0552A52746C67F2A3DFA3 /* ThoughtfulHostWorldBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1910262818A6C8132456EE30 /* ThoughtfulHostWorldBlocks.swift */; };
 		A041C240A789B223C9DAE295 /* AgentSuggestionChips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72ABAA98385BA17C78F00DC8 /* AgentSuggestionChips.swift */; };
 		A5A9C4A567FFE85BD6D90EEC /* WarmLightingBluDotBrandCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E1A573A940E934F04C9D35 /* WarmLightingBluDotBrandCard.swift */; };
 		A7E88F039954B5B789BC28C5 /* HolidayFeedHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81893883E934BAC0B3B769E2 /* HolidayFeedHeader.swift */; };
@@ -255,7 +255,7 @@
 		17A588205457B7125D9C517E /* ConversationStartersClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationStartersClient.swift; sourceTree = "<group>"; };
 		1900539FD305AC1A165342BB /* TryFavesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryFavesSheet.swift; sourceTree = "<group>"; };
 		190227BB0CFBCCDB54E36645 /* shopiconpainted2.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = shopiconpainted2.icon; sourceTree = "<group>"; };
-		1910262818A6C8132456EE30 /* ThoughtfulHostWorldPrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThoughtfulHostWorldPrototype.swift; sourceTree = "<group>"; };
+		1910262818A6C8132456EE30 /* ThoughtfulHostWorldBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThoughtfulHostWorldBlocks.swift; sourceTree = "<group>"; };
 		19528F8711C9D4A2008E30B3 /* LibraryWordmarkCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryWordmarkCatalog.swift; sourceTree = "<group>"; };
 		1C19A304A47A9AE92E877FF8 /* HomeUtilityPrototypeCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUtilityPrototypeCards.swift; sourceTree = "<group>"; };
 		1D89BFFAA56AD3F6CD49A24D /* BottomNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomNavBar.swift; sourceTree = "<group>"; };
@@ -523,7 +523,7 @@
 				B688BEC7F76E8968601FF28E /* StorePage.swift */,
 				31BC531098602EBF12CF58A9 /* StoryDetailPage.swift */,
 				6D860120DF5795DCF4608E92 /* StoryTopicPage.swift */,
-				1910262818A6C8132456EE30 /* ThoughtfulHostWorldPrototype.swift */,
+				1910262818A6C8132456EE30 /* ThoughtfulHostWorldBlocks.swift */,
 				6CEF99F49C84054848107162 /* TopicDetailPage.swift */,
 				79B5EE001CCDA550692C9022 /* TopicPageBlocks.swift */,
 				7163BC021837A3CE4059EA3A /* TopicPageRecipe.swift */,
@@ -1205,7 +1205,7 @@
 				EAEE9AD32F574178273E511B /* StoryFeedCard.swift in Sources */,
 				B9941023B1530544D245555F /* StoryTopicPage.swift in Sources */,
 				C2CCA16A0728B377D7E946A7 /* SuggestedCollectionsFeedCard.swift in Sources */,
-				9EE0552A52746C67F2A3DFA3 /* ThoughtfulHostWorldPrototype.swift in Sources */,
+				9EE0552A52746C67F2A3DFA3 /* ThoughtfulHostWorldBlocks.swift in Sources */,
 				1B22F19322E62C2BD328E135 /* TopicDetailPage.swift in Sources */,
 				F8959E4172C75BEC9A15B753 /* TopicPageBlocks.swift in Sources */,
 				5214052977BAFDB80B763160 /* TopicPageRecipe.swift in Sources */,
