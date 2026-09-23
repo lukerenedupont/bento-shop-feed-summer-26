@@ -51,7 +51,9 @@ struct PrototypeFeedbackActions: View {
     var appliesShadow = true
     var includesOverflow = false
     var includesVolume = false
+    var includesLike = true
     var includesThread = true
+    var includesShare = true
     var usesPostActionOrder = false
     var overflowOnly = false
     var onOverflowTap: (() -> Void)?
@@ -80,9 +82,9 @@ struct PrototypeFeedbackActions: View {
         var actions: [Action] = []
         if includesOverflow { actions.append(.more) }
         if includesVolume { actions.append(.volume) }
-        actions.append(.like)
+        if includesLike { actions.append(.like) }
         if includesThread { actions.append(.thread) }
-        actions.append(.share)
+        if includesShare { actions.append(.share) }
         return actions
     }
 

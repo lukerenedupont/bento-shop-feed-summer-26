@@ -335,7 +335,8 @@ struct TopicDetailPage: View {
         }
     }
     private var heroHeight: CGFloat {
-        topicPresentation.usesExactHeroLayout ? 526 : 560
+        if editorialWorldRecipe?.family == .merchant { return 500 }
+        return topicPresentation.usesExactHeroLayout ? 526 : 560
     }
     private var windowSafeAreaTopInset: CGFloat {
         guard let windowScene = UIApplication.shared.connectedScenes
@@ -372,7 +373,7 @@ struct TopicDetailPage: View {
                             .background { scrolledSurfaceBackground }
                     }
                 }
-                .contentMargins(.bottom, ShopCanvasLibrary.isEnabled ? 112 : 0, for: .scrollContent)
+                .contentMargins(.bottom, ShopCanvasLibrary.isEnabled ? 144 : 0, for: .scrollContent)
                 .scrollBounceBehavior(.basedOnSize)
                 .onScrollGeometryChange(for: CGFloat.self) { scrollGeometry in
                     scrollGeometry.contentOffset.y
@@ -532,8 +533,6 @@ struct TopicDetailPage: View {
                     endPoint: .bottom
                 )
                 .frame(height: 190)
-                // A solid overlap prevents a one-pixel compositing seam where
-                // the hero hands off to the page surface.
                 surfaceColor.frame(height: 12)
             }
             if !topicPresentation.usesExactHeroLayout {
@@ -666,7 +665,6 @@ struct TopicDetailPage: View {
             .padding(.bottom, 120)
         }
     }
-    /// Maps recipe blocks onto shared or authored rendering implementations.
     @ViewBuilder
     private func merchantEditorialBlock(_ block: EditorialWorldRecipe.Block, containerWidth: CGFloat) -> some View {
         if block.kind == .productRail {
@@ -1080,7 +1078,9 @@ struct TopicDetailPage: View {
             foregroundColor: .white,
             appliesShadow: true,
             includesOverflow: true,
-            includesVolume: false
+            includesVolume: false,
+            includesThread: false,
+            includesShare: false
         )
     }
 }

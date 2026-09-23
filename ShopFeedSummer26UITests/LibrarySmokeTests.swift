@@ -267,7 +267,21 @@ final class LibrarySmokeTests: XCTestCase {
         XCTAssertFalse(app.staticTexts["View at shop"].exists)
         XCTAssertFalse(app.staticTexts["17 selected finds"].exists)
         app.buttons["For the thoughtful host"].firstMatch.tap()
-        XCTAssertTrue(app.staticTexts["From the edit"].waitForExistence(timeout: 10))
+        let openingSection = app.staticTexts["From the edit"]
+        XCTAssertTrue(openingSection.waitForExistence(timeout: 10))
+        XCTAssertLessThan(openingSection.frame.minY, app.frame.height * 0.70)
+        XCTAssertTrue(app.buttons["Like"].exists)
+        XCTAssertFalse(app.buttons["Thread"].exists)
+        XCTAssertFalse(app.buttons["Share"].exists)
+        let composer = app.descendants(matching: .any)["DYNAMIC_TYPEAHEAD_TEXT_INPUT"]
+        XCTAssertTrue(composer.waitForExistence(timeout: 10))
+        let openingProduct = app.buttons.matching(
+            NSPredicate(format: "label CONTAINS %@", "Kitchen Apron Lemonade")
+        ).allElementsBoundByIndex.first { $0.frame.intersects(app.frame) }
+        XCTAssertNotNil(openingProduct)
+        if let openingProduct {
+            XCTAssertLessThan(openingProduct.frame.maxY, composer.frame.minY)
+        }
         XCTAssertTrue(app.staticTexts["Djerf Avenue"].firstMatch.exists)
         XCTAssertFalse(app.staticTexts["djerfavenue.com"].exists)
         XCTAssertFalse(app.staticTexts["View at shop"].exists)
