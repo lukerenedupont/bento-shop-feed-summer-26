@@ -481,9 +481,6 @@ struct HomePage: View {
                 Task { @MainActor in
                     try? await Task.sleep(for: .milliseconds(360))
                     expandingStoryID = nil
-                    withAnimation(.easeOut(duration: 0.18)) {
-                        coordinator.showNavBar = true
-                    }
                 }
             }
             syncTopicBackAction()
@@ -1547,9 +1544,9 @@ struct HomePage: View {
         func beginSharedExpansion() {
             coordinator.resetScrollState()
             expandingStoryID = story.id
-            withAnimation(.easeOut(duration: 0.16)) {
-                coordinator.showNavBar = false
-            }
+            // Keep Julian's UIKit owner mounted. Activating the World context
+            // drives its native tabs-to-composer swap while the card expands.
+            coordinator.showNavBar = true
         }
 
         if story.id.hasPrefix("custom-feed-") {

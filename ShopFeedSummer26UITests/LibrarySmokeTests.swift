@@ -255,10 +255,15 @@ final class LibrarySmokeTests: XCTestCase {
         XCTAssertGreaterThan(artwork.frame.height, app.frame.height * 0.8)
         XCTAssertFalse(app.staticTexts["View at shop"].exists)
         XCTAssertFalse(app.staticTexts["17 selected finds"].exists)
+        let navigationSurface = app.descendants(matching: .any)["navigation-tab-surface"]
+        XCTAssertTrue(navigationSurface.waitForExistence(timeout: 10))
+        let feedNavigationWidth = navigationSurface.frame.width
         app.buttons["For the thoughtful host"].firstMatch.tap()
         let transitionHero = app.descendants(matching: .any)["world.transition-hero"]
         XCTAssertTrue(transitionHero.waitForExistence(timeout: 10))
         XCTAssertGreaterThanOrEqual(transitionHero.frame.height, app.frame.height * 0.9)
+        XCTAssertLessThan(navigationSurface.frame.width, feedNavigationWidth * 0.5)
+        XCTAssertTrue(app.descendants(matching: .any)["DYNAMIC_TYPEAHEAD_TEXT_INPUT"].exists)
         XCTAssertTrue(app.staticTexts["Warm, design-minded pieces for a table—and a home—that feels genuinely inviting."].exists)
         app.swipeUp()
         let openingSection = app.staticTexts["From the edit"]
@@ -283,8 +288,10 @@ final class LibrarySmokeTests: XCTestCase {
         app.swipeUp()
         XCTAssertTrue(app.staticTexts["From the shops"].waitForExistence(timeout: 5))
         capture(app, name: "World — simplified blocks")
+        let compactNavigationWidth = navigationSurface.frame.width
         app.buttons["Close"].firstMatch.tap()
         XCTAssertTrue(app.buttons["Home"].waitForExistence(timeout: 10))
+        XCTAssertGreaterThan(navigationSurface.frame.width, compactNavigationWidth * 2)
     }
 
     @MainActor

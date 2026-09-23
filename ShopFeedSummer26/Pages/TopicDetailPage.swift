@@ -435,10 +435,7 @@ struct TopicDetailPage: View {
         .onAppear { if !ShopCanvasLibrary.isEnabled { coordinator.showNavBar = true } }
         .onDisappear {
             coordinator.resetScrollState()
-            if coordinator.navigationDepth == 0 {
-                coordinator.showNavBar = false
-                restoreNavigationAfterSharedTransition()
-            }
+            coordinator.showNavBar = true
         }
     }
     private func hero(width: CGFloat, viewportHeight: CGFloat) -> some View {
@@ -1015,21 +1012,11 @@ struct TopicDetailPage: View {
         .frame(width: width, height: windowSafeAreaTopInset + 72, alignment: .top)
     }
     private func closeTopic() {
-        withAnimation(.easeOut(duration: 0.14)) {
-            coordinator.showNavBar = false
-        }
+        coordinator.showNavBar = true
         if coordinator.homePath.isEmpty, coordinator.topicBackAction != nil {
             coordinator.popCurrentPage()
         } else {
             dismiss()
-        }
-        restoreNavigationAfterSharedTransition()
-    }
-
-    private func restoreNavigationAfterSharedTransition() {
-        Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(360))
-            withAnimation(.easeOut(duration: 0.18)) { coordinator.showNavBar = true }
         }
     }
 
