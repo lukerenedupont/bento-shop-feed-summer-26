@@ -40,7 +40,8 @@ enum LibraryArtDirection {
     }
 
     static func cover(for story: FeedStory) -> Cover? {
-        ShoppingResearchCatalog.world(for: story.id)?.cover ?? group(for: story).flatMap { byGroup[$0] }
+        if story.id == ReadingCornerCatalog.storyID { return ReadingCornerCatalog.snapshot.cover }
+        return ShoppingResearchCatalog.world(for: story.id)?.cover ?? group(for: story).flatMap { byGroup[$0] }
     }
 
     static func railProducts(_ products: [ResolvedStoryProduct], for story: FeedStory) -> [ResolvedStoryProduct] {
@@ -51,6 +52,7 @@ enum LibraryArtDirection {
     }
 
     static func editorialDeck(for story: FeedStory) -> String? {
+        if story.id == ReadingCornerCatalog.storyID { return ReadingCornerCatalog.deck }
         if let world = ShoppingResearchCatalog.world(for: story.id) { return world.deck }
         guard let group = group(for: story) else { return nil }
         let decks = [

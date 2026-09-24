@@ -257,8 +257,10 @@ final class LibraryCatalogTests: XCTestCase {
         let expectedIDs = ShopCanvasLibrary.manifest.selectedIds.filter { id in
             productsByID[id].map { !$0.merchantIDs.filter(confirmedIDs.contains).isEmpty } == true
         }
-        XCTAssertEqual(ShopCanvasLibrary.curatedProducts.count, 232)
-        XCTAssertEqual(ShopCanvasLibrary.curatedProducts.map(\.id), expectedIDs + ShoppingResearchCatalog.snapshot.offers.map(\.id))
+        XCTAssertEqual(ShopCanvasLibrary.curatedProducts.count, 241)
+        XCTAssertEqual(ShopCanvasLibrary.curatedProducts.map(\.id), expectedIDs
+                       + ShoppingResearchCatalog.snapshot.offers.map(\.id)
+                       + ReadingCornerCatalog.snapshot.pieces.map(\.product.id))
         let all = ShopCanvasLibrary.stories.first { $0.id == "library-edit-all" }!
         XCTAssertEqual(all.products.map(\.productID), ShopCanvasLibrary.curatedProducts.map(\.nativeID))
         XCTAssertEqual(ShopCanvasLibrary.merchants.count, 83)

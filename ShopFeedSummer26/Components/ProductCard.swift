@@ -87,6 +87,8 @@ struct ProductCard: View {
     var style: Style = .grid
     var merchantLogoImage: Image? = nil
     var merchantLogoURL: String? = nil
+    /// Tall furniture can opt into full-product framing without changing other cards.
+    var gridImageContentMode: ContentMode = .fill
 
     // MARK: - Private
 
@@ -245,12 +247,12 @@ struct ProductCard: View {
         if let image {
             image
                 .resizable()
-                .scaledToFill()
+                .aspectRatio(contentMode: gridImageContentMode)
         } else if let imageURL, let url = URL(string: imageURL) {
             CachedAsyncImage(url: url) { phase in
                 switch phase {
                 case .success(let loaded):
-                    loaded.resizable().scaledToFill()
+                    loaded.resizable().aspectRatio(contentMode: gridImageContentMode)
                 case .failure:
                     imageFallback
                 default:

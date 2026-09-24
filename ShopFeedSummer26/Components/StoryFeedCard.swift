@@ -679,15 +679,23 @@ struct StoryFeedCard: View {
                     storyHeader
                 }
             }
-            Text(presentation.deck)
-                .font(GravityFont.regular.fixedFont(size: 16))
-                .lineSpacing(3)
-                .foregroundStyle(.white.opacity(0.92))
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: 330, alignment: .leading)
-                .gravityShadow(GravityShadows.feedText)
+            if story.id == ReadingCornerCatalog.storyID {
+                LibraryMerchantWordmark(merchantID: ReadingCornerCatalog.merchantID, onDark: true)
+                    .frame(width: 120, height: 28, alignment: .leading)
+                    .accessibilityLabel("The Oblist")
+            } else {
+                Text(presentation.deck)
+                    .font(GravityFont.regular.fixedFont(size: 16))
+                    .lineSpacing(3)
+                    .foregroundStyle(.white.opacity(0.92))
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: 330, alignment: .leading)
+                    .gravityShadow(GravityShadows.feedText)
+            }
             if let world = ShoppingResearchCatalog.world(for: story.id) {
                 ResearchFeedSummary(world: world).padding(.vertical, 4)
+            } else if story.id == ReadingCornerCatalog.storyID {
+                ReadingCornerFeedSummary().padding(.vertical, 4)
             }
             Text(presentation.cta)
                 .font(GravityFont.medium.fixedFont(size: 16))

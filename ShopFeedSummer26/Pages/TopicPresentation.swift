@@ -96,6 +96,10 @@ enum TopicPresentationCatalog {
     static func presentation(for story: FeedStory) -> TopicPresentation {
         let result: TopicPresentation
         switch story.id {
+        case ReadingCornerCatalog.storyID:
+            result = TopicPresentation(kind: .standard, fixedSurfaceHex: "#42392E",
+                                       heroFallbackAsset: nil, heroTitleOverride: "A corner to\nget lost in.",
+                                       merchantStyle: .standard, authoredBlocks: [:])
         case "kyle-argizari-lighting":
             result = TopicPresentation(
                 kind: .warmDesignerLighting,

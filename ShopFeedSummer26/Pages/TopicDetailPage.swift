@@ -229,9 +229,6 @@ struct TopicDetailPage: View {
             blue: sampledSurfaceColor.blue
         )
     }
-    /// The hero keeps the authored topic color at full strength. Commerce
-    /// content gradually washes that color toward white so long pages feel
-    /// calmer without creating a hard color seam below the film.
     private var scrolledSurfaceBackground: some View {
         let softeningOpacity = topicPresentation.softensLongPageSurface ? 0.09 : 0
         return surfaceColor
@@ -247,7 +244,9 @@ struct TopicDetailPage: View {
                 }
             }
     }
+    private var isPersonalEdit: Bool { story.id == ReadingCornerCatalog.storyID || ShoppingResearchCatalog.world(for: story.id) != nil }
     private var heroVideoURL: URL? {
+        if story.id == ReadingCornerCatalog.storyID { return nil }
         if let film = ShoppingResearchCatalog.world(for: story.id)?.coverFilm { return film.videoURL }
         if NikeSkimsWorldMedia.isStory(story) {
             return NikeSkimsWorldMedia.coverFilmURL
@@ -323,7 +322,8 @@ struct TopicDetailPage: View {
         }
     }
     private func heroHeight(viewportHeight: CGFloat) -> CGFloat {
-        if ShoppingResearchCatalog.world(for: story.id) != nil { return max(500, viewportHeight * 0.58) }
+        if story.id == ReadingCornerCatalog.storyID { return max(380, viewportHeight * 0.46) }
+        if isPersonalEdit { return max(500, viewportHeight * 0.58) }
         let minimum: CGFloat = editorialWorldRecipe?.family == .merchant
             ? 500 : (topicPresentation.usesExactHeroLayout ? 526 : 560)
         return max(minimum, viewportHeight * 0.64)
@@ -364,9 +364,7 @@ struct TopicDetailPage: View {
                             .background { scrolledSurfaceBackground }
                     }
                 }
-                .contentMargins(.bottom, ShoppingResearchCatalog.world(for: story.id) != nil
-                                ? 0 : (ShopCanvasLibrary.isEnabled ? 144 : 0), for: .scrollContent)
-                .scrollBounceBehavior(.basedOnSize)
+                .modifier(TopicScrollBehavior(isPersonalEdit: isPersonalEdit))
                 .onScrollGeometryChange(for: CGFloat.self) { scrollGeometry in
                     scrollGeometry.contentOffset.y
                 } action: { _, offset in
@@ -437,17 +435,17 @@ struct TopicDetailPage: View {
         }
         .onAppear {
             if !ShopCanvasLibrary.isEnabled { coordinator.showNavBar = true }
-            if ShoppingResearchCatalog.world(for: story.id) != nil { coordinator.julianShell.navigationBackdropColor = surfaceColor }
+            if isPersonalEdit { coordinator.julianShell.navigationBackdropColor = surfaceColor }
         }
         .onChange(of: sampledSurfaceColor) { _, _ in
-            if ShoppingResearchCatalog.world(for: story.id) != nil {
+            if isPersonalEdit {
                 coordinator.julianShell.navigationBackdropColor = surfaceColor
             }
         }
         .onDisappear {
             coordinator.resetScrollState()
             coordinator.showNavBar = true
-            if ShoppingResearchCatalog.world(for: story.id) != nil {
+            if isPersonalEdit {
                 coordinator.julianShell.navigationBackdropColor = nil
             }
         }
@@ -531,7 +529,7 @@ struct TopicDetailPage: View {
                 .frame(height: 190)
                 surfaceColor.frame(height: 12)
             }
-            if !topicPresentation.usesExactHeroLayout && ShoppingResearchCatalog.world(for: story.id) == nil {
+            if !topicPresentation.usesExactHeroLayout && !isPersonalEdit {
                 heroFeedbackPill(layout: .vertical)
                     .frame(
                         maxWidth: .infinity,
@@ -631,7 +629,8 @@ struct TopicDetailPage: View {
     }
     @ViewBuilder
     private func merchandising(containerWidth: CGFloat) -> some View {
-        if let research = ShoppingResearchCatalog.world(for: story.id) {
+        if story.id == ReadingCornerCatalog.storyID { ReadingCornerContent() }
+        else if let research = ShoppingResearchCatalog.world(for: story.id) {
             ShoppingResearchContent(world: research)
         } else if let editorialWorldRecipe {
             switch editorialWorldRecipe.family {

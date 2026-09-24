@@ -50,11 +50,14 @@ case "${DESTINATION}" in
   self-care)
     xcrun simctl launch "${DEVICE_ID}" "${BUNDLE_ID}" -previewStory library-edit-9
     ;;
+  reading-corner)
+    xcrun simctl launch "${DEVICE_ID}" "${BUNDLE_ID}" -previewStory library-edit-oblist-reading-corner
+    ;;
   home)
     xcrun simctl launch "${DEVICE_ID}" "${BUNDLE_ID}"
     ;;
   *)
-    echo "error: Unknown destination '${DESTINATION}'. Use: host, self-care, or home."
+    echo "error: Unknown destination '${DESTINATION}'. Use: host, self-care, reading-corner, or home."
     exit 2
     ;;
 esac

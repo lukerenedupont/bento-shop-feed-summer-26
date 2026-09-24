@@ -2,6 +2,208 @@ import XCTest
 
 final class LibrarySmokeTests: XCTestCase {
     @MainActor
+    func testCornerCardCanBeLiftedAndThrownVerticallyWithoutScrollingWorld() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-previewStory", "library-edit-oblist-reading-corner"]
+        app.launch()
+        let card = app.buttons["corner.product.chair"]
+        XCTAssertTrue(card.waitForExistence(timeout: 30))
+        scrollTo(card, in: app, attempts: 4)
+        let original = Int((card.value as? String ?? "1").prefix(1)) ?? 1
+        let next = original % 5 + 1
+        let initialY = card.frame.minY
+        let start = card.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6))
+        let end = card.coordinate(withNormalizedOffset: CGVector(dx: 0.64, dy: 0.22))
+        start.press(forDuration: 0.25, thenDragTo: end, withVelocity: .slow, thenHoldForDuration: 0.3)
+        XCTAssertTrue(waitForValue(card, equalTo: "\(next) of 5"), "A lifted card can be thrown up, not only paged horizontally")
+        XCTAssertEqual(card.frame.minY, initialY, accuracy: 3, "The grabbed card must own the gesture, not scroll the World")
+        capture(app, name: "Oblist — physical card throw")
+        card.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
+            .press(forDuration: 0.25, thenDragTo: card.coordinate(withNormalizedOffset: CGVector(dx: 0.4, dy: 0.68)),
+                   withVelocity: .slow, thenHoldForDuration: 0.3)
+        XCTAssertTrue(waitForValue(card, equalTo: "\(original) of 5"))
+    }
+
+    @MainActor
+    func testCornerDeckFillsSpaceAndSwipingLightUpdatesTotal() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-previewStory", "library-edit-oblist-reading-corner"]
+        app.launch()
+        let chair = app.buttons["corner.product.chair"]
+        XCTAssertTrue(chair.waitForExistence(timeout: 30))
+        XCTAssertGreaterThanOrEqual(chair.frame.width, app.frame.width - 56)
+        XCTAssertEqual(chair.frame.height / chair.frame.width, 4.0 / 3.0, accuracy: 0.02)
+        XCTAssertLessThan(app.descendants(matching: .any)["corner.request"].frame.maxY, chair.frame.minY)
+        XCTAssertFalse(app.buttons["corner.swap.chair"].exists)
+        let lightRole = app.buttons["corner.role.light"]
+        scrollTo(lightRole, in: app, attempts: 3)
+        XCTAssertFalse(app.staticTexts["Swipe to choose · Tap for details"].exists)
+        XCTAssertFalse(app.staticTexts["USD · Tax & shipping extra"].exists)
+        capture(app, name: "Oblist — actual product cutout controls")
+        lightRole.tap()
+        let light = app.buttons["corner.product.light"]
+        scrollTo(light, in: app, attempts: 3)
+        if light.value as? String != "1 of 2" { light.swipeRight(); XCTAssertTrue(waitForValue(light, equalTo: "1 of 2")) }
+        let baseline = cornerAmount(app.staticTexts["corner.subtotal"].label)
+        let before = light.value as? String
+        app.swipeUp()
+        XCTAssertEqual(light.value as? String, before, "Vertical scrolling cannot select another piece")
+        scrollTo(light, in: app, attempts: 3)
+        light.swipeLeft()
+        XCTAssertTrue(waitForValue(light, equalTo: "2 of 2"))
+        XCTAssertEqual(cornerAmount(app.staticTexts["corner.subtotal"].label), baseline - 943)
+        capture(app, name: "Oblist — selected light stack and updated total")
+        light.swipeRight()
+        XCTAssertTrue(waitForValue(light, equalTo: "1 of 2"))
+        XCTAssertEqual(cornerAmount(app.staticTexts["corner.subtotal"].label), baseline)
+        let tableRole = app.buttons["corner.role.table"]
+        scrollTo(tableRole, in: app, attempts: 3)
+        tableRole.tap()
+        XCTAssertTrue(app.buttons["corner.product.table"].waitForExistence(timeout: 5))
+        app.buttons["corner.role.chair"].tap()
+        XCTAssertTrue(chair.waitForExistence(timeout: 5))
+        XCTAssertEqual(cornerAmount(app.staticTexts["corner.subtotal"].label), baseline, "Changing the active role does not change the set")
+    }
+
+    @MainActor
+    func testRoomCutoutsDragIndependentlyAndKeepTheSelectedSet() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-previewStory", "library-edit-oblist-reading-corner"]
+        app.launch()
+        let room = app.buttons["corner.room"]
+        XCTAssertTrue(room.waitForExistence(timeout: 30))
+        let total = app.staticTexts["corner.subtotal"].label
+        scrollTo(room, in: app, attempts: 6)
+        room.tap()
+        XCTAssertTrue(app.descendants(matching: .any)["corner.room-board"].waitForExistence(timeout: 5))
+        let board = app.descendants(matching: .any)["corner.room-board"].firstMatch
+        let chair = board.descendants(matching: .any)["corner.room-piece.chair"].firstMatch
+        let table = board.descendants(matching: .any)["corner.room-piece.table"].firstMatch
+        let before = chair.frame.midX
+        let tableBefore = table.frame.midX
+        let grab = chair.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        grab.press(forDuration: 0.2, thenDragTo: grab.withOffset(CGVector(dx: 50, dy: -10)))
+        XCTAssertGreaterThan(chair.frame.midX, before + 25)
+        XCTAssertEqual(table.frame.midX, tableBefore, accuracy: 1)
+        XCTAssertTrue(app.staticTexts[total].exists)
+        capture(app, name: "Oblist — freely arranged product cutouts")
+        app.buttons["Done"].tap()
+    }
+
+    @MainActor
+    func testCornerStyleDirectionsAndCategoriesStayShoppable() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-previewStory", "library-edit-oblist-reading-corner"]
+        app.launch()
+        XCTAssertTrue(app.buttons["corner.product.chair"].waitForExistence(timeout: 30))
+        let soft = app.buttons["corner.direction.soft"]
+        scrollTo(soft, in: app, attempts: 8)
+        soft.tap()
+        XCTAssertTrue(app.staticTexts["Soft & sculptural"].waitForExistence(timeout: 5))
+        scrollTo(app.staticTexts["Soft & sculptural"], in: app, attempts: 3)
+        XCTAssertTrue(app.staticTexts["Brasilia Lounge Chair, Textile"].exists)
+        capture(app, name: "Oblist — soft direction and grouped products")
+        let tables = app.buttons["corner.category.tables"]
+        scrollTo(tables, in: app, attempts: 4)
+        capture(app, name: "Oblist — visual shopping categories")
+        tables.tap()
+        XCTAssertTrue(app.navigationBars["Side tables"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Cubo Side Table"].exists)
+        XCTAssertTrue(app.staticTexts["Rivet Side Table | Aluminum"].exists)
+        capture(app, name: "Oblist — side-table assortment")
+        app.navigationBars["Side tables"].buttons["Close"].tap()
+        XCTAssertTrue(app.navigationBars["Side tables"].waitForNonExistence(timeout: 5))
+        let frama = app.buttons["corner.shop.gid://shopify/Shop/83980288319"]
+        scrollTo(frama, in: app, attempts: 4)
+        capture(app, name: "Oblist — home merchants and related stories")
+        XCTAssertTrue(frama.isHittable)
+    }
+
+    @MainActor
+    func testOblistChairDeckCyclesPersistsAndCarriesSetIntoRoomBoard() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-previewStory", "library-edit-oblist-reading-corner"]
+        app.launch()
+        let subtotal = app.staticTexts["corner.subtotal"]
+        XCTAssertTrue(subtotal.waitForExistence(timeout: 30))
+        capture(app, name: "Oblist — inspiration hero and selected products")
+        let chair = app.buttons["corner.product.chair"]
+        scrollTo(chair, in: app, attempts: 4)
+        for _ in 0..<5 {
+            if chair.value as? String == "1 of 5" { break }
+            let before = chair.value as? String
+            chair.swipeRight()
+            XCTAssertTrue(waitForValueChange(chair, from: before))
+        }
+        let originalTotal = subtotal.label
+        capture(app, name: "Oblist — swipeable chair pile")
+        for next in [2, 3, 4, 5, 1, 2] {
+            chair.swipeLeft()
+            XCTAssertTrue(waitForValue(chair, equalTo: "\(next) of 5"))
+        }
+        capture(app, name: "Oblist — second chair selected from five")
+        let expectedTotal = subtotal.label
+        XCTAssertEqual(cornerAmount(expectedTotal), cornerAmount(originalTotal) - 536)
+        let room = app.buttons["corner.room"]
+        scrollTo(room, in: app, attempts: 4)
+        capture(app, name: "Oblist — selected set and room next step")
+        room.tap()
+        XCTAssertTrue(app.descendants(matching: .any)["corner.room-board"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Small Palma Chair"].exists)
+        XCTAssertTrue(app.staticTexts[expectedTotal].exists)
+        XCTAssertTrue(app.buttons["Add your room photo"].exists)
+        XCTAssertTrue(app.buttons["About this room preview"].exists)
+        capture(app, name: "Oblist — same product cutouts in perspective room")
+        let roomChair = app.descendants(matching: .any)["corner.room-board"].firstMatch
+            .descendants(matching: .any)["corner.room-piece.chair"].firstMatch
+        XCTAssertTrue(roomChair.exists)
+        let previousX = roomChair.frame.midX
+        let grab = roomChair.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        grab.press(forDuration: 0.15, thenDragTo: grab.withOffset(CGVector(dx: 50, dy: -10)))
+        XCTAssertGreaterThan(roomChair.frame.midX, previousX + 25)
+        app.buttons["About this room preview"].tap()
+        XCTAssertTrue(app.alerts["About this preview"].waitForExistence(timeout: 5))
+        app.alerts.buttons["OK"].tap()
+        app.buttons["Done"].tap()
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(subtotal.waitForExistence(timeout: 20))
+        XCTAssertEqual(subtotal.label, expectedTotal)
+        scrollTo(chair, in: app, attempts: 4)
+        XCTAssertEqual(chair.value as? String, "2 of 5")
+        chair.swipeRight()
+        XCTAssertTrue(waitForValue(chair, equalTo: "1 of 5"))
+        XCTAssertEqual(subtotal.label, originalTotal)
+    }
+
+    private func cornerAmount(_ label: String) -> Double {
+        Double(label.filter { "0123456789.".contains($0) }) ?? -.infinity
+    }
+
+    @MainActor
+    func testOblistFeedOpensWorldAndNativeProductReturnsToSet() {
+        let app = XCUIApplication()
+        app.launch()
+        let first = app.buttons["Your trail-running price edit"].firstMatch
+        XCTAssertTrue(first.waitForExistence(timeout: 30))
+        let card = app.buttons["A corner to get lost in."].firstMatch
+        scrollTo(card, in: app, attempts: 4)
+        XCTAssertEqual(app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "over your")).count, 0)
+        capture(app, name: "Oblist — shared living-room feed cover")
+        card.coordinate(withNormalizedOffset: CGVector(dx: 0.45, dy: 0.25)).tap()
+        let product = app.buttons["corner.product.chair"]
+        XCTAssertTrue(product.waitForExistence(timeout: 10))
+        scrollTo(product, in: app, attempts: 3)
+        product.tap()
+        XCTAssertTrue(app.buttons["Back"].firstMatch.waitForExistence(timeout: 10))
+        capture(app, name: "Oblist — canonical chair product")
+        app.buttons["Back"].firstMatch.tap()
+        XCTAssertTrue(app.staticTexts["corner.subtotal"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["corner.product.chair"].exists)
+        XCTAssertFalse(app.buttons["corner.swap.chair"].exists)
+    }
+
+    @MainActor
     func testResearchBuyingAdviceOpensContextualDraft() {
         let app = XCUIApplication()
         app.launchArguments = ["-previewStory", "library-edit-norda-price-research"]

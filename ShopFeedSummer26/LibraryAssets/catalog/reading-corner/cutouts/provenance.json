@@ -1,0 +1,102 @@
+{
+  "rightsStatus": "Derived from merchant product photography for this prototype; production reuse rights remain unverified.",
+  "items": [
+    {
+      "handle": "594146-sedia-tonda",
+      "sourceURL": "https://cdn.shopify.com/s/files/1/0671/5290/4457/files/fazfc9pfpzorqcfxh0rx_591c41f2-a88f-461e-bc36-f20c01793965.jpg?v=1783959461",
+      "sourceImageID": 81145359368457,
+      "file": "594146-sedia-tonda.webp",
+      "sha256": "fdd662e707372d667d31fe29d1308a7ed6f0ba3fdeabbf5be802db30a5c03275",
+      "method": "Apple Vision foreground-instance mask; transparent crop, bounded to 480px. No furniture generation or shape synthesis.",
+      "variantID": 45415606321417,
+      "productID": "oblist:8578972483849"
+    },
+    {
+      "handle": "635658-cubo",
+      "sourceURL": "https://cdn.shopify.com/s/files/1/0671/5290/4457/files/n4lue0bpvikexw3q3c9v.jpg?v=1778851255",
+      "sourceImageID": 80793865322761,
+      "file": "635658-cubo.webp",
+      "sha256": "869f123f907fb6dea49bb2e8dc9e515d3ca69a31e50054241ed8eeb797ab036e",
+      "method": "Apple Vision foreground-instance mask; transparent crop, bounded to 480px. No furniture generation or shape synthesis.",
+      "variantID": 56456995668233,
+      "productID": "oblist:8578971828489"
+    },
+    {
+      "handle": "floor-lamp-1",
+      "sourceURL": "https://cdn.shopify.com/s/files/1/0671/5290/4457/products/mc_Ti60dmDAn.jpg?v=1707476388",
+      "sourceImageID": 45626904740105,
+      "file": "floor-lamp-1.webp",
+      "sha256": "d74c4c417a86947280a255486eb8d20eb22597b0145dae52dc9dd6fe05a135aa",
+      "method": "Apple Vision foreground-instance mask; transparent crop, bounded to 480px. No furniture generation or shape synthesis.",
+      "variantID": 44826645823753,
+      "productID": "oblist:8389367169289"
+    },
+    {
+      "handle": "161659-small-palma",
+      "sourceURL": "https://cdn.shopify.com/s/files/1/0671/5290/4457/files/4A52522B-7155-4251-AC6C-DD4FE76CFB12_1_201_a.jpg?v=1722522972",
+      "sourceImageID": 48639062769929,
+      "file": "161659-small-palma.webp",
+      "sha256": "19cb6b26037f87cb61dbf40c46c95ed6a86ae984976d08f5f902b1f5e9ebdb6a",
+      "method": "Apple Vision foreground-instance mask; transparent crop, bounded to 480px. No furniture generation or shape synthesis.",
+      "variantID": 48229312004361,
+      "productID": "oblist:9223658176777"
+    },
+    {
+      "handle": "la-lampe-bien-faite-taupe",
+      "sourceURL": "https://cdn.shopify.com/s/files/1/0671/5290/4457/files/quyrkakofu7zmnoo6rri.jpg?v=1771917676",
+      "sourceImageID": 79111623409929,
+      "file": "la-lampe-bien-faite-taupe.webp",
+      "sha256": "286776c37272c30f1fb5fad1987907b4f3bf74695f663594dcc03fa811ac9ba9",
+      "method": "Apple Vision foreground-instance mask; transparent crop, bounded to 480px. No furniture generation or shape synthesis.",
+      "variantID": 56840339915017,
+      "productID": "oblist:8424695562505"
+    },
+    {
+      "handle": "633555-figure-side-table-4",
+      "sourceURL": "https://cdn.shopify.com/s/files/1/0671/5290/4457/files/lsyqxeb6it6vu60qzvpz.jpg?v=1777470024",
+      "sourceImageID": 80696230674697,
+      "file": "633555-figure-side-table-4.webp",
+      "sha256": "aed9ee923546d08b0db4937a51cd092ec8040e70697bb5e7cef02b2c0f9fca2f",
+      "method": "Apple Vision foreground-instance mask; transparent crop, bounded to 480px. No furniture generation or shape synthesis.",
+      "variantID": 45136651485449,
+      "productID": "oblist:8479503581449"
+    },
+    {
+      "handle": "melides-chair",
+      "sourceURL": "https://cdn.shopify.com/s/files/1/0671/5290/4457/files/vh1l2i13axspv5mexx4e_a1c552a4-b9d2-40bc-96b5-a36cc71a49e2.jpg?v=1786998440",
+      "sourceImageID": 81375595725065,
+      "file": "melides-chair.webp",
+      "sha256": "a47fe9fde47e53019b408edd340164a9a719834d644ab86f7ad5e72a05cbc373",
+      "method": "Apple Vision foreground-instance mask; transparent crop, bounded to 480px. No furniture generation or shape synthesis.",
+      "variantID": 56988879585545,
+      "productID": "oblist:9237583364361"
+    },
+    {
+      "handle": "382442-vaga-chair",
+      "sourceURL": "https://cdn.shopify.com/s/files/1/0671/5290/4457/files/zkxrvhpi9vkallg9ljji_ebc8b0d6-462c-4956-a8a3-55e15f06d78f.jpg?v=1776782770",
+      "sourceImageID": 80650296131849,
+      "file": "382442-vaga-chair.webp",
+      "sha256": "5054edf9b427297ab9bb6592dc1d6c9de774178567096a7f8e31f9f260e8c9a4",
+      "method": "Apple Vision foreground-instance mask; transparent crop, bounded to 480px. No furniture generation or shape synthesis.",
+      "variantID": 56302943895817,
+      "productID": "oblist:9203761185033"
+    },
+    {
+      "handle": "447110-fish-chair",
+      "sourceURL": "https://cdn.shopify.com/s/files/1/0671/5290/4457/files/uaztiultmtd02ke17gm5.jpg?v=1774341460",
+      "sourceImageID": 80019657752841,
+      "file": "447110-fish-chair.webp",
+      "sha256": "c3e539b9d59925f29d40e44741b73c7648ed31d42fff45d5a1d017361858aca6",
+      "method": "Apple Vision foreground-instance mask; transparent crop, bounded to 480px. No furniture generation or shape synthesis.",
+      "variantID": 56912325116169,
+      "productID": "oblist:9283190391049"
+    }
+  ],
+  "packaging": {
+    "maximumPixelSize": 480,
+    "webpQuality": 82,
+    "webpMethod": 6,
+    "alphaCleanup": "Alpha below 16 becomes 0; alpha above 235 becomes 255. Intermediate edge alpha is retained.",
+    "sourceWidths": "900px lead images; 1200px alternate gallery images."
+  }
+}

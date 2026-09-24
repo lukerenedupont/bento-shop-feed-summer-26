@@ -178,7 +178,8 @@
     "sourceProductID": "catalog:gid://shopify/p/5fZd8rmkUywfIccQcAwwSm",
     "path": "./catalog/editorial/4bac0776d28bbe4e02ca12a90d80f04c0549478a96a9511c42c404f90f56d7cb.jpg",
     "sourceURL": "https://cdn.shopify.com/s/files/1/0076/3327/2890/files/b779d3e358ed9b3eedd5e659b516000e.jpg",
-    "sha256": "f3592e7bbdf15ee696321b80e9bd5690f0ff0a86765a6c52a19fafc8af06face"
+    "sha256": "ec07d8398297f24641d86083214c29762487c4d5b6123160fb936e686314a200",
+    "processingNote": "Losslessly repacked; decoded RGBA pixels verified identical. See docs/READING_CORNER_LOSSLESS_MEDIA.json."
   },
   {
     "group": "Big sports guy",
@@ -288,7 +289,8 @@
     "sourceProductID": "catalog:gid://shopify/p/3NHhfZPHrHYfxUNzVJCjyA",
     "path": "./catalog/editorial/f7ba1151173866121587747f576f906b235973b5c64e6efe467c20ecd37b5865.jpg",
     "sourceURL": "https://cdn.shopify.com/s/files/1/0228/6779/files/BB50810D-B086-476B-979E-4C820F240ACB.jpg",
-    "sha256": "3b1445e9cfb1b7cffc646b645c34d0e3170907c49c2bf9709b8ef6b8c94f8cd9"
+    "sha256": "35c0d27065dd083fc3d44e59d9e8e10390aa72415c0446c5088af0dbb9adbe73",
+    "processingNote": "Losslessly repacked; decoded RGBA pixels verified identical. See docs/READING_CORNER_LOSSLESS_MEDIA.json."
   },
   {
     "group": "__all__",

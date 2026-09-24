@@ -1297,8 +1297,9 @@
       "white": {
         "path": "./merchant-assets/imported-wordmarks/launch-approved/norse-white.png",
         "originalPath": "./merchant-assets/imported-wordmarks/launch-approved/norse-white.png",
-        "sha256": "8695ea7b176f468d190b83696df42e5c18e56110f58378c33dff5b1c5184de25",
-        "nativeSha256": "8695ea7b176f468d190b83696df42e5c18e56110f58378c33dff5b1c5184de25"
+        "sha256": "e093baa878a924e8e18b5d2034317edb29a5de48df801cd11a7457bd29b93170",
+        "nativeSha256": "e093baa878a924e8e18b5d2034317edb29a5de48df801cd11a7457bd29b93170",
+        "processingNote": "Lossless PNG repack; decoded RGBA pixels unchanged."
       },
       "original": {
         "path": "./merchant-assets/imported-wordmarks/launch-approved/norse-original.png",

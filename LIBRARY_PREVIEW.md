@@ -21,9 +21,49 @@ cd /Users/lukedupont/bento-shop-feed-library-demo
 Scripts/run_library_preview.sh host
 ```
 
-Other supported destinations are `self-care` and `home`. The script boots the exact **Bento Architecture Review** simulator, validates the source snapshot and the Shopify-only publication set, rebuilds the app, installs it, and launches the requested destination. To work in Xcode instead, open `ShopFeedSummer26.xcodeproj`, select the `ShopFeedSummer26` scheme and **Bento Architecture Review** simulator, then press Run. `xcodegen generate` is needed only after changing `project.yml`.
+Other supported destinations are `self-care`, `reading-corner`, and `home`. The script boots the exact **Bento Architecture Review** simulator, validates the source snapshot and the Shopify-only publication set, rebuilds the app, installs it, and launches the requested destination. To work in Xcode instead, open `ShopFeedSummer26.xcodeproj`, select the `ShopFeedSummer26` scheme and **Bento Architecture Review** simulator, then press Run. `xcodegen generate` is needed only after changing `project.yml`.
 
 The phone installation survives both Mac and phone restarts and can be opened directly as **Shop Library Preview**. It does not require the Mac unless rebuilding or using a local development service.
+
+## The Oblist — reading-corner set
+
+Run `Scripts/run_library_preview.sh reading-corner`. The new World is second
+in For You, after Norda. Its feed card and hero share The Oblist’s Living Room
+Edit photograph, labelled as inspiration rather than the selected set.
+The original $600 request follows the shorter hero. The Oblist logo and three
+role selectors use background-removed photos of the actual selected products.
+The rejected vector icons and carousel have been replaced. A physical card pile
+offers five chairs, two tables and two lights: flick sideways, or briefly hold
+to lift and throw in any direction. Short drags spring home. White product text
+stays on the image, without hearts, swap footers or instructional captions.
+The working budget is now $3,000 at the shopper's explicit request; history keeps
+the original $600 prompt. The initial set remains $3,894. The feed retains its
+square trio, wordmark and subtotal; the World has an editable budget and a simple
+“Find options closer to my budget” button. Supporting price details are in Sources.
+
+Three visual style directions pair FRAMA/Audo lifestyle imagery with product
+groups. Categories cover side tables, reading chairs, lighting and finishing
+touches; they open shared native assortment sheets. An Oblist/FRAMA/Audo/Ferm
+Living logo rail and existing lighting/books/furniture Worlds extend discovery.
+These are editorial moods, not exact photographed sets or trending rankings.
+
+“See it in your room” is a tappable perspective-room card using the same selected
+cutouts. Inside, move the pieces or add a local room photo. There are no extra
+moodboard links or disclaimers on the invitation; Info explains the illustrative,
+unmeasured composition. Photos and positions stay session-local, without uploads.
+Native PDP/back, merchant, search and Ask keep the canonical catalog graph.
+Provenance and limitations: `docs/OBLIST_READING_CORNER_RESEARCH.md`.
+
+Latest slice: **56 XCTest cases (3 skipped), 27 Swift Testing cases** passed.
+Six focused UI journeys passed across final runs: vertical card throws without
+page movement; role/light controls; five-chair cycling and persistence/room
+carryover; native PDP return; independent room-piece dragging; Norda advice.
+Parent-scroll interference was fixed with scoped drag ownership. Room tests scope
+the editor, avoiding identically named decorative pieces behind the sheet.
+No full UI-suite or actual photo-picker coverage claimed.
+Shipping: **184,292 / 184,320 KB**, **28 KB headroom**, **44,692 KB** feed,
+**978 media files**, **6 fonts**. Existing images were losslessly repacked, with
+byte-identical decoded pixels, to fit the cutouts without more video degradation.
 
 ## Shop Agent — Norda price edit
 
@@ -35,7 +75,7 @@ The first cover and World header now share an **8-second, muted native loop** fr
 
 Latest verification: **46 XCTest cases (3 skipped), 26 Swift Testing cases, the expanded Norda UI journey, and 11 Python importer tests passed**. Coverage includes comparison criteria, product/back navigation, source details, equal tile dimensions, local poster loading and a native shared-player/excerpt-loop test. Reduce Motion was manually checked with pixel-identical still crops three seconds apart, then restored. A clean tracked-files export passed catalog/source validation without local credentials or the optional external feed checkout. Outgoing history and the staged patch passed Gitleaks; two exact historical localization-comment false positives are documented in `.gitleaksignore`.
 
-Shipping build: **184,140 KB / 184,320 KB**, with **180 KB headroom**. Existing preview clips were re-encoded for the phone target (including 360px Sculptural Living Room/Streetwear and 320px Fuumuu/Stadium exports), the new running films remain remote, and the unused `try-faves-figure` cutout was removed after checking all source references. Active avatar/environment assets and interactive Worlds are retained. The budget was not raised; further additions still need size discipline. The Norda journey also fixed a PDP bug where an oversized decorative image intercepted the Back button.
+Norda checkpoint shipping build: **184,140 KB / 184,320 KB**, with **180 KB headroom**. Existing preview clips were re-encoded for the phone target (including 360px Sculptural Living Room/Streetwear and 320px Fuumuu/Stadium exports), the new running films remain remote, and the unused `try-faves-figure` cutout was removed after checking all source references. Active avatar/environment assets and interactive Worlds are retained. The budget was not raised; further additions still need size discipline. The Norda journey also fixed a PDP bug where an oversized decorative image intercepted the Back button.
 
 ### Buying-time prompt
 
@@ -45,7 +85,7 @@ Validation for this addition: 46 XCTest cases (3 skipped) and 27 Swift Testing c
 
 ## Rich movement World — build 20
 
-`library-edit-9` (**For your self-care reset**) follows the Norda research story in Luke’s For You feed. Its motion-led feed card uses the cinematic material-detail film rather than the grid film, the same compact two-line editorial title component as the destination hero, the shared product rail, and coordinated media-aware dark chrome. The grid film is reserved for a later editorial beat inside the World. The Nike lockup is neither rendered nor bundled.
+`library-edit-9` (**For your self-care reset**) follows the Norda and Oblist stories in Luke’s For You feed. Its motion-led feed card uses the cinematic material-detail film rather than the grid film, the same compact two-line editorial title component as the destination hero, the shared product rail, and coordinated media-aware dark chrome. The grid film is reserved for a later editorial beat inside the World. The Nike lockup is neither rendered nor bundled.
 
 The destination uses the campaign’s warm brown surface and a long-form editorial sequence: two campaign films, 26 filmstrip frames, six independent campaign stills, seven autoplaying collection/fabric films, four native Shop product shelves, and the complete 18-product edit. The fabric chapter retains the first-party collection names and full descriptions for Studio Stretch, Matte, Airy, Satin Shine, Weightless, Ribbed Seamless, and Stretch Knit. Collection, color, styling, and movement galleries now include concise editorial context, and paired media is explicitly clipped to prevent overlap.
 
@@ -57,7 +97,7 @@ Read-only source: `/Users/lukedupont/Developer/apx3000-shop-canvas/public/`.
 The importer reads `catalog/catalog.json`, `catalog/merchants.json`, and
 `catalog/merchant-depth.json` in full.
 
-The source snapshot contains exactly **328 curated products**. From that immutable snapshot, the Shop prototype publishes only the **213 products** associated with one of the **79 confirmed Shopify merchants**. The reviewed research supplement adds 19 products and four additional merchants through the same gate, for **232 products / 83 merchants** in the combined catalog; domain-only, unresolved, and other-platform records are excluded from feeds, Worlds, search, merchant pages, and Agent context. `selectedIds` remains the ordering authority within the base eligible subset; **All finds** appends the research observations in their reviewed source order. For You groups those records by their existing group
+The source snapshot contains exactly **328 curated products**. From that immutable snapshot, the Shop prototype publishes only the **213 products** associated with one of the **79 confirmed Shopify merchants**. The reviewed research supplement adds 19 products and four additional merchants through the same gate, and the Oblist supplement adds nine products from an existing merchant, for **241 products / 83 merchants** in the combined catalog; domain-only, unresolved, and other-platform records are excluded from feeds, Worlds, search, merchant pages, and Agent context. `selectedIds` remains the ordering authority within the base eligible subset; **All finds** appends the running and reading-corner observations in their reviewed source order. For You groups those records by their existing group
 labels, ordered by each group's first appearance; it does not claim that a
 grouped feed is the same thing as the flat 328-product sequence.
 

@@ -112,11 +112,13 @@ enum ShopCanvasLibrary {
             .filter { seen.insert($0.id).inserted }
     }()
     static let selectedProductIDs = manifest.selectedIds + ShoppingResearchCatalog.snapshot.offers.map(\.id)
+        + ReadingCornerCatalog.snapshot.pieces.map(\.product.id)
     static let confirmedMerchantRecords = merchantRecords.filter {
         $0.platformOutcome == "confirmed_shopify" && $0.id.hasPrefix("gid://shopify/Shop/")
     }
     private static let confirmedMerchantIDs = Set(confirmedMerchantRecords.map(\.id))
-    private static let publishedProducts = (manifest.products + ShoppingResearchCatalog.snapshot.offers.map(\.libraryProduct)).compactMap {
+    private static let publishedProducts = (manifest.products + ShoppingResearchCatalog.snapshot.offers.map(\.libraryProduct)
+        + ReadingCornerCatalog.snapshot.pieces.map(\.product)).compactMap {
         $0.restricted(to: confirmedMerchantIDs)
     }
     static let productsByID = Dictionary(uniqueKeysWithValues: publishedProducts.map { ($0.id, $0) })
@@ -185,13 +187,13 @@ enum ShopCanvasLibrary {
             subtitle: "", format: .world,
             topicKeys: ["library", "catalog-only-media"], accentHex: "#4D6256", coverImageName: nil,
             destinationLabel: "Explore all \(curatedProducts.count)", products: references(selectedProductIDs))
-        return ShoppingResearchCatalog.worlds.map(\.story) + edits + [all]
+        return ShoppingResearchCatalog.worlds.map(\.story) + [ReadingCornerCatalog.story] + edits + [all]
     }()
 
     static let profile: BuyerPreviewProfile = {
         let edits = stories.filter { $0.id != "\(storyPrefix)all" }
         let sections: [(String, String, Set<String>)] = [
-            ("living", "Living", ["For the thoughtful host", "Nordic Knots", "objects", "lighting", "tableware", "Working from home", "books", "furniture", "home textiles", "The coziest corner", "Turn off the big light"]),
+            ("living", "Living", ["For the thoughtful host", "Nordic Knots", "objects", "lighting", "tableware", "Working from home", "books", "furniture", "home textiles", "The coziest corner", "Turn off the big light", "Reading corner"]),
             ("style", "Style", ["Eckhaus Latta", "fashion", "Balenciaga", "Soft launching fall", "The best-dressed guest", "Jil Sander", "Dries Van Noten", "Lemaire", "All suited up", "JW Anderson", "Our Legacy", "accessories"]),
             ("travel", "Travel", ["Travelling light", "Snow Peak"]),
             ("wellness", "Wellness", ["For your self-care reset", "Big sports guy", "On"]),

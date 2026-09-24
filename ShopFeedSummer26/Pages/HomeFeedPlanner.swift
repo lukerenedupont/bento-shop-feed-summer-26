@@ -73,10 +73,11 @@ enum HomeFeedPlanner {
         return plan
     }
 
-    /// Demo-only editorial opening. All five already have authored bundled
-    /// films; their original content, destination, and presentation stay intact.
+    /// Demo-only editorial opening, preserving each World’s authored media,
+    /// destination, and presentation.
     private static let demoOpeningStoryIDs = [
         "library-edit-norda-price-research",
+        ReadingCornerCatalog.storyID,
         NikeSkimsWorldMedia.storyID,
         "kyle-argizari-lighting",
         "shelf-luke-9-streetwear-caps-and-tees",

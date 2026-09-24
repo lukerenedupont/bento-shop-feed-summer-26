@@ -5,7 +5,7 @@ final class LibraryShellTests: XCTestCase {
     func testSearchPreservesCuratedOrderAndHasNoDuplicates() {
         let all = LibraryCatalogSearch.results(for: "  ")
         XCTAssertEqual(all.map(\.id), ShopCanvasLibrary.curatedProducts.map(\.id))
-        XCTAssertEqual(Set(all.map(\.id)).count, 232)
+        XCTAssertEqual(Set(all.map(\.id)).count, 241)
         XCTAssertTrue(LibraryCatalogSearch.results(for: "zzzznotacatalogitem").isEmpty)
     }
 

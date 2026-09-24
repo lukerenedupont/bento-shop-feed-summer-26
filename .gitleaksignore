@@ -2,3 +2,7 @@
 # Header.CloseA11yLabel and Marketing.OfferBanner.A11yHint, respectively.
 3b55f6615776693665fa53e2875b79df632cc7c3:Vendor/JulianAgentUI/Sources/JulianAgentUI/Resources/en.lproj/Localizable.strings:generic-api-key:435
 3b55f6615776693665fa53e2875b79df632cc7c3:Vendor/JulianAgentUI/Sources/JulianAgentUI/Resources/en.lproj/Localizable.strings:generic-api-key:11451
+# Reviewed historical dossier filename identifiers (16 hex characters), not API credentials.
+# The manifest explicitly maps these keys to local <key>.json/media filenames.
+4efd1e519f7025f38b7b9553f6edf28f4de410d1:ShopFeedSummer26/Dossiers/dossier-manifest.json:generic-api-key:23
+c36d458ea4461048125fcd174e7c330603c9dc3b:ShopFeedSummer26/Dossiers/dossier-manifest.json:generic-api-key:7

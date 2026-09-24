@@ -112,8 +112,46 @@ for policy in research['shippingPolicies']:
     merchant = research_merchants[policy['merchantID']]
     assert urlparse(policy['sourceURL']).hostname == urlparse(merchant['url']).hostname
     assert policy['summary'] and policy['detail'] and datetime.fromisoformat(policy['observedAt']).tzinfo
-print(f'Validated research supplement: {len(research["offers"])} offers; '
-      f'combined publication: {len(published_products) + len(research["offers"])} products / '
+corner = json.loads((root / 'reading-corner.json').read_text())
+assert corner['rightsStatus'] and urlparse(corner['coverSource']).hostname == 'oblist.com'
+cover = corner['cover']
+assert cover['sourceMerchantID'] in confirmed_merchants and not cover.get('sourceProductID')
+path = (root / cover['path']).resolve()
+assert path.is_relative_to(root) and path.is_file()
+assert hashlib.sha256(path.read_bytes()).hexdigest() == cover['sha256'], 'Reading corner cover changed'
+assert {p['role'] for p in corner['pieces']} == {'chair', 'table', 'light'}
+for piece in corner['pieces']:
+    product = piece['product']
+    assert product['id'] not in ids and product['nativeID'] not in native_ids, 'Corner product collision'
+    ids.add(product['id'])
+    native_ids.add(product['nativeID'])
+    assert product['merchantIDs'] == [cover['sourceMerchantID']]
+    assert product['currency'] == 'USD' and product['curated']
+    amount = Decimal(product['price'])
+    assert amount.is_finite() and amount > 0 and amount * 100 == piece['amountCents']
+    source = urlparse(product['url'])
+    assert source.scheme == 'https' and source.hostname == 'oblist.com'
+    assert parse_qs(source.query)['variant'] == [str(piece['variantID'])]
+    assert parse_qs(source.query)['currency'] == ['USD']
+    assert product['image'] == product['images'][0] and piece['observedImageID'] > 0
+    assert 0.1 < piece['imageAspectRatio'] < 3, 'Invalid source image framing'
+    assert datetime.fromisoformat(product['checkedAt']).tzinfo is not None
+cutout_root = root / 'catalog/reading-corner/cutouts'
+cutouts = json.loads((cutout_root / 'provenance.json').read_text())
+assert cutouts['rightsStatus'] and len(cutouts['items']) == len(corner['pieces'])
+assert {item['handle'] for item in cutouts['items']} == {piece['handle'] for piece in corner['pieces']}
+for item in cutouts['items']:
+    piece = next(piece for piece in corner['pieces'] if piece['handle'] == item['handle'])
+    assert item['variantID'] == piece['variantID'] and item['productID'] == piece['product']['id'], 'Cutout belongs to a different product variant'
+    path = (cutout_root / item['file']).resolve()
+    assert path.is_relative_to(cutout_root.resolve()) and path.is_file(), 'Unsafe or missing cutout'
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == item['sha256'], 'Reviewed cutout changed'
+    source = urlparse(item['sourceURL'])
+    assert source.scheme == 'https' and source.hostname == 'cdn.shopify.com'
+    assert source.path.startswith('/s/files/1/0671/5290/4457/'), 'Cutout must come from the verified Oblist storefront'
+    assert item['sourceImageID'] > 0 and item['method']
+print(f'Validated supplements: {len(research["offers"])} running offers, {len(corner["pieces"])} corner pieces; '
+      f'combined publication: {len(published_products) + len(research["offers"]) + len(corner["pieces"])} products / '
       f'{len(confirmed_merchants | set(research_merchants))} confirmed Shopify merchants')
 print(
     f'Validated library source: {len(selected)} curated products, {len(merchants)} merchants; '

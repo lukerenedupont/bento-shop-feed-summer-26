@@ -30,6 +30,11 @@ struct FeedCardPresentation: Equatable {
                         actions: [.overflow], showsProducts: true,
                         topScrimOpacity: 0.16, bottomScrimOpacity: 0.28)
         }
+        if story.id == ReadingCornerCatalog.storyID {
+            return Self(kind: .editorial, deck: ReadingCornerCatalog.deck, cta: "Make it yours",
+                        actions: [.overflow], showsProducts: true,
+                        topScrimOpacity: 0.16, bottomScrimOpacity: 0.48)
+        }
         if ShopCanvasLibrary.isLibraryStory(story) {
             return Self(
                 kind: .editorial,
