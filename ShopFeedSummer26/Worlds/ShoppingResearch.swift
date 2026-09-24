@@ -110,6 +110,8 @@ struct ShoppingResearchWorld {
                   products: offers.map { .init(merchantID: $0.merchantID, productID: $0.nativeID) })
     }
     var models: [String] { Array(Set(offers.filter { $0.section == "shoes" }.map(\.model))).sorted() }
+    var researchedMerchantCount: Int { Set(offers.map(\.merchantID)).count }
+    var observedDate: String { offers.first.map { String($0.observedAt.prefix(10)) } ?? "" }
     var shoeMerchantCount: Int { Set(offers.filter { $0.section == "shoes" }.map(\.merchantID)).count }
     var comparisonMatches: [ResearchShoeMatch] {
         let matches = Set(offers.filter { $0.section == "shoes" }.map { ResearchShoeMatch(model: $0.model, color: $0.color) })
@@ -185,8 +187,8 @@ enum ShoppingResearchCatalog {
 
     static let norda = ShoppingResearchWorld(
         id: "library-edit-norda-price-research", title: "Your trail-running price edit",
-        headline: "Go farther.\nSpend smarter.",
-        deck: "Norda and the rest of your run.",
+        headline: "Research complete.\nYour trail edit is ready.",
+        deck: "19 sourced offers, exact price matches and a few directions worth taking.",
         prompt: "Find me good prices on Norda trail-running shoes, and other running gear I might like.",
         heroImage: ResearchCoverFilm.norda.posterPath,
         heroSource: ResearchCoverFilm.norda.sourcePage.absoluteString,

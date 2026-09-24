@@ -9,18 +9,27 @@ struct ShoppingResearchContent: View {
     @State private var modal: ResearchModal?
     @State private var apparelFilter = "Markdowns"
     @State private var activeMotionStoryID: String?
+    @State private var showsBriefEditor = false
+    @AppStorage private var deliveryContext: String
+    @AppStorage private var raceContext: String
+    @AppStorage private var styleContext: String
     private let lime = Color(hex: "#DFECA5")
 
     init(world: ShoppingResearchWorld) {
         self.world = world
         _model = AppStorage(wrappedValue: "All", "\(world.id).model")
+        _deliveryContext = AppStorage(wrappedValue: "", "\(world.id).delivery-context")
+        _raceContext = AppStorage(wrappedValue: "", "\(world.id).race-context")
+        _styleContext = AppStorage(wrappedValue: "", "\(world.id).style-context")
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 36) {
             ForEach(Array(world.sections.enumerated()), id: \.offset) { _, section in
                 switch section {
-                case .offers: offersSection
+                case .offers:
+                    offersSection
+                    researchBrief
                 case .modelStudy: modelStudy
                 case .merchantComparison:
                     ResearchMerchantComparison(world: world) { modal = .offer($0, usSize: $1) }
@@ -49,6 +58,85 @@ struct ShoppingResearchContent: View {
                     .environment(\.colorScheme, .light)
             }
         }
+        .sheet(isPresented: $showsBriefEditor) {
+            ResearchBriefEditor(
+                delivery: $deliveryContext,
+                race: $raceContext,
+                style: $styleContext
+            )
+            .environment(\.colorScheme, .light)
+        }
+    }
+
+    private var researchBrief: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            HStack(spacing: 7) {
+                Image(systemName: "checkmark.circle.fill")
+                Text("Source-checked snapshot")
+            }
+            .font(GravityFont.semiBold.fixedFont(size: 13))
+            .foregroundStyle(lime)
+
+            Text("Built from your request.")
+                .font(GravityFont.expressiveBold.fixedFont(size: 34)).tracking(-1.2)
+                .accessibilityAddTraits(.isHeader)
+
+            Text("“\(world.prompt)”")
+                .font(GravityFont.medium.fixedFont(size: 17))
+                .lineSpacing(3)
+                .foregroundStyle(.white.opacity(0.92))
+
+            Text("I checked \(world.offers.count) sourced offers across \(world.researchedMerchantCount) running shops, compared exact Norda matches, and built this edit with the best observed price, sale finds, a complete kit and other trail shoes worth seeing.")
+                .font(GravityFont.regular.fixedFont(size: 14))
+                .lineSpacing(3)
+                .foregroundStyle(.white.opacity(0.7))
+
+            HStack(spacing: 8) {
+                briefFact("\(world.offers.count) sourced offers")
+                briefFact("\(world.researchedMerchantCount) shops")
+                briefFact("US · USD")
+            }
+
+            Button { showsBriefEditor = true } label: {
+                VStack(spacing: 0) {
+                    briefContextRow("Delivery destination", value: deliveryContext, emptyValue: "Add destination")
+                    Divider().overlay(.white.opacity(0.1))
+                    briefContextRow("Upcoming race", value: raceContext, emptyValue: "Add race")
+                    Divider().overlay(.white.opacity(0.1))
+                    briefContextRow("Fit & aesthetic", value: styleContext, emptyValue: "Add preferences")
+                }
+                .padding(.horizontal, 16)
+                .background(.white.opacity(0.07), in: RoundedRectangle(cornerRadius: 18))
+                .overlay(RoundedRectangle(cornerRadius: 18).stroke(.white.opacity(0.1)))
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("research.personalize-brief")
+        }
+        .padding(.horizontal, 20)
+    }
+
+    private func briefFact(_ value: String) -> some View {
+        Text(value)
+            .font(GravityFont.medium.fixedFont(size: 11))
+            .foregroundStyle(.white.opacity(0.72))
+            .padding(.horizontal, 10).frame(height: 30)
+            .background(.white.opacity(0.07), in: Capsule())
+    }
+
+    private func briefContextRow(_ label: String, value: String, emptyValue: String) -> some View {
+        HStack(spacing: 12) {
+            Text(label)
+                .font(GravityFont.regular.fixedFont(size: 13))
+                .foregroundStyle(.white.opacity(0.62))
+            Spacer()
+            Text(value.isEmpty ? emptyValue : value)
+                .font(GravityFont.semiBold.fixedFont(size: 13))
+                .lineLimit(1)
+            Image(systemName: "chevron.right")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.4))
+        }
+        .frame(minHeight: 46)
     }
 
     private var offersSection: some View {
@@ -336,6 +424,38 @@ struct ShoppingResearchContent: View {
     private func openSource(_ source: String) {
         guard let url = URL(string: source), url.scheme == "https" else { return }
         modal = .source(url)
+    }
+}
+
+private struct ResearchBriefEditor: View {
+    @Binding var delivery: String
+    @Binding var race: String
+    @Binding var style: String
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    TextField("City or ZIP code", text: $delivery)
+                        .textContentType(.postalCode)
+                    TextField("Race and date", text: $race)
+                    TextField("Fit, colors or aesthetic", text: $style, axis: .vertical)
+                        .lineLimit(2...4)
+                } header: {
+                    Text("Make this edit more personal")
+                } footer: {
+                    Text("These details stay on this device as context for the edit. Prices and delivery are not recalculated, and blank fields are never inferred.")
+                }
+            }
+            .navigationTitle("Your running brief")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
+        }
     }
 }
 

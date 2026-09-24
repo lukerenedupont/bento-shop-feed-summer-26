@@ -10,6 +10,12 @@ final class LibraryCatalogTests: XCTestCase {
         XCTAssertEqual(FeedCardPresentation.resolve(story: world.story).kind, .researchSummary)
         XCTAssertTrue(ShoppingResearchCatalog.validationIssues(ShoppingResearchCatalog.snapshot).isEmpty)
         XCTAssertEqual(LibraryCatalogSearch.results(for: "norda").count, 9)
+        XCTAssertEqual(world.researchedMerchantCount, 6)
+        XCTAssertEqual(world.models, ["001A", "003", "005", "055"])
+        XCTAssertEqual(world.observedDate, "2026-09-24")
+        XCTAssertEqual(world.headline, "Research complete.\nYour trail edit is ready.")
+        XCTAssertTrue(world.deck.contains("19 sourced offers"))
+        XCTAssertFalse(world.prompt.isEmpty)
         XCTAssertTrue(world.offers.allSatisfy { $0.currency == "USD" })
         let hoka = world.offers.filter { $0.brand.caseInsensitiveCompare("Hoka") == .orderedSame }
         XCTAssertEqual(hoka.count, 2)

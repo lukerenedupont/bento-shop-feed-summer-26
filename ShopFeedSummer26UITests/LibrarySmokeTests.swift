@@ -16,6 +16,18 @@ final class LibrarySmokeTests: XCTestCase {
         // The card continues under Julian's dock. Tap the visible title, not
         // XCTest's full-card center inside the dock's touch surface.
         card.coordinate(withNormalizedOffset: CGVector(dx: 0.45, dy: 0.25)).tap()
+        XCTAssertTrue(app.staticTexts["Built from your request."].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Source-checked snapshot"].exists)
+        XCTAssertTrue(app.staticTexts["19 sourced offers"].exists)
+        let personalize = app.buttons["research.personalize-brief"]
+        XCTAssertTrue(personalize.exists)
+        scrollTo(personalize, in: app, attempts: 3)
+        capture(app, name: "Shop Agent — built from your request")
+        personalize.tap()
+        XCTAssertTrue(app.navigationBars["Your running brief"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.textFields["City or ZIP code"].exists)
+        XCTAssertTrue(app.textFields["Race and date"].exists)
+        app.buttons["Done"].tap()
         XCTAssertTrue(app.staticTexts["Find your Norda."].waitForExistence(timeout: 10))
         XCTAssertFalse(app.staticTexts["YOUR PRICE FINDINGS"].exists)
         XCTAssertFalse(app.buttons["research.save-search"].exists)
@@ -24,6 +36,7 @@ final class LibrarySmokeTests: XCTestCase {
         XCTAssertTrue(app.buttons["research.model.001A"].exists)
         XCTAssertTrue(app.buttons["research.model.005"].exists)
         XCTAssertTrue(app.buttons["research.model.055"].exists)
+        scrollTo(app.buttons["research.model.003"], in: app, attempts: 3)
         app.buttons["research.model.003"].tap()
         XCTAssertTrue(app.staticTexts["Renegade Running"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["Norda"].exists)
