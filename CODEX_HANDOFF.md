@@ -6,11 +6,11 @@ not the older personalized-feed/phone demo.
 ## Start here
 
 - Branch: `experiment/shop-agent-world-lab`.
-- Shareable repository: https://github.com/lukerenedupont/bento-shop-feed-library-demo-private
-  (private; collaborators need access).
-- This worktree calls that remote `private-backup`. A fresh clone calls it
-  `origin`. Check the remote URL before pushing: the original summer-26
-  repository is public and is not the destination for this internal media.
+- Shareable repository: https://github.com/lukerenedupont/bento-shop-feed-summer-26
+  (the original public repository, published here at the user's explicit direction).
+- `origin` is the public handoff destination. `private-backup` retains the prior
+  private checkpoint; it is not required for teammates to clone this branch.
+  Public visibility does not establish additional source or media reuse rights.
 - The branch includes the shared feed/World/navigation refactor and the Norda
   price-research World. Keep this history; the original phone demo is preserved
   separately. No phone installation is needed for this handoff.
@@ -25,8 +25,8 @@ configuration.
 
 ```sh
 git clone --depth 1 --branch experiment/shop-agent-world-lab \
-  https://github.com/lukerenedupont/bento-shop-feed-library-demo-private.git
-cd bento-shop-feed-library-demo-private
+  https://github.com/lukerenedupont/bento-shop-feed-summer-26.git
+cd bento-shop-feed-summer-26
 xcrun simctl list devices available
 # Replace this with an available iOS 26 simulator's exact UUID on your Mac.
 export SIMULATOR_ID='YOUR-EXACT-SIMULATOR-UUID'
