@@ -26,6 +26,8 @@ SELECTION = [
     ('https://renegade-running.com', 'Renegade Running', '', [
         ('norda-003-m-cinder', '003', 'shoes', 'Cinder'),
         ('mens-055-strato', '055', 'shoes', 'Strato'),
+        ('mens-tecton-x-3-copy', 'Tecton X 4', 'alternatives', ''),
+        ('mens-mafate-5-frost-hoka-citrust', 'Mafate 5', 'alternatives', ''),
     ]),
     ('https://theexchange.run', 'The Exchange Running Collective', '', [
         ('mens-001a', '001A', 'shoes', 'Cinder'),

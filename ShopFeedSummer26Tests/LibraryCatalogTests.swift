@@ -5,12 +5,15 @@ import UIKit
 final class LibraryCatalogTests: XCTestCase {
     func testResearchSnapshotPublishesResolvableProductsAndAgentContext() throws {
         let world = ShoppingResearchCatalog.norda
-        XCTAssertEqual(world.story.resolvedProducts(from: ShopCanvasLibrary.merchants).count, 17)
-        XCTAssertEqual(LibraryAskContext.world(world.story).products.count, 17)
+        XCTAssertEqual(world.story.resolvedProducts(from: ShopCanvasLibrary.merchants).count, 19)
+        XCTAssertEqual(LibraryAskContext.world(world.story).products.count, 19)
         XCTAssertEqual(FeedCardPresentation.resolve(story: world.story).kind, .researchSummary)
         XCTAssertTrue(ShoppingResearchCatalog.validationIssues(ShoppingResearchCatalog.snapshot).isEmpty)
         XCTAssertEqual(LibraryCatalogSearch.results(for: "norda").count, 9)
         XCTAssertTrue(world.offers.allSatisfy { $0.currency == "USD" })
+        let hoka = world.offers.filter { $0.brand.caseInsensitiveCompare("Hoka") == .orderedSame }
+        XCTAssertEqual(hoka.count, 2)
+        XCTAssertTrue(hoka.allSatisfy { $0.merchantName == "Renegade Running" && $0.section == "alternatives" })
     }
 
     func testResearchCoverUsesShortFirstPartyFilmAndItsRealLocalPoster() throws {
@@ -28,6 +31,27 @@ final class LibraryCatalogTests: XCTestCase {
         XCTAssertEqual(world.cover.path, film.posterPath)
         XCTAssertNotNil(UIImage(contentsOfFile: film.posterURL.path))
         XCTAssertTrue(film.rightsStatus.contains("Permission for production reuse is not established"))
+    }
+
+    func testResearchMerchantAndMotionSectionsUsePublishedExactJoins() {
+        let world = ShoppingResearchCatalog.norda
+        var merchantIDs: [String] = []
+        var stories: [ResearchMotionStory] = []
+        for section in world.sections {
+            if case .runningShops(let ids) = section { merchantIDs = ids }
+            if case .motionStories(let items) = section { stories = items }
+        }
+        XCTAssertEqual(Set(merchantIDs), [
+            "gid://shopify/Shop/7546175546",
+            "gid://shopify/Shop/46461485224",
+            "gid://shopify/Shop/27527348310",
+        ])
+        XCTAssertTrue(merchantIDs.allSatisfy { ShopCanvasLibrary.merchantsByID[$0] != nil })
+        XCTAssertEqual(stories.count, 3)
+        XCTAssertTrue(stories.allSatisfy { story in
+            world.offers.contains { $0.id == story.offerID }
+                && URL(string: story.videoURL)?.scheme == "https"
+        })
     }
 
     func testResearchPriceComparisonMatchesModelColorCurrencyAndAvailableUSSize() throws {
@@ -218,7 +242,7 @@ final class LibraryCatalogTests: XCTestCase {
         let expectedIDs = ShopCanvasLibrary.manifest.selectedIds.filter { id in
             productsByID[id].map { !$0.merchantIDs.filter(confirmedIDs.contains).isEmpty } == true
         }
-        XCTAssertEqual(ShopCanvasLibrary.curatedProducts.count, 230)
+        XCTAssertEqual(ShopCanvasLibrary.curatedProducts.count, 232)
         XCTAssertEqual(ShopCanvasLibrary.curatedProducts.map(\.id), expectedIDs + ShoppingResearchCatalog.snapshot.offers.map(\.id))
         let all = ShopCanvasLibrary.stories.first { $0.id == "library-edit-all" }!
         XCTAssertEqual(all.products.map(\.productID), ShopCanvasLibrary.curatedProducts.map(\.nativeID))

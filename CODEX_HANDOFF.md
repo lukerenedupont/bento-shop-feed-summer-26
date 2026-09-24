@@ -56,7 +56,7 @@ never put them in a commit or shared app artifact.
 - Fixed product-card geometry, native PDP/back and merchant source sheets,
   persistent product hearts/preferences, and Julian's continuously mounted dock.
 - One confirmed-Shopify publication path for feed, search, products, merchants
-  and Ask context: 230 products / 83 merchants. Base source snapshot is immutable.
+  and Ask context: 232 products / 83 merchants. Base source snapshot is immutable.
 - Shared feed presentation, finite editorial recipes, and navigation-owned
   shopping context. Existing interactive Worlds remain in the project.
 

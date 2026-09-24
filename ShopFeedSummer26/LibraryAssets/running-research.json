@@ -142,7 +142,7 @@
       ],
       "canonicalURL": "https://nordarun.com/products/003-m-cinder?currency=USD",
       "sourceURL": "https://nordarun.com/products/003-m-cinder?currency=USD&variant=47845318328625",
-      "observedAt": "2026-09-23T22:40:25.933867+00:00",
+      "observedAt": "2026-09-24T13:22:21.815191+00:00",
       "description": "Laceless shoe that transitions effortlessly between hiking, scrambling, and running."
     },
     {
@@ -214,7 +214,7 @@
       ],
       "canonicalURL": "https://nordarun.com/products/001a-m-cinder?currency=USD",
       "sourceURL": "https://nordarun.com/products/001a-m-cinder?currency=USD&variant=51399553057073",
-      "observedAt": "2026-09-23T22:40:27.442976+00:00",
+      "observedAt": "2026-09-24T13:22:24.478005+00:00",
       "description": "Optimally-cushioned ultra distance shoe with an all-new Arnitel® midsole."
     },
     {
@@ -274,7 +274,7 @@
       ],
       "canonicalURL": "https://nordarun.com/products/001a-m-astral?currency=USD",
       "sourceURL": "https://nordarun.com/products/001a-m-astral?currency=USD&variant=51996750151985",
-      "observedAt": "2026-09-23T22:40:28.755638+00:00",
+      "observedAt": "2026-09-24T13:22:26.477669+00:00",
       "description": "Optimally-cushioned ultra distance shoe with an all-new Arnitel® midsole."
     },
     {
@@ -346,7 +346,7 @@
       ],
       "canonicalURL": "https://nordarun.com/products/005-m-neve?currency=USD",
       "sourceURL": "https://nordarun.com/products/005-m-neve?currency=USD&variant=50564500914481",
-      "observedAt": "2026-09-23T22:40:30.039980+00:00",
+      "observedAt": "2026-09-24T13:22:28.363867+00:00",
       "description": "The lightest, fastest and most stable super shoe ever crafted for trail runners."
     },
     {
@@ -418,7 +418,7 @@
       ],
       "canonicalURL": "https://nordarun.com/products/055-m-strato?currency=USD",
       "sourceURL": "https://nordarun.com/products/055-m-strato?currency=USD&variant=52070729646385",
-      "observedAt": "2026-09-23T22:40:31.295961+00:00",
+      "observedAt": "2026-09-24T13:22:30.008838+00:00",
       "description": "All-terrain speed and stability with a seamless knit collar."
     },
     {
@@ -467,7 +467,7 @@
       ],
       "canonicalURL": "https://renegade-running.com/products/norda-003-m-cinder",
       "sourceURL": "https://renegade-running.com/products/norda-003-m-cinder?variant=48477601792301",
-      "observedAt": "2026-09-23T22:40:25.811284+00:00",
+      "observedAt": "2026-09-24T13:22:20.785118+00:00",
       "description": "The 003 is a durable, supportive approach shoe designed to transition seamlessly between hiking, scrambling and running. \n This laceless approach shoe utilizing a customized Vibram® midsole and soleplate as its foundation allows for long days on feet with uncompromising traction. A Bio-Dyneema® upper with an added elasticized Bio-Dyneema® allows for a fit that remains unchanged over time. Between a padded heel collar and reversed heel tab is a pull tab through which the shoes can easily be clipped to a pack.  Excels on adventures of all conditions and duration. No wrong approach.  \n  Our shoes run small. Please take a half size up."
     },
     {
@@ -524,8 +524,98 @@
       ],
       "canonicalURL": "https://renegade-running.com/products/mens-055-strato",
       "sourceURL": "https://renegade-running.com/products/mens-055-strato?variant=52207688384813",
-      "observedAt": "2026-09-23T22:40:27.111661+00:00",
+      "observedAt": "2026-09-24T13:22:22.569424+00:00",
       "description": "The norda 055 combines race day grade resilience and responsiveness with a build that’s designed to tackle the world’s most technical terrain. Its one-piece knit “sock” collar — a first for norda footwear — supplies a “second skin” fit to keep trail detritus out and the wearer’s foot locked in place, while a bespoke Arnitel® midsole ensures benchmark rebound and stable mechanical properties across all conditions and climates. \n \n \n \n \n \n Fit Guide: We recommend to go up 1/2 size (US) from your regular size."
+    },
+    {
+      "id": "research:27527348310:10330396557613",
+      "nativeID": 10330396557613,
+      "merchantID": "gid://shopify/Shop/27527348310",
+      "merchantName": "Renegade Running",
+      "title": "Men's Tecton X 4",
+      "brand": "Hoka",
+      "model": "Tecton X 4",
+      "section": "alternatives",
+      "color": "Frost / Neon tangerine",
+      "usMensSizes": [],
+      "observedImageID": 54387399950637,
+      "price": "275.00",
+      "referencePrice": null,
+      "currency": "USD",
+      "variantIDs": [
+        52289855095085,
+        52289855127853,
+        52289855160621,
+        52289855193389,
+        52289855226157,
+        52289855258925,
+        52289855291693,
+        52289855324461
+      ],
+      "availableVariants": [
+        "Frost / Neon tangerine / 8.5",
+        "Frost / Neon tangerine / 9",
+        "Frost / Neon tangerine / 9.5",
+        "Frost / Neon tangerine / 10",
+        "Frost / Neon tangerine / 10.5",
+        "Frost / Neon tangerine / 11",
+        "Frost / Neon tangerine / 11.5",
+        "Frost / Neon tangerine / 12"
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0275/2734/8310/files/0004_1168723-ABNT_1_dd05e2af-e8c0-4b38-b2cd-d35c233bcebd.webp?v=1786576117&width=900",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0275/2734/8310/files/0004_1168723-ABNT_1_dd05e2af-e8c0-4b38-b2cd-d35c233bcebd.webp?v=1786576117&width=900",
+        "https://cdn.shopify.com/s/files/1/0275/2734/8310/files/0001_1168723-ABNT_4_911aec5d-a535-4f8d-892d-f2008b0e9ab0.webp?v=1786576117&width=900",
+        "https://cdn.shopify.com/s/files/1/0275/2734/8310/files/0002_1168723-ABNT_3_843e9ada-82a2-488a-92ee-6fc122db9394.webp?v=1786576117&width=900",
+        "https://cdn.shopify.com/s/files/1/0275/2734/8310/files/0003_1168723-ABNT_2_8abf0703-e8dd-4c77-9a60-535741cdaef2.webp?v=1786576117&width=900",
+        "https://cdn.shopify.com/s/files/1/0275/2734/8310/files/0000_1168723-ABNT_5_508e6907-5b31-4f79-8d6f-bbd1437839ce.webp?v=1786576117&width=900"
+      ],
+      "canonicalURL": "https://renegade-running.com/products/mens-tecton-x-3-copy",
+      "sourceURL": "https://renegade-running.com/products/mens-tecton-x-3-copy?variant=52289855095085",
+      "observedAt": "2026-09-24T13:22:24.202392+00:00",
+      "description": "Crafted to lead the pack at the world’s pinnacle trail races, the Tecton X 4 is freshly finessed with PROFLY™ X series technologies for speed on gnarly terrain. Parallel carbon plates are adjusted to increase pop in the gait cycle and a new Matryx® Micro textile upper enhances breathability during all-out efforts. Built with two layers of PEBA—our lightest, most resilient foam—and finished with an extended knit collar and updated lace structure for better lockdown and support, this beast has course records in its sights."
+    },
+    {
+      "id": "research:27527348310:10330402423085",
+      "nativeID": 10330402423085,
+      "merchantID": "gid://shopify/Shop/27527348310",
+      "merchantName": "Renegade Running",
+      "title": "Men's Mafate 5",
+      "brand": "Hoka",
+      "model": "Mafate 5",
+      "section": "alternatives",
+      "color": "Frost / Hoka Citrus",
+      "usMensSizes": [],
+      "observedImageID": 54386695242029,
+      "price": "185.00",
+      "referencePrice": null,
+      "currency": "USD",
+      "variantIDs": [
+        52289880293677,
+        52289880326445,
+        52289880359213,
+        52289880391981,
+        52289880424749
+      ],
+      "availableVariants": [
+        "Frost / Hoka Citrus / 10",
+        "Frost / Hoka Citrus / 10.5",
+        "Frost / Hoka Citrus / 11",
+        "Frost / Hoka Citrus / 11.5",
+        "Frost / Hoka Citrus / 12"
+      ],
+      "image": "https://cdn.shopify.com/s/files/1/0275/2734/8310/files/0004_1168723-ABNT_1.webp?v=1786566450&width=900",
+      "images": [
+        "https://cdn.shopify.com/s/files/1/0275/2734/8310/files/0004_1168723-ABNT_1.webp?v=1786566450&width=900",
+        "https://cdn.shopify.com/s/files/1/0275/2734/8310/files/0001_1168723-ABNT_4.webp?v=1786566450&width=900",
+        "https://cdn.shopify.com/s/files/1/0275/2734/8310/files/0002_1168723-ABNT_3.webp?v=1786566450&width=900",
+        "https://cdn.shopify.com/s/files/1/0275/2734/8310/files/0003_1168723-ABNT_2.webp?v=1786566451&width=900",
+        "https://cdn.shopify.com/s/files/1/0275/2734/8310/files/0000_1168723-ABNT_5.webp?v=1786566450&width=900"
+      ],
+      "canonicalURL": "https://renegade-running.com/products/mens-mafate-5-frost-hoka-citrust",
+      "sourceURL": "https://renegade-running.com/products/mens-mafate-5-frost-hoka-citrust?variant=52289880293677",
+      "observedAt": "2026-09-24T13:22:26.064397+00:00",
+      "description": "Plush cushioning for tough terrain. \n \n \n A pinnacle product for technical trail, the Mafate 5 goes the extra mile with more cushioning and protection than ever before. Built tough for mileage chasers, this tenacious trail runner helps maintain control during long haul efforts with our Rocker Integrity Technology and protects from trail debris with an optional ankle gaiter. Finished with a soft, springy foam just underfoot and impact-absorbing foam near the sole, the Mafate 5 is grounded in aggressive Vibram® Megagrip traction lugs. In a word: gnarly."
     },
     {
       "id": "research:58182041653:8132830396469",
@@ -565,7 +655,7 @@
       ],
       "canonicalURL": "https://theexchange.run/products/mens-001a",
       "sourceURL": "https://theexchange.run/products/mens-001a?variant=45221225234485",
-      "observedAt": "2026-09-23T22:40:25.832765+00:00",
+      "observedAt": "2026-09-24T13:22:21.503017+00:00",
       "description": "An optimally-cushioned ultra distance shoe that boasts a seamless Dyneema® upper, custom Arnitel® midsole and a bespoke Vibram® soleplate for unparalleled ultra-distance performance and durability."
     },
     {
@@ -618,7 +708,7 @@
       ],
       "canonicalURL": "https://theexchange.run/products/mens-005",
       "sourceURL": "https://theexchange.run/products/mens-005?variant=45221304107061",
-      "observedAt": "2026-09-23T22:40:27.182493+00:00",
+      "observedAt": "2026-09-24T13:22:23.677601+00:00",
       "description": "The lightest, fastest, most stable super shoe ever crafted for trail runners. Engineered for race day(s), the 005 is a redefinition of what trail racing footwear can and should feel like."
     },
     {
@@ -652,7 +742,7 @@
       ],
       "canonicalURL": "https://districtvision.com/products/ultralight-nylon-zippered-shorts-obsidian",
       "sourceURL": "https://districtvision.com/products/ultralight-nylon-zippered-shorts-obsidian?variant=47574002794714",
-      "observedAt": "2026-09-23T22:40:25.335566+00:00",
+      "observedAt": "2026-09-24T13:22:20.577848+00:00",
       "description": "The Ultralight Nylon Zippered Shorts are designed for use in a broad range of weather conditions. The shorts are constructed from our featherweight 53gsm Japanese milled nylon with abrasion and snag resistance, and feature a comfort liner and deep split zippers on either side, allowing the shorts to vent out further in warmer conditions. A non-PFC Durable Water Repellent finish is added for increased water resistance in inclement weather.  \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n   \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n  Fabric weight: 53gsm   \n  Fabric origin: Japan   \n  Fabric composition: 100% Nylon"
     },
     {
@@ -692,7 +782,7 @@
       ],
       "canonicalURL": "https://districtvision.com/products/ultralight-nylon-windbreaker-obsidian",
       "sourceURL": "https://districtvision.com/products/ultralight-nylon-windbreaker-obsidian?variant=47574006595802",
-      "observedAt": "2026-09-23T22:40:26.255485+00:00",
+      "observedAt": "2026-09-24T13:22:22.078877+00:00",
       "description": "Designed for wind and light rain protection with ultralight packability, the wind jacket is constructed from a featherweight 53gsm Japanese-milled nylon with superior abrasion and snag resistance. The jacket features a wide vent across the back for excess heat ventilation during high-output activities, cinch cords at the waist and easily packs into its own thoughtfully designed rear envelope pocket for keeping close at hand in variable weather conditions. The fabric is also treated with a non-PFC Durable Water Resistant finish for increased water resistance in inclement weather.  Fabric weight: 53gsm Fabric origin: Japan Fabric composition: 100% Nylon"
     },
     {
@@ -729,7 +819,7 @@
       ],
       "canonicalURL": "https://districtvision.com/products/ultralight-nylon-trail-shorts-obsidian-umber",
       "sourceURL": "https://districtvision.com/products/ultralight-nylon-trail-shorts-obsidian-umber?variant=47573984837850",
-      "observedAt": "2026-09-23T22:40:27.213095+00:00",
+      "observedAt": "2026-09-24T13:22:24.357709+00:00",
       "description": "The Ultralight Nylon Trail Shorts unite our recycled half tights with a 5\" ultralight Japanese nylon shell, a concealed phone pocket under the outer shell of the shorts, a secure rear technical zip pocket, a discrete key pocket sewn into the waistline, and substantial drawcords for a secure and customizable fit. \n   \n Fabric weight: 53-135gsm Fabric origin: Italy & Japan Liner composition: 78% Recycled Nylon, 22% Elastane Shell composition: 100% Nylon"
     },
     {
@@ -769,7 +859,7 @@
       ],
       "canonicalURL": "https://districtvision.com/products/dv-nb-1080-training-shoe-womens-linen",
       "sourceURL": "https://districtvision.com/products/dv-nb-1080-training-shoe-womens-linen?variant=47699779879130",
-      "observedAt": "2026-09-23T22:40:28.322436+00:00",
+      "observedAt": "2026-09-24T13:22:26.149440+00:00",
       "description": "Featuring a minimal, monochromatic palette, the 1080v15 is engineered as a versatile everyday trainer. An Infinion midsole provides lasting performance, offering enhanced cushioning and responsive energy return with each step. Exploring materials through the lens of 1990s running shoes, the design utilizes a layered construction, adding a veil of mesh to the upper, and a recycled, woven ‘N’ cutout for branding. Adding texture and depth, the collaborative design embraces tactility and emphasizes restraint and function over excess.  Weight: 7.3oz"
     },
     {
@@ -802,7 +892,7 @@
       ],
       "canonicalURL": "https://www.soarrunning.com/en-us/products/marathon-shorts-black-and-white-dot",
       "sourceURL": "https://www.soarrunning.com/en-us/products/marathon-shorts-black-and-white-dot?variant=56569169346935",
-      "observedAt": "2026-09-23T22:40:28.136579+00:00",
+      "observedAt": "2026-09-24T13:22:25.508461+00:00",
       "description": "Designed for distance, from 26.2 miles and beyond, the Marathon Shorts balance ultra-lightweight construction with long-haul storage and friction-free comfort. \n Cut from French-made stretch mesh, they move freely at pace and stay dry under load. Laser-cut hems remove bulk at the edge, and a bonded liner, shaped and infused with aloe vera, eliminates chafing across the distance. \n A zipped rear pocket secures essentials. An external mesh pouch holds four gels, with two additional waistband loops up front for fast fuelling on the move. \n Race-ready, long-range shorts, built for the full effort."
     },
     {
@@ -842,7 +932,7 @@
       ],
       "canonicalURL": "https://satisfyrunning.com/products/mothtech-t-shirt-aged-black-men?currency=USD",
       "sourceURL": "https://satisfyrunning.com/products/mothtech-t-shirt-aged-black-men?currency=USD&variant=53721458016584",
-      "observedAt": "2026-09-23T22:40:28.495097+00:00",
+      "observedAt": "2026-09-24T13:22:27.124163+00:00",
       "description": "- Organic combed cotton jersey. Fabric from Portugal.  - Regular fit.  - Body-mapped “moth” holes for strategic ventilation and cooling.  - Exterior detachable care label so nothing rubs against your skin."
     },
     {
@@ -882,7 +972,7 @@
       ],
       "canonicalURL": "https://satisfyrunning.com/products/rippy-cordura-5-trail-shorts-black?currency=USD",
       "sourceURL": "https://satisfyrunning.com/products/rippy-cordura-5-trail-shorts-black?currency=USD&variant=52616222441800",
-      "observedAt": "2026-09-23T22:40:29.895590+00:00",
+      "observedAt": "2026-09-24T13:22:28.660224+00:00",
       "description": "- Ultra-lightweight 2.5” Rippy™ shell (abrasion resistant, fast dry, moisture control) ripstop. Fabric from Italy. \n \n- Anti-chafe 3” Justice™ liner (silky soft, fast dry, moisture control, 4-way stretch) technical silk. \n \n- 2 side back pockets for nutrition. \n \n- Double waistband construction to tuck drawcords in and avoid chafing. \n \n- Integrated sweatproof phone pocket in the double waistband. \n \n- Mini S-Carabiner to clip in valuables. \n \n -  Exterior detachable care label so nothing rubs against your skin."
     },
     {
@@ -946,7 +1036,7 @@
       ],
       "canonicalURL": "https://satisfyrunning.com/products/therocker-shadow?currency=USD",
       "sourceURL": "https://satisfyrunning.com/products/therocker-shadow?currency=USD&variant=50617063768392",
-      "observedAt": "2026-09-23T22:40:31.761131+00:00",
+      "observedAt": "2026-09-24T13:22:30.309097+00:00",
       "description": "- TuneLug™ engineered outsole with Vibram ®  Megagrip™, Litebase™, and Traction Lug™.   - Euforia™ super foam midsole with a proprietary PEBA/EVA blend for cushion and rebound.   - Rippy™ 66 high-tenacity monomesh upper for breathable structure. - Asymmetrical lacing system to relieve Achilles and big toe pressure.   - Dual-width form: D-width heel, E-width forefoot to accommodate natural expansion.   - Serrated laces for a secure, stay-tied fit."
     }
   ],
@@ -956,7 +1046,7 @@
       "summary": "Free US shipping over $180",
       "detail": "Processes within 2 business days. UPS Ground for domestic orders. This is not a delivery estimate.",
       "sourceURL": "https://renegade-running.com/policies/shipping-policy",
-      "observedAt": "2026-09-23T22:41:30.019581+00:00"
+      "observedAt": "2026-09-24T13:22:30.871341+00:00"
     }
   ]
 }

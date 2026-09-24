@@ -8,6 +8,7 @@ struct ShoppingResearchContent: View {
     @AppStorage("shop-agent.saved-research-offers") private var savedOffers = ""
     @State private var modal: ResearchModal?
     @State private var apparelFilter = "Markdowns"
+    @State private var activeMotionStoryID: String?
     private let lime = Color(hex: "#DFECA5")
 
     init(world: ShoppingResearchWorld) {
@@ -30,6 +31,8 @@ struct ShoppingResearchContent: View {
                         heading("Other ways to go.")
                         offerRail(world.offers.filter { $0.section == "alternatives" })
                     }
+                case .runningShops(let merchantIDs): runningShops(merchantIDs)
+                case .motionStories(let stories): motionStoryRail(stories)
                 case .relatedWorlds(let storyIDs): relatedWorlds(storyIDs)
                 case .stories(let editorials): storyRail(editorials)
                 case .methodology: methodology
@@ -203,6 +206,59 @@ struct ShoppingResearchContent: View {
         }
     }
 
+    private func runningShops(_ merchantIDs: [String]) -> some View {
+        let merchants = merchantIDs.compactMap { ShopCanvasLibrary.merchantsByID[$0] }
+            .compactMap { record in ShopCanvasLibrary.merchants.first { $0.id == record.id } }
+        return VStack(alignment: .leading, spacing: 18) {
+            heading("More from running shops.")
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(alignment: .top, spacing: 12) {
+                    ForEach(merchants) { merchant in
+                        VStack(alignment: .leading, spacing: 10) {
+                            TopicMerchantShowcaseCard(merchant: merchant)
+                            Text(merchant.id == "gid://shopify/Shop/27527348310"
+                                 ? "Hoka + Norda at Renegade Running"
+                                 : merchant.displayName)
+                                .font(GravityFont.medium.fixedFont(size: 14))
+                                .lineLimit(1)
+                        }
+                        .accessibilityIdentifier("research.merchant-card.\(merchant.id)")
+                    }
+                }.scrollTargetLayout()
+            }
+            .contentMargins(.horizontal, 20, for: .scrollContent)
+            .scrollTargetBehavior(.viewAligned)
+        }
+    }
+
+    private func motionStoryRail(_ stories: [ResearchMotionStory]) -> some View {
+        let resolved = stories.compactMap { story in
+            world.offers.first { $0.id == story.offerID }.map { (story, $0) }
+        }
+        return VStack(alignment: .leading, spacing: 18) {
+            heading("Running, in motion.")
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 12) {
+                    ForEach(resolved, id: \.0.id) { story, offer in
+                        ResearchMotionStoryCard(
+                            story: story,
+                            offer: offer,
+                            isActive: activeMotionStoryID == story.id,
+                            onOpen: {
+                                coordinator.pushRoute(.product(merchantId: offer.merchantID, productId: offer.nativeID))
+                            }
+                        )
+                        .id(story.id)
+                    }
+                }.scrollTargetLayout()
+            }
+            .contentMargins(.horizontal, 20, for: .scrollContent)
+            .scrollTargetBehavior(.viewAligned)
+            .scrollPosition(id: $activeMotionStoryID)
+            .onAppear { if activeMotionStoryID == nil { activeMotionStoryID = resolved.first?.0.id } }
+        }
+    }
+
     private func storyRail(_ items: [ResearchEditorial]) -> some View {
         VStack(alignment: .leading, spacing: 18) {
             heading("Out there, somewhere.")
@@ -291,6 +347,48 @@ private enum ResearchModal: Identifiable {
         case .offer(let offer, let size): "offer:\(offer.id):\(size ?? "all")"
         case .source(let url): url.absoluteString
         }
+    }
+}
+
+private struct ResearchMotionStoryCard: View {
+    let story: ResearchMotionStory
+    let offer: ResearchOffer
+    let isActive: Bool
+    let onOpen: () -> Void
+    @State private var isVisible = false
+
+    var body: some View {
+        Button(action: onOpen) {
+            ZStack(alignment: .bottomLeading) {
+                AmbientProductVideo(
+                    videoURL: URL(string: story.videoURL),
+                    posterImageURL: offer.image,
+                    playbackEnabled: isActive && isVisible,
+                    playbackGroupID: "research-motion-\(story.id)"
+                )
+                .frame(width: 258, height: 368)
+                LinearGradient(
+                    stops: [.init(color: .clear, location: 0.45), .init(color: .black.opacity(0.82), location: 1)],
+                    startPoint: .top, endPoint: .bottom
+                )
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(story.title)
+                        .font(GravityFont.expressiveBold.fixedFont(size: 24)).tracking(-0.5)
+                    Text(story.detail)
+                        .font(GravityFont.regular.fixedFont(size: 13)).foregroundStyle(.white.opacity(0.78))
+                    Text("View \(offer.title)")
+                        .font(GravityFont.medium.fixedFont(size: 13)).padding(.top, 4)
+                }.padding(18)
+            }
+            .frame(width: 258, height: 368)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .contentShape(RoundedRectangle(cornerRadius: 20))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("\(story.title). \(story.detail). View \(offer.title)")
+        .accessibilityIdentifier("research.motion.\(story.id)")
+        .onScrollVisibilityChange(threshold: 0.55) { isVisible = $0 }
+        .onDisappear { isVisible = false }
     }
 }
 

@@ -65,6 +65,16 @@ struct ResearchEditorial: Identifiable {
     let isFilm: Bool
 }
 
+/// Merchant-owned product film joined to the exact published offer it depicts.
+/// It is not labeled as user-generated Shop content without a real PostCard.
+struct ResearchMotionStory: Identifiable {
+    let id: String
+    let title: String
+    let detail: String
+    let offerID: String
+    let videoURL: String
+}
+
 /// Finite composition: new research edits supply content, not a new screen.
 enum ResearchSection {
     case offers
@@ -73,6 +83,8 @@ enum ResearchSection {
     case film(ResearchEditorial)
     case apparel
     case alternatives
+    case runningShops(merchantIDs: [String])
+    case motionStories([ResearchMotionStory])
     case relatedWorlds(storyIDs: [String])
     case stories([ResearchEditorial])
     case methodology
@@ -183,11 +195,23 @@ enum ShoppingResearchCatalog {
         shippingPolicies: snapshot.shippingPolicies,
         sections: [
             .offers, .merchantComparison, .modelStudy,
-            .film(.init(id: "norda-055-film", title: "Freedom of the soul.",
-                        detail: "Norda 055",
-                        image: "https://i.ytimg.com/vi/94vmhYRLw2M/maxresdefault.jpg",
-                        source: "https://www.youtube.com/watch?v=94vmhYRLw2M", isFilm: true)),
             .apparel, .alternatives,
+            .runningShops(merchantIDs: [
+                "gid://shopify/Shop/7546175546",
+                "gid://shopify/Shop/46461485224",
+                "gid://shopify/Shop/27527348310",
+            ]),
+            .motionStories([
+                .init(id: "norda-055-motion", title: "055 in motion", detail: "Norda product film",
+                      offerID: "research:82070208817:10459799683377",
+                      videoURL: ResearchCoverFilm.norda.videoURL.absoluteString),
+                .init(id: "satisfy-rocker-motion", title: "TheROCKER on trail", detail: "SATISFY product film",
+                      offerID: "research:7546175546:9517646643528",
+                      videoURL: "https://satisfyrunning.com/cdn/shop/videos/c/vp/a19bd92102cf4b9490e36bfbc6433621/a19bd92102cf4b9490e36bfbc6433621.HD-1080p-2.5Mbps-38152704.mp4?v=0"),
+                .init(id: "satisfy-mothtech-motion", title: "MothTech in motion", detail: "SATISFY product film",
+                      offerID: "research:7546175546:10193085464904",
+                      videoURL: "https://satisfyrunning.com/cdn/shop/videos/c/vp/028db231b1894ee0aeee3296aab4976d/028db231b1894ee0aeee3296aab4976d.HD-1080p-2.5Mbps-91298377.mp4?v=0"),
+            ]),
             .stories([
                 .init(id: "western-states", title: "The long way round.",
                       detail: "Priscilla Forgie and Jenny Quilty at Western States. From Norda.",

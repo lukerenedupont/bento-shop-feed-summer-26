@@ -125,7 +125,7 @@ Removed the all caps editorial labels and search bookmark from the feed card and
 
 ### USD merchant comparison update
 
-This update supersedes the first-pass offer counts, Distance assortment and currency controls above. The catalog now contains **17 researched products, including 9 Norda shoe offers across 3 shops**; combined publication is **230 products / 83 confirmed Shopify merchants**. Distance is no longer in this research edit.
+This update supersedes the first-pass offer counts, Distance assortment and currency controls above. The catalog now contains **19 researched products, including 9 Norda shoe offers across 3 shops and 2 Hoka alternatives sold by Renegade Running**; combined publication is **232 products / 83 confirmed Shopify merchants**. Distance is no longer in this research edit.
 
 `Scripts/import_running_research.py` now requests each merchant's USD presentation and requires matching `Shopify.currency`, product JSON `price_currency`, and Ajax `.js` prices. It does not multiply amounts by an agent-selected FX rate. Norda and SATISFY use `?currency=USD`; SOAR uses `/en-us/`. This establishes displayed USD prices, not delivery eligibility or landed totals for every US address.
 
@@ -171,6 +171,18 @@ Subsequent handoff cleanup removed the unreferenced `try-faves-figure` cutout wh
 The research hero now occupies approximately **58% of the viewport** so the Norda film leads while the first two product tiles remain the next visible beat. “Find your Norda” replaces its menu with direct All / 001A / 003 / 005 / 055 pills. Selecting a model intentionally shows all checked merchant observations instead of deduplicating the model/color, making sourced price differences visible in the finding rail.
 
 The merchant comparison now follows an editorial buying-guide hierarchy: the model selected above carries through, one compact size menu remains, the lowest exact-match observed price is featured, and other checked sellers sit under “Also available.” The prior equal-weight model and Best price / Fastest shipping / Highest rated controls were removed. Lowest observed item price remains calculated only for exact available-size matches; shipping evidence stays in merchant details and no rating/speed winner is implied. See `WIRECUTTER_COMPARISON_PATTERN.md` for the reviewed reference and the limits on what this evidence can claim.
+
+### Running-shop and motion breadth — 2026-09-24
+
+The wider edit now includes two source-checked Hoka alternatives from confirmed-Shopify merchant Renegade Running: Men's Tecton X 4 at **$275** and Men's Mafate 5 at **$185** in the checked USD storefront. Hoka is the product brand; the canonical merchant route remains Renegade Running. The merchant rail reuses native merchant showcase cards for **SATISFY, District Vision and Renegade Running**, all already within the confirmed publication catalog.
+
+A new “Running, in motion” rail uses merchant-owned product-page films with exact offer joins:
+
+- Norda 055 film → Norda 055 Strato offer; source page https://nordarun.com/products/055-m-strato
+- SATISFY TheROCKER film → TheROCKER offer; source page https://satisfyrunning.com/products/therocker-shadow?currency=USD
+- SATISFY MothTech film → MothTech T-Shirt offer; source page https://satisfyrunning.com/products/mothtech-t-shirt-aged-black-men?currency=USD
+
+These are labeled **product films**, not user posts or endorsements. No authenticated Shop PostCard in the fixture established an exact Norda/Hoka product relationship, so the app does not relabel unrelated bundled posts as running UGC. Video streams remain remote, muted, one active card at a time, with the exact product image as fallback; tapping opens the joined native PDP. Public product media still requires permission clearance for production redistribution.
 
 ### Remaining production work
 
