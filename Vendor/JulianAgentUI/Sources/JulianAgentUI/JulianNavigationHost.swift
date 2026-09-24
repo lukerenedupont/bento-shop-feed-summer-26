@@ -25,7 +25,7 @@ public struct JulianNavigationHost: View {
                     cartAnimations: state.cartAnimation.activeAnimations,
                     cartButtonBounceTrigger: state.cartAnimation.cartButtonBounceTrigger,
                     bottomInset: geometry.safeAreaInsets.bottom,
-                    backdropColor: colorScheme == .dark ? .black : .white,
+                    backdropColor: state.navigationBackdropColor ?? (colorScheme == .dark ? .black : .white),
                     onTabPressed: { tab in
                         state.draft.navigation.closeAskPage()
                         state.closeConversation()

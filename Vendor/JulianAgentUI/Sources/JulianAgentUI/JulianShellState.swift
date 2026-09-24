@@ -30,6 +30,8 @@ public final class JulianShellState {
     public var searchActive = false
     /// Host-resolved media contrast shared by source search and UIKit navigation.
     public var prefersDarkChrome = false
+    /// Optional destination-owned color beneath the dock's progressive blur.
+    public var navigationBackdropColor: Color?
     public var showsSettings = false
     public var showsUtilityBeltControls = false
     public var showsServiceNotice = false

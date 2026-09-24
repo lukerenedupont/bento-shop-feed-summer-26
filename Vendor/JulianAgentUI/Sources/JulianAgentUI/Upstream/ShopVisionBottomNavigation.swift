@@ -1254,6 +1254,19 @@ private final class ShopUIKitTabBarBackdropView: UIView {
     }
 
     func update(color: UIColor) {
+        var white: CGFloat = 0
+        var alpha: CGFloat = 0
+        let isDark: Bool
+        if color.getWhite(&white, alpha: &alpha) {
+            isDark = white < 0.5
+        } else {
+            var red: CGFloat = 0
+            var green: CGFloat = 0
+            var blue: CGFloat = 0
+            color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+            isDark = red * 0.299 + green * 0.587 + blue * 0.114 < 0.5
+        }
+        blur.effect = UIBlurEffect(style: isDark ? .systemMaterialDark : .systemMaterialLight)
         colorGradient.colors = [
             color.withAlphaComponent(0).cgColor,
             color.withAlphaComponent(0.58).cgColor,

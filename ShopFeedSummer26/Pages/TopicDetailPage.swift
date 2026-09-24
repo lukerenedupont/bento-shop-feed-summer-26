@@ -364,7 +364,8 @@ struct TopicDetailPage: View {
                             .background { scrolledSurfaceBackground }
                     }
                 }
-                .contentMargins(.bottom, ShopCanvasLibrary.isEnabled ? 144 : 0, for: .scrollContent)
+                .contentMargins(.bottom, ShoppingResearchCatalog.world(for: story.id) != nil
+                                ? 0 : (ShopCanvasLibrary.isEnabled ? 144 : 0), for: .scrollContent)
                 .scrollBounceBehavior(.basedOnSize)
                 .onScrollGeometryChange(for: CGFloat.self) { scrollGeometry in
                     scrollGeometry.contentOffset.y
@@ -434,10 +435,21 @@ struct TopicDetailPage: View {
                 sampledSurfaceColor = color
             }
         }
-        .onAppear { if !ShopCanvasLibrary.isEnabled { coordinator.showNavBar = true } }
+        .onAppear {
+            if !ShopCanvasLibrary.isEnabled { coordinator.showNavBar = true }
+            if ShoppingResearchCatalog.world(for: story.id) != nil { coordinator.julianShell.navigationBackdropColor = surfaceColor }
+        }
+        .onChange(of: sampledSurfaceColor) { _, _ in
+            if ShoppingResearchCatalog.world(for: story.id) != nil {
+                coordinator.julianShell.navigationBackdropColor = surfaceColor
+            }
+        }
         .onDisappear {
             coordinator.resetScrollState()
             coordinator.showNavBar = true
+            if ShoppingResearchCatalog.world(for: story.id) != nil {
+                coordinator.julianShell.navigationBackdropColor = nil
+            }
         }
     }
     private func hero(width: CGFloat, viewportHeight: CGFloat) -> some View {

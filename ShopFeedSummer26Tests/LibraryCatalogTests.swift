@@ -58,6 +58,11 @@ final class LibraryCatalogTests: XCTestCase {
             world.offers.contains { $0.id == story.offerID }
                 && URL(string: story.videoURL)?.scheme == "https"
         })
+        XCTAssertEqual(world.alternativeNotes.count, 4)
+        XCTAssertTrue(world.alternativeNotes.allSatisfy { note in
+            world.offers.contains { $0.id == note.offerID && $0.section == "alternatives" }
+                && !note.useCase.isEmpty && !note.distinction.isEmpty
+        })
     }
 
     func testResearchPriceComparisonMatchesModelColorCurrencyAndAvailableUSSize() throws {

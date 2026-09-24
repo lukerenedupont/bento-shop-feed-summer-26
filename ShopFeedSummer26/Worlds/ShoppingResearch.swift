@@ -75,6 +75,15 @@ struct ResearchMotionStory: Identifiable {
     let videoURL: String
 }
 
+/// Short, source-derived distinctions for the side-by-side alternative view.
+/// These describe construction and intended use; they are not test results.
+struct ResearchAlternativeNote: Identifiable {
+    let offerID: String
+    let useCase: String
+    let distinction: String
+    var id: String { offerID }
+}
+
 /// Finite composition: new research edits supply content, not a new screen.
 enum ResearchSection {
     case offers
@@ -101,6 +110,7 @@ struct ShoppingResearchWorld {
     let coverFilm: ResearchCoverFilm?
     let offers: [ResearchOffer]
     let shippingPolicies: [ResearchShippingPolicy]
+    let alternativeNotes: [ResearchAlternativeNote]
     let sections: [ResearchSection]
 
     var story: FeedStory {
@@ -195,6 +205,16 @@ enum ShoppingResearchCatalog {
         coverFilm: .norda,
         offers: snapshot.offers,
         shippingPolicies: snapshot.shippingPolicies,
+        alternativeNotes: [
+            .init(offerID: "research:27527348310:10330396557613", useCase: "Race-day alternative",
+                  distinction: "Parallel carbon plates · dual-layer PEBA"),
+            .init(offerID: "research:27527348310:10330402423085", useCase: "Long-haul alternative",
+                  distinction: "Plush cushioning · Vibram Megagrip"),
+            .init(offerID: "research:46461485224:9203603800282", useCase: "Everyday training",
+                  distinction: "Minimal palette · responsive cushioning"),
+            .init(offerID: "research:7546175546:9517646643528", useCase: "Trail alternative",
+                  distinction: "PEBA/EVA foam · Vibram Megagrip"),
+        ],
         sections: [
             .offers, .merchantComparison, .modelStudy,
             .apparel, .alternatives,

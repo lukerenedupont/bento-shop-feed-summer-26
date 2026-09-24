@@ -30,6 +30,13 @@ The useful pattern is **recommendation first, buying options second**:
 5. Open evidence and shipping-policy detail on demand instead of exposing
    equally weighted ranking/filter controls.
 
+The wider alternatives section uses the same progressive-disclosure idea in a
+horizontal “this versus that” view. It keeps the selected Norda first, then
+places Hoka, District Vision and SATISFY options beside it with only
+merchant-supplied intended-use and construction distinctions. Those labels are
+descriptive, not test verdicts, and the UI explicitly says this is not
+comparative wear testing.
+
 The UI deliberately says **Best observed price**, not “Our pick,” “Best deal,”
 or “Best shoe.” It does not rank shipping or ratings because comparable evidence
 is absent, and shipping/tax may change the delivered total.

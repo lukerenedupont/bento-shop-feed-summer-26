@@ -107,15 +107,11 @@ struct ResearchMerchantComparison: View {
                 if let pick = result.offers.first {
                     recommendation(pick, result: result, size: safeSize)
                     if result.offers.count > 1 {
-                        VStack(alignment: .leading, spacing: 0) {
+                        VStack(alignment: .leading, spacing: 10) {
                             Text("Also available")
-                                .font(GravityFont.semiBold.fixedFont(size: 14))
-                                .padding(.bottom, 8)
-                            ForEach(Array(result.offers.dropFirst().enumerated()), id: \.element.id) { index, offer in
+                                .font(GravityFont.expressiveBold.fixedFont(size: 22)).tracking(-0.5)
+                            ForEach(Array(result.offers.dropFirst())) { offer in
                                 alternativeRow(offer, result: result, size: safeSize)
-                                if index < result.offers.dropFirst().count - 1 {
-                                    Divider().overlay(.white.opacity(0.12))
-                                }
                             }
                         }.padding(.horizontal, 20)
                     }
@@ -190,21 +186,29 @@ struct ResearchMerchantComparison: View {
 
     private func alternativeRow(_ offer: ResearchOffer, result: ResearchComparison, size: String) -> some View {
         Button { onOffer(offer, size) } label: {
-            HStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: 3) {
+            HStack(spacing: 13) {
+                ProductCard(image: nil, imageURL: offer.image, showFavoriteButton: false)
+                    .frame(width: 72, height: 72).environment(\.colorScheme, .light)
+                    .allowsHitTesting(false)
+                VStack(alignment: .leading, spacing: 4) {
                     Text(offer.merchantName.localizedCapitalized)
                         .font(GravityFont.semiBold.fixedFont(size: 15)).lineLimit(1)
+                    Text("Norda \(offer.model) · US M \(size)")
+                        .font(GravityFont.regular.fixedFont(size: 12))
+                        .foregroundStyle(.white.opacity(0.62)).lineLimit(1)
                     if result.lowestOfferIDs.contains(offer.id), result.lowestOfferIDs.count > 1 {
-                        Text("Same observed item price").font(GravityFont.regular.fixedFont(size: 11))
-                            .foregroundStyle(.white.opacity(0.65))
+                        Text("Same observed item price")
+                            .font(GravityFont.regular.fixedFont(size: 11)).foregroundStyle(accent)
                     }
                 }
-                Spacer(minLength: 8)
+                Spacer(minLength: 6)
                 Text(offer.displayPrice).font(GravityFont.expressiveBold.fixedFont(size: 22))
-                Image(systemName: "chevron.right").font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.45))
             }
-            .frame(minHeight: 62).contentShape(Rectangle())
+            .padding(10)
+            .frame(minHeight: 92)
+            .background(.white.opacity(0.055), in: RoundedRectangle(cornerRadius: 16))
+            .overlay(RoundedRectangle(cornerRadius: 16).stroke(.white.opacity(0.1)))
+            .contentShape(RoundedRectangle(cornerRadius: 16))
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("research.merchant.\(offer.nativeID)")

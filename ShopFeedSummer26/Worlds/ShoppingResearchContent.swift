@@ -7,7 +7,6 @@ struct ShoppingResearchContent: View {
     @AppStorage private var model: String
     @AppStorage("shop-agent.saved-research-offers") private var savedOffers = ""
     @State private var modal: ResearchModal?
-    @State private var apparelFilter = "Markdowns"
     @State private var activeMotionStoryID: String?
     @State private var showsBriefEditor = false
     @AppStorage private var deliveryContext: String
@@ -35,11 +34,7 @@ struct ShoppingResearchContent: View {
                     ResearchMerchantComparison(world: world) { modal = .offer($0, usSize: $1) }
                 case .film(let editorial): editorialFeature(editorial)
                 case .apparel: apparelSection
-                case .alternatives:
-                    VStack(alignment: .leading, spacing: 18) {
-                        heading("Other ways to go.")
-                        offerRail(world.offers.filter { $0.section == "alternatives" })
-                    }
+                case .alternatives: alternativeComparison
                 case .runningShops(let merchantIDs): runningShops(merchantIDs)
                 case .motionStories(let stories): motionStoryRail(stories)
                 case .relatedWorlds(let storyIDs): relatedWorlds(storyIDs)
@@ -49,6 +44,7 @@ struct ShoppingResearchContent: View {
             }
         }
         .foregroundStyle(.white)
+        .padding(.bottom, 180)
         .sheet(item: $modal) { item in
             switch item {
             case .source(let url): ResearchSourceBrowser(url: url).ignoresSafeArea()
@@ -235,9 +231,27 @@ struct ShoppingResearchContent: View {
         VStack(alignment: .leading, spacing: 18) {
             heading("A closer look.")
             if let offer = world.offers.first(where: { $0.model == (model == "All" ? "001A" : model) && $0.merchantName == "norda" }) {
+                if let editorial = trailEditorial {
+                    Button { openSource(editorial.source) } label: {
+                        ZStack(alignment: .bottomLeading) {
+                            ResearchImage(url: editorial.image, height: 280)
+                            LinearGradient(colors: [.clear, .black.opacity(0.72)], startPoint: .center, endPoint: .bottom)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Norda on trail")
+                                    .font(GravityFont.expressiveBold.fixedFont(size: 27)).tracking(-0.6)
+                                Text("Western States · Norda story")
+                                    .font(GravityFont.regular.fixedFont(size: 13)).foregroundStyle(.white.opacity(0.78))
+                            }.padding(18)
+                        }
+                        .frame(height: 280)
+                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.horizontal, 20)
+                }
                 HStack(spacing: 8) {
                     ForEach(Array(offer.images.dropFirst().prefix(2).enumerated()), id: \.offset) { _, image in
-                        ResearchImage(url: image, height: 228)
+                        ResearchImage(url: image, height: 180)
                             .background(Color(hex: "#EDEEE9")).clipShape(RoundedRectangle(cornerRadius: 14))
                     }
                 }.padding(.horizontal, 20)
@@ -250,6 +264,14 @@ struct ShoppingResearchContent: View {
                 }.padding(.horizontal, 20)
             }
         }
+    }
+
+    private var trailEditorial: ResearchEditorial? {
+        for section in world.sections {
+            if case .stories(let items) = section,
+               let editorial = items.first(where: { $0.id == "western-states" }) { return editorial }
+        }
+        return nil
     }
 
     private func editorialFeature(_ item: ResearchEditorial) -> some View {
@@ -276,47 +298,145 @@ struct ShoppingResearchContent: View {
     }
 
     private var apparelSection: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            heading("The rest of your run.")
-            HStack(spacing: 8) {
-                ForEach(["Markdowns", "The wider kit"], id: \.self) { value in
-                    Button { apparelFilter = value } label: {
-                        Text(value).font(GravityFont.medium.fixedFont(size: 13))
-                            .padding(.horizontal, 16).frame(minHeight: 44)
-                            .foregroundStyle(apparelFilter == value ? Color(hex: "#26382D") : .white)
-                            .background(apparelFilter == value ? lime : .white.opacity(0.08), in: Capsule())
-                    }
-                }
-            }.padding(.horizontal, 20)
-            offerRail(world.offers.filter {
-                $0.section == "apparel" && (apparelFilter == "Markdowns" ? $0.markdownPercent != nil : $0.markdownPercent == nil)
-            })
-        }
-    }
-
-    private func runningShops(_ merchantIDs: [String]) -> some View {
-        let merchants = merchantIDs.compactMap { ShopCanvasLibrary.merchantsByID[$0] }
-            .compactMap { record in ShopCanvasLibrary.merchants.first { $0.id == record.id } }
+        let offers = world.offers.filter { $0.section == "apparel" }
+        let merchantOrder = ["District Vision", "SATISFY", "SOAR"]
         return VStack(alignment: .leading, spacing: 18) {
-            heading("More from running shops.")
+            heading("The rest of your run.")
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(alignment: .top, spacing: 12) {
-                    ForEach(merchants) { merchant in
-                        VStack(alignment: .leading, spacing: 10) {
-                            TopicMerchantShowcaseCard(merchant: merchant)
-                            Text(merchant.id == "gid://shopify/Shop/27527348310"
-                                 ? "Hoka + Norda at Renegade Running"
-                                 : merchant.displayName)
-                                .font(GravityFont.medium.fixedFont(size: 14))
-                                .lineLimit(1)
+                    ForEach(merchantOrder, id: \.self) { merchantName in
+                        let merchantOffers = offers.filter { $0.merchantName == merchantName }
+                        if let merchantID = merchantOffers.first?.merchantID, !merchantOffers.isEmpty {
+                            runningKitMerchantCard(merchantID: merchantID, offers: merchantOffers)
                         }
-                        .accessibilityIdentifier("research.merchant-card.\(merchant.id)")
                     }
                 }.scrollTargetLayout()
             }
             .contentMargins(.horizontal, 20, for: .scrollContent)
             .scrollTargetBehavior(.viewAligned)
         }
+    }
+
+    private func runningKitMerchantCard(merchantID: String, offers: [ResearchOffer]) -> some View {
+        Button { coordinator.pushRoute(.store(merchantId: merchantID)) } label: {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 8) {
+                    ForEach(Array(offers.prefix(2))) { offer in
+                        ProductCard(image: nil, imageURL: offer.image, priceBadge: offer.displayPrice,
+                                    showFavoriteButton: false)
+                            .environment(\.colorScheme, .light)
+                            .frame(width: 126, height: 126)
+                            .allowsHitTesting(false)
+                    }
+                }
+                LibraryMerchantWordmark(merchantID: merchantID)
+                    .frame(width: 150, height: 28, alignment: .leading)
+                Text(merchantOfferSummary(offers))
+                    .font(GravityFont.regular.fixedFont(size: 13))
+                    .foregroundStyle(.white.opacity(0.68))
+            }
+            .padding(14)
+            .frame(width: 292, alignment: .leading)
+            .background(.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 20))
+            .overlay(RoundedRectangle(cornerRadius: 20).stroke(.white.opacity(0.1)))
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("research.kit-merchant.\(merchantID)")
+    }
+
+    private func merchantOfferSummary(_ offers: [ResearchOffer]) -> String {
+        let saleCount = offers.filter { $0.markdownPercent != nil }.count
+        let floor = offers.min(by: { $0.amount < $1.amount })?.displayPrice ?? "Price at shop"
+        if saleCount > 0 { return "\(saleCount) sale \(saleCount == 1 ? "find" : "finds") · from \(floor)" }
+        return "\(offers.count) \(offers.count == 1 ? "piece" : "pieces") · from \(floor)"
+    }
+
+    private var alternativeComparison: some View {
+        let selected = world.featuredShoes(model: model).first
+        let alternatives = world.alternativeNotes.compactMap { note in
+            world.offers.first { $0.id == note.offerID }.map { (offer: $0, note: note) }
+        }
+        return VStack(alignment: .leading, spacing: 12) {
+            heading("How they compare.")
+            Text("Your Norda beside other directions for race day, long miles and daily training.")
+                .font(GravityFont.regular.fixedFont(size: 14))
+                .foregroundStyle(.white.opacity(0.68)).lineSpacing(3)
+                .padding(.horizontal, 20)
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(alignment: .top, spacing: 10) {
+                    if let selected {
+                        comparisonCard(offer: selected, useCase: "Your Norda",
+                                       distinction: nordaDistinction(selected.model), highlighted: true)
+                    }
+                    ForEach(alternatives, id: \.note.id) { item in
+                        comparisonCard(offer: item.offer, useCase: item.note.useCase,
+                                       distinction: item.note.distinction, highlighted: false)
+                    }
+                }.scrollTargetLayout()
+            }
+            .contentMargins(.horizontal, 20, for: .scrollContent)
+            .scrollTargetBehavior(.viewAligned)
+            Text("At a glance from merchant product descriptions—not comparative wear testing.")
+                .font(GravityFont.regular.fixedFont(size: 11))
+                .foregroundStyle(.white.opacity(0.52)).padding(.horizontal, 20)
+        }
+    }
+
+    private func comparisonCard(offer: ResearchOffer, useCase: String, distinction: String, highlighted: Bool) -> some View {
+        Button { coordinator.pushRoute(.product(merchantId: offer.merchantID, productId: offer.nativeID)) } label: {
+            VStack(alignment: .leading, spacing: 10) {
+                Text(useCase)
+                    .font(GravityFont.semiBold.fixedFont(size: 11))
+                    .foregroundStyle(highlighted ? Color(hex: "#26382D") : .white.opacity(0.72))
+                    .padding(.horizontal, 9).frame(height: 26)
+                    .background(highlighted ? lime : .white.opacity(0.09), in: Capsule())
+                ProductCard(image: nil, imageURL: offer.image, showFavoriteButton: false)
+                    .environment(\.colorScheme, .light)
+                    .frame(width: 164, height: 164).allowsHitTesting(false)
+                Text(offer.title).font(GravityFont.medium.fixedFont(size: 14)).lineLimit(2)
+                Text(distinction).font(GravityFont.regular.fixedFont(size: 11))
+                    .foregroundStyle(.white.opacity(0.66)).lineLimit(3)
+                HStack(alignment: .firstTextBaseline) {
+                    Text(offer.displayPrice).font(GravityFont.expressiveBold.fixedFont(size: 22))
+                    Spacer()
+                    Text(offer.merchantName.localizedCapitalized)
+                        .font(GravityFont.regular.fixedFont(size: 10)).foregroundStyle(.white.opacity(0.56)).lineLimit(1)
+                }
+            }
+            .padding(12).frame(width: 188, height: 320, alignment: .topLeading)
+            .background(.white.opacity(highlighted ? 0.10 : 0.055), in: RoundedRectangle(cornerRadius: 18))
+            .overlay(RoundedRectangle(cornerRadius: 18).stroke(highlighted ? lime.opacity(0.6) : .white.opacity(0.1)))
+        }.buttonStyle(.plain)
+    }
+
+    private func nordaDistinction(_ model: String) -> String {
+        switch model {
+        case "003": "Laceless Bio-Dyneema · Vibram traction"
+        case "001A": "Cushioned trail construction"
+        case "005": "Race-day trail build"
+        case "055": "Responsive technical-trail build"
+        default: "Technical trail construction"
+        }
+    }
+
+    private func runningShops(_ merchantIDs: [String]) -> some View {
+        let merchants = merchantIDs.compactMap { ShopCanvasLibrary.merchantsByID[$0] }
+        return ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                ForEach(merchants, id: \.id) { merchant in
+                    Button { coordinator.pushRoute(.store(merchantId: merchant.id)) } label: {
+                        LibraryMerchantWordmark(merchantID: merchant.id)
+                            .frame(width: 122, height: 34)
+                            .padding(.horizontal, 18).frame(height: 64)
+                            .background(.white.opacity(0.07), in: Capsule())
+                            .overlay(Capsule().stroke(.white.opacity(0.1)))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("research.merchant-card.\(merchant.id)")
+                }
+            }
+        }
+        .contentMargins(.horizontal, 20, for: .scrollContent)
     }
 
     private func motionStoryRail(_ stories: [ResearchMotionStory]) -> some View {
@@ -357,9 +477,11 @@ struct ShoppingResearchContent: View {
                             VStack(alignment: .leading, spacing: 10) {
                                 ResearchImage(url: item.image, height: 290)
                                     .overlay(alignment: .bottomTrailing) {
-                                        Image(systemName: item.isFilm ? "play.fill" : "arrow.up.right")
-                                            .frame(width: 40, height: 40)
-                                            .background(.ultraThinMaterial, in: Circle()).padding(12)
+                                        if item.isFilm {
+                                            Image(systemName: "play.fill")
+                                                .frame(width: 40, height: 40)
+                                                .background(.ultraThinMaterial, in: Circle()).padding(12)
+                                        }
                                     }
                                     .clipShape(RoundedRectangle(cornerRadius: 16))
                                 Text(item.title).font(GravityFont.expressiveBold.fixedFont(size: 23)).tracking(-0.5)
