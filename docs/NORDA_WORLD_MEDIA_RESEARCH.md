@@ -170,7 +170,7 @@ Subsequent handoff cleanup removed the unreferenced `try-faves-figure` cutout wh
 
 The research hero now occupies approximately **58% of the viewport** so the Norda film leads while the first two product tiles remain the next visible beat. “Find your Norda” replaces its menu with direct All / 001A / 003 / 005 / 055 pills. Selecting a model intentionally shows all checked merchant observations instead of deduplicating the model/color, making sourced price differences visible in the finding rail.
 
-“Compare shops” now follows one hierarchy: exact model/color pills, one compact size menu, then a vertical merchant price list. The prior equal-weight Best price / Fastest shipping / Highest rated controls were removed. Lowest observed item price remains calculated only for exact available-size matches; shipping evidence stays in merchant details and no rating/speed winner is implied.
+The merchant comparison now follows an editorial buying-guide hierarchy: the model selected above carries through, one compact size menu remains, the lowest exact-match observed price is featured, and other checked sellers sit under “Also available.” The prior equal-weight model and Best price / Fastest shipping / Highest rated controls were removed. Lowest observed item price remains calculated only for exact available-size matches; shipping evidence stays in merchant details and no rating/speed winner is implied. See `WIRECUTTER_COMPARISON_PATTERN.md` for the reviewed reference and the limits on what this evidence can claim.
 
 ### Remaining production work
 
