@@ -51,15 +51,13 @@ struct ShoppingResearchContent: View {
     private var offersSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             heading("Find your Norda.")
-            HStack(spacing: 8) {
-                Menu {
-                    ForEach(["All"] + world.models, id: \.self) { value in
-                        Button(value == "All" ? "All Norda models" : "Norda \(value)") { model = value }
-                    }
-                } label: { filterLabel(model == "All" ? "All models" : "Norda \(model)") }
-                .accessibilityIdentifier("research.model-filter")
-                Spacer(minLength: 0)
-            }.padding(.horizontal, 20)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    modelPill("All")
+                    ForEach(world.models, id: \.self) { modelPill($0) }
+                }
+            }
+            .contentMargins(.horizontal, 20, for: .scrollContent)
             let offers = world.featuredShoes(model: model)
             if offers.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
@@ -73,14 +71,16 @@ struct ShoppingResearchContent: View {
         }
     }
 
-    private func filterLabel(_ title: String) -> some View {
-        HStack(spacing: 8) {
-            Text(title).font(GravityFont.medium.fixedFont(size: 13))
-            Image(systemName: "chevron.down").font(.system(size: 10, weight: .semibold))
+    private func modelPill(_ value: String) -> some View {
+        Button { model = value } label: {
+            Text(value == "All" ? "All" : "Norda \(value)")
+                .font(GravityFont.medium.fixedFont(size: 13))
+                .padding(.horizontal, 16).frame(minHeight: 44)
+                .foregroundStyle(model == value ? Color(hex: "#26382D") : .white)
+                .background(model == value ? lime : .white.opacity(0.08), in: Capsule())
         }
-        .padding(.horizontal, 15).frame(minHeight: 44)
-        .background(.white.opacity(0.08), in: Capsule())
-        .overlay(Capsule().stroke(.white.opacity(0.16)))
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("research.model.\(value)")
     }
 
     private func offerRail(_ offers: [ResearchOffer]) -> some View {
@@ -126,10 +126,17 @@ struct ShoppingResearchContent: View {
                 .buttonStyle(.plain).padding(6)
                 .accessibilityLabel(isSaved(offer) ? "Unsave \(offer.title)" : "Save \(offer.title)")
             }
-            Text(offer.section == "shoes" ? "Norda \(offer.model) · \(offer.color.localizedCapitalized)" : offer.title)
-                .font(GravityFont.medium.fixedFont(size: 14))
-                .lineLimit(2, reservesSpace: true)
-                .frame(height: 40, alignment: .topLeading)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(offer.section == "shoes" ? "Norda \(offer.model) · \(offer.color.localizedCapitalized)" : offer.title)
+                    .font(GravityFont.medium.fixedFont(size: 14))
+                    .lineLimit(1)
+                if offer.section == "shoes", model != "All" {
+                    Text(offer.merchantName.localizedCapitalized)
+                        .font(GravityFont.regular.fixedFont(size: 12))
+                        .foregroundStyle(.white.opacity(0.65)).lineLimit(1)
+                }
+            }
+            .frame(height: 40, alignment: .topLeading)
         }
     }
 

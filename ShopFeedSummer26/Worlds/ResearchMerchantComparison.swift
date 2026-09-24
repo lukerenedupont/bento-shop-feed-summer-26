@@ -58,111 +58,113 @@ struct ResearchComparison {
 struct ResearchMerchantComparison: View {
     let world: ShoppingResearchWorld
     let onOffer: (ResearchOffer, String) -> Void
-    @State private var selectedMatchID = ""
     @AppStorage("shop-agent.norda.comparison-us-size") private var size = "9"
-    @State private var criterion = ResearchComparisonCriterion.price
+    @State private var selectedMatchID = ""
     private let accent = Color(hex: "#DFECA5")
 
     private var match: ResearchShoeMatch? {
         world.comparisonMatches.first { $0.id == selectedMatchID }
-            ?? world.featuredShoes().first.flatMap { offer in world.comparisonMatches.first { $0.matches(offer) } }
+            ?? world.comparisonMatches.first { $0.model == "003" }
             ?? world.comparisonMatches.first
+    }
+    private var availableSizes: [String] {
+        guard let match else { return [] }
+        return Set(world.offers.filter(match.matches).flatMap(\.usMensSizes)).sorted {
+            (Double($0) ?? 0) < (Double($1) ?? 0)
+        }
     }
 
     var body: some View {
         if let match {
-            let result = world.comparison(match: match, size: size, criterion: criterion)
+            let result = world.comparison(match: match, size: size, criterion: .price)
             VStack(alignment: .leading, spacing: 16) {
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 6) {
                     Text("Compare shops.")
                         .font(GravityFont.expressiveBold.fixedFont(size: 30)).tracking(-1)
                         .accessibilityAddTraits(.isHeader)
-                    Text("\(world.shoeOffers(currency: "USD").count) Norda offers checked across \(world.shoeMerchantCount) shops")
+                    Text("Norda \(match.title)")
+                        .font(GravityFont.medium.fixedFont(size: 16))
+                    Text("Same shoe and color, checked in US men's \(size)")
                         .font(GravityFont.regular.fixedFont(size: 13)).foregroundStyle(.white.opacity(0.65))
                 }.padding(.horizontal, 20)
-                HStack(spacing: 8) {
-                    Menu {
-                        ForEach(world.comparisonMatches) { item in
-                            Button(item.title) { selectedMatchID = item.id }
-                        }
-                    } label: { menuLabel(match.title) }
-                    .accessibilityIdentifier("research.comparison-model")
-                    Menu {
-                        ForEach(["8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "12.5", "13", "14", "15"], id: \.self) { value in
-                            Button("US men's \(value)") { size = value }
-                        }
-                    } label: { menuLabel("US men's \(size)") }
-                    .accessibilityIdentifier("research.comparison-size")
-                }.padding(.horizontal, 20)
+
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
-                        ForEach(ResearchComparisonCriterion.allCases) { option in
-                            Button { criterion = option } label: {
-                                Text(option.rawValue).font(GravityFont.medium.fixedFont(size: 13))
-                                    .padding(.horizontal, 16).frame(minHeight: 44)
-                                    .foregroundStyle(criterion == option ? Color(hex: "#26382D") : .white)
-                                    .background(criterion == option ? accent : .white.opacity(0.08), in: Capsule())
-                            }.buttonStyle(.plain)
+                        ForEach(world.comparisonMatches) { item in
+                            Button {
+                                selectedMatchID = item.id
+                                if !sizes(for: item).contains(size) { size = sizes(for: item).first ?? size }
+                            } label: {
+                                Text("\(item.model) · \(item.color)")
+                                    .font(GravityFont.medium.fixedFont(size: 13))
+                                    .padding(.horizontal, 14).frame(minHeight: 38)
+                                    .foregroundStyle(match.id == item.id ? Color(hex: "#26382D") : .white)
+                                    .background(match.id == item.id ? accent : .clear, in: Capsule())
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityIdentifier("research.comparison.\(item.id)")
                         }
                     }
                 }.contentMargins(.horizontal, 20, for: .scrollContent)
+
+                HStack(spacing: 12) {
+                    Text("Size").font(GravityFont.regular.fixedFont(size: 13)).foregroundStyle(.white.opacity(0.65))
+                    Picker("US men's size", selection: $size) {
+                        ForEach(availableSizes, id: \.self) { Text($0).tag($0) }
+                    }
+                    .pickerStyle(.menu).tint(.white)
+                    .accessibilityIdentifier("research.comparison-size")
+                    Spacer()
+                }.padding(.horizontal, 20)
+
                 if let notice = result.notice {
                     Text(notice).font(GravityFont.regular.fixedFont(size: 13))
                         .foregroundStyle(.white.opacity(0.7)).padding(.horizontal, 20)
                 }
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        ForEach(result.offers) { offer in
-                            merchantCard(offer, result: result)
-                        }
-                    }.scrollTargetLayout()
-                }
-                .contentMargins(.horizontal, 20, for: .scrollContent)
-                .scrollTargetBehavior(.viewAligned)
-            }
-        }
-    }
-
-    private func menuLabel(_ title: String) -> some View {
-        HStack(spacing: 8) {
-            Text(title).font(GravityFont.medium.fixedFont(size: 13))
-            Image(systemName: "chevron.down").font(.system(size: 10, weight: .semibold))
-        }
-        .padding(.horizontal, 14).frame(minHeight: 44)
-        .background(.white.opacity(0.08), in: Capsule())
-    }
-
-    private func merchantCard(_ offer: ResearchOffer, result: ResearchComparison) -> some View {
-        let policy = world.shippingPolicies.first { $0.merchantID == offer.merchantID }
-        return Button { onOffer(offer, size) } label: {
-            VStack(alignment: .leading, spacing: 14) {
-                HStack(alignment: .top, spacing: 12) {
-                    ProductCard(image: nil, imageURL: offer.image, showFavoriteButton: false)
-                        .frame(width: 64, height: 64).environment(\.colorScheme, .light)
-                        .allowsHitTesting(false)
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(offer.merchantName.localizedCapitalized)
-                            .font(GravityFont.semiBold.fixedFont(size: 15)).lineLimit(2)
-                        Text(offer.displayPrice).font(GravityFont.expressiveBold.fixedFont(size: 26))
+                VStack(spacing: 0) {
+                    ForEach(Array(result.offers.enumerated()), id: \.element.id) { index, offer in
+                        merchantRow(offer, result: result)
+                        if index < result.offers.count - 1 { Divider().overlay(.white.opacity(0.12)) }
                     }
-                    Spacer(minLength: 0)
                 }
-                if result.lowestOfferIDs.contains(offer.id) {
-                    Text(result.lowestOfferIDs.count > 1 ? "Same item price" : "Lowest observed item price")
-                        .font(GravityFont.medium.fixedFont(size: 12))
-                        .foregroundStyle(accent)
-                } else {
-                    Text("Available when checked").font(GravityFont.regular.fixedFont(size: 12))
-                        .foregroundStyle(.white.opacity(0.65))
-                }
-                Text(criterion == .rating ? "Ratings not verified" : policy?.summary ?? "Shipping not verified")
-                    .font(GravityFont.regular.fixedFont(size: 12)).foregroundStyle(.white.opacity(0.7))
-                    .lineLimit(2)
+                .padding(.horizontal, 18)
+                .background(.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 20))
+                .overlay(RoundedRectangle(cornerRadius: 20).stroke(.white.opacity(0.1)))
+                .padding(.horizontal, 20)
             }
-            .frame(width: 242, height: 150, alignment: .topLeading).padding(18)
-            .background(.white.opacity(0.07), in: RoundedRectangle(cornerRadius: 20))
-            .overlay(RoundedRectangle(cornerRadius: 20).stroke(.white.opacity(0.1)))
-            .contentShape(RoundedRectangle(cornerRadius: 20))
+        }
+    }
+
+    private func sizes(for match: ResearchShoeMatch) -> [String] {
+        Set(world.offers.filter(match.matches).flatMap(\.usMensSizes)).sorted {
+            (Double($0) ?? 0) < (Double($1) ?? 0)
+        }
+    }
+
+    private func merchantRow(_ offer: ResearchOffer, result: ResearchComparison) -> some View {
+        Button { onOffer(offer, size) } label: {
+            HStack(spacing: 12) {
+                ProductCard(image: nil, imageURL: offer.image, showFavoriteButton: false)
+                    .frame(width: 54, height: 54).environment(\.colorScheme, .light)
+                    .allowsHitTesting(false)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(offer.merchantName.localizedCapitalized)
+                        .font(GravityFont.semiBold.fixedFont(size: 15)).lineLimit(1)
+                    if result.lowestOfferIDs.contains(offer.id) {
+                        Text(result.lowestOfferIDs.count > 1 ? "Same item price" : "Lowest observed item price")
+                            .font(GravityFont.medium.fixedFont(size: 11)).foregroundStyle(accent)
+                    } else {
+                        Text("Available when checked")
+                            .font(GravityFont.regular.fixedFont(size: 11)).foregroundStyle(.white.opacity(0.6))
+                    }
+                }
+                Spacer(minLength: 8)
+                Text(offer.displayPrice).font(GravityFont.expressiveBold.fixedFont(size: 23))
+                Image(systemName: "chevron.right").font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.45))
+            }
+            .frame(minHeight: 82)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("research.merchant.\(offer.nativeID)")

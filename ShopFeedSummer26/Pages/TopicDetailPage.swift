@@ -323,7 +323,7 @@ struct TopicDetailPage: View {
         }
     }
     private func heroHeight(viewportHeight: CGFloat) -> CGFloat {
-        if ShoppingResearchCatalog.world(for: story.id) != nil { return max(340, viewportHeight * 0.39) }
+        if ShoppingResearchCatalog.world(for: story.id) != nil { return max(500, viewportHeight * 0.58) }
         let minimum: CGFloat = editorialWorldRecipe?.family == .merchant
             ? 500 : (topicPresentation.usesExactHeroLayout ? 526 : 560)
         return max(minimum, viewportHeight * 0.64)

@@ -106,6 +106,7 @@ struct ShoppingResearchWorld {
         }.sorted { $0.title < $1.title }
     }
     func featuredShoes(model: String = "All") -> [ResearchOffer] {
+        if model != "All" { return shoeOffers(model: model, currency: "USD") }
         var seen = Set<ResearchShoeMatch>()
         return shoeOffers(model: model, currency: "USD").filter {
             seen.insert(ResearchShoeMatch(model: $0.model, color: $0.color)).inserted
