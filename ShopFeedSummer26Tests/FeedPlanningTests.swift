@@ -1,10 +1,11 @@
 import XCTest
 import SwiftUI
+import AVFoundation
 @testable import ShopFeedSummer26
 
 final class FeedPlanningTests: XCTestCase {
     @MainActor
-    func testLibraryForYouPromotesNikeSkimsWorldWithoutChangingItsProductOrder() throws {
+    func testLibraryForYouPromotesPriceResearchWithoutChangingItsProductOrder() throws {
         guard ShopCanvasLibrary.isEnabled else { throw XCTSkip("Library-only editorial opening") }
         let buyer = ShopCanvasLibrary.profile
         let topic = try XCTUnwrap(buyer.topics.first { $0.id == "for-you" })
@@ -21,10 +22,10 @@ final class FeedPlanningTests: XCTestCase {
         )
         let plan = HomeFeedPlanner.plan(input)
         let promoted = try XCTUnwrap(plan.stories.first)
-        XCTAssertEqual(promoted.id, NikeSkimsWorldMedia.storyID)
+        XCTAssertEqual(promoted.id, "library-edit-norda-price-research")
         XCTAssertEqual(
             promoted.products.map(\.productID),
-            ShopCanvasLibrary.stories.first { $0.id == NikeSkimsWorldMedia.storyID }?.products.map(\.productID)
+            ShopCanvasLibrary.stories.first { $0.id == "library-edit-norda-price-research" }?.products.map(\.productID)
         )
     }
 
@@ -186,6 +187,48 @@ final class FeedPlanningTests: XCTestCase {
             requested: true, visible: true, reduceMotion: false,
             lowPowerMode: false, sceneIsActive: false
         ))
+    }
+
+    @MainActor
+    func testCoverSurfacesShareMutedPlaybackAndLoopOnlyTheirSelectedExcerpt() async throws {
+        let url = try XCTUnwrap(NikeSkimsWorldMedia.coverFilmURL)
+        let scene = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
+        let window = UIWindow(windowScene: scene)
+        window.rootViewController = UIViewController()
+        let surfaces = (0..<2).map { _ in
+            LoopingVideoPlayer.PlayerUIView(urls: [url], loops: true, loopDuration: 0.5,
+                playbackEnabled: false, playbackGroupID: "test-cover-handoff", videoGravity: .resizeAspectFill)
+        }
+        surfaces.forEach {
+            $0.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+            window.rootViewController?.view.addSubview($0)
+        }
+        window.isHidden = false
+        defer { surfaces.forEach { $0.removeFromSuperview() }; window.isHidden = true }
+        let players = surfaces.compactMap { surface in
+            surface.layer.sublayers?.compactMap { ($0 as? AVPlayerLayer)?.player }.first
+        }
+        XCTAssertEqual(players.count, 2)
+        let player = try XCTUnwrap(players.first)
+        XCTAssertTrue(player === players.last)
+        XCTAssertTrue(player.isMuted)
+        let looped = expectation(description: "Short excerpt loops twice, not the full source film")
+        looped.expectedFulfillmentCount = 2
+        let observer = NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
+            object: nil, queue: .main) { notification in
+                guard let item = notification.object as? AVPlayerItem,
+                      (item.asset as? AVURLAsset)?.url == url else { return }
+                XCTAssertLessThanOrEqual(item.currentTime().seconds, 0.55)
+                looped.fulfill()
+            }
+        defer { NotificationCenter.default.removeObserver(observer) }
+        surfaces[0].setPlaybackEnabled(true)
+        await fulfillment(of: [looped], timeout: 5)
+        surfaces[1].setPlaybackEnabled(true)
+        surfaces[0].setPlaybackEnabled(false)
+        XCTAssertEqual(player.rate, 1)
+        surfaces[1].setPlaybackEnabled(false)
+        XCTAssertEqual(player.rate, 0)
     }
 
     @MainActor

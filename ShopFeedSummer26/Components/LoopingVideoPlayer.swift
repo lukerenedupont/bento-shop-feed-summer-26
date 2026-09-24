@@ -45,6 +45,7 @@ struct LoopingVideoPlayer: UIViewRepresentable {
     var isVisible: Bool
     var playbackGroupID: String?
     var videoGravity: AVLayerVideoGravity
+    var loopDuration: TimeInterval?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @State private var playbackRuntime = MediaPlaybackRuntime.shared
@@ -52,12 +53,14 @@ struct LoopingVideoPlayer: UIViewRepresentable {
     init(
         url: URL,
         loops: Bool = true,
+        loopDuration: TimeInterval? = nil,
         playbackEnabled: Bool = true,
         isVisible: Bool = true,
         playbackGroupID: String? = nil,
         videoGravity: AVLayerVideoGravity = .resizeAspectFill
     ) {
         self.urls = [url]
+        self.loopDuration = loopDuration
         self.loops = loops
         self.playbackEnabled = playbackEnabled
         self.isVisible = isVisible
@@ -68,12 +71,14 @@ struct LoopingVideoPlayer: UIViewRepresentable {
     init(
         urls: [URL],
         loops: Bool = true,
+        loopDuration: TimeInterval? = nil,
         playbackEnabled: Bool = true,
         isVisible: Bool = true,
         playbackGroupID: String? = nil,
         videoGravity: AVLayerVideoGravity = .resizeAspectFill
     ) {
         self.urls = urls
+        self.loopDuration = loopDuration
         self.loops = loops
         self.playbackEnabled = playbackEnabled
         self.isVisible = isVisible
@@ -95,6 +100,7 @@ struct LoopingVideoPlayer: UIViewRepresentable {
         PlayerUIView(
             urls: urls,
             loops: loops,
+            loopDuration: loopDuration,
             playbackEnabled: policyAllowsPlayback,
             playbackGroupID: playbackGroupID,
             videoGravity: videoGravity
@@ -104,7 +110,7 @@ struct LoopingVideoPlayer: UIViewRepresentable {
     func updateUIView(_ uiView: PlayerUIView, context: Context) {
         uiView.setPlaybackEnabled(policyAllowsPlayback)
         uiView.setVideoGravity(videoGravity)
-        uiView.setSource(urls: urls, loops: loops, playbackGroupID: playbackGroupID)
+        uiView.setSource(urls: urls, loops: loops, loopDuration: loopDuration, playbackGroupID: playbackGroupID)
     }
 
     static func dismantleUIView(_ uiView: PlayerUIView, coordinator: ()) {
@@ -116,6 +122,8 @@ struct LoopingVideoPlayer: UIViewRepresentable {
     final class PlayerUIView: UIView {
         private var urls: [URL]
         private var loops: Bool
+        private var loopDuration: TimeInterval?
+        private var readyObservation: NSKeyValueObservation?
         private var playbackGroupID: String?
         private var playbackEnabled: Bool
         private var videoGravity: AVLayerVideoGravity
@@ -127,11 +135,13 @@ struct LoopingVideoPlayer: UIViewRepresentable {
         init(
             urls: [URL],
             loops: Bool,
+            loopDuration: TimeInterval?,
             playbackEnabled: Bool,
             playbackGroupID: String?,
             videoGravity: AVLayerVideoGravity
         ) {
             self.urls = urls
+            self.loopDuration = loopDuration
             self.loops = loops
             self.playbackEnabled = playbackEnabled
             self.playbackGroupID = playbackGroupID
@@ -156,19 +166,25 @@ struct LoopingVideoPlayer: UIViewRepresentable {
                 session = SharedVideoPlaybackRegistry.shared.session(
                     id: playbackGroupID,
                     urls: urls,
-                    loops: loops
+                    loops: loops,
+                    loopDuration: loopDuration
                 )
             } else {
-                session = SharedVideoPlaybackSession(urls: urls, loops: loops)
+                session = SharedVideoPlaybackSession(urls: urls, loops: loops, loopDuration: loopDuration)
             }
 
             let clientID = session.register(enabled: playbackEnabled)
-            backgroundColor = videoGravity == .resizeAspect ? .white : .black
+            backgroundColor = videoGravity == .resizeAspect ? .white : .clear
             let layer = AVPlayerLayer(player: session.player)
             layer.videoGravity = videoGravity
             layer.backgroundColor = backgroundColor?.cgColor
             layer.frame = bounds
             self.layer.addSublayer(layer)
+            // Let the caller's poster show during loading or a failed request.
+            // Readiness belongs to the actual layer, not an arbitrary delay.
+            readyObservation = layer.observe(\.isReadyForDisplay, options: [.initial, .new]) { layer, _ in
+                DispatchQueue.main.async { layer.isHidden = !layer.isReadyForDisplay }
+            }
 
             self.session = session
             self.clientID = clientID
@@ -190,11 +206,12 @@ struct LoopingVideoPlayer: UIViewRepresentable {
 
         /// SwiftUI can reuse this UIView for another product or buyer. Keep
         /// the media source in sync, not just its enabled/gravity settings.
-        func setSource(urls: [URL], loops: Bool, playbackGroupID: String?) {
-            guard self.urls != urls || self.loops != loops
+        func setSource(urls: [URL], loops: Bool, loopDuration: TimeInterval?, playbackGroupID: String?) {
+            guard self.urls != urls || self.loops != loops || self.loopDuration != loopDuration
                     || self.playbackGroupID != playbackGroupID else { return }
             tearDown()
             self.urls = urls
+            self.loopDuration = loopDuration
             self.loops = loops
             self.playbackGroupID = playbackGroupID
             if window != nil { setUp() }
@@ -223,6 +240,7 @@ struct LoopingVideoPlayer: UIViewRepresentable {
                     session: detachedSession
                 )
             }
+            readyObservation = nil
             playerLayer?.removeFromSuperlayer()
             playerLayer = nil
             session = nil
@@ -355,12 +373,12 @@ private final class SharedVideoPlaybackRegistry {
 
     private var sessions: [String: SharedVideoPlaybackSession] = [:]
 
-    func session(id: String, urls: [URL], loops: Bool) -> SharedVideoPlaybackSession {
-        if let session = sessions[id], session.urls == urls, session.loops == loops {
+    func session(id: String, urls: [URL], loops: Bool, loopDuration: TimeInterval?) -> SharedVideoPlaybackSession {
+        if let session = sessions[id], session.urls == urls, session.loops == loops, session.loopDuration == loopDuration {
             return session
         }
 
-        let session = SharedVideoPlaybackSession(urls: urls, loops: loops)
+        let session = SharedVideoPlaybackSession(urls: urls, loops: loops, loopDuration: loopDuration)
         sessions[id] = session
         return session
     }
@@ -375,6 +393,7 @@ private final class SharedVideoPlaybackRegistry {
 private final class SharedVideoPlaybackSession {
     let urls: [URL]
     let loops: Bool
+    let loopDuration: TimeInterval?
     let player: AVQueuePlayer
 
     private var looper: AVPlayerLooper?
@@ -387,9 +406,10 @@ private final class SharedVideoPlaybackSession {
 
     var hasClients: Bool { !clients.isEmpty }
 
-    init(urls: [URL], loops: Bool) {
+    init(urls: [URL], loops: Bool, loopDuration: TimeInterval?) {
         self.urls = urls
         self.loops = loops
+        self.loopDuration = loopDuration
 
         if loops, let onlyURL = urls.first, urls.count == 1 {
             let player = AVQueuePlayer()
@@ -398,7 +418,8 @@ private final class SharedVideoPlaybackSession {
             self.player = player
             self.looper = AVPlayerLooper(
                 player: player,
-                templateItem: item
+                templateItem: item,
+                timeRange: Self.loopRange(duration: loopDuration)
             )
         } else {
             let items = urls.map { url in
@@ -427,6 +448,11 @@ private final class SharedVideoPlaybackSession {
         player.isMuted = true
         player.preventsDisplaySleepDuringVideoPlayback = false
         player.automaticallyWaitsToMinimizeStalling = false
+    }
+
+    private static func loopRange(duration: TimeInterval?) -> CMTimeRange {
+        guard let duration, duration.isFinite, duration > 0 else { return .invalid }
+        return CMTimeRange(start: .zero, duration: CMTime(seconds: duration, preferredTimescale: 600))
     }
 
     deinit {

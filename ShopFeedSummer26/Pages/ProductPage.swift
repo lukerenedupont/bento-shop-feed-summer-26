@@ -373,6 +373,9 @@ struct ProductPage: View {
                         )
                 }
                 .frame(height: PurlTune.value("Pages/ProductPage.swift:frame:height:315:32", default: 423))
+                // Clipping is visual only: a tall remote image's hit area can
+                // extend over the header and swallow Back. A still has no actions.
+                .allowsHitTesting(false)
                 .navigationTransition(.zoom(sourceID: productId, in: namespace))
             }
 

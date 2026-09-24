@@ -76,6 +76,7 @@ enum HomeFeedPlanner {
     /// Demo-only editorial opening. All five already have authored bundled
     /// films; their original content, destination, and presentation stay intact.
     private static let demoOpeningStoryIDs = [
+        "library-edit-norda-price-research",
         NikeSkimsWorldMedia.storyID,
         "kyle-argizari-lighting",
         "shelf-luke-9-streetwear-caps-and-tees",

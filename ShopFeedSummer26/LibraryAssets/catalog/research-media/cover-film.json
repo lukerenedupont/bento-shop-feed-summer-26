@@ -1,0 +1,14 @@
+{
+  "videoURL": "https://player.vimeo.com/progressive_redirect/playback/1206594829/rendition/720p/file.mp4%20%28720p%29.mp4?loc=external&signature=2baef33928dded23b9812464246421b2ca8fa28507e989021789135d4521e0e5",
+  "posterPath": "catalog/research-media/norda-055-poster.jpg",
+  "posterSHA256": "29bb2a628852367e332ae42b6914a734627ba254457b9281526a5e795322e7a5",
+  "sourcePage": "https://nordarun.com/products/055-m-strato",
+  "sourceMerchantID": "gid://shopify/Shop/82070208817",
+  "credit": "Norda",
+  "loopDuration": 8,
+  "sourceDuration": 65.556667,
+  "sourceWidth": 1280,
+  "sourceHeight": 720,
+  "rightsStatus": "Internal reference only. Permission for production reuse is not established.",
+  "checkedAt": "2026-09-23T23:04:15.065589+00:00"
+}

@@ -4,7 +4,7 @@ This is an alternate Swift app, not the Shop Canvas UI and not a replacement
 for the five-video demo currently installed on Luke's phone.
 
 - Working copy: `/Users/lukedupont/bento-shop-feed-library-demo`
-- Branch: `ceo-library-preview`
+- Branch: `experiment/shop-agent-world-lab` (based on the polished library preview)
 - Display name: **Shop Library Preview**
 - Bundle ID: `com.shopify.purl.prototype.shop.feed.library.preview`
 - Version: 1.0 (20)
@@ -25,9 +25,21 @@ Other supported destinations are `self-care` and `home`. The script boots the ex
 
 The phone installation survives both Mac and phone restarts and can be opened directly as **Shop Library Preview**. It does not require the Mac unless rebuilding or using a local development service.
 
+## Shop Agent — Norda price edit
+
+Run `Scripts/run_library_preview.sh home`. **Your trail-running price edit** is the first For You story (`library-edit-norda-price-research`), using the existing native shared transition and persistent Julian dock. Its compact opening shows products immediately.
+
+The source-checked supplement adds 17 offers from Norda, Renegade Running, The Exchange Running Collective, District Vision, SOAR and SATISFY. Every amount is a merchant-supplied USD storefront price, not an agent-generated conversion. Nine shoe offers cover three merchants. “Compare shops” matches model, color and available US men's size before labeling the lowest observed item price. Shipping and ratings modes explicitly withhold rankings without comparable evidence. Merchant cards open variant/source details; product images retain the native PDP journey. Product tiles have fixed square media and plain captions, and the feed thumbnails have no captions. Saved product hearts, model choice and comparison size persist on this device. There is no live tracking or generated conversation—this is an authored price-snapshot artifact.
+
+The first cover and World header now share an **8-second, muted native loop** from Norda's official 055 film: a runner moving through rocky terrain. Both surfaces use the same player through the native transition. The published source streams remotely; only its real first-frame poster is bundled, for loading/failure and Reduce Motion/Low Power Mode. Attribution is in “About these prices.” Later films and social sources still open in Safari. This is internal-reference media, not permission-cleared production content. See `docs/NORDA_WORLD_MEDIA_RESEARCH.md` for evidence, merchant IDs and limitations. Refresh prices explicitly with `python3 Scripts/import_running_research.py`; the independent film manifest is under `LibraryAssets/catalog/research-media/`.
+
+Handoff verification (2026-09-23): **45 XCTest cases (3 skipped), 26 Swift Testing cases, all 8 library UI smoke journeys in one full run, and 11 Python importer tests passed**. Coverage includes comparison criteria, product/back navigation, source details, equal tile dimensions, local poster loading and a native shared-player/excerpt-loop test. Reduce Motion was manually checked with pixel-identical still crops three seconds apart, then restored. A clean tracked-files export passed catalog/source validation without local credentials or the optional external feed checkout. Outgoing history and the staged patch passed Gitleaks; two exact historical localization-comment false positives are documented in `.gitleaksignore`.
+
+Shipping build: **184,132 KB / 184,320 KB**, with **188 KB headroom**. Five existing preview clips were re-encoded at 360px width, the full new film remains remote, and the unused `try-faves-figure` cutout was removed after checking all source references. Active avatar/environment assets and interactive Worlds are retained. The budget was not raised; further additions still need size discipline. The Norda journey also fixed a PDP bug where an oversized decorative image intercepted the Back button.
+
 ## Rich movement World — build 20
 
-`library-edit-9` (**For your self-care reset**) is promoted to the first World in Luke’s For You feed. Its motion-led feed card uses the cinematic material-detail film rather than the grid film, the same compact two-line editorial title component as the destination hero, the shared product rail, and coordinated media-aware dark chrome. The grid film is reserved for a later editorial beat inside the World. The Nike lockup is neither rendered nor bundled.
+`library-edit-9` (**For your self-care reset**) follows the Norda research story in Luke’s For You feed. Its motion-led feed card uses the cinematic material-detail film rather than the grid film, the same compact two-line editorial title component as the destination hero, the shared product rail, and coordinated media-aware dark chrome. The grid film is reserved for a later editorial beat inside the World. The Nike lockup is neither rendered nor bundled.
 
 The destination uses the campaign’s warm brown surface and a long-form editorial sequence: two campaign films, 26 filmstrip frames, six independent campaign stills, seven autoplaying collection/fabric films, four native Shop product shelves, and the complete 18-product edit. The fabric chapter retains the first-party collection names and full descriptions for Studio Stretch, Matte, Airy, Satin Shine, Weightless, Ribbed Seamless, and Stretch Knit. Collection, color, styling, and movement galleries now include concise editorial context, and paired media is explicitly clipped to prevent overlap.
 
@@ -39,7 +51,7 @@ Read-only source: `/Users/lukedupont/Developer/apx3000-shop-canvas/public/`.
 The importer reads `catalog/catalog.json`, `catalog/merchants.json`, and
 `catalog/merchant-depth.json` in full.
 
-The source snapshot contains exactly **328 curated products**. The Shop prototype publishes only the **213 products** associated with one of the **79 confirmed Shopify merchants**; domain-only, unresolved, and other-platform records are excluded from feeds, Worlds, search, merchant pages, and Agent context. `selectedIds` remains the ordering authority within that eligible subset and for **All finds**. For You groups those records by their existing group
+The source snapshot contains exactly **328 curated products**. From that immutable snapshot, the Shop prototype publishes only the **213 products** associated with one of the **79 confirmed Shopify merchants**. The reviewed research supplement adds 17 products and four additional merchants through the same gate, for **230 products / 83 merchants** in the combined catalog; domain-only, unresolved, and other-platform records are excluded from feeds, Worlds, search, merchant pages, and Agent context. `selectedIds` remains the ordering authority within the base eligible subset; **All finds** appends the research observations in their reviewed source order. For You groups those records by their existing group
 labels, ordered by each group's first appearance; it does not claim that a
 grouped feed is the same thing as the flat 328-product sequence.
 

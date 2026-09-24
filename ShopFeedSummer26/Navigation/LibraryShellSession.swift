@@ -41,7 +41,7 @@ struct LibraryAskContext {
     let productIDs: [String]
 
     static var home: Self {
-        .init(id: "library", title: "The curated library", productIDs: ShopCanvasLibrary.manifest.selectedIds)
+        .init(id: "library", title: "The curated library", productIDs: ShopCanvasLibrary.selectedProductIDs)
     }
 
     static func world(_ story: FeedStory) -> Self {

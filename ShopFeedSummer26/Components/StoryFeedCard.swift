@@ -214,11 +214,11 @@ struct StoryFeedCard: View {
     }
 
     private var usesEditorialOnlyPresentation: Bool {
-        presentation.kind == .editorial
+        presentation.kind == .editorial || presentation.kind == .researchSummary
     }
 
     private var visibleProductLayout: FeedCardProductLayout? {
-        presentation.showsProducts ? productLayout : nil
+        presentation.kind == .commerce && presentation.showsProducts ? productLayout : nil
     }
 
     private var items: [ResolvedStoryProduct] {
@@ -397,6 +397,7 @@ struct StoryFeedCard: View {
         .buttonStyle(.plain)
         .accessibilityLabel((titleOverride ?? story.title) + (story.subtitle.isEmpty ? "" : ". \(story.subtitle)"))
         .accessibilityHint(story.destinationLabel)
+        .accessibilityValue(ShoppingResearchCatalog.world(for: story.id)?.coverFilm == nil ? "" : "Cover film")
     }
 
     private var standardForeground: some View {
@@ -495,7 +496,17 @@ struct StoryFeedCard: View {
         ZStack {
             Color(hex: story.accentHex)
 
-            if NikeSkimsWorldMedia.isStory(story) {
+            if let film = ShoppingResearchCatalog.world(for: story.id)?.coverFilm {
+                ResearchCoverFilmView(film: film, story: story, playbackEnabled: backgroundPlaybackEnabled && isActive)
+                    .frame(width: width, height: height)
+                    // Keep the runner in the visible card, alongside its lifted
+                    // foreground, while the first card enters below the shelf.
+                    .visualEffect { content, proxy in
+                        content.offset(y: worldChromeVisibleBottom.map { limit in
+                            -max(0, proxy.frame(in: .scrollView(axis: .vertical)).maxY - limit) * 0.5
+                        } ?? 0)
+                    }
+            } else if NikeSkimsWorldMedia.isStory(story) {
                 NikeSkimsFeedHero(playbackEnabled: backgroundPlaybackEnabled && isActive)
             } else if ShopCanvasLibrary.isLibraryStory(story) {
                 LibraryProductHero(story: story, width: width, height: height)
@@ -675,6 +686,9 @@ struct StoryFeedCard: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: 330, alignment: .leading)
                 .gravityShadow(GravityShadows.feedText)
+            if let world = ShoppingResearchCatalog.world(for: story.id) {
+                ResearchFeedSummary(world: world).padding(.vertical, 4)
+            }
             Text(presentation.cta)
                 .font(GravityFont.medium.fixedFont(size: 16))
                 .foregroundStyle(.white)
@@ -698,7 +712,7 @@ struct StoryFeedCard: View {
                 LibraryCollectionWordmark(story: story)
                     .frame(width: min(width - 80, 264), height: 44, alignment: .leading)
             } else {
-                Text(titleOverride ?? story.title)
+                Text(titleOverride ?? ShoppingResearchCatalog.world(for: story.id)?.headline ?? story.title)
                     .feedCardTitleStyle()
                     .foregroundStyle(usesLightSphereCover ? Color.black : .white)
             }

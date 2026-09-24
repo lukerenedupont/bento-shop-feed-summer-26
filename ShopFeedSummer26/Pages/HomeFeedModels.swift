@@ -5,6 +5,7 @@ import SwiftUI
 struct FeedCardPresentation: Equatable {
     enum Kind: Equatable {
         case editorial
+        case researchSummary
         case commerce
     }
 
@@ -24,6 +25,11 @@ struct FeedCardPresentation: Equatable {
     let bottomScrimOpacity: Double
 
     static func resolve(story: FeedStory) -> Self {
+        if let world = ShoppingResearchCatalog.world(for: story.id) {
+            return Self(kind: .researchSummary, deck: world.deck, cta: "Explore your findings",
+                        actions: [.overflow], showsProducts: true,
+                        topScrimOpacity: 0.16, bottomScrimOpacity: 0.28)
+        }
         if ShopCanvasLibrary.isLibraryStory(story) {
             return Self(
                 kind: .editorial,

@@ -248,6 +248,7 @@ struct TopicDetailPage: View {
             }
     }
     private var heroVideoURL: URL? {
+        if let film = ShoppingResearchCatalog.world(for: story.id)?.coverFilm { return film.videoURL }
         if NikeSkimsWorldMedia.isStory(story) {
             return NikeSkimsWorldMedia.coverFilmURL
         }
@@ -260,7 +261,7 @@ struct TopicDetailPage: View {
         if topicPresentation.usesGiftGuidePrototype {
             return "Gifts for \(giftGuideState.recipientName)"
         }
-        return topicPresentation.heroTitleOverride ?? story.title
+        return ShoppingResearchCatalog.world(for: story.id)?.headline ?? topicPresentation.heroTitleOverride ?? story.title
     }
     private var editorialWorldRecipe: EditorialWorldRecipe? {
         EditorialWorldRecipeCatalog.recipe(for: story.id)
@@ -322,6 +323,7 @@ struct TopicDetailPage: View {
         }
     }
     private func heroHeight(viewportHeight: CGFloat) -> CGFloat {
+        if ShoppingResearchCatalog.world(for: story.id) != nil { return max(340, viewportHeight * 0.39) }
         let minimum: CGFloat = editorialWorldRecipe?.family == .merchant
             ? 500 : (topicPresentation.usesExactHeroLayout ? 526 : 560)
         return max(minimum, viewportHeight * 0.64)
@@ -517,7 +519,7 @@ struct TopicDetailPage: View {
                 .frame(height: 190)
                 surfaceColor.frame(height: 12)
             }
-            if !topicPresentation.usesExactHeroLayout {
+            if !topicPresentation.usesExactHeroLayout && ShoppingResearchCatalog.world(for: story.id) == nil {
                 heroFeedbackPill(layout: .vertical)
                     .frame(
                         maxWidth: .infinity,
@@ -579,6 +581,7 @@ struct TopicDetailPage: View {
         .clipped()
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("world.transition-hero")
+        .accessibilityValue(heroVideoURL == nil ? "" : "Cover film")
     }
     private func productRail(
         title: String,
@@ -616,7 +619,9 @@ struct TopicDetailPage: View {
     }
     @ViewBuilder
     private func merchandising(containerWidth: CGFloat) -> some View {
-        if let editorialWorldRecipe {
+        if let research = ShoppingResearchCatalog.world(for: story.id) {
+            ShoppingResearchContent(world: research)
+        } else if let editorialWorldRecipe {
             switch editorialWorldRecipe.family {
             case .campaign:
                 LazyVStack(alignment: .leading, spacing: 64) {

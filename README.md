@@ -1,6 +1,8 @@
 # Shop Feed Summer 26 — library preview
 
-This working copy is the **Shop Library Preview** experiment. See
+This branch is the **Shop Library Preview / Norda World** experiment.
+**Picking this up? Start with [`CODEX_HANDOFF.md`](CODEX_HANDOFF.md)** for the
+private repository, exact branch, setup, tests and remaining work. See
 [`LIBRARY_PREVIEW.md`](LIBRARY_PREVIEW.md) for its read-only source contract,
 curated inventory, native asset handling, build commands, and limitations.
 The original five-video phone demo is preserved in `../bento-shop-feed-ceo-demo`.

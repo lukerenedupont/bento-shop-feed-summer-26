@@ -1,0 +1,4 @@
+# Reviewed false positives: RN localization identifiers in comments, not credentials.
+# Header.CloseA11yLabel and Marketing.OfferBanner.A11yHint, respectively.
+3b55f6615776693665fa53e2875b79df632cc7c3:Vendor/JulianAgentUI/Sources/JulianAgentUI/Resources/en.lproj/Localizable.strings:generic-api-key:435
+3b55f6615776693665fa53e2875b79df632cc7c3:Vendor/JulianAgentUI/Sources/JulianAgentUI/Resources/en.lproj/Localizable.strings:generic-api-key:11451

@@ -1,6 +1,80 @@
 import XCTest
 
 final class LibrarySmokeTests: XCTestCase {
+    @MainActor
+    func testPriceResearchOpensFirstWithOffersAndPreservesNativeJourney() {
+        let app = XCUIApplication()
+        app.launch()
+        let card = app.buttons["Your trail-running price edit"].firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 30))
+        XCTAssertTrue(card.isHittable)
+        XCTAssertEqual(card.value as? String, "Cover film")
+        XCTAssertFalse(app.staticTexts["SHOP AGENT  /  PRICE SNAPSHOT"].exists)
+        let nav = app.descendants(matching: .any)["navigation-tab-surface"]
+        let originalWidth = nav.frame.width
+        capture(app, name: "Shop Agent — first feed card")
+        // The card continues under Julian's dock. Tap the visible title, not
+        // XCTest's full-card center inside the dock's touch surface.
+        card.coordinate(withNormalizedOffset: CGVector(dx: 0.45, dy: 0.25)).tap()
+        XCTAssertTrue(app.staticTexts["Find your Norda."].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["YOUR PRICE FINDINGS"].exists)
+        XCTAssertFalse(app.buttons["research.save-search"].exists)
+        XCTAssertFalse(app.buttons["Save search"].exists)
+        if !app.buttons["All models"].exists {
+            app.buttons["research.model-filter"].tap()
+            app.buttons["All Norda models"].tap()
+        }
+        XCTAssertFalse(app.buttons["research.market-filter"].exists)
+        XCTAssertFalse(app.staticTexts["Price snapshot. Check your size at the shop."].exists)
+        let hero = app.descendants(matching: .any)["world.transition-hero"]
+        XCTAssertLessThan(hero.frame.height, app.frame.height * 0.5)
+        XCTAssertEqual(hero.value as? String, "Cover film")
+        XCTAssertLessThan(nav.frame.width, originalWidth * 0.5)
+        let composer = app.descendants(matching: .any)["DYNAMIC_TYPEAHEAD_TEXT_INPUT"]
+        XCTAssertTrue(composer.exists)
+        let product = app.buttons["research.product.9258627334445"].firstMatch
+        XCTAssertTrue(product.isHittable)
+        XCTAssertLessThan(product.frame.maxY, composer.frame.minY)
+        capture(app, name: "Shop Agent — offers on arrival")
+        product.tap()
+        XCTAssertTrue(app.buttons["Visit shop"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["ADD_CONTEXT_BUTTON"].label.contains("Men's 003"))
+        capture(app, name: "Research product — before Back")
+        app.buttons["Back"].firstMatch.tap()
+        capture(app, name: "Research product — after Back")
+        XCTAssertTrue(app.staticTexts["Find your Norda."].waitForExistence(timeout: 10))
+        scrollTo(app.buttons["Best price"], in: app, attempts: 4)
+        app.buttons["Best price"].tap()
+        XCTAssertTrue(app.staticTexts["Lowest observed item price"].firstMatch.waitForExistence(timeout: 5))
+        capture(app, name: "Comparison before merchant tap")
+        let merchant = app.descendants(matching: .any)["research.merchant.9258627334445"].firstMatch
+        XCTAssertTrue(merchant.waitForExistence(timeout: 5))
+        scrollTo(merchant, in: app, attempts: 4)
+        merchant.tap()
+        XCTAssertTrue(app.staticTexts["US men's 9"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Free US shipping over $180"].exists)
+        app.buttons["Done"].tap()
+        scrollTo(app.buttons["Fastest shipping"], in: app, attempts: 3)
+        app.buttons["Fastest shipping"].tap()
+        XCTAssertTrue(app.staticTexts["Delivery dates aren't verified yet. These shops aren't ranked by speed."].waitForExistence(timeout: 5))
+        app.buttons["Highest rated"].tap()
+        XCTAssertTrue(app.staticTexts["Comparable ratings aren't available yet. No rating winner selected."].waitForExistence(timeout: 5))
+        capture(app, name: "Shop Agent — honest merchant comparison")
+        scrollTo(app.buttons["The wider kit"], in: app, attempts: 8)
+        app.buttons["The wider kit"].tap()
+        let shirt = app.buttons["research.product.10193085464904"]
+        let shorts = app.buttons["research.product.15337452142967"]
+        XCTAssertTrue(shirt.waitForExistence(timeout: 5))
+        XCTAssertEqual(shirt.frame.width, shorts.frame.width, accuracy: 1)
+        XCTAssertEqual(shirt.frame.height, shorts.frame.height, accuracy: 1)
+        XCTAssertEqual(shirt.frame.width, shirt.frame.height, accuracy: 1)
+        XCTAssertFalse(app.staticTexts["Compared with shop reference prices."].exists)
+        capture(app, name: "Shop Agent — consistent wider kit cards")
+        app.buttons["Close"].firstMatch.tap()
+        XCTAssertTrue(card.waitForExistence(timeout: 10))
+        XCTAssertGreaterThan(nav.frame.width, originalWidth * 0.9)
+    }
+
     // Build-12 approximation coverage retained for provenance, replaced by JulianShellUITests.
     #if LEGACY_LIBRARY_NAVIGATION
     @MainActor
@@ -214,12 +288,17 @@ final class LibrarySmokeTests: XCTestCase {
     func testOpeningCardsKeepAnEdgeToEdgeEditorialComposition() {
         let app = XCUIApplication()
         app.launch()
-        XCTAssertTrue(app.images["Editorial cover: For the thoughtful host"].firstMatch.waitForExistence(timeout: 30))
+        let firstCover = app.buttons["Your trail-running price edit"].firstMatch
+        XCTAssertTrue(firstCover.waitForExistence(timeout: 30))
+        XCTAssertEqual(firstCover.value as? String, "Cover film")
+        // The real poster must load too: otherwise reduced-motion/offline
+        // openings become black even though normal video playback works.
+        XCTAssertTrue(app.images["Editorial cover: Your trail-running price edit"].firstMatch.waitForExistence(timeout: 10))
         // The first upward swipe now lets the lead card take over from the belt.
         app.swipeUp()
         for title in ["Gifts for him", "Eckhaus Latta", "Objects with character"] {
             let cover = app.images["Editorial cover: \(title)"].firstMatch
-            scrollTo(cover, in: app, attempts: 3)
+            scrollTo(cover, in: app, attempts: 8)
             XCTAssertGreaterThan(cover.frame.intersection(app.frame).height, app.frame.height * 0.6)
             capture(app, name: "Editorial feed — \(title)")
         }
@@ -250,6 +329,7 @@ final class LibrarySmokeTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         let artwork = app.images["Editorial cover: For the thoughtful host"].firstMatch
+        scrollTo(artwork, in: app, attempts: 8)
         XCTAssertTrue(artwork.waitForExistence(timeout: 30))
         XCTAssertGreaterThanOrEqual(artwork.frame.width, app.frame.width * 0.95)
         XCTAssertGreaterThan(artwork.frame.height, app.frame.height * 0.8)
@@ -299,6 +379,7 @@ final class LibrarySmokeTests: XCTestCase {
     private func openHost(_ app: XCUIApplication) {
         app.launch()
         let card = app.buttons["For the thoughtful host"].firstMatch
+        scrollTo(card, in: app, attempts: 8)
         XCTAssertTrue(card.waitForExistence(timeout: 30))
         card.tap()
         XCTAssertTrue(app.staticTexts["From the edit"].waitForExistence(timeout: 10))

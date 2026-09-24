@@ -106,17 +106,23 @@ enum ShopCanvasLibrary {
         return resolve(manifest.nativeAssets[value] ?? value)
     }
 
-    static let confirmedMerchantRecords = manifest.merchants.filter {
+    private static let merchantRecords: [Merchant] = {
+        var seen = Set<String>()
+        return (manifest.merchants + ShoppingResearchCatalog.snapshot.merchants)
+            .filter { seen.insert($0.id).inserted }
+    }()
+    static let selectedProductIDs = manifest.selectedIds + ShoppingResearchCatalog.snapshot.offers.map(\.id)
+    static let confirmedMerchantRecords = merchantRecords.filter {
         $0.platformOutcome == "confirmed_shopify" && $0.id.hasPrefix("gid://shopify/Shop/")
     }
     private static let confirmedMerchantIDs = Set(confirmedMerchantRecords.map(\.id))
-    private static let publishedProducts = manifest.products.compactMap {
+    private static let publishedProducts = (manifest.products + ShoppingResearchCatalog.snapshot.offers.map(\.libraryProduct)).compactMap {
         $0.restricted(to: confirmedMerchantIDs)
     }
     static let productsByID = Dictionary(uniqueKeysWithValues: publishedProducts.map { ($0.id, $0) })
     static let productsByNativeID = Dictionary(uniqueKeysWithValues: publishedProducts.map { ($0.nativeID, $0) })
     static let merchantsByID = Dictionary(uniqueKeysWithValues: confirmedMerchantRecords.map { ($0.id, $0) })
-    static let curatedProducts = manifest.selectedIds.compactMap { productsByID[$0] }.filter(\.curated)
+    static let curatedProducts = selectedProductIDs.compactMap { productsByID[$0] }.filter(\.curated)
 
     static let merchants: [SampleMerchant] = confirmedMerchantRecords.map { merchant in
         let products = publishedProducts.filter { $0.merchantIDs.contains(merchant.id) }.map { product in
@@ -178,8 +184,8 @@ enum ShopCanvasLibrary {
         let all = FeedStory(id: "\(storyPrefix)all", eyebrow: "Curated library", title: "All curated finds",
             subtitle: "", format: .world,
             topicKeys: ["library", "catalog-only-media"], accentHex: "#4D6256", coverImageName: nil,
-            destinationLabel: "Explore all \(manifest.selectedIds.count)", products: references(manifest.selectedIds))
-        return edits + [all]
+            destinationLabel: "Explore all \(curatedProducts.count)", products: references(selectedProductIDs))
+        return ShoppingResearchCatalog.worlds.map(\.story) + edits + [all]
     }()
 
     static let profile: BuyerPreviewProfile = {

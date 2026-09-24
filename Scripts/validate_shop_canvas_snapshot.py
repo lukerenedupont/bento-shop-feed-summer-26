@@ -4,6 +4,9 @@ import hashlib
 import json
 import pathlib
 import sys
+from datetime import datetime
+from decimal import Decimal
+from urllib.parse import urlparse, parse_qs
 
 root = pathlib.Path(sys.argv[1]).resolve()
 snapshot = json.loads((root / 'snapshot.json').read_text())
@@ -68,6 +71,50 @@ if wordmark_file.exists():
                 assert hashlib.sha256(path.read_bytes()).hexdigest() == digest, 'Wordmark checksum mismatch'
     assert set(marks['merchantKeys']) <= merchants, 'Wordmark has an unknown merchant mapping'
     assert set(marks['merchantKeys'].values()) | set(marks['groupKeys'].values()) <= set(marks['assets'])
+research = json.loads((root / 'running-research.json').read_text())
+research_merchants = {m['id']: m for m in research['merchants']}
+assert all(m['platformOutcome'] == 'confirmed_shopify' and mid.startswith('gid://shopify/Shop/')
+           for mid, m in research_merchants.items()), 'Unconfirmed research merchant'
+film = json.loads((root / 'catalog/research-media/cover-film.json').read_text())
+film_merchant = research_merchants[film['sourceMerchantID']]
+assert any(o['merchantID'] == film['sourceMerchantID'] for o in research['offers'])
+assert urlparse(film['sourcePage']).scheme == 'https'
+assert urlparse(film['sourcePage']).hostname == urlparse(film_merchant['url']).hostname
+assert urlparse(film['videoURL']).scheme == 'https' and urlparse(film['videoURL']).hostname == 'player.vimeo.com'
+assert 0 < film['loopDuration'] <= 10 < film['sourceDuration'], 'Cover must remain a short excerpt'
+assert film['sourceWidth'] > 0 and film['sourceHeight'] > 0
+assert film['rightsStatus'] and film['credit'] and datetime.fromisoformat(film['checkedAt']).tzinfo
+poster = (root / film['posterPath']).resolve()
+assert poster.is_relative_to(root) and poster.is_file(), 'Unsafe or missing film poster'
+assert hashlib.sha256(poster.read_bytes()).hexdigest() == film['posterSHA256'], 'Film poster changed'
+ids = {p['id'] for p in products}
+native_ids = {p['nativeID'] for p in products}
+for offer in research['offers']:
+    assert offer['id'] not in ids and offer['nativeID'] not in native_ids, 'Research product collision'
+    ids.add(offer['id'])
+    native_ids.add(offer['nativeID'])
+    merchant = research_merchants[offer['merchantID']]
+    source = urlparse(offer['sourceURL'])
+    assert source.scheme == 'https' and source.hostname == urlparse(merchant['url']).hostname
+    assert int(parse_qs(source.query)['variant'][0]) in offer['variantIDs'], 'Wrong source variant'
+    amount = Decimal(offer['price'])
+    assert amount.is_finite() and amount > 0 and offer['currency'] == 'USD'
+    if offer['section'] == 'shoes':
+        assert offer['color'] and len(offer['usMensSizes']) == len(offer['variantIDs'])
+        assert all(Decimal(size) > 0 for size in offer['usMensSizes'])
+    if offer['referencePrice'] is not None:
+        reference = Decimal(offer['referencePrice'])
+        assert reference.is_finite() and reference > amount, 'Invalid markdown reference'
+    assert offer['availableVariants'] and len(offer['variantIDs']) == len(offer['availableVariants'])
+    assert offer['observedImageID'] > 0 and offer['image'] == offer['images'][0]
+    assert datetime.fromisoformat(offer['observedAt']).tzinfo is not None
+for policy in research['shippingPolicies']:
+    merchant = research_merchants[policy['merchantID']]
+    assert urlparse(policy['sourceURL']).hostname == urlparse(merchant['url']).hostname
+    assert policy['summary'] and policy['detail'] and datetime.fromisoformat(policy['observedAt']).tzinfo
+print(f'Validated research supplement: {len(research["offers"])} offers; '
+      f'combined publication: {len(published_products) + len(research["offers"])} products / '
+      f'{len(confirmed_merchants | set(research_merchants))} confirmed Shopify merchants')
 print(
     f'Validated library source: {len(selected)} curated products, {len(merchants)} merchants; '
     f'published Shopify set: {len(published_products)} products, {len(confirmed_merchants)} merchants; '
