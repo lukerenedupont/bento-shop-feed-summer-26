@@ -61,6 +61,7 @@ struct ResearchComparison {
 struct ResearchMerchantComparison: View {
     let world: ShoppingResearchWorld
     let onOffer: (ResearchOffer, String) -> Void
+    @Environment(NavigationCoordinator.self) private var coordinator
     @AppStorage private var model: String
     @AppStorage("shop-agent.norda.comparison-us-size") private var size = "9"
     private let accent = Color(hex: "#DFECA5")
@@ -115,6 +116,7 @@ struct ResearchMerchantComparison: View {
                             }
                         }.padding(.horizontal, 20)
                     }
+                    buyingAdviceCard(pick, size: safeSize)
                 } else if let notice = result.notice {
                     Text(notice).font(GravityFont.regular.fixedFont(size: 13))
                         .foregroundStyle(.white.opacity(0.7)).padding(.horizontal, 20)
@@ -125,6 +127,44 @@ struct ResearchMerchantComparison: View {
                 if !availableSizes.contains(size), let first = availableSizes.first { size = first }
             }
         }
+    }
+
+    private func buyingAdviceCard(_ offer: ResearchOffer, size: String) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top, spacing: 12) {
+                ProductCard(image: nil, imageURL: offer.image, showFavoriteButton: false)
+                    .environment(\.colorScheme, .light)
+                    .frame(width: 52, height: 52).allowsHitTesting(false)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Waiting for a better price?")
+                        .font(GravityFont.semiBold.fixedFont(size: 16))
+                    Text("Ask whether to buy now or wait, using the prices in this edit.")
+                        .font(GravityFont.regular.fixedFont(size: 13))
+                        .foregroundStyle(.white.opacity(0.65))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            Button {
+                coordinator.julianShell.openAsk(prompt:
+                    "Should I buy Norda \(offer.model) in \(offer.color), US men's \(size), now or wait? The observed price is \(offer.displayPrice) at \(offer.merchantName). Use this edit's evidence and explain any gaps in price history."
+                )
+            } label: {
+                Text("Tell me the best time to buy")
+                    .font(GravityFont.semiBold.fixedFont(size: 14))
+                    .foregroundStyle(accent)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .background(accent.opacity(0.10), in: Capsule())
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("research.buying-advice")
+            Text("Opens Ask · No price alerts are active")
+                .font(GravityFont.regular.fixedFont(size: 11))
+                .foregroundStyle(.white.opacity(0.5))
+        }
+        .padding(16)
+        .background(.white.opacity(0.055), in: RoundedRectangle(cornerRadius: 22))
+        .overlay(RoundedRectangle(cornerRadius: 22).stroke(.white.opacity(0.1)))
+        .padding(.horizontal, 20)
     }
 
     private func sizeMenu(_ selectedSize: String) -> some View {

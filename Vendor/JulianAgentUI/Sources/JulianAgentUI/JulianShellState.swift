@@ -83,7 +83,8 @@ public final class JulianShellState {
         }
     }
 
-    public func openAsk() {
+    public func openAsk(prompt: String? = nil) {
+        if let prompt { draft.query = prompt }
         draft.navigation.isAskPagePresented = true
         draft.isFocused = true
         draft.navigation.showNavigationMode(.composer)

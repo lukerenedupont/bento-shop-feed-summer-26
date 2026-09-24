@@ -35,7 +35,13 @@ The first cover and World header now share an **8-second, muted native loop** fr
 
 Latest verification: **46 XCTest cases (3 skipped), 26 Swift Testing cases, the expanded Norda UI journey, and 11 Python importer tests passed**. Coverage includes comparison criteria, product/back navigation, source details, equal tile dimensions, local poster loading and a native shared-player/excerpt-loop test. Reduce Motion was manually checked with pixel-identical still crops three seconds apart, then restored. A clean tracked-files export passed catalog/source validation without local credentials or the optional external feed checkout. Outgoing history and the staged patch passed Gitleaks; two exact historical localization-comment false positives are documented in `.gitleaksignore`.
 
-Shipping build: **184,092 KB / 184,320 KB**, with **228 KB headroom**. Existing preview clips were re-encoded for the phone target (including 360px Sculptural Living Room/Streetwear and 320px Fuumuu/Stadium exports), the new running films remain remote, and the unused `try-faves-figure` cutout was removed after checking all source references. Active avatar/environment assets and interactive Worlds are retained. The budget was not raised; further additions still need size discipline. The Norda journey also fixed a PDP bug where an oversized decorative image intercepted the Back button.
+Shipping build: **184,140 KB / 184,320 KB**, with **180 KB headroom**. Existing preview clips were re-encoded for the phone target (including 360px Sculptural Living Room/Streetwear and 320px Fuumuu/Stadium exports), the new running films remain remote, and the unused `try-faves-figure` cutout was removed after checking all source references. Active avatar/environment assets and interactive Worlds are retained. The budget was not raised; further additions still need size discipline. The Norda journey also fixed a PDP bug where an oversized decorative image intercepted the Back button.
+
+### Buying-time prompt
+
+Below the checked sellers, a compact “Waiting for a better price?” card shows the compared shoe. “Tell me the best time to buy” opens an **unsent** draft in the existing Julian Ask surface with the model, color, size, merchant and observed price. It retains the World context and does not create a watcher or price alert. Submission still uses the existing Agent/sign-in path; there is no guaranteed forecast or price history.
+
+Validation for this addition: 46 XCTest cases (3 skipped) and 27 Swift Testing cases passed, including the unsent-draft contract. The focused buying-advice UI journey passed. The longer Norda journey passed in the initial run, but a repeat left the World during the existing PDP/back segment before reaching this card; that repeat did not pass. Shipping build and budget validation passed.
 
 ## Rich movement World — build 20
 

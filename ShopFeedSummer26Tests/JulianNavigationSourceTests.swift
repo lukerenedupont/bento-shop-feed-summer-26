@@ -9,6 +9,22 @@ import UIKit
 @MainActor
 struct ShopTabBarChromeConversationTests {
     @Test
+    func contextualBuyingQuestionOpensAsAnUnsentDraft() {
+        let state = JulianShellState()
+        let context = JulianShellState.Context(id: "world:norda", title: "Norda edit")
+        state.activate(context)
+        var submissionCount = 0
+        state.onInitialAgentSubmit = { _, _ in submissionCount += 1 }
+        state.openAsk(prompt: "Should I buy Norda 003 now or wait?")
+        #expect(state.context == context)
+        #expect(state.draft.query == "Should I buy Norda 003 now or wait?")
+        #expect(state.draft.isFocused)
+        #expect(state.draft.navigation.isAskPagePresented)
+        #expect(submissionCount == 0)
+        #expect(!state.isConversationPresented)
+    }
+
+    @Test
     func dockDepthDipsTheRecedingSurfaceAndBumpsTheComposer() throws {
         let layer = CALayer()
         #expect(ShopTabBarMetrics.dockSwapBounce == 0)

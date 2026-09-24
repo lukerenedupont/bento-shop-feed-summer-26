@@ -2,6 +2,22 @@ import XCTest
 
 final class LibrarySmokeTests: XCTestCase {
     @MainActor
+    func testResearchBuyingAdviceOpensContextualDraft() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-previewStory", "library-edit-norda-price-research"]
+        app.launch()
+        let advice = app.buttons["research.buying-advice"]
+        XCTAssertTrue(advice.waitForExistence(timeout: 30))
+        scrollTo(advice, in: app, attempts: 10)
+        capture(app, name: "Norda — waiting for a better price")
+        advice.tap()
+        let input = app.descendants(matching: .any)["DYNAMIC_TYPEAHEAD_TEXT_INPUT"]
+        XCTAssertTrue(input.waitForExistence(timeout: 5))
+        XCTAssertTrue((input.value as? String ?? "").contains("Should I buy Norda"))
+        capture(app, name: "Norda — unsent buying question")
+    }
+
+    @MainActor
     func testPriceResearchOpensFirstWithOffersAndPreservesNativeJourney() {
         let app = XCUIApplication()
         app.launch()
@@ -90,6 +106,10 @@ final class LibrarySmokeTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["US men's 9"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["Free US shipping over $180"].exists)
         app.buttons["Done"].tap()
+        scrollTo(app.buttons["research.buying-advice"], in: app, attempts: 4)
+        XCTAssertTrue(app.staticTexts["Waiting for a better price?"].exists)
+        XCTAssertTrue(app.staticTexts["Opens Ask · No price alerts are active"].exists)
+        capture(app, name: "Shop Agent — buying advice card")
         scrollTo(app.staticTexts["The rest of your run."], in: app, attempts: 8)
         XCTAssertTrue(app.descendants(matching: .any)["research.kit-merchant.gid://shopify/Shop/46461485224"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["3 sale finds · from $80"].exists)
