@@ -4,7 +4,7 @@ import SwiftUI
 struct ResearchFeedSummary: View {
     let world: ShoppingResearchWorld
     private var highlights: [ResearchOffer] {
-        Array(world.featuredShoes().prefix(2))
+        Array(world.featuredShoes().prefix(1))
             + Array(world.offers.filter { $0.section == "apparel" && $0.markdownPercent != nil }.prefix(1))
     }
     var body: some View {

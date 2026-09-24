@@ -210,8 +210,8 @@ enum ShoppingResearchCatalog {
 
     static let norda = ShoppingResearchWorld(
         id: "library-edit-norda-price-research", title: "Your trail-running price edit",
-        headline: "Research complete.\nYour trail edit is ready.",
-        deck: "19 sourced offers, exact price matches and a few directions worth taking.",
+        headline: "Your Norda edit\nis ready.",
+        deck: "19 sourced offers across 6 running shops.",
         prompt: "Find me good prices on Norda trail-running shoes, and other running gear I might like.",
         heroImage: ResearchCoverFilm.norda.posterPath,
         heroSource: ResearchCoverFilm.norda.sourcePage.absoluteString,

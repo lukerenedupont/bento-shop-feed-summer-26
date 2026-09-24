@@ -13,8 +13,8 @@ final class LibraryCatalogTests: XCTestCase {
         XCTAssertEqual(world.researchedMerchantCount, 6)
         XCTAssertEqual(world.models, ["001A", "003", "005", "055"])
         XCTAssertEqual(world.observedDate, "2026-09-24")
-        XCTAssertEqual(world.headline, "Research complete.\nYour trail edit is ready.")
-        XCTAssertTrue(world.deck.contains("19 sourced offers"))
+        XCTAssertEqual(world.headline, "Your Norda edit\nis ready.")
+        XCTAssertEqual(world.deck, "19 sourced offers across 6 running shops.")
         XCTAssertFalse(world.prompt.isEmpty)
         XCTAssertEqual(world.raceOptions.map(\.date), ["October 4, 2026", "November 15, 2026", "November 22, 2026"])
         XCTAssertTrue(world.raceOptions.allSatisfy {
