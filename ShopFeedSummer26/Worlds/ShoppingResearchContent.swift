@@ -77,15 +77,37 @@ struct ShoppingResearchContent: View {
                 .font(GravityFont.expressiveBold.fixedFont(size: 34)).tracking(-1.2)
                 .accessibilityAddTraits(.isHeader)
 
-            Text("“\(world.prompt)”")
-                .font(GravityFont.medium.fixedFont(size: 17))
-                .lineSpacing(3)
-                .foregroundStyle(.white.opacity(0.92))
+            HStack {
+                Spacer(minLength: 42)
+                VStack(alignment: .trailing, spacing: 6) {
+                    Text("You")
+                        .font(GravityFont.medium.fixedFont(size: 11))
+                        .foregroundStyle(.white.opacity(0.58))
+                    Text(world.prompt)
+                        .font(GravityFont.medium.fixedFont(size: 16))
+                        .lineSpacing(3)
+                        .foregroundStyle(Color(hex: "#26382D"))
+                        .padding(.horizontal, 16).padding(.vertical, 13)
+                        .background(lime, in: RoundedRectangle(cornerRadius: 19, style: .continuous))
+                        .accessibilityIdentifier("research.sent-request")
+                    Text("👍")
+                        .font(.system(size: 15))
+                        .padding(.horizontal, 9).frame(height: 28)
+                        .background(.white.opacity(0.1), in: Capsule())
+                        .overlay(Capsule().stroke(.white.opacity(0.12)))
+                        .accessibilityLabel("Thumbs up reaction")
+                }
+            }
 
-            Text("I checked \(world.offers.count) sourced offers across \(world.researchedMerchantCount) running shops, compared exact Norda matches, and built this edit with the best observed price, sale finds, a complete kit and other trail shoes worth seeing.")
-                .font(GravityFont.regular.fixedFont(size: 14))
-                .lineSpacing(3)
-                .foregroundStyle(.white.opacity(0.7))
+            VStack(alignment: .leading, spacing: 8) {
+                Label("Shop Agent", systemImage: "sparkles")
+                    .font(GravityFont.semiBold.fixedFont(size: 12))
+                    .foregroundStyle(lime)
+                Text("I checked \(world.offers.count) sourced offers across \(world.researchedMerchantCount) running shops, compared exact Norda matches, and built this edit with the best observed price, sale finds, a complete kit and other trail shoes worth seeing.")
+                    .font(GravityFont.regular.fixedFont(size: 14))
+                    .lineSpacing(3)
+                    .foregroundStyle(.white.opacity(0.7))
+            }
 
             HStack(spacing: 8) {
                 briefFact("\(world.offers.count) sourced offers")

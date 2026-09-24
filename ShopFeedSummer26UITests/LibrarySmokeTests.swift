@@ -19,6 +19,8 @@ final class LibrarySmokeTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Built from your request."].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["Source-checked snapshot"].exists)
         XCTAssertTrue(app.staticTexts["19 sourced offers"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["research.sent-request"].exists)
+        XCTAssertTrue(app.staticTexts["Thumbs up reaction"].exists)
         let personalize = app.buttons["research.personalize-brief"]
         XCTAssertTrue(personalize.exists)
         scrollTo(personalize, in: app, attempts: 3)
