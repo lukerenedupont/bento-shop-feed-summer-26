@@ -184,6 +184,16 @@ A new “Running, in motion” rail uses merchant-owned product-page films with 
 
 These are labeled **product films**, not user posts or endorsements. No authenticated Shop PostCard in the fixture established an exact Norda/Hoka product relationship, so the app does not relabel unrelated bundled posts as running UGC. Video streams remain remote, muted, one active card at a time, with the exact product image as fallback; tapping opens the joined native PDP. Public product media still requires permission clearance for production redistribution.
 
+### Race-context sources — 2026-09-24
+
+The optional race picker snapshots three upcoming New York events from their public RunSignup registration listings:
+
+- [4 in the Forest](https://runsignup.com/Race/NY/Irvington/4InTheForest) — Irvington, New York · October 4, 2026
+- [Brookhaven Trail Half Marathon & 5 Mile](https://runsignup.com/Race/NY/WadingRiver/BROOKHAVENTRAILHALFMARATHON) — Wading River, New York · November 15, 2026
+- [After the Leaves Half Marathon](https://runsignup.com/Race/NY/Kerhonkson/AfterTheLeavesJoshFedltHalfMarathon) — Kerhonkson, New York · November 22, 2026
+
+The picker labels these as New York options unless the shopper has explicitly entered New York as their destination. Selection is local context only: it does not verify registration availability, calculate distance, or alter price and delivery results.
+
 ### Remaining production work
 
 Permission-clear final editorial photography/film/post selections; reconcile buyer market, color and size across merchants; compute delivered totals before any best-price claim; connect a real conversation-to-artifact lifecycle and monitoring service before presenting live progress or notifications. The current slice is a durable local, source-linked **price snapshot**.

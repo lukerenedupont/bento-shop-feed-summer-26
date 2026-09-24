@@ -84,6 +84,18 @@ struct ResearchAlternativeNote: Identifiable {
     var id: String { offerID }
 }
 
+/// A dated event from a public registration listing. Selection is local-only;
+/// proximity is not claimed until the shopper supplies a destination.
+struct ResearchRace: Identifiable {
+    let id: String
+    let name: String
+    let location: String
+    let month: String
+    let day: String
+    let date: String
+    let sourceURL: String
+}
+
 /// Finite composition: new research edits supply content, not a new screen.
 enum ResearchSection {
     case offers
@@ -111,6 +123,7 @@ struct ShoppingResearchWorld {
     let offers: [ResearchOffer]
     let shippingPolicies: [ResearchShippingPolicy]
     let alternativeNotes: [ResearchAlternativeNote]
+    let raceOptions: [ResearchRace]
     let sections: [ResearchSection]
 
     var story: FeedStory {
@@ -214,6 +227,17 @@ enum ShoppingResearchCatalog {
                   distinction: "Minimal palette · responsive cushioning"),
             .init(offerID: "research:7546175546:9517646643528", useCase: "Trail alternative",
                   distinction: "PEBA/EVA foam · Vibram Megagrip"),
+        ],
+        raceOptions: [
+            .init(id: "runsignup-4-in-the-forest", name: "4 in the Forest",
+                  location: "Irvington, New York", month: "OCT", day: "04", date: "October 4, 2026",
+                  sourceURL: "https://runsignup.com/Race/NY/Irvington/4InTheForest"),
+            .init(id: "runsignup-brookhaven-trail", name: "Brookhaven Trail Half Marathon & 5 Mile",
+                  location: "Wading River, New York", month: "NOV", day: "15", date: "November 15, 2026",
+                  sourceURL: "https://runsignup.com/Race/NY/WadingRiver/BROOKHAVENTRAILHALFMARATHON"),
+            .init(id: "runsignup-after-the-leaves", name: "After the Leaves Half Marathon",
+                  location: "Kerhonkson, New York", month: "NOV", day: "22", date: "November 22, 2026",
+                  sourceURL: "https://runsignup.com/Race/NY/Kerhonkson/AfterTheLeavesJoshFedltHalfMarathon"),
         ],
         sections: [
             .offers, .merchantComparison, .modelStudy,

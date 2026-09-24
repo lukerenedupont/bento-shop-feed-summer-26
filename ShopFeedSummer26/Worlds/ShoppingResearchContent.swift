@@ -9,8 +9,9 @@ struct ShoppingResearchContent: View {
     @State private var modal: ResearchModal?
     @State private var activeMotionStoryID: String?
     @State private var showsBriefEditor = false
+    @State private var showsRacePicker = false
     @AppStorage private var deliveryContext: String
-    @AppStorage private var raceContext: String
+    @AppStorage private var selectedRaceID: String
     @AppStorage private var styleContext: String
     private let lime = Color(hex: "#DFECA5")
 
@@ -18,7 +19,7 @@ struct ShoppingResearchContent: View {
         self.world = world
         _model = AppStorage(wrappedValue: "All", "\(world.id).model")
         _deliveryContext = AppStorage(wrappedValue: "", "\(world.id).delivery-context")
-        _raceContext = AppStorage(wrappedValue: "", "\(world.id).race-context")
+        _selectedRaceID = AppStorage(wrappedValue: "", "\(world.id).race-context")
         _styleContext = AppStorage(wrappedValue: "", "\(world.id).style-context")
     }
 
@@ -55,13 +56,21 @@ struct ShoppingResearchContent: View {
             }
         }
         .sheet(isPresented: $showsBriefEditor) {
-            ResearchBriefEditor(
-                delivery: $deliveryContext,
-                race: $raceContext,
-                style: $styleContext
+            ResearchBriefEditor(delivery: $deliveryContext, style: $styleContext)
+            .environment(\.colorScheme, .light)
+        }
+        .sheet(isPresented: $showsRacePicker) {
+            ResearchRacePicker(
+                races: world.raceOptions,
+                selectedRaceID: $selectedRaceID,
+                destination: deliveryContext
             )
             .environment(\.colorScheme, .light)
         }
+    }
+
+    private var selectedRace: ResearchRace? {
+        world.raceOptions.first { $0.id == selectedRaceID }
     }
 
     private var researchBrief: some View {
@@ -115,11 +124,15 @@ struct ShoppingResearchContent: View {
                 briefFact("US · USD")
             }
 
+            Button { showsRacePicker = true } label: {
+                raceCard
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("research.race-picker")
+
             Button { showsBriefEditor = true } label: {
                 VStack(spacing: 0) {
                     briefContextRow("Delivery destination", value: deliveryContext, emptyValue: "Add destination")
-                    Divider().overlay(.white.opacity(0.1))
-                    briefContextRow("Upcoming race", value: raceContext, emptyValue: "Add race")
                     Divider().overlay(.white.opacity(0.1))
                     briefContextRow("Fit & aesthetic", value: styleContext, emptyValue: "Add preferences")
                 }
@@ -131,6 +144,43 @@ struct ShoppingResearchContent: View {
             .accessibilityIdentifier("research.personalize-brief")
         }
         .padding(.horizontal, 20)
+    }
+
+    private var raceCard: some View {
+        HStack(spacing: 14) {
+            if let race = selectedRace {
+                VStack(spacing: 1) {
+                    Text(race.month).font(GravityFont.semiBold.fixedFont(size: 10))
+                    Text(race.day).font(GravityFont.expressiveBold.fixedFont(size: 25)).tracking(-0.6)
+                }
+                .foregroundStyle(Color(hex: "#26382D"))
+                .frame(width: 58, height: 58)
+                .background(lime, in: RoundedRectangle(cornerRadius: 14))
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(race.name).font(GravityFont.semiBold.fixedFont(size: 15)).lineLimit(2)
+                    Text("\(race.location) · \(race.date)")
+                        .font(GravityFont.regular.fixedFont(size: 12))
+                        .foregroundStyle(.white.opacity(0.62)).lineLimit(2)
+                }
+            } else {
+                Image(systemName: "flag.checkered")
+                    .font(.system(size: 20, weight: .semibold)).foregroundStyle(lime)
+                    .frame(width: 58, height: 58)
+                    .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 14))
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Choose an upcoming race").font(GravityFont.semiBold.fixedFont(size: 15))
+                    Text("Select a name, location and date")
+                        .font(GravityFont.regular.fixedFont(size: 12)).foregroundStyle(.white.opacity(0.62))
+                }
+            }
+            Spacer(minLength: 4)
+            Image(systemName: "chevron.right")
+                .font(.system(size: 11, weight: .semibold)).foregroundStyle(.white.opacity(0.4))
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, minHeight: 86, alignment: .leading)
+        .background(.white.opacity(0.07), in: RoundedRectangle(cornerRadius: 18))
+        .overlay(RoundedRectangle(cornerRadius: 18).stroke(.white.opacity(0.1)))
     }
 
     private func briefFact(_ value: String) -> some View {
@@ -571,9 +621,84 @@ struct ShoppingResearchContent: View {
     }
 }
 
+private struct ResearchRacePicker: View {
+    let races: [ResearchRace]
+    @Binding var selectedRaceID: String
+    let destination: String
+    @Environment(\.dismiss) private var dismiss
+
+    private var locationNote: String {
+        let value = destination.lowercased()
+        if value.contains("new york") || value.contains("nyc") || value.contains("brooklyn") {
+            return "Sourced events in your New York area."
+        }
+        if destination.isEmpty {
+            return "Add a delivery destination to establish what is actually nearby. These sourced options are in New York."
+        }
+        return "These sourced New York events are not ranked by distance from \(destination)."
+    }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    Text(locationNote)
+                        .font(GravityFont.regular.fixedFont(size: 14))
+                        .foregroundStyle(.secondary).padding(.bottom, 4)
+                    ForEach(races) { race in
+                        VStack(alignment: .leading, spacing: 0) {
+                            Button {
+                                selectedRaceID = race.id
+                                dismiss()
+                            } label: {
+                                HStack(spacing: 14) {
+                                    VStack(spacing: 1) {
+                                        Text(race.month).font(GravityFont.semiBold.fixedFont(size: 10))
+                                        Text(race.day).font(GravityFont.expressiveBold.fixedFont(size: 24))
+                                    }
+                                    .foregroundStyle(Color(hex: "#26382D"))
+                                    .frame(width: 58, height: 58)
+                                    .background(Color(hex: "#DFECA5"), in: RoundedRectangle(cornerRadius: 14))
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(race.name).font(GravityFont.semiBold.fixedFont(size: 15)).lineLimit(2)
+                                        Text(race.location).font(GravityFont.regular.fixedFont(size: 13))
+                                            .foregroundStyle(.secondary)
+                                        Text(race.date).font(GravityFont.medium.fixedFont(size: 12))
+                                    }
+                                    Spacer(minLength: 4)
+                                    Image(systemName: selectedRaceID == race.id ? "checkmark.circle.fill" : "circle")
+                                        .foregroundStyle(selectedRaceID == race.id ? Color(hex: "#26382D") : .secondary)
+                                }
+                                .padding(14).contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityIdentifier("research.race.\(race.id)")
+                            if let url = URL(string: race.sourceURL) {
+                                Link("RunSignup event listing", destination: url)
+                                    .font(GravityFont.regular.fixedFont(size: 11))
+                                    .foregroundStyle(.secondary)
+                                    .padding(.horizontal, 14).padding(.bottom, 12)
+                            }
+                        }
+                        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 18))
+                    }
+                    Text("Dates and locations were checked on the linked event listings. Selecting a race adds context to this saved edit; it does not verify registration availability.")
+                        .font(GravityFont.regular.fixedFont(size: 12)).foregroundStyle(.secondary)
+                        .padding(.top, 4)
+                }.padding(20)
+            }
+            .navigationTitle("Choose a race")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
+            }
+        }
+        .presentationDetents([.medium, .large])
+    }
+}
+
 private struct ResearchBriefEditor: View {
     @Binding var delivery: String
-    @Binding var race: String
     @Binding var style: String
     @Environment(\.dismiss) private var dismiss
 
@@ -583,7 +708,6 @@ private struct ResearchBriefEditor: View {
                 Section {
                     TextField("City or ZIP code", text: $delivery)
                         .textContentType(.postalCode)
-                    TextField("Race and date", text: $race)
                     TextField("Fit, colors or aesthetic", text: $style, axis: .vertical)
                         .lineLimit(2...4)
                 } header: {

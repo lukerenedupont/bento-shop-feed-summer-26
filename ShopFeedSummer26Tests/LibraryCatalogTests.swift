@@ -16,6 +16,10 @@ final class LibraryCatalogTests: XCTestCase {
         XCTAssertEqual(world.headline, "Research complete.\nYour trail edit is ready.")
         XCTAssertTrue(world.deck.contains("19 sourced offers"))
         XCTAssertFalse(world.prompt.isEmpty)
+        XCTAssertEqual(world.raceOptions.map(\.date), ["October 4, 2026", "November 15, 2026", "November 22, 2026"])
+        XCTAssertTrue(world.raceOptions.allSatisfy {
+            $0.location.hasSuffix("New York") && URL(string: $0.sourceURL)?.host() == "runsignup.com"
+        })
         XCTAssertTrue(world.offers.allSatisfy { $0.currency == "USD" })
         let hoka = world.offers.filter { $0.brand.caseInsensitiveCompare("Hoka") == .orderedSame }
         XCTAssertEqual(hoka.count, 2)
